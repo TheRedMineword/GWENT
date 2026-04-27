@@ -78,7 +78,7 @@ wss.on('connection', (ws) => {
     }
 
     if (data.type === 'joinSession') {
-      const sessionCode = data.code;
+      const sessionCode = data.sessionId;
       if (sessions[sessionCode] && sessions[sessionCode].players.length === 1) {
         sessions[sessionCode].players.push(ws);
         ws.sessionCode = sessionCode;
