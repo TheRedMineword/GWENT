@@ -52,4 +52,12 @@ function loadGwent() {
 }
 
 // start boot
-loadCards();
+async function bootstrap() {
+    await wakeBackend("https://drmineword-gwent.onrender.com/wake");
+
+    await loadCards();
+
+    startGame(); // or load gwent.js logic
+}
+
+bootstrap();

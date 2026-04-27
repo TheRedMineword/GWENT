@@ -9,6 +9,12 @@ const wss = new WebSocket.Server({ server });
 
 const PORT = process.env.PORT || 8081;
 
+app.use(cors({
+  origin: "*", // or your frontend domain in production
+}));
+
+
+
 let sessions = {};
 let players = [];
 let nextPlayerId = 1;
@@ -155,5 +161,11 @@ wss.on('connection', (ws) => {
     players = players.filter(player => player !== ws);
   });
 });
+
+app.get("/wake", (req, res) => {
+  res.status(200).json({ status: "awake" });
+});
+
+
 
 server.listen(PORT, () => console.log(`## Server running on port ${PORT} ##`));
