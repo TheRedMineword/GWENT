@@ -27,7 +27,7 @@ if (
 ) {
   wsUrl = "ws://localhost:8081";
 } else {
-  wsUrl = `ws://${host}`;
+  wsUrl = `ws://drmineword-gwent.onrender.com`;
 }
 
 console.log("Websocket", wsUrl);
