@@ -86,7 +86,7 @@ wss.on('connection', (ws) => {
 
   // Send a welcome message with the player's ID
   ws.send(JSON.stringify({ type: 'welcome', playerId: ws.playerId }));
-  console.log(`# Player ${ws.playerId} connected`);
+  console.log(`\# Player ${ws.playerId} connected`);
 
   ws.on('message', (message) => {
     const data = JSON.parse(message);
@@ -97,7 +97,7 @@ wss.on('connection', (ws) => {
       sessions[sessionCode] = { players: [ws], code: sessionCode, playersReady: 0 };
       ws.sessionCode = sessionCode;
       ws.send(JSON.stringify({ type: 'sessionCreated', code: sessionCode }));
-      console.log(`# Player ${ws.playerId} created Session ${sessionCode}`);
+      console.log(`\# Player ${ws.playerId} created Session ${sessionCode}`);
 
       ws.send(JSON.stringify({ type: 'sessionJoined', code: sessionCode }));
     }
@@ -106,7 +106,7 @@ wss.on('connection', (ws) => {
       const sessionCode = data.code;
       if (!sessions[sessionCode]) return;
 
-      console.log(`# Player ${ws.playerId} cancelled Session ${sessionCode}`);
+      console.log(`\# Player ${ws.playerId} cancelled Session ${sessionCode}`);
       delete sessions[ws.sessionCode];
     }
 
@@ -114,7 +114,7 @@ wss.on('connection', (ws) => {
       const sessionCode = data.code;
       if (!sessions[sessionCode]) return;
 
-      console.log(`# Player ${ws.playerId} left Session ${sessionCode}`);
+      console.log(`\# Player ${ws.playerId} left Session ${sessionCode}`);
       sessions[sessionCode].players = sessions[sessionCode].players.filter(player => player !== ws);
     }
 
@@ -124,14 +124,14 @@ wss.on('connection', (ws) => {
         sessions[sessionCode].players.push(ws);
         ws.sessionCode = sessionCode;
         ws.send(JSON.stringify({ type: 'sessionJoined', code: sessionCode }));
-        console.log(`# Player ${ws.playerId} joined Session ${sessionCode}`);
+        console.log(`\# Player ${ws.playerId} joined Session ${sessionCode}`);
 
         sessions[sessionCode].players.forEach((player, index) => {
           player.send(JSON.stringify({ type: 'sessionReady', player: index + 1 }));
         });
       } else {
         ws.send(JSON.stringify({ type: 'sessionInvalid' }));
-        console.log(`# Player ${ws.playerId} attempted to join invalid Session ${sessionCode}`);
+        console.log(`\# Player ${ws.playerId} attempted to join invalid Session ${sessionCode}`);
       }
     }
 
@@ -155,7 +155,7 @@ wss.on('connection', (ws) => {
         const session = sessions[ws.sessionCode];
         session.playersReady += 1;
 
-        console.log(`# Players ready in session ${ws.sessionCode}: ${session.playersReady}`);
+        console.log(`\# Players ready in session ${ws.sessionCode}: ${session.playersReady}`);
 
         if (session.playersReady === 2) {
             session.players.forEach((player) => {
@@ -178,7 +178,7 @@ wss.on('connection', (ws) => {
   });
 
   ws.on('close', () => {
-    console.log(`# Player ${ws.playerId} disconnected`);
+    console.log(`\# Player ${ws.playerId} disconnected`);
 
     // Check if the player has an active session
     if (ws.sessionCode && sessions[ws.sessionCode]) {
@@ -187,7 +187,7 @@ wss.on('connection', (ws) => {
       // Check if the player is the creator of the session
       if (session.players[0] === ws) {
         // If the creator disconnects, delete the session
-        console.log(`# Deleting session ${ws.sessionCode} because the creator left`);
+        console.log(`\# Deleting session ${ws.sessionCode} because the creator left`);
         if (session.players.length > 1) {
           session.players[1].send(JSON.stringify({ type: 'unReady' }));
           session.players[1].send(JSON.stringify({ type: 'sessionUnready' }));
@@ -198,7 +198,7 @@ wss.on('connection', (ws) => {
         session.players = session.players.filter(player => player !== ws);
         session.players[0].send(JSON.stringify({ type: 'unReady' }));
         session.players[0].send(JSON.stringify({ type: 'sessionUnready' }));
-        console.log(`# Player ${ws.playerId} left the session ${ws.sessionCode}`);
+        console.log(`\# Player ${ws.playerId} left the session ${ws.sessionCode}`);
       }
     }
 
@@ -209,4 +209,4 @@ wss.on('connection', (ws) => {
 
 
 
-server.listen(PORT, () => console.log(`## Server running on port ${PORT} ##`));
+server.listen(PORT, () => console.log(`\#\# Server running on port ${PORT} \#\#`));

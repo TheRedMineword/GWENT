@@ -120,6 +120,18 @@ var ability_dict = {
 			card.holder = card.holder.opponent();
 		}
 	},
+	sabotage: {
+        name: "sabotage",
+        description: "Send to enemy fields this cards to lower their score and draw extra card. ",
+        placed: async (card) => {
+            await card.animate("spy");
+            for (let i=0;i<1;i++) {
+                if (card.holder.deck.cards.length > 0)
+                    await card.holder.deck.draw(card.holder.hand);
+            }
+            card.holder = card.holder.opponent();
+        }
+    },
 	medic: {
 		name: "medic",
 		description: "Choose one card from your discard pile and play it instantly (no Heroes or Special Cards). ",
