@@ -90,6 +90,8 @@ wss.on('connection', (ws) => {
 
   ws.on('message', (message) => {
     const data = JSON.parse(message);
+    const msg =  JSON.stringify(data);
+    console.log('|| Message recived: \`\`\`json\n${msg}\`\`\`');
 
     if (data.type === 'createSession') {
       const sessionCode = generateCode();
@@ -129,9 +131,11 @@ wss.on('connection', (ws) => {
         sessions[sessionCode].players.forEach((player, index) => {
           player.send(JSON.stringify({ type: 'sessionReady', player: index + 1 }));
         });
+      
       } else {
         ws.send(JSON.stringify({ type: 'sessionInvalid' }));
-        console.log(`|| Player ${ws.playerId} attempted to join invalid Session ${sessionCode}`);
+        const msg_out =  JSON.stringify({ type: 'sessionInvalid' });
+  
       }
     }
 
@@ -147,6 +151,7 @@ wss.on('connection', (ws) => {
             session.players.forEach((player) => {
                 player.send(JSON.stringify({ type: 'coinToss', player: sessions[ws.sessionCode].firstPlayer }));
               });
+  
         }
     }
 
