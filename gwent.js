@@ -309,7 +309,7 @@ class Player {
 		this.deck.reset();
 		this.deck.initializeFromID(this.deck_data.cards, this);
 		
-		this.health = 2;
+		this.health = maxhealth;
 		this.total = 0;
 		this.passed = false;
 		this.handsize = thishandsize;
@@ -2348,7 +2348,7 @@ class DeckMaker {
 		stats.children[7].innerHTML = this.stats.strength;
 		stats.children[9].innerHTML = this.stats.hero + "/" + ForGameStart.hero;
 		
-		stats.children[3].style.color = this.stats.units < 22 ? "red" : "";
+		stats.children[3].style.color = this.stats.units < ForGameStart.unitscard ? "red" : "";
 		stats.children[5].style.color = (this.stats.special > ForGameStart.special) ? "red" : "";
 		stats.children[9].style.color = (this.stats.hero > ForGameStart.hero) ? "red" : "";
 	}
