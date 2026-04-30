@@ -52,7 +52,7 @@ var factions = {
 		factionAbility: player => game.gameStart.push( async () => {
 			if (player === player_me) {
 				await ui.popup("Go First", () => game.firstPlayer = player, "Let Opponent Start", () => game.firstPlayer = player.opponent(), "Would you like to go first?", "The Scoia'tael faction perk allows you to decide who will get to go first.");
-				socket.send(JSON.stringify({ type: 'scoiataelStart', first: game.firstPlayer.tag }));
+				comp_and_send(socket, JSON.stringify({ type: 'scoiataelStart', first: game.firstPlayer.tag }));
 			}
 			return true;
 		}),
