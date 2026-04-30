@@ -17,7 +17,7 @@ document.getElementById("join-game").onclick = () => {
 
     if (!code) return;
 
-    socket.send(JSON.stringify({
+    comp_and_send(socket, JSON.stringify({
         type: "joinSession",
         sessionId: code.toUpperCase()
     }));
@@ -88,6 +88,106 @@ let opponentReady = false;
 let playerId = null;
 
 
+// Super JSON Compressor for WebSockets
+// Uses Brotli if available, falls back to gzip-like Deflate via CompressionStream
+// Sends binary Uint8Array payloads
+// Logs stats + SHA hash + failure reasons
+
+const TextEnc = new TextEncoder();
+const TextDec = new TextDecoder();
+
+async function sha256(buffer) {
+    const hash = await crypto.subtle.digest("SHA-256", buffer);
+    return [...new Uint8Array(hash)]
+        .map(b => b.toString(16).padStart(2, "0"))
+        .join("");
+}
+
+async function compressData(str) {
+    const input = TextEnc.encode(str);
+
+    if ("CompressionStream" in window) {
+        const cs = new CompressionStream("deflate-raw");
+        const writer = cs.writable.getWriter();
+        writer.write(input);
+        writer.close();
+
+        const compressed = await new Response(cs.readable).arrayBuffer();
+        return new Uint8Array(compressed);
+    }
+
+    throw new Error("CompressionStream not supported.");
+}
+
+async function decompressData(uint8) {
+    if ("DecompressionStream" in window) {
+        const ds = new DecompressionStream("deflate-raw");
+        const writer = ds.writable.getWriter();
+        writer.write(uint8);
+        writer.close();
+
+        const decompressed = await new Response(ds.readable).arrayBuffer();
+		console.log("Decompressed:", decompressed);
+        return TextDec.decode(decompressed);
+    }
+
+    throw new Error("DecompressionStream not supported.");
+}
+
+async function comp_and_send(socket, jsonString) {
+	console.log("Comp and send:", socket, jsonString);
+    try {
+        const before = TextEnc.encode(jsonString).length;
+
+        const compressed = await compressData(jsonString);
+
+        const after = compressed.length;
+        const saved = ((1 - after / before) * 100).toFixed(3);
+        const hash = await sha256(compressed);
+
+        console.log("Bytes before:", before);
+        console.log("Bytes after :", after);
+        console.log("Compressed% :", saved + "%");
+        console.log("Payload sha :", hash);
+
+        if (socket.readyState !== WebSocket.OPEN) {
+            alert("Socket send failed: socket not open");
+            return;
+        }
+
+        socket.send(compressed);
+
+    } catch (err) {
+        console.error(err);
+        alert("Socket send failed: " + err.message);
+    }
+}
+
+async function recv_and_decomp(event) {
+	console.log("recv_and_decomp");
+    try {
+        let buffer;
+
+        if (event.data instanceof Blob) {
+            buffer = await event.data.arrayBuffer();
+        } else if (event.data instanceof ArrayBuffer) {
+            buffer = event.data;
+        } else {
+            throw new Error("Unsupported message type");
+        }
+
+        const uint8 = new Uint8Array(buffer);
+        const json = await decompressData(uint8);
+
+        console.log("Received JSON:", json);
+        return JSON.parse(json);
+
+    } catch (err) {
+        alert("Socket receive failed: " + err.message);
+    }
+}
+
+
 
 
 function showTooltip(text) {
@@ -118,11 +218,12 @@ document.getElementById("copy-session").onclick = () => {
 
 
 
-socket.onmessage = async(event) => {
+socket.onmessage = async (event) => {
     console.log('[socket raw event.data]', event.data);
-	
-	const data = JSON.parse(event.data);
-
+	const event_parsed = await recv_and_decomp(event);
+	console.log("event_parsed", event_parsed);
+	const data = event_parsed; //.data;
+console.log("onmsg data:", data)
 		switch (data.type) {
 			case "welcome":
 				playerId = data.playerId;
@@ -130,18 +231,24 @@ socket.onmessage = async(event) => {
 				break;
 			
 			// Opponent has joined and the session is ready
+			case "sessionCreated":
+			console.log("Parsing vars for session join", data);
+			joinedSessionId = data.code;
+			console.log("joinedSessionId",joinedSessionId);
+			break;
 			case "sessionReady":
+				console.log("sessionReady");
 				// showTooltip("Opponent has joined and the session is ready");
 				// [socket raw event.data] {"type":"sessionJoined","code":"XRA2"}
-				readyButtonElem.classList.remove("disabled");
+				readyButtonElem.classList.remove("hidden");
 				isOpponentReadyElem.classList.remove("hidden");
-
+				
 				  document.getElementById("session-display").classList.remove("hidden");
     document.getElementById("session-code-text").textContent = joinedSessionId;
-	console.log(joinedSessionId);
+	
 	// joinedSessionId;
 				// sends the opponent which faction you're playing with
-				socket.send(JSON.stringify({ type: "opChangeFaction", faction: dm.faction }));
+				comp_and_send(socket, JSON.stringify({ type: "opChangeFaction", faction: dm.faction }));
 				break;
 
 			// Opponent has left and the session is no longer ready
@@ -455,7 +562,7 @@ class Player {
 		if (this.id === 0 && this.leader.activated.length > 0){
 			this.elem_leader.addEventListener("click", async () => {
 				await ui.viewCard(this.leader, async () => {
-						socket.send(JSON.stringify({ type: "useLeader", player: this.id }));
+						comp_and_send(socket, JSON.stringify({ type: "useLeader", player: this.id }));
 						await this.activateLeader();
 				});
 		});
@@ -1240,14 +1347,14 @@ class Game {
 				socket.addEventListener('message', handleMessage);
 			});
 
-			socket.send(JSON.stringify({ type: 'gameStart' }));
+			comp_and_send(socket, JSON.stringify({ type: 'gameStart' }));
 			await this.initialRedraw();
 		} else if (player_me.deck.faction === "scoiatael" && player_op.deck.faction !== "scoiatael") {
-			socket.send(JSON.stringify({ type: 'gameStart' }));
+			comp_and_send(socket, JSON.stringify({ type: 'gameStart' }));
 	
 			await this.initialRedraw();
 		} else {
-			socket.send(JSON.stringify({ type: 'gameStart' }));
+			comp_and_send(socket, JSON.stringify({ type: 'gameStart' }));
 			await this.coinToss();
 	
 			await this.initialRedraw();
@@ -1258,7 +1365,8 @@ class Game {
 	async coinToss() {
 		return new Promise((resolve) => {
 			const handleMessage = async (event) => {
-				const data = JSON.parse(event.data);
+				
+				const data = await recv_and_decomp(event);
 
 				if (data.type === 'coinToss') {
 					let player;
@@ -1290,7 +1398,7 @@ class Game {
 			await ui.queueCarousel(player_me.hand, 2, async (c, i) => await player_me.deck.swap(c, c.removeCard(i)), c => true, true, true, "Choose up to 2 cards to redraw.");
 		ui.enablePlayer(false);
 
-		socket.send(JSON.stringify({ type: "initial_reDraw", hand: removeCircularReferences(player_me.hand.cards), deck: removeCircularReferences(player_me.deck.cards) }));
+		comp_and_send(socket, JSON.stringify({ type: "initial_reDraw", hand: removeCircularReferences(player_me.hand.cards), deck: removeCircularReferences(player_me.deck.cards) }));
 	}
 	
 	// Initiates a new round of the game
@@ -1423,7 +1531,7 @@ class Game {
 	
 	// Returns the client to the deck customization screen
 	returnToCustomization(){
-		socket.send(JSON.stringify({ type: "unReady" }));
+		comp_and_send(socket, JSON.stringify({ type: "unReady" }));
 		amReady = false;
 		opponentReady = false;
 		readyButtonElem.classList.remove("ready");
@@ -1677,7 +1785,7 @@ class UI {
 		this.previewCard = null;
 		this.lastRow = null;
 		passButton.addEventListener("click", () => {
-			socket.send(JSON.stringify({ type: "pass", player: playerId }));
+			comp_and_send(socket, JSON.stringify({ type: "pass", player: playerId }));
 			player_me.passRound();
 		});
 		document.getElementById("click-background").addEventListener("click", () => ui.cancel(), false);
@@ -1762,7 +1870,7 @@ class UI {
 			const targetCard = removeCircularReferences(card);
 
 			console.log("You played the card", this.previewCard)
-			socket.send(JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna, target: targetCard }));
+			comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna, target: targetCard }));
 			
 			this.hidePreview(card);
 			this.enablePlayer(false);
@@ -1789,7 +1897,7 @@ class UI {
 		if (this.previewCard.name === "Decoy")
 			return;
 
-		socket.send(JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna}));
+		comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna}));
 
 		let card = this.previewCard || opponentCard;
 		let holder = card.holder;
@@ -1908,7 +2016,7 @@ class UI {
 		action = action ? action : function() { return this.cancel();};
 
 		await this.queueCarousel(container, 1, action, () => true, false, true);
-		socket.send(JSON.stringify({ type: "containerClosed" }));
+		comp_and_send(socket, JSON.stringify({ type: "containerClosed" }));
 	}
 	
 	// Displays a Carousel menu of filtered container items that match the predicate.
@@ -2095,19 +2203,19 @@ class Carousel {
 
 		if (actionString === "(c, i) => wrapper.card=c.cards[i]" || actionString === "(c,i) => newCard = c.cards[i]") {
 			setTimeout(() => {
-				socket.send(JSON.stringify({ type: "medicDraw", card: resp.filename }));
+				comp_and_send(socket, JSON.stringify({ type: "medicDraw", card: resp.filename }));
 			}, 1000);
 		} else if (actionString.includes("board.toWeather")) {
 			setTimeout(() => {
-				socket.send(JSON.stringify({ type: "weatherDraw", card: resp.filename }));
+				comp_and_send(socket, JSON.stringify({ type: "weatherDraw", card: resp.filename }));
 			}, 1000);
 		} else if (actionString.includes("board.toGrave")) {
 			setTimeout(() => {
-				socket.send(JSON.stringify({ type: "removeCardHand", card: resp.filename }));
+				comp_and_send(socket, JSON.stringify({ type: "removeCardHand", card: resp.filename }));
 			}, 1000);
 		} else if (actionString.includes("board.toHand")) {
 			setTimeout(() => {
-				socket.send(JSON.stringify({ type: "addCardHand", card: resp.filename  }));
+				comp_and_send(socket, JSON.stringify({ type: "addCardHand", card: resp.filename  }));
 			}, 1000);
 		}
 		if (this.isLastSelection() && !this.cancelled)
@@ -2259,7 +2367,7 @@ class DeckMaker {
 				return false;
 			}
 
-			socket.send(JSON.stringify({ type: "opChangeFaction", faction: faction_name }));
+			comp_and_send(socket, JSON.stringify({ type: "opChangeFaction", faction: faction_name }));
 		}
 
 		this.elem.getElementsByTagName("h1")[0].innerHTML = factions[faction_name].name;
@@ -2464,7 +2572,7 @@ class DeckMaker {
 			amReady = false;
 			readyButtonElem.classList.remove("ready");
 			customizationElem.classList.remove("noclick");
-			socket.send(JSON.stringify({ type: "unReady" }));
+			comp_and_send(socket, JSON.stringify({ type: "unReady" }));
 			return
 		}
 		console.log("[Start] \\this.stats\\", this.stats);
@@ -2490,7 +2598,7 @@ class DeckMaker {
 		};
 
 		player_me = new Player(0, "you", me_deck );
-		socket.send(JSON.stringify({ type: "ready", deck: me_deck }));
+		comp_and_send(socket, JSON.stringify({ type: "ready", deck: me_deck }));
 		amReady = true;
 		 showTooltip("You are ready, please wait for opponent!");
 		if (opponentReady) {
@@ -2573,7 +2681,7 @@ class DeckMaker {
 		if (warning && !confirm(warning + "\n\n\Continue importing deck?"))
 			return;
 		this.setFaction(deck.faction, true);
-		socket.send(JSON.stringify({ type: "opChangeFaction", faction: deck.faction }));
+		comp_and_send(socket, JSON.stringify({ type: "opChangeFaction", faction: deck.faction }));
 		if (card_dict[deck.leader].row === "leader" && deck.faction === card_dict[deck.leader].deck){
 			this.leader = this.leaders.find(c => c.index === deck.leader);
 			this.leader_elem.children[1].style.backgroundImage = largeURL(this.leader.card.deck + "_" + this.leader.card.filename);
@@ -2937,7 +3045,7 @@ function handleKeyDown(event) {
 					document.removeEventListener('keyup', handleKeyUp);
 					passButton.classList.remove("loading");
           player_me.passRound();
-					socket.send(JSON.stringify({ type: "pass", player: playerId }));
+					comp_and_send(socket, JSON.stringify({ type: "pass", player: playerId }));
         }, 2 * 1000); 
         startLoadingEffect();
     }

@@ -3,7 +3,7 @@ const OnGameStartDraw = 2;
 const ForGameStart = {
  'unitscards': 22,
  'special': 10,
- 'hero': 10
+ 'hero': 15
 };
 const maxhealth = 2; // Dont change it, it also should do nothing
 const thishandsize = 10;

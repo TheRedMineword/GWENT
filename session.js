@@ -70,7 +70,7 @@ function createGame() {
 
   btnCancelElem.classList.remove("hidden");
 
-  socket.send(JSON.stringify({ type: "createSession" }));
+  comp_and_send(socket, JSON.stringify({ type: "createSession" }));
 }
 
 function cancelSession() {
@@ -84,14 +84,14 @@ function cancelSession() {
 
   if (createdSessionId) {
     console.log("Cancelled Session:", createdSessionId);
-    socket.send(JSON.stringify({
+    comp_and_send(socket, JSON.stringify({
       type: "cancelSession",
       code: createdSessionId
     }));
     createdSessionId = null;
   } else if (joinedSessionId) {
     console.log("Left Session:", joinedSessionId);
-    socket.send(JSON.stringify({
+    comp_and_send(socket, JSON.stringify({
       type: "leaveSession",
       code: joinedSessionId
     }));
@@ -102,8 +102,17 @@ function cancelSession() {
 // --------------------
 // SOCKET MESSAGE HANDLING
 // --------------------
-socket.addEventListener("message", (event) => {
-  const data = JSON.parse(event.data);
+socket.addEventListener("message", async (event) => {
+  const data_dec = null;
+    try {
+        let data_dec = await recv_and_decomp(event);
+
+        if (!data_dec) return;
+
+    } catch (err) {
+        console.error(err);
+    }
+  const data = recv_and_decomp; //.data;
 
   switch (data.type) {
     case "sessionCreated":

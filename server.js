@@ -4,6 +4,7 @@ const WebSocket = require("ws");
 const path = require("path");
 const cors = require("cors");
 const crypto = require("crypto");
+const zlib = require("zlib");
 
 const app = express();
 const server = http.createServer(app);
@@ -49,7 +50,90 @@ console.log = (message) => {
 
 
 
+// ---------- helpers ----------
+function sha256(buffer) {
+    return crypto.createHash("sha256").update(buffer).digest("hex");
+}
 
+function percentSaved(before, after) {
+    return ((1 - after / before) * 100).toFixed(3);
+}
+
+function compressPayload(jsonString) {
+    const input = Buffer.from(jsonString, "utf8");
+    const compressed = zlib.deflateRawSync(input, { level: 9 });
+    console.log(`Bytes before ${input.length}\nBytes after ${compressed.length}\nCompressed% ${percentSaved(input.length, compressed.length)}%\nPayload sha ${sha256(compressed)}`);
+    console.log(jsonString);
+    return compressed;
+}
+
+function decompressPayload(buffer) {
+  console.log(zlib.inflateRawSync(buffer).toString("utf8"));
+    return zlib.inflateRawSync(buffer).toString("utf8");
+}
+
+
+// ---------- compress ----------
+//function compressPayload(jsonString) {
+   // const input = Buffer.from(jsonString, "utf8");
+
+   // const compressed = zlib.brotliCompressSync(input, {
+   //     params: {
+   //         [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+   //         [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_TEXT
+   //     }
+  //  });
+
+    
+//
+ //   return compressed;
+//}
+
+// ---------- decompress ----------
+//function decompressPayload(buffer) {
+   // const raw = zlib.brotliDecompressSync(buffer);
+  //  return raw.toString("utf8");
+//}
+
+// ---------- send compressed ----------
+function comp_and_send(ws, objectOrString) {
+    try {
+        if (ws.readyState !== WebSocket.OPEN) {
+            console.log("Socket send failed reason: socket not open");
+            return false;
+        }
+
+        const json =
+            typeof objectOrString === "string"
+                ? objectOrString
+                : JSON.stringify(objectOrString);
+
+        const compressed = compressPayload(json);
+
+        ws.send(compressed, { binary: true }, (err) => {
+            if (err) {
+                console.log("Socket send failed reason: " + err.message);
+            }
+        });
+
+        return true;
+
+    } catch (err) {
+        console.log("Socket send failed reason: " + err.message);
+        return false;
+    }
+}
+
+// ---------- receive compressed ----------
+function decodeIncoming(message) {
+    try {
+        const json = decompressPayload(message);
+        return JSON.parse(json);
+    } catch (err) {
+        console.log("Socket decode failed reason: " + err.message);
+        return null;
+    }
+}
 
 
 
@@ -85,11 +169,12 @@ wss.on('connection', (ws) => {
   players.push(ws);
 
   // Send a welcome message with the player's ID
-  ws.send(JSON.stringify({ type: 'welcome', playerId: ws.playerId }));
+  comp_and_send(ws, JSON.stringify({ type: 'welcome', playerId: ws.playerId }));
   console.log(`|| Player ${ws.playerId} connected`);
 
   ws.on('message', (message) => {
-    const data = JSON.parse(message);
+    const msg_is = decompressPayload(message);
+    const data = JSON.parse(msg_is);
     const msg =  JSON.stringify(data);
     console.log(`|| Message recived: \`\`\`\n${msg}\`\`\``);
 
@@ -98,10 +183,10 @@ wss.on('connection', (ws) => {
       // Create a new session and auto-join the creator
       sessions[sessionCode] = { players: [ws], code: sessionCode, playersReady: 0 };
       ws.sessionCode = sessionCode;
-      ws.send(JSON.stringify({ type: 'sessionCreated', code: sessionCode }));
+      comp_and_send(ws, JSON.stringify({ type: 'sessionCreated', code: sessionCode }));
       console.log(`|| Player ${ws.playerId} created Session ${sessionCode}`);
 
-      ws.send(JSON.stringify({ type: 'sessionJoined', code: sessionCode }));
+      comp_and_send(ws, JSON.stringify({ type: 'sessionJoined', code: sessionCode }));
     }
 
     if (data.type === "cancelSession") {
@@ -125,15 +210,15 @@ wss.on('connection', (ws) => {
       if (sessions[sessionCode] && sessions[sessionCode].players.length === 1) {
         sessions[sessionCode].players.push(ws);
         ws.sessionCode = sessionCode;
-        ws.send(JSON.stringify({ type: 'sessionJoined', code: sessionCode }));
+        comp_and_send(ws, JSON.stringify({ type: 'sessionJoined', code: sessionCode }));
         console.log(`|| Player ${ws.playerId} joined Session ${sessionCode}`);
 
         sessions[sessionCode].players.forEach((player, index) => {
-          player.send(JSON.stringify({ type: 'sessionReady', player: index + 1 }));
+          player.send(compressPayload(JSON.stringify({ type: 'sessionReady', player: index + 1 })));
         });
       
       } else {
-        ws.send(JSON.stringify({ type: 'sessionInvalid' }));
+        comp_and_send(ws, JSON.stringify({ type: 'sessionInvalid' }));
         const msg_out =  JSON.stringify({ type: 'sessionInvalid' });
   
       }
@@ -149,7 +234,7 @@ wss.on('connection', (ws) => {
             console.log("firstPlayer = ", sessions[ws.sessionCode].firstPlayer)
 
             session.players.forEach((player) => {
-                player.send(JSON.stringify({ type: 'coinToss', player: sessions[ws.sessionCode].firstPlayer }));
+                player.send(compressPayload(JSON.stringify({ type: 'coinToss', player: sessions[ws.sessionCode].firstPlayer })));
               });
   
         }
@@ -164,7 +249,7 @@ wss.on('connection', (ws) => {
 
         if (session.playersReady === 2) {
             session.players.forEach((player) => {
-                player.send(JSON.stringify({ type: 'start' }));
+                player.send(compressPayload(JSON.stringify({ type: 'start' })));
               });
           session.playersReady = 0;
         }
@@ -176,7 +261,7 @@ wss.on('connection', (ws) => {
       const sessionPlayers = sessions[ws.sessionCode]?.players || [];
       sessionPlayers.forEach((player) => {
         if (player !== ws) {
-          player.send(JSON.stringify(data));
+          player.send(compressPayload(JSON.stringify(data)));
         }
       });
     }
@@ -194,15 +279,15 @@ wss.on('connection', (ws) => {
         // If the creator disconnects, delete the session
         console.log(`|| Deleting session ${ws.sessionCode} because the creator left`);
         if (session.players.length > 1) {
-          session.players[1].send(JSON.stringify({ type: 'unReady' }));
-          session.players[1].send(JSON.stringify({ type: 'sessionUnready' }));
+          session.players[1].send(compressPayload(JSON.stringify({ type: 'unReady' })));
+          session.players[1].send(compressPayload(JSON.stringify({ type: 'sessionUnready' })));
         }
         delete sessions[ws.sessionCode];
       } else {
         // If a non-creator disconnects, remove them from the session and notify the creator
         session.players = session.players.filter(player => player !== ws);
-        session.players[0].send(JSON.stringify({ type: 'unReady' }));
-        session.players[0].send(JSON.stringify({ type: 'sessionUnready' }));
+        session.players[0].send(compressPayload(JSON.stringify({ type: 'unReady' })));
+        session.players[0].send(compressPayload(JSON.stringify({ type: 'sessionUnready' })));
         console.log(`|| Player ${ws.playerId} left the session ${ws.sessionCode}`);
       }
     }
