@@ -181,17 +181,7 @@ html {
 	z-index: -100;
 }
 
-#toggle-music {
-	position: absolute;
-	top: 45.6vw;
-	left: 20.5vw;
-	width: 2vw;
-	height: 3vw;
-	font-size: 3vw;
-	color: goldenrod;
-	text-shadow: 0 0 2vw #000;
-	z-index: 86;
-}
+
 
 #opponent-ready {
   position: absolute;
