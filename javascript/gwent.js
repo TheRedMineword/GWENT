@@ -292,6 +292,7 @@ setTimeout(() => {
 			// Opponent has left and the session is no longer ready
 			case "sessionUnready":
 				showTooltip("Opponent has left and the session is no longer ready");
+				twoPlayersConnected = false
 				console.log("---------------------");
 				console.log("Opponent left the game");
 				isOpponentReadyElem.classList.add("hidden");
@@ -328,6 +329,7 @@ setTimeout(() => {
 				break;
 
 			case "opChangeFaction":
+				twoPlayersConnected = true;
 				console.log("opponent has changed his faction");
 				 showTooltip(`Opponent changed his faction to ${data.faction}`);
 				opponentReadyElem.querySelector("img").src = `img/icons/deck_shield_${data.faction}.png`
@@ -335,6 +337,8 @@ setTimeout(() => {
 			
 			case "unReady":
 				opponentReady = false;
+				amReady = false;
+			//	twoPlayersConnected = true;
 				 showTooltip("Opponent is unReady.");
 				opponentReadyElem.classList.add("disabled");
 				if (amReady) {
@@ -1483,10 +1487,12 @@ console.log("Player op have a Squirrel leader, waiting for msg", event);
 	
 	// Allows the player to swap out up to two cards from their iniitial hand
 	async initialRedraw(){
+		var nilfard_drawmaster_draws = player_me.leader.abilities[0] === "nilf_drawmaster" ? nilfard_drawmaster.drawextra : 0;
+		var OnGameStartDraw2 = OnGameStartDraw + nilfard_drawmaster_draws;
 		if (debug == true)
-			await ui.queueCarousel(player_me.hand, OnGameStartDraw, async (c, i) => await player_me.deck.swap(c, c.removeCard(i)), c => true, true, true, `Choose up to ${OnGameStartDraw} cards to redraw.`);
+			await ui.queueCarousel(player_me.hand, OnGameStartDraw2, async (c, i) => await player_me.deck.swap(c, c.removeCard(i)), c => true, true, true, `Choose up to ${OnGameStartDraw2} cards to redraw.`);
 		else
-			await ui.queueCarousel(player_me.hand, 2, async (c, i) => await player_me.deck.swap(c, c.removeCard(i)), c => true, true, true, "Choose up to 2 cards to redraw.");
+			await ui.queueCarousel(player_me.hand, OnGameStartDraw2, async (c, i) => await player_me.deck.swap(c, c.removeCard(i)), c => true, true, true, `Choose up to ${OnGameStartDraw2} cards to redraw.`);
 		ui.enablePlayer(false);
 
 		comp_and_send(socket, JSON.stringify({ type: "initial_reDraw", hand: removeCircularReferences(player_me.hand.cards), deck: removeCircularReferences(player_me.deck.cards) }));
@@ -1607,6 +1613,7 @@ console.log("Player op have a Squirrel leader, waiting for msg", event);
 			tocar("");
 			endScreen.getElementsByTagName("p")[0].classList.remove("hide");
 			endScreen.children[0].classList.add("end-draw");
+			tocar("game_draw", true);
 			console.log("Game over || Draw")
 		} else if (player_op.health === 0){
 			tocar("game_win", true);
@@ -2108,6 +2115,7 @@ async notification(name, duration) {
     const guia2 = {
 			"me-pass" : "pass",
 			"win-round" : "round_win",
+			"draw-round": "round_lose",
 			"lose-round" : "round_lose",
 			"me-turn" : "turn_me",
 			"op-turn" : "turn_op",
@@ -2782,6 +2790,11 @@ class DeckMaker {
 	
 	// Verifies current deck, creates the players and their decks, then starts a new game
 	async startNewGame(){
+		if (!twoPlayersConnected) {
+    console.warn("Cannot start game: waiting for second player.");
+	showTooltip("Cannot start game: waiting for second player.");
+    return;
+}
 		if (amReady) {
 			amReady = false;
 			readyButtonElem.classList.remove("ready");

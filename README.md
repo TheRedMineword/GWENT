@@ -17,3 +17,4 @@ https://fontmeme.com/fonts/gwent-font/
 
 - Music
 Pass sound [pixabay.com](https://pixabay.com/sound-effects/film-special-effects-copyright-free-swoosh-487669/) by DRAGON-STUDIO
+Game ends: draw - [TF2 Stealmate](https://www.youtube.com/watch?v=Gz7l7d7otIs)

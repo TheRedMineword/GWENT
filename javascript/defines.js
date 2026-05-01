@@ -1,4 +1,8 @@
 "use strict"
+let twoPlayersConnected = false; //host alone
+ //host alone
+
+
 const OnGameStartDraw = 2;
 const tooltipQueue = [];
 let tooltipActive = false;
@@ -62,6 +66,7 @@ const nilfard_drawmaster =
 	// Starting hand penalty:
 	// Player begins the game with fewer cards based on this value
 	cardban: 0,
+	drawextra: 1
 };
 
 // Derived values:

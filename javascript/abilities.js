@@ -303,7 +303,7 @@ if (card.holder.id === player_op.id) {
 		weight: (card, ai) => ai.weightWeatherFromDeck(card, "rain")
 	},
 	nilf_drawmaster: {
-	description: `On use, if your hand has fewer than ${nilfard_drawmaster.handshort} cards, draw ${nilfard_drawmaster.drawalive} cards from your deck, plus 1 additional card for each unit in your graveyard (up to ${nilfard_drawmaster.drawdead} bonus cards).\nYou start the game with ${nilfard_drawmaster.cardban} fewer cards in hand.`,
+	description: `On use, if your hand has fewer than ${nilfard_drawmaster.handshort} cards, draw ${nilfard_drawmaster.drawalive} cards from your deck, plus 1 additional card for each unit in your graveyard (up to ${nilfard_drawmaster.drawdead} bonus cards).\nYou start the game with ${nilfard_drawmaster.cardban} fewer cards in hand but you can on game start redraw extra ${nilfard_drawmaster.drawextra} card(s).`,
 	activated:  async (card) => {
 	console.log("nilf_drawmaster");
 
