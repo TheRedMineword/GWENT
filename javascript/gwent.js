@@ -367,34 +367,24 @@ setTimeout(() => {
 
 			// Game - Opponent plays card
 			case "play":
-				let card = player_op.hand.cards.find(
+let card = player_op.hand.cards.find(
     c => c.filename === data.card.filename
 );
 
 if (!card) {
-    console.warn("Opponent hand desync, rebuilding card:", data.card);
+    console.warn("Opponent hand desync, rebuilding:", data.card);
 
-    // use raw network data if available, fallback to dictionary
-    const source = data.card || card_dict.find(
+    const source = card_dict.find(
         c => c.filename === data.card.filename
     );
 
     if (!source) {
-        throw new Error(`Unknown card ${data.card.filename}`, "source", source);
+        throw new Error(
+            `Unknown card ${data.card.filename}`
+        );
     }
 
-    card = new Card({
-        name: source.name,
-        filename: source.filename,
-        faction: source.faction || source.deck,
-        power: Number(source.power || source.strength),
-        basePower: Number(source.basePower || source.strength),
-        row: source.row,
-        abilities: source.abilities || [source.ability].filter(Boolean),
-        hero: !!source.hero
-    });
-
-    card.holder = player_op;
+    card = new Card(source, player_op);
 }
 console.log(
     "Opponent plays card:",
