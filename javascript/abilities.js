@@ -338,6 +338,78 @@ if (card.holder.id === player_op.id) {
 	}
 }
 },
+scol_secondchance: {
+ description: desc_scol_secondchance,
+ activated: async (card) => {
+        console.log("Second Chance Activated");
+		if (game.roundCount < scol_secondchance.useonround) {
+            console.log("scol_secondchance blocked - too early round", game.roundCount, " need to be ", scol_secondchance.useonround);
+            return;
+        }
+		scol_secondchance.usecount = scol_secondchance.usecount + 1;
+		this.game.roundCount = this.game.roundCount - 1;
+		await ui.notification(
+                `scol_secondchance_necro${scol_secondchance.usecount}`,
+                ui_display_times.faction_ability
+            );
+
+        const me = player_me;
+        const op = player_op;
+
+        // Save hand sizes AFTER grave cards are moved
+        const moveGraveToDeck = async (player) => {
+            let graveCards = [...player.grave.cards]; // copy array first
+            for (const c of graveCards) {
+                await board.toDeck(c, player.grave);
+            }
+        };
+
+        // Move all grave cards to hands
+        await moveGraveToDeck(me);
+        await moveGraveToDeck(op);
+
+        // Get hand sizes after grave recovery
+        const meHandSize = me.hand.cards.length;
+        const opHandSize = op.hand.cards.length;
+if (scol_secondchance.based_on_hand_size_draw_2 = false ) {
+	meHandSize = thishandsize;
+	opHandSize = thishandsize;
+};
+        console.log("Drawing based on hand sizes or value preset :", meHandSize, opHandSize);
+		
+
+        // Draw for each side
+        for (let i = 0; i < meHandSize; i++) {
+            if (me.deck.cards.length > 0)
+                await me.deck.draw(me.hand);
+        }
+
+        for (let i = 0; i < opHandSize; i++) {
+            if (op.deck.cards.length > 0)
+                await op.deck.draw(op.hand);
+        }
+
+		 // Run player_me first, then player_op
+        const restoreLife = (player) => {
+            if (player.health === 1) {
+                player.health += 1;
+
+                // Reactivate correct gem visually
+                const gemId = player.health;
+                const gem = document.getElementById("gem" + gemId + "-" + player.tag);
+
+                if (gem) {
+                    gem.classList.add("gem-on");
+                }
+
+                console.log("Restored life to", player.tag, "=>", player.health);
+            }
+        };
+
+        restoreLife(player_me);
+        restoreLife(player_op);
+    }
+},
 	emhyr_emperor: {
 		description: "Look at 3 random cards from your opponent's hand.",
 		activated: async card => {

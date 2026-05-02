@@ -408,6 +408,29 @@ html {
 	content: "Northern Realms faction ability triggered: \A North draws an additional card.";
 }
 
+#notif-scol_secondchance {
+	background-image: url(img/icons/notif_scoiatael.png);
+}
+
+#notif-scol_secondchance_necro1 {
+	background-image: url(img/icons/notif_scoiatael.png);
+}
+#notif-scol_secondchance_necro1::after {
+	content: "Scoia'tael \A Second Chance!";
+}
+
+#notif-scol_secondchance_necro2 {
+	background-image: url(img/icons/notif_scoiatael.png);
+}
+
+#notif-scol_secondchance_necro2::after {
+	content: "Scoia'tael \A Third Chance!";
+}
+
+#notif-scol_secondchance::after {
+	content: "Scoia'tael leader passive ability triggered: \A Scoia'tael draws an additional card from grave.";
+}
+
 #notif-north-scorch-cancelled::after {
 	content: "Northern Realms leader ability used: \A Scorch ability cancelled for the rest of the round.";
 }

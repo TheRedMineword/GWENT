@@ -38,7 +38,53 @@ const customizationElem = document.getElementById("deck-customization");
 const gameStartControlsElem = document.getElementById("session-start-control");
 const ep_id = document.getElementById("player-id-btn");
 
-let debug = true;
+let debug = false;
+
+
+
+function initAutoFitText() {
+  const apply = (root = document) => {
+    root.querySelectorAll(".card-description > p").forEach(p => {
+      fitText(p);
+    });
+  };
+
+  // initial run
+  apply();
+
+  // watch for changes (new cards / text updates)
+  const observer = new MutationObserver(mutations => {
+    for (const m of mutations) {
+      if (m.type === "childList" || m.type === "characterData") {
+        apply(document);
+        break;
+      }
+    }
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    characterData: true
+  });
+}
+function fitText(el, min = 10, max = 18) {
+  let size = max;
+  el.style.fontSize = max + "px"; // reset first
+
+  while (
+    (el.scrollHeight > el.clientHeight ||
+      el.scrollWidth > el.clientWidth) &&
+    size > min
+  ) {
+    size -= 0.5;
+    el.style.fontSize = size + "px";
+  }
+}
+
+initAutoFitText();
+
+
 
 function showTooltip(text) {
     const tooltip = document.getElementById("tooltip");
@@ -1361,6 +1407,7 @@ class Game {
 	
 	// Sets up player faction abilities and psasive leader abilities
 	initPlayers(p1, p2){
+		console.log("[initPlayers]", p1, p2);
 		let l1 = ability_dict[p1.leader.abilities[0]];
 		let l2 = ability_dict[p2.leader.abilities[0]];
 		if (l1 === ability_dict["emhyr_whiteflame"] || l2 === ability_dict["emhyr_whiteflame"]){
@@ -1374,6 +1421,7 @@ class Game {
 			return;
 		initFaction(p1);
 		initFaction(p2);
+		
 		
 		function initLeader(player, leader){
 			if (leader.placed)
@@ -1425,7 +1473,23 @@ class Game {
 
 		await this.runEffects(this.gameStart);
 		tocar("game_opening", false);
+		
 		if (player_op.deck.faction === "scoiatael" && player_me.deck.faction !== "scoiatael") {
+
+			if (player_op.leader?.abilities?.[0] === "scol_secondchance") {
+    showTooltip(`Opponent starts (instant resolve)!`);
+
+    console.log("Scol second chance active → forcing opponent start");
+
+    game.firstPlayer = player_me
+    game.currPlayer = player_me;
+
+    comp_and_send(socket, JSON.stringify({ type: 'gameStart' }));
+    await this.initialRedraw();
+
+  } else {
+			
+			showTooltip(`Waiting for oponent to decide who starts!`);
 			await new Promise((resolve) => {
 				const handleMessage = async (event) => {
 					const data = await recv_and_decomp(event);
@@ -1444,6 +1508,7 @@ console.log("Player op have a Squirrel leader, waiting for msg", event);
 
 			comp_and_send(socket, JSON.stringify({ type: 'gameStart' }));
 			await this.initialRedraw();
+		}
 		} else if (player_me.deck.faction === "scoiatael" && player_op.deck.faction !== "scoiatael") {
 			comp_and_send(socket, JSON.stringify({ type: 'gameStart' }));
 	
@@ -1568,6 +1633,8 @@ console.log("Player op have a Squirrel leader, waiting for msg", event);
 		let winner = dif > 0 ? player_me : dif < 0 ? player_op : null;
 		let verdict = {winner: winner, score_me: player_me.total, score_op: player_op.total}
 		this.roundHistory.push(verdict);
+		scol_secondchance.lastwin = winner;
+		console.log("Winner", scol_secondchance.lastwin.id);
 		
 		await this.runEffects(this.roundEnd);
 		
@@ -2124,7 +2191,10 @@ async notification(name, duration) {
 			"nilfgaard-wins-draws" : "turn_op",
 			"sv-err": "server_error",
 			"win-opleft" : "round_win", // "opponent_left",
-			"round-start": "round1_start"
+			"round-start": "round1_start",
+			"scol_secondchance": "med",
+			"scol_secondchance_necro1": "necromancy_ability",
+			"scol_secondchance_necro2": "necromancy_ability"
 		};
 
     const temSom = Object.keys(guia2);

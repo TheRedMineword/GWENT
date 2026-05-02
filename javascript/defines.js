@@ -30,7 +30,7 @@ const ui_display_times = {
 	'turn': 1200,
 	'round_start': 1200,
 	'coin': 1200,
-	'faction_ability': 1200,
+	'faction_ability': 2700,
 	'show_me_that_card_you_have': 2900
 }
 
@@ -87,3 +87,18 @@ const audio_cache = {};
 const audio_yt_vid_soundtrack = "FTsuevfvQ9w"; // wild hunt: "UE9fPWy1_o4" // How about round of gwent: "FTsuevfvQ9w"
 const audio_yt_vid_soundtrack_volume = 47; // 100 for wild hunt, less for other
 
+
+
+const scol_secondchance = {
+ 'choose_who_starts': false,
+ 'based_on_hand_size_draw_2': false,
+ 'usecount': 0,
+ 'useonround': '2',
+ 'roundstartreviverandom': true,
+ 'lastwin': null
+};
+
+
+const desc_scol_secondchance = `${scol_secondchance.choose_who_starts ? `` : `Passive Ability: On game start the player will lose the ability to choose who starts the game and the opponent will always start the game`}${scol_secondchance.choose_who_starts ? `After` : `, after`} round is finished player will ${scol_secondchance.choose_who_starts ? `Passive Ability: After ` : `, after `}${scol_secondchance.roundstartreviverandom ? `random card will be revivied from grave into player hand` : `card choosed by player will be revivied from grave into player hand`} Active Ability: After using a leader card, if the number of rounds is greater than or equal to ${scol_secondchance.useonround}, the following will happen for each player: All cards will be moved from the grave to the deck, players' hands will be refilled with ${scol_secondchance.based_on_hand_size_draw_2 ? `amount of cards based on thier current hand size` : `a number of cards equal to the number of cards at the start of the game (buffs and debuffs up to this number are not taken into account)`}, players will regain up to one life, and the round counter will be reduced by one. If opponent uses same faction as you passive ability gets cancelled!`;
+
+console.log("scol_secondchance", scol_secondchance, desc_scol_secondchance);

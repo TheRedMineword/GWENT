@@ -49,13 +49,107 @@ var factions = {
 	},
 	scoiatael: {
 		name: "Scoia'tael",
-		factionAbility: player => game.gameStart.push( async () => {
-			if (player === player_me) {
-				await ui.popup("Go First", () => game.firstPlayer = player, "Let Opponent Start", () => game.firstPlayer = player.opponent(), "Would you like to go first?", "The Scoia'tael faction perk allows you to decide who will get to go first.");
-				comp_and_send(socket, JSON.stringify({ type: 'scoiataelStart', first: game.firstPlayer.tag }));
-			}
-			return true;
-		}),
+		factionAbility: player => {
+
+    // MATCH START ability (choose who goes first)
+game.gameStart.push(async () => {
+    console.log("[Scoiatael] gameStart triggered");
+
+    if (player === player_me) {
+
+        const hasSecondChance =
+            player_me.leader &&
+            player_me.leader.abilities &&
+            player_me.leader.abilities.includes("scol_secondchance");
+
+        const forceOpponentStart =
+            hasSecondChance &&
+            player_me.leader.abilities.includes("scol_secondchance.choose_who_starts") === false;
+console.log("[Scoiatael] gameStart triggered", 'second chancing?', forceOpponentStart, hasSecondChance);
+        if (forceOpponentStart) {
+            console.log("[Scoiatael] Forcing opponent to start (Second Chance override)");
+
+		game.firstPlayer = player.opponent();
+		return true;
+
+        } else {
+            await ui.popup(
+                "Go First",
+                () => game.firstPlayer = player,
+                "Let Opponent Start",
+                () => game.firstPlayer = player.opponent(),
+                "Would you like to go first?",
+                "The Scoia'tael faction perk allows you to decide who will get to go first."
+            );
+        }
+
+        comp_and_send(
+            socket,
+            JSON.stringify({
+                type: "scoiataelStart",
+                first: game.firstPlayer.tag
+            })
+        );
+    }
+
+    return true;
+});
+
+    // ROUND START ability (Second Chance)
+    game.roundStart.push(async () => {
+    console.log("[Scoiatael] roundStart triggered");
+		try {
+			console.log(scol_secondchance.lastwin, player.leader.abilities[0], game.roundCount, "lastwinner", scol_secondchance.lastwin);
+			
+    if (game.roundCount > 1 && scol_secondchance.lastwin.id === player.id && player.leader.abilities[0] === "scol_secondchance") {
+        console.log("[Scoiatael] Second Chance activated, drawing");
+
+        let grave = player.grave;
+		console.log("Grave:", grave);
+        let newCard = null;
+
+        const valid = grave.cards.filter(c => c.isUnit());
+
+        if (valid.length > 0) {
+            const useRandom = scol_secondchance.roundstartreviverandom;
+			console.log("[Scoiatael] second chance random?", useRandom);
+
+            if (player.controller instanceof ControllerOpponent) {
+                newCard = useRandom
+                    ? valid[Math.floor(Math.random() * valid.length)]
+                    : valid[0];
+            } else {
+                if (Carousel.curr) Carousel.curr.cancel();
+
+                if (useRandom) {
+                    newCard = valid[Math.floor(Math.random() * valid.length)];
+                } else {
+                    await ui.queueCarousel(
+                        grave,
+                        1,
+                        (c, i) => newCard = c.cards[i],
+                        c => c.isUnit(),
+                        true
+                    );
+                }
+            }
+        }
+
+        if (newCard) {
+            await board.toHand(newCard, grave);
+            await ui.notification(
+                "scol_secondchance",
+                ui_display_times.faction_ability
+            );
+        }
+    }} catch (e) {
+		console.log("[Scoiatael] roundStart triggered error;", e);
+	}
+
+    return false;
+});
+
+},
 		description: "Decides who takes first turn."
 	},
 	skellige: {

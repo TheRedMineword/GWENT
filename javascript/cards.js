@@ -2187,6 +2187,16 @@ var card_dict = [
         "ability": "nilf_drawmaster",
         "filename": "nilf_drawmaster",
         "count": "1"
+    },
+    {
+        "name": "scol_secondchance",
+        "id": "1004",
+        "deck": "scoiatael",
+        "row": "leader",
+        "strength": "",
+        "ability": "scol_secondchance",
+        "filename": "",
+        "count": "1"
     }
 ];
 console.log("Cards array", card_dict);
