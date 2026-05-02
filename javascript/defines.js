@@ -1,7 +1,9 @@
 "use strict"
 let twoPlayersConnected = false; //host alone
  //host alone
-
+const players = {
+	'me': "You", "op": "Opponent"
+}
 
 const OnGameStartDraw = 2;
 const tooltipQueue = [];
@@ -9,7 +11,7 @@ let tooltipActive = false;
 const ForGameStart = {
  'unitscards': 22,
  'special': 10,
- 'hero': 7
+ 'hero': 9
 };
 const maxhealth = 2; // Dont change it, it also should do nothing
 const thishandsize = 10;

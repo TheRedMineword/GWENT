@@ -315,7 +315,7 @@ setTimeout(() => {
 			// Opponent is ready. If you are ready begin the game immediately
 			case "ready":
 				 showTooltip("Opponent is ready. If you are ready begin the game immediately");
-				player_op = new Player(1, "Opponent", data.deck);
+				player_op = new Player(1, players.op, data.deck);
 				if (amReady) {
 					customizationElem.classList.add("hide");
 					gameStartControlsElem.classList.add("hide");
@@ -2824,7 +2824,7 @@ class DeckMaker {
 			cards: this.deck.filter(x => x.count > 0)
 		};
 
-		player_me = new Player(0, "you", me_deck );
+		player_me = new Player(0, players.me, me_deck );
 		comp_and_send(socket, JSON.stringify({ type: "ready", deck: me_deck }));
 		amReady = true;
 		 showTooltip("You are ready, please wait for opponent!");
