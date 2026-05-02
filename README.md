@@ -11,11 +11,7 @@ Full credit and thanks go to CD Projekt Red for creating The Witcher 3, [asundr 
 https://pngtree.com/freebackground/vintage-crinkled-paper-texture-aged-brown-background-with-sheet-of-paper_15221865.html
 - Fonts for custom gwent cards:
 https://fontmeme.com/fonts/gwent-font/
-
-
-
-
-> Music
+- Rules page copied from: https://romain-durban.github.io/gwent-classic-v3.0/rules
 - Pass sound [pixabay.com](https://pixabay.com/sound-effects/film-special-effects-copyright-free-swoosh-487669/) by DRAGON-STUDIO
 - Game ends: draw - [TF2 Stealmate](https://www.youtube.com/watch?v=Gz7l7d7otIs)
 - scol_secondchance necromance: Start of "Geralt of Rivia - Sonya Belousova & Giona Ostinelli"
