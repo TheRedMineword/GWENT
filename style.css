@@ -416,7 +416,7 @@ html {
 	background-image: url(img/icons/notif_scoiatael.png);
 }
 #notif-gaunter::after {
-	content: "Scoia'tael \A Second Chance!";
+	content: "Gaunter o'Dim Ability Used \A Both sides recived additional card!";
 }
 
 #notif-gaunter {

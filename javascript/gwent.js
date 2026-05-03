@@ -2086,7 +2086,9 @@ class UI {
 			console.log("You played the card", this.previewCard)
 			comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna, target: targetCard, isMeHand: handData, HandMePost: handData_after }));
 			if (extraJSON !== null) {
-    await new Promise(resolve => setTimeout(resolve, 300));
+				console.log("Hold before send extraJSON", extraJSON);
+				showTooltip(`The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000}`);
+    await new Promise(resolve => setTimeout(resolve, RegisterMovesHold));
     comp_and_send(socket, extraJSON);
     extraJSON = null;
 }
@@ -2136,7 +2138,9 @@ class UI {
 		console.log("HandData_after", handData_after)
 		comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna, isMeHand: handData, HandMePost: handData_after}));
 		if (extraJSON !== null) {
-    await new Promise(resolve => setTimeout(resolve, 300));
+			console.log("Hold before send extraJSON", extraJSON);
+    showTooltip(`The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000}`);
+    await new Promise(resolve => setTimeout(resolve, RegisterMovesHold));
     comp_and_send(socket, extraJSON);
     extraJSON = null;
 }
@@ -2564,6 +2568,7 @@ class Carousel {
 		if (actionString === "(c, i) => wrapper.card=c.cards[i]" || actionString === "(c,i) => newCard = c.cards[i]") {
 			setTimeout(() => {
 				extraJSON = JSON.stringify({ type: "medicDraw", card: resp.filename });
+				console.log("extra json now", extraJSON);
 			}, 1000);
 		} else if (actionString.includes("board.toWeather")) {
 			setTimeout(() => {
