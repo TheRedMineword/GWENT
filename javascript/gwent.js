@@ -2060,6 +2060,7 @@ class UI {
 	
 	// Called when the player selects a selectable card
 	async selectCard(card) {
+		extraJSON = null;
 		var handData = await serializeCards(player_me.hand.cards);
 		console.log("HandData", handData);
 		let row = this.lastRow;
@@ -2104,6 +2105,7 @@ class UI {
 	// Called when the player selects a selectable CardContainer
 	// LEO - aqui de fato coloca a carta na coluna.
 	async selectRow(row, opponentCard = null){
+		extraJSON = null;
 		var handData = await serializeCards(player_me.hand.cards);
 		console.log("HandData", handData);
 		this.lastRow = row;
