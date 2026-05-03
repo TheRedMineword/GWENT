@@ -164,9 +164,20 @@ async function decompressData(uint8) {
     throw new Error("DecompressionStream not supported.");
 }
 
-async function comp_and_send(socket, jsonString) {
-	console.log("Comp and send:", socket, jsonString);
+function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Start automatic queue processor
+setInterval(async () => {
+    if (sendQueue.length === 0) return;
+
+    const item = sendQueue.shift(); // take first queued item
+    const { socket, jsonString } = item;
+
     try {
+        console.log("Comp and send:", socket, jsonString);
+
         const before = TextEnc.encode(jsonString).length;
 
         const compressed = await compressData(jsonString);
@@ -181,8 +192,7 @@ async function comp_and_send(socket, jsonString) {
         console.log("Payload sha :", hash);
 
         if (socket.readyState !== WebSocket.OPEN) {
-            alert("Socket send failed: socket not open");
-            return;
+            throw new Error("socket not open");
         }
 
         socket.send(compressed);
@@ -191,6 +201,18 @@ async function comp_and_send(socket, jsonString) {
         console.error(err);
         alert("Socket send failed: " + err.message);
     }
+
+}, SEND_INTERVAL_MS);
+
+
+// Call this anytime you want to queue a send
+function comp_and_send(socket, jsonString) {
+    sendQueue.push({
+        socket,
+        jsonString
+    });
+
+    console.log("Queued request. Queue size:", sendQueue.length);
 }
 
 async function recv_and_decomp(event) {
@@ -365,34 +387,42 @@ setTimeout(() => {
 				tocar("game_start", false);
 				break;
 
+			   case "resync_hands()##BLOCK##": //Resync function disabled, due to changes made in play
+      try {
+				console.log("[RESYNC]", "recived", data);
+				var rebuild = await deserializeCards(   data.data,    player_op );
+				console.log("[RESYNC]", "REBUILD", rebuild);
+				player_op.hand.cards = rebuild;
+				console.log("[RESYNC]", "op is", player_op.hand.cards);
+				try {
+					console.log("[RESYNC]", "sync cards counter op", player_op.hand.cards.length)
+var op_counter = document.getElementById("hand-count-op");
+op_counter.innerHTML = player_op.hand.cards.length
+} catch (e) {
+	console.log("[RESYNC]", "sync cards counter op", e)
+}
+				} catch (e) {
+					console.log("[RESYNC]", " FAILED", " OUT", e);
+				}
+      break;
+
 			// Game - Opponent plays card
 			case "play":
-let card = player_op.hand.cards.find(
-    c => c.filename === data.card.filename
-);
+				console.log("[OPHAND]", await deserializeCards(   data?.isMeHand,    player_op));
+				var cards_to_find = await deserializeCards(   data?.isMeHand,    player_op);
+				player_op.hand.cards = cards_to_find;
+				console.log("[OPHAND]", cards_to_find, data?.isMeHand);
+				// const card = player_op.hand.cards.find(c => c.filename === data.card.filename);
+				let card = null;
+				try {
+					try { console.log("[OPHAND]","IsCardPlayed?", player_op.hand.cards.find(c => c.filename === data.card.filename))} catch (e) {};
+					card = cards_to_find.find(c => c.filename === data.card.filename);
+				} catch (e) {
 
-if (!card) {
-    console.warn("Opponent hand desync, rebuilding:", data.card);
-
-    const source = card_dict.find(
-        c => c.filename === data.card.filename
-    );
-
-    if (!source) {
-        throw new Error(
-            `Unknown card ${data.card.filename}`
-        );
-    }
-
-    card = new Card(source, player_op);
-}
-console.log(
-    "Opponent plays card:",
-	"card, data.card",	//source",
-    card,
-    data.card//,
-//	source || null/
-);
+					console.log("[OPHAND]","Let card card failure", e,"\n\n", "OpHand: (rebuilded)", player_op.hand.cards, "payload", data, "card", card);
+					alert("Failed to build opponent hand, check console for more!! \n\nReport is as bug!!!");
+				}
+				console.log("[OPHAND]","OP", "PLAY", card, cards_to_find, data);
 
 				const splitRowName = data.row.split("-");
 				let row
@@ -416,6 +446,19 @@ console.log(
 					await  player_op.playScorch(card);
 				else
 					await player_op.playCardToRow(card, row);
+
+
+				console.log("[OPHAND]","PLAY EXCUTE DONE, SYNC2");
+				try {
+				console.log("[OPHAND] post", await deserializeCards(   data?.HandMePost,    player_op));
+				var cards_to_find_post = await deserializeCards(   data?.HandMePost,    player_op);
+				player_op.hand.cards = cards_to_find_post;
+				console.log("[OPHAND]", player_op.hand.cards);
+				document.getElementById("hand-count-op").innerHTML = player_op.hand.cards.length;
+				} catch (e) {
+					console.log("[OPHAND]","sync from payload post procces fatal", e, "data", data, cards_to_find_post);
+					alert("Failed sync op cars on end of execute path, check console for more \n\nReport it as bug!!!");
+				}
 				break;
 
 			// Game - Opponent pass
@@ -635,6 +678,7 @@ class Player {
 				await ui.viewCard(this.leader, async () => {
 						comp_and_send(socket, JSON.stringify({ type: "useLeader", player: this.id }));
 						await this.activateLeader();
+					//	await init_sync_hands();
 				});
 		});
 		} else {
@@ -706,6 +750,7 @@ class CardContainer {
 	
 	// Removes a card from the container along with its associated HTML element.
 	removeCard(card, index){
+		console.log("REMOVE CARD", card, index);
 		if (this.cards.length === 0)
 			throw "Cannot draw from empty " + this.constructor.name;
 		card = this.cards.splice( isNumber(card)? card : this.cards.indexOf(card) , 1)[0];
@@ -1535,7 +1580,7 @@ console.log("Player op have a Squirrel leader, waiting for msg", event);
 			await ui.queueCarousel(player_me.hand, OnGameStartDraw2, async (c, i) => await player_me.deck.swap(c, c.removeCard(i)), c => true, true, true, `Choose up to ${OnGameStartDraw2} cards to redraw.`);
 		ui.enablePlayer(false);
 
-		comp_and_send(socket, JSON.stringify({ type: "initial_reDraw", hand: removeCircularReferences(player_me.hand.cards), deck: removeCircularReferences(player_me.deck.cards) }));
+		comp_and_send(socket, JSON.stringify({ type: "initial_reDraw", hand: removeCircularReferences(player_me.hand.cards), deck: removeCircularReferences(player_me.deck.cards)}));
 	}
 	
 	// Initiates a new round of the game
@@ -2006,6 +2051,8 @@ class UI {
 	
 	// Called when the player selects a selectable card
 	async selectCard(card) {
+		var handData = await serializeCards(player_me.hand.cards);
+		console.log("HandData", handData);
 		let row = this.lastRow;
 		let pCard = this.previewCard;
 		if (card === pCard)
@@ -2018,20 +2065,27 @@ class UI {
 			const playedCard = removeCircularReferences(this.previewCard);
 			const targetCard = removeCircularReferences(card);
 
-			console.log("You played the card", this.previewCard)
-			comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna, target: targetCard }));
+			//console.log("You played the card", this.previewCard)
+			//comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna, target: targetCard, isMeHand: handData }));
 			
 			this.hidePreview(card);
 			this.enablePlayer(false);
 			board.toHand(card, row);
 			await board.moveTo(pCard, row, pCard.holder.hand);
+			var handData_after = await serializeCards(player_me.hand.cards);
+		console.log("HandData_after", handData);
+			console.log("You played the card", this.previewCard)
+			comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna, target: targetCard, isMeHand: handData, HandMePost: handData_after }));
 			pCard.holder.endTurn();
+		//	await init_sync_hands();
 		}
 	}
 	
 	// Called when the player selects a selectable CardContainer
 	// LEO - aqui de fato coloca a carta na coluna.
 	async selectRow(row, opponentCard = null){
+		var handData = await serializeCards(player_me.hand.cards);
+		console.log("HandData", handData);
 		this.lastRow = row;
 
 		if (this.previewCard === null && opponentCard === null) {
@@ -2046,7 +2100,7 @@ class UI {
 		if (this.previewCard.name === "Decoy")
 			return;
 
-		comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna}));
+		// comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna, isMeHand: handData}));
 
 		let card = this.previewCard || opponentCard;
 		let holder = card.holder;
@@ -2060,7 +2114,11 @@ class UI {
 		} else {
 			await board.moveTo(card, row, card.holder.hand);
 		}
+		var handData_after = await serializeCards(player_me.hand.cards);
+		console.log("HandData_after", handData_after)
+		comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna, isMeHand: handData, HandMePost: handData_after}));
 		holder.endTurn();
+		// await init_sync_hands();
 	}
 	
 	// Called when the client cancels out of a card-preview

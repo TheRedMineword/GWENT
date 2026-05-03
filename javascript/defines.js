@@ -15,6 +15,13 @@ const ForGameStart = {
 };
 const maxhealth = 2; // Dont change it, it also should do nothing
 const thishandsize = 10;
+
+const sendQueue = [];
+let queueRunning = false;
+
+const SEND_INTERVAL_MS = 700; // change this to desired wait time
+
+
 const ui_display_times = {
 	'socketready': 3000,
 	'hold_pause': {
@@ -36,6 +43,9 @@ const ui_display_times = {
 	'show_me_that_card_you_have': 2900
 }
 
+
+let isSyncingHands = false;
+const resync_wait = 1000 * 0.01;
 
 ui_display_times.is_transitioning = false;
 const ongame_start_eval = "console.log(\"evaled start game\");\n(function notificationRepeat() {\r\n  ui.notificationLoop();\r\n  setTimeout(notificationRepeat, ui_display_times.checkDelay);\r\n})();";

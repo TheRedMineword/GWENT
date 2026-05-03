@@ -130,6 +130,7 @@ var ability_dict = {
                     await card.holder.deck.draw(card.holder.hand);
             }
             card.holder = card.holder.opponent();
+			//await resync_hands();
         }
     },
 	aid: {
@@ -175,6 +176,7 @@ if (card.holder.id === player_op.id) {
 		}
 }
         card.holder = card.holder.opponent();
+		//await resync_hands();
     }
 },
 	medic: {

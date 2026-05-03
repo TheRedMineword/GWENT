@@ -7,6 +7,7 @@ var factions = {
 			if (game.roundCount > 1 && game.roundHistory[game.roundCount-2].winner === player) {
 				player.deck.draw(player.hand);
 				await ui.notification("north", ui_display_times.faction_ability);
+				await init_sync_hands();
 			}
 			return false;
 		}),
