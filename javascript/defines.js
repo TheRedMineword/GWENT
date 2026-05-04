@@ -1,6 +1,7 @@
 "use strict"
 let twoPlayersConnected = false; //host alone
 let extraJSON = null;
+let gameended = false;
  //host alone
 const players = {
 	'me': "You", "op": "Opponent"
