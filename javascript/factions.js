@@ -83,5 +83,36 @@ var factions = {
 		}),
 		// OLD: description: "2 random cards from the graveyard are placed on the battlefield at the start of the third round."
 		description: "The strongest 2 cards from the graveyard are placed on the battlefield at the start of the third round."
+	},
+	sky: {
+		name: "Sky Kindom",
+		factionAbility: player => game.roundEnd.push( () => {
+			let units = board.row.filter( (r,i) => player === player_me ^ i < 3)
+				.reduce((a,r) => r.cards.filter(c => c.isUnit()).concat(a), []);
+			
+			if (units.length === 0)
+				return;
+			
+			// Edit by Rick: Previously this would pick a random unit but that'll differ per client.
+			// Easiest fix was to just have it always keep the strongest card (use filename in case of tie) instead of a random index.
+			// OLD: let card = units[randomInt(units.length)];
+			units.sort((a, b) => {
+				const powerDiff = b.basePower - a.basePower;
+				if (powerDiff !== 0) return powerDiff;
+				return a.filename.localeCompare(b.filename);	// Fallback, if points are tied then use filename as a tiebreaker.
+			});
+			let card = units[0];
+			
+			card.noRemove = true;
+			
+			game.roundStart.push( async () => {
+				await ui.notification("monsters", ui_display_times.faction_ability);
+				delete card.noRemove;
+				return true; 
+			});
+			return false;
+		}),
+		// OLD: description: "Keeps a random Unit Card out after each round."
+		description: "Keeps the strongest Unit Card out after each round."
 	}
 }

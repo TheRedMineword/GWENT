@@ -22,3 +22,9 @@ https://fontmeme.com/fonts/gwent-font/
 - Pass sound [pixabay.com](https://pixabay.com/sound-effects/film-special-effects-copyright-free-swoosh-487669/) by DRAGON-STUDIO
 - Game ends: draw - [TF2 Stealmate](https://www.youtube.com/watch?v=Gz7l7d7otIs)
 - scol_secondchance necromance: Start of "Geralt of Rivia - Sonya Belousova & Giona Ostinelli"
+
+
+# Sky Kindom Faction
+>> All cards and card images are created using resources from the Sky: Children of the Light Wiki (Fandom) for non-commercial use. Sky: Children of the Light is a game developed and published by thatgamecompany.
+>> 
+>> All rights to original characters, designs, images, and related assets belong to thatgamecompany. This project is a fan-made, non-commercial work and is not affiliated with, endorsed by, or sponsored by thatgamecompany or its partners.

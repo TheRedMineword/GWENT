@@ -679,7 +679,7 @@ class Player {
 						await this.activateLeader();
 							if ( player_op.passed && !player_me.passed ) {
 			showTooltip(`The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`);
-			await sleep(RegisterMovesHold);
+			await sleep(RegisterMovesHold); 			showTooltip(`You can play now again`);
 		}
 					//	await init_sync_hands();
 				});
@@ -688,7 +688,7 @@ class Player {
 			this.elem_leader.addEventListener("click", async () => await ui.viewCard(this.leader), false);
 				if ( player_op.passed && !player_me.passed ) {
 			showTooltip(`The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`);
-			await sleep(RegisterMovesHold);
+			await sleep(RegisterMovesHold); 			showTooltip(`You can play now again`);
 		}
 		}
 		
@@ -2096,7 +2096,7 @@ class UI {
 }
 			if ( player_op.passed && !player_me.passed ) {
 			showTooltip(`The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`);
-			await sleep(RegisterMovesHold);
+			await sleep(RegisterMovesHold); 			showTooltip(`You can play now again`);
 		}
 			pCard.holder.endTurn();
 		//	await init_sync_hands();
@@ -2149,7 +2149,7 @@ class UI {
 }
 		if ( player_op.passed && !player_me.passed ) {
 			showTooltip(`The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`);
-			await sleep(RegisterMovesHold);
+			await sleep(RegisterMovesHold); 			showTooltip(`You can play now again`);
 		}
 		holder.endTurn();
 		// await init_sync_hands();

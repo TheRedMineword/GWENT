@@ -2188,7 +2188,7 @@ var card_dict = [
         "filename": "nilf_drawmaster",
         "count": "1"
     }, 
-    {"name":"Gaunter o'Dim","id":"1004","deck":"monsters","row":"leader","strength":"0","ability":"gaunter_neutral_leader","filename":"Gaunter_Leader","count":"1"},{"name":"Gaunter o'Dim","id":"1004","deck":"nilfgaard","row":"leader","strength":"0","ability":"gaunter_neutral_leader","filename":"Gaunter_Leader","count":"1"},{"name":"Gaunter o'Dim","id":"1004","deck":"realms","row":"leader","strength":"0","ability":"gaunter_neutral_leader","filename":"Gaunter_Leader","count":"1"},{"name":"Gaunter o'Dim","id":"1004","deck":"scoiatael","row":"leader","strength":"0","ability":"gaunter_neutral_leader","filename":"Gaunter_Leader","count":"1"},{"name":"Gaunter o'Dim","id":"1004","deck":"skellige","row":"leader","strength":"0","ability":"gaunter_neutral_leader","filename":"Gaunter_Leader","count":"1"},
+    {"name":"Gaunter o'Dim","id":"1004","deck":"monsters","row":"leader","strength":"0","ability":"gaunter_neutral_leader","filename":"Gaunter_Leader","count":"1"},{"name":"Gaunter o'Dim","id":"1004","deck":"nilfgaard","row":"leader","strength":"0","ability":"gaunter_neutral_leader","filename":"Gaunter_Leader","count":"1"},{"name":"Gaunter o'Dim","id":"1004","deck":"realms","row":"leader","strength":"0","ability":"gaunter_neutral_leader","filename":"Gaunter_Leader","count":"1"},{"name":"Gaunter o'Dim","id":"1004","deck":"scoiatael","row":"leader","strength":"0","ability":"gaunter_neutral_leader","filename":"Gaunter_Leader","count":"1"},{"name":"Gaunter o'Dim","id":"1004","deck":"skellige","row":"leader","strength":"0","ability":"gaunter_neutral_leader","filename":"Gaunter_Leader","count":"1"},{"name":"Gaunter o'Dim","id":"1004","deck":"sky","row":"leader","strength":"0","ability":"gaunter_neutral_leader","filename":"Gaunter_Leader","count":"1"},
     {
         "name": "Spice Merchant",
         "id": "1005",
@@ -2198,6 +2198,87 @@ var card_dict = [
         "ability": "hero sabotage",
         "filename": "spice_trader",
         "count": "1"
+    },
+    // New cards for sky
+    {
+        "name": "Hopeful Steward",
+        "id": "3001",
+        "deck": "sky",
+        "row": "agile",
+        "strength": "7",
+        "ability": "hero morale",
+        "filename": "steward",
+        "count": "1"
+    },
+    {
+        "name": "Royal Guard",
+        "id": "3002",
+        "deck": "sky",
+        "row": "close",
+        "strength": "3",
+        "ability": "muster",
+        "filename": "guard",
+        "count": "3"
+    },
+    {
+        "name": "Chibi Mask",
+        "id": "3003",
+        "deck": "sky",
+        "row": "ranged",
+        "strength": "1",
+        "ability": "bond",
+        "filename": "chibi_mask",
+        "count": "3"
+    },
+    {
+        "name": "Dark Dragon",
+        "id": "3004",
+        "deck": "sky",
+        "row": "ranged",
+        "strength": "5",
+        "ability": "",
+        "filename": "krill",
+        "count": "3"
+    },
+    {
+        "name": "Cackling Cannoneer",
+        "id": "3005",
+        "deck": "sky",
+        "row": "siege",
+        "strength": "7",
+        "ability": "scorch_s",
+        "filename": "rico",
+        "count": "1"
+    },
+    {
+        "name": "Wandering Carnival",
+        "id": "3006",
+        "deck": "sky",
+        "row": "siege",
+        "strength": "6",
+        "ability": "",
+        "filename": "arcadaoffun",
+        "count": "2"
+    },
+    {
+        "name": "Fortune Drum",
+        "id": "3007",
+        "deck": "sky",
+        "row": "agile",
+        "strength": "0",
+        "ability": "hero morale",
+        "filename": "fortunedrum",
+        "count": "2"
+    },
+    {
+        "name": "Ascended Ancestor Spirit",
+        "id": "3008",
+        "deck": "sky",
+        "row": "close",
+        "strength": "2",
+        "ability": "bond",
+        "filename": "spirit",
+        "count": "2"
     }
 ];
 console.log("Cards array", card_dict);
