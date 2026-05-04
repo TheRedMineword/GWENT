@@ -303,7 +303,8 @@ setTimeout(() => {
 
 			// Opponent has left and the session is no longer ready
 			case "sessionUnready":
-				if (gameended = false) {
+				console.log("session un ready", gameended);
+				if (gameended === false) {
 				showTooltip("Opponent has left and the session is no longer ready");
 				}
 				twoPlayersConnected = false
@@ -315,7 +316,7 @@ setTimeout(() => {
 				// if (game.roundCound > 0) { //oryginal dev typo X D
 				var game_state = this.game;
 				console.log("END GAME TRY round counts", game_state.roundCount, "game", game_state);
-				if (gameended = false) {
+				if (gameended === false) {
 				if (game_state.roundCount > 0) {
 					console.log("running");
 					await ui.notification("win-opleft", ui_display_times.round_end_result *2);
