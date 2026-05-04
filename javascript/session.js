@@ -112,25 +112,31 @@ socket.addEventListener("message", async (event) => {
     } catch (err) {
         console.error(err);
     }
-  const data = recv_and_decomp; //.data;
-
+  const data = await recv_and_decomp(event);
+    console.log("Session.js on msg", data)
   switch (data.type) {
     case "sessionCreated":
       createdSessionId = data.code;
 
   //    sessionDisplay.classList.remove("hidden");
-      sessionCodeText.textContent = createdSessionId;
+     // sessionCodeText.textContent = createdSessionId;
 
       console.log("Session created:", createdSessionId);
       break;
 
     case "sessionJoined":
+      console.log("Session.js", data.code);
       joinedSessionId = data.code;
 
  //     sessionDisplay.classList.remove("hidden");
-      sessionCodeText.textContent = joinedSessionId;
+  //    sessionCodeText.textContent = joinedSessionId;
 
       btnReadyElem.classList.remove("hidden");
+    // hide if joined
+    btnCreateElem.classList.add("hidden");
+		btnJoinElem.classList.add("hidden");
+
+
 
       console.log("Joined session:", joinedSessionId);
       break;

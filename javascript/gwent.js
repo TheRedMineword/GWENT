@@ -306,6 +306,11 @@ setTimeout(() => {
 				console.log("session un ready", gameended);
 				if (gameended === false) {
 				showTooltip("Opponent has left and the session is no longer ready");
+				var btn = document.getElementById("session-start-control");
+				btn.textContent = "Ready";
+				btnCancelElem.classList.remove("hidden");
+			//	btnCreateElem.classList.remove("hidden");
+			//	btnJoinElem.classList.remove("hidden");
 				}
 				twoPlayersConnected = false
 				console.log("---------------------");
@@ -1174,7 +1179,7 @@ class Row extends CardContainer {
 	
 	// Calculates the current power of a card affected by row affects
 	calcCardScore(card) {
-		// console.log("calcCardScore(card)", card, this);
+	//	console.log("calcCardScore(card)", card, this);
 		if (card.name === "decoy")
 			return 0;
 		let total = card.basePower;
@@ -1474,6 +1479,11 @@ class Game {
 	
 	// Initializes player abilities, hands and waits for cointoss
 	async startGame() {
+		var btn = document.getElementById("session-start-control");
+		btn.textContent = "Game \nStarting";
+		btnCancelElem.classList.add("hidden");
+		btnCreateElem.classList.add("hidden");
+		btnJoinElem.classList.add("hidden");
 		gameStartControlsElem.classList.add("hide");
 		isOpponentReadyElem.classList.add("hidden");
 		ui.toggleMusic_elem.style.left = "26vw"
@@ -1528,16 +1538,20 @@ class Game {
 		await this.runEffects(this.gameStart);
 		tocar("game_opening", false);
 		if (player_op.deck.faction === "scoiatael" && player_me.deck.faction !== "scoiatael") {
+			var btn2 = document.getElementById("session-start-control");
+			btn2.textContent = "Waiting for opponent to start";
 			await new Promise((resolve) => {
 				const handleMessage = async (event) => {
 					const data = await recv_and_decomp(event);
-console.log("Player op have a Squirrel leader, waiting for msg", event);
+					console.log("Player op have a Squirrel leader, waiting for msg", event);
 					if (data.type === "scoiataelStart") {
 						console.log("Is who start info vs Squirrel");
 						const player = data.first === "me" ? player_op : player_me;
 						game.firstPlayer = player;
 						game.currPlayer = player;
 						socket.removeEventListener('message', handleMessage);
+						var btn4 = document.getElementById("session-start-control");
+						btn4.textContent = "Game In Progress";
 						resolve(true);
 					}
 				}
@@ -1556,6 +1570,8 @@ console.log("Player op have a Squirrel leader, waiting for msg", event);
 	
 			await this.initialRedraw();
 		}
+		var btn3 = document.getElementById("session-start-control");
+		btn3.textContent = "Game In Progress";
 	}
 	
 	// Determines who starts first
@@ -2984,10 +3000,13 @@ this.leader_elem.children[1].style.backgroundImage = largeURL(tmp);
     return;
 }
 		if (amReady) {
+			comp_and_send(socket, JSON.stringify({ type: "unReady" })); showTooltip(`You are now UnReady`)
+			var btn = document.getElementById("session-start-control");
+			btn.textContent = "Ready";
 			amReady = false;
-			readyButtonElem.classList.remove("ready");
-			customizationElem.classList.remove("noclick");
-			comp_and_send(socket, JSON.stringify({ type: "unReady" }));
+	//		readyButtonElem.classList.remove("ready");
+	//		customizationElem.classList.remove("noclick");
+	//		comp_and_send(socket, JSON.stringify({ type: "unReady" }));
 			return
 		}
 		console.log("[Start] \\this.stats\\", this.stats);
@@ -3019,6 +3038,9 @@ this.leader_elem.children[1].style.backgroundImage = largeURL(tmp);
 		if (opponentReady) {
 			this.elem.classList.add("hide");
 			game.startGame();
+		} else {
+			var btn = document.getElementById("session-start-control");
+			btn.textContent = "UnReady";
 		}
 	}
 	
@@ -3603,4 +3625,3 @@ function startLoadingEffect() {
 function stopLoadingEffect() {
 	passButton.classList.remove('loading');
 }
-
