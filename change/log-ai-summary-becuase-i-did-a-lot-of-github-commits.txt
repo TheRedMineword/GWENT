@@ -1,0 +1,132 @@
+## May 5, 2026
+<Added patch notes display + ai made update log becuase i did too many not documented in any way commits that i had to use ai to read thru git commits> ~DrMineword
+
+## May 4, 2026
+
+### New Content
+- Added Sky Kingdom faction (early testing)
+- Added new card: Sky Kid – Danielle
+- Work started on a new faction
+
+### Gameplay & Fixes
+- Fixed ability trigger issues
+- Game no longer returns to menu when opponent leaves after end screen
+- Multiplayer menu buttons now work properly
+
+### UI / Visual
+- Updated board and start screen visuals
+- Added background for deck selector
+- Added fullscreen configuration
+
+### Misc
+- Various typo fixes
+
+
+## May 3, 2026
+
+### Gameplay & Balance
+- Added Kupiec Korzenny
+- Removed problematic / unfun cards
+- Fixed medic units
+
+### Networking & Stability
+- Improved hand synchronization between players
+- Fixed desync issues
+- Added protection logic for sync system
+
+### Fixes
+- Fixed rain overlay visibility
+- Multiple hotfixes
+
+### Content
+- Added custom Gwent board
+
+
+## May 2, 2026
+
+### Gameplay Changes
+- Rebalanced hero cards
+- Improved card logic
+
+### Gaunter O'Dimm Changes
+- Added as neutral leader
+- Added safety fallback for desync
+- Later removed problematic interactions causing desync
+
+### Removed / Disabled
+- Removed scol_secondchance due to fatal desync issues
+
+### Other
+- Added rules page
+- Added 404 page
+- General fixes and adjustments
+
+
+## May 1, 2026
+
+### Major Fixes
+- Fixed fatal desync issues
+- Fixed server crashes
+- Fixed audio problems
+
+### Gameplay
+- Added sound for round/draw end
+- Rebalanced Nilfgaard drawmaster
+- Fixed soft lock when opponent reconnects
+
+### UI
+- Improved notification timing
+- Updated background music
+
+
+## Apr 30, 2026
+
+### Performance
+- Reduced image sizes for better loading
+
+### UI
+- Improved menu (music button now inside menu)
+- Fixed notification overlay
+- Fixed issue where game didn’t end on disconnect
+
+### Networking
+- Fixed JSON parsing issues
+- Added payload compression
+
+
+## Apr 29, 2026
+
+### Gameplay
+- Added new abilities: Sabotage, Call to Arms
+- Added new Nilfgaard leader
+
+### Balance
+- Adjusted sabotage cards
+- Monitoring Nilfgaard drawmaster (possible nerf)
+
+
+## Apr 28, 2026
+
+### Systems
+- Added server logging (Discord)
+- Improved core game config system
+
+### Development
+- Groundwork for new cards
+- Reworked websocket logic
+
+
+## Apr 27, 2026
+
+### Core Systems
+- Rebuilt websocket system
+- Fixed player IDs and coin toss
+- Fixed multiple loading issues
+
+### Server
+- Fixed localhost websocket problems
+- General server stability improvements
+
+### Misc
+- Cleanup of old files
+- Initial project setup
