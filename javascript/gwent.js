@@ -315,9 +315,16 @@ setTimeout(() => {
 				twoPlayersConnected = false
 				console.log("---------------------");
 				console.log("Opponent left the game");
-				isOpponentReadyElem.classList.add("hidden");
-
+				// isOpponentReadyElem.classList.add("hidden");
+				updateOpponentUI({
+ 								 "name": "No Opponent",
+ 								 "state": "img/icons/google_fonts__signal_disconnected_99dp_CCCCCC_FILL0_wght400_GRAD0_opsz48.png",
+ 								 "status": ""
+								});
+								await sleep(100);
+				opponentReadyElem.classList.add("disabled");
 				readyButtonElem.classList.add("disabled");
+				opponentReadyElem.classList.add("disabled");
 				// if (game.roundCound > 0) { //oryginal dev typo X D
 				var game_state = this.game;
 				console.log("END GAME TRY round counts", game_state.roundCount, "game", game_state);
@@ -340,6 +347,11 @@ setTimeout(() => {
 			// Opponent is ready. If you are ready begin the game immediately
 			case "ready":
 				 showTooltip("Opponent is ready. If you are ready begin the game immediately");
+				 updateOpponentUI({
+ 								 "name": "Opponent",
+ 								 "state": op_icon_faction,
+ 								 "status": `Ready: ${opponentReady}`
+								});
 				player_op = new Player(1, players.op, data.deck);
 				if (amReady) {
 					customizationElem.classList.add("hide");
@@ -350,6 +362,11 @@ setTimeout(() => {
 				} else {
 					opponentReadyElem.classList.remove("disabled");
 					opponentReady = true;
+					updateOpponentUI({
+ 								 "name": "Opponent",
+ 								 "state": op_icon_faction,
+ 								 "status": `Ready: ${opponentReady}`
+								});
 				}
 				break;
 
@@ -357,15 +374,26 @@ setTimeout(() => {
 				twoPlayersConnected = true;
 				console.log("opponent has changed his faction");
 				 showTooltip(`Opponent changed his faction to ${data.faction}`);
-				opponentReadyElem.querySelector("img").src = `img/icons/deck_shield_${data.faction}.png`
+				 op_icon_faction = `img/icons/deck_shield_${data.faction}.png`;
+				updateOpponentUI({
+ 								 "name": "Opponent",
+ 								 "state": op_icon_faction,
+ 								 "status": `Ready: ${opponentReady}`
+								});
+				// opponentReadyElem.querySelector("img").src = `img/icons/deck_shield_${data.faction}.png`
 				break;
 			
 			case "unReady":
 				opponentReady = false;
 				amReady = false;
+								updateOpponentUI({
+ 								 "name": "Opponent",
+ 								 "state": op_icon_faction,
+ 								 "status": `Ready: ${opponentReady}`
+								});
 			//	twoPlayersConnected = true;
 				 showTooltip("Opponent is unReady.");
-				opponentReadyElem.classList.add("disabled");
+				// opponentReadyElem.classList.add("disabled");
 				if (amReady) {
 					readyButtonElem.classList.remove("ready");
 					customizationElem.classList.remove("noclick");
@@ -1179,7 +1207,7 @@ class Row extends CardContainer {
 	
 	// Calculates the current power of a card affected by row affects
 	calcCardScore(card) {
-	//	console.log("calcCardScore(card)", card, this);
+	// console.log("calcCardScore(card)", card, this); this.cards[0].holder.leader.abilities to get card 0 leader abilities, could be usefull in future
 		if (card.name === "decoy")
 			return 0;
 		let total = card.basePower;
@@ -1485,7 +1513,12 @@ class Game {
 		btnCreateElem.classList.add("hidden");
 		btnJoinElem.classList.add("hidden");
 		gameStartControlsElem.classList.add("hide");
-		isOpponentReadyElem.classList.add("hidden");
+		// isOpponentReadyElem.classList.add("hidden");
+		updateOpponentUI({
+ 								 "name": " ",
+ 								 "state": op_icon_faction,
+ 								 "status": `Game In Progress!`
+								});
 		ui.toggleMusic_elem.style.left = "26vw"
 
 		ui.toggleMusic_elem.classList.remove("music-customization");

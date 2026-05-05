@@ -182,3 +182,38 @@ function openFullscreen() {
 		console.error("[FS] Fullscreen API not supported");
 	}
 }
+
+
+let op_icon_faction = "img/icons/google_fonts__signal_disconnected_99dp_CCCCCC_FILL0_wght400_GRAD0_opsz48.png";
+function updateOpponentUI(data) {
+  const box = document.getElementById("opponent-ready");
+  if (!box) return;
+
+  const label = document.getElementById("opponent-name");
+  const img = box.querySelector("img");
+  const span = box.querySelector("span");
+
+  if (!label || !img || !span) return;
+
+  // reset state
+  box.classList.add("hidden");
+
+  if (!data) {
+    label.textContent = "No Opponent";
+    img.src = "img/icons/google_fonts__signal_disconnected_99dp_CCCCCC_FILL0_wght400_GRAD0_opsz48.png";
+    span.textContent = "";
+
+    box.classList.add("disabled");
+    box.classList.remove("hidden");
+    return;
+  }
+
+
+  box.classList.remove("hidden", "disabled");
+
+  label.textContent = data.name || "Opponent";
+
+  span.textContent = data.status; //Readys
+
+ img.src = data.state;
+}
