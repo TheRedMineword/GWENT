@@ -2313,6 +2313,28 @@ var card_dict = [
         "filename": "beast_of_tussant",
         "count": "1"
     },
+    //dopler
+    {
+        "name": "dopler",
+        "id": "1016",
+        "deck": "neutral",
+        "row": "siege",
+        "strength": "0",
+        "ability": "dopler",
+        "filename": "dopler",
+        "count": "2"
+    },
+    {
+        "name": "Dopler Revealed",
+        "id": "1017",
+        "deck": "neutral",
+        "row": "ranged",
+        "strength": "-6",
+        "ability": "hero",
+        "filename": "reveal_dopler",
+        "count": "0",
+        "avenger": "Dopler"
+    },
     // New cards for sky
     {
         "name": "Hopeful Steward",

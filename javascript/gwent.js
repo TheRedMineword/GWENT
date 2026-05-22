@@ -729,7 +729,7 @@ op_counter.innerHTML = player_op.hand.cards.length
 					if (!replacedCard) return
 					try {
 						replacedCard.animate2("decoy"); //placeholder
-						await sleep(Math.floor(ui_display_times.show_me_that_card_you_have * (1 - 0.9)));
+						await sleep(Math.floor(ui_display_times.show_me_that_card_you_have * (1 - 0.6)));
 					} catch (e) {
 						console.log("Decoy target", e);
 					}
@@ -1943,7 +1943,7 @@ class Board {
 	getRow(card, row_name, player){
 		player = player ? player : card ? card.holder : player_me;
 		let isMe = player === player_me;
-		let isSpy = card.abilities.includes("spy") || card.abilities.includes("sabotage") || card.abilities.includes("axii2_desc_playable");
+		let isSpy = card.abilities.includes("spy") || card.abilities.includes("sabotage") || card.abilities.includes("axii2_desc_playable") || card.abilities.includes("dopler");
 		switch (row_name) {
 			case "weather": return weather; break;
 			case "close":  return this.row[ isMe^isSpy ? 3 : 2];
@@ -2481,7 +2481,10 @@ class Card {
 			"hero": "hero_anim",
 			"griffin": "moral",
 			"mtg": "cos",
-		"decoy": "spy"
+		"decoy": "spy",
+		"dopler": "spy",
+		"dopavenger": "moral",
+		"dopler_spawn_creature": "avenger"
 		}
 		var temSom = new Array();
 		for (var x in guia) temSom[temSom.length] = x;
@@ -2527,7 +2530,10 @@ class Card {
 		"hero": "hero_anim",
 		"griffin": "moral",
 		"mtg": "cos",
-		"decoy": "spy"
+		"decoy": "spy",
+		"dopler": "spy",
+		"dopavenger": "moral",
+		"dopler_spawn_creature": "avenger"
 	};
 
 	const literais = [

@@ -1,6 +1,6 @@
 {
-  "sha": "7a85aa77e5a7a433fad4156fce95746ac1d4d4acdca3d2ea2b1a10afdc59a2d9",
-  "generatedAt": "2026-05-20T17:27:03.761Z",
+  "sha": "90579867585473e59f0c7b6e1838cbed2cb2dd3fbe7d7fc7ebff8ac4197e5dd9",
+  "generatedAt": "2026-05-22T15:52:43.497Z",
   "files": [
     {
       "path": "404.html",
@@ -24,7 +24,7 @@
     },
     {
       "path": "change/index.json",
-      "sha256": "77010ab082ad11d08c09431aca371c7eed9dc4b94037752181028cebc7e86932",
+      "sha256": "71f9a6120cf90d112b48a30debad9322a7d3cf3177c7a2006507c44476f63f02",
       "size": 24
     },
     {
@@ -66,6 +66,11 @@
       "path": "change/log-update14.txt",
       "sha256": "4c817b8ed3b5d124f3da39acf600f5a8383da25dcdf877892cc0f01207e550d7",
       "size": 201
+    },
+    {
+      "path": "change/log-update15.txt",
+      "sha256": "ad5141c4576fd5232ee8138a361af261102700f28b90c871fcc5c974e4a63f73",
+      "size": 245
     },
     {
       "path": "change/log-update2.txt",
@@ -179,8 +184,23 @@
     },
     {
       "path": "img/icons/anim_decoy.png",
-      "sha256": "5fd9ba2cc0c9f25deb8493a92296a1771c6ebf5c0768bb3ec78d48eb8ee7ee40",
-      "size": 34440
+      "sha256": "430e62a6500ed9f9d41445bd85bd5e30c4ee56728ca22462c6f055f2c0ca509b",
+      "size": 37957
+    },
+    {
+      "path": "img/icons/anim_dopavenger.png",
+      "sha256": "d076e792c16161358f39ac638d5aa516e8c638780029abff9f4763ab68475877",
+      "size": 9185
+    },
+    {
+      "path": "img/icons/anim_dopler_spawn_creature.png",
+      "sha256": "d076e792c16161358f39ac638d5aa516e8c638780029abff9f4763ab68475877",
+      "size": 9185
+    },
+    {
+      "path": "img/icons/anim_dopler.png",
+      "sha256": "fed1ad3ba08d616c1328d4e1b11f8b4f5a023ba7756f087bc698e9b9a4630cfd",
+      "size": 17137
     },
     {
       "path": "img/icons/anim_griffin_hand.png",
@@ -194,8 +214,8 @@
     },
     {
       "path": "img/icons/anim_hero.png",
-      "sha256": "b3d50c4c975c99f92bcce4f88f460b96f865693108d7b4fb995583b36e73153d",
-      "size": 10797
+      "sha256": "bbefd08960572e353613ab767b0ce8024d59aadbb60394fc4e445ed18c7f67d9",
+      "size": 47248
     },
     {
       "path": "img/icons/anim_horn.png",
@@ -296,6 +316,16 @@
       "path": "img/icons/card_ability_decoy.png",
       "sha256": "b473f8a5cf4eb1376ddb2340acbf55586d930e9f68daa5967f4ae34c9f324c6e",
       "size": 24085
+    },
+    {
+      "path": "img/icons/card_ability_dopavenger.png",
+      "sha256": "d076e792c16161358f39ac638d5aa516e8c638780029abff9f4763ab68475877",
+      "size": 9185
+    },
+    {
+      "path": "img/icons/card_ability_dopler.png",
+      "sha256": "cc50f1d0165425b4e238300fd66f18b4e4d365e5ec7f01c276282009ed589b57",
+      "size": 10096
     },
     {
       "path": "img/icons/card_ability_fog.png",
@@ -1068,6 +1098,11 @@
       "size": 94512
     },
     {
+      "path": "img/lg/neutral_dopler.jpg",
+      "sha256": "b03fb810d9b6adeb2e03c1243a04d924a82dd34668d00bfe5c43c1ebc7e689ed",
+      "size": 152393
+    },
+    {
       "path": "img/lg/neutral_emiel.jpg",
       "sha256": "62771f967c05ab6ecec0ba93b4134c61e85d00fcbc36318d95c762a8b3b87277",
       "size": 76761
@@ -1121,6 +1156,11 @@
       "path": "img/lg/neutral_olgierd.jpg",
       "sha256": "4b4d362addd5debb706a928e8aab12119538c6c58a8f897058c65f9619a998c2",
       "size": 100007
+    },
+    {
+      "path": "img/lg/neutral_reveal_dopler.jpg",
+      "sha256": "8c026aa57f74e4056201045274e69d18ac6732f6be964a11ff0da23e554159db",
+      "size": 135597
     },
     {
       "path": "img/lg/neutral_roach.jpg",
@@ -2318,6 +2358,11 @@
       "size": 43800
     },
     {
+      "path": "img/sm/neutral_dopler.jpg",
+      "sha256": "ef24d9511420b4c0bfc1fd23585d52bafae232ad063a7257bac63cdb0906b429",
+      "size": 100150
+    },
+    {
       "path": "img/sm/neutral_emiel.jpg",
       "sha256": "3429ef94cbb74e4e58f05135374611efd49bf589512b1b493715f53545ba488a",
       "size": 28615
@@ -2371,6 +2416,11 @@
       "path": "img/sm/neutral_olgierd.jpg",
       "sha256": "bf3731881388ecc292cc1f47fcf5f162cb61f2a2cef61ccecbc0fd06bc10d3ef",
       "size": 50564
+    },
+    {
+      "path": "img/sm/neutral_reveal_dopler.jpg",
+      "sha256": "3dda64af43a9bc2561242c6b3776b4a6469b13e70b6aa64ca72ee9ad30e074b1",
+      "size": 76323
     },
     {
       "path": "img/sm/neutral_roach.jpg",
@@ -3309,13 +3359,13 @@
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "3bc9f40831491645f496278e9172d14c3cbbb9826d85ff2703f7d8ee23452d6e",
-      "size": 40836
+      "sha256": "40256341d285498a3bd722d5806e0898c41ff6c4f1fb5526a022756a8a8c0b7d",
+      "size": 44757
     },
     {
       "path": "javascript/cards.js",
-      "sha256": "833406280bec565864a34d3d756a29fe17ee62b63829fccfdc227e80f74de778",
-      "size": 57642
+      "sha256": "48354790f59248bcfa07c8aa4dc947ed1c2e256d59df23227835f536f3f47d3c",
+      "size": 58134
     },
     {
       "path": "javascript/chat.js",
@@ -3329,8 +3379,8 @@
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
-      "sha256": "6cea8b14eab3772abb041de7bbcdaf5ea386b7d6852e5ea0360acd47801506f7",
-      "size": 73343
+      "sha256": "556188969f30b3ca9ce0d18c011a7a1564589931de91c8b1fdfdc071d9ccf379",
+      "size": 75306
     },
     {
       "path": "javascript/custom_server/deafult.txt",
@@ -3354,8 +3404,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "8e056bf48b0e281cce58bc204e7f8cb0dd435a944fda27f92a176f49f77ed9c5",
-      "size": 149314
+      "sha256": "100f009be73774f1e6db4c0af433a599ea03b23b52728aeca24ddcefcad39b4b",
+      "size": 149521
     },
     {
       "path": "javascript/jszip.min.js",

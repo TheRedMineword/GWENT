@@ -508,6 +508,150 @@ card.animate(gryffinschool_conf.anim);
 		card.animate(mtg_conf.anim);
 	}
 },
+	dopler: {
+	name: "Doppler",
+	description: "Send a shapeshifter to enemy fields that will will disguise itself as a strong card from the opponent's faction, so next round they can find a knife in their back",
+
+	placed: async (card, row) => {
+		try {
+
+			card.animate2("dopler");
+
+			// ====================================
+// GET ENEMY FACTION
+// ====================================
+
+let enemyFaction = null;
+let seed_real_id = "aaa";
+if (player_me.id !== card.holder.id){
+	enemyFaction = player_me.leader.faction
+} else {
+	enemyFaction =  player_op.leader.faction
+}
+
+console.log("[DOPLER] Enemy faction:", enemyFaction);
+
+// ====================================
+// FIND VALID TARGETS
+// ====================================
+
+let filteredCards = Object.values(card_dict).filter(c => {
+
+	let strength = Number(c.strength);
+
+	return (
+		c.deck === enemyFaction &&
+		!isNaN(strength) &&
+
+		strength >= 7 &&
+		strength <= 15 &&
+
+		c.row !== "leader" && c.row !== "agile" &&
+
+		!c.token &&
+		!c.generated // &&
+
+		// !c.ability?.includes("hero")
+	);
+});
+
+// ====================================
+// FALLBACK
+// ====================================
+
+if (!filteredCards.length) {
+
+	console.warn("[DOPLER] No valid faction cards found, using fallback.");
+
+	let fallback = Object.values(card_dict).find(
+		c => c.filename === "leshen"
+	);
+
+	if (fallback)
+		filteredCards = [fallback];
+}
+
+// ====================================
+// SEEDED SHUFFLE
+// ====================================
+
+var seed_is =
+	`${time_now_utc_to_b64()}${mtg_conf.version}${turncount}${gameID}${enemyFaction}${time_now_utc_to_b64()}`;
+
+let shuffled = shuffleSeeded(
+	filteredCards,
+	btoa(seed_is),
+	`dopler seeded from ${seed_is}`
+).array;
+
+// ====================================
+// PICK TARGET
+// ====================================
+
+let picked = shuffled[0];
+
+console.log("[DOPLER] Picked:", picked);
+console.log("[DOPLER] Picked:", picked.name);
+
+			// ====================================
+			// CREATE NEW CARD COPY
+			// ====================================
+
+			let fakeData = structuredClone(picked);
+
+			// keep Dopler identity
+			fakeData.name = "Dopler";
+
+			// keep copied artwork
+			fakeData.filename = picked.filename;
+
+			// hero + avenger
+			fakeData.ability = "hero dopavenger";
+
+			// custom avenger target
+			// fakeData.avenger = "dopler_negative";
+
+			// mark generated
+			fakeData.is_dopler_generated = true;
+
+			let spawned = new Card(
+				fakeData,
+				card.holder.opponent()
+			);
+			console.log("[DOPLER] spawned", fakeData, spawned);
+			await sleep(1600);
+			// ====================================
+			// REMOVE ORIGINAL FOREVER
+			// ====================================
+
+			if (row)
+				row.removeCard(card);
+
+			// completely erase card
+			card.removed = [];
+			card.abilities = [];
+			card.basePower = 0;
+			card.power = 0;
+
+			// ====================================
+			// SPAWN COPY ON ENEMY FIELD
+			// ====================================
+
+			await board.addCardToRow(
+				spawned,
+				picked.row,
+				card.holder.opponent()
+			);
+
+			await spawned.animate("dopavenger");
+
+		} catch(e) {
+			console.log("[DOPLER ERROR]", e);
+		}
+	},
+
+	weight: () => 40
+},
 	medic: {
 		name: "medic",
 		description: "Choose one card from your discard pile and play it instantly (no Heroes or Special Cards). ",
@@ -603,6 +747,36 @@ card.animate(gryffinschool_conf.anim);
 
 			await board.addCardToRow(bdf, targetData.row, card.holder);
 			await bdf.animate("avenger_spawn_creature");
+
+		} catch (e) {
+			console.log(e);
+		}
+	},
+	weight: () => 50
+	},
+	dopavenger: {
+		name: "Doppler",
+		description: "When this card is removed from the battlefield, it summons a powerful new Unit Card to take its place. ",
+		removed: async card => {
+		try {
+			console.log("Avenger script running");
+
+			const targetData = findAvengerTarget(card.name);
+
+			if (!targetData) {
+				console.warn("No avenger target found for:", card.name);
+				return;
+			}
+
+			let bdf = new Card(targetData, card.holder);
+			console.log("AVENGER bdf/target data", bdf, targetData)
+
+			bdf.removed.push(() =>
+				setTimeout(() => bdf.holder.grave.removeCard(bdf), 1001)
+			);
+
+			await board.addCardToRow(bdf, targetData.row, card.holder);
+			await bdf.animate("dopler_spawn_creature");
 
 		} catch (e) {
 			console.log(e);
