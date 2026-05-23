@@ -509,14 +509,17 @@ if (data.type === "createSession") {
   console.log("Try notify all remaining players");
   sessions[ws.sessionId].players.forEach((player) => {
     try {
+        if (player === session.players[0]) return;
         console.log(`${player.id} cancelled try`);
-        console.log("SEND unready session");
+        console.log(`SEND unready session, silent: ${data?.silent || false}`);
+        if (`${data?.silent || false}` === `${false}`){
         player.send(
           compressPayload(JSON.stringify({
             type: "sessionUnready",
             reason: "sessionCancelled"
           }))
         );
+      }
     } catch (e) {
       console.log("cancelSession notify error:", e);
     }
@@ -542,17 +545,33 @@ if (data.type === "createSession") {
 
 
     if (data.type === "joinSession") {
+      let joinCode = null;
+      let sessionId = false;
+      try {
+    joinCode = data.sessionId;
 
-    const joinCode = data.sessionId;
-
-    const sessionId = joinIndex[joinCode];
-
+    sessionId = joinIndex[joinCode];
+      } catch (e){
+        console.log("err session id", e);
+        comp_and_send(ws, JSON.stringify({
+            type: "sessionInvalid"
+        }));
+        return;
+      }
+      try {
     if (!sessionId) {
         comp_and_send(ws, JSON.stringify({
             type: "sessionInvalid"
         }));
         return;
     }
+  } catch (e) {
+    console.log("err session id", e);
+    comp_and_send(ws, JSON.stringify({
+            type: "sessionInvalid"
+        }));
+        return;
+  }
 
     const session = sessions[sessionId];
 
@@ -643,7 +662,7 @@ if (data.type === "createSession") {
         console.log(`|| Deleting session ${ws.sessionId} because the creator left`);
         if (session.players.length > 1) {
           try {
-          session.players[1].send(compressPayload(JSON.stringify({ type: 'unReady' })));
+          // session.players[1].send(compressPayload(JSON.stringify({ type: 'unReady' })));
           session.players[1].send(compressPayload(JSON.stringify({ type: 'sessionUnready' })));
           } catch (e) {
             console.log("Err", e);
@@ -654,8 +673,8 @@ if (data.type === "createSession") {
         try {
         // If a non-creator disconnects, remove them from the session and notify the creator
         session.players = session.players.filter(player => player !== ws);
-        session.players[0].send(compressPayload(JSON.stringify({ type: 'unReady' })));
-        session.players[0].send(compressPayload(JSON.stringify({ type: 'sessionUnready' })));
+       session.players[0].send(compressPayload(JSON.stringify({ type: 'unReady' })));
+       // session.players[0].send(compressPayload(JSON.stringify({ type: 'sessionUnready' })));
         console.log(`|| Player ${ws.playerId} left the session ${ws.sessionId}`);
         broadcastToSession(ws.sessionId, `Player ${ws.playerId} left the session`);
         } catch (e) {

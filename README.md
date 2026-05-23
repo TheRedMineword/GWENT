@@ -23,6 +23,7 @@ https://fontmeme.com/fonts/gwent-font/
 - Pass sound [pixabay.com](https://pixabay.com/sound-effects/film-special-effects-copyright-free-swoosh-487669/) by DRAGON-STUDIO
 - Game ends: draw - [TF2 Stealmate](https://www.youtube.com/watch?v=Gz7l7d7otIs)
 - Game waiting for both players ready: [INFO](https://github.com/TheRedMineword/GWENT/blob/main/sfx/oldgwent)
+- Game (player ready/unready, session ready/unready, server joined/left) sound effects: [INFO](https://github.com/TheRedMineword/GWENT/blob/main/sfx/tf2)
 - Gaunter necromance sound effect: Start of "Geralt of Rivia - Sonya Belousova & Giona Ostinelli"
 - Avenger card sound effect: https://pixabay.com/pl/sound-effects/przera%c5%bcenie-beast-growl-494304/
 - Hero cards place sound effect: https://mixkit.co/free-sound-effects/fire/ ([Short fire whoosh](https://assets.mixkit.co/active_storage/sfx/1345/1345-preview.mp3))

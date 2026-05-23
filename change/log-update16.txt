@@ -1,0 +1,3 @@
+## May 23, 2026
+- Added new sound effects: player ready/unready, session ready/unready, server joined/left
+- Added animation while ready and waiting for opponent

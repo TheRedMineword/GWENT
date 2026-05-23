@@ -193,6 +193,7 @@ async function createGame() {
     if (!mode) return;
 
     if (mode.type === "create") {
+        tocar("tf2/Trade_ready", false);
         comp_and_send(socket, JSON.stringify({ type: "createSession", custom_server: { active: false}}));
     }
 
@@ -214,6 +215,7 @@ async function createGame() {
 }
 
 function cancelSession() {
+  tocar("tf2/Trade_failure", false);
   document.getElementById("session-start-control").classList.add("hidden");
 
   btnCreateElem.classList.remove("hidden");
@@ -238,10 +240,58 @@ function cancelSession() {
     }));
     joinedSessionId = null;
     ThisSessionId = null;
+    btnCancelElem.classList.add("hidden");
   }
-  reset_custom();
+  joinedSessionId = null;
+ // reset_custom();
 }
+function silent_cancelSession() {
+  tocar("tf2/Trade_failure", false);
+  document.getElementById("session-start-control").classList.add("hidden");
 
+  btnCreateElem.classList.remove("hidden");
+  btnJoinElem.classList.remove("hidden");
+
+  btnCancelElem.classList.add("hidden");
+ // sessionDisplay.classList.add("hidden");
+
+  if (createdSessionId) {
+    console.log("Cancelled Session:", createdSessionId);
+    comp_and_send(socket, JSON.stringify({
+      type: "cancelSession",
+      code: ThisSessionId,
+      silent: true
+    }));
+    createdSessionId = null;
+    ThisSessionId = null;
+  } else if (joinedSessionId) {
+    console.log("Left Session:", joinedSessionId);
+    comp_and_send(socket, JSON.stringify({
+      type: "leaveSession",
+      code: ThisSessionId,
+      silent: true
+    }));
+    joinedSessionId = null;
+    ThisSessionId = null;
+    btnCancelElem.classList.add("hidden");
+  }
+  joinedSessionId = null;
+ // reset_custom();
+}
+function reset_menu() {
+  document.getElementById("session-start-control").classList.add("hidden");
+
+  btnCreateElem.classList.remove("hidden");
+  btnJoinElem.classList.remove("hidden");
+
+  btnCancelElem.classList.add("hidden");
+ // sessionDisplay.classList.add("hidden");
+    createdSessionId = null;
+    ThisSessionId = null;
+    btnCancelElem.classList.add("hidden");
+  joinedSessionId = null;
+ // reset_custom();
+}
 // --------------------
 // SOCKET MESSAGE HANDLING
 // --------------------

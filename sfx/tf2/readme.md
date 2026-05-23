@@ -1,0 +1,1 @@
+> Sound effects are taken from *Team Fortress 2*, a game developed and published by Valve Corporation.

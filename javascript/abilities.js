@@ -242,6 +242,7 @@ if (card.holder.id === player_op.id) {
 
 			// Add to opponent close row
 			await board.addCardToRow(spawned, "close", opponent);
+			
 
 		} catch (e) {
 			console.log("Axii ability error:", e);
@@ -1086,7 +1087,6 @@ resolve(player_op.grave.cards[0]);
 
 		// Don't simulate opponent
 		if (player_me.id !== card.holder.id) {
-			card.animate("deploy");
 			console.log("[EREDIN_DESTROYER] Opponent played card, waiting for sync.");
 			return;
 		}
@@ -1212,8 +1212,6 @@ resolve(player_op.grave.cards[0]);
 
 		card.holder.hand.addCard(created);
 
-		created.animate("draw");
-		card.animate("deploy");
 
 		console.log("[EREDIN_DESTROYER] Ability finished.");
 	},

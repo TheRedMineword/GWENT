@@ -11,7 +11,124 @@ menuBtn.onclick = () => {
     menu.classList.toggle("hidden");
 };
 
+function toggleReadyWaiting(amReady) {
+    console.log('[READY] toggleReadyWaiting called:', amReady);
 
+    const container = document.querySelector('#deck-customization');
+
+    console.log('[READY] container:', container);
+
+    if (!container) {
+        console.error('[READY] #deck-customization NOT FOUND');
+        return;
+    }
+
+    const existing = document.querySelector('#ready-waiting-overlay');
+
+    if (!amReady) {
+        if (existing) {
+            existing.remove();
+            console.log('[READY] overlay removed');
+        }
+		tocar("tf2/Vote_no", false);
+        return;
+    }
+	tocar("tf2/Vote_yes", false);
+    if (existing) {
+        console.log('[READY] overlay already exists');
+        return;
+    }
+
+    // ensure relative positioning
+    if (getComputedStyle(container).position === 'static') {
+        container.style.position = 'relative';
+    }
+
+    // inject css once
+    if (!document.querySelector('#ready-waiting-style')) {
+
+        const style = document.createElement('style');
+        style.id = 'ready-waiting-style';
+
+        style.innerHTML = `
+            #ready-waiting-overlay {
+                position: absolute;
+                inset: 0;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                z-index: 99999;
+
+                background: rgba(0,0,0,0.35);
+
+                pointer-events: none;
+            }
+
+            .gwent-ready-spinner {
+                width: 180px;
+                height: 180px;
+
+                border-radius: 50%;
+
+                border-top: 6px solid #d8a45a;
+                border-right: 6px solid #7a4b1f;
+                border-bottom: 6px solid #f0d28c;
+                border-left: 6px solid #3a2411;
+
+                box-shadow:
+                    0 0 30px rgba(255,190,90,0.5),
+                    inset 0 0 20px rgba(255,210,120,0.2);
+
+                animation: gwentSpin 1.5s linear infinite;
+
+                position: relative;
+            }
+
+            .gwent-ready-spinner::after {
+                content: "";
+
+                position: absolute;
+                bottom: -42px;
+                left: 50%;
+
+                transform: translateX(-50%);
+
+                color: #d6b06b;
+                font-size: 18px;
+                letter-spacing: 2px;
+                white-space: nowrap;
+
+                text-shadow:
+                    0 0 8px rgba(0,0,0,1),
+                    0 0 12px rgba(214,176,107,0.4);
+            }
+
+            @keyframes gwentSpin {
+                from {
+                    transform: rotateY(0deg) rotate(0deg);
+                }
+                to {
+                    transform: rotateY(360deg) rotate(360deg);
+                }
+            }
+        `;
+
+        document.head.appendChild(style);
+    }
+
+    const overlay = document.createElement('div');
+    overlay.id = 'ready-waiting-overlay';
+
+    overlay.innerHTML = `
+        <div class="gwent-ready-spinner"></div>
+    `;
+
+    container.appendChild(overlay);
+
+    console.log('[READY] overlay appended');
+}
 function askForSessionId() {
     return new Promise((resolve) => {
         // overlay background
@@ -526,6 +643,7 @@ setTimeout(() => {
 			break;
 			case "sessionReady":
 				console.log("sessionReady");
+				tocar("tf2/Vote_started", false);
 				// showTooltip("Opponent has joined and the session is ready");
 				// [socket raw event.data] {"type":"sessionJoined","code":"XRA2"}
 				document.getElementById("session-start-control").classList.remove("hidden");
@@ -542,6 +660,8 @@ setTimeout(() => {
 
 			// Opponent has left and the session is no longer ready
 			case "sessionUnready":
+				opponentReady = false;
+				tocar("tf2/Vote_failure", false);
 				console.log("session un ready", gameended);
 				disableChat();
 				reset_custom();
@@ -549,7 +669,9 @@ setTimeout(() => {
 				showTooltip("Opponent has left and the session is no longer ready");
 				var btn = document.getElementById("session-start-control");
 				btn.textContent = "Ready";
-				btnCancelElem.classList.remove("hidden");
+				amReady = false;
+				toggleReadyWaiting(amReady);
+			//	btnCancelElem.classList.remove("hidden");
 			//	btnCreateElem.classList.remove("hidden");
 			//	btnJoinElem.classList.remove("hidden");
 				}
@@ -578,23 +700,25 @@ setTimeout(() => {
 				console.log("END GAME TRY round counts", game_state.roundCount, "game", game_state);
 				if (gameended === false) {
 				if (game_state.roundCount > 0) {
-					console.log("running");
 					await ui.notification("win-opleft", ui_display_times.round_end_result *2);
 
 					game.returnToCustomization();
 					if (joinedSessionId) {
-						cancelSession();
+						silent_cancelSession();
 					}
 				}
 			} else {
 				console.log("Op left, but game ended is", gameended);
 				showTooltip("Opponent has left");
 			}
+				reset_menu();
+				clearUnread();
 				break;
 			
 			// Opponent is ready. If you are ready begin the game immediately
 			case "ready":
 				 showTooltip("Opponent is ready. If you are ready begin the game immediately");
+				 tocar("tf2/Vote_yes", true);
 				 updateOpponentUI({
  								 "name": "Opponent",
  								 "state": `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
@@ -604,7 +728,7 @@ setTimeout(() => {
 				if (amReady) {
 					customizationElem.classList.add("hide");
 					gameStartControlsElem.classList.add("hide");
-		
+					await sleep(100);
 					game.startGame();
 					return
 				} else {
@@ -645,7 +769,9 @@ setTimeout(() => {
 			
 			case "unReady":
 				opponentReady = false;
-				amReady = false;
+				tocar("tf2/Vote_no", true);
+				// amReady = false;
+				toggleReadyWaiting(amReady);
 								updateOpponentUI({
  								 "name": `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players.op}`,
  								 "state": `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
@@ -894,21 +1020,32 @@ function mulberry32(seed) {
 		return ((t ^ t >>> 14) >>> 0) / 4294967296;
 	}
 }
-
-function shuffleSeeded(array, seed, debug = null) {
+function shuffleSeeded(array, seed, debug = null){
+	var input = {
+		array: array,
+		seed: for_seed_hashString(seed),
+		debug: debug
+	}
+	var finresult = shuffleSeeded2(array, seed, debug);
+	console.log("SHUFFLE INPUT/OUTPUT", input, finresult, " check same ", finresult.array === input.array);
+	return finresult;
+}
+function shuffleSeeded2(array, seed, debug = null) {
 	try {
 	let seed_init = seed;
 	seed = for_seed_hashString(seed);
 	console.log(`Shuffle new seed ${seed} from ${seed_init}`, array);
 	let rng = mulberry32(seed);
 	if (debug === "THAT_IS_OP__RETURN_THIS"){
-		console.log(
+		try {
+			console.log(
 		"SHUFFLE ON SEED",
 		seed,
 		`\nStarted: ${fasthash(btoa(JSON.stringify(array)))}`,
 		`\nOutput: ${fasthash(btoa(JSON.stringify(array)))}`,
 		debug
 	);
+} catch (e){}
 	 return {"array": array, "seed": seed}; }
 	let arr = [...array];
 
@@ -916,7 +1053,7 @@ function shuffleSeeded(array, seed, debug = null) {
 		const j = Math.floor(rng() * (i + 1));
 		[arr[i], arr[j]] = [arr[j], arr[i]];
 	}
-
+	try{
 	console.log(
 		"SHUFFLE ON SEED",
 		seed,
@@ -924,10 +1061,12 @@ function shuffleSeeded(array, seed, debug = null) {
 		`\nOutput: ${fasthash(btoa(JSON.stringify(arr)))}`,
 		debug
 	);
+} catch (e){
 
+}
 	return {"array": arr, "seed": seed};
 } catch (e){
-	console.log(`shuffleSeeded`, ` fatal error`, array, seed, debug, ` error `, e);
+	console.error(`shuffleSeeded`, ` fatal error`, array, seed, debug, ` error `, e);
 	alert("GAME CRASH!\n\nFatal error at shuffleSeeded function, check console for more info\n\nReport is as bug!!");
 }
 }
@@ -949,7 +1088,7 @@ class Player {
 		this.id = id;
 		this.tag = "me";
 		this.controller = (id === 0) ? new Controller() : new ControllerOpponent(this);
-		var tmp_cards = shuffleSeeded(deck.cards, this.ThatPlayerId, debug);
+		var tmp_cards = shuffleSeeded(deck.cards, btoa(`${Math.random().toString(36).substring(2, 36)}${this.ThatPlayerId}`), debug);
 		deck.cards = tmp_cards.array;
 		this.deckseed = tmp_cards.seed;
 		
@@ -1414,8 +1553,7 @@ class Deck extends CardContainer {
 
 		if (drawnCard !== null)
 			return drawnCard
-	}
-	
+	}	
 	// Draws a card and sends it to the container before adding a card from the container back to the deck.
 	//swap(container, card){
 	//	container.addCard(this.removeCard(0));
@@ -2027,6 +2165,7 @@ class Game {
 	async startGame() {
 		var btn = document.getElementById("session-start-control");
 		btn.textContent = "Game \nStarting";
+		tocar("tf2/Vote_success", false);
 		btnCancelElem.classList.add("hidden");
 		btnCreateElem.classList.add("hidden");
 		btnJoinElem.classList.add("hidden");
@@ -2330,7 +2469,7 @@ class Game {
 			tocar("");
 			endScreen.getElementsByTagName("p")[0].classList.remove("hide");
 			endScreen.children[0].classList.add("end-draw");
-			tocar("game_draw", true);
+			tocar("tf2/game_draw", true);
 			console.log("Game over || Draw")
 			gameended = true;
 		} else if (player_op.health === 0){
@@ -2354,6 +2493,7 @@ class Game {
 		ui.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);
 		comp_and_send(socket, JSON.stringify({ type: "unReady" }));
 		amReady = false;
+		toggleReadyWaiting(amReady);
 		opponentReady = false;
 		document.getElementById("session-start-control").classList.remove("ready");
 		
@@ -3975,6 +4115,7 @@ if (2 < descString.length) {
 			btn.textContent = "Ready";
 			customizationElem.classList.remove("noclick");
 			amReady = false;
+			toggleReadyWaiting(amReady);
 	//		readyButtonElem.classList.remove("ready");
 	//		customizationElem.classList.remove("noclick");
 	//		comp_and_send(socket, JSON.stringify({ type: "unReady" }));
@@ -4005,10 +4146,12 @@ if (2 < descString.length) {
 		player_me = new Player(0, players.me, me_deck );
 		comp_and_send(socket, JSON.stringify({ type: "ready", deck: me_deck }));
 		amReady = true;
+		toggleReadyWaiting(amReady);
 		customizationElem.classList.add("noclick");
 		 showTooltip("You are ready, please wait for opponent!");
 		if (opponentReady) {
 			this.elem.classList.add("hide");
+			await sleep(100);
 			game.startGame();
 		} else {
 			var btn = document.getElementById("session-start-control");
@@ -4430,6 +4573,7 @@ console.log(loadPackedSFX_pref, " files ", files);
 }
 // new:
 function tocar(arquivo, pararMusica) {
+	// console.log("TOCAR", arquivo, pararMusica);
 	//console.log("[sfx] tocar() called");
 	//console.log("[sfx] params -> arquivo:", arquivo, "| pararMusica:", pararMusica);
 	//console.log("[sfx] current lastSound:", lastSound);

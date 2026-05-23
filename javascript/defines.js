@@ -227,8 +227,6 @@ console.log("gaunter_lider", gaunter_lider);
 let ThisDef = {"name":"Deafult Config","env_vars":{"showbankms":9000,"players":{"sys":"Gwent Bot"},"fullscreenConfig":{"localhost":false,"else":true},"OnGameStartDraw":2,"ForGameStart":{"unitscards":22,"special":10,"hero":9},"killoverpowercard":999,"darknessstorm_await":false,"thishandsize":10,"herocardanim":true,"announce_turn_count":true,"SEND_INTERVAL_MS":700,"ui_display_times":{"socketready":3000,"hold_pause":{"sleep":78,"needs":6},"queue":[],"is_running":false,"is_busy":false,"round_end_result":2200,"notyfication":2200,"fadeSpeed":150,"checkDelay":25,"pass":1320,"turn":1200,"round_start":1200,"coin":1200,"faction_ability":2700,"show_me_that_card_you_have":2900,"is_transitioning":false},"RegisterMovesHold":5690,"resync_wait":10,"spy":{"spy":2,"aid":5,"sabotage":1},"powergain":{"ForEachCardGain":1.11,"CountSelf":false,"WeatherDebuffPercent":0.25,"Ceil":false},"axii":{"IfBasePowerUnder":5,"TakeAway":2,"desc":null},"nilfard_drawmaster":{"handshort":3,"drawdead":3,"drawalive":1,"drawiffail":3,"cardban":2,"drawextra":1},"gryffinschool_conf":{"anim":"griffin","anim_hand":"griffin_hand","topic":"Choose a Witcher Sign"},"mtg_conf":{"anim":"mtg","anim_hand":"mtg_hand","topic":"Pick a card to draw","random_max":25,"min_power":-7,"max_power":13,"count_needed":0,"shuffle_few_times":false,"version":"sanidsayuftusidfgnyudsfgnudsf","daily_seed":true,"unstable_mode":"random"},"buttonmutemode":1,"button_is_second_sheet":0,"audio_yt_vid_soundtrack":"FTsuevfvQ9w","audio_yt_vid_soundtrack_volume":47,"tavern_yt_vid":"yu197hlNWK0","tavern_yt_volume":100,"gaunter_lider":{"extra_cards":0.5,"revive":0.6}}};
 
 
-
-
 function ordinal(n) {
   let j = n % 10;
   let k = n % 100;
@@ -239,6 +237,5 @@ function ordinal(n) {
 
   return `${n}th`;
 }
-
 
 let card = null;

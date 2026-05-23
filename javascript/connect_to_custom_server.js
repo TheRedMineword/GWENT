@@ -287,6 +287,7 @@ async function connect_to_custom_server(URL) {
     createLoaderOverlay();
 
     try {
+        tocar("tf2/Carrier_new_robot", false);
         updateLoader('Connecting...', 0, `Request Hashed: ${btoa(for_seed_hashString(URL))}`);
         await sleep(1500);
         console.log(LOG_PREFIX, 'Connecting to URL:', URL);

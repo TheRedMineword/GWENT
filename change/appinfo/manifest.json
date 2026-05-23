@@ -1,6 +1,6 @@
 {
-  "sha": "90579867585473e59f0c7b6e1838cbed2cb2dd3fbe7d7fc7ebff8ac4197e5dd9",
-  "generatedAt": "2026-05-22T15:52:43.497Z",
+  "sha": "f895beda0b29e94f3cdd260d5bb00ade15aa87ad60ed618f7aeba87f45d90c8e",
+  "generatedAt": "2026-05-23T16:33:36.118Z",
   "files": [
     {
       "path": "404.html",
@@ -24,7 +24,7 @@
     },
     {
       "path": "change/index.json",
-      "sha256": "71f9a6120cf90d112b48a30debad9322a7d3cf3177c7a2006507c44476f63f02",
+      "sha256": "8c9240c253bd6f306dd13df6741d2f0167a07c3d86f67a500f305668cefdd2da",
       "size": 24
     },
     {
@@ -71,6 +71,11 @@
       "path": "change/log-update15.txt",
       "sha256": "ad5141c4576fd5232ee8138a361af261102700f28b90c871fcc5c974e4a63f73",
       "size": 245
+    },
+    {
+      "path": "change/log-update16.txt",
+      "sha256": "f78fde7a2d3ee4563d7ec2e883a84995bd7737500776298771de55f75feef7d6",
+      "size": 163
     },
     {
       "path": "change/log-update2.txt",
@@ -3359,8 +3364,8 @@
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "40256341d285498a3bd722d5806e0898c41ff6c4f1fb5526a022756a8a8c0b7d",
-      "size": 44757
+      "sha256": "64a033a7d51388b93e682a063da49f3ab73d564bf14d95a81d620c323a20affd",
+      "size": 44681
     },
     {
       "path": "javascript/cards.js",
@@ -3374,8 +3379,8 @@
     },
     {
       "path": "javascript/connect_to_custom_server.js",
-      "sha256": "3de761be69d49b604fcbc467ecd9937ccc91497b23a702819e49f2fc9dfe6eb0",
-      "size": 25781
+      "sha256": "a4105619184be2875da008dd32da97a0e03b51584639baa3f9efa64e071e5cb5",
+      "size": 25829
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
@@ -3394,8 +3399,8 @@
     },
     {
       "path": "javascript/defines.js",
-      "sha256": "29efbbf2df0cb30a2d14c4d57ca97880dc36458cb7d7e09f0476ea7d1dc9d1b2",
-      "size": 8438
+      "sha256": "7445888394a6fdb4a20854de3e3abefff7465762cabdacd6188c0fcb3074fec3",
+      "size": 8432
     },
     {
       "path": "javascript/factions.js",
@@ -3404,8 +3409,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "100f009be73774f1e6db4c0af433a599ea03b23b52728aeca24ddcefcad39b4b",
-      "size": 149521
+      "sha256": "79a0e37480e5939a87ec18a3c1592ca136fd493e897006eecea0e4a82724b4be",
+      "size": 153647
     },
     {
       "path": "javascript/jszip.min.js",
@@ -3419,8 +3424,8 @@
     },
     {
       "path": "javascript/session.js",
-      "sha256": "311633d81e66f1895d10430563e27a9b1230e0de0ef0c0e6523cd8a1fd3f9f73",
-      "size": 12331
+      "sha256": "cd1e03c95cdc263b5bd704338a64e241cd9620eba7fc97b7baa1dc4edba39279",
+      "size": 13842
     },
     {
       "path": "javascript/sync_hands.js",
@@ -3444,8 +3449,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "f13baed6165601ede11e0e40fbab35608d82c0094ef4f967c65636f0c644b93f",
-      "size": 3122
+      "sha256": "80f7d3de7608ee8fd45b2fe3cdc3cb37827f1d11971420c0a5e43d6ab4dfa1d5",
+      "size": 3277
     },
     {
       "path": "rules.css",
@@ -3533,11 +3538,6 @@
       "size": 11405
     },
     {
-      "path": "sfx/game_draw.mp3",
-      "sha256": "884caffc22e1324a17f1dfb42caf958bff9bfd35f3d75abc6683693912f487d1",
-      "size": 197623
-    },
-    {
       "path": "sfx/game_lose.mp3",
       "sha256": "d93392efe76e9235093470bfa81da21a2e36d8e37998aa258b67f14cf617cb6d",
       "size": 56348
@@ -3619,8 +3619,8 @@
     },
     {
       "path": "sfx/packed.zip",
-      "sha256": "836474b694b09eb8b0c67ee5559bd4adb25a3c4b74765f26e71be91a737080d6",
-      "size": 2623032
+      "sha256": "f2d949dd66c5b679fb7a891c31301619663f377cdc1fdadc9aa3e305416ff6cc",
+      "size": 3039202
     },
     {
       "path": "sfx/pass.mp3",
@@ -3676,6 +3676,56 @@
       "path": "sfx/spy.mp3",
       "sha256": "93461baa26594adc0d115845b63746bca8de6e7301f2e97f503d1615d28290da",
       "size": 29772
+    },
+    {
+      "path": "sfx/tf2/Carrier_new_robot.mp3",
+      "sha256": "90731aca910349e5047bcb3f0667688b284da153aff7510298d72ab3a74ad23a",
+      "size": 51323
+    },
+    {
+      "path": "sfx/tf2/game_draw.mp3",
+      "sha256": "884caffc22e1324a17f1dfb42caf958bff9bfd35f3d75abc6683693912f487d1",
+      "size": 197623
+    },
+    {
+      "path": "sfx/tf2/readme.md",
+      "sha256": "7370f5e007f9d23c1f23c64fd39b74929f2ae4eed7a007c272f636d9f9f581dd",
+      "size": 102
+    },
+    {
+      "path": "sfx/tf2/Trade_failure.mp3",
+      "sha256": "08a0bc69aa82cd43d88acfb3a020b525b38bd47be3b98e6ec4ec2c0b0ae05083",
+      "size": 59758
+    },
+    {
+      "path": "sfx/tf2/Trade_ready.mp3",
+      "sha256": "c8341003c5bf0e0221f0673bd63e61ddfa8bc7b555e6cad35e0f26f939a218b4",
+      "size": 44413
+    },
+    {
+      "path": "sfx/tf2/Vote_failure.mp3",
+      "sha256": "b7e7a401b37338b91b696b4acd957b5c7638171f00858faece5a0f5f151fcf32",
+      "size": 69368
+    },
+    {
+      "path": "sfx/tf2/Vote_no.mp3",
+      "sha256": "e9966926f43f86b09c88ab46882f440afca64cb2e52e47b4e380a694caf1b493",
+      "size": 18906
+    },
+    {
+      "path": "sfx/tf2/Vote_started.mp3",
+      "sha256": "d4904d901332f3daa26d28cca9e788a7b4e55d10a91976e3bbe35819af5a2f9b",
+      "size": 62794
+    },
+    {
+      "path": "sfx/tf2/Vote_success.mp3",
+      "sha256": "35c844aab6c8bb5173c4febfe47f75500f6f0dc4469952cb7b2ce27532d8f190",
+      "size": 99638
+    },
+    {
+      "path": "sfx/tf2/Vote_yes.mp3",
+      "sha256": "b07ce9178808257c2636ac565f4f6c694d52885b1ed4f21c14988302dfc50d73",
+      "size": 18056
     },
     {
       "path": "sfx/turn_me.mp3",
