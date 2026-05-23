@@ -238,4 +238,6 @@ function ordinal(n) {
   return `${n}th`;
 }
 
+let isconnectedtosession = false;
+
 let card = null;

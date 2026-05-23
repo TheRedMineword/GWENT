@@ -1,6 +1,6 @@
 {
-  "sha": "f895beda0b29e94f3cdd260d5bb00ade15aa87ad60ed618f7aeba87f45d90c8e",
-  "generatedAt": "2026-05-23T16:33:36.118Z",
+  "sha": "3fbd22bdca0d9a4f1285f6740984cc61561ec953a9a608ce5d356ea950b0616e",
+  "generatedAt": "2026-05-23T16:41:57.330Z",
   "files": [
     {
       "path": "404.html",
@@ -3379,8 +3379,8 @@
     },
     {
       "path": "javascript/connect_to_custom_server.js",
-      "sha256": "a4105619184be2875da008dd32da97a0e03b51584639baa3f9efa64e071e5cb5",
-      "size": 25829
+      "sha256": "0168940dbb3843434ad43d7719771d0ae6894cf3bd936fa7a0aa6d6db3f8b9a1",
+      "size": 25858
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
@@ -3399,8 +3399,8 @@
     },
     {
       "path": "javascript/defines.js",
-      "sha256": "7445888394a6fdb4a20854de3e3abefff7465762cabdacd6188c0fcb3074fec3",
-      "size": 8432
+      "sha256": "f602f027e193e4d126de3282e2d7883125bab6d16903384c66959840e5a5afc9",
+      "size": 8469
     },
     {
       "path": "javascript/factions.js",
@@ -3409,8 +3409,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "79a0e37480e5939a87ec18a3c1592ca136fd493e897006eecea0e4a82724b4be",
-      "size": 153647
+      "sha256": "bb6387b34b10414c9149d5052db5aa31efc606f6af0b2cc9ac4b96b74aabb966",
+      "size": 153761
     },
     {
       "path": "javascript/jszip.min.js",
@@ -3424,8 +3424,8 @@
     },
     {
       "path": "javascript/session.js",
-      "sha256": "cd1e03c95cdc263b5bd704338a64e241cd9620eba7fc97b7baa1dc4edba39279",
-      "size": 13842
+      "sha256": "e399fe5073cf1df1cbff05f25141e96a96e88445faf73409ec06eebf9e59809f",
+      "size": 14086
     },
     {
       "path": "javascript/sync_hands.js",

@@ -195,6 +195,7 @@ async function createGame() {
     if (mode.type === "create") {
         tocar("tf2/Trade_ready", false);
         comp_and_send(socket, JSON.stringify({ type: "createSession", custom_server: { active: false}}));
+         isconnectedtosession = true;
     }
 
     if (mode.type === "custom") {
@@ -211,11 +212,15 @@ async function createGame() {
                 conf
             }
         }));
+         isconnectedtosession = true;
     }
 }
 
 function cancelSession() {
+  if (isconnectedtosession){
   tocar("tf2/Trade_failure", false);
+  }
+   isconnectedtosession = false;
   document.getElementById("session-start-control").classList.add("hidden");
 
   btnCreateElem.classList.remove("hidden");
@@ -246,7 +251,10 @@ function cancelSession() {
  // reset_custom();
 }
 function silent_cancelSession() {
+  if (isconnectedtosession){
   tocar("tf2/Trade_failure", false);
+  }
+   isconnectedtosession = false;
   document.getElementById("session-start-control").classList.add("hidden");
 
   btnCreateElem.classList.remove("hidden");
@@ -328,6 +336,7 @@ socket.addEventListener("message", async (event) => {
       console.log("Session.js", data.code);
       joinedSessionId = data.code;
       ThisSessionId = data.id;
+       isconnectedtosession = true;
       showTooltip(`Joined session: ${data.id}`);
       if (data.custom === true){
         connect_to_custom_server(`${custom_url}api/custom_sync?session=${encodeURIComponent(ThisSessionId)}`);

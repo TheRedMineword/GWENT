@@ -661,7 +661,9 @@ setTimeout(() => {
 			// Opponent has left and the session is no longer ready
 			case "sessionUnready":
 				opponentReady = false;
+				if (isconnectedtosession){
 				tocar("tf2/Vote_failure", false);
+				}
 				console.log("session un ready", gameended);
 				disableChat();
 				reset_custom();
@@ -700,6 +702,7 @@ setTimeout(() => {
 				console.log("END GAME TRY round counts", game_state.roundCount, "game", game_state);
 				if (gameended === false) {
 				if (game_state.roundCount > 0) {
+					isconnectedtosession = false;
 					await ui.notification("win-opleft", ui_display_times.round_end_result *2);
 
 					game.returnToCustomization();
@@ -769,7 +772,9 @@ setTimeout(() => {
 			
 			case "unReady":
 				opponentReady = false;
+				if (isconnectedtosession){
 				tocar("tf2/Vote_no", true);
+				}
 				// amReady = false;
 				toggleReadyWaiting(amReady);
 								updateOpponentUI({

@@ -29,7 +29,8 @@ const IGNORE_PATTERNS = [
     'LOG_PREFIX',
     'IsNowCustom',
     'witcher_signs',
-    'ThisDef'
+    'ThisDef',
+    'isconnectedtosession'
 ];
 
 const LOG_PREFIX = '[CUSTOM_SERVER]';
