@@ -1,6 +1,6 @@
 {
-  "sha": "25689f91e939d7fb269d427e826bb4a81a38fe5750196537dea9d35c6f05bbc0",
-  "generatedAt": "2026-05-24T14:14:18.083Z",
+  "sha": "ffbe64ac4b098426eca5ade7eb70387428db03a94bc7a7093b95c5afa1586cbf",
+  "generatedAt": "2026-05-24T14:19:41.810Z",
   "files": [
     {
       "path": "404.html",
@@ -3416,6 +3416,11 @@
       "path": "javascript/custom_server/deafult.txt",
       "sha256": "64b96d3fcd38e86903bdce76aad98a1ea5a2be6124fbbf3765bb458f425ed5f3",
       "size": 2497
+    },
+    {
+      "path": "javascript/custom_server/texture_pack_for_edits.zip",
+      "sha256": "83b98e4c2ea4523d5f731ec361ed8a5aab522b7188670a50636b905c299b7e34",
+      "size": 544
     },
     {
       "path": "javascript/decks.js",
