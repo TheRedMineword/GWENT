@@ -42,6 +42,113 @@
 
 
 
+/* Dark fullscreen backdrop */
+.tp-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 99999999999999;
+
+  /* Make text visible */
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+/* Modal box */
+.tp-modal {
+  width: 420px;
+  max-width: 90%;
+
+  background: #1e1e1e;
+  border: 2px solid #444;
+  border-radius: 12px;
+
+  padding: 24px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+
+  text-align: center;
+}
+
+/* Heading */
+.tp-modal h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+
+  font-size: 22px;
+  color: #ffcc66;
+}
+
+/* Paragraph text */
+.tp-modal p {
+  margin-bottom: 20px;
+
+  font-size: 15px;
+  line-height: 1.6;
+
+  color: #e0e0e0;
+
+  word-break: break-word;
+}
+
+/* Code styling */
+.tp-modal code {
+  background: #2b2b2b;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #8fd3ff;
+}
+
+/* URL */
+.tp-modal b {
+  color: #ffffff;
+}
+
+/* Buttons */
+.tp-modal button {
+  margin: 8px;
+  padding: 10px 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-size: 14px;
+  font-weight: bold;
+
+  transition: 0.2s ease;
+}
+
+/* Accept button */
+.tp-accept {
+  background: #4caf50;
+  color: white;
+}
+
+.tp-accept:hover {
+  background: #5ecb63;
+}
+
+/* Cancel button */
+.tp-cancel {
+  background: #c0392b;
+  color: white;
+}
+
+.tp-cancel:hover {
+  background: #e74c3c;
+}
+
+
+
+
+
 
 #chat-overlay{
     position:fixed;

@@ -30,7 +30,8 @@ const IGNORE_PATTERNS = [
     'IsNowCustom',
     'witcher_signs',
     'ThisDef',
-    'isconnectedtosession'
+    'isconnectedtosession',
+    'texturepack'
 ];
 
 const LOG_PREFIX = '[CUSTOM_SERVER]';
@@ -66,6 +67,8 @@ async function reset_custom(){
     def.env_vars.card_dict = card_dict_base;
     def.env_vars.faction = factions_base;
     def.env_vars.ability_dict = ability_dict_base;
+    def.texture_pack_url = null;
+    resetTexturePack();
     await connect_to_custom_server(`data:application/json;base64,${btoa(JSON.stringify(def))}`);
     await sleep(300);
     IsNowCustom = false;
@@ -163,6 +166,107 @@ function removeLoaderOverlay() {
 
     console.log(LOG_PREFIX, 'Loader overlay removed');
 }
+
+async function showThirdPartyWarning(url) {
+  return new Promise((resolve) => {
+    const overlay = document.createElement("div");
+    overlay.className = "tp-overlay";
+
+   overlay.innerHTML = `
+  <div class="tp-modal">
+    <h3>⚠ Third-party Texture Pack</h3>
+
+    <p>
+      You are about to load a texture pack from:
+    </p>
+
+    <p>
+      <b>${url}</b>
+    </p>
+
+    <p>
+      We are not responsible for its content or safety.
+    </p>
+
+    <button class="tp-accept">Accept</button>
+    <button class="tp-cancel">Cancel</button>
+  </div>
+`;
+
+    document.body.appendChild(overlay);
+
+    const cleanup = () => overlay.remove();
+
+    overlay.querySelector(".tp-cancel").onclick = () => {
+      cleanup();
+      resolve(false);
+    };
+
+    overlay.querySelector(".tp-accept").onclick = async () => {
+      cleanup();
+
+      try {
+        const res = await fetch(url);
+        const blob = await res.blob();
+
+        const zip = await JSZip.loadAsync(blob);
+
+        if (!zip.file("data.meta")) {
+          throw new Error("Missing data.meta");
+        }
+
+        const metaText = await zip.file("data.meta").async("string");
+
+        const files = {};
+        let hasAssets = false;
+
+        zip.forEach((path, file) => {
+          if (path.startsWith("assets/") && !file.dir) {
+            hasAssets = true;
+            files[path] = file.async("blob");
+          }
+        });
+
+        if (!hasAssets) {
+          throw new Error("Missing assets/ folder");
+        }
+
+        const resolvedAssets = {};
+        for (const key in files) {
+          resolvedAssets[key] = await files[key];
+        }
+
+        texturePack = {
+          sourceUrl: url,
+          meta: metaText,
+          assets: resolvedAssets,
+          path: blob
+        };
+        refreshFactionVisuals();
+         refreshAllCards();
+        resolve(true);
+      } catch (err) {
+        console.error(err);
+        alert("Failed to load texture pack: " + err.message);
+        resolve(false);
+      }
+    };
+  });
+}
+
+function resetTexturePack() {
+  if (!texturePack) return;
+
+  // revoke blob if needed (optional but good practice)
+  if (texturePack.path instanceof Blob) {
+    URL.revokeObjectURL(texturePack.path);
+  }
+  texturePackBlobCache.clear();
+  texturePack = null;
+  refreshFactionVisuals();
+  refreshAllCards();
+}
+
 
 // ===============================
 // IGNORE PATTERN MATCHING
@@ -410,7 +514,11 @@ percent = 5 + Math.floor((rawPercent / 100) * (74 - 5));
         // ===========================
         // APPLY ENV VARS
         // ===========================
-
+        updateLoader('Parsing bit more...', 76);
+        if (data?.texture_pack_url || null !== null){
+            updateLoader('Loading texture pack', 79);
+            await showThirdPartyWarning(data.texture_pack_url);
+        }
         if (data.env_vars) {
             updateLoader('Applying env vars...', 80, `You are synchronizing with ${s_name_low}`);
 

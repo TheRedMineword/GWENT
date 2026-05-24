@@ -2472,7 +2472,7 @@ class Game {
 		endScreen.children[0].className = "";
 		console.log("---------------------")
 		if (player_op.health <= 0 && player_me.health <= 0) {
-			tocar("");
+			tocar("game_lose");
 			endScreen.getElementsByTagName("p")[0].classList.remove("hide");
 			endScreen.children[0].classList.add("end-draw");
 			tocar("tf2/game_draw", true);
@@ -4390,15 +4390,31 @@ async function fade(fadeIn, elem, dur, delay){
 
 //      Get Image paths   
 function iconURL(name, ext = "png"){
+	const blobUrl = getTexturePackBlob("icons/" + name, ext);
+	if (blobUrl) {
+		return `url('${blobUrl}')`;
+	}
 	return imgURL("icons/" + name, ext);
 }
 function largeURL(name, ext="jpg"){
+	const blobUrl = getTexturePackBlob("lg/" + name, ext);
+	if (blobUrl) {
+		return `url('${blobUrl}')`;
+	}
 	return imgURL("lg/" + name, ext) 
 }
 function smallURL(name, ext="jpg"){
+	const blobUrl = getTexturePackBlob("sm/" + name, ext);
+	if (blobUrl) {
+		return `url('${blobUrl}')`;
+	}
 	return imgURL("sm/" + name, ext);
 }
 function imgURL(path, ext) {
+	const blobUrl = getTexturePackBlob("img/" + path + "." + ext + "");
+	if (blobUrl) {
+		return `url('${blobUrl}')`;
+	}
 	// return "url('img/" + path + "." + ext;
 	return "url('img/" + path + "." + ext + "')";
 }
@@ -4595,7 +4611,7 @@ function tocar(arquivo, pararMusica) {
 	//	console.log("[sfx] sound allowed to play");
 
 	
-	var audioPath = audio_cache[arquivo] || ("sfx/" + arquivo + ".mp3");
+	var audioPath = getTexturePackBlob("sfx/" + arquivo + ".mp3") || audio_cache[arquivo] || ("sfx/" + arquivo + ".mp3");
 
 // console.log("[sfx] creating Audio with path:", audioPath);
 

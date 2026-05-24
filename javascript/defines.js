@@ -239,5 +239,25 @@ function ordinal(n) {
 }
 
 let isconnectedtosession = false;
+const texturePackBlobCache = new Map();
+let texturePack = null;
+function getTexturePackBlob(path) {
+	if (!texturePack?.assets) return null;
 
+	const fullPath = "assets/" + path;
+	// console.log("Texture pack check", fullPath, texturePack);
+
+	const blob = texturePack.assets[fullPath];
+	if (!blob) return null;
+
+	// cache blob URLs so we don't recreate them
+	if (texturePackBlobCache.has(fullPath)) {
+		return texturePackBlobCache.get(fullPath);
+	}
+
+	const url = URL.createObjectURL(blob);
+	texturePackBlobCache.set(fullPath, url);
+
+	return url;
+}
 let card = null;

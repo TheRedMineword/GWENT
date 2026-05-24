@@ -1,6 +1,6 @@
 {
-  "sha": "91c853a48bcf589a2433b98a23fed8061ff1de89a3c1f7ef520375d13d5e1792",
-  "generatedAt": "2026-05-24T11:05:34.722Z",
+  "sha": "25689f91e939d7fb269d427e826bb4a81a38fe5750196537dea9d35c6f05bbc0",
+  "generatedAt": "2026-05-24T14:14:18.083Z",
   "files": [
     {
       "path": "404.html",
@@ -3404,13 +3404,13 @@
     },
     {
       "path": "javascript/connect_to_custom_server.js",
-      "sha256": "1d6bd4a5121c6ec62fbb47213675aa20f7328ea1db325b2a9252c6d6fea0cdb8",
-      "size": 25910
+      "sha256": "a59af8ba8b797377c68944381ee6c64f21949c8ba802a13fc9e1fa3040300825",
+      "size": 28623
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
-      "sha256": "2961ec75eb5b846f12c4f49448cf2a54bddbbb4c0f9e9f24b018b162e41b2285",
-      "size": 75507
+      "sha256": "79cf937ba3f29636fdc55ea28a81acc19fd66f7573a9b276dc945d46b146ee51",
+      "size": 75536
     },
     {
       "path": "javascript/custom_server/deafult.txt",
@@ -3424,8 +3424,8 @@
     },
     {
       "path": "javascript/defines.js",
-      "sha256": "4a6a3a038d4927da9fd862866bfff2d6dfb64e3bf706a51152cb4c9975d7a6bd",
-      "size": 8469
+      "sha256": "08c25dde2d3c1c0310b80707bda9edd7f6c8b87f400104dab77bf12b967f5b6a",
+      "size": 9034
     },
     {
       "path": "javascript/factions.js",
@@ -3434,8 +3434,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "245f45297f35a92cfb8534434fc87469ccbc270032da07914465912d907885e2",
-      "size": 153993
+      "sha256": "0c2a4a9ea6c2a5410d742158a625893419d5058e749e404273c2f78876a21375",
+      "size": 154503
     },
     {
       "path": "javascript/jszip.min.js",
@@ -3464,13 +3464,13 @@
     },
     {
       "path": "package-lock.json",
-      "sha256": "565f9f19b0e6221eb668531f758e4e27d1f0376ed05f111e50a93985fc649f0b",
-      "size": 78857
+      "sha256": "da999e598e1e483d37155cc8da54eb49b45eaa7f539f0b1a93b2b057faafe8c3",
+      "size": 96418
     },
     {
       "path": "package.json",
-      "sha256": "20c731581daa2c51cb98b25e7d9965b84f3d479b2bc028f44e0e5b6e8c47f2b0",
-      "size": 507
+      "sha256": "594a27d0a5b9cdf6d3eb3617f532e9eba484c3f3da713ed5e75c896526acff64",
+      "size": 531
     },
     {
       "path": "README.md",
@@ -3789,8 +3789,8 @@
     },
     {
       "path": "style.css",
-      "sha256": "f820c906fe8ee57b94cdd880ad51adef59440b14db8b5a09e0b71182577b5803",
-      "size": 39939
+      "sha256": "a5875e8be9c93e8e80a057612f11feab578a65cf39cefadaeb2ef0e197e15696",
+      "size": 41318
     }
   ]
 }
