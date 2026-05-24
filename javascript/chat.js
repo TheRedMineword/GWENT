@@ -68,6 +68,7 @@ fullcahturl = `${atob(api_url_msg_mode)}://${api_url_msg}/api/message`;
 console.log("[CHAT]", ` ${fullcahturl}`, ` ${atob(api_url_msg_mode)}://${api_url_msg}/api/message`);
 
 async function sendChatMessage() {
+    if (!isconnectedtosession) return;
     const text = input2.value.trim();
     if (!text) return;
     if (!current_op) {
@@ -131,6 +132,7 @@ async function sendChatMessage() {
 }
 
 async function sendChatMessageStrig(atext) {
+    if (!isconnectedtosession) return;
     const text = atext;
     if (!text) return;
     if (!current_op) {

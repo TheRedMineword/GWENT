@@ -227,7 +227,7 @@ if (card.holder.id === player_op.id) {
 			console.log("Is empty deck? got error", e);
 		}
 }
-        card.holder = card.holder.opponent();
+        // card.holder = card.holder.opponent();
 		//await resync_hands();
     }
 },

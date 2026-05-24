@@ -661,12 +661,13 @@ setTimeout(() => {
 			// Opponent has left and the session is no longer ready
 			case "sessionUnready":
 				opponentReady = false;
+				// btnCancelElem.classList.remove("hidden");
 				if (isconnectedtosession){
 				tocar("tf2/Vote_failure", false);
 				}
 				console.log("session un ready", gameended);
 				disableChat();
-				reset_custom();
+				//reset_custom();
 				if (gameended === false) {
 				showTooltip("Opponent has left and the session is no longer ready");
 				var btn = document.getElementById("session-start-control");
@@ -705,17 +706,22 @@ setTimeout(() => {
 					isconnectedtosession = false;
 					await ui.notification("win-opleft", ui_display_times.round_end_result *2);
 
-					game.returnToCustomization();
+					await game.returnToCustomization();
+					btnCancelElem.classList.remove("hidden"); // no idea if its do anything
 					if (joinedSessionId) {
 						silent_cancelSession();
 					}
+					reset_menu();
 				}
 			} else {
 				console.log("Op left, but game ended is", gameended);
 				showTooltip("Opponent has left");
 			}
-				reset_menu();
+				
 				clearUnread();
+				if (data?.reason || null === "sessionCancelled"){
+					silent_cancelSession();
+				}
 				break;
 			
 			// Opponent is ready. If you are ready begin the game immediately
@@ -731,7 +737,7 @@ setTimeout(() => {
 				if (amReady) {
 					customizationElem.classList.add("hide");
 					gameStartControlsElem.classList.add("hide");
-					await sleep(100);
+					//await sleep(100);
 					game.startGame();
 					return
 				} else {
@@ -2171,6 +2177,7 @@ class Game {
 	async startGame() {
 		var btn = document.getElementById("session-start-control");
 		btn.textContent = "Game \nStarting";
+		ui.enablePlayer(false);
 		tocar("tf2/Vote_success", false);
 		btnCancelElem.classList.add("hidden");
 		btnCreateElem.classList.add("hidden");
@@ -2515,6 +2522,9 @@ class Game {
 		customizationElem.classList.remove("hide");
 		gameStartControlsElem.classList.remove("hide");
 		customizationElem.classList.remove("noclick");
+		if (isconnectedtosession){
+			btnCancelElem.classList.remove("hidden")
+		}
 	}
 	
 	// Restarts the last game with the same decks
@@ -4164,7 +4174,7 @@ if (2 < descString.length) {
 		 showTooltip("You are ready, please wait for opponent!");
 		if (opponentReady) {
 			this.elem.classList.add("hide");
-			await sleep(100);
+			//await sleep(100);
 			game.startGame();
 		} else {
 			var btn = document.getElementById("session-start-control");

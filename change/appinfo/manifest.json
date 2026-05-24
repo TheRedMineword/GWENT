@@ -1,6 +1,6 @@
 {
-  "sha": "ffbe64ac4b098426eca5ade7eb70387428db03a94bc7a7093b95c5afa1586cbf",
-  "generatedAt": "2026-05-24T14:19:41.810Z",
+  "sha": "19519adad794d26257b1d5eb52d257d4dc370f34a74d410e5f9371b4eb5f739f",
+  "generatedAt": "2026-05-24T17:06:00.683Z",
   "files": [
     {
       "path": "404.html",
@@ -3389,8 +3389,8 @@
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "b0300411781416c1d756cc77e55dce1a4ff5fb6ca93a224571950755dfe863fe",
-      "size": 46050
+      "sha256": "bbb5741a733b3165add523bfe727d7f8ab11421d2c486726b56c4daf307b6eee",
+      "size": 46053
     },
     {
       "path": "javascript/cards.js",
@@ -3399,8 +3399,8 @@
     },
     {
       "path": "javascript/chat.js",
-      "sha256": "a9a182e940d5f10208fe006a377eb23d56031eb8cf3e7d59e4a20f7698b8d245",
-      "size": 6825
+      "sha256": "a7ad610b6b5f94d7c6629b894341787ea2c3c18721b8718a6c5b52486b78afd3",
+      "size": 6905
     },
     {
       "path": "javascript/connect_to_custom_server.js",
@@ -3439,8 +3439,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "0c2a4a9ea6c2a5410d742158a625893419d5058e749e404273c2f78876a21375",
-      "size": 154503
+      "sha256": "8cd17820516b0154d24c89c493086d3a22a80261b1228c4ba9455244467e48d5",
+      "size": 154849
     },
     {
       "path": "javascript/jszip.min.js",
@@ -3454,8 +3454,8 @@
     },
     {
       "path": "javascript/session.js",
-      "sha256": "11e55d54b5cfff0ab21650299a002b39603ced5621ca5c7a55ca34526fd0ecb7",
-      "size": 14082
+      "sha256": "3183544e678c4feeb92c15dfcde6f96b8b93e2ef0dccaefdec514ec8cc3dc07b",
+      "size": 14804
     },
     {
       "path": "javascript/sync_hands.js",

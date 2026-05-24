@@ -230,6 +230,8 @@ function cancelSession() {
  // sessionDisplay.classList.add("hidden");
 
   if (createdSessionId) {
+    amReady = false;
+opponentReady = false;
     console.log("Cancelled Session:", createdSessionId);
     comp_and_send(socket, JSON.stringify({
       type: "cancelSession",
@@ -249,8 +251,15 @@ function cancelSession() {
   }
   joinedSessionId = null;
   reset_custom();
+  updateOpponentUI({
+ 								 "name": "No Opponent",
+ 								 "state": "img/icons/google_fonts__signal_disconnected_99dp_CCCCCC_FILL0_wght400_GRAD0_opsz48.png",
+ 								 "status": ""
+								});
 }
 function silent_cancelSession() {
+  amReady = false;
+opponentReady = false;
   if (isconnectedtosession){
   tocar("tf2/Trade_failure", false);
   }
@@ -262,7 +271,7 @@ function silent_cancelSession() {
 
   btnCancelElem.classList.add("hidden");
  // sessionDisplay.classList.add("hidden");
-
+  
   if (createdSessionId) {
     console.log("Cancelled Session:", createdSessionId);
     comp_and_send(socket, JSON.stringify({
@@ -285,8 +294,15 @@ function silent_cancelSession() {
   }
   joinedSessionId = null;
   reset_custom();
+  updateOpponentUI({
+ 								 "name": "No Opponent",
+ 								 "state": "img/icons/google_fonts__signal_disconnected_99dp_CCCCCC_FILL0_wght400_GRAD0_opsz48.png",
+ 								 "status": ""
+								});
 }
 function reset_menu() {
+  amReady = false;
+opponentReady = false;
   document.getElementById("session-start-control").classList.add("hidden");
 
   btnCreateElem.classList.remove("hidden");
@@ -298,7 +314,12 @@ function reset_menu() {
     ThisSessionId = null;
     btnCancelElem.classList.add("hidden");
   joinedSessionId = null;
- // reset_custom();
+  reset_custom();
+  updateOpponentUI({
+ 								 "name": "No Opponent",
+ 								 "state": "img/icons/google_fonts__signal_disconnected_99dp_CCCCCC_FILL0_wght400_GRAD0_opsz48.png",
+ 								 "status": ""
+								});
 }
 // --------------------
 // SOCKET MESSAGE HANDLING

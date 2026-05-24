@@ -520,7 +520,7 @@ if (data.type === "createSession") {
   console.log("Try notify all remaining players");
   sessions[ws.sessionId].players.forEach((player) => {
     try {
-        if (player === session.players[0]) return;
+        if (player === sessions[ws.sessionId].players[0]) return;
         console.log(`${player.id} cancelled try`);
         console.log(`SEND unready session, silent: ${data?.silent || false}`);
         if (`${data?.silent || false}` === `${false}`){
@@ -532,7 +532,7 @@ if (data.type === "createSession") {
         );
       }
     } catch (e) {
-      console.log("cancelSession notify error:", e);
+      console.error("cancelSession notify error:", e);
     }
   });
 
