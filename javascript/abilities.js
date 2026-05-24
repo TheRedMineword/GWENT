@@ -189,7 +189,7 @@ var ability_dict = {
     name: "Call to Arms",
     description: `Lets you and your opponent redraw ${spy.aid} cards. `,
     placed: async (card) => {
-        await card.animate("horn");
+        await card.animate("aid");
 		console.log("AID CARD PAYLOD", card, "by:", card.holder.id, "me id:", player_me.id);
 		// await player_me.deck.draw(player_me.hand);
 

@@ -1,6 +1,6 @@
 {
-  "sha": "228fae6b1b6474583975169094eca3714bfa0373de92bcf615d762cc338ced81",
-  "generatedAt": "2026-05-24T09:51:11.047Z",
+  "sha": "91c853a48bcf589a2433b98a23fed8061ff1de89a3c1f7ef520375d13d5e1792",
+  "generatedAt": "2026-05-24T11:05:34.722Z",
   "files": [
     {
       "path": "404.html",
@@ -24,8 +24,8 @@
     },
     {
       "path": "change/index.json",
-      "sha256": "8c9240c253bd6f306dd13df6741d2f0167a07c3d86f67a500f305668cefdd2da",
-      "size": 24
+      "sha256": "45caadf8be857115ae28843323fb0b3e82d9ce163ab24831ccac2cb7d95e96cb",
+      "size": 28
     },
     {
       "path": "change/log-ai-summary-becuase-i-did-a-lot-of-github-commits.txt",
@@ -71,6 +71,11 @@
       "path": "change/log-update15.txt",
       "sha256": "ad5141c4576fd5232ee8138a361af261102700f28b90c871fcc5c974e4a63f73",
       "size": 245
+    },
+    {
+      "path": "change/log-update16.hot.txt",
+      "sha256": "0bb2813d3b67a74a64dd205baa375ca08315c19f0e1754800576457ecce04b8b",
+      "size": 460
     },
     {
       "path": "change/log-update16.txt",
@@ -161,6 +166,11 @@
       "path": "img/deck.jpg",
       "sha256": "ad9c5b668134949ae65a5b79dcf8679d39c405667f56ddbec4046262a0701708",
       "size": 494975
+    },
+    {
+      "path": "img/icons/anim_aid.png",
+      "sha256": "bcd0dae4456ffec28d787f59151c132d6833384194b9fc0cba38851c968fad52",
+      "size": 8675
     },
     {
       "path": "img/icons/anim_avenger_spawn_creature.png",
@@ -1079,8 +1089,8 @@
     },
     {
       "path": "img/lg/neutral_aidhorn.jpg",
-      "sha256": "510bdbaa22a33763f2076735536d37c4e19a47f5d3a534949c512e4b8c37465a",
-      "size": 517572
+      "sha256": "53c136ca1d91f449c07876d418a4e689cc6c1aea5ae0444d8da617ce30a3aa94",
+      "size": 152258
     },
     {
       "path": "img/lg/neutral_axii_p.jpg",
@@ -2339,8 +2349,8 @@
     },
     {
       "path": "img/sm/neutral_aidhorn.jpg",
-      "sha256": "52c936cfb625cf1563935ba7ee345cdb919a0bdceea05e18768e149d75d94008",
-      "size": 27587
+      "sha256": "b6e02474ac687249acc6c7549f99ff09f77d202645faf7bbe5c4778a9e555927",
+      "size": 384362
     },
     {
       "path": "img/sm/neutral_axii_p.jpg",
@@ -3379,8 +3389,8 @@
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "16ce8269c223661dcc670beddb36e3b2409dabb95244aa0c5904e28b2711292b",
-      "size": 46051
+      "sha256": "b0300411781416c1d756cc77e55dce1a4ff5fb6ca93a224571950755dfe863fe",
+      "size": 46050
     },
     {
       "path": "javascript/cards.js",
@@ -3389,8 +3399,8 @@
     },
     {
       "path": "javascript/chat.js",
-      "sha256": "6739bea365dbfef944b6ba8eb0afe58a6325f77fefede9a3ca840d0b77c37e34",
-      "size": 6526
+      "sha256": "a9a182e940d5f10208fe006a377eb23d56031eb8cf3e7d59e4a20f7698b8d245",
+      "size": 6825
     },
     {
       "path": "javascript/connect_to_custom_server.js",
@@ -3424,8 +3434,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "877149cb5e85e5dff194e8eb21cece9a2d94cf9c7cad393291211f1799a056ca",
-      "size": 153855
+      "sha256": "245f45297f35a92cfb8534434fc87469ccbc270032da07914465912d907885e2",
+      "size": 153993
     },
     {
       "path": "javascript/jszip.min.js",
@@ -3464,8 +3474,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "80f7d3de7608ee8fd45b2fe3cdc3cb37827f1d11971420c0a5e43d6ab4dfa1d5",
-      "size": 3277
+      "sha256": "70b2daa41531136f6fb736fb6161cea4493099e9c682cd094491d181038f6877",
+      "size": 3477
     },
     {
       "path": "rules.css",
@@ -3593,6 +3603,11 @@
       "size": 24379
     },
     {
+      "path": "sfx/leader_horn.mp3",
+      "sha256": "d3bb84566f184836a42d39be7cffaf08157fdc399327acab3844d1b422305b55",
+      "size": 97920
+    },
+    {
       "path": "sfx/lock.mp3",
       "sha256": "3cf0ac31ff6d3f384513c5cef878ab440adbeb73ad74f570626a9e9c195db77e",
       "size": 102528
@@ -3634,8 +3649,8 @@
     },
     {
       "path": "sfx/packed.zip",
-      "sha256": "f2d949dd66c5b679fb7a891c31301619663f377cdc1fdadc9aa3e305416ff6cc",
-      "size": 3039202
+      "sha256": "fe96c7879cd7a7d56f95a57599f0ed3763c6eb59af6494ed9f7a794200032d7f",
+      "size": 3266352
     },
     {
       "path": "sfx/pass.mp3",
@@ -3673,6 +3688,11 @@
       "size": 25089
     },
     {
+      "path": "sfx/royal_horn.mp3",
+      "sha256": "95cd0e345e6394cd135c17a4e710d62c19ba1e8ff0d4170330633be0ab910f8b",
+      "size": 155520
+    },
+    {
       "path": "sfx/scorch.mp3",
       "sha256": "8146ffb1cbd7897af8ee5f3f67320b138ce3c78ad7ffcbb8acbd08928ccfe3a8",
       "size": 36791
@@ -3701,6 +3721,11 @@
       "path": "sfx/tf2/game_draw.mp3",
       "sha256": "884caffc22e1324a17f1dfb42caf958bff9bfd35f3d75abc6683693912f487d1",
       "size": 197623
+    },
+    {
+      "path": "sfx/tf2/msg/Chat_display_text.mp3",
+      "sha256": "60adb53c1795ae6a1c7efdc784a2d86e544e5de7a0f37f4578ec20217ff57c6c",
+      "size": 4112
     },
     {
       "path": "sfx/tf2/readme.md",

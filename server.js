@@ -190,7 +190,7 @@ function getClientIp(req) {
     "unknown"
   );
 }
-
+const lastMessageTime = {};
 // Serve all client files (index.html, JS, CSS, etc.)
 app.use(express.static(__dirname));
 app.use(express.json());
@@ -277,6 +277,17 @@ app.post("/api/message", (req, res) => {
       error: "Message must be text"
     });
   }
+    // ---- RATE LIMIT (1 second) ----
+  const key = `${session_id}:${player_id}`;
+  const now = Date.now();
+
+  if (lastMessageTime[key] && now - lastMessageTime[key] < 1000) {
+    return res.status(429).json({
+      error: "You're sending messages too fast"
+    });
+  }
+
+  lastMessageTime[key] = now;
 
   // Trim whitespace
   let cleanMessage = message.trim();

@@ -29,6 +29,8 @@ https://fontmeme.com/fonts/gwent-font/
 - Hero cards place sound effect: https://mixkit.co/free-sound-effects/fire/ ([Short fire whoosh](https://assets.mixkit.co/active_storage/sfx/1345/1345-preview.mp3))
 - Gryffin School icon: https://www.deviantart.com/ari-m94/art/THE-WITCHER-SCHOOL-OF-THE-GRIFFIN-LOGO-1035014639
 - Conjunction of the Spheres sound effect: https://pixabay.com/sound-effects/film-special-effects-warp-magic-2-382390/
+- Leader card sound effect: https://pixabay.com/sound-effects/film-special-effects-battle-horn-1-6931/
+- Royal Trumpet sound effect: https://pixabay.com/sound-effects/musical-medieval-fanfare-6826/
 
 
 # Sky Kindom Faction

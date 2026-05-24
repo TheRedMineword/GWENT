@@ -11,6 +11,7 @@ const input2 = document.getElementById("chat-input");
 const sendBtn2 = document.getElementById("chat-send");
 
 const log = document.getElementById("chat-log");
+const message_recived_sound = true;
 
 let chat_dis = 0;
 document.getElementById("chat-toggle").disabled = true;
@@ -202,8 +203,14 @@ function addMessage(type, text){
         parse_type = players.me
     } else if (parse_type === "op"){
         parse_type = players.op
+        if (message_recived_sound){
+            tocar("tf2/msg/Chat_display_text", false);
+        }
     } else if (parse_type === "system"){
         parse_type = players.sys
+        if (message_recived_sound){
+            // tocar("tf2/msg/Chat_display_text", false); // no sound effect for system so players can focus
+        }
     }
     div.textContent = `${parse_type}: ${text}`;
 

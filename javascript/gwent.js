@@ -1239,7 +1239,8 @@ class Player {
 	// Use a leader's Activate ability, then disable the leader
 	async activateLeader() {
 		ui.showPreviewVisuals(this.leader);
-		await sleep(1500);
+		tocar("leader_horn", false);
+		await sleep(ui_display_times.faction_ability + 600);
 		ui.hidePreview(this.leader);
 		await this.leader.activated[0](this.leader, this);
 		this.disableLeader();
@@ -2631,7 +2632,8 @@ class Card {
 		"dopavenger": "moral",
 		"dopler_spawn_creature": "avenger",
 		"muster2": "ally",
-		"reinforce": "moral"
+		"reinforce": "moral",
+		"aid": "royal_horn"
 		}
 		var temSom = new Array();
 		for (var x in guia) temSom[temSom.length] = x;
@@ -2682,7 +2684,8 @@ class Card {
 		"dopavenger": "moral",
 		"dopler_spawn_creature": "avenger",
 		"muster2": "ally",
-		"reinforce": "moral"
+		"reinforce": "moral",
+		"aid": "royal_horn"
 	};
 
 	const literais = [
@@ -3296,6 +3299,7 @@ async notification(name, duration) {
     // SOUND mapping
     const guia2 = {
 			"me-pass" : "pass",
+			"op-pass" : "pass",
 			"win-round" : "round_win",
 			"draw-round": "round_lose",
 			"lose-round" : "round_lose",
