@@ -54,7 +54,7 @@ let ui_display_times = {
 	'pass': 1320,
 	'turn': 1200,
 	'round_start': 1200,
-	'coin': 1200,
+	'coin': 3200,
 	'faction_ability': 2700,
 	'show_me_that_card_you_have': 2900
 }

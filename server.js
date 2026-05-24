@@ -674,7 +674,7 @@ if (data.type === "createSession") {
         // If a non-creator disconnects, remove them from the session and notify the creator
         session.players = session.players.filter(player => player !== ws);
        session.players[0].send(compressPayload(JSON.stringify({ type: 'unReady' })));
-       // session.players[0].send(compressPayload(JSON.stringify({ type: 'sessionUnready' })));
+        session.players[0].send(compressPayload(JSON.stringify({ type: 'sessionUnready' })));
         console.log(`|| Player ${ws.playerId} left the session ${ws.sessionId}`);
         broadcastToSession(ws.sessionId, `Player ${ws.playerId} left the session`);
         } catch (e) {

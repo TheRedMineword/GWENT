@@ -4,6 +4,14 @@ function findAvengerTarget(cardName) {
 	console.log("findAvengerTarget(\"",cardName,"\");");
 	return card_dict.find(c => c.avenger === cardName);
 }
+function findReinforceTargets(cardName) {
+	console.log("findReinforceTargets(\"", cardName, "\");");
+
+	return card_dict.filter(c =>
+		c.reinforce &&
+		c.reinforce.owner_name === cardName
+	);
+}
 function time_now_utc_to_b64() {
     // Get UTC date parts only (day-level uniqueness)
     const now = new Date();
@@ -24,7 +32,7 @@ if (mtg_conf.unstable_mode === "random"){
 } else if (mtg_conf.unstable_mode === "unrandom"){
 	magicthegathering_stable = "This card is unstable, after picking card it power will drop to -3 "
 }
-const NotPickUpAbilities = ["axii2_desc", "gryffinSchool", "magicthegathering", "tgc_portal"];
+const NotPickUpAbilities = ["axii2_desc", "gryffinSchool", "magicthegathering", "tgc_portal", "reinforce"];
 
 var ability_dict = {
 	clear: {
@@ -179,7 +187,7 @@ var ability_dict = {
     },
 	aid: {
     name: "Call to Arms",
-    description: `Lets you and your to the opponent redraw ${spy.aid} cards. `,
+    description: `Lets you and your opponent redraw ${spy.aid} cards. `,
     placed: async (card) => {
         await card.animate("horn");
 		console.log("AID CARD PAYLOD", card, "by:", card.holder.id, "me id:", player_me.id);
@@ -652,6 +660,53 @@ console.log("[DOPLER] Picked:", picked.name);
 	},
 
 	weight: () => 40
+},
+	reinforce: {
+	name: "Reinforce",
+	description: "Summons additional cards to board, summoned cards dont need to be in hand or deck. Cant be pick up after being placed. ",
+
+	placed: async (card) => {
+		var tasks = [];
+		try {
+			card.animate("muster2");
+			console.log("[REINFORCE] running for:", card.name);
+
+			const targets = findReinforceTargets(card.name);
+
+			if (!targets || targets.length === 0) {
+				console.warn("[REINFORCE] No reinforce targets for:", card.name);
+				return;
+			}
+
+			for (const targetData of targets) {
+
+				let spawnCount = Number(targetData.reinforce?.spawn_count || 1);
+
+				for (let i = 0; i < spawnCount; i++) {
+					tasks.push((async () => {
+					let spawned = new Card(targetData, card.holder);
+
+					console.log("[REINFORCE] spawning:", targetData.name);
+
+					await board.addCardToRow(
+						spawned,
+						targetData.row,
+						card.holder
+					);
+					await sleep(3);
+					await spawned.animate("reinforce");
+					})());
+				}
+				await Promise.all(tasks); // if cards x, card y ....
+			}
+			//await Promise.all(tasks); // if all cards at once
+
+		} catch (e) {
+			console.log("[REINFORCE ERROR]", e);
+		}
+	},
+
+	weight: () => 35
 },
 	medic: {
 		name: "medic",

@@ -2729,7 +2729,7 @@
       },
       "aid": {
         "name": "Call to Arms",
-        "description": "Lets you and your to the opponent redraw 5 cards. "
+        "description": "Lets you and your opponent redraw 5 cards. "
       },
       "axii": {
         "name": "witcher Signs",
@@ -2758,6 +2758,10 @@
       "dopler": {
         "name": "Doppler",
         "description": "Send a shapeshifter to enemy fields that will will disguise itself as a strong card from the opponent's faction, so next round they can find a knife in their back"
+      },
+      "reinforce": {
+        "name": "Reinforce",
+        "description": "Summons additional cards to board, summoned cards dont need to be in hand or deck. Cant be pick up after being placed. "
       },
       "medic": {
         "name": "medic",

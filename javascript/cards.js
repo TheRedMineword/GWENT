@@ -67,7 +67,8 @@ var card_dict = [
         "strength": "2",
         "ability": "horn",
         "filename": "dandelion",
-        "count": "1"
+        "count": "1"//,
+       //  "reinforce": {"owner_name": "test", "spawn_count": 2}
     },
     {
         "name": "Emiel Regis Rohellec Terzieff",
@@ -2313,7 +2314,6 @@ var card_dict = [
         "filename": "beast_of_tussant",
         "count": "1"
     },
-    //dopler
     {
         "name": "dopler",
         "id": "1016",

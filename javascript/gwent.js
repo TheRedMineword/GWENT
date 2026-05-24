@@ -2629,7 +2629,9 @@ class Card {
 		"decoy": "spy",
 		"dopler": "spy",
 		"dopavenger": "moral",
-		"dopler_spawn_creature": "avenger"
+		"dopler_spawn_creature": "avenger",
+		"muster2": "ally",
+		"reinforce": "moral"
 		}
 		var temSom = new Array();
 		for (var x in guia) temSom[temSom.length] = x;
@@ -2678,7 +2680,9 @@ class Card {
 		"decoy": "spy",
 		"dopler": "spy",
 		"dopavenger": "moral",
-		"dopler_spawn_creature": "avenger"
+		"dopler_spawn_creature": "avenger",
+		"muster2": "ally",
+		"reinforce": "moral"
 	};
 
 	const literais = [

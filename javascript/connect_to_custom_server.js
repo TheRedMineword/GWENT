@@ -57,6 +57,7 @@ function customSwitch(){
     }
 }
 async function reset_custom(){
+    console.log("CUSTOM POWER DOWN", IsNowCustom);
     if (!IsNowCustom){
         return;
     }

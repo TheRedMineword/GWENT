@@ -248,7 +248,7 @@ function cancelSession() {
     btnCancelElem.classList.add("hidden");
   }
   joinedSessionId = null;
- // reset_custom();
+  reset_custom();
 }
 function silent_cancelSession() {
   if (isconnectedtosession){
@@ -284,7 +284,7 @@ function silent_cancelSession() {
     btnCancelElem.classList.add("hidden");
   }
   joinedSessionId = null;
- // reset_custom();
+  reset_custom();
 }
 function reset_menu() {
   document.getElementById("session-start-control").classList.add("hidden");

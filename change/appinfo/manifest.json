@@ -1,6 +1,6 @@
 {
-  "sha": "3fbd22bdca0d9a4f1285f6740984cc61561ec953a9a608ce5d356ea950b0616e",
-  "generatedAt": "2026-05-23T16:41:57.330Z",
+  "sha": "228fae6b1b6474583975169094eca3714bfa0373de92bcf615d762cc338ced81",
+  "generatedAt": "2026-05-24T09:51:11.047Z",
   "files": [
     {
       "path": "404.html",
@@ -253,9 +253,19 @@
       "size": 7896
     },
     {
+      "path": "img/icons/anim_muster2.png",
+      "sha256": "78d1f6ee85291614de18ecce9c789c1c1156c908f8a18044987ffe7539971f7b",
+      "size": 6181
+    },
+    {
       "path": "img/icons/anim_powergain.png",
       "sha256": "f5d4ac6044ba40345e86249216fa742d3e3e76d68b76059d291b773d9754fd44",
       "size": 1053
+    },
+    {
+      "path": "img/icons/anim_reinforce.png",
+      "sha256": "e3ceb21bef3284d6fcd71ac9f1a73863aaa3ea96bb8d116f79c242cab3b450ab",
+      "size": 20495
     },
     {
       "path": "img/icons/anim_sab.png",
@@ -381,6 +391,11 @@
       "path": "img/icons/card_ability_rain.png",
       "sha256": "44a58fce4fd1ff1ca45e5999b723389640b85cc7c0ff0c3912661934b0b28b60",
       "size": 24459
+    },
+    {
+      "path": "img/icons/card_ability_reinforce.png",
+      "sha256": "e3ceb21bef3284d6fcd71ac9f1a73863aaa3ea96bb8d116f79c242cab3b450ab",
+      "size": 20495
     },
     {
       "path": "img/icons/card_ability_sabotage.png",
@@ -3364,13 +3379,13 @@
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "64a033a7d51388b93e682a063da49f3ab73d564bf14d95a81d620c323a20affd",
-      "size": 44681
+      "sha256": "16ce8269c223661dcc670beddb36e3b2409dabb95244aa0c5904e28b2711292b",
+      "size": 46051
     },
     {
       "path": "javascript/cards.js",
-      "sha256": "48354790f59248bcfa07c8aa4dc947ed1c2e256d59df23227835f536f3f47d3c",
-      "size": 58134
+      "sha256": "e2d01e2b9d8fa222fdecd47898ac151ca54f9b1c29e2bbf0e4e8e51d9f5dae56",
+      "size": 58189
     },
     {
       "path": "javascript/chat.js",
@@ -3379,13 +3394,13 @@
     },
     {
       "path": "javascript/connect_to_custom_server.js",
-      "sha256": "0168940dbb3843434ad43d7719771d0ae6894cf3bd936fa7a0aa6d6db3f8b9a1",
-      "size": 25858
+      "sha256": "1d6bd4a5121c6ec62fbb47213675aa20f7328ea1db325b2a9252c6d6fea0cdb8",
+      "size": 25910
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
-      "sha256": "556188969f30b3ca9ce0d18c011a7a1564589931de91c8b1fdfdc071d9ccf379",
-      "size": 75306
+      "sha256": "2961ec75eb5b846f12c4f49448cf2a54bddbbb4c0f9e9f24b018b162e41b2285",
+      "size": 75507
     },
     {
       "path": "javascript/custom_server/deafult.txt",
@@ -3399,7 +3414,7 @@
     },
     {
       "path": "javascript/defines.js",
-      "sha256": "f602f027e193e4d126de3282e2d7883125bab6d16903384c66959840e5a5afc9",
+      "sha256": "4a6a3a038d4927da9fd862866bfff2d6dfb64e3bf706a51152cb4c9975d7a6bd",
       "size": 8469
     },
     {
@@ -3409,8 +3424,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "bb6387b34b10414c9149d5052db5aa31efc606f6af0b2cc9ac4b96b74aabb966",
-      "size": 153761
+      "sha256": "877149cb5e85e5dff194e8eb21cece9a2d94cf9c7cad393291211f1799a056ca",
+      "size": 153855
     },
     {
       "path": "javascript/jszip.min.js",
@@ -3424,8 +3439,8 @@
     },
     {
       "path": "javascript/session.js",
-      "sha256": "e399fe5073cf1df1cbff05f25141e96a96e88445faf73409ec06eebf9e59809f",
-      "size": 14086
+      "sha256": "11e55d54b5cfff0ab21650299a002b39603ced5621ca5c7a55ca34526fd0ecb7",
+      "size": 14082
     },
     {
       "path": "javascript/sync_hands.js",
