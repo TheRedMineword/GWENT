@@ -60,7 +60,7 @@ let ui_display_times = {
 }
 
 
-let RegisterMovesHold = 2700 + SEND_INTERVAL_MS + ui_display_times.show_me_that_card_you_have; //If op passed wait before moves
+let RegisterMovesHold = 3600 + SEND_INTERVAL_MS + ui_display_times.show_me_that_card_you_have; //If op passed wait before moves
 let resync_wait = 1000 * 0.01;
 
 ui_display_times.is_transitioning = false;

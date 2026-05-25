@@ -1,6 +1,6 @@
 {
-  "sha": "c0a1f7232dbd9b4ef6fece63b0644b2386293d5b446c6ada7ad9c2dc091ddd59",
-  "generatedAt": "2026-05-25T16:06:40.570Z",
+  "sha": "8bde724a095b0029335162db8bedc26ff5fb33f19c1f67ef8303f18b7270bac3",
+  "generatedAt": "2026-05-25T18:59:07.514Z",
   "files": [
     {
       "path": "404.html",
@@ -3449,7 +3449,7 @@
     },
     {
       "path": "javascript/defines.js",
-      "sha256": "138357cf82b27eba1288dd30d283526c6663977f45ef3ce51054a738b2ddbc5f",
+      "sha256": "70779c931c9d28d66f079aa6a1811ae6ba686300bf7d4a8a9fae7711c3a2e5b7",
       "size": 9057
     },
     {
@@ -3459,8 +3459,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "8788ed1591aa73c338e5b5452cf277df3cd89c9798acf5c5e7e95dc089b5e8fe",
-      "size": 155523
+      "sha256": "2c4e0036926178b25478857a69a136afee379ee7bf1cc2b039983c366d237350",
+      "size": 155840
     },
     {
       "path": "javascript/jszip.min.js",

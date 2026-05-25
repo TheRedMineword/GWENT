@@ -927,6 +927,7 @@ op_counter.innerHTML = player_op.hand.cards.length
 					console.log("[OPHAND]","sync from payload post procces fatal", e, "data", data, cards_to_find_post);
 					alert("Failed sync op cars on end of execute path, check console for more \n\nReport it as bug!!!");
 				}
+				player_op.endTurn();
 				break;
 		}
 };
@@ -1250,7 +1251,7 @@ class Player {
 		ui.hidePreview(this.leader);
 		await this.leader.activated[0](this.leader, this);
 		this.disableLeader();
-		this.endTurn();
+		// this.endTurn();
 	}
 	
 	// Disable access to leader ability and toggles leader visuals to off state
@@ -1283,21 +1284,31 @@ class Player {
 		console.log("HandData post", handData_after);
 						comp_and_send(socket, JSON.stringify({ type: "useLeader", player: this.id, isMeHand: handData, HandMePost: handData_after  }));
 							if ( player_op.passed && !player_me.passed ) {
+								ui.enablePlayer(false);
 			showTooltip(`The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`);
-			await sleep(RegisterMovesHold); 			showTooltip(`You can play now again`);
+								ui.enablePlayer(false);
+			await sleep(RegisterMovesHold);
+			showTooltip(`You can play now again`);
+			ui.enablePlayer(true);
 		}
 					//	await init_sync_hands();
+					//console.log("LEADER END TURN");
+		await player_me.endTurn();
 				});
 		});
 		} else {
 			this.elem_leader.addEventListener("click", async () => await ui.viewCard(this.leader), false);
 				if ( player_op.passed && !player_me.passed ) {
+					ui.enablePlayer(false);
 			showTooltip(`The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`);
-			await sleep(RegisterMovesHold); 			showTooltip(`You can play now again`);
+					ui.enablePlayer(false);
+			await sleep(RegisterMovesHold);
+			showTooltip(`You can play now again`);
+			ui.enablePlayer(true);
 		}
+		//console.log("LEADER END TURN");
+		await player_me.endTurn();
 		}
-		
-		// TODO set crown color
 	}
 	
 }
