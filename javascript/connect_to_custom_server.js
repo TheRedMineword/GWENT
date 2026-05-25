@@ -31,7 +31,8 @@ const IGNORE_PATTERNS = [
     'witcher_signs',
     'ThisDef',
     'isconnectedtosession',
-    'texturepack'
+    'texturepack',
+    'playblock'
 ];
 
 const LOG_PREFIX = '[CUSTOM_SERVER]';

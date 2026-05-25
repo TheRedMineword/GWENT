@@ -261,3 +261,4 @@ function getTexturePackBlob(path) {
 	return url;
 }
 let card = null;
+const playBlock = {};

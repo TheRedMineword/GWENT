@@ -1,6 +1,6 @@
 {
-  "sha": "19519adad794d26257b1d5eb52d257d4dc370f34a74d410e5f9371b4eb5f739f",
-  "generatedAt": "2026-05-24T17:06:00.683Z",
+  "sha": "aaa41e40b5e3599817c3f369ea533f636c3eade90068a632a11b12cae6831684",
+  "generatedAt": "2026-05-25T15:58:13.080Z",
   "files": [
     {
       "path": "404.html",
@@ -1988,6 +1988,16 @@
       "size": 187397
     },
     {
+      "path": "img/lg/sky_colorcollab.jpg",
+      "sha256": "d5ef0d2f9f5a64e1b01cb1a67a545bce2287e4e8f5da3d4e33c7d110267df104",
+      "size": 39632
+    },
+    {
+      "path": "img/lg/sky_colorguide.jpg",
+      "sha256": "b844ea6e096a9e5435e714f56655999bb3edfec3b8610cd737f4ba0762dcca80",
+      "size": 126984
+    },
+    {
       "path": "img/lg/sky_crabspy.jpg",
       "sha256": "55c41d2e1a87287439dcc26dc110642ad320b056abaabf509510f007d1e2519e",
       "size": 110197
@@ -3248,6 +3258,16 @@
       "size": 83763
     },
     {
+      "path": "img/sm/sky_colorcollab.jpg",
+      "sha256": "d5ef0d2f9f5a64e1b01cb1a67a545bce2287e4e8f5da3d4e33c7d110267df104",
+      "size": 39632
+    },
+    {
+      "path": "img/sm/sky_colorguide.jpg",
+      "sha256": "bec1860eccc7fc29a2050b5f62346f1fb85d9a8cae370f17fdbc8212a2685212",
+      "size": 102267
+    },
+    {
       "path": "img/sm/sky_crabspy.jpg",
       "sha256": "68ef67162859b1f1e5381bcf9130097d8047ae77643b3ce409936421f0ef81d0",
       "size": 53853
@@ -3394,8 +3414,8 @@
     },
     {
       "path": "javascript/cards.js",
-      "sha256": "e2d01e2b9d8fa222fdecd47898ac151ca54f9b1c29e2bbf0e4e8e51d9f5dae56",
-      "size": 58189
+      "sha256": "69ab34e00cd52603e0c7d5277661a8b4448918daa5a5fa3b381809a7f8443bec",
+      "size": 58662
     },
     {
       "path": "javascript/chat.js",
@@ -3404,8 +3424,8 @@
     },
     {
       "path": "javascript/connect_to_custom_server.js",
-      "sha256": "a59af8ba8b797377c68944381ee6c64f21949c8ba802a13fc9e1fa3040300825",
-      "size": 28623
+      "sha256": "cde333710f8fadfeeb82635743d2c9ada73f651b2a16e5d5dc4c1e6565eacf54",
+      "size": 28641
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
@@ -3429,8 +3449,8 @@
     },
     {
       "path": "javascript/defines.js",
-      "sha256": "08c25dde2d3c1c0310b80707bda9edd7f6c8b87f400104dab77bf12b967f5b6a",
-      "size": 9034
+      "sha256": "138357cf82b27eba1288dd30d283526c6663977f45ef3ce51054a738b2ddbc5f",
+      "size": 9057
     },
     {
       "path": "javascript/factions.js",
@@ -3439,8 +3459,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "8cd17820516b0154d24c89c493086d3a22a80261b1228c4ba9455244467e48d5",
-      "size": 154849
+      "sha256": "8788ed1591aa73c338e5b5452cf277df3cd89c9798acf5c5e7e95dc089b5e8fe",
+      "size": 155523
     },
     {
       "path": "javascript/jszip.min.js",

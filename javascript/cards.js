@@ -67,8 +67,7 @@ var card_dict = [
         "strength": "2",
         "ability": "horn",
         "filename": "dandelion",
-        "count": "1"//,
-       //  "reinforce": {"owner_name": "test", "spawn_count": 2}
+        "count": "1"
     },
     {
         "name": "Emiel Regis Rohellec Terzieff",
@@ -2496,7 +2495,29 @@ var card_dict = [
         "ability": "eredin_commander",
         "filename": "elder_wasteland",
         "count": "1"
+    },
+    {
+        "name": "Days Of Color Guide",
+        "id": "3017",
+        "deck": "sky",
+        "row": "agile",
+        "strength": "1",
+        "ability": "reinforce",
+        "filename": "colorguide",
+        "count": "1"
+    },
+    {
+        "name": "Trevor Project",
+        "id": "3018",
+        "deck": "sky",
+        "row": "ranged",
+        "strength": "2",
+        "ability": "hero",
+        "filename": "colorcollab",
+        "count": "0",
+        "reinforce": {"owner_name": "Days Of Color Guide", "spawn_count": 2}
     }
+    
 ];
 
 const witcher_signs = Object.entries(card_dict)

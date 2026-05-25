@@ -4612,9 +4612,23 @@ console.log(loadPackedSFX_pref, " files ", files);
 }
 // new:
 function tocar(arquivo, pararMusica) {
+	if (!arquivo.includes("card") || !arquivo.includes("game_buy")){
+		if (playBlock[btoa(arquivo)]) {
+			if (playBlock[btoa(arquivo)] === 1){
+				playBlock[btoa(arquivo)] = 2;
+//	console.log("TOCAR PLAY", playBlock, arquivo);
+			} else {
+//			console.log("TOCAR BLOCK PLAY", playBlock, arquivo);
+    	return false;
+			}
+  } else {
+	playBlock[btoa(arquivo)] = 2;
+//	console.log("TOCAR PLAY", playBlock, arquivo);
+  }
+}
+
 	// console.log("TOCAR", arquivo, pararMusica);
-	//console.log("[sfx] tocar() called");
-	//console.log("[sfx] params -> arquivo:", arquivo, "| pararMusica:", pararMusica);
+	//console.log("[sfx] tocar() called", "\n[sfx] params -> arquivo:", arquivo, "| pararMusica:", pararMusica);
 	//console.log("[sfx] current lastSound:", lastSound);
 
 	if (arquivo != lastSound && arquivo != "") {
@@ -4662,9 +4676,17 @@ var s = new Audio(audioPath);
 
 		s.play()
 			.then(() => {
+				if (playBlock[btoa(arquivo)]) {
+	playBlock[btoa(arquivo)] = 1;
+//	console.log("TOCAR DEL NOW:", playBlock, arquivo);
+	}
 			//	console.log("[sfx] audio playback started successfully");
 			})
 			.catch((err) => {
+				if (playBlock[btoa(arquivo)]) {
+	playBlock[btoa(arquivo)]  = 1;
+//	console.log("TOCAR DEL NOW:", playBlock, arquivo);
+	}
 			//	console.error("[sfx] audio playback failed:", err);
 			});
 
