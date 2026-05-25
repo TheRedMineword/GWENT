@@ -1,6 +1,6 @@
 {
-  "sha": "aaa41e40b5e3599817c3f369ea533f636c3eade90068a632a11b12cae6831684",
-  "generatedAt": "2026-05-25T15:58:13.080Z",
+  "sha": "c0a1f7232dbd9b4ef6fece63b0644b2386293d5b446c6ada7ad9c2dc091ddd59",
+  "generatedAt": "2026-05-25T16:06:40.570Z",
   "files": [
     {
       "path": "404.html",
@@ -534,8 +534,8 @@
     },
     {
       "path": "img/icons/deck_back_sky.jpg",
-      "sha256": "5afa3cff3a4575385c2b0494f8ebc664f0ff055a41a333e15b2e0ceba5c511e3",
-      "size": 33641
+      "sha256": "88a386b225487935efa03c9499effc0d6b4ba89668dcd94204ffd8fd401668e2",
+      "size": 31899
     },
     {
       "path": "img/icons/deck_shield_monsters.png",
@@ -849,8 +849,8 @@
     },
     {
       "path": "img/lg/faction_sky.jpg",
-      "sha256": "03c9c8c1b433bf0923d9fca3c8f27ec486592b4c1b3ac8c485f90e8662b0e100",
-      "size": 33641
+      "sha256": "ba2b1f35ce66b2adb891edebf4cda97a24bd2bef93a1fb151e8b7d240dae1a1b",
+      "size": 31899
     },
     {
       "path": "img/lg/monsters_arachas_1.jpg",
