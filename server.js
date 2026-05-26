@@ -537,6 +537,7 @@ if (data.type === "createSession") {
   });
 
       console.log(`|| Player ${ws.playerId} cancelled Session ${sessionId}`);
+      try { delete joinIndex[sessions[ws.sessionId].joinCode]; } catch(e) {}
       delete sessions[ws.sessionId];
     }
 
@@ -679,6 +680,7 @@ if (data.type === "createSession") {
             console.log("Err", e);
           }
         }
+        try { delete joinIndex[sessions[ws.sessionId].joinCode]; } catch(e) {}
         delete sessions[ws.sessionId];
       } else {
         try {
