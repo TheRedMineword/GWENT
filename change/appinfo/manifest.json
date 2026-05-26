@@ -1,6 +1,6 @@
 {
-  "sha": "08222459b63af7262c319ceac67c7f7f3abf7eb7c8e98fa4e73adbff50257ef4",
-  "generatedAt": "2026-05-26T16:08:35.889Z",
+  "sha": "a1cd36b7b204101dc7a40e1146c56b7c33d403f7f533f21caae45f9b85b6d664",
+  "generatedAt": "2026-05-26T16:38:30.765Z",
   "files": [
     {
       "path": "404.html",
@@ -854,8 +854,8 @@
     },
     {
       "path": "img/lg/faction_sky.jpg",
-      "sha256": "c46d46dfb3d4a7a57df8a06615491448780e69cf0ddd5fa740ec7c0af1687d73",
-      "size": 13450
+      "sha256": "3eea5db7f70104e24b3cf4fbbb19fa894484e5f65d8c288eba67448ba5a652a5",
+      "size": 13399
     },
     {
       "path": "img/lg/monsters_arachas_1.jpg",
@@ -879,8 +879,8 @@
     },
     {
       "path": "img/lg/monsters_beast_of_tussant.jpg",
-      "sha256": "b38f7335569251e44c3c5ba279349be1a57b950ad5b70ea35e1adafc09c26403",
-      "size": 54003
+      "sha256": "46ab14d18bc2c5c95c9d555a5c8f27a96785b3360b38256605e75567230a9368",
+      "size": 53995
     },
     {
       "path": "img/lg/monsters_bruxa.jpg",
@@ -1094,8 +1094,8 @@
     },
     {
       "path": "img/lg/neutral_aidhorn.jpg",
-      "sha256": "3559e3a08d2c80fd26b5a4679346aadec640168594227548956df67020fca760",
-      "size": 66401
+      "sha256": "e3611c7aac886ed86f4889de8c2cdf42f210696e4d9e563bdf389f67a30ca4c8",
+      "size": 66355
     },
     {
       "path": "img/lg/neutral_axii_p.jpg",
@@ -1119,8 +1119,8 @@
     },
     {
       "path": "img/lg/neutral_cos.jpg",
-      "sha256": "05624fee11c702ba9c2677e188ec81d8ff0e421f97474a429266074daa43a7dd",
-      "size": 72980
+      "sha256": "b01154972f749542ab05886b30f6645cf411fd332043abe2b80918aed5cf75a4",
+      "size": 72947
     },
     {
       "path": "img/lg/neutral_cow.jpg",
@@ -1134,8 +1134,8 @@
     },
     {
       "path": "img/lg/neutral_dopler.jpg",
-      "sha256": "9ab63e3eda01050341b6ef5d4ebde6de4cadebcc118c7d8250c3649a60863d19",
-      "size": 71745
+      "sha256": "6c613663e448a1182b23785ac33ec31e4e887fdc1cd710781a20518de80acfca",
+      "size": 71725
     },
     {
       "path": "img/lg/neutral_emiel.jpg",
@@ -1169,13 +1169,13 @@
     },
     {
       "path": "img/lg/neutral_GryffinWitcher.jpg",
-      "sha256": "69aec9856f5104cd7b50b1b91b0fa7ac5de315ead685eb2c7476ac4d59e62312",
-      "size": 55969
+      "sha256": "04807499ca7ec1aaab19c2989250a1ee5d2e8e4f8e1b750cc4f93334e3060857",
+      "size": 55951
     },
     {
       "path": "img/lg/neutral_lambert.jpg",
-      "sha256": "9bdfecedb039e399f7f807a32d185cd25943951d092b3909db72bffe0c3346e9",
-      "size": 63121
+      "sha256": "e38544b3c436b01582c635f9b2bf897b6180703153817e393ce870d19b6c0c08",
+      "size": 63093
     },
     {
       "path": "img/lg/neutral_lethosabotage.jpg",
@@ -1194,13 +1194,13 @@
     },
     {
       "path": "img/lg/neutral_reveal_dopler.jpg",
-      "sha256": "03efbf24f933843e4fbe77ce69295dc2c0ba411acef73a92e6e88746a9037a54",
-      "size": 65391
+      "sha256": "61712d2326950f02cca4bed4fdfb634e8379844ac52df83f14a87f7e162f8765",
+      "size": 65375
     },
     {
       "path": "img/lg/neutral_roach.jpg",
-      "sha256": "225fa3b2f9c744429c4f9adedb84f16db56d9a7af8822245ba55c24c08aa2c0d",
-      "size": 72168
+      "sha256": "3407542a867e71ea2b834423e5e8f4dc6cb7807fefdf4b5227f82ddfd28abaf5",
+      "size": 72157
     },
     {
       "path": "img/lg/neutral_triss.jpg",
@@ -1334,8 +1334,8 @@
     },
     {
       "path": "img/lg/nilfgaard_nilf_drawmaster.jpg",
-      "sha256": "bbdc74f2e18195a7f3b29e4ca2b28d8e9a6ae5b30ee268a006bedcc130401263",
-      "size": 104892
+      "sha256": "3550e8dab1bba21c2ae7123d0fe2e2f9a5c2bedbde2e23383cd6b96f1e8d5ca1",
+      "size": 104846
     },
     {
       "path": "img/lg/nilfgaard_puttkammer.jpg",
@@ -1559,8 +1559,8 @@
     },
     {
       "path": "img/lg/realms_spice_trader.jpg",
-      "sha256": "d3083872b81a273957916bc64f627dc3d7bbba33bf1b6ea831dba8bbdbce658e",
-      "size": 72943
+      "sha256": "0c68d0d8170fb2df912e67569b3e929113bf895b068d7243632d2b63dddc302a",
+      "size": 72920
     },
     {
       "path": "img/lg/realms_stennis.jpg",
@@ -1789,8 +1789,8 @@
     },
     {
       "path": "img/lg/scoiatael_scol_sab.jpg",
-      "sha256": "3fb82d80454059952449d1e60c88a0f690c36616ddb6ec8dc2562ed02e051398",
-      "size": 63937
+      "sha256": "2e095d5e6f335d35d411278c49e9e2123260ada15498bd29832e5b23ab124543",
+      "size": 63917
     },
     {
       "path": "img/lg/scoiatael_toruviel.jpg",
@@ -1819,8 +1819,8 @@
     },
     {
       "path": "img/lg/skellige_bad_lady.jpg",
-      "sha256": "d2f4e6ccab47d891b4e948a1d95709e2616b850b502bcc1f18aad40f4cfff8d9",
-      "size": 59831
+      "sha256": "02c0d71acea6be303aa0ba06b3c387fa6d65361a70e78cd588fd9cf784aa2525",
+      "size": 59799
     },
     {
       "path": "img/lg/skellige_berserker.jpg",
@@ -1979,33 +1979,33 @@
     },
     {
       "path": "img/lg/sky_ Danielle.jpg",
-      "sha256": "a54f3a7e62f5e66ee8b18d12dc8a9c42407e5f34d72caaf1ab67e670f5ada179",
-      "size": 45795
+      "sha256": "1bed092489a99538cb6ae3e58264035a15eaeefd441657745a1c03ecb28f3375",
+      "size": 45777
     },
     {
       "path": "img/lg/sky_arcadaoffun.jpg",
-      "sha256": "d05b9d566c5062891f8ff84bebf370ffa8595c403da6abed3b3be3b2f0f7c350",
-      "size": 59511
+      "sha256": "e4c4a78e54ea804a0cb176d543c599f8760433d96613ca6c48c0b7abeb9dd450",
+      "size": 59482
     },
     {
       "path": "img/lg/sky_chibi_mask.jpg",
-      "sha256": "c7de8017f325c3882b8d47a382c5054e4b2c5f1b57da2e192b57e832590fb604",
-      "size": 53306
+      "sha256": "7c954953500d696c007a91e5daa76e7e69fbe7dba762da47e0538a2b38fa7d27",
+      "size": 53234
     },
     {
       "path": "img/lg/sky_colorcollab.jpg",
-      "sha256": "a2f980d9cbdf8fd96956ab07a4fd624806b47221e9ca4d6214e37ee3d559148c",
-      "size": 21202
+      "sha256": "48d0145f4b0519c073f7343f04287ff5ba65fa4d0d3105f6459e1bb1c186c59f",
+      "size": 21165
     },
     {
       "path": "img/lg/sky_colorguide.jpg",
-      "sha256": "73dd9bd2b048e761dc9b16ae7a3ecfc87d3caff3dbd73b03567e03409de2d1c6",
-      "size": 58210
+      "sha256": "1d4c0928a2c716837fd85c1d835e0091947fe5a6db98184855517c238cf78311",
+      "size": 58175
     },
     {
       "path": "img/lg/sky_crabspy.jpg",
-      "sha256": "1a5a802304becb2737e4468aae5966ec4988400d031c2f9dd7f258be4275cbd0",
-      "size": 49834
+      "sha256": "b724976d8611f2d327d817f3062e204e1d95f37a9a991f1821e650441ad1f6b2",
+      "size": 49784
     },
     {
       "path": "img/lg/sky_darkness_storm_leader.jpg",
@@ -2019,38 +2019,38 @@
     },
     {
       "path": "img/lg/sky_elder_wasteland.jpg",
-      "sha256": "7c7f85a14c1e2cb14fa7f4adc20fe0825e6896f3e0828a60c48a58c5ed0b7f2b",
-      "size": 32710
+      "sha256": "48ccf4f956971f56a6fc890e1dd2e3aee04a0390d4ff9f7aab2aa8c81c31bd1a",
+      "size": 32707
     },
     {
       "path": "img/lg/sky_fortunedrum.jpg",
-      "sha256": "5999bb56b55c332764d8c38cfb363b053e70217ee59c89866cb808dc4d1f88de",
-      "size": 53292
+      "sha256": "bf2df16f0f15d4cf3a1665b031f3dc7d347cc3e6efc5a60dde206d8854dfff86",
+      "size": 53252
     },
     {
       "path": "img/lg/sky_guard.jpg",
-      "sha256": "9bcef0c5034d4e16c6d181f1913048be3d03fbdcc00c5e0d7863f1032ac6c988",
-      "size": 51618
+      "sha256": "4e76631e58276388745d504236e28ccf7a13e8e65ec845d5b5b475ebe87e4d50",
+      "size": 51591
     },
     {
       "path": "img/lg/sky_krill.jpg",
-      "sha256": "294d054710877bc18d38422d65d3b367d72eddd0aabe382dd3f2fd9015ff9b22",
-      "size": 43698
+      "sha256": "bddd87691c38567ee44584105a0ebe096f972e8b000eb91bccd4abee025d63d8",
+      "size": 43683
     },
     {
       "path": "img/lg/sky_ranger.jpg",
-      "sha256": "ab97833bb4cf6e9624711d78519431663a84971378492c9878ed2f093912ccfe",
-      "size": 59005
+      "sha256": "86fba0287703145090f55637c4f79fc62d9b5a3ff1302e1d2332ec7c563030f4",
+      "size": 58996
     },
     {
       "path": "img/lg/sky_redcrab.jpg",
-      "sha256": "dccf19837f39d3479d6fafe70e13b4cd90053ee8b154079f865decacb63ceaee",
-      "size": 44799
+      "sha256": "a8cd232793a0b99e5a63924ea93f320ee8763399dc348b43c726d815e9719c30",
+      "size": 44770
     },
     {
       "path": "img/lg/sky_rico.jpg",
-      "sha256": "1c307c67b2ed4bf1ec0661f230aa9de743b824f6373ac666da594e24a59f7549",
-      "size": 54855
+      "sha256": "7f785b3cbe8f3d3391d97013073982e2a324db6e595a995442b0557226c55ea7",
+      "size": 54837
     },
     {
       "path": "img/lg/sky_spirit.jpg",
@@ -2059,8 +2059,8 @@
     },
     {
       "path": "img/lg/sky_steward.jpg",
-      "sha256": "b58df7c448099577cb44b0e25c51cfe6ab87543d8355fcabea96eb2828fae9fe",
-      "size": 62663
+      "sha256": "51005300392f9225181d74e810b9f7b97132e3acec252075075bb386b49a1b3d",
+      "size": 62647
     },
     {
       "path": "img/lg/sky_tgc20.jpg",
@@ -2389,8 +2389,8 @@
     },
     {
       "path": "img/sm/neutral_cos.jpg",
-      "sha256": "e84b7e78fad499cd44489eecc429032527528999ff95a00b612d112031ea280d",
-      "size": 53274
+      "sha256": "659339b4e6aff56baaad6d14a23bc37dfc1ba746e5b39977cae51678eb5f2fe8",
+      "size": 53273
     },
     {
       "path": "img/sm/neutral_cow.jpg",
@@ -2404,8 +2404,8 @@
     },
     {
       "path": "img/sm/neutral_dopler.jpg",
-      "sha256": "887048d7f68b7cacfbb0b6fef663fad7acf035338a2987ad5b9c94fdcaea2687",
-      "size": 58306
+      "sha256": "9676f616307d64db044a3241f8cd39ecb6f669a5f396cc4c9e45b5152c1c4cd1",
+      "size": 58294
     },
     {
       "path": "img/sm/neutral_emiel.jpg",
@@ -3249,8 +3249,8 @@
     },
     {
       "path": "img/sm/sky_ Danielle.jpg",
-      "sha256": "c55c11be9c8cf565918a043b36cdd4f589bac9439b1a5f0a01e40caaf8b9d9c4",
-      "size": 19092
+      "sha256": "2a40f7875aa79d0d80ec2f93831494cad0f742268e123d986bcc93967dfd7d89",
+      "size": 19087
     },
     {
       "path": "img/sm/sky_arcadaoffun.jpg",
@@ -3264,8 +3264,8 @@
     },
     {
       "path": "img/sm/sky_colorcollab.jpg",
-      "sha256": "a2f980d9cbdf8fd96956ab07a4fd624806b47221e9ca4d6214e37ee3d559148c",
-      "size": 21202
+      "sha256": "48d0145f4b0519c073f7343f04287ff5ba65fa4d0d3105f6459e1bb1c186c59f",
+      "size": 21165
     },
     {
       "path": "img/sm/sky_colorguide.jpg",
@@ -3274,8 +3274,8 @@
     },
     {
       "path": "img/sm/sky_crabspy.jpg",
-      "sha256": "77fa3ff44a088f0930c3f3254f7ed809bb5cde6ef32001079a2adda8e6aa8747",
-      "size": 25670
+      "sha256": "649770e063584986052337ccc4d36101c5e57f43bf1d299ec490cf4c90a24da2",
+      "size": 25669
     },
     {
       "path": "img/sm/sky_darkness_storm_leader.jpg",
@@ -3289,13 +3289,13 @@
     },
     {
       "path": "img/sm/sky_elder_wasteland.jpg",
-      "sha256": "21b03a8b94ee9f370ee6efb7d357f53cfc0c6edbf4446771b3a4f3cebb0c2e4a",
-      "size": 14661
+      "sha256": "4bef96a78170c1bc87053e68dedb5e0a83229b8ba14e1cd0156b237cbab6b26c",
+      "size": 14659
     },
     {
       "path": "img/sm/sky_fortunedrum.jpg",
-      "sha256": "2e0a9031efed4cd77660a85597a209ac342f856931488a81bd3db9014eddf295",
-      "size": 30129
+      "sha256": "94349da0ca14244d806bafa095757895f93c4ea68509ae8cf66bf6e310dca8dc",
+      "size": 30120
     },
     {
       "path": "img/sm/sky_guard.jpg",
@@ -3304,8 +3304,8 @@
     },
     {
       "path": "img/sm/sky_krill.jpg",
-      "sha256": "929bef9926e255191dbd5ccd2645ca90662a9cd703b164a10e5a2590be1b9561",
-      "size": 18954
+      "sha256": "39e9a73f8402e9ac6bc81f45ba38b5a5b92a5b7001e7efa7ccae98671a67f5cb",
+      "size": 18943
     },
     {
       "path": "img/sm/sky_ranger.jpg",
@@ -3314,8 +3314,8 @@
     },
     {
       "path": "img/sm/sky_redcrab.jpg",
-      "sha256": "24fe927876053b03099eadee4ef6a7de61ae0488baa40d9213d7d679d90d1c71",
-      "size": 17904
+      "sha256": "640a0b367c2eedb18015872642dfffcce59979a4ce7f271f8598600be66f2648",
+      "size": 17894
     },
     {
       "path": "img/sm/sky_rico.jpg",
@@ -3329,8 +3329,8 @@
     },
     {
       "path": "img/sm/sky_steward.jpg",
-      "sha256": "eebf06a5958c6a58e0b6ce0e3648a1d83bc210f6f41d13e091b232edc50e899c",
-      "size": 72382
+      "sha256": "f3d74e817d914ee7acbb32e529e6f60fbcb6b49bccb05b8c082d5f3c77f2a3b4",
+      "size": 72343
     },
     {
       "path": "img/sm/sky_tgc20.jpg",
@@ -3434,12 +3434,12 @@
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
-      "sha256": "79cf937ba3f29636fdc55ea28a81acc19fd66f7573a9b276dc945d46b146ee51",
+      "sha256": "0b532d98d4177ab0c13945d5141ee3ce4d48cee1c63b120773505b9de8d7179f",
       "size": 75536
     },
     {
       "path": "javascript/custom_server/deafult.txt",
-      "sha256": "64b96d3fcd38e86903bdce76aad98a1ea5a2be6124fbbf3765bb458f425ed5f3",
+      "sha256": "bf4c8e7812dab2e2bcb8bc0a07b876f633c46dac1c1743562b460a3fb90450cd",
       "size": 2497
     },
     {
@@ -3454,7 +3454,7 @@
     },
     {
       "path": "javascript/defines.js",
-      "sha256": "70779c931c9d28d66f079aa6a1811ae6ba686300bf7d4a8a9fae7711c3a2e5b7",
+      "sha256": "a6534f256199ed8896cd59e80c2d2fd148b6e66730c1904a279a5d6d461dfe66",
       "size": 9057
     },
     {

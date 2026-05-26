@@ -51,7 +51,7 @@
         "is_transitioning": false
     },
 
-    "RegisterMovesHold": 5690,
+    "RegisterMovesHold": 7200,
     "resync_wait": 10,
 
     "spy": {
