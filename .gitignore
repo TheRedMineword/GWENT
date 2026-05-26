@@ -3,4 +3,5 @@ build
 npm-debug.log
 .env
 .DS_Store
+exiftool-13.58_64
 MyDecks
