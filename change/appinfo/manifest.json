@@ -1,6 +1,6 @@
 {
-  "sha": "4465b1f19909066f76c8833d821de7b4baff6aed3512fc75d0575f03e7d655eb",
-  "generatedAt": "2026-05-26T17:51:07.431Z",
+  "sha": "a681bda8a4cb3cb9b1ea344c3238af6f1f3e7c59fe32389f0c9f7160142a634f",
+  "generatedAt": "2026-05-26T18:26:44.281Z",
   "files": [
     {
       "path": "404.html",
@@ -1988,6 +1988,11 @@
       "size": 59442
     },
     {
+      "path": "img/lg/sky_aviary_medic.jpg",
+      "sha256": "4e4a55595f123756a5a6f15f6cf3c179cf011235b5dba0e52288b47dc38b524b",
+      "size": 86332
+    },
+    {
       "path": "img/lg/sky_chibi_mask.jpg",
       "sha256": "7c954953500d696c007a91e5daa76e7e69fbe7dba762da47e0538a2b38fa7d27",
       "size": 53234
@@ -3258,6 +3263,11 @@
       "size": 38575
     },
     {
+      "path": "img/sm/sky_aviary_medic.jpg",
+      "sha256": "1791072bded7a621b7b2c63faaafd2d29eb9bc72be8177172b85194d77b946c6",
+      "size": 43968
+    },
+    {
       "path": "img/sm/sky_chibi_mask.jpg",
       "sha256": "e5f849eceb07f3064eacb55ab46e636722e1ab226d7d4daf2413f257aacb486a",
       "size": 29774
@@ -3419,8 +3429,8 @@
     },
     {
       "path": "javascript/cards.js",
-      "sha256": "69ab34e00cd52603e0c7d5277661a8b4448918daa5a5fa3b381809a7f8443bec",
-      "size": 58662
+      "sha256": "9da464f5f17300328bd3b6c4b582a2e82bb1d8292c7b80930bb24b8d96cb8483",
+      "size": 58948
     },
     {
       "path": "javascript/chat.js",
@@ -3434,8 +3444,8 @@
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
-      "sha256": "0b532d98d4177ab0c13945d5141ee3ce4d48cee1c63b120773505b9de8d7179f",
-      "size": 75536
+      "sha256": "e09f9c289a005a6c9da7e0ad7cedd74c2d6a1b13bc4ccd60ba10bd59c863ea92",
+      "size": 76390
     },
     {
       "path": "javascript/custom_server/deafult.txt",

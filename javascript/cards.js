@@ -2516,6 +2516,17 @@ var card_dict = [
         "filename": "colorcollab",
         "count": "0",
         "reinforce": {"owner_name": "Days Of Color Guide", "spawn_count": 2}
+    },
+    {
+        "name": "Aviary Village Emotional Support",
+        "id": "3019",
+        "deck": "sky",
+        "row": "siege",
+        "strength": "3",
+        "ability": "medic",
+        "filename": "aviary_medic",
+        "count": "1",
+        "discord": "1074082782998966342"
     }
     
 ];
