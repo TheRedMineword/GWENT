@@ -1,6 +1,6 @@
 {
-  "sha": "a681bda8a4cb3cb9b1ea344c3238af6f1f3e7c59fe32389f0c9f7160142a634f",
-  "generatedAt": "2026-05-28T16:17:34.638Z",
+  "sha": "205dee47893368818e2871c145a37a82c989052accfb5fa45ea43714c06d73d9",
+  "generatedAt": "2026-05-28T17:24:36.787Z",
   "files": [
     {
       "path": "404.html",
@@ -24,8 +24,8 @@
     },
     {
       "path": "change/index.json",
-      "sha256": "626b05e458d27f1f07441bbc532efe9b4d22551960e458532b01eb46c3ef7889",
-      "size": 29
+      "sha256": "2b4f5a5680902c89b98ebf48f348a2f3dd6bf75581a027af5449662870e0131a",
+      "size": 24
     },
     {
       "path": "change/log-ai-summary-becuase-i-did-a-lot-of-github-commits.txt",
@@ -86,6 +86,11 @@
       "path": "change/log-update16.txt",
       "sha256": "f78fde7a2d3ee4563d7ec2e883a84995bd7737500776298771de55f75feef7d6",
       "size": 163
+    },
+    {
+      "path": "change/log-update17.txt",
+      "sha256": "32bfde58ab86fba900495d5326602f19d9c54cbbabd3fdbd091229541caaadfb",
+      "size": 92
     },
     {
       "path": "change/log-update2.txt",
@@ -3459,8 +3464,8 @@
     },
     {
       "path": "javascript/decks.js",
-      "sha256": "363ea301f53ec32c6afaacaf9b6cab04c972330e0562334fc8246a9e8322bdb9",
-      "size": 522
+      "sha256": "7c9c6d0036f3f3ee39f4e7d6b2b30a456ce749dc7f6b68029622084ff6e839f7",
+      "size": 13717
     },
     {
       "path": "javascript/defines.js",
