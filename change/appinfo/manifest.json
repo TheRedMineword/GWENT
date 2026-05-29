@@ -1,6 +1,6 @@
 {
-  "sha": "205dee47893368818e2871c145a37a82c989052accfb5fa45ea43714c06d73d9",
-  "generatedAt": "2026-05-28T17:24:36.787Z",
+  "sha": "db91cdac64fdc3513aeeb635e3e93123064181193c64a60aa3eb3fbf4673f1ef",
+  "generatedAt": "2026-05-29T18:18:07.049Z",
   "files": [
     {
       "path": "404.html",
@@ -3489,7 +3489,7 @@
     },
     {
       "path": "javascript/patchnotes.js",
-      "sha256": "e697bd583ed90ff4c215f044945be86b569b76224aefbdbb8cf1f3603b0b625a",
+      "sha256": "c2ffe2c9391f7923581d75fd596c406c06985f70fc37992b8518e33c751dcb8f",
       "size": 2945
     },
     {
