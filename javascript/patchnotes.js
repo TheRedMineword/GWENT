@@ -95,7 +95,7 @@ function showOverlay(content) {
 
   async function run() {
     try {
-      const res = await fetch(`/change/index.json?time=${base64Now()}`);
+      const res = await fetch(`change/index.json?time=${base64Now()}`);
       if (!res.ok) return;
 
       const data = await res.json();
@@ -104,7 +104,7 @@ function showOverlay(content) {
       const savedId = localStorage.getItem(STORAGE_KEY);
 
       if (savedId !== data.id) {
-        const logRes = await fetch(`/change/log-${data.id}.txt`);
+        const logRes = await fetch(`change/log-${data.id}.txt`);
         if (!logRes.ok) return;
 
         const text = await logRes.text();
