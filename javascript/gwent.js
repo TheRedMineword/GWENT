@@ -615,14 +615,28 @@ socket.onmessage = async (event) => {
 	const data = event_parsed; //.data;
 console.log("onmsg data:", data)
 		switch (data.type) {
-			case "welcome":
-				playerId = data.playerId;
+			case "authRequired":
 				ip_data = data._ip;
 				console.log("[IP PARSE]", data._ip);
 				country = ip_data.countryCode || null;
 				risk_is = data._ip?.risk || risk_is;
 				handleRiskMessage(risk_is);
 				ip_data = null;
+	
+
+    currentPlayerId = data.playerId;
+
+    createAuthOverlay(
+        api_url_login_reg
+    );
+
+    tryAutoLogin(
+        api_url_login_reg,
+        data.playerId
+    );
+	break
+			case "welcome":
+				playerId = data.playerId;
 				console.log("[SERVER DROPPED IP DATA", ip_data, ` Country: ${country} || Risk: ${JSON.stringify(risk_is)}`);
 				console.log("Welcome, your id is " + playerId);
 ep_id.textContent = `Hello PlayerID:\n${playerId}`;

@@ -13,6 +13,7 @@
   "dependencies": {
     "cors": "^2.8.6",
     "crypto": "^1.0.1",
+    "dotenv": "^17.4.2",
     "express": "^4.22.1",
     "puppeteer": "^24.42.0",
     "sharp": "^0.34.5",

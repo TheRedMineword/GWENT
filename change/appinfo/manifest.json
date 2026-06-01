@@ -1,6 +1,6 @@
 {
-  "sha": "db91cdac64fdc3513aeeb635e3e93123064181193c64a60aa3eb3fbf4673f1ef",
-  "generatedAt": "2026-05-29T18:18:07.049Z",
+  "sha": "d816d00a743a857f12e0e45227af453fabead4b2350e1f4df6f4f9c83ed1ee67",
+  "generatedAt": "2026-06-01T17:02:26.578Z",
   "files": [
     {
       "path": "404.html",
@@ -18,13 +18,23 @@
       "size": 19306
     },
     {
+      "path": "api/discord-iframe/invite.json",
+      "sha256": "d5d01dfd72130baee4b7998680e92b16d036b121414415bfe97c2dbef986f43a",
+      "size": 97
+    },
+    {
+      "path": "api/discord-iframe/page.html",
+      "sha256": "338d2f7201152fbc467baf9ff7970035b53b6d8e7b830a620e3a344bea25d656",
+      "size": 5993
+    },
+    {
       "path": "apple-touch-icon.png",
       "sha256": "7ef8a5531a4a2c83f2e25ce0c0762874c9654e11b3c63a1213f914c943661f5b",
       "size": 9919
     },
     {
       "path": "change/index.json",
-      "sha256": "2b4f5a5680902c89b98ebf48f348a2f3dd6bf75581a027af5449662870e0131a",
+      "sha256": "d4a452345acbc570c5c312e8a8a8be99c4837c4455b518e2092f0e343281d1a2",
       "size": 24
     },
     {
@@ -91,6 +101,11 @@
       "path": "change/log-update17.txt",
       "sha256": "32bfde58ab86fba900495d5326602f19d9c54cbbabd3fdbd091229541caaadfb",
       "size": 92
+    },
+    {
+      "path": "change/log-update18.txt",
+      "sha256": "7642b5c96a4edae65066f4db23706fee5aa36f4f8bdd93b9350afbf9d9b5aff1",
+      "size": 102
     },
     {
       "path": "change/log-update2.txt",
@@ -3424,8 +3439,8 @@
     },
     {
       "path": "index.html",
-      "sha256": "bdefdef8fab78b1b730dfcad41844c5433a374f3b3155d624ac190f4a884708a",
-      "size": 10132
+      "sha256": "e81a6b8196c537e58419ed7b1afcd65ccadfd44d4a1822bd0add2b09144b7027",
+      "size": 10359
     },
     {
       "path": "javascript/abilities.js",
@@ -3479,8 +3494,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "2c4e0036926178b25478857a69a136afee379ee7bf1cc2b039983c366d237350",
-      "size": 155840
+      "sha256": "e62a78ed61f2d5a1b09b9192fc892fbdeb2ec8973ba01ca99e3cdc724f6a7d38",
+      "size": 156057
     },
     {
       "path": "javascript/jszip.min.js",
@@ -3493,9 +3508,14 @@
       "size": 2945
     },
     {
+      "path": "javascript/session_registering.js",
+      "sha256": "a3b135f9bb8a386a04dee2f30a896586a7aeab904d80f7541b27fe9c1dca021e",
+      "size": 21066
+    },
+    {
       "path": "javascript/session.js",
-      "sha256": "3183544e678c4feeb92c15dfcde6f96b8b93e2ef0dccaefdec514ec8cc3dc07b",
-      "size": 14804
+      "sha256": "8bfaf7f6ef30b2742b65b46fe5f72c761f1e658c27b37d2de69bd60ffde2b48c",
+      "size": 14805
     },
     {
       "path": "javascript/sync_hands.js",
@@ -3509,13 +3529,13 @@
     },
     {
       "path": "package-lock.json",
-      "sha256": "da999e598e1e483d37155cc8da54eb49b45eaa7f539f0b1a93b2b057faafe8c3",
-      "size": 96418
+      "sha256": "9ffe8a75af051718133c021ccedac239aaa53f0af19ddf88b495b3dc41dfa12e",
+      "size": 96851
     },
     {
       "path": "package.json",
-      "sha256": "594a27d0a5b9cdf6d3eb3617f532e9eba484c3f3da713ed5e75c896526acff64",
-      "size": 531
+      "sha256": "9ca2b31e081eb22fd4418cf427efd006483a2e3d74c59f59daac415557bba890",
+      "size": 556
     },
     {
       "path": "README.md",
@@ -3834,8 +3854,8 @@
     },
     {
       "path": "style.css",
-      "sha256": "a5875e8be9c93e8e80a057612f11feab578a65cf39cefadaeb2ef0e197e15696",
-      "size": 41318
+      "sha256": "b86ae44559b2b4e40771dd759251225504b0af5bf7674d8c6b1dd68a631cb69c",
+      "size": 41315
     }
   ]
 }

@@ -6,3 +6,5 @@ npm-debug.log
 exiftool-13.58_64
 MyDecks
 gwent_cards
+.env
+session_registering_oryginal.js

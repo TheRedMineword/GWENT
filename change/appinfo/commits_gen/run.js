@@ -26,7 +26,9 @@ const IGNORE_FILES = new Set([
 
     'manifest.json',
     'latest-sha.txt',
-    '.init.bat', '.replace.env', 'server.js', '.server.js'
+    '.init.bat', '.replace.env', 'server.js', '.server.js',
+    '.env',
+    'session_registering_oryginal.js'
 ]);
 
 // =====================================================

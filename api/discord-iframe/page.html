@@ -1,0 +1,271 @@
+<div id="discordInvite"></div>
+
+<script>
+(async () => {
+
+    const host = location?.ancestorOrigins[0] || location.hostname;
+    console.log("DC HOST", host, location.hostname, location);
+
+    const isLocalhost_discordInvite=
+    host.includes("localhost") ||
+    host.includes("127.0.0.1") ||
+    host.includes("[::1]");
+    
+const isElectronLauncher_discordInvite=
+    isLocalhost_discordInvite&&
+    location.port === "1111";
+    console.log("DC HOST", isLocalhost_discordInvite, isElectronLauncher_discordInvite);
+const api_url_discordInvite=
+    isElectronLauncher_discordInvite
+        ? "htpps://drmineword-gwent.onrender.com"
+        : isLocalhost_discordInvite
+            ? "http://localhost:8080"
+            : "https://drmineword-gwent.onrender.com";
+
+    const api_url_login_reg = api_url_discordInvite;
+
+    const cfg = await fetch(
+        `${api_url_login_reg}/api/discord-iframe/invite.json`
+    ).then(r => r.json());
+
+    let widgetData = null;
+    let inviteData = null;
+
+    try {
+        widgetData = await fetch(cfg.widget)
+            .then(r => r.json());
+    } catch (e) {
+        console.error("Widget fetch failed", e);
+    }
+
+    try {
+        inviteData = await fetch(
+            `https://discord.com/api/v10/invites/${cfg.invite}?with_counts=true`
+        ).then(r => r.json());
+    } catch (e) {
+        console.error("Invite fetch failed", e);
+    }
+
+    const guild =
+        inviteData?.guild ||
+        {};
+
+    const serverName =
+        guild.name ||
+        widgetData?.name ||
+        "Discord Server";
+
+    const icon =
+        guild.icon
+            ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=512`
+            : "";
+
+    const banner =
+        guild.banner
+            ? `https://cdn.discordapp.com/banners/${guild.id}/${guild.banner}.png?size=2048`
+            : "";
+
+    const online =
+        inviteData?.approximate_presence_count ??
+        widgetData?.presence_count ??
+        0;
+
+    const members =
+        inviteData?.approximate_member_count ??
+        0;
+
+    function getDominantColor(url) {
+        return new Promise(resolve => {
+
+            if (!url) {
+                resolve("88,101,242");
+                return;
+            }
+
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+
+            img.onload = () => {
+
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+
+                canvas.width = 64;
+                canvas.height = 64;
+
+                ctx.drawImage(img, 0, 0, 64, 64);
+
+                const data =
+                    ctx.getImageData(0, 0, 64, 64).data;
+
+                let r = 0;
+                let g = 0;
+                let b = 0;
+                let count = 0;
+
+                for (let i = 0; i < data.length; i += 16) {
+                    r += data[i];
+                    g += data[i + 1];
+                    b += data[i + 2];
+                    count++;
+                }
+
+                resolve(
+                    `${Math.round(r / count)},${Math.round(g / count)},${Math.round(b / count)}`
+                );
+            };
+
+            img.onerror = () =>
+                resolve("88,101,242");
+
+            img.src = url;
+        });
+    }
+
+    const color =
+        await getDominantColor(
+            banner || icon
+        );
+
+    const root =
+        document.getElementById("discordInvite");
+
+    root.innerHTML = `
+        <div class="discord-card">
+            ${
+                banner
+                ? `<div class="banner" style="background-image:url('${banner}')"></div>`
+                : ""
+            }
+
+            <div class="content">
+
+                ${
+                    icon
+                    ? `<img class="icon" src="${icon}" alt="">`
+                    : ""
+                }
+
+                <h2>${serverName}</h2>
+
+                <div class="stats">
+                    <span>${online} online</span>
+                    <span>${members} members</span>
+                </div>
+
+                <a
+                    class="join"
+                    href="https://discord.gg/${cfg.invite}"
+                    target="_blank"
+                >
+                    Join Server
+                </a>
+
+            </div>
+        </div>
+    `;
+
+    root.style.setProperty(
+        "--guild-rgb",
+        color
+    );
+
+})();
+</script>
+
+<style>
+#discordInvite {
+    --guild-rgb: 88,101,242;
+}
+
+.discord-card {
+    width: 420px;
+    overflow: hidden;
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(var(--guild-rgb),0.28),
+            rgba(var(--guild-rgb),0.06)
+        );
+
+    backdrop-filter: blur(16px);
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 15px 50px rgba(0,0,0,.35);
+
+    color: white;
+
+    font-family:
+        Inter,
+        system-ui,
+        sans-serif;
+}
+
+.banner {
+    height: 160px;
+    background-size: cover;
+    background-position: center;
+}
+
+.content {
+    padding: 24px;
+    text-align: center;
+}
+
+.icon {
+    width: 96px;
+    height: 96px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    margin-top: -72px;
+
+    border: 5px solid rgba(20,20,20,.8);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.4);
+}
+
+.content h2 {
+    margin: 12px 0;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+
+    opacity: .85;
+    margin-bottom: 18px;
+}
+
+.join {
+    display: inline-block;
+
+    padding: 12px 24px;
+
+    border-radius: 999px;
+
+    text-decoration: none;
+
+    font-weight: 700;
+
+    background:
+        rgb(var(--guild-rgb));
+
+    color: white;
+
+    transition: .2s;
+}
+
+.join:hover {
+    transform: translateY(-2px);
+}
+</style>

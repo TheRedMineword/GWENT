@@ -11,6 +11,8 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+require('dotenv').config();
+
 const PORT = process.env.PORT || 8081;
 
 app.use(cors({ origin: '*' }));
@@ -21,6 +23,15 @@ let sessions = {};
 const joinIndex = {};
 let players = [];
 let nextPlayerId = 1;
+
+let database = {
+  users: []
+};
+
+let databaseOriginal = "";
+let playerSockets = {};
+
+console.warn("PROCCESS ENV",  process.env, process.env.VERIF || false);
 
 const webhookUrl = process.env.WEBHOOK_LOGS_URL;
 
@@ -48,6 +59,96 @@ console.log = (message) => {
   });
 };
 
+// db work
+function encryptPassword(password) {
+  const salt = process.env.AUTH_HEX;
+
+  const hash = crypto.pbkdf2Sync(
+    password,
+    salt,
+    100000,
+    64,
+    "sha512"
+  ).toString("hex");
+
+  return `${salt}:${hash}`;
+}
+
+function decryptPassword(stored) {
+  console.log(`stored ${stored}`);
+  return stored;
+}
+
+async function loadDatabase() {
+
+  const response = await fetch(
+    `${process.env.XANO_URL}/database?id=${process.env.DB_ID}`
+  );
+
+  const json = await response.json();
+
+  if (!json.ok) {
+    throw new Error(
+      "Failed loading database"
+    );
+  }
+
+  database = json.db || {
+    users: []
+  };
+
+  databaseOriginal =
+    JSON.stringify(database);
+
+  console.log(
+    `Loaded ${database.users.length} users`
+  );
+}
+
+async function saveDatabase() {
+
+  const current =
+    JSON.stringify(database);
+
+  if (current === databaseOriginal) {
+    return false;
+  }
+
+  const response = await fetch(
+    `${process.env.XANO_URL}/database`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type":
+          "application/json"
+      },
+      body: JSON.stringify({
+        id: process.env.DB_ID,
+        overwrite: database
+      })
+    }
+  );
+
+  const json =
+    await response.json();
+
+  if (json.ok) {
+
+    database =
+      json.db || database;
+
+    databaseOriginal =
+      JSON.stringify(database);
+
+    console.log(
+      "Database synced"
+    );
+  }
+
+  return json;
+}
+
+// await loadDatabase();
 
 
 // ---------- helpers ----------
@@ -235,6 +336,182 @@ app.get("/api/custom_sync", (req, res) => {
 app.get("*", (_, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
+app.post("/api/register", async (req, res) => {
+
+  try {
+
+    const {
+      playerId,
+      login,
+      password
+    } = req.body;
+
+    if (
+      !playerId ||
+      !login ||
+      !password
+    ) {
+      return res.status(400).json({
+        ok: false,
+        error: "missingFields"
+      });
+    }
+
+    const ws =
+      playerSockets[playerId];
+
+    if (!ws) {
+      return res.status(404).json({
+        ok: false,
+        error: "playerNotConnected"
+      });
+    }
+
+    const exists =
+      database.users.find(
+        u =>
+          u.login.toLowerCase()
+          === login.toLowerCase()
+      );
+
+    if (exists) {
+      return res.status(409).json({
+        ok: false,
+        error: "loginTaken"
+      });
+    }
+
+    const user = {
+
+      id: crypto.randomUUID(),
+
+      login,
+
+      password:
+        encryptPassword(password)
+
+    };
+
+    database.users.push(user);
+
+    await saveDatabase();
+
+    ws.authenticated = true;
+    ws.user = user;
+
+    comp_and_send(ws,{
+      type: "welcome",
+      playerId: ws.playerId,
+      login: user.login
+    });
+
+    return res.json({
+      ok: true,
+      user: {
+        id: user.id,
+        login: user.login
+      }
+    });
+
+  }
+  catch (err) {
+
+    console.log(err);
+
+    return res.status(500).json({
+      ok: false,
+      error: "serverError"
+    });
+  }
+
+});
+app.post("/api/login", async (req, res) => {
+
+  try {
+
+    const {
+      playerId,
+      login,
+      password
+    } = req.body;
+
+    if (
+      !playerId ||
+      !login ||
+      !password
+    ) {
+      return res.status(400).json({
+        ok: false,
+        error: "missingFields"
+      });
+    }
+
+    const ws =
+      playerSockets[playerId];
+
+    if (!ws) {
+      return res.status(404).json({
+        ok: false,
+        error: "playerNotConnected"
+      });
+    }
+
+    const user =
+      database.users.find(
+        u =>
+          u.login.toLowerCase()
+          === login.toLowerCase()
+      );
+
+    if (!user) {
+      return res.status(401).json({
+        ok: false,
+        error: "invalidCredentials"
+      });
+    }
+
+    console.log(`LOGGIN ATTEMPT FOR: ${JSON.stringify(user)} wich password input\n-# ${encryptPassword(password)}}`);
+    var pass_check = user.password;
+    const realPassword = pass_check;
+
+    if (
+      realPassword !== encryptPassword(password)
+    ) {
+      return res.status(401).json({
+        ok: false,
+        error: "invalidCredentials"
+      });
+    }
+
+    ws.authenticated = true;
+    ws.user = user;
+
+    comp_and_send(ws,{
+      type: "welcome",
+      playerId: ws.playerId,
+      login: user.login
+    });
+
+    return res.json({
+      ok: true,
+      user: {
+        id: user.id,
+        login: user.login
+      }
+    });
+
+  }
+  catch (err) {
+
+    console.log(err);
+
+    return res.status(500).json({
+      ok: false,
+      error: "serverError"
+    });
+  }
+
+});
 app.post("/api/message", (req, res) => {
   const { session_id, player_id, message, type } = req.body;
 
@@ -382,7 +659,11 @@ function broadcastToSession(sessionId, payload) {
 }
 riskinfo = "{}";
 wss.on('connection', async (ws, req) => {
+  ws.authenticated = false;
+  ws.user = null;
   ws.playerId = await generatePlayerId(req);
+
+  playerSockets[ws.playerId] = ws;
   
   const ip = getClientIp(req);
   const ip2 = crypto
@@ -427,11 +708,21 @@ wss.on('connection', async (ws, req) => {
   const isp = geo.isp || "Unknown";
   geo.ThatRealIp = ip2;
   // Send welcome
+  //comp_and_send(ws, JSON.stringify({
+   // type: 'welcome',
+   // playerId: ws.playerId,
+   // "_ip": geo
+  //}));
+  console.log(`AUTH REQ\n-# ${JSON.stringify({
+  type:"authRequired",
+  playerId: ws.playerId,
+   "_ip": geo
+})}`);
   comp_and_send(ws, JSON.stringify({
-    type: 'welcome',
-    playerId: ws.playerId,
-    "_ip": geo
-  }));
+  type: "authRequired",
+  playerId: ws.playerId,
+   "_ip": geo
+}));
 
   console.log(
     `|| Player ${ws.playerId} connected from ${ip_censor} (${country}) | ${region}, ${city} | ISP: ${isp} | Risk: ${JSON.stringify(geo.risk)}`
@@ -475,6 +766,22 @@ function sessionIdToJoinCode(sessionId, digitLength = 4) {
     const msg_is = decompressPayload(message);
     const data = JSON.parse(msg_is);
     const msg =  JSON.stringify(data);
+    const allowedBeforeAuth = [
+  "ping"
+];
+
+if (
+  !ws.authenticated &&
+  !allowedBeforeAuth.includes(data.type)
+) {
+
+  comp_and_send(ws,{
+    type: "authRequired",
+    playerId: ws.playerId
+  });
+
+  return;
+}
     console.log(`|| Message recived: \`\`\`\n${msg}\`\`\``);
 if (data.type === "ping"){
   console.log(`|| Sombody pinged server!!!`);
@@ -663,7 +970,7 @@ if (data.type === "createSession") {
 
   ws.on('close', () => {
     console.log(`|| Player ${ws.playerId} disconnected`);
-
+    delete playerSockets[ws.playerId];
     // Check if the player has an active session
     if (ws.sessionId && sessions[ws.sessionId]) {
       const session = sessions[ws.sessionId];
@@ -703,4 +1010,14 @@ if (data.type === "createSession") {
 
 
 
-server.listen(PORT, () => console.log(`>>> Server running on port ${PORT} `));
+(async () => {
+
+  await loadDatabase();
+
+  server.listen(PORT, () => {
+    console.log(
+      `>>> Server running ${PORT}`
+    );
+  });
+
+})();
