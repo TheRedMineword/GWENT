@@ -32,7 +32,8 @@ const IGNORE_PATTERNS = [
     'ThisDef',
     'isconnectedtosession',
     'texturepack',
-    'playblock'
+    'playblock',
+    'currentPlayerId'
 ];
 
 const LOG_PREFIX = '[CUSTOM_SERVER]';

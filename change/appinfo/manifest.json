@@ -1,6 +1,6 @@
 {
-  "sha": "ee556e4b5e0730616255f0fdeecdc5bba8763040bd109e8e2fa5afc36e0d13df",
-  "generatedAt": "2026-06-01T17:07:47.429Z",
+  "sha": "92607e9f72809c4b577e1fbb778fdb2c687262c6b83e11e475698aa611e881a3",
+  "generatedAt": "2026-06-01T19:12:56.123Z",
   "files": [
     {
       "path": "404.html",
@@ -34,8 +34,8 @@
     },
     {
       "path": "change/index.json",
-      "sha256": "d4a452345acbc570c5c312e8a8a8be99c4837c4455b518e2092f0e343281d1a2",
-      "size": 24
+      "sha256": "4f91cc2160e61400121e3ac19eadd2a66655a05b2a1546f8d5050d0ebe773b51",
+      "size": 26
     },
     {
       "path": "change/log-ai-summary-becuase-i-did-a-lot-of-github-commits.txt",
@@ -101,6 +101,11 @@
       "path": "change/log-update17.txt",
       "sha256": "32bfde58ab86fba900495d5326602f19d9c54cbbabd3fdbd091229541caaadfb",
       "size": 92
+    },
+    {
+      "path": "change/log-update18-1.txt",
+      "sha256": "a1f577841423a43ff086f911c897c932ed04438742aea979ff4308420ee6588a",
+      "size": 159
     },
     {
       "path": "change/log-update18.txt",
@@ -328,6 +333,11 @@
       "size": 5934
     },
     {
+      "path": "img/icons/anim_wshield.png",
+      "sha256": "2c515c7243c3706ef1440cd006429d2d8216ecad3f2cd3852699179e17d860d6",
+      "size": 3587
+    },
+    {
       "path": "img/icons/card_ability_agile.png",
       "sha256": "dfab0eee75d4badb97b30e4d19829cb1732790c4d3484da7525e31e1b3060129",
       "size": 21530
@@ -423,6 +433,11 @@
       "size": 18018
     },
     {
+      "path": "img/icons/card_ability_quen_desc.jpg",
+      "sha256": "3cda3e782dab758f316a3f11558b2e031ef7954e0d3a05465e18f8000964d4f3",
+      "size": 3728
+    },
+    {
       "path": "img/icons/card_ability_rain.png",
       "sha256": "44a58fce4fd1ff1ca45e5999b723389640b85cc7c0ff0c3912661934b0b28b60",
       "size": 24459
@@ -456,6 +471,11 @@
       "path": "img/icons/card_ability_tgc_portal.png",
       "sha256": "6ae69c036f08a7e283b79ceae81c65c52c470f487ca846841c1262872d21d473",
       "size": 10728
+    },
+    {
+      "path": "img/icons/card_ability_wshield.png",
+      "sha256": "10d093ccdb4b05a66db83eeb244b893275bea87dbcf2c0ed69dc65ae79cb508e",
+      "size": 12873
     },
     {
       "path": "img/icons/card_gryffinSchool.png",
@@ -1213,6 +1233,11 @@
       "size": 100007
     },
     {
+      "path": "img/lg/neutral_quen.jpg",
+      "sha256": "bac66b74afb51503177d156a65bc7de477e43fb93d0ed98fb200684fb052fa70",
+      "size": 18807
+    },
+    {
       "path": "img/lg/neutral_reveal_dopler.jpg",
       "sha256": "b4e570fb18a33944dbcd1c6c479e930b97652314f8b684327431ae60cb05c02e",
       "size": 65338
@@ -1236,6 +1261,11 @@
       "path": "img/lg/neutral_villen.jpg",
       "sha256": "86474c6681964f07b0e7957a572d5e352222eb42451c113db1428edfcf1878cb",
       "size": 100280
+    },
+    {
+      "path": "img/lg/neutral_wshield.jpg",
+      "sha256": "f2309e60aa365481225ebf8764642931c2bd358b1c41bcf3998f7b12c3c456bf",
+      "size": 100219
     },
     {
       "path": "img/lg/neutral_yennefer.jpg",
@@ -2488,6 +2518,11 @@
       "size": 50564
     },
     {
+      "path": "img/sm/neutral_quen.jpg",
+      "sha256": "15269cadb5dc840d4b47ab21f1833eed2869ae51762d480d3a59ea216a115dc7",
+      "size": 15572
+    },
+    {
       "path": "img/sm/neutral_reveal_dopler.jpg",
       "sha256": "13ac87ce1ec4be2ce87f1c24956ba5750b56f7741db5d384cb22d91d39d2c235",
       "size": 46439
@@ -2511,6 +2546,11 @@
       "path": "img/sm/neutral_villen.jpg",
       "sha256": "5b3e8ae02bfda7d0159b0f61676ac02f2192682bff279367d317728c83c1befa",
       "size": 52620
+    },
+    {
+      "path": "img/sm/neutral_wshield.jpg",
+      "sha256": "f5b269e5f78d9e2a9871fc9ab7e1c51dde390975bff3da5fda25ee66ba1d6ba3",
+      "size": 253929
     },
     {
       "path": "img/sm/neutral_yennefer.jpg",
@@ -3444,13 +3484,13 @@
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "bbb5741a733b3165add523bfe727d7f8ab11421d2c486726b56c4daf307b6eee",
-      "size": 46053
+      "sha256": "5c7297a5ff6fb8af0f02bb4f8297c143834a8adde3533c4984e24b016ee4982c",
+      "size": 46393
     },
     {
       "path": "javascript/cards.js",
-      "sha256": "9da464f5f17300328bd3b6c4b582a2e82bb1d8292c7b80930bb24b8d96cb8483",
-      "size": 58948
+      "sha256": "21d8f12cf506cba17b0ded68b9e065c503d60899c5d9c3932aad47396cb44c0e",
+      "size": 59449
     },
     {
       "path": "javascript/chat.js",
@@ -3459,13 +3499,13 @@
     },
     {
       "path": "javascript/connect_to_custom_server.js",
-      "sha256": "cde333710f8fadfeeb82635743d2c9ada73f651b2a16e5d5dc4c1e6565eacf54",
-      "size": 28641
+      "sha256": "d67ef53de41c15cd5888cc5e3fab7278c5681a9c20dd030566a652875d2e8c75",
+      "size": 28665
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
-      "sha256": "e09f9c289a005a6c9da7e0ad7cedd74c2d6a1b13bc4ccd60ba10bd59c863ea92",
-      "size": 76390
+      "sha256": "19cf6a6ad754c89d1438a30c38415ed6425240c14fdbc016a6cfd2e3c1796343",
+      "size": 77303
     },
     {
       "path": "javascript/custom_server/deafult.txt",
@@ -3494,8 +3534,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "e62a78ed61f2d5a1b09b9192fc892fbdeb2ec8973ba01ca99e3cdc724f6a7d38",
-      "size": 156057
+      "sha256": "56f97d2c703950c86d73fc74e84ceba29ae5e9f5895305dff8d478b3356a0d5d",
+      "size": 156515
     },
     {
       "path": "javascript/jszip.min.js",

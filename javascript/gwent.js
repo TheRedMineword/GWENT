@@ -571,7 +571,7 @@ function showVpnWarning() {
     popup.style.padding = "12px 16px";
     popup.style.borderRadius = "8px";
     popup.style.fontSize = "14px";
-    popup.style.zIndex = "999991";
+    popup.style.zIndex = "9999999999999999999";
     popup.style.whiteSpace = "pre-line";
     popup.style.maxWidth = "520px";
     popup.style.textAlign = "center";
@@ -1819,6 +1819,10 @@ calcCardScore_work(card) {
 		if (card.name === "decoy")
 			return 0;
 		let total = card.basePower;
+		let this_row_have_quen = [false, 1, 2]; // should bool, multiplayer, axii weather etc, horn
+		if (this.cards.some(c => c.filename === "wshield" || c.filename === "quen")){
+			this_row_have_quen = [true, 0.35, 1]
+		}
 		if (this.cards.some(c => c.filename === "darkstorm")) {
 			if (card.hero === false){
 			card.pendingScorch = true;
@@ -1828,7 +1832,7 @@ calcCardScore_work(card) {
 		}
 		if (this.cards.some(c => c.filename === "axii" || c.filename === "axii_p")) {
 					if (0 < total && total < axii.IfBasePowerUnder) {
-						total = total - axii.TakeAway
+						total = total - Math.ceil( axii.TakeAway * this_row_have_quen[1]);
 					}
 		}
 		if (card.abilities.includes("magicthegathering") === true || card.abilities.includes("tgc_portal") === true){
@@ -1863,7 +1867,7 @@ calcCardScore_work(card) {
 
 			// apply weather debuff
 		if (this.effects.weather) {
-			bonus *= powergain.WeatherDebuffPercent;
+			bonus *= (powergain.WeatherDebuffPercent * this_row_have_quen[1] );
 			console.log("[POWERGAIN]", ` Total valid cards: ${count}, making it ${bonus} (lost ${powergain.WeatherDebuffPercent} by weather) bonus power by ${powergain.ForEachCardGain} for each card!`);
 			}
 
@@ -1880,7 +1884,9 @@ calcCardScore_work(card) {
 		if (card.hero)
 			return total;
 		if (this.effects.weather) 
-			total = Math.min(1, total);
+			if (this_row_have_quen[0]){
+				total = Math.ceil(total * this_row_have_quen[1])
+			} else {total = Math.min(1, total);}
 		if (game.doubleSpyPower && card.abilities.includes("spy"))
 			total *= 2;
 		if (game.doubleSpyPower && card.abilities.includes("sabotage")) //Double sabotage power
@@ -1894,7 +1900,7 @@ calcCardScore_work(card) {
 		total += Math.max(0, this.effects.morale + (card.abilities.includes("morale") ? -1 : 0 ));
 		if (this.effects.horn - (card.abilities.includes("horn") ? 1 : 0) >  0 )
 		//	card.animate("powergain");
-			total *= 2;
+			total *= this_row_have_quen[2];
 		return total;
 	}
 	
@@ -2668,7 +2674,8 @@ class Card {
 		"dopler_spawn_creature": "avenger",
 		"muster2": "ally",
 		"reinforce": "moral",
-		"aid": "royal_horn"
+		"aid": "royal_horn",
+		"wshield": "ally"
 		}
 		var temSom = new Array();
 		for (var x in guia) temSom[temSom.length] = x;
@@ -2720,7 +2727,8 @@ class Card {
 		"dopler_spawn_creature": "avenger",
 		"muster2": "ally",
 		"reinforce": "moral",
-		"aid": "royal_horn"
+		"aid": "royal_horn",
+		"wshield": "ally"
 	};
 
 	const literais = [

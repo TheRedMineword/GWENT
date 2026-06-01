@@ -32,7 +32,7 @@ if (mtg_conf.unstable_mode === "random"){
 } else if (mtg_conf.unstable_mode === "unrandom"){
 	magicthegathering_stable = "This card is unstable, after picking card it power will drop to -3 "
 }
-const NotPickUpAbilities = ["axii2_desc", "gryffinSchool", "magicthegathering", "tgc_portal", "reinforce"];
+const NotPickUpAbilities = ["axii2_desc", "gryffinSchool", "magicthegathering", "tgc_portal", "reinforce", "wshield"];
 
 var ability_dict = {
 	clear: {
@@ -56,12 +56,21 @@ var ability_dict = {
 		description: "Reduces the Strength of all Range and Siege Units to 1. "
 	},
 	hero: {
-		name: "hero",
+		name: "Hero Card",
 		description: "Not affected by any Special Cards or abilities. "
 	},
 	decoy: {
 		name: "Decoy",
 		description: "Swap with a card on the battlefield to return it to your hand. "
+	},
+	wshield: {
+		name: "Shield",
+		description: "Partialy protects all cards in same row from weather card effects, Commander's Horn will have no effect in that row. Cant be picked up after placing. ",
+		placed: async card => await card.animate("wshield")
+	},
+	quen_desc: {
+		name: "witcher Signs: Quen",
+		description: ""
 	},
 	horn: {
 		name: "Commander's Horn",

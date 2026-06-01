@@ -2334,6 +2334,27 @@ var card_dict = [
         "count": "0",
         "avenger": "Dopler"
     },
+    {
+        "name": "Witcher - Quen",
+        "id": "1018",
+        "deck": "neutral",
+        "row": "close",
+        "strength": "1",
+        "ability": "wshield",
+        "filename": "wshield",
+        "count": "2"
+    },
+    {
+        "name": "witcher Signs: Quen",
+        "id": "1019",
+        "deck": "neutral",
+        "row": "agile",
+        "strength": "0",
+        "ability": "quen_desc wshield hero",
+        "filename": "quen",
+        "count": "0",
+        "witcher_sign": true
+    },
     // New cards for sky
     {
         "name": "Hopeful Steward",

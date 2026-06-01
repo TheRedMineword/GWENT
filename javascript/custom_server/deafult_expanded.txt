@@ -2463,6 +2463,27 @@
         "avenger": "Dopler"
       },
       {
+        "name": "Witcher - Quen",
+        "id": "1018",
+        "deck": "neutral",
+        "row": "close",
+        "strength": "1",
+        "ability": "wshield",
+        "filename": "wshield",
+        "count": "2"
+      },
+      {
+        "name": "witcher Signs: Quen",
+        "id": "1019",
+        "deck": "neutral",
+        "row": "agile",
+        "strength": "0",
+        "ability": "quen_desc wshield hero",
+        "filename": "quen",
+        "count": "0",
+        "witcher_sign": true
+      },
+      {
         "name": "Hopeful Steward",
         "id": "3001",
         "deck": "sky",
@@ -2623,7 +2644,7 @@
         "filename": "elder_wasteland",
         "count": "1"
       },
-    {
+      {
         "name": "Days Of Color Guide",
         "id": "3017",
         "deck": "sky",
@@ -2632,8 +2653,8 @@
         "ability": "reinforce",
         "filename": "colorguide",
         "count": "1"
-    },
-    {
+      },
+      {
         "name": "Trevor Project",
         "id": "3018",
         "deck": "sky",
@@ -2642,9 +2663,12 @@
         "ability": "hero",
         "filename": "colorcollab",
         "count": "0",
-        "reinforce": {"owner_name": "Days Of Color Guide", "spawn_count": 2}
-    },
-    {
+        "reinforce": {
+          "owner_name": "Days Of Color Guide",
+          "spawn_count": 2
+        }
+      },
+      {
         "name": "Aviary Village Emotional Support",
         "id": "3019",
         "deck": "sky",
@@ -2654,7 +2678,7 @@
         "filename": "aviary_medic",
         "count": "1",
         "discord": "1074082782998966342"
-    }
+      }
     ],
     "faction": {
       "realms": {
@@ -2704,12 +2728,20 @@
         "description": "Reduces the Strength of all Range and Siege Units to 1. "
       },
       "hero": {
-        "name": "hero",
+        "name": "Hero Card",
         "description": "Not affected by any Special Cards or abilities. "
       },
       "decoy": {
         "name": "Decoy",
         "description": "Swap with a card on the battlefield to return it to your hand. "
+      },
+      "wshield": {
+        "name": "Shield",
+        "description": "Partialy protects all cards in same row from weather card effects, Commander's Horn will have no effect in that row. Cant be picked up after placing. "
+      },
+      "quen_desc": {
+        "name": "witcher Signs: Quen",
+        "description": ""
       },
       "horn": {
         "name": "Commander's Horn",
