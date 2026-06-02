@@ -69,7 +69,7 @@ var ability_dict = {
 		placed: async card => await card.animate("wshield")
 	},
 	quen_desc: {
-		name: "witcher Signs: Quen",
+		name: "Witcher Signs: Quen",
 		description: ""
 	},
 	horn: {

@@ -2339,18 +2339,18 @@ var card_dict = [
         "id": "1018",
         "deck": "neutral",
         "row": "close",
-        "strength": "1",
+        "strength": "0",
         "ability": "wshield",
         "filename": "wshield",
         "count": "2"
     },
     {
-        "name": "witcher Signs: Quen",
+        "name": "Witcher Signs: Quen",
         "id": "1019",
         "deck": "neutral",
         "row": "agile",
         "strength": "0",
-        "ability": "quen_desc wshield hero",
+        "ability": "hero quen_desc wshield",
         "filename": "quen",
         "count": "0",
         "witcher_sign": true

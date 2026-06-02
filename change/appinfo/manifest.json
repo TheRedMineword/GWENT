@@ -1,6 +1,6 @@
 {
-  "sha": "92607e9f72809c4b577e1fbb778fdb2c687262c6b83e11e475698aa611e881a3",
-  "generatedAt": "2026-06-01T19:12:56.123Z",
+  "sha": "0ce31a5c021dd8ad54dd81ca821d992508aca95267ed674c633e33521f5849a5",
+  "generatedAt": "2026-06-02T05:03:20.126Z",
   "files": [
     {
       "path": "404.html",
@@ -3484,12 +3484,12 @@
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "5c7297a5ff6fb8af0f02bb4f8297c143834a8adde3533c4984e24b016ee4982c",
+      "sha256": "552607d2b0cba9e98b6d95f16206184781c3ac33d10f4603a2b5515e7282b0e7",
       "size": 46393
     },
     {
       "path": "javascript/cards.js",
-      "sha256": "21d8f12cf506cba17b0ded68b9e065c503d60899c5d9c3932aad47396cb44c0e",
+      "sha256": "6c8f8811f8b787932f307dda13690ff54b37dbdcc6dd129d9bdf8af5352a8ce0",
       "size": 59449
     },
     {
@@ -3504,8 +3504,8 @@
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
-      "sha256": "19cf6a6ad754c89d1438a30c38415ed6425240c14fdbc016a6cfd2e3c1796343",
-      "size": 77303
+      "sha256": "e94b93f8e8dfa4d0bfa175bd37d34bdb2b8ee5c9343b4b2fb76fa7fe1d9bd2e0",
+      "size": 77297
     },
     {
       "path": "javascript/custom_server/deafult.txt",
