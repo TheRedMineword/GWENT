@@ -1,6 +1,6 @@
 {
-  "sha": "0ce31a5c021dd8ad54dd81ca821d992508aca95267ed674c633e33521f5849a5",
-  "generatedAt": "2026-06-02T05:03:20.126Z",
+  "sha": "8d0f1b45580cb6203fb0aee39d3918e3d3a45d57c82d98276378d3778da11ef6",
+  "generatedAt": "2026-06-02T15:55:59.903Z",
   "files": [
     {
       "path": "404.html",
@@ -1264,8 +1264,8 @@
     },
     {
       "path": "img/lg/neutral_wshield.jpg",
-      "sha256": "f2309e60aa365481225ebf8764642931c2bd358b1c41bcf3998f7b12c3c456bf",
-      "size": 100219
+      "sha256": "686bad4467884eb8aad32b83f12f2a0d2c4265603b4685ccc310b2974a0944e7",
+      "size": 100303
     },
     {
       "path": "img/lg/neutral_yennefer.jpg",
@@ -3524,8 +3524,8 @@
     },
     {
       "path": "javascript/defines.js",
-      "sha256": "a6534f256199ed8896cd59e80c2d2fd148b6e66730c1904a279a5d6d461dfe66",
-      "size": 9057
+      "sha256": "2721f4528d2844ed5ea4fd364b93fcaee784cd7705b53b73e07f4913a378015e",
+      "size": 9059
     },
     {
       "path": "javascript/factions.js",
@@ -3549,8 +3549,8 @@
     },
     {
       "path": "javascript/session_registering.js",
-      "sha256": "877c7cdc7c93df7a8287898b1605750928be5ca2d435060a9da92967ee1f8de6",
-      "size": 21038
+      "sha256": "c16c00206fe4639fd307025be4f68fdd9a4d8c7d3da2316a0f4bb7292125b933",
+      "size": 18905
     },
     {
       "path": "javascript/session.js",
