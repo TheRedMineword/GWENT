@@ -153,7 +153,7 @@ let button_is_second_sheet = 0;
 let audio_yt_vid_soundtrack = "FTsuevfvQ9w"; // wild hunt: "UE9fPWy1_o4" // How about round of gwent: "FTsuevfvQ9w"
 let audio_yt_vid_soundtrack_volume = 47; // 100 for wild hunt, less for other
 // Tavern (Deck menu)
-let tavern_yt_vid = "yu197hlNWK0"; // The Witcher 3: Wild Hunt OST - Skellige Tavern | Extended
+let tavern_yt_vid = "JaPf-MRKITg"; // The Witcher 3: Wild Hunt OST - Skellige Tavern | Extended
 let tavern_yt_volume = 100;
 let gaunter_lider = {
 	"extra_cards": 0.50,
