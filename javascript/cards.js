@@ -2559,4 +2559,4 @@ const witcher_signs = Object.entries(card_dict)
         ...card
     }));
 console.log("Cards array", card_dict, witcher_signs);
-const card_dict_base = card_dict;
+const card_dict_base = deepClone(card_dict);

@@ -117,4 +117,4 @@ var factions = {
 	}
 }
 
-const factions_base = factions;
+const factions_base = deepClone(factions);

@@ -1,6 +1,6 @@
 {
-  "sha": "8d0f1b45580cb6203fb0aee39d3918e3d3a45d57c82d98276378d3778da11ef6",
-  "generatedAt": "2026-06-02T15:55:59.903Z",
+  "sha": "eab053221fb8e08692861584852a595f9793cfc6f1e4e19742cf6101a3e2d05f",
+  "generatedAt": "2026-06-03T14:14:45.024Z",
   "files": [
     {
       "path": "404.html",
@@ -3479,18 +3479,18 @@
     },
     {
       "path": "index.html",
-      "sha256": "e81a6b8196c537e58419ed7b1afcd65ccadfd44d4a1822bd0add2b09144b7027",
-      "size": 10359
+      "sha256": "869ba699760d308f4bf31602ca048b74ff500e967506a706c60263ff5d54c63e",
+      "size": 10637
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "552607d2b0cba9e98b6d95f16206184781c3ac33d10f4603a2b5515e7282b0e7",
-      "size": 46393
+      "sha256": "b6180baab251ca69c2d188aab9f65279edc5cbfab1e64e713f1d4b63cca83a7b",
+      "size": 46404
     },
     {
       "path": "javascript/cards.js",
-      "sha256": "6c8f8811f8b787932f307dda13690ff54b37dbdcc6dd129d9bdf8af5352a8ce0",
-      "size": 59449
+      "sha256": "6aebf1f29c2d1b0407a5182c4622f48cbbaa236625a14ff9c7596f2a40f49de0",
+      "size": 59460
     },
     {
       "path": "javascript/chat.js",
@@ -3499,13 +3499,13 @@
     },
     {
       "path": "javascript/connect_to_custom_server.js",
-      "sha256": "d67ef53de41c15cd5888cc5e3fab7278c5681a9c20dd030566a652875d2e8c75",
-      "size": 28665
+      "sha256": "0580740f48fcc90b960bfdde465fadef09fd2ade85bd2231dcd23237b9e8d38f",
+      "size": 28879
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
-      "sha256": "e94b93f8e8dfa4d0bfa175bd37d34bdb2b8ee5c9343b4b2fb76fa7fe1d9bd2e0",
-      "size": 77297
+      "sha256": "d96779e0ea236a677345bf9df9e0bec01114d15db58a1b262e74b841281e01f7",
+      "size": 77301
     },
     {
       "path": "javascript/custom_server/deafult.txt",
@@ -3519,8 +3519,8 @@
     },
     {
       "path": "javascript/decks.js",
-      "sha256": "7c9c6d0036f3f3ee39f4e7d6b2b30a456ce749dc7f6b68029622084ff6e839f7",
-      "size": 13717
+      "sha256": "a96beb3846215f96234664306033ea70441f7b2352372062529604fbac8713b8",
+      "size": 13896
     },
     {
       "path": "javascript/defines.js",
@@ -3529,13 +3529,13 @@
     },
     {
       "path": "javascript/factions.js",
-      "sha256": "877cacb243093cd3a0333c25383b61d5328a2dda2838b1d30622191ff5209b39",
-      "size": 5101
+      "sha256": "c80c4c35d55b428a146a0a2b54944719467cecef51e6c4c14007f4e4ea88eb52",
+      "size": 5112
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "56f97d2c703950c86d73fc74e84ceba29ae5e9f5895305dff8d478b3356a0d5d",
-      "size": 156515
+      "sha256": "e690e321a8e9ef7db369ac79defc89b957c2b1262f2c23d68fce283fe6b19eaf",
+      "size": 156770
     },
     {
       "path": "javascript/jszip.min.js",

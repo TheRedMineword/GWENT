@@ -316,9 +316,6 @@
 <button id="chat-toggle">Chat</button>
 </div>
 
-<div id="discordInvite" style="z-index:9999999999999;">
-    TEST
-</div>
 
 <div id="no-server">
     <div id="no-server-icon"></div>
@@ -341,6 +338,23 @@
 
 <script>
 const client_random_strng = Math.random().toString(36).substring(2, 10);
+function deepClone(value) {
+	//console.log("[DEEPCLONE]", value);
+    if (value === null || typeof value !== "object") {
+        return value;
+    }
+
+    if (Array.isArray(value)) {
+        return value.map(deepClone);
+    }
+
+    const clone = {};
+
+    for (const key in value) {
+        clone[key] = deepClone(value[key]);
+    }
+    return clone;
+}
 </script>
 <script type="text/javascript" src="javascript/jszip.min.js"></script>
 <script type="text/javascript" src="javascript/defines.js"></script>

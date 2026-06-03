@@ -579,7 +579,7 @@
         "count": "1"
       },
       {
-        "name": "S�le de Tansarville",
+        "name": "Síle de Tansarville",
         "id": "85",
         "deck": "realms",
         "row": "ranged",
@@ -1049,7 +1049,7 @@
         "count": "1"
       },
       {
-        "name": "Eredin Br�acc Glas - The Treacherous",
+        "name": "Eredin Bréacc Glas - The Treacherous",
         "id": "",
         "deck": "monsters",
         "row": "leader",
@@ -1620,7 +1620,7 @@
         "count": "1"
       },
       {
-        "name": "Eithn�",
+        "name": "Eithné",
         "id": "17",
         "deck": "scoiatael",
         "row": "ranged",
@@ -2471,8 +2471,8 @@
         "ability": "wshield",
         "filename": "wshield",
         "count": "2"
-    },
-    {
+      },
+      {
         "name": "Witcher Signs: Quen",
         "id": "1019",
         "deck": "neutral",
@@ -2482,7 +2482,7 @@
         "filename": "quen",
         "count": "0",
         "witcher_sign": true
-    },
+      },
       {
         "name": "Hopeful Steward",
         "id": "3001",
@@ -2680,7 +2680,7 @@
         "discord": "1074082782998966342"
       }
     ],
-    "faction": {
+    "factions": {
       "realms": {
         "name": "Northern Realms",
         "description": "Draw a card from your deck whenever you win a round."

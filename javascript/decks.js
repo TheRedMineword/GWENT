@@ -561,8 +561,8 @@ function getCardsIndex(faction, cards) {
 		.filter(Boolean);
 }
 
-
-let premade_deck = [
+function gen_premade_decks(){
+return [
 	{
 		faction: "realms",
 		leader: getLeaderIndex("Foltest - Lord Commander of the North"),
@@ -673,13 +673,17 @@ let premade_deck = [
 	// Work in progress
 	{
 	faction: "sky",
-	leader: getLeaderIndex("Gaunter o'Dim"),
+	leader: getLeaderIndex("darkness_storm_leader"), // change later when better leader
 	cards: getCardsIndex("sky", [
 		["Royal Guard", 3]
 		])
 }
 ];
-
+}
+async function async_gen_premade_decks() {
+	return gen_premade_decks();
+}
+let premade_deck = gen_premade_decks();
 
 
 console.log("PREMADE DECKS", premade_deck);

@@ -67,11 +67,12 @@ async function reset_custom(){
     IsNowCustom = false;
     var def = ThisDef;
     def.env_vars.card_dict = card_dict_base;
-    def.env_vars.faction = factions_base;
+    def.env_vars.factions = factions_base;
     def.env_vars.ability_dict = ability_dict_base;
     def.texture_pack_url = null;
     resetTexturePack();
-    await connect_to_custom_server(`data:application/json;base64,${btoa(JSON.stringify(def))}`);
+    console.log("CUSTOM POWERING DOWN DEF", def)
+    await connect_to_custom_server(`data:application/json;base64,${btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify(def))))}`);
     await sleep(300);
     IsNowCustom = false;
 }
@@ -526,6 +527,8 @@ percent = 5 + Math.floor((rawPercent / 100) * (74 - 5));
 
             applyEnvVars(data.env_vars);
         }
+        premade_deck = await async_gen_premade_decks();
+        console.log("NEW PREMADE DECK", premade_deck);
         await sleep(300);
         updateLoader('Almost There', 99, `Finalizing the connection with ${s_name_low}`);
         await reloadRuntimeConfigs();

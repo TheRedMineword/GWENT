@@ -3868,10 +3868,11 @@ class DeckMaker {
 		this.leader_elem = document.getElementById("card-leader");
 		this.leader_elem.children[1].addEventListener("click", () => this.selectLeader(), false);
 		
-		this.faction = "realms";
+		this.faction = Object.keys(factions)[Math.floor(Math.random() * Object.keys(factions).length)] || "realms";
+		console.log("START DECK RANDOM FACTION", this.faction);
 		this.setFaction(this.faction, true);
 		let start_deck = premade_deck.find(d => d.faction === this.faction);
-		console.log(start_deck);
+		console.log("START DECK", JSON.stringify(start_deck?.cards) || start_deck, `For faction ${factions[this.faction].name || this.faction}`);
 		start_deck.cards = start_deck.cards.map(c => ({index: c[0], count: c[1]}) );
 		this.setLeader(start_deck.leader);
 		this.makeBank(this.faction, start_deck.cards);

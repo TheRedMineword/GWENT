@@ -1460,4 +1460,4 @@ resolve(player_op.grave.cards[0]);
 	}
 };
 
-const ability_dict_base = ability_dict;
+const ability_dict_base = deepClone(ability_dict);
