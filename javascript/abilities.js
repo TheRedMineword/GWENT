@@ -1388,7 +1388,7 @@ resolve(player_op.grave.cards[0]);
 		}
 	},
 	crach_an_craite: {
-		description: "Shuffle all cards from each player's graveyard back into their decks.",
+		description: "Shuffle all cards from each player's graveyard back into their decks. (Decks after this will be shuffled)",
 		activated: async card => {
 			// Edit by Rick: Everything below is new.
 			// Previous version let both clients individually add the cards back to the deck at random positions. Problematic as then the next deck draw (e.g. Spy cards) will draw a different card per client.
@@ -1438,6 +1438,9 @@ resolve(player_op.grave.cards[0]);
 			}
 
 			// Small async yield so any pending UI/handlers can process; not a hack, just a safe tick.
+			var start = player_me.deck.cards
+			player_me.deck.cards = shuffleSeeded(player_me.deck.cards, `${Math.random().toString(36).substring(2, 36)}${player_me.ThatPlayerId}`).array
+			console.log("DECK SHUFFLED?", start !== player_me.deck.cards, "Was", start, "is", player_me.deck.cards)
 			await Promise.resolve();
 		},
 		weight: (card, ai, max, data) => {
