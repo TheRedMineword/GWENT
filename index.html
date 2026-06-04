@@ -420,7 +420,9 @@ function openDiscordIframePage() {
         host === "[::1]";
 
     const isDevLocal = isLocalhost || location.port === "1111";
-
+	const mode = isDevLocal
+        ? true
+        : false;
     const url = isDevLocal
         ? `${location.origin}/api/discord-iframe/page.html`
         : "https://drmineword-gwent.onrender.com/api/discord-iframe/page.html";
@@ -439,12 +441,15 @@ function openDiscordIframePage() {
 
     const left = (screen.width / 2) - (width / 2);
     const top = (screen.height / 2) - (height / 2);
-
+	if(mode){
+		window.electronAPI.openExternal(url);
+	} else {
     window.open(
         url,
         "discordInviteWindow",
         `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes`
     );
+	}
 }
 document.getElementById("dc_join").addEventListener("click", () => {
     openDiscordIframePage();

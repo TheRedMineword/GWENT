@@ -1,6 +1,6 @@
 {
-  "sha": "f0834b7edc382c93023cadfd584f36bf5b8f3498bf2e7b6c463bd995981fcb26",
-  "generatedAt": "2026-06-04T10:43:55.846Z",
+  "sha": "dd7b82c262eabfff7f500d98c29d53037e36ae15fa4c6b02b49b503d3fd85f72",
+  "generatedAt": "2026-06-04T10:52:22.638Z",
   "files": [
     {
       "path": "404.html",
@@ -3534,8 +3534,8 @@
     },
     {
       "path": "index.html",
-      "sha256": "22ef601e5eb1ffad419ffe2cfc1ff33942ba6b1ee545326d82c58d070adf8323",
-      "size": 12729
+      "sha256": "7925dbfd3acaeac3b17381cbf89830275ede633330c863665cbd7efc425c2d97",
+      "size": 12848
     },
     {
       "path": "javascript/abilities.js",
