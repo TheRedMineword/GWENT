@@ -1,6 +1,6 @@
 {
-  "sha": "484804fad0efb9acf6b709b95ed11b9685a63900a39efc198e95ae9ec72612c4",
-  "generatedAt": "2026-06-04T09:19:49.166Z",
+  "sha": "572dcf4375b3ef5b4487e18c986a4798daa761f923a63624361455b50b02dad8",
+  "generatedAt": "2026-06-04T09:42:53.072Z",
   "files": [
     {
       "path": "404.html",
@@ -24,8 +24,8 @@
     },
     {
       "path": "api/discord-iframe/page.html",
-      "sha256": "338d2f7201152fbc467baf9ff7970035b53b6d8e7b830a620e3a344bea25d656",
-      "size": 5993
+      "sha256": "1a93b04060be488edfc669f87f67d69ac33a8e1f5c50869e8ee5f3c688775f71",
+      "size": 6410
     },
     {
       "path": "apple-touch-icon.png",
@@ -641,6 +641,11 @@
       "path": "img/icons/deck_stats_unit.png",
       "sha256": "9a3c50bee5ff9d1bb3dedb7b768043b25d105ca2bbc4b94f717f781626f563b5",
       "size": 4064
+    },
+    {
+      "path": "img/icons/discord.png",
+      "sha256": "4c18896a42078d1ee45cf0e3194ae1ae9054bd7062f4e2f69cb07b85f9df76c6",
+      "size": 13151
     },
     {
       "path": "img/icons/end_draw.png",
@@ -1299,6 +1304,11 @@
     },
     {
       "path": "img/lg/nilfgaard_assire.jpg",
+      "sha256": "a2a0b6a8f29814de6fcad5c4cd6dfabddc37d716530ad5beee70adcba891ec44",
+      "size": 113423
+    },
+    {
+      "path": "img/lg/nilfgaard_assire.jpg_exiftool_tmp",
       "sha256": "a2a0b6a8f29814de6fcad5c4cd6dfabddc37d716530ad5beee70adcba891ec44",
       "size": 113423
     },
@@ -3524,8 +3534,8 @@
     },
     {
       "path": "index.html",
-      "sha256": "869ba699760d308f4bf31602ca048b74ff500e967506a706c60263ff5d54c63e",
-      "size": 10637
+      "sha256": "a0f756b6d9beddc6351edf44632c4599a6986bb00c36d3342eab46f2a63fd0b1",
+      "size": 12720
     },
     {
       "path": "javascript/abilities.js",
@@ -3599,8 +3609,8 @@
     },
     {
       "path": "javascript/session.js",
-      "sha256": "8bfaf7f6ef30b2742b65b46fe5f72c761f1e658c27b37d2de69bd60ffde2b48c",
-      "size": 14805
+      "sha256": "3183544e678c4feeb92c15dfcde6f96b8b93e2ef0dccaefdec514ec8cc3dc07b",
+      "size": 14804
     },
     {
       "path": "javascript/sync_hands.js",

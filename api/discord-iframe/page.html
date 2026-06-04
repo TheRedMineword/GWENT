@@ -17,7 +17,7 @@ const isElectronLauncher_discordInvite=
     console.log("DC HOST", isLocalhost_discordInvite, isElectronLauncher_discordInvite);
 const api_url_discordInvite=
     isElectronLauncher_discordInvite
-        ? "htpps://drmineword-gwent.onrender.com"
+        ? "http://localhost:1111/"
         : isLocalhost_discordInvite
             ? "http://localhost:8080"
             : "https://drmineword-gwent.onrender.com";
@@ -174,10 +174,6 @@ const api_url_discordInvite=
 </script>
 
 <style>
-#discordInvite {
-    --guild-rgb: 88,101,242;
-}
-
 .discord-card {
     width: 420px;
     overflow: hidden;
@@ -205,11 +201,16 @@ const api_url_discordInvite=
         system-ui,
         sans-serif;
 }
-
+.discord-card {
+    overflow: visible;
+}
 .banner {
     height: 160px;
     background-size: cover;
     background-position: center;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    overflow: hidden;
 }
 
 .content {
@@ -268,4 +269,25 @@ const api_url_discordInvite=
 .join:hover {
     transform: translateY(-2px);
 }
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: radial-gradient(
+        circle at top,
+        #3a3a3a,
+        #1e1e1e
+    );
+}
+
+#discordInvite {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
 </style>
