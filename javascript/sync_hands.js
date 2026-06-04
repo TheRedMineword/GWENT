@@ -90,6 +90,7 @@ async function resync_hands() {
     var pl = {
         type: "resync_hands()",
         data: handData_tosend,
+        deck: serializeCards(player_me.deck.cards),
         player: playerId
     }
     console.log("[RESYNC]", " Cards to send", handData_tosend, "payload:", pl);
@@ -99,6 +100,7 @@ async function resync_hands() {
     JSON.stringify(pl)
 );
 }
+
 
 async function init_sync_hands(){
     console.log("[RESYNC]", "On hold for:", resync_wait / 1000, "seconds");

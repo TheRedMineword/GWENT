@@ -1,6 +1,6 @@
 {
-  "sha": "ff5f65587608a62e8bcb09eb7589c27afb20a3507ec21ec33cc34a91ea777b3a",
-  "generatedAt": "2026-06-03T14:27:55.680Z",
+  "sha": "b6c485234ee41cd5f50eb685ae823d4fb0ed83b9c45fa41b9687f72b82b5b642",
+  "generatedAt": "2026-06-04T06:40:58.146Z",
   "files": [
     {
       "path": "404.html",
@@ -3484,8 +3484,8 @@
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "f9f60d421f91b22324b8600a74cf996415a49b060668c03899d32608f469a64f",
-      "size": 46726
+      "sha256": "d4307db455dffd4db9a48c0c8e6a92c2486ffb9206af84736403b18a34fff561",
+      "size": 47196
     },
     {
       "path": "javascript/cards.js",
@@ -3559,8 +3559,8 @@
     },
     {
       "path": "javascript/sync_hands.js",
-      "sha256": "4e76d2ddd231be6e8b0108cb097d44a0c6394a42526b41659e9029fdb4981b27",
-      "size": 4231
+      "sha256": "52fd506d8d6a7e9e3819f4d1e943ae0aa44b3ee0ba0bc7be875b12f522256440",
+      "size": 4286
     },
     {
       "path": "LICENSE",
