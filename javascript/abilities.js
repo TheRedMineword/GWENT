@@ -110,8 +110,9 @@ var ability_dict = {
 			console.warn("No transformed card found for:", card.name);
 			return;
 		}
-
-		await row.addCard(new Card(targetData, card.holder));
+		var Mutatant = new Card(targetData, card.holder);
+		await row.addCard(Mutatant);
+		try {Mutatant.animate("avenger_spawn_creature");} catch (e) {console.error(targetData, Mutatant, e, "BERSERKS")}
 	}
 },
 	scorch: {
@@ -1145,7 +1146,7 @@ resolve(player_op.grave.cards[0]);
 
 	activated: async (card) => {
 		let hand = board.getRow(card, "hand", card.holder);
-		let deck = board.getRow(card, "deck", card.holder);
+		let deck = player_me.deck;
 
 		console.log("[EREDIN_DESTROYER] Ability activated.");
 
@@ -1161,7 +1162,7 @@ resolve(player_op.grave.cards[0]);
 		// =========================
 		// BANISH CARD 1
 		// =========================
-		console.log("[EREDIN_DESTROYER] Choosing first card to banish.");
+		console.log("[EREDIN_DESTROYER] Choosing first card to banish.", hand);
 
 		await ui.queueCarousel(
 			hand,
@@ -1193,7 +1194,7 @@ resolve(player_op.grave.cards[0]);
 		// =========================
 		// BANISH CARD 2
 		// =========================
-		console.log("[EREDIN_DESTROYER] Choosing second card to banish.");
+		console.log("[EREDIN_DESTROYER] Choosing second card to banish.", hand);
 
 		await ui.queueCarousel(
 			hand,
@@ -1225,12 +1226,12 @@ resolve(player_op.grave.cards[0]);
 		// =========================
 		// CHOOSE CARD TO COPY
 		// =========================
-		console.log("[EREDIN_DESTROYER] Choosing card from deck to copy.");
+		console.log("[EREDIN_DESTROYER] Choosing card from deck to copy.", deck);
 
 		let wrapper = { card: null };
 
 		await ui.queueCarousel(
-			shuffleSeeded(deck, Math.random().toString(36).substring(2, 10)).array,
+			deck,
 			1,
 			(c, i) => {
 				wrapper.card = c.cards[i];
@@ -1438,7 +1439,7 @@ resolve(player_op.grave.cards[0]);
 			 await moveToDeckBottom(c, card.holder.opponent());
 			}
 
-			// Small async yield so any pending UI/handlers can process; not a hack, just a safe tick.
+			// Tried shuffle but clients desynced
 			//var start = player_me.deck.cards
 			///player_me.deck.cards = shuffleSeeded(player_me.deck.cards, `${Math.random().toString(36).substring(2, 36)}${player_me.ThatPlayerId}_-_-_${JSON.stringify(serializeCards(player_me.deck.cards))}`).array
 			//console.log("DECK SHUFFLED?", "me", start !== player_me.deck.cards, "Was", serializeCards(start), "is", serializeCards(player_me.deck.cards))
@@ -1446,6 +1447,8 @@ resolve(player_op.grave.cards[0]);
 			// var start2 = player_op.deck.cards
 			// player_op.deck.cards = shuffleSeeded(player_op.deck.cards, `${JSON.stringify(serializeCards(player_op.deck.cards))}`).array
 			// console.log("DECK SHUFFLED?", "op", start2 !== player_op.deck.cards, "Was", serializeCards(start2), "is", serializeCards(player_op.deck.cards))
+
+			// Small async yield so any pending UI/handlers can process; not a hack, just a safe tick.
 			await Promise.resolve();
 		},
 		weight: (card, ai, max, data) => {
@@ -1465,7 +1468,237 @@ resolve(player_op.grave.cards[0]);
 	king_bran: {
 		description: "Units only lose half their Strength in bad weather conditions.",
 		placed: card => board.row.filter((c,i) => card.holder === player_me ^ i<3).forEach(r => r.halfWeather = true)
-	}
+	},
+	eist_tuirseach: {
+		description: "Pick a Skellige Storm card from your deck and play it instantly.",
+		activated: async card => {
+			let out = card.holder.deck.findCard(c => c.name === "Skellige Storm");
+			if (out)
+				await out.autoplay(card.holder.deck);
+		},
+		weight: (card, ai) => ai.weightWeatherFromDeck(card, "rain")
+	},
+	skellige_berserk_reward: {
+    description: "Spawn a Mardroeme card in the row with the most Berserkers.",
+	activated: async card => {
+
+        let rows = [
+            board.getRow(card, "close", card.holder),
+            board.getRow(card, "ranged", card.holder),
+            board.getRow(card, "siege", card.holder)
+        ];
+
+        let bestRow = null;
+        let bestCount = 0;
+
+        for (let row of rows) {
+
+            let count = row.findCards(
+                c => c.abilities?.includes("berserker")
+            ).length;
+
+            if (count > bestCount) {
+                bestCount = count;
+                bestRow = row;
+            }
+        }
+
+        if (!bestRow || bestCount === 0)
+            return;
+        // placeholder card
+        let targetData = Object.values(card_dict)
+            .find(c => c.filename === "svalblod_change");
+
+        if (!targetData)
+            return;
+		if (board.getRow(card, "ranged", card.holder) === bestRow){
+		targetData.row = "ranged"
+		} else if (board.getRow(card, "siege", card.holder) === bestRow){
+			targetData.row = "siege"
+		} else {
+		targetData.row = "close"
+		}
+		// console.log("BEST ROW", bestRow, targetData, targetData.row);
+        let spawned = new Card(targetData, card.holder);
+
+        bestRow.addCard(spawned);
+        spawned.animate("reinforce");
+    }
+},
+skellige_bond_summoner: {
+    description:
+        `Banish a card with power greater than or equal to ${skellige_bond_conf.power}. Then create a Tight Bond card from your faction or Neutral and add it to your hand.`,
+
+    activated: async (card) => {
+
+        console.log(
+            "[SKELLIGE_BOND_SUMMONER]",
+            player_me.id,
+            card.holder.id
+        );
+
+        if (player_me.id !== card.holder.id)
+            return;
+
+        let hand = card.holder.hand;
+
+        let discardable = hand.findCards(
+            c => c.basePower > skellige_bond_conf.power
+        );
+
+        if (!discardable.length) {
+        //    showTooltip("You lack valid cards to banish");
+            return;
+        }
+
+        if (Carousel.curr)
+            Carousel.curr.exit();
+
+        // =========================
+        // CHOOSE CARD TO BANISH
+        // =========================
+
+        let banished = null;
+
+        await ui.queueCarousel(
+            hand,
+            1,
+            (c, i) => {
+
+                banished = c.cards[i];
+
+                console.log(
+                    "[SKELLIGE_BOND_SUMMONER] Banishing:",
+                    banished.name || banished.filename
+                );
+
+                // One-way ticket to hell
+                c.removeCard(banished);
+
+                if (Carousel.curr)
+                    Carousel.curr.update();
+
+                return banished;
+            },
+            candidate => (
+                candidate.basePower >= skellige_bond_conf.power
+            ),
+            false,
+            false,
+            "Choose card to banish"
+        );
+
+        if (!banished)
+            return;
+
+        await new Promise(r => setTimeout(r, 300));
+
+        // =========================
+        // FIND BOND TARGETS
+        // =========================
+
+        let faction = card.holder.leader.faction;
+
+        let bondCards = Object.values(card_dict).filter(cd => {
+
+            let abilities =
+                typeof cd.ability === "string"
+                    ? cd.ability.split(" ")
+                    : [];
+
+            return (
+                abilities.includes("bond") &&
+                (
+                    cd.deck === faction || cd.deck === "neutral"
+                ) &&
+                !cd.token &&
+                !cd.generated
+            );
+        });
+
+        if (!bondCards.length) {
+            console.log(
+                "[SKELLIGE_BOND_SUMMONER] No valid Tight Bond cards found."
+            );
+            return;
+        }
+
+        // =========================
+        // CHOOSE CARD TO CREATE
+        // =========================
+
+        let wrapper = { card: null };
+
+        let preview = bondCards.map(
+            data => new Card(data, card.holder)
+        );
+
+        await ui.queueCarousel(
+            { cards: preview },
+            1,
+            (c, i) => {
+
+                wrapper.card = c.cards[i];
+
+                console.log(
+                    "[SKELLIGE_BOND_SUMMONER] Selected:",
+                    wrapper.card.name || wrapper.card.filename
+                );
+
+                return wrapper.card;
+            },
+            () => true,
+            true,
+            false,
+            "Choose Tight Bond card"
+        );
+
+        if (!wrapper.card)
+            return;
+
+        // =========================
+        // CREATE COPY
+        // =========================
+
+        let cardData = Object.values(card_dict)
+            .find(cd => cd.filename === wrapper.card.filename);
+
+        if (!cardData) {
+            console.log(
+                "[SKELLIGE_BOND_SUMMONER] Failed to find card data for:",
+                wrapper.card.filename
+            );
+            return;
+        }
+
+        let created = new Card(cardData, card.holder);
+
+        console.log(
+            "[SKELLIGE_BOND_SUMMONER] Creating:",
+            created.name || created.filename
+        );
+
+        card.holder.hand.addCard(created);
+
+        await created.animate("reinforce");
+
+        console.log(
+            "[SKELLIGE_BOND_SUMMONER] Ability finished."
+        );
+    },
+
+    weight: (card, ai) => {
+
+        let valid = ai.hand.cards.filter(
+            c => c.basePower > skellige_bond_conf.power
+        );
+
+        if (!valid.length)
+            return 0;
+
+        return 30;
+    }
+},
 };
 
 const ability_dict_base = deepClone(ability_dict);

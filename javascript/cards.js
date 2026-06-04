@@ -2294,7 +2294,7 @@ var card_dict = [
         "count": "1"
     },
     {
-        "name": "Birna Bran",
+        "name": "Birna Bran - Sabotage",
         "id": "1014",
         "deck": "skellige",
         "row": "siege",
@@ -2354,6 +2354,46 @@ var card_dict = [
         "filename": "quen",
         "count": "0",
         "witcher_sign": true
+    },
+    {
+        "name": "Eist Tuirseach — King Of Citra",
+        "id": "1020",
+        "deck": "skellige",
+        "row": "leader",
+        "strength": "",
+        "ability": "eist_tuirseach",
+        "filename": "eist_tuirseach",
+        "count": "0"
+    },
+    {
+        "name": "Svalblod Cult",
+        "id": "1021",
+        "deck": "skellige",
+        "row": "leader",
+        "strength": "",
+        "ability": "skellige_berserk_reward",
+        "filename": "svalblod",
+        "count": "0"
+    },
+    {
+        "name": "Svalblod Cult - Transformation",
+        "id": "1022",
+        "deck": "skellige",
+        "row": "agile",
+        "strength": "0",
+        "ability": "hero mardroeme",
+        "filename": "svalblod_change",
+        "count": "0"
+    },
+    {
+        "name": "Arnjolf the Patricide",
+        "id": "1023",
+        "deck": "skellige",
+        "row": "leader",
+        "strength": "",
+        "ability": "skellige_bond_summoner",
+        "filename": "Arnjolf_the_Patricide",
+        "count": "0"
     },
     // New cards for sky
     {

@@ -96,6 +96,9 @@
       "extra_cards": 0.5,
       "revive": 0.6
     },
+    "skellige_bond_conf": {
+      "power": 4
+    },
     "card_dict": [
       {
         "name": "Mysterious Elf",
@@ -2422,7 +2425,7 @@
         "count": "1"
       },
       {
-        "name": "Birna Bran",
+        "name": "Birna Bran - Sabotage",
         "id": "1014",
         "deck": "skellige",
         "row": "siege",
@@ -2482,6 +2485,46 @@
         "filename": "quen",
         "count": "0",
         "witcher_sign": true
+      },
+      {
+        "name": "Eist Tuirseach — King Of Citra",
+        "id": "1020",
+        "deck": "skellige",
+        "row": "leader",
+        "strength": "",
+        "ability": "eist_tuirseach",
+        "filename": "eist_tuirseach",
+        "count": "0"
+      },
+      {
+        "name": "Svalblod Cult",
+        "id": "1021",
+        "deck": "skellige",
+        "row": "leader",
+        "strength": "",
+        "ability": "skellige_berserk_reward",
+        "filename": "svalblod",
+        "count": "0"
+      },
+      {
+        "name": "Svalblod Cult - Transformation",
+        "id": "1022",
+        "deck": "skellige",
+        "row": "agile",
+        "strength": "0",
+        "ability": "hero mardroeme",
+        "filename": "svalblod_change",
+        "count": "0"
+      },
+      {
+        "name": "Arnjolf the Patricide",
+        "id": "1023",
+        "deck": "skellige",
+        "row": "leader",
+        "strength": "",
+        "ability": "skellige_bond_summoner",
+        "filename": "Arnjolf_the_Patricide",
+        "count": "0"
       },
       {
         "name": "Hopeful Steward",
@@ -2930,6 +2973,15 @@
       },
       "king_bran": {
         "description": "Units only lose half their Strength in bad weather conditions."
+      },
+      "eist_tuirseach": {
+        "description": "Pick a Skellige Storm card from your deck and play it instantly."
+      },
+      "skellige_berserk_reward": {
+        "description": "Spawn a Mardroeme card in the row with the most Berserkers."
+      },
+      "skellige_bond_summoner": {
+        "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
       }
     }
   },

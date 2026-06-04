@@ -1,6 +1,6 @@
 {
-  "sha": "b6c485234ee41cd5f50eb685ae823d4fb0ed83b9c45fa41b9687f72b82b5b642",
-  "generatedAt": "2026-06-04T06:40:58.146Z",
+  "sha": "484804fad0efb9acf6b709b95ed11b9685a63900a39efc198e95ae9ec72612c4",
+  "generatedAt": "2026-06-04T09:19:49.166Z",
   "files": [
     {
       "path": "404.html",
@@ -34,8 +34,8 @@
     },
     {
       "path": "change/index.json",
-      "sha256": "4f91cc2160e61400121e3ac19eadd2a66655a05b2a1546f8d5050d0ebe773b51",
-      "size": 26
+      "sha256": "9c249a5b57bdd21ae863966e16f1864f2ad8893a2391e1b6a80aeb4218e6d06d",
+      "size": 24
     },
     {
       "path": "change/log-ai-summary-becuase-i-did-a-lot-of-github-commits.txt",
@@ -111,6 +111,11 @@
       "path": "change/log-update18.txt",
       "sha256": "7642b5c96a4edae65066f4db23706fee5aa36f4f8bdd93b9350afbf9d9b5aff1",
       "size": 102
+    },
+    {
+      "path": "change/log-update19.txt",
+      "sha256": "c561bbb4e210b2a04a85eaf396c44069687233a078df82426bf3bae6abb64a30",
+      "size": 631
     },
     {
       "path": "change/log-update2.txt",
@@ -1868,6 +1873,11 @@
       "size": 96254
     },
     {
+      "path": "img/lg/skellige_Arnjolf_the_Patricide.jpg",
+      "sha256": "0541190efa9e76c0826385958025d7b9f78404c55f9403f4641540e1e729e9f4",
+      "size": 80172
+    },
+    {
       "path": "img/lg/skellige_bad_lady.jpg",
       "sha256": "bb0e2fc0e0592a9d79955bba6536820ad174ef9cf3adb69fbb37450ca851df40",
       "size": 59779
@@ -1921,6 +1931,11 @@
       "path": "img/lg/skellige_draig.jpg",
       "sha256": "40409c123d57575f5fec8bfb69466ce11270bef7c476dfe6cf718d000ec2eece",
       "size": 70089
+    },
+    {
+      "path": "img/lg/skellige_eist_tuirseach.jpg",
+      "sha256": "e9ac405acc5b7b8276d82ce155bbc677dac325ca5e9d01a1457ca145149c5840",
+      "size": 80516
     },
     {
       "path": "img/lg/skellige_ermion.jpg",
@@ -1991,6 +2006,16 @@
       "path": "img/lg/skellige_shield_maiden.jpg",
       "sha256": "6ef08335e2d361d0bdc5dfa54fce11340c68966aaecea556410bfb90f997d255",
       "size": 63415
+    },
+    {
+      "path": "img/lg/skellige_svalblod_change.jpg",
+      "sha256": "ab337223986a9b9a0e0e778c2dae9166bcfa1966449b38fc7fb94cc2b0b03d66",
+      "size": 100708
+    },
+    {
+      "path": "img/lg/skellige_svalblod.jpg",
+      "sha256": "d1d33ea10ce9d31320fe2ff977a7bb90ae1fd3252372a82d0d063e6f4323f1e0",
+      "size": 64499
     },
     {
       "path": "img/lg/skellige_svanrige.jpg",
@@ -3153,6 +3178,11 @@
       "size": 40173
     },
     {
+      "path": "img/sm/skellige_Arnjolf_the_Patricide.jpg",
+      "sha256": "e97e1a5c7d290ed7182188f50d78415468f848f364db4854eaf2793439d1f956",
+      "size": 51838
+    },
+    {
       "path": "img/sm/skellige_bad_lady.jpg",
       "sha256": "91f4d2c2e9a8f6a50ecd0bbb44348c76d3a64a3969042af087f7482905863a02",
       "size": 37005
@@ -3206,6 +3236,11 @@
       "path": "img/sm/skellige_draig.jpg",
       "sha256": "b4a8f19023f7e71053cf593ac1d8218209386b2e3fad8df7bccd9afb1eaf0c24",
       "size": 41294
+    },
+    {
+      "path": "img/sm/skellige_eist_tuirseach.jpg",
+      "sha256": "a003e42bc8de1247dc67b9b8ce58f794fc6037d55237d3bbe32ad42cd5d5621c",
+      "size": 51256
     },
     {
       "path": "img/sm/skellige_ermion.jpg",
@@ -3276,6 +3311,16 @@
       "path": "img/sm/skellige_shield_maiden.jpg",
       "sha256": "5fd619aed566b49b1f59d2719b28ebac74081fe89aab29773c3b9f16295ed089",
       "size": 25774
+    },
+    {
+      "path": "img/sm/skellige_svalblod_change.jpg",
+      "sha256": "1a452c320f5c90bdb4bc86248138589c4cbf96ee85e4308782e2927be88ab501",
+      "size": 57776
+    },
+    {
+      "path": "img/sm/skellige_svalblod.jpg",
+      "sha256": "f0346f661872af3aecb3ff7101533b3529f271f62fbe8857cf7784c7e7a6e56f",
+      "size": 36338
     },
     {
       "path": "img/sm/skellige_svanrige.jpg",
@@ -3484,13 +3529,13 @@
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "d4307db455dffd4db9a48c0c8e6a92c2486ffb9206af84736403b18a34fff561",
-      "size": 47196
+      "sha256": "ddcfbb6abb7962e09adbb700251b0cac56ec6005d8fc61e467124f620ab630d5",
+      "size": 53276
     },
     {
       "path": "javascript/cards.js",
-      "sha256": "6aebf1f29c2d1b0407a5182c4622f48cbbaa236625a14ff9c7596f2a40f49de0",
-      "size": 59460
+      "sha256": "2a369c6c9c866aec55278831b9cdc8b3ac549d1e61b6637fdac7a4a9655c80f8",
+      "size": 60498
     },
     {
       "path": "javascript/chat.js",
@@ -3504,13 +3549,13 @@
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
-      "sha256": "d96779e0ea236a677345bf9df9e0bec01114d15db58a1b262e74b841281e01f7",
-      "size": 77301
+      "sha256": "2f86def6ed843334f9d99e02c41be7a0f52064319dd41f2c2f869db1bd847be6",
+      "size": 78918
     },
     {
       "path": "javascript/custom_server/deafult.txt",
-      "sha256": "bf4c8e7812dab2e2bcb8bc0a07b876f633c46dac1c1743562b460a3fb90450cd",
-      "size": 2497
+      "sha256": "34dfaf773f8875d455359ad52963b4e7d7eda9f988f003d0e61361050323c697",
+      "size": 2440
     },
     {
       "path": "javascript/custom_server/texture_pack_for_edits.zip",
@@ -3519,13 +3564,13 @@
     },
     {
       "path": "javascript/decks.js",
-      "sha256": "a96beb3846215f96234664306033ea70441f7b2352372062529604fbac8713b8",
-      "size": 13896
+      "sha256": "fc2d2ec866cb4ee9e65ed095379a74d16d609ed8a309b85625f49e264e063d29",
+      "size": 13913
     },
     {
       "path": "javascript/defines.js",
-      "sha256": "2721f4528d2844ed5ea4fd364b93fcaee784cd7705b53b73e07f4913a378015e",
-      "size": 9059
+      "sha256": "4188468f7fa4667fd9e85f38d35e9fb6734c8c831f91c04975fab9590a083df7",
+      "size": 9136
     },
     {
       "path": "javascript/factions.js",

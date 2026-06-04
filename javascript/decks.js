@@ -649,7 +649,7 @@ return [
 
 	{
 		faction: "skellige",
-		leader: getLeaderIndex("Crach an Craite"),
+		leader: getLeaderIndex("Eist Tuirseach — King Of Citra"),
 		cards: getCardsIndex("skellige",[
 			["Clan an Craite Warrior", 3],
 			["Young Berserker", 3],
