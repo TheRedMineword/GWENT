@@ -1,6 +1,6 @@
 {
-  "sha": "95a232b00ee0a88140e854c1ca28ad94884b1a44df56982347b244f0802a6a3a",
-  "generatedAt": "2026-06-04T09:58:20.736Z",
+  "sha": "31f10dcbe63723ff362da2bcc63cc8466bc45e9944edf393aad6379740d1ed12",
+  "generatedAt": "2026-06-04T10:03:31.108Z",
   "files": [
     {
       "path": "404.html",
@@ -18,14 +18,9 @@
       "size": 19306
     },
     {
-      "path": "api/discord-iframe/invite.json",
-      "sha256": "d5d01dfd72130baee4b7998680e92b16d036b121414415bfe97c2dbef986f43a",
-      "size": 97
-    },
-    {
       "path": "api/discord-iframe/page.html",
-      "sha256": "1a93b04060be488edfc669f87f67d69ac33a8e1f5c50869e8ee5f3c688775f71",
-      "size": 6410
+      "sha256": "83edfce11f6fddd38c092e2e99aed4c2eb81387408c1926d9522354a39b9df94",
+      "size": 6477
     },
     {
       "path": "apple-touch-icon.png",

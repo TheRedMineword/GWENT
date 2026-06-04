@@ -28,7 +28,7 @@ const IGNORE_FILES = new Set([
     'latest-sha.txt',
     '.init.bat', '.replace.env', 'server.js', '.server.js',
     '.env',
-    'session_registering_oryginal.js'
+    'session_registering_oryginal.js', 'invite.json'
 ]);
 
 // =====================================================
