@@ -4245,6 +4245,7 @@ if (2 < descString.length) {
 		console.log("[DECK.U]", files, fr);
 		fr.onload = e => {
 			try {
+				console.log("[DECK.U]", `deckFromJSON`, e.target.result)
 				this.deckFromJSON(e.target.result);
 			} catch (e) {
 				console.log("DECK.U] err", e);
@@ -4282,7 +4283,7 @@ if (2 < descString.length) {
 				return false;
 			}
 			if (card.count < c[1]) {
-				warning += "Deck contains " + c[1] + "/" + card.count + " available " + card_dict[c.index].name + " cards\n";
+				warning += "Deck contains " + c[1] + "/" + card.count + " available " + card_dict[c[0]].name + " cards\n";
 				return false;
 			}
 			return true;
