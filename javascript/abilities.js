@@ -195,6 +195,86 @@ var ability_dict = {
 			//await resync_hands();
         }
     },
+	resilience: {
+	name: "Resilience",
+	description: "Remains on the board for the following round. ",
+	placed: async card => {
+		game.roundEnd.push(async () => {
+			if (card.isLocked()) return;
+
+			card.noRemove = true;
+			await card.animate("resilience");
+
+			game.roundStart.push(async () => {
+				delete card.noRemove;
+				return true;
+			});
+		});
+	}
+},
+	aard: {
+	name: "Witcher Signs: Aard",
+	description: "Push all enemy units in the opposing row one row back toward Siege, ignoring shields. Playing this card will damage your total score! ",
+	placed: async (card, row) => {
+		// Row this card was played on
+	//	console.log("AARD PLAY", card, row)
+		const myRow = row;
+	//	console.log("AARD PLAY", card, board.getRow(card, "close", card.holder), board.getRow(card, "ranged", card.holder))
+
+		let enemyRow;
+		let targetRow;
+
+		if (myRow === board.getRow(card, "close", card.holder)) {
+			enemyRow = board.getRow(card, "close", card.holder.opponent());
+			targetRow = board.getRow(card, "ranged", card.holder.opponent());
+		} else if (myRow === board.getRow(card, "ranged", card.holder)) {
+			enemyRow = board.getRow(card, "ranged", card.holder.opponent());
+			targetRow = board.getRow(card, "siege", card.holder.opponent());
+		} else {
+			await board.toGrave(card, card.holder.hand);
+			return;
+		}
+
+		const units = enemyRow.findCards(c => c.isUnit());
+
+		if (units.length > 0) {
+			await Promise.all(
+				units.map(async c => await c.animate("knockback"))
+			);
+
+			await Promise.all(
+				units.map(async c => {
+					if (
+						c.abilities.includes("bond") ||
+						c.abilities.includes("morale") ||
+						c.abilities.includes("horn")
+					) {
+						await board.moveTo(c, targetRow, enemyRow);
+					} else {
+					//	await board.moveToNoEffects(c, targetRow, enemyRow); // not worky here
+						// Move cards wich effects listed above
+						await board.moveTo(c, targetRow, enemyRow);
+					}
+				})
+			);
+		}
+
+	//	await board.toGrave(card, card.holder.hand);
+	},
+	weight: card => {
+		const opponent = card.holder.opponent();
+
+		const closeUnits = board
+			.getRow(card, "close", opponent)
+			.cards.filter(c => c.isUnit()).length;
+
+		const rangedUnits = board
+			.getRow(card, "ranged", opponent)
+			.cards.filter(c => c.isUnit()).length;
+
+		return Math.max(closeUnits, rangedUnits);
+	}
+},
 	aid: {
     name: "Call to Arms",
     description: `Lets you and your opponent redraw ${spy.aid} cards. `,

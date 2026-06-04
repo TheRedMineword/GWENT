@@ -2527,6 +2527,17 @@
         "count": "0"
       },
       {
+        "name": "Witcher Signs: Aard",
+        "id": "1024",
+        "deck": "neutral",
+        "row": "agile",
+        "strength": "-3",
+        "ability": "hero aard",
+        "filename": "aard",
+        "count": "0",
+        "witcher_sign": true
+      },
+      {
         "name": "Hopeful Steward",
         "id": "3001",
         "deck": "sky",
@@ -2833,6 +2844,14 @@
       "sabotage": {
         "name": "sabotage",
         "description": "Send to enemy fields this cards to lower their score and draw extra 1 card(s). "
+      },
+      "resilience": {
+        "name": "Resilience",
+        "description": "Remains on the board for the following round. "
+      },
+      "aard": {
+        "name": "Witcher Signs: Aard",
+        "description": "Push all enemy units in the opposing row one row back toward Siege, ignoring shields. Playing this card will damage your total score! "
       },
       "aid": {
         "name": "Call to Arms",

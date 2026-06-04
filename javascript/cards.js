@@ -2395,6 +2395,17 @@ var card_dict = [
         "filename": "Arnjolf_the_Patricide",
         "count": "0"
     },
+    {
+        "name": "Witcher Signs: Aard",
+        "id": "1024",
+        "deck": "neutral",
+        "row": "agile",
+        "strength": "-3",
+        "ability": "hero aard",
+        "filename": "aard",
+        "count": "0",
+        "witcher_sign": true
+    },
     // New cards for sky
     {
         "name": "Hopeful Steward",
@@ -2594,6 +2605,7 @@ var card_dict = [
 
 const witcher_signs = Object.entries(card_dict)
     .filter(([_, card]) => card.witcher_sign)
+    .sort(([, a], [, b]) => a.name.localeCompare(b.name))
     .map(([key, card]) => ({
         id: key,
         ...card

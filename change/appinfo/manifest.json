@@ -1,6 +1,6 @@
 {
-  "sha": "dd7b82c262eabfff7f500d98c29d53037e36ae15fa4c6b02b49b503d3fd85f72",
-  "generatedAt": "2026-06-04T10:52:22.638Z",
+  "sha": "eb103218af684ee4259b6242f69be715775791a705de178cbd5bdec2ca746779",
+  "generatedAt": "2026-06-04T19:48:34.028Z",
   "files": [
     {
       "path": "404.html",
@@ -273,6 +273,11 @@
       "size": 8675
     },
     {
+      "path": "img/icons/anim_knockback.png",
+      "sha256": "b01d67e378d9fcf001015bfa841d925b990f33e48ae8626475a5eb1e8b773b6b",
+      "size": 7473
+    },
+    {
       "path": "img/icons/anim_medic.png",
       "sha256": "892d07612114ec912f9f0027b9f3d44dcf61b4987b69fb14287fda49a24cf173",
       "size": 6896
@@ -313,6 +318,11 @@
       "size": 20495
     },
     {
+      "path": "img/icons/anim_resilience.png",
+      "sha256": "7a868d586f88cb056f740d7d5aede2fcece75bf9419153a6694a17a33da4ec1e",
+      "size": 5267
+    },
+    {
       "path": "img/icons/anim_sab.png",
       "sha256": "4346b6f1edff30493c2d64e55d2b1f960e237bb2fd7ec46c4d09c71e668fe9d9",
       "size": 12927
@@ -341,6 +351,11 @@
       "path": "img/icons/anim_wshield.png",
       "sha256": "2c515c7243c3706ef1440cd006429d2d8216ecad3f2cd3852699179e17d860d6",
       "size": 3587
+    },
+    {
+      "path": "img/icons/card_ability_aard.png",
+      "sha256": "d1be337143ae49a59e5c109f0012e5e7158e3f6db34ef99adad3d0b6f93370aa",
+      "size": 16821
     },
     {
       "path": "img/icons/card_ability_agile.png",
@@ -408,6 +423,11 @@
       "size": 21591
     },
     {
+      "path": "img/icons/card_ability_knockback.png",
+      "sha256": "6c130a504a692e845b2cbbbc12f761144f9869c7694ada51231e36af7433c8f4",
+      "size": 19242
+    },
+    {
       "path": "img/icons/card_ability_magicthegathering.png",
       "sha256": "6ae69c036f08a7e283b79ceae81c65c52c470f487ca846841c1262872d21d473",
       "size": 10728
@@ -438,9 +458,9 @@
       "size": 18018
     },
     {
-      "path": "img/icons/card_ability_quen_desc.jpg",
-      "sha256": "3cda3e782dab758f316a3f11558b2e031ef7954e0d3a05465e18f8000964d4f3",
-      "size": 3728
+      "path": "img/icons/card_ability_quen_desc.png",
+      "sha256": "d52659341072dd44cddeaf543c394b156769b1d9a748ae2cbc4e531ef23ec59c",
+      "size": 7184
     },
     {
       "path": "img/icons/card_ability_rain.png",
@@ -451,6 +471,11 @@
       "path": "img/icons/card_ability_reinforce.png",
       "sha256": "e3ceb21bef3284d6fcd71ac9f1a73863aaa3ea96bb8d116f79c242cab3b450ab",
       "size": 20495
+    },
+    {
+      "path": "img/icons/card_ability_resilience.png",
+      "sha256": "de01b4dc69e89d8be1a0a6312850e1f9d9c88bc13f353422e00ffaf6093bed11",
+      "size": 18022
     },
     {
       "path": "img/icons/card_ability_sabotage.png",
@@ -1141,6 +1166,11 @@
       "path": "img/lg/monsters_wyvern.jpg",
       "sha256": "7997bf07f57580d154a84d760eb4ac692f0e63150b7e61e1648efe0efb8f34b8",
       "size": 94145
+    },
+    {
+      "path": "img/lg/neutral_aard.jpg",
+      "sha256": "53a1ae153b454cf96b983d60596b28606fa9d8c70825c799723ac10512777926",
+      "size": 16444
     },
     {
       "path": "img/lg/neutral_aidhorn.jpg",
@@ -2453,6 +2483,11 @@
       "size": 37622
     },
     {
+      "path": "img/sm/neutral_aard.jpg",
+      "sha256": "f419c000a0a3a5c90e1a8af30364ca69ed79b0d927d910b816f58f77fd8a66b5",
+      "size": 15885
+    },
+    {
       "path": "img/sm/neutral_aidhorn.jpg",
       "sha256": "e6c1e33bbfb35fa84c9ef5b3ee087a39c7120fd0d6f769a2fa99461aaa3f043c",
       "size": 307777
@@ -3539,13 +3574,13 @@
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "ddcfbb6abb7962e09adbb700251b0cac56ec6005d8fc61e467124f620ab630d5",
-      "size": 53276
+      "sha256": "be9490b64d3ef05841a44dc74b6ebf14cdfb2e78f97b93e92c42626cb06bd58c",
+      "size": 55568
     },
     {
       "path": "javascript/cards.js",
-      "sha256": "2a369c6c9c866aec55278831b9cdc8b3ac549d1e61b6637fdac7a4a9655c80f8",
-      "size": 60498
+      "sha256": "882f09404f83fcc8b5423b118cef09255f4cb6d130b1bde60d658c3c553c3d4a",
+      "size": 60818
     },
     {
       "path": "javascript/chat.js",
@@ -3559,8 +3594,8 @@
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
-      "sha256": "2f86def6ed843334f9d99e02c41be7a0f52064319dd41f2c2f869db1bd847be6",
-      "size": 78918
+      "sha256": "56f235c5fc8eed18e20eec47dd671f3cc382b80576e89ddd7895668d17563954",
+      "size": 79560
     },
     {
       "path": "javascript/custom_server/deafult.txt",
