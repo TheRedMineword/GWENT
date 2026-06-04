@@ -17,7 +17,8 @@ const IGNORE_DIRS = new Set([
     'exe',
     'commits_gen',
     'MyDecks',
-    'gwent_cards'
+    'gwent_cards',
+    'fragment_map'
 ]);
 
 const IGNORE_FILES = new Set([

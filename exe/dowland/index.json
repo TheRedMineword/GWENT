@@ -1,10 +1,10 @@
 {
-  "originalFile": "GWENT.zip",
-  "totalSize": 121982147,
-  "fragmentCount": 24,
+  "originalFile": "zip.zip",
+  "totalSize": 244123987,
+  "fragmentCount": 47,
   "fragmentSize": 5242880,
-  "sha256": "3d81dd51b1c38ebebffb0511b3f6eaaf6fe27789385b7be072494e708405032a",
-  "createdAt": "2026-05-13T14:08:50.934Z",
+  "sha256": "73a704e495f4211b9dd76c2fb4c47deb57231e60ff2fc7e90582bdc2e822d8c0",
+  "createdAt": "2026-06-04T10:37:33.867Z",
   "fragments": [
     {
       "id": 0,
@@ -124,7 +124,122 @@
     {
       "id": 23,
       "file": "fragment_map/fragment23.bin",
-      "size": 1395907
+      "size": 5242880
+    },
+    {
+      "id": 24,
+      "file": "fragment_map/fragment24.bin",
+      "size": 5242880
+    },
+    {
+      "id": 25,
+      "file": "fragment_map/fragment25.bin",
+      "size": 5242880
+    },
+    {
+      "id": 26,
+      "file": "fragment_map/fragment26.bin",
+      "size": 5242880
+    },
+    {
+      "id": 27,
+      "file": "fragment_map/fragment27.bin",
+      "size": 5242880
+    },
+    {
+      "id": 28,
+      "file": "fragment_map/fragment28.bin",
+      "size": 5242880
+    },
+    {
+      "id": 29,
+      "file": "fragment_map/fragment29.bin",
+      "size": 5242880
+    },
+    {
+      "id": 30,
+      "file": "fragment_map/fragment30.bin",
+      "size": 5242880
+    },
+    {
+      "id": 31,
+      "file": "fragment_map/fragment31.bin",
+      "size": 5242880
+    },
+    {
+      "id": 32,
+      "file": "fragment_map/fragment32.bin",
+      "size": 5242880
+    },
+    {
+      "id": 33,
+      "file": "fragment_map/fragment33.bin",
+      "size": 5242880
+    },
+    {
+      "id": 34,
+      "file": "fragment_map/fragment34.bin",
+      "size": 5242880
+    },
+    {
+      "id": 35,
+      "file": "fragment_map/fragment35.bin",
+      "size": 5242880
+    },
+    {
+      "id": 36,
+      "file": "fragment_map/fragment36.bin",
+      "size": 5242880
+    },
+    {
+      "id": 37,
+      "file": "fragment_map/fragment37.bin",
+      "size": 5242880
+    },
+    {
+      "id": 38,
+      "file": "fragment_map/fragment38.bin",
+      "size": 5242880
+    },
+    {
+      "id": 39,
+      "file": "fragment_map/fragment39.bin",
+      "size": 5242880
+    },
+    {
+      "id": 40,
+      "file": "fragment_map/fragment40.bin",
+      "size": 5242880
+    },
+    {
+      "id": 41,
+      "file": "fragment_map/fragment41.bin",
+      "size": 5242880
+    },
+    {
+      "id": 42,
+      "file": "fragment_map/fragment42.bin",
+      "size": 5242880
+    },
+    {
+      "id": 43,
+      "file": "fragment_map/fragment43.bin",
+      "size": 5242880
+    },
+    {
+      "id": 44,
+      "file": "fragment_map/fragment44.bin",
+      "size": 5242880
+    },
+    {
+      "id": 45,
+      "file": "fragment_map/fragment45.bin",
+      "size": 5242880
+    },
+    {
+      "id": 46,
+      "file": "fragment_map/fragment46.bin",
+      "size": 2951507
     }
   ]
 }

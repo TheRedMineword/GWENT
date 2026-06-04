@@ -9,6 +9,8 @@ const path = require('path');
 const { startServer } = require('./server');
 const { updateApp } = require('./updater');
 
+const { shell } = require('electron');
+
 let mainWindow;
 let splash;
 
@@ -99,7 +101,22 @@ async function createWindow() {
     }
 }
 
-app.whenReady().then(createWindow);
+// app.whenReady().then(createWindow);
+app.whenReady().then(async () => {
+
+    // IPC handlers belong here
+    //console.log("IPC MAIN UNDER");
+    ipcMain.on('open-external', async (event, url) => {
+    try {
+        await shell.openExternal(url);
+        console.log('Opened');
+    } catch (err) {
+        console.error('Failed:', err);
+    }
+});
+
+    await createWindow();
+});
 
 app.on('window-all-closed', () => {
 

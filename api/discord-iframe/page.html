@@ -155,8 +155,7 @@ const api_url_discordInvite=
 
                 <a
                     class="join"
-                    href="https://discord.gg/${cfg.invite}"
-                    target="_blank"
+                    href="#"
                 >
                     Join Server
                 </a>
@@ -169,6 +168,27 @@ const api_url_discordInvite=
         "--guild-rgb",
         color
     );
+    //    console.warn(" document.querySelector");
+    document.querySelector('.join').addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const url = `https://discord.gg/${cfg.invite}`;
+
+    try {
+        // your custom API (if it exists)
+        console.log("OPEN URL", url);
+        if (window.electronAPI?.openExternal) {
+            console.log("EXE APP");
+            window.electronAPI.openExternal(url);
+        } else {
+            console.error('No electron API');
+            throw new Error('No electron API');
+        }
+    } catch (err) {
+        console.warn('fallback to normal browser behavior');
+        window.open(url, '_blank');
+    }
+});
 
 })();
 </script>
