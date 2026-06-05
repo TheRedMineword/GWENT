@@ -2594,6 +2594,7 @@ class Game {
     ) {
       var btn2 = document.getElementById("session-start-control");
       btn2.textContent = "Waiting for opponent to start";
+      showTooltip("Opponent used Scoia'tael ability to pick who play first!");
       await new Promise((resolve) => {
         const handleMessage = async (event) => {
           const data = await recv_and_decomp(event);
