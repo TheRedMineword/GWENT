@@ -34,6 +34,7 @@ const IGNORE_PATTERNS = [
   "texturepack",
   "playblock",
   "currentPlayerId",
+  "previous_game_start_cards",
 ];
 
 const LOG_PREFIX = "[CUSTOM_SERVER]";

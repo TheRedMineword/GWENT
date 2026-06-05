@@ -197,7 +197,7 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
     var index_tmp = getCardIndex(name);
     var maxCount = card_dict[index_tmp[0]].count;
     var isMax = parseInt(maxCount);
-    console.log("isMax", isMax);
+    //   console.log("isMax", isMax);
     return isMax;
   }
 

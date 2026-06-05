@@ -217,8 +217,8 @@ const ep_id = document.getElementById("player-id-btn");
 
 let debug = false;
 
-function showTooltip(text) {
-  console.log("ToolTip", text);
+function showTooltip(text, duratation = 3200) {
+  console.log("ToolTip", text, duratation);
   const tooltip = document.getElementById("tooltip");
 
   // set message
@@ -228,7 +228,7 @@ function showTooltip(text) {
 
   setTimeout(() => {
     tooltip.classList.remove("show");
-  }, 3200);
+  }, duratation);
 }
 
 function cardredrawnotice(text) {
@@ -2594,7 +2594,8 @@ class Game {
     ) {
       var btn2 = document.getElementById("session-start-control");
       btn2.textContent = "Waiting for opponent to start";
-      showTooltip("Opponent used Scoia'tael ability to pick who play first!");
+      //    showTooltip("Opponent used Scoia'tael faction ability to pick who play first!", 9000);
+      ui.notification("scol_pick", 5000);
       await new Promise((resolve) => {
         const handleMessage = async (event) => {
           const data = await recv_and_decomp(event);
@@ -2834,8 +2835,11 @@ class Game {
       await ui.notification("lose-round", ui_display_times.round_end_result);
     else await ui.notification("draw-round", ui_display_times.round_end_result);
 
-    if (player_me.health === 0 || player_op.health === 0) this.endGame();
-    else this.startRound();
+    if (player_me.health === 0 || player_op.health === 0) {
+      this.endGame();
+    } else {
+      this.startRound();
+    }
   }
 
   // Sets up and displays the end-game screen
@@ -2860,26 +2864,41 @@ class Game {
     endScreen.children[0].className = "";
     console.log("---------------------");
     if (player_op.health <= 0 && player_me.health <= 0) {
-      tocar("game_lose");
-      endScreen.getElementsByTagName("p")[0].classList.remove("hide");
-      endScreen.children[0].classList.add("end-draw");
-      tocar("tf2/game_draw", true);
-      console.log("Game over || Draw");
-      gameended = true;
+      if (game_draw_force_rematch) {
+        var end_screen = false;
+        console.log("Game over || Draw");
+        gameended = true;
+        ui.enablePlayer(false);
+        tocar("tf2/game_draw", true);
+        await ui.notification("draw_end", 8000);
+        //  game.draw_restart();
+        this.restartGame();
+      } else {
+        var end_screen = true;
+        tocar("tf2/game_draw_not_redraw", true);
+        endScreen.getElementsByTagName("p")[0].classList.remove("hide");
+        endScreen.children[0].classList.add("end-draw");
+      }
     } else if (player_op.health === 0) {
+      var end_screen = true;
       tocar("game_win", true);
       endScreen.children[0].classList.add("end-win");
       console.log("Game over || Victory");
       gameended = true;
     } else {
+      var end_screen = true;
+      tocar("game_lose");
       endScreen.children[0].classList.add("end-lose");
       endScreen.children[0].classList.add("end-lose");
       console.log("Game over || Defeat");
       gameended = true;
     }
-
-    fadeIn(endScreen, 300);
-    ui.enablePlayer(true);
+    if (end_screen) {
+      fadeIn(endScreen, 300);
+      ui.enablePlayer(true);
+    } else {
+      ui.enablePlayer(false);
+    }
   }
 
   // Returns the client to the deck customization screen
@@ -4794,6 +4813,7 @@ class DeckMaker {
       leader: card_dict[this.leader.index],
       cards: this.deck.filter((x) => x.count > 0),
     };
+    previous_game_start_cards = me_deck;
 
     player_me = new Player(0, players.me, me_deck);
     comp_and_send(socket, JSON.stringify({ type: "ready", deck: me_deck }));

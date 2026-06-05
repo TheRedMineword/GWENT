@@ -1,6 +1,6 @@
 {
-  "sha": "47a61fb9f682529c5560bb66b30f248f10afa42cbea5aed1e52de08aceed3d85",
-  "generatedAt": "2026-06-05T18:34:04.189Z",
+  "sha": "3f8212c9b657f3e2774512d8e6a94c0bf9d5ac9e2eb516ef8c84461bcac7bde3",
+  "generatedAt": "2026-06-05T19:44:23.398Z",
   "files": [
     {
       "path": "404.html",
@@ -3634,8 +3634,8 @@
     },
     {
       "path": "javascript/connect_to_custom_server.js",
-      "sha256": "9f977b39d70509b76ed0aae935d11227eb792f0092707adc10a08915d5a12044",
-      "size": 23767
+      "sha256": "89b8afa7a66867169d9056a96b98ae37b95582743568be9998df3b78885a956b",
+      "size": 23798
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
@@ -3654,13 +3654,13 @@
     },
     {
       "path": "javascript/decks.js",
-      "sha256": "13b0f2dd4bd85f54eb4f0c6c231ee6a6358d89cf03c6fe2901d4ab1446c7f1bd",
-      "size": 14008
+      "sha256": "827bc8dd5db1542588655797f83c8b9c32d3a709b2cf0b41939a813be39a88c9",
+      "size": 14013
     },
     {
       "path": "javascript/defines.js",
-      "sha256": "a6bae3e37d030e9718a7e2d6a8c374cabe46307ad4ed156868ac934e7dd0ed3d",
-      "size": 9187
+      "sha256": "bdb9d04d36f549c606f32baf05aeff39d5f9cac49f1e947454e9f41efe17ac31",
+      "size": 9321
     },
     {
       "path": "javascript/factions.js",
@@ -3669,8 +3669,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "cd5b2212e47a45c285a5a222a44c6096d0d6856638d6ad0974f8c19cbd8feca4",
-      "size": 165416
+      "sha256": "face54a6c22237d10dd0dd6390cbac0f1bb45d9cf3dbb2c17ee7cc48b7b48194",
+      "size": 166036
     },
     {
       "path": "javascript/jszip.min.js",
@@ -3879,8 +3879,8 @@
     },
     {
       "path": "sfx/packed.zip",
-      "sha256": "fe96c7879cd7a7d56f95a57599f0ed3763c6eb59af6494ed9f7a794200032d7f",
-      "size": 3266352
+      "sha256": "f37779d9c4a4942acf19031383fad3a6f836d15c3556304baff2da07e4ffbde2",
+      "size": 3503705
     },
     {
       "path": "sfx/pass.mp3",
@@ -3948,9 +3948,14 @@
       "size": 51323
     },
     {
-      "path": "sfx/tf2/game_draw.mp3",
+      "path": "sfx/tf2/game_draw_not_redraw.mp3",
       "sha256": "884caffc22e1324a17f1dfb42caf958bff9bfd35f3d75abc6683693912f487d1",
       "size": 197623
+    },
+    {
+      "path": "sfx/tf2/game_draw.mp3",
+      "sha256": "3ca451a20197afcb29b296ecc0d5bc278e16d22eb4aceab92666906fe995dd68",
+      "size": 238998
     },
     {
       "path": "sfx/tf2/msg/Chat_display_text.mp3",
@@ -4019,8 +4024,8 @@
     },
     {
       "path": "style.css",
-      "sha256": "b86ae44559b2b4e40771dd759251225504b0af5bf7674d8c6b1dd68a631cb69c",
-      "size": 41315
+      "sha256": "a1f28da29f2d24aee61f4d0fe28b0ad284758a1a544e6386ec3f142705a3a7a2",
+      "size": 41695
     }
   ]
 }

@@ -620,6 +620,22 @@ html {
 	content: "Monsters faction ability triggered: \A one Monster Unit Card stays on the board";
 }
 
+#notif-draw_end {
+	background-image: url(img/icons/notif_lose_round.png);
+}
+
+#notif-draw_end::after {
+	content: "Gwent game can't end in a draw! \A Face opponent again till winner is picked!";
+}
+
+#notif-scol_pick {
+	background-image: url(img/icons/notif_scoiatael.png);
+}
+
+#notif-scol_pick::after {
+	content: "Opponent used Scoia'tael faction ability to pick who play first!";
+}
+
 #notif-sky {
 	background-image: url(img/icons/notif_sky.png);
 }
