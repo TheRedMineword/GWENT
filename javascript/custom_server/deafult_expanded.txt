@@ -2538,6 +2538,28 @@
         "witcher_sign": true
       },
       {
+        "name": "Witcher Signs: Yrden",
+        "id": "1025",
+        "deck": "neutral",
+        "row": "ranged",
+        "strength": "0",
+        "ability": "yrden",
+        "filename": "yrden",
+        "count": "0",
+        "witcher_sign": true
+      },
+      {
+        "name": "Witcher Signs: Ignii",
+        "id": "1026",
+        "deck": "neutral",
+        "row": "close",
+        "strength": "-2",
+        "ability": "hero resilience_igni",
+        "filename": "igni",
+        "count": "0",
+        "witcher_sign": true
+      },
+      {
         "name": "Hopeful Steward",
         "id": "3001",
         "deck": "sky",
@@ -2797,6 +2819,10 @@
         "name": "Witcher Signs: Quen",
         "description": ""
       },
+      "yrden": {
+        "name": "Witcher Signs: Yrden",
+        "description": "Witchers Magic Trap, place on enemy ranged row to aplly -1 to each unit card. Effects stacks. Decoy can be used to pick up the card! "
+      },
       "horn": {
         "name": "Commander's Horn",
         "description": "Doubles the strength of all unit cards in that row. Limited to 1 per row. "
@@ -2849,9 +2875,13 @@
         "name": "Resilience",
         "description": "Remains on the board for the following round. "
       },
+      "resilience_igni": {
+        "name": "Witcher Signs: Ignii",
+        "description": "Remains on the board for the following round. Adds +1 to all units in the row (excluding itself). Effects dont stacks"
+      },
       "aard": {
         "name": "Witcher Signs: Aard",
-        "description": "Push all enemy units in the opposing row one row back toward Siege, ignoring shields. Playing this card will damage your total score! "
+        "description": "Push all enemy units in the opposing row one row back toward Siege, ignoring shields. Playing this card will damage your total score! Hero and few other cards will ignore push (Internal Game Desing). "
       },
       "aid": {
         "name": "Call to Arms",

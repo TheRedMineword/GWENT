@@ -227,9 +227,19 @@ function getCardsIndex_return_more(
 	// =====================================================
 
 	function addCard(name, count, sampleCard) {
+	//	console.log(sampleCard);
+	var maxCount = sampleCard?.count || 0;
+    var current = count;
 
-		if (count <= 0)
-			return false;
+    // no more copies allowed
+    if (current >= maxCount)
+        count = maxCount
+
+    // clamp amount to remaining legal copies
+   // count = Math.min(count, maxCount - current);
+
+    if (count <= 0)
+        return false;
 
 		const existing = result.find(
 			r =>

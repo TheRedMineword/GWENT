@@ -2406,6 +2406,28 @@ var card_dict = [
         "count": "0",
         "witcher_sign": true
     },
+    {
+        "name": "Witcher Signs: Yrden",
+        "id": "1025",
+        "deck": "neutral",
+        "row": "ranged",
+        "strength": "0",
+        "ability": "yrden",
+        "filename": "yrden",
+        "count": "0",
+        "witcher_sign": true
+    },
+    {
+        "name": "Witcher Signs: Ignii",
+        "id": "1026",
+        "deck": "neutral",
+        "row": "close",
+        "strength": "-2",
+        "ability": "hero resilience_igni",
+        "filename": "igni",
+        "count": "0",
+        "witcher_sign": true
+    },
     // New cards for sky
     {
         "name": "Hopeful Steward",

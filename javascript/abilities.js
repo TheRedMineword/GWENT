@@ -34,6 +34,7 @@ if (mtg_conf.unstable_mode === "random"){
 }
 const NotPickUpAbilities = ["axii2_desc", "gryffinSchool", "magicthegathering", "tgc_portal", "reinforce", "wshield"];
 
+
 var ability_dict = {
 	clear: {
 		name: "Clear Weather",
@@ -71,6 +72,10 @@ var ability_dict = {
 	quen_desc: {
 		name: "Witcher Signs: Quen",
 		description: ""
+	},
+	yrden: {
+		name: "Witcher Signs: Yrden",
+		description: "Witchers Magic Trap, place on enemy ranged row to aplly -1 to each unit card. Effects stacks. Decoy can be used to pick up the card! "
 	},
 	horn: {
 		name: "Commander's Horn",
@@ -198,23 +203,38 @@ var ability_dict = {
 	resilience: {
 	name: "Resilience",
 	description: "Remains on the board for the following round. ",
-	placed: async card => {
+	placed: async (card) => {
 		game.roundEnd.push(async () => {
-			if (card.isLocked()) return;
 
 			card.noRemove = true;
 			await card.animate("resilience");
 
-			game.roundStart.push(async () => {
-				delete card.noRemove;
-				return true;
-			});
+	//		game.roundStart.push(async () => {
+	//			delete card.noRemove;
+	//			return true;
+	//		});
+		});
+	}
+},
+	resilience_igni: {
+	name: "Witcher Signs: Ignii",
+	description: "Remains on the board for the following round. Adds +1 to all units in the row (excluding itself). Effects dont stacks",
+	placed: async (card) => {
+		game.roundEnd.push(async () => {
+
+			card.noRemove = true;
+			await card.animate("resilience");
+
+	//		game.roundStart.push(async () => {
+	//			delete card.noRemove;
+	//			return true;
+	//		}); it also dont work bruh
 		});
 	}
 },
 	aard: {
 	name: "Witcher Signs: Aard",
-	description: "Push all enemy units in the opposing row one row back toward Siege, ignoring shields. Playing this card will damage your total score! ",
+	description: "Push all enemy units in the opposing row one row back toward Siege, ignoring shields. Playing this card will damage your total score! Hero and few other cards will ignore push (Internal Game Desing). ",
 	placed: async (card, row) => {
 		// Row this card was played on
 	//	console.log("AARD PLAY", card, row)
@@ -238,22 +258,36 @@ var ability_dict = {
 		const units = enemyRow.findCards(c => c.isUnit());
 
 		if (units.length > 0) {
-			await Promise.all(
-				units.map(async c => await c.animate("knockback"))
-			);
+		//	await Promise.all(
+			//	units.map(async c => await c.animate("knockback"))
+		//	);
 
-			await Promise.all(
+
+		await Promise.all(
 				units.map(async c => {
 					if (
-						c.abilities.includes("bond") ||
-						c.abilities.includes("morale") ||
-						c.abilities.includes("horn")
+						c.abilities.includes("reinforce") ||
+						c.abilities.includes("muster") ||
+						c.abilities.includes("medic") ||
+						c.abilities.includes("sabotage") ||
+						c.abilities.includes("spy") ||
+						c.abilities.includes("gryffinSchool") ||
+						c.abilities.includes("magicthegathering") ||
+						c.abilities.includes("tgc_portal") ||
+						c.abilities.includes("hero")
 					) {
-						await board.moveTo(c, targetRow, enemyRow);
+						console.log("AARD SKIPPED ", c, " becuase it had bad abilities")
 					} else {
 					//	await board.moveToNoEffects(c, targetRow, enemyRow); // not worky here
 						// Move cards wich effects listed above
-						await board.moveTo(c, targetRow, enemyRow);
+					//	await board.moveTo(c, targetRow, enemyRow);
+					await c.animate("aard");
+					await board.moveTo(c, targetRow, enemyRow);
+					try {
+					c.animate("knockback");
+					} catch (e){
+
+					}
 					}
 				})
 			);

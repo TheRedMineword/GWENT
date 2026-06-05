@@ -1460,7 +1460,7 @@ addCardRandom(card) {
 	addCardElement(card, index){
 		if (this.elem){
 			if (index === this.cards.length)
-				thise.elem.appendChild(card.elem);
+				this.elem.appendChild(card.elem);
 			else
 				this.elem.insertBefore(card.elem, this.elem.children[index]);
 		}
@@ -1821,7 +1821,7 @@ calcCardScore_work(card) {
 		let total = card.basePower;
 		let this_row_have_quen = [false, 1, 2]; // should bool, multiplayer, axii weather etc, horn
 		if (this.cards.some(c => c.filename === "wshield" || c.filename === "quen")){
-			this_row_have_quen = [true, 0.35, 1]
+			this_row_have_quen = [true, 0.5, 1]
 		}
 		if (this.cards.some(c => c.filename === "darkstorm")) {
 			if (card.hero === false){
@@ -1834,6 +1834,24 @@ calcCardScore_work(card) {
 					if (0 < total && total < axii.IfBasePowerUnder) {
 						total = total - Math.ceil( axii.TakeAway * this_row_have_quen[1]);
 					}
+		}
+		if (this.cards.some(c => c.filename === "yrden")){
+			if (card.hero){
+			return total;
+			} else if (card.name === "Witcher Signs: Yrden"){
+				return 0;
+			}
+
+			total = total - this.cards.filter(c => c.filename === "yrden").length;
+		}
+		if (this.cards.some(c => c.filename === "igni")){
+			if (card.hero){
+			return total;
+			} else if (card.name === "Witcher Signs: Igni"){
+				return 0;
+			}
+
+			total = total + 1; //this.cards.filter(c => c.filename === "igni").length;
 		}
 		if (card.abilities.includes("magicthegathering") === true || card.abilities.includes("tgc_portal") === true){
 			var holder_is_the = this.cards
@@ -1947,7 +1965,17 @@ calcCardScore_work(card) {
 	clear() {
 		if (this.special != null)
 			board.toGrave(this.special, this);
-		this.cards.filter(c => !c.noRemove).forEach(c => board.toGrave(c, this) );
+		console.log("Before:", this.cards);
+
+this.cards.filter(c => c.noRemove === false || !c.noRemove)
+    .forEach(c => board.toGrave(c, this));
+
+console.log("After grave:", this.cards);
+
+this.cards.filter(c => c.noRemove === true)
+    .forEach(c => c.noRemove = false, console.log("NO REMOVE REMOVED FROM C"));
+
+console.log("After reset:", this.cards);
 	}
 
 	// Returns all regular unit cards with the heighest power
@@ -2124,7 +2152,7 @@ class Board {
 	getRow(card, row_name, player){
 		player = player ? player : card ? card.holder : player_me;
 		let isMe = player === player_me;
-		let isSpy = card.abilities.includes("spy") || card.abilities.includes("sabotage") || card.abilities.includes("axii2_desc_playable") || card.abilities.includes("dopler");
+		let isSpy = card.abilities.includes("spy") || card.abilities.includes("sabotage") || card.abilities.includes("axii2_desc_playable") || card.abilities.includes("dopler") || card.abilities.includes("yrden");
 		switch (row_name) {
 			case "weather": return weather; break;
 			case "close":  return this.row[ isMe^isSpy ? 3 : 2];
@@ -2582,6 +2610,7 @@ class Game {
 class Card {
 
 	constructor(card_data, player) {
+		console.log("constructor card data", card_data, player);
 		this.name = card_data.name;
 		this.basePower = this.power = Number(card_data.strength);
 		this.faction = card_data.deck;
@@ -3281,6 +3310,8 @@ this.preview.getElementsByClassName("card-lg")[0].style.backgroundImage = largeU
 	
 	// Sets up description window for a card
 	setDescription(card, desc){
+	//	console.log("SET DESCRYPTION", card, desc);
+	try {
 		if (card.hero || card.row === "agile" || card.abilities.length > 0 || card.faction === "faction") {
 			desc.classList.remove("hide");
 			let str = card.row === "agile" ? "agile" : "";
@@ -3301,6 +3332,10 @@ this.preview.getElementsByClassName("card-lg")[0].style.backgroundImage = largeU
 		} else {
 			desc.classList.add("hide");
 		}
+	} catch (e) {
+		console.error("setDescription", " error", e);
+		desc.classList.add("hide");
+	}
 	}
 
 async waitNotificationsDone() {
