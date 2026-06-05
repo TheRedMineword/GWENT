@@ -1,4 +1,4 @@
-"use strict";
+"use strict"
 
 const GLOBAL_DECKS = ["neutral", "special", "weather"];
 const MIN_UNITS = 22;
@@ -204,14 +204,19 @@ function getCardsIndex_return_more(
 	// =====================================================
 
 	function getMaxCount(name) {
-		return card_dict
-			.filter(c =>
-				STRNG_lowercase(c.name) === STRNG_lowercase(name)
-			)
-			.reduce(
-				(sum, c) => sum + Number(c.count || 0),
-				0
-			);
+	//	return card_dict
+	//		.filter(c =>
+	//			STRNG_lowercase(c.name) === STRNG_lowercase(name)
+	//		)
+	//		.reduce(
+	//			(sum, c) => sum + Number(c.count || 0),
+	//			0
+	//		);
+	var index_tmp = getCardIndex(name);
+	var maxCount = card_dict[index_tmp[0]].count;
+	var isMax = parseInt(maxCount);
+	console.log("isMax", isMax);
+	return isMax;
 	}
 
 	function getCurrentCount(name) {
@@ -227,19 +232,9 @@ function getCardsIndex_return_more(
 	// =====================================================
 
 	function addCard(name, count, sampleCard) {
-	//	console.log(sampleCard);
-	var maxCount = sampleCard?.count || 0;
-    var current = count;
 
-    // no more copies allowed
-    if (current >= maxCount)
-        count = maxCount
-
-    // clamp amount to remaining legal copies
-   // count = Math.min(count, maxCount - current);
-
-    if (count <= 0)
-        return false;
+		if (count <= 0)
+			return false;
 
 		const existing = result.find(
 			r =>
@@ -448,11 +443,7 @@ function getCardsIndex_return_more(
 
 	while (totalCards < TARGET_TOTAL) {
 
-		const heroLimit =
-			Math.floor(
-				TARGET_TOTAL *
-				TARGET_HERO_RATIO
-			);
+		const heroLimit = ForGameStart.hero;
 
 		const neutralLimit =
 			Math.floor(
