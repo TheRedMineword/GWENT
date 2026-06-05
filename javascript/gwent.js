@@ -1,5 +1,4 @@
-"use strict"
-
+"use strict";
 
 class Controller {}
 
@@ -8,49 +7,48 @@ const menuBtn = document.getElementById("top-menu-btn");
 const menu = document.getElementById("top-menu");
 
 menuBtn.onclick = () => {
-    menu.classList.toggle("hidden");
+  menu.classList.toggle("hidden");
 };
 
 function toggleReadyWaiting(amReady) {
-    console.log('[READY] toggleReadyWaiting called:', amReady);
+  console.log("[READY] toggleReadyWaiting called:", amReady);
 
-    const container = document.querySelector('#deck-customization');
+  const container = document.querySelector("#deck-customization");
 
-    console.log('[READY] container:', container);
+  console.log("[READY] container:", container);
 
-    if (!container) {
-        console.error('[READY] #deck-customization NOT FOUND');
-        return;
-    }
+  if (!container) {
+    console.error("[READY] #deck-customization NOT FOUND");
+    return;
+  }
 
-    const existing = document.querySelector('#ready-waiting-overlay');
+  const existing = document.querySelector("#ready-waiting-overlay");
 
-    if (!amReady) {
-        if (existing) {
-            existing.remove();
-            console.log('[READY] overlay removed');
-        }
-		tocar("tf2/Vote_no", false);
-        return;
-    }
-	tocar("tf2/Vote_yes", false);
+  if (!amReady) {
     if (existing) {
-        console.log('[READY] overlay already exists');
-        return;
+      existing.remove();
+      console.log("[READY] overlay removed");
     }
+    tocar("tf2/Vote_no", false);
+    return;
+  }
+  tocar("tf2/Vote_yes", false);
+  if (existing) {
+    console.log("[READY] overlay already exists");
+    return;
+  }
 
-    // ensure relative positioning
-    if (getComputedStyle(container).position === 'static') {
-        container.style.position = 'relative';
-    }
+  // ensure relative positioning
+  if (getComputedStyle(container).position === "static") {
+    container.style.position = "relative";
+  }
 
-    // inject css once
-    if (!document.querySelector('#ready-waiting-style')) {
+  // inject css once
+  if (!document.querySelector("#ready-waiting-style")) {
+    const style = document.createElement("style");
+    style.id = "ready-waiting-style";
 
-        const style = document.createElement('style');
-        style.id = 'ready-waiting-style';
-
-        style.innerHTML = `
+    style.innerHTML = `
             #ready-waiting-overlay {
                 position: absolute;
                 inset: 0;
@@ -115,104 +113,99 @@ function toggleReadyWaiting(amReady) {
             }
         `;
 
-        document.head.appendChild(style);
-    }
+    document.head.appendChild(style);
+  }
 
-    const overlay = document.createElement('div');
-    overlay.id = 'ready-waiting-overlay';
+  const overlay = document.createElement("div");
+  overlay.id = "ready-waiting-overlay";
 
-    overlay.innerHTML = `
+  overlay.innerHTML = `
         <div class="gwent-ready-spinner"></div>
     `;
 
-    container.appendChild(overlay);
+  container.appendChild(overlay);
 
-    console.log('[READY] overlay appended');
+  console.log("[READY] overlay appended");
 }
 function askForSessionId() {
-    return new Promise((resolve) => {
-        // overlay background
-        const overlay = document.createElement("div");
-        overlay.style.position = "fixed";
-        overlay.style.top = "0";
-        overlay.style.left = "0";
-        overlay.style.width = "100%";
-        overlay.style.height = "100%";
-        overlay.style.background = "rgba(0,0,0,0.5)";
-        overlay.style.display = "flex";
-        overlay.style.alignItems = "center";
-        overlay.style.justifyContent = "center";
-        overlay.style.zIndex = "9999";
+  return new Promise((resolve) => {
+    // overlay background
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.background = "rgba(0,0,0,0.5)";
+    overlay.style.display = "flex";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.zIndex = "9999";
 
-        // dialog box
-        const box = document.createElement("div");
-        box.style.background = "white";
-        box.style.padding = "20px";
-        box.style.borderRadius = "10px";
-        box.style.minWidth = "250px";
-        box.style.textAlign = "center";
+    // dialog box
+    const box = document.createElement("div");
+    box.style.background = "white";
+    box.style.padding = "20px";
+    box.style.borderRadius = "10px";
+    box.style.minWidth = "250px";
+    box.style.textAlign = "center";
 
-        // input
-        const input = document.createElement("input");
-        input.type = "text";
-        input.placeholder = "Enter Session ID";
-        input.style.width = "100%";
-        input.style.marginBottom = "10px";
+    // input
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "Enter Session ID";
+    input.style.width = "100%";
+    input.style.marginBottom = "10px";
 
-        // buttons
-        const ok = document.createElement("button");
-        ok.textContent = "Join";
-        ok.style.marginRight = "10px";
+    // buttons
+    const ok = document.createElement("button");
+    ok.textContent = "Join";
+    ok.style.marginRight = "10px";
 
-        const cancel = document.createElement("button");
-        cancel.textContent = "Cancel";
+    const cancel = document.createElement("button");
+    cancel.textContent = "Cancel";
 
-        function cleanup(value) {
-            document.body.removeChild(overlay);
-            resolve(value);
-        }
+    function cleanup(value) {
+      document.body.removeChild(overlay);
+      resolve(value);
+    }
 
-        ok.onclick = () => {
-            const value = input.value.trim();
-            cleanup(value || null);
-        };
+    ok.onclick = () => {
+      const value = input.value.trim();
+      cleanup(value || null);
+    };
 
-        cancel.onclick = () => cleanup(null);
+    cancel.onclick = () => cleanup(null);
 
-        // allow Enter key
-        input.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") ok.click();
-            if (e.key === "Escape") cancel.click();
-        });
-
-        // assemble
-        box.appendChild(input);
-        box.appendChild(ok);
-        box.appendChild(cancel);
-        overlay.appendChild(box);
-        document.body.appendChild(overlay);
-
-        input.focus();
+    // allow Enter key
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") ok.click();
+      if (e.key === "Escape") cancel.click();
     });
+
+    // assemble
+    box.appendChild(input);
+    box.appendChild(ok);
+    box.appendChild(cancel);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    input.focus();
+  });
 }
 
-
 document.getElementById("join-game").onclick = async () => {
-    const code = await askForSessionId();
-    if (!code) return;
+  const code = await askForSessionId();
+  if (!code) return;
 
-    comp_and_send(socket, JSON.stringify({
-        type: "joinSession",
-        sessionId: code
-    }));
+  comp_and_send(
+    socket,
+    JSON.stringify({
+      type: "joinSession",
+      sessionId: code,
+    }),
+  );
 };
-
-
-
-
-
-
-
 
 const readyButtonElem = document.getElementById("session-start-control");
 const opponentReadyElem = document.getElementById("opponent-ready");
@@ -225,59 +218,58 @@ const ep_id = document.getElementById("player-id-btn");
 let debug = false;
 
 function showTooltip(text) {
-	console.log("ToolTip", text);
-    const tooltip = document.getElementById("tooltip");
+  console.log("ToolTip", text);
+  const tooltip = document.getElementById("tooltip");
 
-    // set message
-    tooltip.textContent = `${text}`;
+  // set message
+  tooltip.textContent = `${text}`;
 
-    tooltip.classList.add("show");
+  tooltip.classList.add("show");
 
-    setTimeout(() => {
-        tooltip.classList.remove("show");
-    }, 3200);
+  setTimeout(() => {
+    tooltip.classList.remove("show");
+  }, 3200);
 }
 
 function cardredrawnotice(text) {
-    tooltipQueue.push(text);
-    processTooltipQueue();
+  tooltipQueue.push(text);
+  processTooltipQueue();
 }
 
 function processTooltipQueue() {
-    if (tooltipActive) return;
-    if (tooltipQueue.length === 0) return;
+  if (tooltipActive) return;
+  if (tooltipQueue.length === 0) return;
 
-    tooltipActive = true;
+  tooltipActive = true;
 
-    const tooltip2 = document.getElementById("tooltip2");
-    const text = tooltipQueue.shift();
+  const tooltip2 = document.getElementById("tooltip2");
+  const text = tooltipQueue.shift();
 
-    tooltip.textContent = text;
-    tooltip.classList.add("show");
+  tooltip.textContent = text;
+  tooltip.classList.add("show");
 
+  setTimeout(() => {
+    tooltip.classList.remove("show");
+
+    // small delay so CSS fade-out can finish cleanly
     setTimeout(() => {
-        tooltip.classList.remove("show");
-
-        // small delay so CSS fade-out can finish cleanly
-        setTimeout(() => {
-            tooltipActive = false;
-            processTooltipQueue();
-        }, 200);
-
-    }, 3200);
+      tooltipActive = false;
+      processTooltipQueue();
+    }, 200);
+  }, 3200);
 }
 
 document.getElementById("copy-session").onclick = () => {
-// document.querySelector("copy-session").addEventListener("click", async () => {
-	console.log("clicked session copy", joinedSessionId)
-    if (!joinedSessionId) return;
+  // document.querySelector("copy-session").addEventListener("click", async () => {
+  console.log("clicked session copy", joinedSessionId);
+  if (!joinedSessionId) return;
 
-    try {
-        navigator.clipboard.writeText(joinedSessionId);
-        showTooltip(joinedSessionId);
-    } catch (err) {
-        console.error("Copy failed:", err);
-    }
+  try {
+    navigator.clipboard.writeText(joinedSessionId);
+    showTooltip(joinedSessionId);
+  } catch (err) {
+    console.error("Copy failed:", err);
+  }
 };
 
 // Websocket and Server config.
@@ -287,20 +279,17 @@ const wakeUrl = "https://drmineword-gwent.onrender.com/wake";
 const host = window.location.hostname; // wrong define window.location?
 
 const isLocalhost =
-    host.startsWith("localhost") ||
-    host.startsWith("127.0.0.1") ||
-    host.startsWith("[::1]");
+  host.startsWith("localhost") ||
+  host.startsWith("127.0.0.1") ||
+  host.startsWith("[::1]");
 
-const isElectronLauncher =
-    isLocalhost &&
-    location.port === "1111";
+const isElectronLauncher = isLocalhost && location.port === "1111";
 
-const wsUrl =
-    isElectronLauncher
-        ? "wss://drmineword-gwent.onrender.com"
-        : isLocalhost
-            ? "ws://localhost:8081"
-            : "wss://drmineword-gwent.onrender.com";
+const wsUrl = isElectronLauncher
+  ? "wss://drmineword-gwent.onrender.com"
+  : isLocalhost
+    ? "ws://localhost:8081"
+    : "wss://drmineword-gwent.onrender.com";
 
 function showBrickScreen() {
   document.documentElement.innerHTML = `
@@ -371,15 +360,15 @@ socket.onclose = (event) => {
   // Optional: treat early close as failure
   if (!socket._connected) {
     showBrickScreen();
-    alert("Failed to start multiplayer, please refresh page!!!\n\nIf it dont work wait for a moment before trying again!");
+    alert(
+      "Failed to start multiplayer, please refresh page!!!\n\nIf it dont work wait for a moment before trying again!",
+    );
   }
 };
-
 
 let amReady = false;
 let opponentReady = false;
 let playerId = null;
-
 
 // Super JSON Compressor for WebSockets
 // Uses Brotli if available, falls back to gzip-like Deflate via CompressionStream
@@ -390,583 +379,649 @@ const TextEnc = new TextEncoder();
 const TextDec = new TextDecoder();
 
 async function sha256(buffer) {
-    const hash = await crypto.subtle.digest("SHA-256", buffer);
-    return [...new Uint8Array(hash)]
-        .map(b => b.toString(16).padStart(2, "0"))
-        .join("");
+  const hash = await crypto.subtle.digest("SHA-256", buffer);
+  return [...new Uint8Array(hash)]
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 async function compressData(str) {
-    const input = TextEnc.encode(str);
+  const input = TextEnc.encode(str);
 
-    if ("CompressionStream" in window) {
-        const cs = new CompressionStream("deflate-raw");
-        const writer = cs.writable.getWriter();
-        writer.write(input);
-        writer.close();
+  if ("CompressionStream" in window) {
+    const cs = new CompressionStream("deflate-raw");
+    const writer = cs.writable.getWriter();
+    writer.write(input);
+    writer.close();
 
-        const compressed = await new Response(cs.readable).arrayBuffer();
-        return new Uint8Array(compressed);
-    }
+    const compressed = await new Response(cs.readable).arrayBuffer();
+    return new Uint8Array(compressed);
+  }
 
-    throw new Error("CompressionStream not supported.");
+  throw new Error("CompressionStream not supported.");
 }
 
 async function decompressData(uint8) {
-    if ("DecompressionStream" in window) {
-        const ds = new DecompressionStream("deflate-raw");
-        const writer = ds.writable.getWriter();
-        writer.write(uint8);
-        writer.close();
+  if ("DecompressionStream" in window) {
+    const ds = new DecompressionStream("deflate-raw");
+    const writer = ds.writable.getWriter();
+    writer.write(uint8);
+    writer.close();
 
-        const decompressed = await new Response(ds.readable).arrayBuffer();
-		console.log("Decompressed:", decompressed);
-        return TextDec.decode(decompressed);
-    }
+    const decompressed = await new Response(ds.readable).arrayBuffer();
+    console.log("Decompressed:", decompressed);
+    return TextDec.decode(decompressed);
+  }
 
-    throw new Error("DecompressionStream not supported.");
+  throw new Error("DecompressionStream not supported.");
 }
 
-
 async function decompressBase64(base64) {
-    // base64 -> Uint8Array
-    const binary = atob(base64);
+  // base64 -> Uint8Array
+  const binary = atob(base64);
 
-    const bytes = Uint8Array.from(
-        binary,
-        c => c.charCodeAt(0)
-    );
+  const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
 
-    // Create decompression stream
-    const ds = new DecompressionStream("deflate-raw");
+  // Create decompression stream
+  const ds = new DecompressionStream("deflate-raw");
 
-    // Pipe compressed bytes into it
-    const decompressedStream =
-        new Blob([bytes])
-            .stream()
-            .pipeThrough(ds);
+  // Pipe compressed bytes into it
+  const decompressedStream = new Blob([bytes]).stream().pipeThrough(ds);
 
-    // Read decompressed result
-    const decompressedBuffer =
-        await new Response(decompressedStream).arrayBuffer();
+  // Read decompressed result
+  const decompressedBuffer = await new Response(
+    decompressedStream,
+  ).arrayBuffer();
 
-    return new TextDecoder().decode(decompressedBuffer);
+  return new TextDecoder().decode(decompressedBuffer);
 }
 
 function wait(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // Start automatic queue processor
 setInterval(async () => {
-    if (sendQueue.length === 0) return;
+  if (sendQueue.length === 0) return;
 
-    const item = sendQueue.shift(); // take first queued item
-    const { socket, jsonString } = item;
+  const item = sendQueue.shift(); // take first queued item
+  const { socket, jsonString } = item;
 
-    try {
-        console.log("Comp and send:", socket, jsonString);
+  try {
+    console.log("Comp and send:", socket, jsonString);
 
-        const before = TextEnc.encode(jsonString).length;
+    const before = TextEnc.encode(jsonString).length;
 
-        const compressed = await compressData(jsonString);
+    const compressed = await compressData(jsonString);
 
-        const after = compressed.length;
-        const saved = ((1 - after / before) * 100).toFixed(3);
-        const hash = await sha256(compressed);
+    const after = compressed.length;
+    const saved = ((1 - after / before) * 100).toFixed(3);
+    const hash = await sha256(compressed);
 
-        console.log("Bytes before:", before);
-        console.log("Bytes after :", after);
-        console.log("Compressed% :", saved + "%");
-        console.log("Payload sha :", hash);
+    console.log("Bytes before:", before);
+    console.log("Bytes after :", after);
+    console.log("Compressed% :", saved + "%");
+    console.log("Payload sha :", hash);
 
-        if (socket.readyState !== WebSocket.OPEN) {
-			if (JSON.parse(jsonString).type === "ping"){
+    if (socket.readyState !== WebSocket.OPEN) {
+      if (JSON.parse(jsonString).type === "ping") {
+      } else {
+        throw new Error("socket not open");
+      }
+    }
 
-			} else {
-            throw new Error("socket not open");
-        }}
-
-        socket.send(compressed);
-
-    } catch (err) {
-        console.error(err);
-		if (JSON.parse(jsonString).type === "ping"){
-
-			} else {
-        alert("Socket send failed: " + err.message);
-    }}
-
+    socket.send(compressed);
+  } catch (err) {
+    console.error(err);
+    if (JSON.parse(jsonString).type === "ping") {
+    } else {
+      alert("Socket send failed: " + err.message);
+    }
+  }
 }, SEND_INTERVAL_MS);
-
 
 // Call this anytime you want to queue a send
 function comp_and_send(socket, jsonString) {
-    sendQueue.push({
-        socket,
-        jsonString
-    });
+  sendQueue.push({
+    socket,
+    jsonString,
+  });
 
-    console.log("Queued request. Queue size:", sendQueue.length);
+  console.log("Queued request. Queue size:", sendQueue.length);
 }
 
 async function recv_and_decomp(event) {
-	console.log("recv_and_decomp");
-    try {
-        let buffer;
+  console.log("recv_and_decomp");
+  try {
+    let buffer;
 
-        if (event.data instanceof Blob) {
-            buffer = await event.data.arrayBuffer();
-        } else if (event.data instanceof ArrayBuffer) {
-            buffer = event.data;
-        } else {
-            throw new Error("Unsupported message type");
-        }
-
-        const uint8 = new Uint8Array(buffer);
-        const json = await decompressData(uint8);
-
-        console.log("Received JSON:", json);
-        return JSON.parse(json);
-
-    } catch (err) {
-        alert("Socket receive failed: " + err.message);
+    if (event.data instanceof Blob) {
+      buffer = await event.data.arrayBuffer();
+    } else if (event.data instanceof ArrayBuffer) {
+      buffer = event.data;
+    } else {
+      throw new Error("Unsupported message type");
     }
+
+    const uint8 = new Uint8Array(buffer);
+    const json = await decompressData(uint8);
+
+    console.log("Received JSON:", json);
+    return JSON.parse(json);
+  } catch (err) {
+    alert("Socket receive failed: " + err.message);
+  }
 }
 
-
 function handleRiskMessage(message) {
-	console.log("HANDLE RISK", message);
-    // Extract JSON part from: risk_is ({...})
-    const match = message;
-    if (!match) return;
+  console.log("HANDLE RISK", message);
+  // Extract JSON part from: risk_is ({...})
+  const match = message;
+  if (!match) return;
 
-    let data;
-    try {
-        data = match;
-    } catch (e) {
-        console.warn("Invalid risk JSON:", e);
-        return;
-    }
+  let data;
+  try {
+    data = match;
+  } catch (e) {
+    console.warn("Invalid risk JSON:", e);
+    return;
+  }
 
-    if (data.vpn === "yes") {
-        showVpnWarning();
-		country = null;
-    }
-	return message;
+  if (data.vpn === "yes") {
+    showVpnWarning();
+    country = null;
+  }
+  return message;
 }
 
 function showVpnWarning() {
-    // Create popup
-    const popup = document.createElement("div");
-    popup.innerText =
-        "⚠ VPN detected.\nVPN usage is not recommended and server may not support it.\nUse it at your own risk!\n\nOpponent country display is disabled for fairness.";
+  // Create popup
+  const popup = document.createElement("div");
+  popup.innerText =
+    "⚠ VPN detected.\nVPN usage is not recommended and server may not support it.\nUse it at your own risk!\n\nOpponent country display is disabled for fairness.";
 
-    popup.style.position = "fixed";
-    popup.style.bottom = "20px";
-    popup.style.left = "50%";
-    popup.style.transform = "translateX(-50%)";
-    popup.style.background = "rgba(0,0,0,0.85)";
-    popup.style.color = "#fff";
-    popup.style.padding = "12px 16px";
-    popup.style.borderRadius = "8px";
-    popup.style.fontSize = "14px";
-    popup.style.zIndex = "9999999999999999999";
-    popup.style.whiteSpace = "pre-line";
-    popup.style.maxWidth = "520px";
-    popup.style.textAlign = "center";
+  popup.style.position = "fixed";
+  popup.style.bottom = "20px";
+  popup.style.left = "50%";
+  popup.style.transform = "translateX(-50%)";
+  popup.style.background = "rgba(0,0,0,0.85)";
+  popup.style.color = "#fff";
+  popup.style.padding = "12px 16px";
+  popup.style.borderRadius = "8px";
+  popup.style.fontSize = "14px";
+  popup.style.zIndex = "9999999999999999999";
+  popup.style.whiteSpace = "pre-line";
+  popup.style.maxWidth = "520px";
+  popup.style.textAlign = "center";
 
-    document.body.appendChild(popup);
+  document.body.appendChild(popup);
 
-    // Auto remove after 4 seconds
-    setTimeout(() => {
-        popup.remove();
-    }, 16000);
+  // Auto remove after 4 seconds
+  setTimeout(() => {
+    popup.remove();
+  }, 16000);
 }
 
-
-
 document.getElementById("copy-session").onclick = () => {
-// document.querySelector("copy-session").addEventListener("click", async () => {
-	console.log("clicked session copy", joinedSessionId)
-    if (!joinedSessionId) return;
+  // document.querySelector("copy-session").addEventListener("click", async () => {
+  console.log("clicked session copy", joinedSessionId);
+  if (!joinedSessionId) return;
 
-    try {
-        navigator.clipboard.writeText(joinedSessionId);
-        showTooltip(`Copied: ${joinedSessionId}`);
-    } catch (err) {
-        console.error("Copy failed:", err);
-    }
+  try {
+    navigator.clipboard.writeText(joinedSessionId);
+    showTooltip(`Copied: ${joinedSessionId}`);
+  } catch (err) {
+    console.error("Copy failed:", err);
+  }
 };
 
 let ip_data = null;
 let country = null;
 let current_op = null;
 let risk_is = {
-    "vpn": "no",
-    "risk": 0,
-    "type": "Wireless",
-    "proxy": "no"
+  vpn: "no",
+  risk: 0,
+  type: "Wireless",
+  proxy: "no",
 };
 socket.onmessage = async (event) => {
-    console.log('[socket raw event.data]', event.data);
-	const event_parsed = await recv_and_decomp(event);
-	console.log("event_parsed", event_parsed);
-	const data = event_parsed; //.data;
-console.log("onmsg data:", data)
-		switch (data.type) {
-			case "authRequired":
-				ip_data = data._ip;
-				console.log("[IP PARSE]", data._ip);
-				country = ip_data.countryCode || null;
-				risk_is = data._ip?.risk || risk_is;
-				handleRiskMessage(risk_is);
-				ip_data = null;
-	
+  console.log("[socket raw event.data]", event.data);
+  const event_parsed = await recv_and_decomp(event);
+  console.log("event_parsed", event_parsed);
+  const data = event_parsed; //.data;
+  console.log("onmsg data:", data);
+  switch (data.type) {
+    case "authRequired":
+      ip_data = data._ip;
+      console.log("[IP PARSE]", data._ip);
+      country = ip_data.countryCode || null;
+      risk_is = data._ip?.risk || risk_is;
+      handleRiskMessage(risk_is);
+      ip_data = null;
 
-    currentPlayerId = data.playerId;
+      currentPlayerId = data.playerId;
 
-    createAuthOverlay(
-        api_url_login_reg
-    );
+      createAuthOverlay(api_url_login_reg);
 
-    tryAutoLogin(
-        api_url_login_reg,
-        data.playerId
-    );
-	break
-			case "welcome":
-				playerId = data.playerId;
-				console.log("[SERVER DROPPED IP DATA", ip_data, ` Country: ${country} || Risk: ${JSON.stringify(risk_is)}`);
-				console.log("Welcome, your id is " + playerId);
-ep_id.textContent = `Hello PlayerID:\n${playerId}`;
-ep_id.style.color = "";
-				menuBtn.style.transition = "color 2s ease";
-menuBtn.style.color = "lightgreen";
+      tryAutoLogin(api_url_login_reg, data.playerId);
+      break;
+    case "welcome":
+      playerId = data.playerId;
+      console.log(
+        "[SERVER DROPPED IP DATA",
+        ip_data,
+        ` Country: ${country} || Risk: ${JSON.stringify(risk_is)}`,
+      );
+      console.log("Welcome, your id is " + playerId);
+      ep_id.textContent = `Hello PlayerID:\n${playerId}`;
+      ep_id.style.color = "";
+      menuBtn.style.transition = "color 2s ease";
+      menuBtn.style.color = "lightgreen";
 
-setTimeout(() => {
-    menuBtn.style.color = "";
-}, ui_display_times.socketready);
-				break;
-			
-			// Opponent has joined and the session is ready
-			case "sessionCreated":
-			console.log("Parsing vars for session join", data);
-			joinedSessionId = data.code;
-			console.log("joinedSessionId",joinedSessionId);
-			break;
-			case "sessionReady":
-				console.log("sessionReady");
-				tocar("tf2/Vote_started", false);
-				// showTooltip("Opponent has joined and the session is ready");
-				// [socket raw event.data] {"type":"sessionJoined","code":"XRA2"}
-				document.getElementById("session-start-control").classList.remove("hidden");
-				isOpponentReadyElem.classList.remove("hidden");
-				
-				 // document.getElementById("session-display").classList.remove("hidden");
-  //  document.getElementById("session-code-text").textContent = joinedSessionId;
-	
-	// joinedSessionId;
-				// sends the opponent which faction you're playing with
-				comp_and_send(socket, JSON.stringify({ type: "opChangeFaction", faction: dm.faction, info: { "me_id": playerId, "me_flag": country} }));
-				sendChatMessageStrig(`play wich ${factions[faction_name].name} faction!`)
-				break;
-
-			// Opponent has left and the session is no longer ready
-			case "sessionUnready":
-				opponentReady = false;
-				// btnCancelElem.classList.remove("hidden");
-				if (isconnectedtosession){
-				tocar("tf2/Vote_failure", false);
-				}
-				console.log("session un ready", gameended);
-				disableChat();
-				//reset_custom();
-				if (gameended === false) {
-				showTooltip("Opponent has left and the session is no longer ready");
-				var btn = document.getElementById("session-start-control");
-				btn.textContent = "Ready";
-				amReady = false;
-				toggleReadyWaiting(amReady);
-			//	btnCancelElem.classList.remove("hidden");
-			//	btnCreateElem.classList.remove("hidden");
-			//	btnJoinElem.classList.remove("hidden");
-				}
-				twoPlayersConnected = false
-				if (twoPlayersConnected === true){
-					ui.stopYouTube();
-					play_wait_music();
-				} else {
-					stop_wait_music();
-					ui.resumeYouTube();
-				}
-				console.log("---------------------");
-				console.log("Opponent left the game");
-				// isOpponentReadyElem.classList.add("hidden");
-				updateOpponentUI({
- 								 "name": "No Opponent",
- 								 "state": "img/icons/google_fonts__signal_disconnected_99dp_CCCCCC_FILL0_wght400_GRAD0_opsz48.png",
- 								 "status": ""
-								});
-								await sleep(100);
-				opponentReadyElem.classList.add("disabled");
-				document.getElementById("session-start-control").classList.add("disabled");
-				opponentReadyElem.classList.add("disabled");
-				// if (game.roundCound > 0) { //oryginal dev typo X D
-				var game_state = this.game;
-				console.log("END GAME TRY round counts", game_state.roundCount, "game", game_state);
-				if (gameended === false) {
-				if (game_state.roundCount > 0) {
-					isconnectedtosession = false;
-					await ui.notification("win-opleft", ui_display_times.round_end_result *2);
-
-					await game.returnToCustomization();
-					btnCancelElem.classList.remove("hidden"); // no idea if its do anything
-					if (joinedSessionId) {
-						silent_cancelSession();
-					}
-					reset_menu();
-				}
-			} else {
-				console.log("Op left, but game ended is", gameended);
-				showTooltip("Opponent has left");
-			}
-				
-				clearUnread();
-				if (data?.reason || null === "sessionCancelled"){
-					silent_cancelSession();
-				}
-				break;
-			
-			// Opponent is ready. If you are ready begin the game immediately
-			case "ready":
-				 showTooltip("Opponent is ready. If you are ready begin the game immediately");
-				 tocar("tf2/Vote_yes", true);
-				 updateOpponentUI({
- 								 "name": "Opponent",
- 								 "state": `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
- 								 "status": `Ready: ${opponentReady}`
-								});
-				player_op = new Player(1, players.op, data.deck);
-				if (amReady) {
-					customizationElem.classList.add("hide");
-					gameStartControlsElem.classList.add("hide");
-					//await sleep(100);
-					game.startGame();
-					return
-				} else {
-					opponentReadyElem.classList.remove("disabled");
-					opponentReady = true;
-					updateOpponentUI({
- 								 "name": "Opponent",
- 								 "state": `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
- 								 "status": `Ready: ${opponentReady}`
-								});
-				}
-				break;
-
-			case "opChangeFaction":
-				if ( twoPlayersConnected === false ){
-					disableChat();
-				}
-				twoPlayersConnected = true;
-				current_op = data.info
-			//	current_op.me_flag = "PL";
-				if (twoPlayersConnected === true){
-					ui.stopYouTube();
-					play_wait_music();
-				} else {
-					stop_wait_music();
-					ui.resumeYouTube();
-				}
-				console.log("opponent has changed his faction");
-				 showTooltip(`Opponent changed his faction to ${factions[data.faction]?.name || data.faction}`);
-				 op_icon_faction = `img/icons/deck_shield_${data.faction}.png`;
-				updateOpponentUI({
- 								 "name": `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players.op}`,
- 								 "state": `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
- 								 "status": `Ready: ${opponentReady}`
-								});
-				// opponentReadyElem.querySelector("img").src = `img/icons/deck_shield_${data.faction}.png`
-				break;
-			
-			case "unReady":
-				opponentReady = false;
-				if (isconnectedtosession){
-				tocar("tf2/Vote_no", true);
-				}
-				// amReady = false;
-				toggleReadyWaiting(amReady);
-								updateOpponentUI({
- 								 "name": `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players.op}`,
- 								 "state": `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
- 								 "status": `Ready: ${opponentReady}`
-								});
-			//	twoPlayersConnected = true;
-				 showTooltip("Opponent is unReady.");
-				// opponentReadyElem.classList.add("disabled");
-				if (amReady) {
-					document.getElementById("session-start-control").classList.remove("ready");
-					customizationElem.classList.remove("noclick");
-				}
-				break;
-			
-			// Initializes Opponent's updated Hand and Deck
-			case "initial_reDraw":
-				data.deck = fillCardElements(data.deck, player_op);
-				data.hand = fillCardElements(data.hand, player_op);
-
-				player_op.hand.cards = data.hand;
-				player_op.deck.cards = data.deck;
-				break;
-
-			// Game-start
-			case "start":
-				console.log("---------------------");
-				console.log("Match start");
-				
-				game.startRound()
-				tocar("game_start", false);
-				break;
-
-			   case "resync_hands()##BLOCK##": //Resync function disabled, due to changes made in play
-      try {
-				console.log("[RESYNC]", "recived", data);
-				var rebuild = await deserializeCards(   data.data,    player_op );
-				console.log("[RESYNC]", "REBUILD", rebuild);
-				player_op.hand.cards = rebuild;
-				console.log("[RESYNC]", "op is", player_op.hand.cards);
-				try {
-					console.log("[RESYNC]", "sync cards counter op", player_op.hand.cards.length)
-var op_counter = document.getElementById("hand-count-op");
-op_counter.innerHTML = player_op.hand.cards.length
-} catch (e) {
-	console.log("[RESYNC]", "sync cards counter op", e)
-}
-				} catch (e) {
-					console.log("[RESYNC]", " FAILED", " OUT", e);
-				}
+      setTimeout(() => {
+        menuBtn.style.color = "";
+      }, ui_display_times.socketready);
       break;
 
-			// Game - Opponent plays card
-			case "play":
-				console.log("[OPHAND]", await deserializeCards(   data?.isMeHand,    player_op));
-				var cards_to_find = await deserializeCards(   data?.isMeHand,    player_op);
-				player_op.hand.cards = cards_to_find;
-				console.log("[OPHAND]", cards_to_find, data?.isMeHand);
-				card = null;
-				// const card = player_op.hand.cards.find(c => c.filename === data.card.filename);
-				try {
-					try { console.log("[OPHAND]","IsCardPlayed?", player_op.hand.cards.find(c => c.filename === data.card.filename))} catch (e) {};
-					card = cards_to_find.find(c => c.filename === data.card.filename);
-				} catch (e) {
+    // Opponent has joined and the session is ready
+    case "sessionCreated":
+      console.log("Parsing vars for session join", data);
+      joinedSessionId = data.code;
+      console.log("joinedSessionId", joinedSessionId);
+      break;
+    case "sessionReady":
+      console.log("sessionReady");
+      tocar("tf2/Vote_started", false);
+      // showTooltip("Opponent has joined and the session is ready");
+      // [socket raw event.data] {"type":"sessionJoined","code":"XRA2"}
+      document
+        .getElementById("session-start-control")
+        .classList.remove("hidden");
+      isOpponentReadyElem.classList.remove("hidden");
 
-					console.log("[OPHAND]","Let card card failure", e,"\n\n", "OpHand: (rebuilded)", player_op.hand.cards, "payload", data, "card", card);
-					alert("Failed to build opponent hand, check console for more!! \n\nReport is as bug!!!");
-				}
-				console.log("[OPHAND]","OP", "PLAY", card, cards_to_find, data);
-				
-				const splitRowName = data.row.split("-");
-				let row
-				if (splitRowName.length > 1) {
-					const targetRow = splitRowName[0] === "self" ? "target" : "self";
-					row = board.row.find(r => r.elem_parent.id === `${targetRow}-${splitRowName[1]}`);
-				} else {
-					row = data.row
-				}
-				
-				if (data.card.filename === "decoy") {
-					const replacedCard = row.cards.find(bc => bc.filename === data.target.filename);
-					if (!replacedCard) return
-					try {
-						replacedCard.animate2("decoy"); //placeholder
-						await sleep(Math.floor(ui_display_times.show_me_that_card_you_have * (1 - 0.6)));
-					} catch (e) {
-						console.log("Decoy target", e);
-					}
-					board.moveTo(replacedCard, player_op.hand, row);
-				}
-				
-				if (row === "weather") 
-					await player_op.playCard(card, row);
-				else if (data.card.filename === "scorch")
-					await  player_op.playScorch(card);
-				else
-					await player_op.playCardToRow(card, row);
-				
-				await sleep(500);
-				console.log("[OPHAND]","PLAY EXCUTE DONE, SYNC2");
-				try {
-				console.log("[OPHAND] post", await deserializeCards(   data?.HandMePost,    player_op));
-				var cards_to_find_post = await deserializeCards(   data?.HandMePost,    player_op);
-				player_op.hand.cards = cards_to_find_post;
-				console.log("[OPHAND]", player_op.hand.cards);
-				document.getElementById("hand-count-op").innerHTML = player_op.hand.cards.length;
-				} catch (e) {
-					console.log("[OPHAND]","sync from payload post procces fatal", e, "data", data, cards_to_find_post);
-					alert("Failed sync op cars on end of execute path, check console for more \n\nReport it as bug!!!");
-				}
-				break;
+      // document.getElementById("session-display").classList.remove("hidden");
+      //  document.getElementById("session-code-text").textContent = joinedSessionId;
 
-				case "sessionInvalid":
+      // joinedSessionId;
+      // sends the opponent which faction you're playing with
+      comp_and_send(
+        socket,
+        JSON.stringify({
+          type: "opChangeFaction",
+          faction: dm.faction,
+          info: { me_id: playerId, me_flag: country },
+        }),
+      );
+      sendChatMessageStrig(`play wich ${factions[faction_name].name} faction!`);
+      break;
+
+    // Opponent has left and the session is no longer ready
+    case "sessionUnready":
+      opponentReady = false;
+      // btnCancelElem.classList.remove("hidden");
+      if (isconnectedtosession) {
+        tocar("tf2/Vote_failure", false);
+      }
+      console.log("session un ready", gameended);
+      disableChat();
+      //reset_custom();
+      if (gameended === false) {
+        showTooltip("Opponent has left and the session is no longer ready");
+        var btn = document.getElementById("session-start-control");
+        btn.textContent = "Ready";
+        amReady = false;
+        toggleReadyWaiting(amReady);
+        //	btnCancelElem.classList.remove("hidden");
+        //	btnCreateElem.classList.remove("hidden");
+        //	btnJoinElem.classList.remove("hidden");
+      }
+      twoPlayersConnected = false;
+      if (twoPlayersConnected === true) {
+        ui.stopYouTube();
+        play_wait_music();
+      } else {
+        stop_wait_music();
+        ui.resumeYouTube();
+      }
+      console.log("---------------------");
+      console.log("Opponent left the game");
+      // isOpponentReadyElem.classList.add("hidden");
+      updateOpponentUI({
+        name: "No Opponent",
+        state:
+          "img/icons/google_fonts__signal_disconnected_99dp_CCCCCC_FILL0_wght400_GRAD0_opsz48.png",
+        status: "",
+      });
+      await sleep(100);
+      opponentReadyElem.classList.add("disabled");
+      document
+        .getElementById("session-start-control")
+        .classList.add("disabled");
+      opponentReadyElem.classList.add("disabled");
+      // if (game.roundCound > 0) { //oryginal dev typo X D
+      var game_state = this.game;
+      console.log(
+        "END GAME TRY round counts",
+        game_state.roundCount,
+        "game",
+        game_state,
+      );
+      if (gameended === false) {
+        if (game_state.roundCount > 0) {
+          isconnectedtosession = false;
+          await ui.notification(
+            "win-opleft",
+            ui_display_times.round_end_result * 2,
+          );
+
+          await game.returnToCustomization();
+          btnCancelElem.classList.remove("hidden"); // no idea if its do anything
+          if (joinedSessionId) {
+            silent_cancelSession();
+          }
+          reset_menu();
+        }
+      } else {
+        console.log("Op left, but game ended is", gameended);
+        showTooltip("Opponent has left");
+      }
+
+      clearUnread();
+      if (data?.reason || null === "sessionCancelled") {
+        silent_cancelSession();
+      }
+      break;
+
+    // Opponent is ready. If you are ready begin the game immediately
+    case "ready":
+      showTooltip(
+        "Opponent is ready. If you are ready begin the game immediately",
+      );
+      tocar("tf2/Vote_yes", true);
+      updateOpponentUI({
+        name: "Opponent",
+        state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
+        status: `Ready: ${opponentReady}`,
+      });
+      player_op = new Player(1, players.op, data.deck);
+      if (amReady) {
+        customizationElem.classList.add("hide");
+        gameStartControlsElem.classList.add("hide");
+        //await sleep(100);
+        game.startGame();
+        return;
+      } else {
+        opponentReadyElem.classList.remove("disabled");
+        opponentReady = true;
+        updateOpponentUI({
+          name: "Opponent",
+          state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
+          status: `Ready: ${opponentReady}`,
+        });
+      }
+      break;
+
+    case "opChangeFaction":
+      if (twoPlayersConnected === false) {
+        disableChat();
+      }
+      twoPlayersConnected = true;
+      current_op = data.info;
+      //	current_op.me_flag = "PL";
+      if (twoPlayersConnected === true) {
+        ui.stopYouTube();
+        play_wait_music();
+      } else {
+        stop_wait_music();
+        ui.resumeYouTube();
+      }
+      console.log("opponent has changed his faction");
+      showTooltip(
+        `Opponent changed his faction to ${factions[data.faction]?.name || data.faction}`,
+      );
+      op_icon_faction = `img/icons/deck_shield_${data.faction}.png`;
+      updateOpponentUI({
+        name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players.op}`,
+        state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
+        status: `Ready: ${opponentReady}`,
+      });
+      // opponentReadyElem.querySelector("img").src = `img/icons/deck_shield_${data.faction}.png`
+      break;
+
+    case "unReady":
+      opponentReady = false;
+      if (isconnectedtosession) {
+        tocar("tf2/Vote_no", true);
+      }
+      // amReady = false;
+      toggleReadyWaiting(amReady);
+      updateOpponentUI({
+        name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players.op}`,
+        state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
+        status: `Ready: ${opponentReady}`,
+      });
+      //	twoPlayersConnected = true;
+      showTooltip("Opponent is unReady.");
+      // opponentReadyElem.classList.add("disabled");
+      if (amReady) {
+        document
+          .getElementById("session-start-control")
+          .classList.remove("ready");
+        customizationElem.classList.remove("noclick");
+      }
+      break;
+
+    // Initializes Opponent's updated Hand and Deck
+    case "initial_reDraw":
+      data.deck = fillCardElements(data.deck, player_op);
+      data.hand = fillCardElements(data.hand, player_op);
+
+      player_op.hand.cards = data.hand;
+      player_op.deck.cards = data.deck;
+      break;
+
+    // Game-start
+    case "start":
+      console.log("---------------------");
+      console.log("Match start");
+
+      game.startRound();
+      tocar("game_start", false);
+      break;
+
+    case "resync_hands()##BLOCK##": //Resync function disabled, due to changes made in play
+      try {
+        console.log("[RESYNC]", "recived", data);
+        var rebuild = await deserializeCards(data.data, player_op);
+        console.log("[RESYNC]", "REBUILD", rebuild);
+        player_op.hand.cards = rebuild;
+        console.log("[RESYNC]", "op is", player_op.hand.cards);
+        try {
+          console.log(
+            "[RESYNC]",
+            "sync cards counter op",
+            player_op.hand.cards.length,
+          );
+          var op_counter = document.getElementById("hand-count-op");
+          op_counter.innerHTML = player_op.hand.cards.length;
+        } catch (e) {
+          console.log("[RESYNC]", "sync cards counter op", e);
+        }
+      } catch (e) {
+        console.log("[RESYNC]", " FAILED", " OUT", e);
+      }
+      break;
+
+    // Game - Opponent plays card
+    case "play":
+      console.log(
+        "[OPHAND]",
+        await deserializeCards(data?.isMeHand, player_op),
+      );
+      var cards_to_find = await deserializeCards(data?.isMeHand, player_op);
+      player_op.hand.cards = cards_to_find;
+      console.log("[OPHAND]", cards_to_find, data?.isMeHand);
+      card = null;
+      // const card = player_op.hand.cards.find(c => c.filename === data.card.filename);
+      try {
+        try {
+          console.log(
+            "[OPHAND]",
+            "IsCardPlayed?",
+            player_op.hand.cards.find((c) => c.filename === data.card.filename),
+          );
+        } catch (e) {}
+        card = cards_to_find.find((c) => c.filename === data.card.filename);
+      } catch (e) {
+        console.log(
+          "[OPHAND]",
+          "Let card card failure",
+          e,
+          "\n\n",
+          "OpHand: (rebuilded)",
+          player_op.hand.cards,
+          "payload",
+          data,
+          "card",
+          card,
+        );
+        alert(
+          "Failed to build opponent hand, check console for more!! \n\nReport is as bug!!!",
+        );
+      }
+      console.log("[OPHAND]", "OP", "PLAY", card, cards_to_find, data);
+
+      const splitRowName = data.row.split("-");
+      let row;
+      if (splitRowName.length > 1) {
+        const targetRow = splitRowName[0] === "self" ? "target" : "self";
+        row = board.row.find(
+          (r) => r.elem_parent.id === `${targetRow}-${splitRowName[1]}`,
+        );
+      } else {
+        row = data.row;
+      }
+
+      if (data.card.filename === "decoy") {
+        const replacedCard = row.cards.find(
+          (bc) => bc.filename === data.target.filename,
+        );
+        if (!replacedCard) return;
+        try {
+          replacedCard.animate2("decoy"); //placeholder
+          await sleep(
+            Math.floor(ui_display_times.show_me_that_card_you_have * (1 - 0.6)),
+          );
+        } catch (e) {
+          console.log("Decoy target", e);
+        }
+        board.moveTo(replacedCard, player_op.hand, row);
+      }
+
+      if (row === "weather") await player_op.playCard(card, row);
+      else if (data.card.filename === "scorch")
+        await player_op.playScorch(card);
+      else await player_op.playCardToRow(card, row);
+
+      await sleep(500);
+      console.log("[OPHAND]", "PLAY EXCUTE DONE, SYNC2");
+      try {
+        console.log(
+          "[OPHAND] post",
+          await deserializeCards(data?.HandMePost, player_op),
+        );
+        var cards_to_find_post = await deserializeCards(
+          data?.HandMePost,
+          player_op,
+        );
+        player_op.hand.cards = cards_to_find_post;
+        console.log("[OPHAND]", player_op.hand.cards);
+        document.getElementById("hand-count-op").innerHTML =
+          player_op.hand.cards.length;
+      } catch (e) {
+        console.log(
+          "[OPHAND]",
+          "sync from payload post procces fatal",
+          e,
+          "data",
+          data,
+          cards_to_find_post,
+        );
+        alert(
+          "Failed sync op cars on end of execute path, check console for more \n\nReport it as bug!!!",
+        );
+      }
+      break;
+
+    case "sessionInvalid":
       alert("Invalid session ID");
       break;
-				//case "medicDraw":
-				//	var data2 = data;
-				
+    //case "medicDraw":
+    //	var data2 = data;
 
+    //break;
+    // Game - Opponent pass
+    case "pass":
+      player_op.passRound();
+      break;
 
-				//break;
-			// Game - Opponent pass
-			case "pass":
-				player_op.passRound();
-				break;
-
-			// Game - Opponent used the leader card
-			case "useLeader":
-				console.log("[OPHAND]", await deserializeCards(   data?.isMeHand,    player_op));
-				var cards_to_find = await deserializeCards(   data?.isMeHand,    player_op);
-				player_op.hand.cards = cards_to_find;
-				console.log("[OPHAND]", cards_to_find, data?.isMeHand);
-				// const card = player_op.hand.cards.find(c => c.filename === data.card.filename);
-				card = null;
-				await player_op.activateLeader();
-				try {
-				console.log("[OPHAND] post", await deserializeCards(   data?.HandMePost,    player_op));
-				var cards_to_find_post = await deserializeCards(   data?.HandMePost,    player_op);
-				player_op.hand.cards = cards_to_find_post;
-				console.log("[OPHAND]", player_op.hand.cards);
-				document.getElementById("hand-count-op").innerHTML = player_op.hand.cards.length;
-				} catch (e) {
-					console.log("[OPHAND]","sync from payload post procces fatal", e, "data", data, cards_to_find_post);
-					alert("Failed sync op cars on end of execute path, check console for more \n\nReport it as bug!!!");
-				}
-				player_op.endTurn();
-				break;
-		}
+    // Game - Opponent used the leader card
+    case "useLeader":
+      console.log(
+        "[OPHAND]",
+        await deserializeCards(data?.isMeHand, player_op),
+      );
+      var cards_to_find = await deserializeCards(data?.isMeHand, player_op);
+      player_op.hand.cards = cards_to_find;
+      console.log("[OPHAND]", cards_to_find, data?.isMeHand);
+      // const card = player_op.hand.cards.find(c => c.filename === data.card.filename);
+      card = null;
+      await player_op.activateLeader();
+      try {
+        console.log(
+          "[OPHAND] post",
+          await deserializeCards(data?.HandMePost, player_op),
+        );
+        var cards_to_find_post = await deserializeCards(
+          data?.HandMePost,
+          player_op,
+        );
+        player_op.hand.cards = cards_to_find_post;
+        console.log("[OPHAND]", player_op.hand.cards);
+        document.getElementById("hand-count-op").innerHTML =
+          player_op.hand.cards.length;
+      } catch (e) {
+        console.log(
+          "[OPHAND]",
+          "sync from payload post procces fatal",
+          e,
+          "data",
+          data,
+          cards_to_find_post,
+        );
+        alert(
+          "Failed sync op cars on end of execute path, check console for more \n\nReport it as bug!!!",
+        );
+      }
+      player_op.endTurn();
+      break;
+  }
 };
 
-
-
-
-
-
-
-
 async function sunlightEffect(duration = 1900) {
-	const sun = document.createElement("div");
+  const sun = document.createElement("div");
 
-	sun.style.position = "fixed";
-	sun.style.top = "0";
-	sun.style.left = "0";
+  sun.style.position = "fixed";
+  sun.style.top = "0";
+  sun.style.left = "0";
 
-	sun.style.width = "40vw";
-	sun.style.height = "40vw";
+  sun.style.width = "40vw";
+  sun.style.height = "40vw";
 
-	sun.style.pointerEvents = "none";
-	sun.style.zIndex = "999999999999";
+  sun.style.pointerEvents = "none";
+  sun.style.zIndex = "999999999999";
 
-	sun.style.background = `
+  sun.style.background = `
 		radial-gradient(
 			circle at top left,
 			rgba(255,255,220,0.95) 0%,
@@ -976,2399 +1031,2736 @@ async function sunlightEffect(duration = 1900) {
 		)
 	`;
 
-	sun.style.filter = "blur(6px)";
-	sun.style.mixBlendMode = "screen";
+  sun.style.filter = "blur(6px)";
+  sun.style.mixBlendMode = "screen";
 
-	// remove scaling animation
-	sun.style.opacity = "0";
-	sun.style.transition = "opacity 0.35s ease";
+  // remove scaling animation
+  sun.style.opacity = "0";
+  sun.style.transition = "opacity 0.35s ease";
 
-	document.body.appendChild(sun);
+  document.body.appendChild(sun);
 
-	await sleep(20);
+  await sleep(20);
 
-	// fade in only
-	sun.style.opacity = "1";
+  // fade in only
+  sun.style.opacity = "1";
 
-	let pulse = setInterval(() => {
-		sun.style.filter =
-			Math.random() > 0.5
-				? "blur(8px)"
-				: "blur(5px)";
-	}, 120);
+  let pulse = setInterval(() => {
+    sun.style.filter = Math.random() > 0.5 ? "blur(8px)" : "blur(5px)";
+  }, 120);
 
-	await sleep(duration - 500);
+  await sleep(duration - 500);
 
-	clearInterval(pulse);
+  clearInterval(pulse);
 
-	// fade out only
-	sun.style.opacity = "0";
+  // fade out only
+  sun.style.opacity = "0";
 
-	await sleep(400);
+  await sleep(400);
 
-	sun.remove();
+  sun.remove();
 }
 
-
-function fillCardElements (cards, player) {
-	for (let i = 0; i < cards.length; i++) {
-		const cardFromDict = card_dict.find(dict => dict.filename === cards[i].filename);
-		cards[i] = new Card(cardFromDict, player);
-	};
-	return cards
+function fillCardElements(cards, player) {
+  for (let i = 0; i < cards.length; i++) {
+    const cardFromDict = card_dict.find(
+      (dict) => dict.filename === cards[i].filename,
+    );
+    cards[i] = new Card(cardFromDict, player);
+  }
+  return cards;
 }
 
 // Opponent Controller
 class ControllerOpponent {
-	constructor(player) {
-		player.tag = "op";
+  constructor(player) {
+    player.tag = "op";
 
-		this.player = player;
-	}
+    this.player = player;
+  }
 }
 
 function for_seed_hashString(str) {
-	let h = 2166136261;
+  let h = 2166136261;
 
-	for (let i = 0; i < str.length; i++) {
-		h ^= str.charCodeAt(i);
-		h = Math.imul(h, 16777619);
-	}
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
 
-	return h >>> 0;
+  return h >>> 0;
 }
 
 function mulberry32(seed) {
-	return function() {
-		let t = seed += 0x6D2B79F5;
-		t = Math.imul(t ^ t >>> 15, t | 1);
-		t ^= t + Math.imul(t ^ t >>> 7, t | 61);
-		return ((t ^ t >>> 14) >>> 0) / 4294967296;
-	}
+  return function () {
+    let t = (seed += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
 }
-function shuffleSeeded(array, seed, debug = null){
-	var input = {
-		array: array,
-		seed: for_seed_hashString(seed),
-		debug: debug
-	}
-	var finresult = shuffleSeeded2(array, seed, debug);
-	console.log("SHUFFLE INPUT/OUTPUT", input, finresult, " check same ", finresult.array === input.array);
-	return finresult;
+function shuffleSeeded(array, seed, debug = null) {
+  var input = {
+    array: array,
+    seed: for_seed_hashString(seed),
+    debug: debug,
+  };
+  var finresult = shuffleSeeded2(array, seed, debug);
+  console.log(
+    "SHUFFLE INPUT/OUTPUT",
+    input,
+    finresult,
+    " check same ",
+    finresult.array === input.array,
+  );
+  return finresult;
 }
 function shuffleSeeded2(array, seed, debug = null) {
-	try {
-	let seed_init = seed;
-	seed = for_seed_hashString(seed);
-	console.log(`Shuffle new seed ${seed} from ${seed_init}`, array);
-	let rng = mulberry32(seed);
-	if (debug === "THAT_IS_OP__RETURN_THIS"){
-		try {
-			console.log(
-		"SHUFFLE ON SEED",
-		seed,
-		`\nStarted: ${fasthash(btoa(JSON.stringify(array)))}`,
-		`\nOutput: ${fasthash(btoa(JSON.stringify(array)))}`,
-		debug
-	);
-} catch (e){}
-	 return {"array": array, "seed": seed}; }
-	let arr = [...array];
+  try {
+    let seed_init = seed;
+    seed = for_seed_hashString(seed);
+    console.log(`Shuffle new seed ${seed} from ${seed_init}`, array);
+    let rng = mulberry32(seed);
+    if (debug === "THAT_IS_OP__RETURN_THIS") {
+      try {
+        console.log(
+          "SHUFFLE ON SEED",
+          seed,
+          `\nStarted: ${fasthash(btoa(JSON.stringify(array)))}`,
+          `\nOutput: ${fasthash(btoa(JSON.stringify(array)))}`,
+          debug,
+        );
+      } catch (e) {}
+      return { array: array, seed: seed };
+    }
+    let arr = [...array];
 
-	for (let i = arr.length - 1; i > 0; i--) {
-		const j = Math.floor(rng() * (i + 1));
-		[arr[i], arr[j]] = [arr[j], arr[i]];
-	}
-	try{
-	console.log(
-		"SHUFFLE ON SEED",
-		seed,
-		`\nStarted: ${fasthash(btoa(JSON.stringify(array)))}`,
-		`\nOutput: ${fasthash(btoa(JSON.stringify(arr)))}`,
-		debug
-	);
-} catch (e){
-
-}
-	return {"array": arr, "seed": seed};
-} catch (e){
-	console.error(`shuffleSeeded`, ` fatal error`, array, seed, debug, ` error `, e);
-	alert("GAME CRASH!\n\nFatal error at shuffleSeeded function, check console for more info\n\nReport is as bug!!");
-}
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    try {
+      console.log(
+        "SHUFFLE ON SEED",
+        seed,
+        `\nStarted: ${fasthash(btoa(JSON.stringify(array)))}`,
+        `\nOutput: ${fasthash(btoa(JSON.stringify(arr)))}`,
+        debug,
+      );
+    } catch (e) {}
+    return { array: arr, seed: seed };
+  } catch (e) {
+    console.error(
+      `shuffleSeeded`,
+      ` fatal error`,
+      array,
+      seed,
+      debug,
+      ` error `,
+      e,
+    );
+    alert(
+      "GAME CRASH!\n\nFatal error at shuffleSeeded function, check console for more info\n\nReport is as bug!!",
+    );
+  }
 }
 
 // Can make actions during turns like playing cards that it owns
 class Player {
-	constructor(id, name, deck) {
-		// console.log("PLAYER NEW", id, name, deck);
-		let debug = null;
-		if (name === players.me) {
-		this.ThatPlayerId = playerId;
-		debug = "ME";
-		} else {
-		this.ThatPlayerId = current_op.me_id;
-		debug = "THAT_IS_OP__RETURN_THIS";
-		};
+  constructor(id, name, deck) {
+    // console.log("PLAYER NEW", id, name, deck);
+    let debug = null;
+    if (name === players.me) {
+      this.ThatPlayerId = playerId;
+      debug = "ME";
+    } else {
+      this.ThatPlayerId = current_op.me_id;
+      debug = "THAT_IS_OP__RETURN_THIS";
+    }
 
+    this.id = id;
+    this.tag = "me";
+    this.controller =
+      id === 0 ? new Controller() : new ControllerOpponent(this);
+    var tmp_cards = shuffleSeeded(
+      deck.cards,
+      btoa(
+        `${Math.random().toString(36).substring(2, 36)}${this.ThatPlayerId}`,
+      ),
+      debug,
+    );
+    deck.cards = tmp_cards.array;
+    this.deckseed = tmp_cards.seed;
 
-		this.id = id;
-		this.tag = "me";
-		this.controller = (id === 0) ? new Controller() : new ControllerOpponent(this);
-		var tmp_cards = shuffleSeeded(deck.cards, btoa(`${Math.random().toString(36).substring(2, 36)}${this.ThatPlayerId}`), debug);
-		deck.cards = tmp_cards.array;
-		this.deckseed = tmp_cards.seed;
-		
+    this.hand =
+      id === 0
+        ? new Hand(document.getElementById("hand-row"))
+        : new HandOpponent();
+    this.grave = new Grave(document.getElementById("grave-" + this.tag));
+    this.deck = new Deck(
+      deck.faction,
+      document.getElementById("deck-" + this.tag),
+    );
+    this.deck_data = deck;
 
-		this.hand = (id === 0) ? new Hand(document.getElementById("hand-row")) : new HandOpponent();
-		this.grave =  new Grave( document.getElementById("grave-" + this.tag));
-		this.deck = new Deck(deck.faction, document.getElementById("deck-" + this.tag));
-		this.deck_data = deck;
-		
-		this.leader = new Card(deck.leader, this);
-		this.elem_leader = document.getElementById("leader-" + this.tag);
-		this.elem_leader.children[0].appendChild( this.leader.elem );
-		
-		this.reset();
-		
-		this.name = name;
-		document.getElementById("name-" + this.tag).innerHTML = name;
-		
-		document.getElementById("deck-name-" +this.tag).innerHTML = factions[deck.faction].name;
-		document.getElementById("stats-" + this.tag).getElementsByClassName("profile-img")[0].children[0].children[0];
-		let x = document.querySelector("#stats-" +this.tag+ " .profile-img > div > div");
-		x.style.backgroundImage = iconURL("deck_shield_" + deck.faction);
-	}
-	
-	// Sets default values
-	reset(){
-		gameended = false;
-		this.grave.reset();
-		this.hand.reset();
-		this.deck.reset();
-		this.deck.initializeFromID(this.deck_data.cards, this);
-		
-		this.health = maxhealth;
-		this.total = 0;
-		this.passed = false;
-		this.handsize = thishandsize;
-		this.winning = false;
-	
-		this.enableLeader();
-		this.setPassed(false);
-		document.getElementById("gem1-" +this.tag).classList.add("gem-on");
-		document.getElementById("gem2-" +this.tag).classList.add("gem-on");
-	}
-	
-	// Returns the opponent Player
-	opponent(){
-		return board.opponent(this);
-	}
-	
-	// Updates the player's total score and notifies the gamee
-	updateTotal(n){
-		// console.log(`UPdtae total this`, this);
-		this.total += n;
-		document.getElementById("score-total-" + this.tag).children[0].innerHTML = this.total;
-		board.updateLeader();
-	}
-	
-	// Puts the player in the winning state
-	setWinning(isWinning) {
-		if (this.winning ^ isWinning)
-			document.getElementById("score-total-" + this.tag).classList.toggle("score-leader");
-		this.winning = isWinning;
-	}
-	
-	// Puts the player in the passed state
-	setPassed(hasPassed) {
-		if (this.passed ^ hasPassed)
-			document.getElementById("passed-" + this.tag).classList.toggle("passed");
-		this.passed = hasPassed;
-	}
-	
-	// Sets up board for turn
-	async startTurn(){
-		document.getElementById("stats-" + this.tag).classList.add("current-turn");
-		if (this.leaderAvailable)
-			this.elem_leader.children[1].classList.remove("hide");
-		
-		if (this === player_me) {
-			document.getElementById("pass-button").classList.remove("noclick");
-		}
-	}
-	
-	// Passes the round and ends the turn
-	passRound(){
-		this.setPassed(true);
-		this.endTurn();
-	}
-	
-	// Plays a scorch card
-	async playScorch(card){
-		await this.playCardAction(card, async () => await ability_dict["scorch"].activated(card));
-	}
-	
-	// Plays a card to a specific row
-	async playCardToRow(card, row){
-		await this.playCardAction(card, async () => await board.moveTo(card, row, this.hand));
-	}
-	
-	// Plays a card to the board
-	async playCard(card){
-		await this.playCardAction(card, async () => await card.autoplay(this.hand));
-	}
-	
-	// Shows a preview of the card being played, plays it to the board and ends the turn
-	async playCardAction(card, action){
-		console.log("[ShowCard]", card, action, ui_display_times.show_me_that_card_you_have);
-		ui.showPreviewVisuals(card);
-		await sleep(ui_display_times.show_me_that_card_you_have);
-		ui.hidePreview(card);
-		await action();
-		this.endTurn();
-	}
-	
-	// Handles end of turn visuals and behavior the notifies the game
-	endTurn(){
-		if (!this.passed && !this.canPlay())
-			this.setPassed(true);
-		if (this === player_me){
-			document.getElementById("pass-button").classList.add("noclick");
-		}
-		document.getElementById("stats-" + this.tag).classList.remove("current-turn");
-		this.elem_leader.children[1].classList.add("hide");
-		game.endTurn()
-	}
-	
-	// Tells the the Player if it won the round. May damage health.
-	endRound(win){
-		if (!win) {
-			if (this.health < 1)
-				return;
-			document.getElementById("gem" + this.health + "-" +this.tag).classList.remove("gem-on");
-			this.health--;
-		}
-		this.setPassed(false);
-		this.setWinning(false);
-	}
-	
-	// Returns true if the Player can make any action other than passing
-	canPlay() {
-		return this.hand.cards.length > 0 || this.leaderAvailable;
-	}
-	
-	// Use a leader's Activate ability, then disable the leader
-	async activateLeader() {
-		ui.showPreviewVisuals(this.leader);
-		tocar("leader_horn", false);
-		await sleep(ui_display_times.faction_ability + 600);
-		ui.hidePreview(this.leader);
-		await this.leader.activated[0](this.leader, this);
-		this.disableLeader();
-		// this.endTurn();
-	}
-	
-	// Disable access to leader ability and toggles leader visuals to off state
-	disableLeader(){
-		this.leaderAvailable = false;
-		let elem = this.elem_leader.cloneNode(true);
-		this.elem_leader.parentNode.replaceChild(elem, this.elem_leader);
-		this.elem_leader = elem;
-		this.elem_leader.children[0].classList.add("fade");
-		this.elem_leader.children[1].classList.add("hide");
-		this.elem_leader.addEventListener("click", async () => await ui.viewCard(this.leader), false);
-	}
-	
-	// Enable access to leader ability and toggles leader visuals to on state
-	async enableLeader() {
-		this.leaderAvailable = this.leader.activated.length > 0;
-		let elem = this.elem_leader.cloneNode(true);
-		this.elem_leader.parentNode.replaceChild(elem, this.elem_leader);
-		this.elem_leader = elem;
-		this.elem_leader.children[0].classList.remove("fade");
-		this.elem_leader.children[1].classList.remove("hide");
-		
-		if (this.id === 0 && this.leader.activated.length > 0){
-			this.elem_leader.addEventListener("click", async () => {
-				await ui.viewCard(this.leader, async () => {
-						var handData = await serializeCards(player_me.hand.cards);
-		console.log("HandData", handData);
-						await this.activateLeader();
-						var handData_after = await serializeCards(player_me.hand.cards);
-		console.log("HandData post", handData_after);
-						comp_and_send(socket, JSON.stringify({ type: "useLeader", player: this.id, isMeHand: handData, HandMePost: handData_after  }));
-							if ( player_op.passed && !player_me.passed ) {
-								ui.enablePlayer(false);
-			showTooltip(`The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`);
-								ui.enablePlayer(false);
-			await sleep(RegisterMovesHold);
-			showTooltip(`You can play now again`);
-			ui.enablePlayer(true);
-		}
-					//	await init_sync_hands();
-					//console.log("LEADER END TURN");
-		await player_me.endTurn();
-				});
-		});
-		} else {
-			this.elem_leader.addEventListener("click", async () => await ui.viewCard(this.leader), false);
-				if ( player_op.passed && !player_me.passed ) {
-					ui.enablePlayer(false);
-			showTooltip(`The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`);
-					ui.enablePlayer(false);
-			await sleep(RegisterMovesHold);
-			showTooltip(`You can play now again`);
-			ui.enablePlayer(true);
-		}
-		//console.log("LEADER END TURN");
-		await player_me.endTurn();
-		}
-	}
-	
+    this.leader = new Card(deck.leader, this);
+    this.elem_leader = document.getElementById("leader-" + this.tag);
+    this.elem_leader.children[0].appendChild(this.leader.elem);
+
+    this.reset();
+
+    this.name = name;
+    document.getElementById("name-" + this.tag).innerHTML = name;
+
+    document.getElementById("deck-name-" + this.tag).innerHTML =
+      factions[deck.faction].name;
+    document
+      .getElementById("stats-" + this.tag)
+      .getElementsByClassName("profile-img")[0].children[0].children[0];
+    let x = document.querySelector(
+      "#stats-" + this.tag + " .profile-img > div > div",
+    );
+    x.style.backgroundImage = iconURL("deck_shield_" + deck.faction);
+  }
+
+  // Sets default values
+  reset() {
+    gameended = false;
+    this.grave.reset();
+    this.hand.reset();
+    this.deck.reset();
+    this.deck.initializeFromID(this.deck_data.cards, this);
+
+    this.health = maxhealth;
+    this.total = 0;
+    this.passed = false;
+    this.handsize = thishandsize;
+    this.winning = false;
+
+    this.enableLeader();
+    this.setPassed(false);
+    document.getElementById("gem1-" + this.tag).classList.add("gem-on");
+    document.getElementById("gem2-" + this.tag).classList.add("gem-on");
+  }
+
+  // Returns the opponent Player
+  opponent() {
+    return board.opponent(this);
+  }
+
+  // Updates the player's total score and notifies the gamee
+  updateTotal(n) {
+    // console.log(`UPdtae total this`, this);
+    this.total += n;
+    document.getElementById("score-total-" + this.tag).children[0].innerHTML =
+      this.total;
+    board.updateLeader();
+  }
+
+  // Puts the player in the winning state
+  setWinning(isWinning) {
+    if (this.winning ^ isWinning)
+      document
+        .getElementById("score-total-" + this.tag)
+        .classList.toggle("score-leader");
+    this.winning = isWinning;
+  }
+
+  // Puts the player in the passed state
+  setPassed(hasPassed) {
+    if (this.passed ^ hasPassed)
+      document.getElementById("passed-" + this.tag).classList.toggle("passed");
+    this.passed = hasPassed;
+  }
+
+  // Sets up board for turn
+  async startTurn() {
+    document.getElementById("stats-" + this.tag).classList.add("current-turn");
+    if (this.leaderAvailable)
+      this.elem_leader.children[1].classList.remove("hide");
+
+    if (this === player_me) {
+      document.getElementById("pass-button").classList.remove("noclick");
+    }
+  }
+
+  // Passes the round and ends the turn
+  passRound() {
+    this.setPassed(true);
+    this.endTurn();
+  }
+
+  // Plays a scorch card
+  async playScorch(card) {
+    await this.playCardAction(
+      card,
+      async () => await ability_dict["scorch"].activated(card),
+    );
+  }
+
+  // Plays a card to a specific row
+  async playCardToRow(card, row) {
+    await this.playCardAction(
+      card,
+      async () => await board.moveTo(card, row, this.hand),
+    );
+  }
+
+  // Plays a card to the board
+  async playCard(card) {
+    await this.playCardAction(card, async () => await card.autoplay(this.hand));
+  }
+
+  // Shows a preview of the card being played, plays it to the board and ends the turn
+  async playCardAction(card, action) {
+    console.log(
+      "[ShowCard]",
+      card,
+      action,
+      ui_display_times.show_me_that_card_you_have,
+    );
+    ui.showPreviewVisuals(card);
+    await sleep(ui_display_times.show_me_that_card_you_have);
+    ui.hidePreview(card);
+    await action();
+    this.endTurn();
+  }
+
+  // Handles end of turn visuals and behavior the notifies the game
+  endTurn() {
+    if (!this.passed && !this.canPlay()) this.setPassed(true);
+    if (this === player_me) {
+      document.getElementById("pass-button").classList.add("noclick");
+    }
+    document
+      .getElementById("stats-" + this.tag)
+      .classList.remove("current-turn");
+    this.elem_leader.children[1].classList.add("hide");
+    game.endTurn();
+  }
+
+  // Tells the the Player if it won the round. May damage health.
+  endRound(win) {
+    if (!win) {
+      if (this.health < 1) return;
+      document
+        .getElementById("gem" + this.health + "-" + this.tag)
+        .classList.remove("gem-on");
+      this.health--;
+    }
+    this.setPassed(false);
+    this.setWinning(false);
+  }
+
+  // Returns true if the Player can make any action other than passing
+  canPlay() {
+    return this.hand.cards.length > 0 || this.leaderAvailable;
+  }
+
+  // Use a leader's Activate ability, then disable the leader
+  async activateLeader() {
+    ui.showPreviewVisuals(this.leader);
+    tocar("leader_horn", false);
+    await sleep(ui_display_times.faction_ability + 600);
+    ui.hidePreview(this.leader);
+    await this.leader.activated[0](this.leader, this);
+    this.disableLeader();
+    // this.endTurn();
+  }
+
+  // Disable access to leader ability and toggles leader visuals to off state
+  disableLeader() {
+    this.leaderAvailable = false;
+    let elem = this.elem_leader.cloneNode(true);
+    this.elem_leader.parentNode.replaceChild(elem, this.elem_leader);
+    this.elem_leader = elem;
+    this.elem_leader.children[0].classList.add("fade");
+    this.elem_leader.children[1].classList.add("hide");
+    this.elem_leader.addEventListener(
+      "click",
+      async () => await ui.viewCard(this.leader),
+      false,
+    );
+  }
+
+  // Enable access to leader ability and toggles leader visuals to on state
+  async enableLeader() {
+    this.leaderAvailable = this.leader.activated.length > 0;
+    let elem = this.elem_leader.cloneNode(true);
+    this.elem_leader.parentNode.replaceChild(elem, this.elem_leader);
+    this.elem_leader = elem;
+    this.elem_leader.children[0].classList.remove("fade");
+    this.elem_leader.children[1].classList.remove("hide");
+
+    if (this.id === 0 && this.leader.activated.length > 0) {
+      this.elem_leader.addEventListener("click", async () => {
+        await ui.viewCard(this.leader, async () => {
+          var handData = await serializeCards(player_me.hand.cards);
+          console.log("HandData", handData);
+          await this.activateLeader();
+          var handData_after = await serializeCards(player_me.hand.cards);
+          console.log("HandData post", handData_after);
+          comp_and_send(
+            socket,
+            JSON.stringify({
+              type: "useLeader",
+              player: this.id,
+              isMeHand: handData,
+              HandMePost: handData_after,
+            }),
+          );
+          if (player_op.passed && !player_me.passed) {
+            ui.enablePlayer(false);
+            showTooltip(
+              `The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`,
+            );
+            ui.enablePlayer(false);
+            await sleep(RegisterMovesHold);
+            showTooltip(`You can play now again`);
+            ui.enablePlayer(true);
+          }
+          //	await init_sync_hands();
+          //console.log("LEADER END TURN");
+          await player_me.endTurn();
+        });
+      });
+    } else {
+      this.elem_leader.addEventListener(
+        "click",
+        async () => await ui.viewCard(this.leader),
+        false,
+      );
+      if (player_op.passed && !player_me.passed) {
+        ui.enablePlayer(false);
+        showTooltip(
+          `The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`,
+        );
+        ui.enablePlayer(false);
+        await sleep(RegisterMovesHold);
+        showTooltip(`You can play now again`);
+        ui.enablePlayer(true);
+      }
+      //console.log("LEADER END TURN");
+      await player_me.endTurn();
+    }
+  }
 }
 
 // Handles the adding, removing and formatting of cards in a container
 class CardContainer {
-	constructor(elem) {
-		this.elem = elem;
-		this.cards = [];
-	}
-	
-	// Returns the first card that satisfies the predcicate. Does not modify container.
-	findCard(predicate){
-		for (let i=this.cards.length-1; i>=0; --i)
-			if (predicate(this.cards[i]))
-				return this.cards[i];
-	}
-	
-	// Returns a list of cards that satisfy the predicate. Does not modify container.
-	findCards(predicate){
-		return this.cards.filter(predicate);
-	}
-	
-	// Returns a list of up to n cards that satisfy the predicate. Does not modify container.
-	findCardsRandom(predicate, n){
-		let valid = predicate ? this.cards.filter(predicate) : this.cards;
-		if (valid.length === 0)
-			return [];
-		if (!n || n === 1)
-			return [valid[randomInt(valid.length)]];
-		let out = [];
-		for (let i=Math.min(n, valid.length); i>0 ; --i){
-			let index = randomInt(valid.length);
-			out.push( valid.splice(index,1)[0] );
-		}
-		return out;
-	}
-	
-	// Removes and returns a list of cards that satisy the predicate.
-	getCards(predicate){
-		return this.cards.reduce((a,c,i) => ( predicate(c,i)?[i]:[] ).concat(a), []).map( i => this.removeCard(i));
-	}
-	
-	// Removes and returns a card that satisfies the predicate.
-	getCard(predicate) {
-		for (let i=this.cards.length-1; i>=0; --i)
-			if (predicate(this.cards[i]))
-				return this.removeCard(i);
-	}
-	
-	// Removes and returns any cards up to n that satisfy the predicate.
-	getCardsRandom(predicate, n) {
-		return this.findCardsRandom(predicate, n).map( c => this.removeCard(c) );
-	}
-	
-	// Adds a card to the container along with its associated HTML element.
-	addCard(card, index){
-		this.cards.push(card);
-		this.addCardElement(card, index?index:0);
-		this.resize();
-	}
-	
-	// Removes a card from the container along with its associated HTML element.
-	removeCard(card, index){
-		console.log("REMOVE CARD", card, index);
-		if (this.cards.length === 0)
-			throw "Cannot draw from empty " + this.constructor.name;
-		card = this.cards.splice( isNumber(card)? card : this.cards.indexOf(card) , 1)[0];
-		this.removeCardElement(card, index?index:0);
-		this.resize();
-		return card;
-	}
-	
-	// Adds a card to a pre-sorted CardContainer
-	addCardSorted(card){
-		let i = this.getSortedIndex(card);
-		this.cards.splice(i, 0, card);
-		return i;
-	}
-	
-	// Returns the expected index of a card in a sorted CardContainer
-	getSortedIndex(card){
-		for (var i=0; i<this.cards.length; ++i)
-			if (Card.compare(card, this.cards[i]) < 0)
-				break;
-		return i;
-	}
-	
-	// Adds a card to a random index of the CardContainer
-	//addCardRandom(card){
-	//	this.cards.push(card);
-	//	let index = randomInt(this.cards.length);
-	//	if (index !== this.cards.length-1) {
-	//		let t = this.cards[this.cards.length-1];
-	//		this.cards[this.cards.length-1] = this.cards[index];
-	//		this.cards[index] = t;
-	//	}
-	//	return index;
-//	}
-addCardRandom(card) {
-//	console.log("[addRCard] called", { game, card });
+  constructor(elem) {
+    this.elem = elem;
+    this.cards = [];
+  }
 
-	this.cards.push(card);
-//	console.log("[addRCard] after push", { cardsLength: this.cards.length });
-	var CardsAll = this.cards;
-//	console.log("CardPicked?", CardsAll);
+  // Returns the first card that satisfies the predcicate. Does not modify container.
+  findCard(predicate) {
+    for (let i = this.cards.length - 1; i >= 0; --i)
+      if (predicate(this.cards[i])) return this.cards[i];
+  }
 
-	let index = randomInt(this.cards.length);
-//	console.log("[addRCard] random index", index);
+  // Returns a list of cards that satisfy the predicate. Does not modify container.
+  findCards(predicate) {
+    return this.cards.filter(predicate);
+  }
 
-	if (index !== this.cards.length - 1) {
-		//console.log("[addRCard] swapping", {
-		//	from: this.cards.length - 1,
-		//	to: index
-	//	});
+  // Returns a list of up to n cards that satisfy the predicate. Does not modify container.
+  findCardsRandom(predicate, n) {
+    let valid = predicate ? this.cards.filter(predicate) : this.cards;
+    if (valid.length === 0) return [];
+    if (!n || n === 1) return [valid[randomInt(valid.length)]];
+    let out = [];
+    for (let i = Math.min(n, valid.length); i > 0; --i) {
+      let index = randomInt(valid.length);
+      out.push(valid.splice(index, 1)[0]);
+    }
+    return out;
+  }
 
-		let t = this.cards[this.cards.length - 1];
-		this.cards[this.cards.length - 1] = this.cards[index];
-		this.cards[index] = t;
-	}
+  // Removes and returns a list of cards that satisy the predicate.
+  getCards(predicate) {
+    return this.cards
+      .reduce((a, c, i) => (predicate(c, i) ? [i] : []).concat(a), [])
+      .map((i) => this.removeCard(i));
+  }
 
-	//console.log("[addRCard] result index", index, { game });
-	//console.log("CardPicked?", CardsAll[this.cards.length - 1]);
+  // Removes and returns a card that satisfies the predicate.
+  getCard(predicate) {
+    for (let i = this.cards.length - 1; i >= 0; --i)
+      if (predicate(this.cards[i])) return this.removeCard(i);
+  }
 
-	return index;
-}
-	
-	// Removes the HTML elemenet associated with the card from this CardContainer
-	removeCardElement(card, index){
-		if (this.elem)
-			this.elem.removeChild(card.elem);
-	}
-	
-	// Adds the HTML elemenet associated with the card to this CardContainer
-	addCardElement(card, index){
-		if (this.elem){
-			if (index === this.cards.length)
-				this.elem.appendChild(card.elem);
-			else
-				this.elem.insertBefore(card.elem, this.elem.children[index]);
-		}
-	}
-	
-	// Empty function to be overried by subclasses that resize their content
-	resize(){}
-	
-	// Modifies the margin of card elements inside a row-like container to stack properly
-	resizeCardContainer(overlap_count, gap, coef) {
-		let n = this.elem.children.length;
-		let param = (n < overlap_count) ?  "" + gap+"vw" : defineCardRowMargin(n, coef);
-		let children = this.elem.getElementsByClassName("card");
-		for (let x of children)
-			x.style.marginLeft = x.style.marginRight = param;
-		
-		function defineCardRowMargin(n, coef = 0){
-			return "calc((100% - (4.45vw * " + n + ")) / (2*" +n+ ") - (" +coef+ "vw * " +n+ "))";
-		}
-	}
-	
-	// Allows the row to be clicked
-	setSelectable(){
-		this.elem.classList.add("row-selectable");
-	}
-	
-	// Disallows the row to be clicked
-	clearSelectable() {
-		this.elem.classList.remove("row-selectable");
-		for (card in this.cards)
-			card.elem.classList.add("noclick");
-	}
-	
-	// Returns the container to its default, empty state
-	reset() {
-		while(this.cards.length)
-			this.removeCard(0);
-		if (this.elem)
-			while(this.elem.firstChild)
-				this.elem.removeChild(this.elem.firstChild);
-		this.cards = [];
-	}
-	
+  // Removes and returns any cards up to n that satisfy the predicate.
+  getCardsRandom(predicate, n) {
+    return this.findCardsRandom(predicate, n).map((c) => this.removeCard(c));
+  }
+
+  // Adds a card to the container along with its associated HTML element.
+  addCard(card, index) {
+    this.cards.push(card);
+    this.addCardElement(card, index ? index : 0);
+    this.resize();
+  }
+
+  // Removes a card from the container along with its associated HTML element.
+  removeCard(card, index) {
+    console.log("REMOVE CARD", card, index);
+    if (this.cards.length === 0)
+      throw "Cannot draw from empty " + this.constructor.name;
+    card = this.cards.splice(
+      isNumber(card) ? card : this.cards.indexOf(card),
+      1,
+    )[0];
+    this.removeCardElement(card, index ? index : 0);
+    this.resize();
+    return card;
+  }
+
+  // Adds a card to a pre-sorted CardContainer
+  addCardSorted(card) {
+    let i = this.getSortedIndex(card);
+    this.cards.splice(i, 0, card);
+    return i;
+  }
+
+  // Returns the expected index of a card in a sorted CardContainer
+  getSortedIndex(card) {
+    for (var i = 0; i < this.cards.length; ++i)
+      if (Card.compare(card, this.cards[i]) < 0) break;
+    return i;
+  }
+
+  // Adds a card to a random index of the CardContainer
+  //addCardRandom(card){
+  //	this.cards.push(card);
+  //	let index = randomInt(this.cards.length);
+  //	if (index !== this.cards.length-1) {
+  //		let t = this.cards[this.cards.length-1];
+  //		this.cards[this.cards.length-1] = this.cards[index];
+  //		this.cards[index] = t;
+  //	}
+  //	return index;
+  //	}
+  addCardRandom(card) {
+    //	console.log("[addRCard] called", { game, card });
+
+    this.cards.push(card);
+    //	console.log("[addRCard] after push", { cardsLength: this.cards.length });
+    var CardsAll = this.cards;
+    //	console.log("CardPicked?", CardsAll);
+
+    let index = randomInt(this.cards.length);
+    //	console.log("[addRCard] random index", index);
+
+    if (index !== this.cards.length - 1) {
+      //console.log("[addRCard] swapping", {
+      //	from: this.cards.length - 1,
+      //	to: index
+      //	});
+
+      let t = this.cards[this.cards.length - 1];
+      this.cards[this.cards.length - 1] = this.cards[index];
+      this.cards[index] = t;
+    }
+
+    //console.log("[addRCard] result index", index, { game });
+    //console.log("CardPicked?", CardsAll[this.cards.length - 1]);
+
+    return index;
+  }
+
+  // Removes the HTML elemenet associated with the card from this CardContainer
+  removeCardElement(card, index) {
+    if (this.elem) this.elem.removeChild(card.elem);
+  }
+
+  // Adds the HTML elemenet associated with the card to this CardContainer
+  addCardElement(card, index) {
+    if (this.elem) {
+      if (index === this.cards.length) this.elem.appendChild(card.elem);
+      else this.elem.insertBefore(card.elem, this.elem.children[index]);
+    }
+  }
+
+  // Empty function to be overried by subclasses that resize their content
+  resize() {}
+
+  // Modifies the margin of card elements inside a row-like container to stack properly
+  resizeCardContainer(overlap_count, gap, coef) {
+    let n = this.elem.children.length;
+    let param =
+      n < overlap_count ? "" + gap + "vw" : defineCardRowMargin(n, coef);
+    let children = this.elem.getElementsByClassName("card");
+    for (let x of children) x.style.marginLeft = x.style.marginRight = param;
+
+    function defineCardRowMargin(n, coef = 0) {
+      return (
+        "calc((100% - (4.45vw * " +
+        n +
+        ")) / (2*" +
+        n +
+        ") - (" +
+        coef +
+        "vw * " +
+        n +
+        "))"
+      );
+    }
+  }
+
+  // Allows the row to be clicked
+  setSelectable() {
+    this.elem.classList.add("row-selectable");
+  }
+
+  // Disallows the row to be clicked
+  clearSelectable() {
+    this.elem.classList.remove("row-selectable");
+    for (card in this.cards) card.elem.classList.add("noclick");
+  }
+
+  // Returns the container to its default, empty state
+  reset() {
+    while (this.cards.length) this.removeCard(0);
+    if (this.elem)
+      while (this.elem.firstChild) this.elem.removeChild(this.elem.firstChild);
+    this.cards = [];
+  }
 }
 
 // Contians all used cards in the order that they were discarded
 class Grave extends CardContainer {
-	constructor(elem) {
-		super(elem)
-		elem.addEventListener("click", () => ui.viewCardsInContainer(this), false);
-	}
-	
-	// Override
-	addCard(card){
-		this.setCardOffset(card, this.cards.length);
-		super.addCard(card, this.cards.length);
-	}
-	
-	// Override
-	removeCard(card){
-		let n = isNumber(card) ? card : this.cards.indexOf(card);
-		return super.removeCard(card, n);
-	}
-	
-	// Override
-	removeCardElement(card, index){
-		card.elem.style.left = "";
-		super.removeCardElement(card, index);
-		for (let i=index; i<this.cards.length; ++i){
-			this.setCardOffset(this.cards[i], i);
-		}
-	}
-	
-	// Offsets the card element in the deck
-	setCardOffset(card, n){
-		card.elem.style.left =  -0.03 * n +"vw";
-	}
+  constructor(elem) {
+    super(elem);
+    elem.addEventListener("click", () => ui.viewCardsInContainer(this), false);
+  }
+
+  // Override
+  addCard(card) {
+    this.setCardOffset(card, this.cards.length);
+    super.addCard(card, this.cards.length);
+  }
+
+  // Override
+  removeCard(card) {
+    let n = isNumber(card) ? card : this.cards.indexOf(card);
+    return super.removeCard(card, n);
+  }
+
+  // Override
+  removeCardElement(card, index) {
+    card.elem.style.left = "";
+    super.removeCardElement(card, index);
+    for (let i = index; i < this.cards.length; ++i) {
+      this.setCardOffset(this.cards[i], i);
+    }
+  }
+
+  // Offsets the card element in the deck
+  setCardOffset(card, n) {
+    card.elem.style.left = -0.03 * n + "vw";
+  }
 }
 
 // Contains a randomized set of cards to be drawn from
 class Deck extends CardContainer {
-	constructor(faction, elem){
-		super(elem);
-		this.faction = faction;
+  constructor(faction, elem) {
+    super(elem);
+    this.faction = faction;
 
-		this.counter = document.createElement("div");
-		this.counter.classList = "deck-counter center";
-		this.counter.appendChild( document.createTextNode(this.cards.length) );
-		this.elem.appendChild(this.counter);
-	}
-	
-	// Creates duplicates of cards with a count of more than one, then initializes deck
-	initializeFromID(card_id_list, player){
-		this.initialize( card_id_list.reduce((a,c) => a.concat(clone(c.count, card_dict[c.index])), []), player);
-		function clone(n ,elem) { for (var  i=0, a=[]; i<n; ++i) a.push(elem); return a; }
-	}
-	
-	// Populates a deck with a list of card data and associated those cards with the owner of this deck.
-	initialize(card_data_list, player){
-		for (let i=0; i<card_data_list.length; ++i) {
-			let card = new Card(card_data_list[i], player);
-			card.holder = player;
-			this.addCardRandom(card);
-			this.addCardElement();
-		}
-		this.resize();
-	}
-	
-	// Override
-	addCard(card){
-		this.addCardRandom(card);
-		this.addCardElement();
-		this.resize();
-	}
-	
-	// Sends the top card from the Deck to the Hand
-	async draw(hand) {
-		let drawnCard = null
-		tocar("game_buy", false);
-		if (hand === player_op.hand) {
-			drawnCard = this.removeCard(0)
-			hand.addCard(drawnCard);
-		} else {
-			drawnCard = this.cards[0];
-			await board.toHand(drawnCard, this);
-		}
+    this.counter = document.createElement("div");
+    this.counter.classList = "deck-counter center";
+    this.counter.appendChild(document.createTextNode(this.cards.length));
+    this.elem.appendChild(this.counter);
+  }
 
-		if (drawnCard !== null)
-			return drawnCard
-	}	
-	// Draws a card and sends it to the container before adding a card from the container back to the deck.
-	//swap(container, card){
-	//	container.addCard(this.removeCard(0));
-	//	this.addCard(card);
-	//	}
-	swap(container, card){
+  // Creates duplicates of cards with a count of more than one, then initializes deck
+  initializeFromID(card_id_list, player) {
+    this.initialize(
+      card_id_list.reduce(
+        (a, c) => a.concat(clone(c.count, card_dict[c.index])),
+        [],
+      ),
+      player,
+    );
+    function clone(n, elem) {
+      for (var i = 0, a = []; i < n; ++i) a.push(elem);
+      return a;
+    }
+  }
+
+  // Populates a deck with a list of card data and associated those cards with the owner of this deck.
+  initialize(card_data_list, player) {
+    for (let i = 0; i < card_data_list.length; ++i) {
+      let card = new Card(card_data_list[i], player);
+      card.holder = player;
+      this.addCardRandom(card);
+      this.addCardElement();
+    }
+    this.resize();
+  }
+
+  // Override
+  addCard(card) {
+    this.addCardRandom(card);
+    this.addCardElement();
+    this.resize();
+  }
+
+  // Sends the top card from the Deck to the Hand
+  async draw(hand) {
+    let drawnCard = null;
+    tocar("game_buy", false);
+    if (hand === player_op.hand) {
+      drawnCard = this.removeCard(0);
+      hand.addCard(drawnCard);
+    } else {
+      drawnCard = this.cards[0];
+      await board.toHand(drawnCard, this);
+    }
+
+    if (drawnCard !== null) return drawnCard;
+  }
+  // Draws a card and sends it to the container before adding a card from the container back to the deck.
+  //swap(container, card){
+  //	container.addCard(this.removeCard(0));
+  //	this.addCard(card);
+  //	}
+  swap(container, card) {
     const fromDeck = this.cards[0]; // card that will be removed
 
-    console.log("SWAP START", "\n Deck gives:", fromDeck?.name,"\n Hand gives:", card?.name);
+    console.log(
+      "SWAP START",
+      "\n Deck gives:",
+      fromDeck?.name,
+      "\n Hand gives:",
+      card?.name,
+    );
 
     const removedFromDeck = this.removeCard(0);
 
     container.addCard(removedFromDeck);
     this.addCard(card);
 
-    console.log("SWAP RESULT", "\n -> Deck received:", card?.name, "\n -> Hand received:", removedFromDeck?.name);
-	try { var txt_draw = `You redrawed card \"${card?.name}\" for a \"${removedFromDeck?.name}\"`; console.log(txt_draw); cardredrawnotice(txt_draw); } catch (e) { console.log("cardredrawnotice err", e); }
-}
-	
-	// Override
-	addCardElement() {
-		let elem = document.createElement("div");
-		elem.classList.add("deck-card");
-		elem.style.backgroundImage = iconURL("deck_back_" + this.faction, "jpg");
-		this.setCardOffset(elem, this.cards.length-1);
-		this.elem.insertBefore(elem, this.counter);
-	}
-	
-	// Override
-	removeCardElement(){
-		this.elem.removeChild(this.elem.children[this.cards.length]).style.left = "";
-	}
-	
-	// Offsets the card element in the deck
-	setCardOffset(elem, n){
-		elem.style.left =  -0.03 * n +"vw";
-	}
-	
-	// Override
-	resize(){
-		this.counter.innerHTML = this.cards.length;
-		this.setCardOffset(this.counter, this.cards.length);
-	}
-	
-	// Override
-	reset() {
-		super.reset();
-		this.elem.appendChild(this.counter);
-	}
+    console.log(
+      "SWAP RESULT",
+      "\n -> Deck received:",
+      card?.name,
+      "\n -> Hand received:",
+      removedFromDeck?.name,
+    );
+    try {
+      var txt_draw = `You redrawed card \"${card?.name}\" for a \"${removedFromDeck?.name}\"`;
+      console.log(txt_draw);
+      cardredrawnotice(txt_draw);
+    } catch (e) {
+      console.log("cardredrawnotice err", e);
+    }
+  }
+
+  // Override
+  addCardElement() {
+    let elem = document.createElement("div");
+    elem.classList.add("deck-card");
+    elem.style.backgroundImage = iconURL("deck_back_" + this.faction, "jpg");
+    this.setCardOffset(elem, this.cards.length - 1);
+    this.elem.insertBefore(elem, this.counter);
+  }
+
+  // Override
+  removeCardElement() {
+    this.elem.removeChild(this.elem.children[this.cards.length]).style.left =
+      "";
+  }
+
+  // Offsets the card element in the deck
+  setCardOffset(elem, n) {
+    elem.style.left = -0.03 * n + "vw";
+  }
+
+  // Override
+  resize() {
+    this.counter.innerHTML = this.cards.length;
+    this.setCardOffset(this.counter, this.cards.length);
+  }
+
+  // Override
+  reset() {
+    super.reset();
+    this.elem.appendChild(this.counter);
+  }
 }
 
 // Hand used by Opponent. Has an offscreen HTML element for card transitions.
 class HandOpponent extends CardContainer {
-	constructor() {
-		super(undefined);
-		this.counter = document.getElementById("hand-count-op"); 
-		this.hidden_elem = document.getElementById("hand-op");
-	}
-	resize() {this.counter.innerHTML = this.cards.length; }
+  constructor() {
+    super(undefined);
+    this.counter = document.getElementById("hand-count-op");
+    this.hidden_elem = document.getElementById("hand-op");
+  }
+  resize() {
+    this.counter.innerHTML = this.cards.length;
+  }
 }
 
 // Hand used by current player
 class Hand extends CardContainer {
-	constructor(elem){
-		super(elem);
-		this.counter = document.getElementById("hand-count-me");
-	}
-	
-	// Override
-	addCard(card){
-		let i = this.addCardSorted(card);
-		this.addCardElement(card, i);
-		this.resize();
-	}
-	
-	// Override
-	resize() {
-		this.counter.innerHTML = this.cards.length;
-		this.resizeCardContainer(11, 0.075, .00225);
-	}
+  constructor(elem) {
+    super(elem);
+    this.counter = document.getElementById("hand-count-me");
+  }
+
+  // Override
+  addCard(card) {
+    let i = this.addCardSorted(card);
+    this.addCardElement(card, i);
+    this.resize();
+  }
+
+  // Override
+  resize() {
+    this.counter.innerHTML = this.cards.length;
+    this.resizeCardContainer(11, 0.075, 0.00225);
+  }
 }
 
 // Contains active cards and effects. Calculates the current score of each card and the row.
 class Row extends CardContainer {
-	constructor(elem) {
-		super(elem.getElementsByClassName("row-cards")[0]);
-		this.elem_parent = elem;
-		this.elem_special = elem.getElementsByClassName("row-special")[0];
-		this.special = null;
-		this.total = 0;
-		this.effects = { weather:false, bond: {}, morale: 0, horn: 0, mardroeme: 0 };
-		this.elem.addEventListener("click", () => ui.selectRow(this), true);
-		this.elem_special.addEventListener("click", () => ui.selectRow(this), false, true);
-		this.elem.addEventListener("mouseover", function() {
-				tocar("card", false);
-				this.style.boxShadow = "0 0 1.5vw #6d5210";
-		});
-		this.elem.addEventListener("mouseout", function() {
-			this.style.boxShadow = "0 0 0 #6d5210"
-		});
-	}
-	
-	// Override
-	async addCard(card) {
-//		console.log("ADD CARD", card);
-		if (card.hero){
-			var card_info = `${JSON.stringify({"a": card.faciton + "_" + card.filename, "b": card.holder.id, "c": card.holder.tag, "d": card.name, "f": card.row })}-${gameID}`;
-			var card_id_for_hero = card_info;
-			//if (!herocardsdb.includes(card_id_for_hero)) {
-			  //  herocardsdb.push(card_id_for_hero);
-			    if (herocardanim === true) {
-			        console.log("NEW HERO", card, card_id_for_hero, card_info, " ARRAY NOW", herocardsdb);
-					card.animate2("hero");
-			    }
-		//	}
-		}
-		if (card.isSpecial()) {
-			this.special = card;
-			this.elem_special.appendChild(card.elem);
-		} else {
-			let index = this.addCardSorted(card);
-			this.addCardElement(card, index);
-			this.resize();
-		}
-		this.updateState(card, true);
-		for (let x of card.placed) 
-			await x(card, this);
-		card.elem.classList.add("noclick");
-		await sleep(600);
-		this.updateScore();
-	}
-	
-	// Override
-	removeCard(card) {
-		card = isNumber(card) ? card === -1 ? this.special : this.cards[card] : card;
-		if (card.isSpecial()) {
-			this.special = null;
-			this.elem_special.removeChild(card.elem);
-		} else {
-			super.removeCard(card);
-			card.resetPower();
-		}
-		this.updateState(card, false);
-		for (let x of card.removed)
-			x(card);
-		this.updateScore();
-		return card;
-	}
-	
-	// Override
-	removeCardElement(card, index) {
-		super.removeCardElement(card, index);
-		let x = card.elem;
-		x.style.marginLeft = x.style.marginRight = "";
-		x.classList.remove("noclick");
-	}
-	
-	// Updates a card's effect on the row
-	updateState(card, activate){
-		for (let x of card.abilities){
-			switch (x) {
-				case "morale":
-				case "horn":
-				case "mardroeme": this.effects[x] += activate ? 1 : -1; break;
-				case "bond": 
-					if (!this.effects.bond[card.id()])
-						this.effects.bond[card.id()] = 0;
-					this.effects.bond[card.id()] += activate ? 1 : -1;
-					break;
-			}
-		}
-	}
-	
-	// Activates weather effect and visuals
-	addOverlay(overlay){
-		var som = overlay == "fog" || overlay == "rain" ? overlay : overlay == "frost" ? "cold" : "";
-		if (som != "") tocar(som, false);
-		this.effects.weather = true;
-		this.elem_parent.getElementsByClassName("row-weather")[0].classList.add(overlay);
-		this.updateScore();
-	}
-	
-	// Deactivates weather effect and visuals
-	removeOverlay(overlay){
-		this.effects.weather = false;
-		this.elem_parent.getElementsByClassName("row-weather")[0].classList.remove(overlay);
-		this.updateScore();
-	}
-	
-	// Override
-	resize(){
-		this.resizeCardContainer(10, 0.075, .00325);
-	}
-	
-	// Updates the row's score by summing the current power of its cards
-	updateScore() {
-		let total = 0;
-		for (let card of this.cards) {
-			total += this.cardScore(card);
-		}
-		let player = this.elem_parent.parentElement.id === "field-op" ? player_op : player_me;
-		player.updateTotal(total - this.total);
-		this.total = total;
-		this.elem_parent.getElementsByClassName("row-score")[0].innerHTML = this.total;
-	}
-	
-	// Calculates and set the card's current power
-	cardScore(card){
-		let total = this.calcCardScore(card);
-		card.setPower(total);
-		return total;
-	}
-	
-	// Calculates the current power of a card affected by row affects
-	calcCardScore(card){
-		let totalpower = 0;
-		totalpower = this.calcCardScore_work(card);
-		if (totalpower >= killoverpowercard){
-			this.scorch_a_card(card);
-			return totalpower;
-		}
-		return totalpower;
-	}
-calcCardScore_work(card) {
-	// console.log("calcCardScore(card)", card, this); //this.cards[0].holder.leader.abilities to get card 0 leader abilities, could be usefull in future
-		if (card.name === "decoy")
-			return 0;
-		let total = card.basePower;
-		let this_row_have_quen = [false, 1, 2]; // should bool, multiplayer, axii weather etc, horn
-		if (this.cards.some(c => c.filename === "wshield" || c.filename === "quen")){
-			this_row_have_quen = [true, 0.5, 1]
-		}
-		if (this.cards.some(c => c.filename === "darkstorm")) {
-			if (card.hero === false){
-			card.pendingScorch = true;
-			// this.scorch_a_card(card);
-			return card.basePower;
-			}
-		}
-		if (this.cards.some(c => c.filename === "axii" || c.filename === "axii_p")) {
-					if (0 < total && total < axii.IfBasePowerUnder) {
-						total = total - Math.ceil( axii.TakeAway * this_row_have_quen[1]);
-					}
-		}
-		if (this.cards.some(c => c.filename === "yrden")){
-			if (card.hero){
-			return total;
-			} else if (card.name === "Witcher Signs: Yrden"){
-				return 0;
-			}
+  constructor(elem) {
+    super(elem.getElementsByClassName("row-cards")[0]);
+    this.elem_parent = elem;
+    this.elem_special = elem.getElementsByClassName("row-special")[0];
+    this.special = null;
+    this.total = 0;
+    this.effects = {
+      weather: false,
+      bond: {},
+      morale: 0,
+      horn: 0,
+      mardroeme: 0,
+    };
+    this.elem.addEventListener("click", () => ui.selectRow(this), true);
+    this.elem_special.addEventListener(
+      "click",
+      () => ui.selectRow(this),
+      false,
+      true,
+    );
+    this.elem.addEventListener("mouseover", function () {
+      tocar("card", false);
+      this.style.boxShadow = "0 0 1.5vw #6d5210";
+    });
+    this.elem.addEventListener("mouseout", function () {
+      this.style.boxShadow = "0 0 0 #6d5210";
+    });
+  }
 
-			total = total - this.cards.filter(c => c.filename === "yrden").length;
-		}
-		if (this.cards.some(c => c.filename === "igni")){
-			if (card.hero){
-			return total;
-			} else if (card.name === "Witcher Signs: Igni"){
-				return 0;
-			}
+  // Override
+  async addCard(card) {
+    //		console.log("ADD CARD", card);
+    if (card.hero) {
+      var card_info = `${JSON.stringify({ a: card.faciton + "_" + card.filename, b: card.holder.id, c: card.holder.tag, d: card.name, f: card.row })}-${gameID}`;
+      var card_id_for_hero = card_info;
+      //if (!herocardsdb.includes(card_id_for_hero)) {
+      //  herocardsdb.push(card_id_for_hero);
+      if (herocardanim === true) {
+        console.log(
+          "NEW HERO",
+          card,
+          card_id_for_hero,
+          card_info,
+          " ARRAY NOW",
+          herocardsdb,
+        );
+        card.animate2("hero");
+      }
+      //	}
+    }
+    if (card.isSpecial()) {
+      this.special = card;
+      this.elem_special.appendChild(card.elem);
+    } else {
+      let index = this.addCardSorted(card);
+      this.addCardElement(card, index);
+      this.resize();
+    }
+    this.updateState(card, true);
+    for (let x of card.placed) await x(card, this);
+    card.elem.classList.add("noclick");
+    await sleep(600);
+    this.updateScore();
+  }
 
-			total = total + 1; //this.cards.filter(c => c.filename === "igni").length;
-		}
-		if (card.abilities.includes("magicthegathering") === true || card.abilities.includes("tgc_portal") === true){
-			var holder_is_the = this.cards
-    .find(card => card.abilities?.includes("magicthegathering"))
-    ?.holder?.ThatPlayerId
+  // Override
+  removeCard(card) {
+    card = isNumber(card)
+      ? card === -1
+        ? this.special
+        : this.cards[card]
+      : card;
+    if (card.isSpecial()) {
+      this.special = null;
+      this.elem_special.removeChild(card.elem);
+    } else {
+      super.removeCard(card);
+      card.resetPower();
+    }
+    this.updateState(card, false);
+    for (let x of card.removed) x(card);
+    this.updateScore();
+    return card;
+  }
 
-			console.log("magicthegathering", this, mtg_conf.unstable_mode, holder_is_the);
-			if (mtg_conf.unstable_mode === "random"){
-				total = shuffleSeeded([-3,-4,-5,-6,-3,-4,-4,-3,-6,-7,-2,-2,-1,0,1], btoa(`${mtg_conf.daily_seed ? `${time_now_utc_to_b64()}` : ""}${mtg_conf.version}${turncount}${gameID}${holder_is_the}`), `MTG POWER CHECK Seeded from ${mtg_conf.daily_seed ? `${time_now_utc_to_b64()}` : ""}${mtg_conf.version}${turncount}${gameID}${holder_is_the}`).array[0] || 2;
-				if (total > 0){
-				//	card.animate2("powergain"); //animations here are ugly
-				} else if (total < 0){
-				//	card.animate2("debuff");
-				}
-			} else if (mtg_conf.unstable_mode === "unrandom"){
-				return -3;
-			} else {
-				return 0;
-			}
-		}
-		if (card.abilities.includes("powergain") === true ){
-			let count = this.cards.length;
+  // Override
+  removeCardElement(card, index) {
+    super.removeCardElement(card, index);
+    let x = card.elem;
+    x.style.marginLeft = x.style.marginRight = "";
+    x.classList.remove("noclick");
+  }
 
-			// exclude self if needed
-			if (!powergain.CountSelf) {
-				count = Math.max(0, count - 1);
-			}
+  // Updates a card's effect on the row
+  updateState(card, activate) {
+    for (let x of card.abilities) {
+      switch (x) {
+        case "morale":
+        case "horn":
+        case "mardroeme":
+          this.effects[x] += activate ? 1 : -1;
+          break;
+        case "bond":
+          if (!this.effects.bond[card.id()]) this.effects.bond[card.id()] = 0;
+          this.effects.bond[card.id()] += activate ? 1 : -1;
+          break;
+      }
+    }
+  }
 
-			let bonus = count * powergain.ForEachCardGain;
-			console.log("[POWERGAIN]", ` Total valid cards: ${count}, making it ${bonus} bonus power by ${powergain.ForEachCardGain} for each card!`);
+  // Activates weather effect and visuals
+  addOverlay(overlay) {
+    var som =
+      overlay == "fog" || overlay == "rain"
+        ? overlay
+        : overlay == "frost"
+          ? "cold"
+          : "";
+    if (som != "") tocar(som, false);
+    this.effects.weather = true;
+    this.elem_parent
+      .getElementsByClassName("row-weather")[0]
+      .classList.add(overlay);
+    this.updateScore();
+  }
 
-			// apply weather debuff
-		if (this.effects.weather) {
-			bonus *= (powergain.WeatherDebuffPercent * this_row_have_quen[1] );
-			console.log("[POWERGAIN]", ` Total valid cards: ${count}, making it ${bonus} (lost ${powergain.WeatherDebuffPercent} by weather) bonus power by ${powergain.ForEachCardGain} for each card!`);
-			}
+  // Deactivates weather effect and visuals
+  removeOverlay(overlay) {
+    this.effects.weather = false;
+    this.elem_parent
+      .getElementsByClassName("row-weather")[0]
+      .classList.remove(overlay);
+    this.updateScore();
+  }
 
-			// rounding
-			bonus = powergain.Ceil ? Math.ceil(bonus) : Math.floor(bonus);
-			console.log("[POWERGAIN]", ` Return: ${bonus} rounded (Total:${total} = Total+Bonus:${total + bonus})`);
-			total += bonus; 
-			if (count > 1){
-		//	card.animate("powergain");
-			}
-			return total;
-		}
-		// card.animate("powergain");
-		if (card.hero)
-			return total;
-		if (this.effects.weather) 
-			if (this_row_have_quen[0]){
-				total = Math.ceil(total * this_row_have_quen[1])
-			} else {total = Math.min(1, total);}
-		if (game.doubleSpyPower && card.abilities.includes("spy"))
-			total *= 2;
-		if (game.doubleSpyPower && card.abilities.includes("sabotage")) //Double sabotage power
-			 total = Math.ceil(total * 1.5);
-		let bond = this.effects.bond[card.id()];
-		if (isNumber(bond) && bond > 1)
-			total *= Number(bond);
-	//	if (this?.effects.morale > 0) {
-		//	card.animate("powergain");
-	//	}
-		total += Math.max(0, this.effects.morale + (card.abilities.includes("morale") ? -1 : 0 ));
-		if (this.effects.horn - (card.abilities.includes("horn") ? 1 : 0) >  0 )
-		//	card.animate("powergain");
-			total *= this_row_have_quen[2];
-		return total;
-	}
-	
-	// Applies a temporary leader horn affect that is removed at the end of the round
-	async leaderHorn(){
-		if (this.special !== null)
-			return;
-		let horn = new Card(card_dict[5], null);
-		await this.addCard(horn);
-		game.roundEnd.push( () => this.removeCard(horn) );
-	}
-	
-	// Applies a local scorch effect to this row
-	async scorch() {
-		if (this.total >= 10)
-			await Promise.all( this.maxUnits().map( async c => {
-				await c.animate("scorch", true, false);
-				await board.toGrave(c, this);
-			}));
-	}
+  // Override
+  resize() {
+    this.resizeCardContainer(10, 0.075, 0.00325);
+  }
 
-	async scorch_a_card(card) {
-	if (!card)
-		return;
-	console.log("scorch_a_card(card)", card);
-	if (card.hero)
-			return;
+  // Updates the row's score by summing the current power of its cards
+  updateScore() {
+    let total = 0;
+    for (let card of this.cards) {
+      total += this.cardScore(card);
+    }
+    let player =
+      this.elem_parent.parentElement.id === "field-op" ? player_op : player_me;
+    player.updateTotal(total - this.total);
+    this.total = total;
+    this.elem_parent.getElementsByClassName("row-score")[0].innerHTML =
+      this.total;
+  }
 
-	// Find the row/container the card is currently in
-	let row = board.row.find(r => r.cards.includes(card));
+  // Calculates and set the card's current power
+  cardScore(card) {
+    let total = this.calcCardScore(card);
+    card.setPower(total);
+    return total;
+  }
 
-	if (!row)
-		return;
+  // Calculates the current power of a card affected by row affects
+  calcCardScore(card) {
+    let totalpower = 0;
+    totalpower = this.calcCardScore_work(card);
+    if (totalpower >= killoverpowercard) {
+      this.scorch_a_card(card);
+      return totalpower;
+    }
+    return totalpower;
+  }
+  calcCardScore_work(card) {
+    // console.log("calcCardScore(card)", card, this); //this.cards[0].holder.leader.abilities to get card 0 leader abilities, could be usefull in future
+    if (card.name === "decoy") return 0;
+    let total = card.basePower;
+    let this_row_have_quen = [false, 1, 2]; // should bool, multiplayer, axii weather etc, horn
+    if (
+      this.cards.some((c) => c.filename === "wshield" || c.filename === "quen")
+    ) {
+      this_row_have_quen = [true, 0.5, 1];
+    }
+    if (this.cards.some((c) => c.filename === "darkstorm")) {
+      if (card.hero === false) {
+        card.pendingScorch = true;
+        // this.scorch_a_card(card);
+        return card.basePower;
+      }
+    }
+    if (
+      this.cards.some((c) => c.filename === "axii" || c.filename === "axii_p")
+    ) {
+      if (0 < total && total < axii.IfBasePowerUnder) {
+        total = total - Math.ceil(axii.TakeAway * this_row_have_quen[1]);
+      }
+    }
+    if (this.cards.some((c) => c.filename === "yrden")) {
+      if (card.hero) {
+        return total;
+      } else if (card.name === "Witcher Signs: Yrden") {
+        return 0;
+      }
 
-	// Play scorch animation
-	await card.animate("scorch", true, false);
+      total = total - this.cards.filter((c) => c.filename === "yrden").length;
+    }
+    if (this.cards.some((c) => c.filename === "igni")) {
+      if (card.hero) {
+        return total;
+      } else if (card.name === "Witcher Signs: Igni") {
+        return 0;
+      }
 
-	// Move card to graveyard
-	await board.toGrave(card, row);
-}
+      total = total + 1; //this.cards.filter(c => c.filename === "igni").length;
+    }
+    if (
+      card.abilities.includes("magicthegathering") === true ||
+      card.abilities.includes("tgc_portal") === true
+    ) {
+      var holder_is_the = this.cards.find((card) =>
+        card.abilities?.includes("magicthegathering"),
+      )?.holder?.ThatPlayerId;
 
-	
-	// Removes all cards and effects from this row
-	clear() {
-		if (this.special != null)
-			board.toGrave(this.special, this);
-		console.log("Before:", this.cards);
+      console.log(
+        "magicthegathering",
+        this,
+        mtg_conf.unstable_mode,
+        holder_is_the,
+      );
+      if (mtg_conf.unstable_mode === "random") {
+        total =
+          shuffleSeeded(
+            [-3, -4, -5, -6, -3, -4, -4, -3, -6, -7, -2, -2, -1, 0, 1],
+            btoa(
+              `${mtg_conf.daily_seed ? `${time_now_utc_to_b64()}` : ""}${mtg_conf.version}${turncount}${gameID}${holder_is_the}`,
+            ),
+            `MTG POWER CHECK Seeded from ${mtg_conf.daily_seed ? `${time_now_utc_to_b64()}` : ""}${mtg_conf.version}${turncount}${gameID}${holder_is_the}`,
+          ).array[0] || 2;
+        if (total > 0) {
+          //	card.animate2("powergain"); //animations here are ugly
+        } else if (total < 0) {
+          //	card.animate2("debuff");
+        }
+      } else if (mtg_conf.unstable_mode === "unrandom") {
+        return -3;
+      } else {
+        return 0;
+      }
+    }
+    if (card.abilities.includes("powergain") === true) {
+      let count = this.cards.length;
 
-this.cards.filter(c => c.noRemove === false || !c.noRemove)
-    .forEach(c => board.toGrave(c, this));
+      // exclude self if needed
+      if (!powergain.CountSelf) {
+        count = Math.max(0, count - 1);
+      }
 
-console.log("After grave:", this.cards);
+      let bonus = count * powergain.ForEachCardGain;
+      console.log(
+        "[POWERGAIN]",
+        ` Total valid cards: ${count}, making it ${bonus} bonus power by ${powergain.ForEachCardGain} for each card!`,
+      );
 
-this.cards.filter(c => c.noRemove === true)
-    .forEach(c => c.noRemove = false, console.log("NO REMOVE REMOVED FROM C"));
+      // apply weather debuff
+      if (this.effects.weather) {
+        bonus *= powergain.WeatherDebuffPercent * this_row_have_quen[1];
+        console.log(
+          "[POWERGAIN]",
+          ` Total valid cards: ${count}, making it ${bonus} (lost ${powergain.WeatherDebuffPercent} by weather) bonus power by ${powergain.ForEachCardGain} for each card!`,
+        );
+      }
 
-console.log("After reset:", this.cards);
-	}
+      // rounding
+      bonus = powergain.Ceil ? Math.ceil(bonus) : Math.floor(bonus);
+      console.log(
+        "[POWERGAIN]",
+        ` Return: ${bonus} rounded (Total:${total} = Total+Bonus:${total + bonus})`,
+      );
+      total += bonus;
+      if (count > 1) {
+        //	card.animate("powergain");
+      }
+      return total;
+    }
+    // card.animate("powergain");
+    if (card.hero) return total;
+    if (this.effects.weather)
+      if (this_row_have_quen[0]) {
+        total = Math.ceil(total * this_row_have_quen[1]);
+      } else {
+        total = Math.min(1, total);
+      }
+    if (game.doubleSpyPower && card.abilities.includes("spy")) total *= 2;
+    if (game.doubleSpyPower && card.abilities.includes("sabotage"))
+      //Double sabotage power
+      total = Math.ceil(total * 1.5);
+    let bond = this.effects.bond[card.id()];
+    if (isNumber(bond) && bond > 1) total *= Number(bond);
+    //	if (this?.effects.morale > 0) {
+    //	card.animate("powergain");
+    //	}
+    total += Math.max(
+      0,
+      this.effects.morale + (card.abilities.includes("morale") ? -1 : 0),
+    );
+    if (this.effects.horn - (card.abilities.includes("horn") ? 1 : 0) > 0)
+      //	card.animate("powergain");
+      total *= this_row_have_quen[2];
+    return total;
+  }
 
-	// Returns all regular unit cards with the heighest power
-	maxUnits(){
-		let max = [];
-		for (let i=0; i<this.cards.length; ++i){
-			let card = this.cards[i];
-			if (!card.isUnit())
-				continue;
-			if (!max[0] || max[0].power < card.power)
-				max = [card];
-			else if (max[0].power === card.power)
-				max.push(card);
-		}
-		return max;
-	}
-	
-	// Override
-	reset(){
-		super.reset();
-		while(this.special)
-			this.removeCard(this.special);
-		while(this.elem_special.firstChild)
-			this.elem_special.removeChild(this.elem_speical.firstChild);
-		this.total = 0;
-		//["rain","fog","frost"].forEach( w => this.removeOverlay(w) );
-		this.effects = {weather:false, bond: {}, morale: 0, horn: 0, mardroeme: 0};
-	}
+  // Applies a temporary leader horn affect that is removed at the end of the round
+  async leaderHorn() {
+    if (this.special !== null) return;
+    let horn = new Card(card_dict[5], null);
+    await this.addCard(horn);
+    game.roundEnd.push(() => this.removeCard(horn));
+  }
+
+  // Applies a local scorch effect to this row
+  async scorch() {
+    if (this.total >= 10)
+      await Promise.all(
+        this.maxUnits().map(async (c) => {
+          await c.animate("scorch", true, false);
+          await board.toGrave(c, this);
+        }),
+      );
+  }
+
+  async scorch_a_card(card) {
+    if (!card) return;
+    console.log("scorch_a_card(card)", card);
+    if (card.hero) return;
+
+    // Find the row/container the card is currently in
+    let row = board.row.find((r) => r.cards.includes(card));
+
+    if (!row) return;
+
+    // Play scorch animation
+    await card.animate("scorch", true, false);
+
+    // Move card to graveyard
+    await board.toGrave(card, row);
+  }
+
+  // Removes all cards and effects from this row
+  clear() {
+    if (this.special != null) board.toGrave(this.special, this);
+    console.log("Before:", this.cards);
+
+    this.cards
+      .filter((c) => c.noRemove === false || !c.noRemove)
+      .forEach((c) => board.toGrave(c, this));
+
+    console.log("After grave:", this.cards);
+
+    this.cards
+      .filter((c) => c.noRemove === true)
+      .forEach(
+        (c) => (c.noRemove = false),
+        console.log("NO REMOVE REMOVED FROM C"),
+      );
+
+    console.log("After reset:", this.cards);
+  }
+
+  // Returns all regular unit cards with the heighest power
+  maxUnits() {
+    let max = [];
+    for (let i = 0; i < this.cards.length; ++i) {
+      let card = this.cards[i];
+      if (!card.isUnit()) continue;
+      if (!max[0] || max[0].power < card.power) max = [card];
+      else if (max[0].power === card.power) max.push(card);
+    }
+    return max;
+  }
+
+  // Override
+  reset() {
+    super.reset();
+    while (this.special) this.removeCard(this.special);
+    while (this.elem_special.firstChild)
+      this.elem_special.removeChild(this.elem_speical.firstChild);
+    this.total = 0;
+    //["rain","fog","frost"].forEach( w => this.removeOverlay(w) );
+    this.effects = {
+      weather: false,
+      bond: {},
+      morale: 0,
+      horn: 0,
+      mardroeme: 0,
+    };
+  }
 }
 
 // Handles how weather effects are added and removed
 class Weather extends CardContainer {
-	constructor(elem) {
-		super(document.getElementById("weather"));
-		this.types = {
-			rain: {name:"rain", count: 0, rows: []},
-			fog: {name:"fog", count: 0, rows: []},
-			frost: {name:"frost", count: 0, rows: []}
-		}
-		let i=0;
-		for (let key of Object.keys(this.types))
-			this.types[key].rows = [board.row[i], board.row[5-i++]];
-		
-		this.elem.addEventListener("click",() => ui.selectRow(this), false);
-	}
-	
-	// Adds a card if unique and clears all weather if 'clear weather' card added
-	async addCard(card) {
-		super.addCard(card);
-		card.elem.classList.add("noclick");
-		if (card.name === "Clear Weather"){
-			// TODO Sunlight animation
-			sunlightEffect();
-			// idk what it is
-			tocar("clear", false);
-			await sleep(500);
-			this.clearWeather();
-		} else {
-			this.changeWeather(card, x => ++this.types[x].count === 1, (r,t) => r.addOverlay(t.name));
-			for (let i=this.cards.length-2; i>=0; --i) {
-				if (card.name === this.cards[i].name) {
-					await sleep(750);
-					await board.toGrave(card, this);
-					break;
-				}
-			}
-		}
-		await sleep(750);
-	}
-	
-	// Override
-	removeCard(card){
-		card = super.removeCard(card);
-		card.elem.classList.remove("noclick");
-		this.changeWeather(card, x => --this.types[x].count === 0, (r,t) => r.removeOverlay(t.name));
-		return card;
-	}
-	
-	// Checks if a card's abilities are a weather type. If the predicate is met, perfom the action
-	// on the type's associated rows
-	changeWeather(card, predicate, action) {
-		for (let x of card.abilities) {
-			if (x in this.types && predicate(x)){
-				for (let r of this.types[x].rows)
-					action(r, this.types[x]);
-			}
-		}
-	}
-	
-	// Removes all weather effects and cards
-	async clearWeather() {
-		await Promise.all(this.cards.map((c,i)=>this.cards[this.cards.length-i-1]).map(c => board.toGrave(c, this)));
-	}
-	
-	// Override
-	resize() {
-		this.resizeCardContainer(4, 0.075, .045);
-	}
-	
-	// Override
-	reset(){
-		super.reset();
-		Object.keys(this.types).map(t => this.types[t].count = 0);
-	}
+  constructor(elem) {
+    super(document.getElementById("weather"));
+    this.types = {
+      rain: { name: "rain", count: 0, rows: [] },
+      fog: { name: "fog", count: 0, rows: [] },
+      frost: { name: "frost", count: 0, rows: [] },
+    };
+    let i = 0;
+    for (let key of Object.keys(this.types))
+      this.types[key].rows = [board.row[i], board.row[5 - i++]];
+
+    this.elem.addEventListener("click", () => ui.selectRow(this), false);
+  }
+
+  // Adds a card if unique and clears all weather if 'clear weather' card added
+  async addCard(card) {
+    super.addCard(card);
+    card.elem.classList.add("noclick");
+    if (card.name === "Clear Weather") {
+      // TODO Sunlight animation
+      sunlightEffect();
+      // idk what it is
+      tocar("clear", false);
+      await sleep(500);
+      this.clearWeather();
+    } else {
+      this.changeWeather(
+        card,
+        (x) => ++this.types[x].count === 1,
+        (r, t) => r.addOverlay(t.name),
+      );
+      for (let i = this.cards.length - 2; i >= 0; --i) {
+        if (card.name === this.cards[i].name) {
+          await sleep(750);
+          await board.toGrave(card, this);
+          break;
+        }
+      }
+    }
+    await sleep(750);
+  }
+
+  // Override
+  removeCard(card) {
+    card = super.removeCard(card);
+    card.elem.classList.remove("noclick");
+    this.changeWeather(
+      card,
+      (x) => --this.types[x].count === 0,
+      (r, t) => r.removeOverlay(t.name),
+    );
+    return card;
+  }
+
+  // Checks if a card's abilities are a weather type. If the predicate is met, perfom the action
+  // on the type's associated rows
+  changeWeather(card, predicate, action) {
+    for (let x of card.abilities) {
+      if (x in this.types && predicate(x)) {
+        for (let r of this.types[x].rows) action(r, this.types[x]);
+      }
+    }
+  }
+
+  // Removes all weather effects and cards
+  async clearWeather() {
+    await Promise.all(
+      this.cards
+        .map((c, i) => this.cards[this.cards.length - i - 1])
+        .map((c) => board.toGrave(c, this)),
+    );
+  }
+
+  // Override
+  resize() {
+    this.resizeCardContainer(4, 0.075, 0.045);
+  }
+
+  // Override
+  reset() {
+    super.reset();
+    Object.keys(this.types).map((t) => (this.types[t].count = 0));
+  }
 }
 
-// 
+//
 class Board {
-	constructor() {
-		this.op_score = 0;
-		this.me_score = 0;
-		this.row = [];
-		for (let x=0; x<6; ++x) {
-			let elem = document.getElementById( (x<3)?"field-op":"field-me" ).children[x%3];
-			this.row[x] = new Row(elem);
-		}
-	}
-	
-	// Get the opponent of this Player
-	opponent(player){
-		return player === player_me ? player_op : player_me;
-	}
-	
-	// Sends and translates a card from the source to the Deck of the card's holder
-	async toDeck(card, source){
-		tocar("discard", false);
-		await this.moveTo(card, "deck", source);
-	}
-	
-	// Sends and translates a card from the source to the Grave of the card's holder
-	async toGrave(card, source){
-		await this.moveTo(card, "grave", source);
-	}
+  constructor() {
+    this.op_score = 0;
+    this.me_score = 0;
+    this.row = [];
+    for (let x = 0; x < 6; ++x) {
+      let elem = document.getElementById(x < 3 ? "field-op" : "field-me")
+        .children[x % 3];
+      this.row[x] = new Row(elem);
+    }
+  }
 
-	// Sends and translates a card from the source to the Hand of the card's holder
-	async toHand(card, source) {
-		await this.moveTo(card, "hand", source);
-	}
+  // Get the opponent of this Player
+  opponent(player) {
+    return player === player_me ? player_op : player_me;
+  }
 
-	// Sends and translates a card from the source to Weather
-	async toWeather(card, source) {
-		await this.moveTo(card, weather, source);
-	}
-	
-	// Sends and translates a card from the source to the Deck of the card's combat row
-	async toRow(card, source) {
-		let row = (card.row === "agile") ? "close" : card.row ? card.row : "close";
-		await this.moveTo(card, row, source);
-	}
-	
-	// Sends and translates a card from the source to a specified row name or CardContainer
-	async moveTo(card, dest, source) {
-		if (isString(dest))
-			dest = this.getRow(card, dest);
+  // Sends and translates a card from the source to the Deck of the card's holder
+  async toDeck(card, source) {
+    tocar("discard", false);
+    await this.moveTo(card, "deck", source);
+  }
 
-		try {
-			cartaNaLinha(dest.elem.id, card);
-		} catch(err) {}
-		await translateTo(card, source ? source : null, dest);
-		await dest.addCard(source ? source.removeCard(card) : card);
-	}
-	
-	// Sends and translates a card from the source to a row name associated with the passed player
-	async addCardToRow(card, row_name, player, source) {
-		let row = this.getRow(card, row_name, player);
-		try {
-			cartaNaLinha(row.elem.id, card);
-		} catch(err) {}
-		await translateTo(card, source, row);
-		await row.addCard(card);
-	}
-	
-	// Returns the CardCard associated with the row name that the card would be sent to
-	getRow(card, row_name, player){
-		player = player ? player : card ? card.holder : player_me;
-		let isMe = player === player_me;
-		let isSpy = card.abilities.includes("spy") || card.abilities.includes("sabotage") || card.abilities.includes("axii2_desc_playable") || card.abilities.includes("dopler") || card.abilities.includes("yrden");
-		switch (row_name) {
-			case "weather": return weather; break;
-			case "close":  return this.row[ isMe^isSpy ? 3 : 2];
-			case "ranged": return this.row[ isMe^isSpy ? 4 : 1];
-			case "siege":  return this.row[ isMe^isSpy ? 5 : 0];
-			case "grave": return player.grave;
-			case "deck": return player.deck;
-			case "hand": return player.hand;
-			default: console.error( card.name + " sent to incorrect row \"" +row_name+ "\" by " +card.holder.name );
-		}
-	}
-	
-	// Updates which player currently is in the lead
-	updateLeader() {
-		let dif = player_me.total - player_op.total;
-		player_me.setWinning(dif > 0);
-		player_op.setWinning(dif < 0);
-	}
+  // Sends and translates a card from the source to the Grave of the card's holder
+  async toGrave(card, source) {
+    await this.moveTo(card, "grave", source);
+  }
+
+  // Sends and translates a card from the source to the Hand of the card's holder
+  async toHand(card, source) {
+    await this.moveTo(card, "hand", source);
+  }
+
+  // Sends and translates a card from the source to Weather
+  async toWeather(card, source) {
+    await this.moveTo(card, weather, source);
+  }
+
+  // Sends and translates a card from the source to the Deck of the card's combat row
+  async toRow(card, source) {
+    let row = card.row === "agile" ? "close" : card.row ? card.row : "close";
+    await this.moveTo(card, row, source);
+  }
+
+  // Sends and translates a card from the source to a specified row name or CardContainer
+  async moveTo(card, dest, source) {
+    if (isString(dest)) dest = this.getRow(card, dest);
+
+    try {
+      cartaNaLinha(dest.elem.id, card);
+    } catch (err) {}
+    await translateTo(card, source ? source : null, dest);
+    await dest.addCard(source ? source.removeCard(card) : card);
+  }
+
+  // Sends and translates a card from the source to a row name associated with the passed player
+  async addCardToRow(card, row_name, player, source) {
+    let row = this.getRow(card, row_name, player);
+    try {
+      cartaNaLinha(row.elem.id, card);
+    } catch (err) {}
+    await translateTo(card, source, row);
+    await row.addCard(card);
+  }
+
+  // Returns the CardCard associated with the row name that the card would be sent to
+  getRow(card, row_name, player) {
+    player = player ? player : card ? card.holder : player_me;
+    let isMe = player === player_me;
+    let isSpy =
+      card.abilities.includes("spy") ||
+      card.abilities.includes("sabotage") ||
+      card.abilities.includes("axii2_desc_playable") ||
+      card.abilities.includes("dopler") ||
+      card.abilities.includes("yrden");
+    switch (row_name) {
+      case "weather":
+        return weather;
+        break;
+      case "close":
+        return this.row[isMe ^ isSpy ? 3 : 2];
+      case "ranged":
+        return this.row[isMe ^ isSpy ? 4 : 1];
+      case "siege":
+        return this.row[isMe ^ isSpy ? 5 : 0];
+      case "grave":
+        return player.grave;
+      case "deck":
+        return player.deck;
+      case "hand":
+        return player.hand;
+      default:
+        console.error(
+          card.name +
+            ' sent to incorrect row "' +
+            row_name +
+            '" by ' +
+            card.holder.name,
+        );
+    }
+  }
+
+  // Updates which player currently is in the lead
+  updateLeader() {
+    let dif = player_me.total - player_op.total;
+    player_me.setWinning(dif > 0);
+    player_op.setWinning(dif < 0);
+  }
 }
 
 class Game {
-	constructor() {
-		this.endScreen = document.getElementById("end-screen");
-		let buttons = this.endScreen.getElementsByTagName("button");
-		this.customize_elem = buttons[0];
-	//	this.replay_elem = buttons[1];
-		this.customize_elem.addEventListener("click", () => this.returnToCustomization(), false);
-	//	this.replay_elem.addEventListener("click", () => this.restartGame(), false);
-		this.reset();
-	}
-	
-	reset() {
-		this.firstPlayer;
-		this.currPlayer = null;
-		
-		this.gameStart = [];
-		this.roundStart = [];
-		this.roundEnd = [];
-		this.turnStart = [];
-		this.turnEnd = [];
-		
-		this.roundCount = 0;
-		this.roundHistory = [];
-		
-		this.randomRespawn = false;
-		this.doubleSpyPower = false;
-		
-		weather.reset();
-		board.row.forEach(r => r.reset());
-	}
-	
-	// Sets up player faction abilities and psasive leader abilities
-	initPlayers(p1, p2){
-		let l1 = ability_dict[p1.leader.abilities[0]];
-		let l2 = ability_dict[p2.leader.abilities[0]];
-		if (l1 === ability_dict["emhyr_whiteflame"] || l2 === ability_dict["emhyr_whiteflame"]){
-			p1.disableLeader();
-			p2.disableLeader();
-		} else {
-			initLeader(p1, l1);
-			initLeader(p2, l2);
-		}
-		if (p1.deck.faction === p2.deck.faction && p1.deck.faction === "scoiatael")
-			return;
-		initFaction(p1);
-		initFaction(p2);
-		
-		function initLeader(player, leader){
-			if (leader.placed)
-				leader.placed(player.leader);
-			Object.keys(leader).filter(key => game[key]).map(key => game[key].push(leader[key]));
-		}
-		
-		function initFaction(player){
-			if (factions[player.deck.faction] && factions[player.deck.faction].factionAbility)
-				factions[player.deck.faction].factionAbility(player);
-		}
-	}
-	
-	// Initializes player abilities, hands and waits for cointoss
-	async startGame() {
-		var btn = document.getElementById("session-start-control");
-		btn.textContent = "Game \nStarting";
-		ui.enablePlayer(false);
-		tocar("tf2/Vote_success", false);
-		btnCancelElem.classList.add("hidden");
-		btnCreateElem.classList.add("hidden");
-		btnJoinElem.classList.add("hidden");
-		gameStartControlsElem.classList.add("hide");
-		// isOpponentReadyElem.classList.add("hidden");
-		turncount = 1;
-		gameID = gameID + 1;
-		ui.resumeYouTube();
-		// CLEAR OLD BOARD
-		board.row.forEach( row => row.clear() );
-		weather.clearWeather();
-		await sleep(10);
-		player_op.grave.reset();
-		player_me.grave.reset();
-		player_op.total = 0;
-		player_me.total = 0;
-		board.row.forEach(r => r.updateScore());
-		// Cleared i hope
-		await sleep(20);
-		ui.youtubePlay(audio_yt_vid_soundtrack, audio_yt_vid_soundtrack_volume, true); stop_wait_music();
-		updateOpponentUI({
- 								 "name": " ",
- 								 "state": `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
- 								 "status": `Game In Progress!`
-								});
-		ui.toggleMusic_elem.style.left = "26vw"
-
-		ui.toggleMusic_elem.classList.remove("music-customization");
-		this.currPlayer = player_me;
-		this.initPlayers(player_me, player_op);
-		openFullscreen();
-		console.log("start game players:", player_me, player_op);
-		var meleadercardloss = player_me.leader.abilities[0] === "nilf_drawmaster" ? nilfard_drawmaster.cardban : 0;
-		var cardspecialgain = 0;
-		console.log("On game start i lose cards:", meleadercardloss);
-		var gamestart_thishandsize = thishandsize + cardspecialgain - meleadercardloss;
-		if (
-    player_me.leader.abilities.includes("gaunter_neutral_leader") ||
-    player_op.leader.abilities.includes("gaunter_neutral_leader")
-) {
-    gamestart_thishandsize = Math.floor(
-        gamestart_thishandsize * (1 + gaunter_lider.extra_cards)
+  constructor() {
+    this.endScreen = document.getElementById("end-screen");
+    let buttons = this.endScreen.getElementsByTagName("button");
+    this.customize_elem = buttons[0];
+    //	this.replay_elem = buttons[1];
+    this.customize_elem.addEventListener(
+      "click",
+      () => this.returnToCustomization(),
+      false,
     );
-}
-		console.log("End game start hannd size", gamestart_thishandsize);
-		await Promise.all([...Array(gamestart_thishandsize).keys()].map( async () => {
-			await player_me.deck.draw(player_me.hand);
-			// await player_op.deck.draw(player_op.hand);
-		}));
-		var op_meleadercardloss = player_op.leader.abilities[0] === "nilf_drawmaster" ? nilfard_drawmaster.cardban : 0;
-		var op_cardspecialgain = cardspecialgain;
-		console.log("On game start op lose cards:", op_meleadercardloss);
-		var op_gamestart_thishandsize = thishandsize + op_cardspecialgain - op_meleadercardloss;
-		if (
-    player_me.leader.abilities.includes("gaunter_neutral_leader") ||
-    player_op.leader.abilities.includes("gaunter_neutral_leader")
-) {
-    op_gamestart_thishandsize = Math.floor(
-        op_gamestart_thishandsize * (1 + gaunter_lider.extra_cards)
-    );
-}
-		console.log("End game start hannd size", op_gamestart_thishandsize);
-		await Promise.all([...Array(op_gamestart_thishandsize).keys()].map( async () => {
-			// await player_me.deck.draw(player_me.hand);
-			await player_op.deck.draw(player_op.hand);
-		}));
-		
-		try {
-			eval(ongame_start_eval);
-		} catch (e) {
-			console.log("Game eval start fail", e);
-		}
+    //	this.replay_elem.addEventListener("click", () => this.restartGame(), false);
+    this.reset();
+  }
 
+  reset() {
+    this.firstPlayer;
+    this.currPlayer = null;
 
-		await this.runEffects(this.gameStart);
-		tocar("game_opening", false);
-		if (player_op.deck.faction === "scoiatael" && player_me.deck.faction !== "scoiatael") {
-			var btn2 = document.getElementById("session-start-control");
-			btn2.textContent = "Waiting for opponent to start";
-			await new Promise((resolve) => {
-				const handleMessage = async (event) => {
-					const data = await recv_and_decomp(event);
-					console.log("Player op have a Squirrel leader, waiting for msg", event);
-					if (data.type === "scoiataelStart") {
-						console.log("Is who start info vs Squirrel");
-						const player = data.first === "me" ? player_op : player_me;
-						game.firstPlayer = player;
-						game.currPlayer = player;
-						socket.removeEventListener('message', handleMessage);
-						var btn4 = document.getElementById("session-start-control");
-						btn4.textContent = "Game In Progress";
-						resolve(true);
-					}
-				}
-				socket.addEventListener('message', handleMessage);
-			});
+    this.gameStart = [];
+    this.roundStart = [];
+    this.roundEnd = [];
+    this.turnStart = [];
+    this.turnEnd = [];
 
-			comp_and_send(socket, JSON.stringify({ type: 'gameStart' }));
-			await this.initialRedraw();
-		} else if (player_me.deck.faction === "scoiatael" && player_op.deck.faction !== "scoiatael") {
-			comp_and_send(socket, JSON.stringify({ type: 'gameStart' }));
-	
-			await this.initialRedraw();
-		} else {
-			comp_and_send(socket, JSON.stringify({ type: 'gameStart' }));
-			await this.coinToss();
-	
-			await this.initialRedraw();
-		}
-		var btn3 = document.getElementById("session-start-control");
-		btn3.textContent = "Game In Progress";
-	}
-	
-	// Determines who starts first
-	async coinToss() {
-		return new Promise((resolve) => {
-			const handleMessage = async (event) => {
-				
-				const data = await recv_and_decomp(event);
+    this.roundCount = 0;
+    this.roundHistory = [];
 
-				if (data.type === 'coinToss') {
-					let player;
-					if (data.player === playerId) {
-						player = player_me;
-						passButton.classList.remove("hidden");
-						document.addEventListener('keydown', handleKeyDown);
-						document.addEventListener('keyup', handleKeyUp);
-					} else {
-						player = player_op;
-					}
-					game.firstPlayer = player;
-					game.currPlayer = player;
-					
-					socket.removeEventListener('message', handleMessage);
-					await ui.notification(game.firstPlayer.tag + "-coin", ui_display_times.coin);
-					resolve(true);
-				}
-			}
-			socket.addEventListener('message', handleMessage);
-		});
-	}
-	
-	// Allows the player to swap out up to two cards from their iniitial hand
-	async initialRedraw(){
-		var nilfard_drawmaster_draws = player_me.leader.abilities[0] === "nilf_drawmaster" ? nilfard_drawmaster.drawextra : 0;
-		var OnGameStartDraw2 = OnGameStartDraw + nilfard_drawmaster_draws;
-		if (debug == true)
-			await ui.queueCarousel(player_me.hand, OnGameStartDraw2, async (c, i) => await player_me.deck.swap(c, c.removeCard(i)), c => true, true, true, `Choose up to ${OnGameStartDraw2} cards to redraw.`);
-		else
-			await ui.queueCarousel(player_me.hand, OnGameStartDraw2, async (c, i) => await player_me.deck.swap(c, c.removeCard(i)), c => true, true, true, `Choose up to ${OnGameStartDraw2} cards to redraw.`);
-		ui.enablePlayer(false);
+    this.randomRespawn = false;
+    this.doubleSpyPower = false;
 
-		comp_and_send(socket, JSON.stringify({ type: "initial_reDraw", hand: removeCircularReferences(player_me.hand.cards), deck: removeCircularReferences(player_me.deck.cards)}));
-	}
-	
-	// Initiates a new round of the game
-	async startRound(){
-		this.roundCount++;
-		this.currPlayer = (this.roundCount%2 === 0) ? this.firstPlayer : this.firstPlayer.opponent();
-		player_me.setPassed(false);
-		player_op.setPassed(false); //tried reset to resolve desync //Update it worked, ez
-		await this.runEffects(this.roundStart);
-		
-		if ( !player_me.canPlay() )
-			player_me.setPassed(true);
-		if ( !player_op.canPlay() )
-			player_op.setPassed(true);
-		
-		if (player_op.passed && player_me.passed)
-			return this.endRound();
-		
-		if (this.currPlayer.passed)
-			this.currPlayer = this.currPlayer.opponent();
-		
-		await ui.notification("round-start", ui_display_times.round_start);
-		if (this.currPlayer.opponent().passed)
-			await ui.notification(this.currPlayer.tag + "-turn", ui_display_times.turn);
-		
-		this.startTurn();
-	}
-	
-	// Starts a new turn. Enables client interraction in client's turn.
-	async startTurn() {
-		//console.log("startTurn()", player_me, player_op);
-		
-		await this.runEffects(this.turnStart);
-		if (!this.currPlayer.opponent().passed){
-			this.currPlayer = this.currPlayer.opponent();
-			ui.notification(this.currPlayer.tag + "-turn", ui_display_times.turn);
-		}
-		if (this.currPlayer === player_me) {
-			passButton.classList.remove("hidden");
-			document.addEventListener('keydown', handleKeyDown);
-			document.addEventListener('keyup', handleKeyUp);
-			ui.enablePlayer(true);
-		} else {
-			passButton.classList.add("hidden");
-			document.removeEventListener('keydown', handleKeyDown);
-			document.removeEventListener('keyup', handleKeyUp);
-		}
-		
-		this.currPlayer.startTurn();
-	}
-	
-	// Ends the current turn and may end round. Disables client interraction in client's turn.
-	async endTurn() {
-				board.row.forEach(r => {
-    if (r.cards.some(card => card.abilities?.includes("magicthegathering"))) {
-        r.updateScore();
+    weather.reset();
+    board.row.forEach((r) => r.reset());
+  }
+
+  // Sets up player faction abilities and psasive leader abilities
+  initPlayers(p1, p2) {
+    let l1 = ability_dict[p1.leader.abilities[0]];
+    let l2 = ability_dict[p2.leader.abilities[0]];
+    if (
+      l1 === ability_dict["emhyr_whiteflame"] ||
+      l2 === ability_dict["emhyr_whiteflame"]
+    ) {
+      p1.disableLeader();
+      p2.disableLeader();
+    } else {
+      initLeader(p1, l1);
+      initLeader(p2, l2);
     }
-});
-				turncount = turncount + 1;
-				console.log(`TURN ENDED: Turn ${turncount - 1}\nNext turn will be: ${turncount}`);
-				if (announce_turn_count){
-					showTooltip(`End of ${ordinal(turncount - 1)} turn`);
-				}
-				if (darknessstorm_await === true) {
-	for (const row of board.row) {
-		for (const card of [...row.cards]) {
-			if (card.pendingScorch) {
-				card.pendingScorch = false;
-				await row.scorch_a_card(card);
-			}
-		}
-	}
-} else {
-	await Promise.all(
-		board.row.flatMap(row =>
-			[...row.cards]
-				.filter(card => card.pendingScorch)
-				.map(async card => {
-					card.pendingScorch = false;
-					await row.scorch_a_card(card);
-				})
-		)
-	);
-}
-		if (this.currPlayer === player_me)
-			ui.enablePlayer(false);
-		await this.runEffects(this.turnEnd);
-		if (this.currPlayer.passed)
-			await ui.notification(this.currPlayer.tag + "-pass", ui_display_times.pass);
-		if (player_op.passed && player_me.passed)
-			this.endRound();
-		else
-			this.startTurn();
-	}
-	
-	// Ends the round and may end the game. Determines final scores and the round winner.
-	async endRound() {
-		let dif = player_me.total - player_op.total;
-		if (dif === 0) {
-			let nilf_me = player_me.deck.faction === "nilfgaard", nilf_op = player_op.deck.faction === "nilfgaard";
-			dif = nilf_me ^ nilf_op ? nilf_me ? 1 : -1 : 0;
-		}
-		let winner = dif > 0 ? player_me : dif < 0 ? player_op : null;
-		let verdict = {winner: winner, score_me: player_me.total, score_op: player_op.total}
-		this.roundHistory.push(verdict);
-		
-		await this.runEffects(this.roundEnd);
-		
-		board.row.forEach( row => row.clear() );
-		weather.clearWeather();
-		
-		player_me.endRound( dif > 0);
-		player_op.endRound( dif < 0);
-		
-		if (dif > 0)
-			await ui.notification("win-round", ui_display_times.round_end_result);
-		else if (dif < 0)
-			await ui.notification("lose-round", ui_display_times.round_end_result);
-		else
-			await ui.notification("draw-round", ui_display_times.round_end_result);
-		
-		if (player_me.health === 0 || player_op.health === 0)
-			this.endGame();
-		else
-			this.startRound();
-	}
-	
-	// Sets up and displays the end-game screen
-	async endGame() {
-		document.getElementById("session-start-control").classList.remove("ready");
-		let endScreen = document.getElementById("end-screen");
-		let rows = endScreen.getElementsByTagName("tr");
-		rows[1].children[0].innerHTML = player_me.name;
-		rows[2].children[0].innerHTML = player_op.name;
-		
-		for (let i=1; i<4; ++i) {
-			let round = this.roundHistory[i-1];
-			rows[1].children[i].innerHTML = round ? round.score_me : 0;
-			rows[1].children[i].style.color = round && round.winner === player_me ? "goldenrod" : "";
-			
-			rows[2].children[i].innerHTML = round ? round.score_op : 0;
-			rows[2].children[i].style.color = round && round.winner === player_op ? "goldenrod" : "";
-		}
-		
-		endScreen.children[0].className = "";
-		console.log("---------------------")
-		if (player_op.health <= 0 && player_me.health <= 0) {
-			tocar("game_lose");
-			endScreen.getElementsByTagName("p")[0].classList.remove("hide");
-			endScreen.children[0].classList.add("end-draw");
-			tocar("tf2/game_draw", true);
-			console.log("Game over || Draw")
-			gameended = true;
-		} else if (player_op.health === 0){
-			tocar("game_win", true);
-			endScreen.children[0].classList.add("end-win");
-			console.log("Game over || Victory")
-			gameended = true;
-		} else {
-			endScreen.children[0].classList.add("end-lose");
-			endScreen.children[0].classList.add("end-lose");
-			console.log("Game over || Defeat")
-			gameended = true;
-		}
-		
-		fadeIn(endScreen, 300);
-		ui.enablePlayer(true);
-	}
-	
-	// Returns the client to the deck customization screen
-	returnToCustomization(){
-		ui.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);
-		comp_and_send(socket, JSON.stringify({ type: "unReady" }));
-		amReady = false;
-		toggleReadyWaiting(amReady);
-		opponentReady = false;
-		document.getElementById("session-start-control").classList.remove("ready");
-		
-		ui.toggleMusic_elem.style.left = "20.5vw"
+    if (p1.deck.faction === p2.deck.faction && p1.deck.faction === "scoiatael")
+      return;
+    initFaction(p1);
+    initFaction(p2);
 
-		this.reset();
-		player_me.reset();
-		player_op.reset();
-		var btn5 = document.getElementById("session-start-control");
-		btn5.textContent = "Ready";
-	//	ui.toggleMusic_elem.classList.add("music-customization");
-		this.endScreen.classList.add("hide");
-		customizationElem.classList.remove("hide");
-		gameStartControlsElem.classList.remove("hide");
-		customizationElem.classList.remove("noclick");
-		if (isconnectedtosession){
-			btnCancelElem.classList.remove("hidden")
-		}
-	}
-	
-	// Restarts the last game with the same decks
-	restartGame(){
-		this.reset();
-		player_me.reset();
-		player_op.reset();
-		this.endScreen.classList.add("hide");
-		this.startGame();
-	}
-	
-	// Executes effects in list. If effect returns true, effect is removed.
-	async runEffects(effects){
-		for (let i = effects.length - 1; i >= 0; --i){
-			let effect = effects[i];
-			if (await effect())
-				effects.splice(i,1)
-		}
-	}
-	
+    function initLeader(player, leader) {
+      if (leader.placed) leader.placed(player.leader);
+      Object.keys(leader)
+        .filter((key) => game[key])
+        .map((key) => game[key].push(leader[key]));
+    }
+
+    function initFaction(player) {
+      if (
+        factions[player.deck.faction] &&
+        factions[player.deck.faction].factionAbility
+      )
+        factions[player.deck.faction].factionAbility(player);
+    }
+  }
+
+  // Initializes player abilities, hands and waits for cointoss
+  async startGame() {
+    var btn = document.getElementById("session-start-control");
+    btn.textContent = "Game \nStarting";
+    ui.enablePlayer(false);
+    tocar("tf2/Vote_success", false);
+    btnCancelElem.classList.add("hidden");
+    btnCreateElem.classList.add("hidden");
+    btnJoinElem.classList.add("hidden");
+    gameStartControlsElem.classList.add("hide");
+    // isOpponentReadyElem.classList.add("hidden");
+    turncount = 1;
+    gameID = gameID + 1;
+    ui.resumeYouTube();
+    // CLEAR OLD BOARD
+    board.row.forEach((row) => row.clear());
+    weather.clearWeather();
+    await sleep(10);
+    player_op.grave.reset();
+    player_me.grave.reset();
+    player_op.total = 0;
+    player_me.total = 0;
+    board.row.forEach((r) => r.updateScore());
+    // Cleared i hope
+    await sleep(20);
+    ui.youtubePlay(
+      audio_yt_vid_soundtrack,
+      audio_yt_vid_soundtrack_volume,
+      true,
+    );
+    stop_wait_music();
+    updateOpponentUI({
+      name: " ",
+      state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
+      status: `Game In Progress!`,
+    });
+    ui.toggleMusic_elem.style.left = "26vw";
+
+    ui.toggleMusic_elem.classList.remove("music-customization");
+    this.currPlayer = player_me;
+    this.initPlayers(player_me, player_op);
+    openFullscreen();
+    console.log("start game players:", player_me, player_op);
+    var meleadercardloss =
+      player_me.leader.abilities[0] === "nilf_drawmaster"
+        ? nilfard_drawmaster.cardban
+        : 0;
+    var cardspecialgain = 0;
+    console.log("On game start i lose cards:", meleadercardloss);
+    var gamestart_thishandsize =
+      thishandsize + cardspecialgain - meleadercardloss;
+    if (
+      player_me.leader.abilities.includes("gaunter_neutral_leader") ||
+      player_op.leader.abilities.includes("gaunter_neutral_leader")
+    ) {
+      gamestart_thishandsize = Math.floor(
+        gamestart_thishandsize * (1 + gaunter_lider.extra_cards),
+      );
+    }
+    console.log("End game start hannd size", gamestart_thishandsize);
+    await Promise.all(
+      [...Array(gamestart_thishandsize).keys()].map(async () => {
+        await player_me.deck.draw(player_me.hand);
+        // await player_op.deck.draw(player_op.hand);
+      }),
+    );
+    var op_meleadercardloss =
+      player_op.leader.abilities[0] === "nilf_drawmaster"
+        ? nilfard_drawmaster.cardban
+        : 0;
+    var op_cardspecialgain = cardspecialgain;
+    console.log("On game start op lose cards:", op_meleadercardloss);
+    var op_gamestart_thishandsize =
+      thishandsize + op_cardspecialgain - op_meleadercardloss;
+    if (
+      player_me.leader.abilities.includes("gaunter_neutral_leader") ||
+      player_op.leader.abilities.includes("gaunter_neutral_leader")
+    ) {
+      op_gamestart_thishandsize = Math.floor(
+        op_gamestart_thishandsize * (1 + gaunter_lider.extra_cards),
+      );
+    }
+    console.log("End game start hannd size", op_gamestart_thishandsize);
+    await Promise.all(
+      [...Array(op_gamestart_thishandsize).keys()].map(async () => {
+        // await player_me.deck.draw(player_me.hand);
+        await player_op.deck.draw(player_op.hand);
+      }),
+    );
+
+    try {
+      eval(ongame_start_eval);
+    } catch (e) {
+      console.log("Game eval start fail", e);
+    }
+
+    await this.runEffects(this.gameStart);
+    tocar("game_opening", false);
+    if (
+      player_op.deck.faction === "scoiatael" &&
+      player_me.deck.faction !== "scoiatael"
+    ) {
+      var btn2 = document.getElementById("session-start-control");
+      btn2.textContent = "Waiting for opponent to start";
+      await new Promise((resolve) => {
+        const handleMessage = async (event) => {
+          const data = await recv_and_decomp(event);
+          console.log(
+            "Player op have a Squirrel leader, waiting for msg",
+            event,
+          );
+          if (data.type === "scoiataelStart") {
+            console.log("Is who start info vs Squirrel");
+            const player = data.first === "me" ? player_op : player_me;
+            game.firstPlayer = player;
+            game.currPlayer = player;
+            socket.removeEventListener("message", handleMessage);
+            var btn4 = document.getElementById("session-start-control");
+            btn4.textContent = "Game In Progress";
+            resolve(true);
+          }
+        };
+        socket.addEventListener("message", handleMessage);
+      });
+
+      comp_and_send(socket, JSON.stringify({ type: "gameStart" }));
+      await this.initialRedraw();
+    } else if (
+      player_me.deck.faction === "scoiatael" &&
+      player_op.deck.faction !== "scoiatael"
+    ) {
+      comp_and_send(socket, JSON.stringify({ type: "gameStart" }));
+
+      await this.initialRedraw();
+    } else {
+      comp_and_send(socket, JSON.stringify({ type: "gameStart" }));
+      await this.coinToss();
+
+      await this.initialRedraw();
+    }
+    var btn3 = document.getElementById("session-start-control");
+    btn3.textContent = "Game In Progress";
+  }
+
+  // Determines who starts first
+  async coinToss() {
+    return new Promise((resolve) => {
+      const handleMessage = async (event) => {
+        const data = await recv_and_decomp(event);
+
+        if (data.type === "coinToss") {
+          let player;
+          if (data.player === playerId) {
+            player = player_me;
+            passButton.classList.remove("hidden");
+            document.addEventListener("keydown", handleKeyDown);
+            document.addEventListener("keyup", handleKeyUp);
+          } else {
+            player = player_op;
+          }
+          game.firstPlayer = player;
+          game.currPlayer = player;
+
+          socket.removeEventListener("message", handleMessage);
+          await ui.notification(
+            game.firstPlayer.tag + "-coin",
+            ui_display_times.coin,
+          );
+          resolve(true);
+        }
+      };
+      socket.addEventListener("message", handleMessage);
+    });
+  }
+
+  // Allows the player to swap out up to two cards from their iniitial hand
+  async initialRedraw() {
+    var nilfard_drawmaster_draws =
+      player_me.leader.abilities[0] === "nilf_drawmaster"
+        ? nilfard_drawmaster.drawextra
+        : 0;
+    var OnGameStartDraw2 = OnGameStartDraw + nilfard_drawmaster_draws;
+    if (debug == true)
+      await ui.queueCarousel(
+        player_me.hand,
+        OnGameStartDraw2,
+        async (c, i) => await player_me.deck.swap(c, c.removeCard(i)),
+        (c) => true,
+        true,
+        true,
+        `Choose up to ${OnGameStartDraw2} cards to redraw.`,
+      );
+    else
+      await ui.queueCarousel(
+        player_me.hand,
+        OnGameStartDraw2,
+        async (c, i) => await player_me.deck.swap(c, c.removeCard(i)),
+        (c) => true,
+        true,
+        true,
+        `Choose up to ${OnGameStartDraw2} cards to redraw.`,
+      );
+    ui.enablePlayer(false);
+
+    comp_and_send(
+      socket,
+      JSON.stringify({
+        type: "initial_reDraw",
+        hand: removeCircularReferences(player_me.hand.cards),
+        deck: removeCircularReferences(player_me.deck.cards),
+      }),
+    );
+  }
+
+  // Initiates a new round of the game
+  async startRound() {
+    this.roundCount++;
+    this.currPlayer =
+      this.roundCount % 2 === 0
+        ? this.firstPlayer
+        : this.firstPlayer.opponent();
+    player_me.setPassed(false);
+    player_op.setPassed(false); //tried reset to resolve desync //Update it worked, ez
+    await this.runEffects(this.roundStart);
+
+    if (!player_me.canPlay()) player_me.setPassed(true);
+    if (!player_op.canPlay()) player_op.setPassed(true);
+
+    if (player_op.passed && player_me.passed) return this.endRound();
+
+    if (this.currPlayer.passed) this.currPlayer = this.currPlayer.opponent();
+
+    await ui.notification("round-start", ui_display_times.round_start);
+    if (this.currPlayer.opponent().passed)
+      await ui.notification(
+        this.currPlayer.tag + "-turn",
+        ui_display_times.turn,
+      );
+
+    this.startTurn();
+  }
+
+  // Starts a new turn. Enables client interraction in client's turn.
+  async startTurn() {
+    //console.log("startTurn()", player_me, player_op);
+
+    await this.runEffects(this.turnStart);
+    if (!this.currPlayer.opponent().passed) {
+      this.currPlayer = this.currPlayer.opponent();
+      ui.notification(this.currPlayer.tag + "-turn", ui_display_times.turn);
+    }
+    if (this.currPlayer === player_me) {
+      passButton.classList.remove("hidden");
+      document.addEventListener("keydown", handleKeyDown);
+      document.addEventListener("keyup", handleKeyUp);
+      ui.enablePlayer(true);
+    } else {
+      passButton.classList.add("hidden");
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+    }
+
+    this.currPlayer.startTurn();
+  }
+
+  // Ends the current turn and may end round. Disables client interraction in client's turn.
+  async endTurn() {
+    board.row.forEach((r) => {
+      if (
+        r.cards.some((card) => card.abilities?.includes("magicthegathering"))
+      ) {
+        r.updateScore();
+      }
+    });
+    turncount = turncount + 1;
+    console.log(
+      `TURN ENDED: Turn ${turncount - 1}\nNext turn will be: ${turncount}`,
+    );
+    if (announce_turn_count) {
+      showTooltip(`End of ${ordinal(turncount - 1)} turn`);
+    }
+    if (darknessstorm_await === true) {
+      for (const row of board.row) {
+        for (const card of [...row.cards]) {
+          if (card.pendingScorch) {
+            card.pendingScorch = false;
+            await row.scorch_a_card(card);
+          }
+        }
+      }
+    } else {
+      await Promise.all(
+        board.row.flatMap((row) =>
+          [...row.cards]
+            .filter((card) => card.pendingScorch)
+            .map(async (card) => {
+              card.pendingScorch = false;
+              await row.scorch_a_card(card);
+            }),
+        ),
+      );
+    }
+    if (this.currPlayer === player_me) ui.enablePlayer(false);
+    await this.runEffects(this.turnEnd);
+    if (this.currPlayer.passed)
+      await ui.notification(
+        this.currPlayer.tag + "-pass",
+        ui_display_times.pass,
+      );
+    if (player_op.passed && player_me.passed) this.endRound();
+    else this.startTurn();
+  }
+
+  // Ends the round and may end the game. Determines final scores and the round winner.
+  async endRound() {
+    let dif = player_me.total - player_op.total;
+    if (dif === 0) {
+      let nilf_me = player_me.deck.faction === "nilfgaard",
+        nilf_op = player_op.deck.faction === "nilfgaard";
+      dif = nilf_me ^ nilf_op ? (nilf_me ? 1 : -1) : 0;
+    }
+    let winner = dif > 0 ? player_me : dif < 0 ? player_op : null;
+    let verdict = {
+      winner: winner,
+      score_me: player_me.total,
+      score_op: player_op.total,
+    };
+    this.roundHistory.push(verdict);
+
+    await this.runEffects(this.roundEnd);
+
+    board.row.forEach((row) => row.clear());
+    weather.clearWeather();
+
+    player_me.endRound(dif > 0);
+    player_op.endRound(dif < 0);
+
+    if (dif > 0)
+      await ui.notification("win-round", ui_display_times.round_end_result);
+    else if (dif < 0)
+      await ui.notification("lose-round", ui_display_times.round_end_result);
+    else await ui.notification("draw-round", ui_display_times.round_end_result);
+
+    if (player_me.health === 0 || player_op.health === 0) this.endGame();
+    else this.startRound();
+  }
+
+  // Sets up and displays the end-game screen
+  async endGame() {
+    document.getElementById("session-start-control").classList.remove("ready");
+    let endScreen = document.getElementById("end-screen");
+    let rows = endScreen.getElementsByTagName("tr");
+    rows[1].children[0].innerHTML = player_me.name;
+    rows[2].children[0].innerHTML = player_op.name;
+
+    for (let i = 1; i < 4; ++i) {
+      let round = this.roundHistory[i - 1];
+      rows[1].children[i].innerHTML = round ? round.score_me : 0;
+      rows[1].children[i].style.color =
+        round && round.winner === player_me ? "goldenrod" : "";
+
+      rows[2].children[i].innerHTML = round ? round.score_op : 0;
+      rows[2].children[i].style.color =
+        round && round.winner === player_op ? "goldenrod" : "";
+    }
+
+    endScreen.children[0].className = "";
+    console.log("---------------------");
+    if (player_op.health <= 0 && player_me.health <= 0) {
+      tocar("game_lose");
+      endScreen.getElementsByTagName("p")[0].classList.remove("hide");
+      endScreen.children[0].classList.add("end-draw");
+      tocar("tf2/game_draw", true);
+      console.log("Game over || Draw");
+      gameended = true;
+    } else if (player_op.health === 0) {
+      tocar("game_win", true);
+      endScreen.children[0].classList.add("end-win");
+      console.log("Game over || Victory");
+      gameended = true;
+    } else {
+      endScreen.children[0].classList.add("end-lose");
+      endScreen.children[0].classList.add("end-lose");
+      console.log("Game over || Defeat");
+      gameended = true;
+    }
+
+    fadeIn(endScreen, 300);
+    ui.enablePlayer(true);
+  }
+
+  // Returns the client to the deck customization screen
+  returnToCustomization() {
+    ui.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);
+    comp_and_send(socket, JSON.stringify({ type: "unReady" }));
+    amReady = false;
+    toggleReadyWaiting(amReady);
+    opponentReady = false;
+    document.getElementById("session-start-control").classList.remove("ready");
+
+    ui.toggleMusic_elem.style.left = "20.5vw";
+
+    this.reset();
+    player_me.reset();
+    player_op.reset();
+    var btn5 = document.getElementById("session-start-control");
+    btn5.textContent = "Ready";
+    //	ui.toggleMusic_elem.classList.add("music-customization");
+    this.endScreen.classList.add("hide");
+    customizationElem.classList.remove("hide");
+    gameStartControlsElem.classList.remove("hide");
+    customizationElem.classList.remove("noclick");
+    if (isconnectedtosession) {
+      btnCancelElem.classList.remove("hidden");
+    }
+  }
+
+  // Restarts the last game with the same decks
+  restartGame() {
+    this.reset();
+    player_me.reset();
+    player_op.reset();
+    this.endScreen.classList.add("hide");
+    this.startGame();
+  }
+
+  // Executes effects in list. If effect returns true, effect is removed.
+  async runEffects(effects) {
+    for (let i = effects.length - 1; i >= 0; --i) {
+      let effect = effects[i];
+      if (await effect()) effects.splice(i, 1);
+    }
+  }
 }
 
 // Contains information and behavior of a Card
 class Card {
+  constructor(card_data, player) {
+    console.log("constructor card data", card_data, player);
+    this.name = card_data.name;
+    this.basePower = this.power = Number(card_data.strength);
+    this.faction = card_data.deck;
+    this.abilities =
+      card_data.ability === "" ? [] : card_data.ability.split(" ");
+    this.row = card_data.deck === "weather" ? card_data.deck : card_data.row;
+    this.filename = card_data.filename;
+    this.placed = [];
+    this.removed = [];
+    this.activated = [];
+    this.holder = player;
 
-	constructor(card_data, player) {
-		console.log("constructor card data", card_data, player);
-		this.name = card_data.name;
-		this.basePower = this.power = Number(card_data.strength);
-		this.faction = card_data.deck;
-		this.abilities = (card_data.ability === "") ? [] : card_data.ability.split(" ");
-		this.row = (card_data.deck === "weather") ? card_data.deck : card_data.row;
-		this.filename = card_data.filename;
-		this.placed = [];
-		this.removed = [];
-		this.activated = [];
-		this.holder = player;
-		
-		this.hero = false;
-		if (this.abilities.length > 0) {
-			if (this.abilities[0] === "hero") {
-				this.hero = true;
-				this.abilities.splice(0, 1);
-			}
-			for (let x of this.abilities) {
-				let ab = ability_dict[x];
-				if ("placed" in ab) this.placed.push(ab.placed);
-				if ("removed" in ab) this.removed.push(ab.removed);
-				if ("activated" in ab) this.activated.push(ab.activated);
-			}
-		}
-		
-		if (this.row === "leader")
-			this.desc_name = "Leader Ability";
-		else if (this.abilities.length > 0)
-			this.desc_name = ability_dict[this.abilities[this.abilities.length-1]].name;
-		else if (this.row==="agile")
-			this.desc_name = "agile";
-		else if (this.hero)
-			this.desc_name = "hero";
-		else
-			this.desc_name = "";
-		
-		this.desc = this.row ==="agile" ? ability_dict["agile"].description : "";
-		for (let i=this.abilities.length-1; i>=0; --i) {
-			this.desc += ability_dict[this.abilities[i]].description;
-		}
-		if (this.hero)
-			this.desc += ability_dict["hero"].description;
-		
-		this.elem = this.createCardElem(this);
-	}
-	
-	// Returns the identifier for this type of card
-	id() {
-		return this.name;
-	}
-	
-	// Sets and displays the current power of this card
-	setPower(n){
-		if (this.name === "Decoy")
-			return;
-		let elem = this.elem.children[0].children[0];
-		if (n !== this.power) {
-			this.power = n;
-			elem.innerHTML = this.power;
-		}
-		elem.style.color = (n>this.basePower) ? "goldenrod" : (n<this.basePower) ? "red" : "";
-	}
-	
-	// Resets the power of this card to default
-	resetPower(){
-		this.setPower(this.basePower);
-	}
-	
-	// Automatically sends and translates this card to its apropriate row from the passed source
-	async autoplay(source){
-		await board.toRow(this, source);
-	}
-	
-	// Animates an ability effect
-	async animate(name, bFade = true, bExpand = true) {
-		var guia = {
-			"medic" : "med",
-			"muster" : "ally",
-			"morale" : "moral",
-			"bond" : "moral",
-			"powergain": "moral", //no audio
-			"darkstrom": "moral",
-			"avenger_spawn_creature": "avenger",
-			"hero": "hero_anim",
-			"griffin": "moral",
-			"mtg": "cos",
-		"decoy": "spy",
-		"dopler": "spy",
-		"dopavenger": "moral",
-		"dopler_spawn_creature": "avenger",
-		"muster2": "ally",
-		"reinforce": "moral",
-		"aid": "royal_horn",
-		"wshield": "ally"
-		}
-		var temSom = new Array();
-		for (var x in guia) temSom[temSom.length] = x;
-		var literais = ["scorch", "spy", "horn", "shield", "lock", "seize", "knockback", "resilience"];
-		var som = literais.indexOf(name) > -1 ? literais[literais.indexOf(name)] : temSom.indexOf(name) > -1 ? guia[name] : "";
-		if (som != "") tocar(som, false);
+    this.hero = false;
+    if (this.abilities.length > 0) {
+      if (this.abilities[0] === "hero") {
+        this.hero = true;
+        this.abilities.splice(0, 1);
+      }
+      for (let x of this.abilities) {
+        let ab = ability_dict[x];
+        if ("placed" in ab) this.placed.push(ab.placed);
+        if ("removed" in ab) this.removed.push(ab.removed);
+        if ("activated" in ab) this.activated.push(ab.activated);
+      }
+    }
 
-		if (name === "scorch") {
-			return await this.scorch(name);
-		}
-		let anim = this.elem.children[3];
-		anim.style.backgroundImage = iconURL("anim_" + name);
-		anim.style.position = "absolute";
-		anim.style.inset = "0";
-		anim.style.zIndex = "50";
-		// console.log("ANIM", anim);
-		await sleep(50);
-		
-		if (bFade) fadeIn(anim, 300);
-		if (bExpand) anim.style.backgroundSize = "100% auto";
-		await sleep(300);
-		
-		if (bExpand) anim.style.backgroundSize = "80% auto";
-		await sleep(1000);
-		
-		if (bFade) fadeOut(anim, 300);
-		if (bExpand) anim.style.backgroundSize = "40% auto";
-		await sleep(300);
-		
-		anim.style.backgroundImage = "";
-		return;
-	}
+    if (this.row === "leader") this.desc_name = "Leader Ability";
+    else if (this.abilities.length > 0)
+      this.desc_name =
+        ability_dict[this.abilities[this.abilities.length - 1]].name;
+    else if (this.row === "agile") this.desc_name = "agile";
+    else if (this.hero) this.desc_name = "hero";
+    else this.desc_name = "";
 
-	async animate2(name, bFade = true) {
-	const guia = {
-		"medic": "med",
-		"muster": "ally",
-		"morale": "moral",
-		"bond": "moral",
-		"powergain": "moral",
-		"darkstrom": "moral",
-		"avenger_spawn_creature": "avenger",
-		"hero": "hero_anim",
-		"griffin": "moral",
-		"mtg": "cos",
-		"decoy": "spy",
-		"dopler": "spy",
-		"dopavenger": "moral",
-		"dopler_spawn_creature": "avenger",
-		"muster2": "ally",
-		"reinforce": "moral",
-		"aid": "royal_horn",
-		"wshield": "ally"
-	};
+    this.desc = this.row === "agile" ? ability_dict["agile"].description : "";
+    for (let i = this.abilities.length - 1; i >= 0; --i) {
+      this.desc += ability_dict[this.abilities[i]].description;
+    }
+    if (this.hero) this.desc += ability_dict["hero"].description;
 
-	const literais = [
-		"scorch",
-		"spy",
-		"horn",
-		"shield",
-		"lock",
-		"seize",
-		"knockback",
-		"resilience"
-	];
+    this.elem = this.createCardElem(this);
+  }
 
-	let som = "";
+  // Returns the identifier for this type of card
+  id() {
+    return this.name;
+  }
 
-	if (literais.includes(name)) {
-		som = name;
-	} else if (guia[name]) {
-		som = guia[name];
-	}
+  // Sets and displays the current power of this card
+  setPower(n) {
+    if (this.name === "Decoy") return;
+    let elem = this.elem.children[0].children[0];
+    if (n !== this.power) {
+      this.power = n;
+      elem.innerHTML = this.power;
+    }
+    elem.style.color =
+      n > this.basePower ? "goldenrod" : n < this.basePower ? "red" : "";
+  }
 
-	if (som) tocar(som, false);
+  // Resets the power of this card to default
+  resetPower() {
+    this.setPower(this.basePower);
+  }
 
-	// IMPORTANT
-	if (getComputedStyle(this.elem).position === "static") {
-		this.elem.style.position = "relative";
-	}
+  // Automatically sends and translates this card to its apropriate row from the passed source
+  async autoplay(source) {
+    await board.toRow(this, source);
+  }
 
-	// create overlay
-	const anim = document.createElement("div");
-	// console.log("ANIM2", anim);
-	anim.style.width = "100%";
-anim.style.height = "100%";
+  // Animates an ability effect
+  async animate(name, bFade = true, bExpand = true) {
+    var guia = {
+      medic: "med",
+      muster: "ally",
+      morale: "moral",
+      bond: "moral",
+      powergain: "moral", //no audio
+      darkstrom: "moral",
+      avenger_spawn_creature: "avenger",
+      hero: "hero_anim",
+      griffin: "moral",
+      mtg: "cos",
+      decoy: "spy",
+      dopler: "spy",
+      dopavenger: "moral",
+      dopler_spawn_creature: "avenger",
+      muster2: "ally",
+      reinforce: "moral",
+      aid: "royal_horn",
+      wshield: "ally",
+    };
+    var temSom = new Array();
+    for (var x in guia) temSom[temSom.length] = x;
+    var literais = [
+      "scorch",
+      "spy",
+      "horn",
+      "shield",
+      "lock",
+      "seize",
+      "knockback",
+      "resilience",
+    ];
+    var som =
+      literais.indexOf(name) > -1
+        ? literais[literais.indexOf(name)]
+        : temSom.indexOf(name) > -1
+          ? guia[name]
+          : "";
+    if (som != "") tocar(som, false);
 
-anim.style.backgroundSize = "contain";
-anim.style.backgroundRepeat = "no-repeat";
-anim.style.backgroundPosition = "center";
+    if (name === "scorch") {
+      return await this.scorch(name);
+    }
+    let anim = this.elem.children[3];
+    anim.style.backgroundImage = iconURL("anim_" + name);
+    anim.style.position = "absolute";
+    anim.style.inset = "0";
+    anim.style.zIndex = "50";
+    // console.log("ANIM", anim);
+    await sleep(50);
 
-anim.style.position = "absolute";
-anim.style.top = "0";
-anim.style.left = "0";
+    if (bFade) fadeIn(anim, 300);
+    if (bExpand) anim.style.backgroundSize = "100% auto";
+    await sleep(300);
 
-	// IMPORTANT
-	anim.style.backgroundColor = "transparent";
+    if (bExpand) anim.style.backgroundSize = "80% auto";
+    await sleep(1000);
 
-	anim.style.backgroundImage = iconURL("anim_" + name);
-	anim.style.backgroundRepeat = "no-repeat";
-	anim.style.backgroundPosition = "center";
+    if (bFade) fadeOut(anim, 300);
+    if (bExpand) anim.style.backgroundSize = "40% auto";
+    await sleep(300);
 
-	// use contain instead of cover
-	anim.style.backgroundSize = "contain";
+    anim.style.backgroundImage = "";
+    return;
+  }
 
-	anim.style.pointerEvents = "none";
+  async animate2(name, bFade = true) {
+    const guia = {
+      medic: "med",
+      muster: "ally",
+      morale: "moral",
+      bond: "moral",
+      powergain: "moral",
+      darkstrom: "moral",
+      avenger_spawn_creature: "avenger",
+      hero: "hero_anim",
+      griffin: "moral",
+      mtg: "cos",
+      decoy: "spy",
+      dopler: "spy",
+      dopavenger: "moral",
+      dopler_spawn_creature: "avenger",
+      muster2: "ally",
+      reinforce: "moral",
+      aid: "royal_horn",
+      wshield: "ally",
+    };
 
-	// IMPORTANT
-	anim.style.zIndex = "49";
+    const literais = [
+      "scorch",
+      "spy",
+      "horn",
+      "shield",
+      "lock",
+      "seize",
+      "knockback",
+      "resilience",
+    ];
 
-	// opacity
-	anim.style.opacity = bFade ? "0" : "1";
+    let som = "";
 
-	this.elem.appendChild(anim);
+    if (literais.includes(name)) {
+      som = name;
+    } else if (guia[name]) {
+      som = guia[name];
+    }
 
-	await sleep(50);
+    if (som) tocar(som, false);
 
-	if (bFade) fadeIn(anim, 300);
+    // IMPORTANT
+    if (getComputedStyle(this.elem).position === "static") {
+      this.elem.style.position = "relative";
+    }
 
-	await sleep(1300);
+    // create overlay
+    const anim = document.createElement("div");
+    // console.log("ANIM2", anim);
+    anim.style.width = "100%";
+    anim.style.height = "100%";
 
-	if (bFade) fadeOut(anim, 300);
+    anim.style.backgroundSize = "contain";
+    anim.style.backgroundRepeat = "no-repeat";
+    anim.style.backgroundPosition = "center";
 
-	await sleep(300);
+    anim.style.position = "absolute";
+    anim.style.top = "0";
+    anim.style.left = "0";
 
-	anim.remove();
-}
-	
-	// Animates the scorch effect
-	async scorch(name){
-		console.log("async scorch(", name, ")");
-		let anim = this.elem.children[3];
-		anim.style.backgroundSize = "cover";
-		anim.style.backgroundImage = iconURL("anim_" + name);
-		await sleep(50);
-		
-		fadeIn(anim, 300);
-		await sleep(1300);
-		
-		fadeOut(anim, 300);
-		await sleep(300);
-		
-		anim.style.backgroundSize = "";
-		anim.style.backgroundImage = "";
-	}
-	
-	// Returns true if this is a combat card that is not a Hero
-	isUnit(){
-		return !this.hero && (this.row === "close" || this.row === "ranged" || this.row === "siege" || this.row === "agile");
-	}
-	
-	// Returns true if card is sent to a Row's special slot
-	isSpecial() {
-		return this.name === "Commander's Horn" || this.name === "Mardroeme";
-	}
+    // IMPORTANT
+    anim.style.backgroundColor = "transparent";
 
-	// Compares by type then power then name
-	static compare(a, b){
-		var dif = factionRank(a) - factionRank(b);
-		if (dif !== 0)
-			return dif;
-		dif = a.basePower - b.basePower;
-		if (dif && dif !== 0)
-			return dif;
-		return a.name.localeCompare(b.name);
-		
-		function factionRank(c){ return c.faction === "special" ? -2 : (c.faction === "weather") ? -1 : 0; }
-	}
-	
-	// Creates an HTML element based on the card's properties
-	createCardElem(card){
-		console.log("createcardElem", card);
-		let elem = document.createElement("div");
-		var tmp = card.faction + "_" + card.filename;
+    anim.style.backgroundImage = iconURL("anim_" + name);
+    anim.style.backgroundRepeat = "no-repeat";
+    anim.style.backgroundPosition = "center";
 
-if (card.filename === "Gaunter_Leader") {
-	tmp = "neutral_Gaunter_Leader";
-}
+    // use contain instead of cover
+    anim.style.backgroundSize = "contain";
 
-elem.style.backgroundImage = smallURL(tmp);
-		elem.classList.add("card");
-		elem.addEventListener("click", () => ui.selectCard(card), false);
-		
-		if (card.row === "leader")
-			return elem;
-		
-		let power = document.createElement("div");
-		elem.appendChild(power);
-		let bg;
-		if (card.hero) {
-			bg = "power_hero";
-			elem.classList.add("hero");
-		} else if (card.faction === "weather") {
-			bg = "power_" + card.abilities[0];
-		} else if (card.faction === "special") {
-			bg = "power_" + card.abilities[0];
-			elem.classList.add("special");
-		} else {
-			bg = "power_normal";
-		}
-		power.style.backgroundImage = iconURL(bg);
-		
-		let row = document.createElement("div");
-		elem.appendChild(row);
-		if (card.row === "close" || card.row === "ranged" || card.row === "siege" || card.row === "agile") {
-			let num = document.createElement("div");
-			num.appendChild( document.createTextNode(card.basePower) );
-			num.classList.add("center");
-			power.appendChild(num);
-			row.style.backgroundImage = iconURL("card_row_" + card.row);
-		}
+    anim.style.pointerEvents = "none";
 
-		let abi = document.createElement("div");
-		elem.appendChild(abi);
-		if (card.faction !== "special" && card.faction !== "weather" && card.abilities.length > 0) {
-			let str =  card.abilities[card.abilities.length-1];
-			if (str === "cerys")
-				str = "muster";
-			if (str.startsWith("avenger"))
-				str = "avenger";
-			if (str === "scorch_c" || str == "scorch_r" || str === "scorch_s")
-				str = "scorch";
-			abi.style.backgroundImage = iconURL("card_ability_" + str);
-		} else if (card.row === "agile")
-			abi.style.backgroundImage = iconURL("card_ability_" + "agile");
-		
-		elem.appendChild( document.createElement("div") ); // animation overlay
-		console.log("createcardElem out", elem)
-		return elem;
-	}
+    // IMPORTANT
+    anim.style.zIndex = "49";
+
+    // opacity
+    anim.style.opacity = bFade ? "0" : "1";
+
+    this.elem.appendChild(anim);
+
+    await sleep(50);
+
+    if (bFade) fadeIn(anim, 300);
+
+    await sleep(1300);
+
+    if (bFade) fadeOut(anim, 300);
+
+    await sleep(300);
+
+    anim.remove();
+  }
+
+  // Animates the scorch effect
+  async scorch(name) {
+    console.log("async scorch(", name, ")");
+    let anim = this.elem.children[3];
+    anim.style.backgroundSize = "cover";
+    anim.style.backgroundImage = iconURL("anim_" + name);
+    await sleep(50);
+
+    fadeIn(anim, 300);
+    await sleep(1300);
+
+    fadeOut(anim, 300);
+    await sleep(300);
+
+    anim.style.backgroundSize = "";
+    anim.style.backgroundImage = "";
+  }
+
+  // Returns true if this is a combat card that is not a Hero
+  isUnit() {
+    return (
+      !this.hero &&
+      (this.row === "close" ||
+        this.row === "ranged" ||
+        this.row === "siege" ||
+        this.row === "agile")
+    );
+  }
+
+  // Returns true if card is sent to a Row's special slot
+  isSpecial() {
+    return this.name === "Commander's Horn" || this.name === "Mardroeme";
+  }
+
+  // Compares by type then power then name
+  static compare(a, b) {
+    var dif = factionRank(a) - factionRank(b);
+    if (dif !== 0) return dif;
+    dif = a.basePower - b.basePower;
+    if (dif && dif !== 0) return dif;
+    return a.name.localeCompare(b.name);
+
+    function factionRank(c) {
+      return c.faction === "special" ? -2 : c.faction === "weather" ? -1 : 0;
+    }
+  }
+
+  // Creates an HTML element based on the card's properties
+  createCardElem(card) {
+    console.log("createcardElem", card);
+    let elem = document.createElement("div");
+    var tmp = card.faction + "_" + card.filename;
+
+    if (card.filename === "Gaunter_Leader") {
+      tmp = "neutral_Gaunter_Leader";
+    }
+
+    elem.style.backgroundImage = smallURL(tmp);
+    elem.classList.add("card");
+    elem.addEventListener("click", () => ui.selectCard(card), false);
+
+    if (card.row === "leader") return elem;
+
+    let power = document.createElement("div");
+    elem.appendChild(power);
+    let bg;
+    if (card.hero) {
+      bg = "power_hero";
+      elem.classList.add("hero");
+    } else if (card.faction === "weather") {
+      bg = "power_" + card.abilities[0];
+    } else if (card.faction === "special") {
+      bg = "power_" + card.abilities[0];
+      elem.classList.add("special");
+    } else {
+      bg = "power_normal";
+    }
+    power.style.backgroundImage = iconURL(bg);
+
+    let row = document.createElement("div");
+    elem.appendChild(row);
+    if (
+      card.row === "close" ||
+      card.row === "ranged" ||
+      card.row === "siege" ||
+      card.row === "agile"
+    ) {
+      let num = document.createElement("div");
+      num.appendChild(document.createTextNode(card.basePower));
+      num.classList.add("center");
+      power.appendChild(num);
+      row.style.backgroundImage = iconURL("card_row_" + card.row);
+    }
+
+    let abi = document.createElement("div");
+    elem.appendChild(abi);
+    if (
+      card.faction !== "special" &&
+      card.faction !== "weather" &&
+      card.abilities.length > 0
+    ) {
+      let str = card.abilities[card.abilities.length - 1];
+      if (str === "cerys") str = "muster";
+      if (str.startsWith("avenger")) str = "avenger";
+      if (str === "scorch_c" || str == "scorch_r" || str === "scorch_s")
+        str = "scorch";
+      abi.style.backgroundImage = iconURL("card_ability_" + str);
+    } else if (card.row === "agile")
+      abi.style.backgroundImage = iconURL("card_ability_" + "agile");
+
+    elem.appendChild(document.createElement("div")); // animation overlay
+    console.log("createcardElem out", elem);
+    return elem;
+  }
 }
 
 // Handles notifications and client interration with menus
 class UI {
-	constructor() {
-		this.carousels = [];
-		this.notif_elem = document.getElementById("notification-bar");
-		this.preview = document.getElementsByClassName("card-preview")[0];
-		this.previewCard = null;
-		this.lastRow = null;
-		this.bypassPlayback = false; // If true, ignore user settings and control playback directly
-		this.savedVolume = null; // To store previous volume before muting or stopping
-		passButton.addEventListener("click", () => {
-			comp_and_send(socket, JSON.stringify({ type: "pass", player: playerId }));
-			player_me.passRound();
-		});
-		document.getElementById("click-background").addEventListener("click", () => ui.cancel(), false);
-		this.youtube;
-		this.ytActive;
-		this.toggleMusic_elem = document.getElementById("toggle-music");
-		this.toggleMusic_elem.classList.add("fade");
-		this.toggleMusic_elem.addEventListener("click", () => this.toggleMusic(), false);
-	}
-	
-	enablePlayer(enable){
-		let main = document.getElementsByTagName("main")[0].classList;
-		if (enable) main.remove("noclick"); else main.add("noclick");
-	}
+  constructor() {
+    this.carousels = [];
+    this.notif_elem = document.getElementById("notification-bar");
+    this.preview = document.getElementsByClassName("card-preview")[0];
+    this.previewCard = null;
+    this.lastRow = null;
+    this.bypassPlayback = false; // If true, ignore user settings and control playback directly
+    this.savedVolume = null; // To store previous volume before muting or stopping
+    passButton.addEventListener("click", () => {
+      comp_and_send(socket, JSON.stringify({ type: "pass", player: playerId }));
+      player_me.passRound();
+    });
+    document
+      .getElementById("click-background")
+      .addEventListener("click", () => ui.cancel(), false);
+    this.youtube;
+    this.ytActive;
+    this.toggleMusic_elem = document.getElementById("toggle-music");
+    this.toggleMusic_elem.classList.add("fade");
+    this.toggleMusic_elem.addEventListener(
+      "click",
+      () => this.toggleMusic(),
+      false,
+    );
+  }
 
-	// Initializes the youtube background music object
-	initYouTube() {
-		this.youtube = new YT.Player('youtube', {
-			videoId: tavern_yt_vid,
-			playerVars: {
-				"autoplay": 1,
-				"controls": 0,
-				"loop": 1,
-				"playlist": tavern_yt_vid,
-				"rel": 0,
-				"version": 3,
-				"modestbranding": 1
-			},
-			events: {
-				'onStateChange': initButton,
-				 onReady: (event) => {
-				event.target.setVolume(tavern_yt_volume);
-				 }
-			}
-		});
+  enablePlayer(enable) {
+    let main = document.getElementsByTagName("main")[0].classList;
+    if (enable) main.remove("noclick");
+    else main.add("noclick");
+  }
 
-	
+  // Initializes the youtube background music object
+  initYouTube() {
+    this.youtube = new YT.Player("youtube", {
+      videoId: tavern_yt_vid,
+      playerVars: {
+        autoplay: 1,
+        controls: 0,
+        loop: 1,
+        playlist: tavern_yt_vid,
+        rel: 0,
+        version: 3,
+        modestbranding: 1,
+      },
+      events: {
+        onStateChange: initButton,
+        onReady: (event) => {
+          event.target.setVolume(tavern_yt_volume);
+        },
+      },
+    });
 
-		function initButton() {
-			if (ui.ytActive !== undefined)
-				return;
-			ui.ytActive = true;
-			ui.youtube.playVideo();
-			let timer = setInterval(() => {
-				if (ui.youtube.getPlayerState() !== YT.PlayerState.PLAYING)
-					ui.youtube.playVideo();
-				else {
-					clearInterval(timer);
-					ui.toggleMusic_elem.classList.remove("fade");
-				}
-			}, 500);
-		}
-	}
-	// Stops the YouTube video, but preserves mute and volume settings
-stopYouTube() {
-    if (this.youtube) {
-        // Save current volume
-		this.bypassPlayback = true;
-        this.savedVolume = this.youtube.getVolume();
-
-        // Mute or pause depending on your preference
-        this.youtube.pauseVideo();
-
-        // Optionally, set volume to 0
-        // this.youtube.setVolume(0);
-    }
-}
-
-// Resumes the YouTube video with previous volume if available
-resumeYouTube() {
-//	console.log("resumeYouTube() ", this.youtube, this.savedVolume, this.bypassPlayback, buttonmutemode);
-    if (this.youtube && this.savedVolume !== null) {
-	//	console.log("resumeYouTube() ", "was inside", buttonmutemode);
-		this.bypassPlayback = false;
-        // Resume playback
-        this.youtube.playVideo();
-
-        // Restore previous volume
-        this.youtube.setVolume(this.savedVolume || audio_yt_vid_soundtrack_volume);
-        this.savedVolume = null; // Reset
-		if (buttonmutemode === 0){
-			this.youtube.pauseVideo();
-			this.bypassPlayback = false;
-		}
-    }
-//	console.log("resumeYouTube() ", this.youtube, this.savedVolume, this.bypassPlayback, buttonmutemode);
-}
-
-youtubeRestart() {
-    if (this.youtube && this.youtube.getPlayerState() !== YT.PlayerState.UNSTARTED) {
-        this.youtube.seekTo(0);
-        this.youtube.playVideo();
-    }
-}
-
-youtubePlay(video_id, volume_int = 100, repeat = false) {
-    if (this.youtube) {
-        this.youtube.loadVideoById(video_id);
-        this.youtube.setVolume(volume_int);
-        this.youtube.playVideo();
-
-        if (repeat) {
-            // Add event listener for repeat
-            this.youtube.addEventListener('onStateChange', (event) => {
-                if (event.data === YT.PlayerState.ENDED) {
-                    this.youtube.seekTo(0);
-                    this.youtube.playVideo();
-                }
-            });
-        } else {
-            // Remove any previous 'ended' listener if needed
-            // (Note: YouTube API does not directly allow removing specific event listeners)
-            // You might need to implement logic to prevent multiple repeats or handle this differently.
+    function initButton() {
+      if (ui.ytActive !== undefined) return;
+      ui.ytActive = true;
+      ui.youtube.playVideo();
+      let timer = setInterval(() => {
+        if (ui.youtube.getPlayerState() !== YT.PlayerState.PLAYING)
+          ui.youtube.playVideo();
+        else {
+          clearInterval(timer);
+          ui.toggleMusic_elem.classList.remove("fade");
         }
+      }, 500);
     }
-	button_is_second_sheet = 1;
-	if (buttonmutemode === 0){
-		ui.stopYouTube();
-		console.log("muted");
-	}
-	console.log("Is second sheet:", button_is_second_sheet);
-}
+  }
+  // Stops the YouTube video, but preserves mute and volume settings
+  stopYouTube() {
+    if (this.youtube) {
+      // Save current volume
+      this.bypassPlayback = true;
+      this.savedVolume = this.youtube.getVolume();
 
-	// Called when client toggles the music
-	toggleMusic() {
-		if (button_is_second_sheet === 1){
-			this.bypassPlayback = false;
-		}
-		console.log(this.bypassPlayback, button_is_second_sheet);
-		try {
-    if (this.bypassPlayback) {
-		
-		if (buttonmutemode === 0){
-			iniciarMusica(this.bypassPlayback)
-			buttonmutemode = 1;
-		} else {
-			 this.youtube.pauseVideo();
-        this.toggleMusic_elem.classList.add("fade");
-			buttonmutemode = 0;
-		}
-        // When bypassed, just stop or resume
-      //  if (this.youtube.getPlayerState() === YT.PlayerState.PLAYING) {
-      //      this.stopYouTube();
-      //  } else {
-      //      this.resumeYouTube();
-      //  }
-     return;
+      // Mute or pause depending on your preference
+      this.youtube.pauseVideo();
+
+      // Optionally, set volume to 0
+      // this.youtube.setVolume(0);
     }
-	if (button_is_second_sheet === 1){
-		if (buttonmutemode === 0){
-			buttonmutemode =1;	
-			ui.resumeYouTube();
-			this.toggleMusic_elem.classList.remove("fade");
-		} else {
-				ui.stopYouTube();
-				buttonmutemode = 0;
-				this.toggleMusic_elem.classList.add("fade");
-		}
-		return;
-	}
-    // Existing logic
-    else if (this.youtube.getPlayerState() !== YT.PlayerState.PLAYING) {
+  }
+
+  // Resumes the YouTube video with previous volume if available
+  resumeYouTube() {
+    //	console.log("resumeYouTube() ", this.youtube, this.savedVolume, this.bypassPlayback, buttonmutemode);
+    if (this.youtube && this.savedVolume !== null) {
+      //	console.log("resumeYouTube() ", "was inside", buttonmutemode);
+      this.bypassPlayback = false;
+      // Resume playback
+      this.youtube.playVideo();
+
+      // Restore previous volume
+      this.youtube.setVolume(
+        this.savedVolume || audio_yt_vid_soundtrack_volume,
+      );
+      this.savedVolume = null; // Reset
+      if (buttonmutemode === 0) {
+        this.youtube.pauseVideo();
+        this.bypassPlayback = false;
+      }
+    }
+    //	console.log("resumeYouTube() ", this.youtube, this.savedVolume, this.bypassPlayback, buttonmutemode);
+  }
+
+  youtubeRestart() {
+    if (
+      this.youtube &&
+      this.youtube.getPlayerState() !== YT.PlayerState.UNSTARTED
+    ) {
+      this.youtube.seekTo(0);
+      this.youtube.playVideo();
+    }
+  }
+
+  youtubePlay(video_id, volume_int = 100, repeat = false) {
+    if (this.youtube) {
+      this.youtube.loadVideoById(video_id);
+      this.youtube.setVolume(volume_int);
+      this.youtube.playVideo();
+
+      if (repeat) {
+        // Add event listener for repeat
+        this.youtube.addEventListener("onStateChange", (event) => {
+          if (event.data === YT.PlayerState.ENDED) {
+            this.youtube.seekTo(0);
+            this.youtube.playVideo();
+          }
+        });
+      } else {
+        // Remove any previous 'ended' listener if needed
+        // (Note: YouTube API does not directly allow removing specific event listeners)
+        // You might need to implement logic to prevent multiple repeats or handle this differently.
+      }
+    }
+    button_is_second_sheet = 1;
+    if (buttonmutemode === 0) {
+      ui.stopYouTube();
+      console.log("muted");
+    }
+    console.log("Is second sheet:", button_is_second_sheet);
+  }
+
+  // Called when client toggles the music
+  toggleMusic() {
+    if (button_is_second_sheet === 1) {
+      this.bypassPlayback = false;
+    }
+    console.log(this.bypassPlayback, button_is_second_sheet);
+    try {
+      if (this.bypassPlayback) {
+        if (buttonmutemode === 0) {
+          iniciarMusica(this.bypassPlayback);
+          buttonmutemode = 1;
+        } else {
+          this.youtube.pauseVideo();
+          this.toggleMusic_elem.classList.add("fade");
+          buttonmutemode = 0;
+        }
+        // When bypassed, just stop or resume
+        //  if (this.youtube.getPlayerState() === YT.PlayerState.PLAYING) {
+        //      this.stopYouTube();
+        //  } else {
+        //      this.resumeYouTube();
+        //  }
+        return;
+      }
+      if (button_is_second_sheet === 1) {
+        if (buttonmutemode === 0) {
+          buttonmutemode = 1;
+          ui.resumeYouTube();
+          this.toggleMusic_elem.classList.remove("fade");
+        } else {
+          ui.stopYouTube();
+          buttonmutemode = 0;
+          this.toggleMusic_elem.classList.add("fade");
+        }
+        return;
+      }
+      // Existing logic
+      else if (this.youtube.getPlayerState() !== YT.PlayerState.PLAYING) {
         buttonmutemode = 1;
-		iniciarMusica(this.bypassPlayback);
-    } else {
+        iniciarMusica(this.bypassPlayback);
+      } else {
         this.youtube.pauseVideo();
         this.toggleMusic_elem.classList.add("fade");
-		buttonmutemode = 0;
+        buttonmutemode = 0;
+      }
+    } catch (e) {
+      console.log("Music toggle error:", e);
+      try {
+        ui.initYouTube();
+      } catch (e) {
+        console.log("ui.initYouTube(); error", e);
+      }
     }
-} catch (e) {
-	console.log("Music toggle error:", e);
-	try {
-		ui.initYouTube();
-	} catch (e){
-		console.log("ui.initYouTube(); error", e);
-	}
-}
-}
+  }
 
-	// Enables or disables backgorund music 
-	setYouTubeEnabled(enable) {
-		if (this.ytActive === enable)
-			return;
-		if (enable && !this.mute)
-			ui.youtube.playVideo();
-		else
-			ui.youtube.pauseVideo();
-		this.ytActive = enable;
-	}
-	
-	// Called when the player selects a selectable card
-	async selectCard(card) {
-		extraJSON = extraJSON;
-		var handData = await serializeCards(player_me.hand.cards);
-		console.log("HandData", handData);
-		let row = this.lastRow;
-		let pCard = this.previewCard;
-		if (card === pCard)
-			return;
-		if (pCard === null || card.holder.hand.cards.includes(card)) {
-			this.setSelectable(null, false);
-			this.showPreview(card);
-		} else if (pCard.name === "Decoy") {
-			const nomeColuna = this.lastRow.elem_parent.id	
-			const playedCard = removeCircularReferences(this.previewCard);
-			const targetCard = removeCircularReferences(card);
-			// targetCard.animate("horn"); //Uncaught (in promise) TypeError: targetCard.animate is not a function at UI.selectCard
+  // Enables or disables backgorund music
+  setYouTubeEnabled(enable) {
+    if (this.ytActive === enable) return;
+    if (enable && !this.mute) ui.youtube.playVideo();
+    else ui.youtube.pauseVideo();
+    this.ytActive = enable;
+  }
 
-			//console.log("You played the card", this.previewCard)
-			//comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna, target: targetCard, isMeHand: handData }));
-			
-			this.hidePreview(card);
-			this.enablePlayer(false);
-			board.toHand(card, row);
-			await board.moveTo(pCard, row, pCard.holder.hand);
-			var handData_after = await serializeCards(player_me.hand.cards);
-		console.log("HandData_after", handData);
-			console.log("You played the card", this.previewCard)
-			comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna, target: targetCard, isMeHand: handData, HandMePost: handData_after }));
-			console.log("extraJSON vibe check:", extraJSON.length, extraJSON);
-			if (extraJSON.length > 0) {
-    const total = extraJSON.length;
+  // Called when the player selects a selectable card
+  async selectCard(card) {
+    extraJSON = extraJSON;
+    var handData = await serializeCards(player_me.hand.cards);
+    console.log("HandData", handData);
+    let row = this.lastRow;
+    let pCard = this.previewCard;
+    if (card === pCard) return;
+    if (pCard === null || card.holder.hand.cards.includes(card)) {
+      this.setSelectable(null, false);
+      this.showPreview(card);
+    } else if (pCard.name === "Decoy") {
+      const nomeColuna = this.lastRow.elem_parent.id;
+      const playedCard = removeCircularReferences(this.previewCard);
+      const targetCard = removeCircularReferences(card);
+      // targetCard.animate("horn"); //Uncaught (in promise) TypeError: targetCard.animate is not a function at UI.selectCard
 
-    for (let i = 0; i < total; i++) {
+      //console.log("You played the card", this.previewCard)
+      //comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna, target: targetCard, isMeHand: handData }));
+
+      this.hidePreview(card);
+      this.enablePlayer(false);
+      board.toHand(card, row);
+      await board.moveTo(pCard, row, pCard.holder.hand);
+      var handData_after = await serializeCards(player_me.hand.cards);
+      console.log("HandData_after", handData);
+      console.log("You played the card", this.previewCard);
+      comp_and_send(
+        socket,
+        JSON.stringify({
+          type: "play",
+          player: playerId,
+          card: playedCard,
+          row: nomeColuna,
+          target: targetCard,
+          isMeHand: handData,
+          HandMePost: handData_after,
+        }),
+      );
+      console.log("extraJSON vibe check:", extraJSON.length, extraJSON);
+      if (extraJSON.length > 0) {
+        const total = extraJSON.length;
+
+        for (let i = 0; i < total; i++) {
+          const payload = extraJSON[i];
+
+          // base hold + extra 500ms for each next packet
+          const delay = RegisterMovesHold + i * 500;
+
+          console.log(`Hold before send extraJSON ${i + 1}/${total}`, payload);
+
+          showTooltip(
+            `The opponent synchronizes with the game (${i + 1}/${total}), wait ${delay / 1000}s`,
+          );
+
+          await new Promise((resolve) => setTimeout(resolve, delay));
+
+          comp_and_send(socket, payload);
+        }
+
+        extraJSON = [];
+      }
+      if (player_op.passed && !player_me.passed) {
+        showTooltip(
+          `The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`,
+        );
+        await sleep(RegisterMovesHold);
+        showTooltip(`You can play now again`);
+      }
+      pCard.holder.endTurn();
+      //	await init_sync_hands();
+    }
+  }
+
+  // Called when the player selects a selectable CardContainer
+  // LEO - aqui de fato coloca a carta na coluna.
+  async selectRow(row, opponentCard = null) {
+    extraJSON = extraJSON;
+    var handData = await serializeCards(player_me.hand.cards);
+    console.log("HandData", handData);
+    this.lastRow = row;
+
+    if (this.previewCard === null && opponentCard === null) {
+      await ui.viewCardsInContainer(row);
+      return;
+    }
+
+    const nomeColuna =
+      this.lastRow.elem.id === "weather"
+        ? this.lastRow.elem.id
+        : this.lastRow.elem_parent.id;
+    const playedCard = removeCircularReferences(
+      this.previewCard || opponentCard,
+    );
+
+    console.log("You played the card", this.previewCard);
+    if (this.previewCard.name === "Decoy") return;
+
+    // comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna, isMeHand: handData}));
+
+    let card = this.previewCard || opponentCard;
+    let holder = card.holder;
+    this.hidePreview();
+    this.enablePlayer(false);
+    if (card.name === "Scorch") {
+      this.hidePreview();
+      await ability_dict["scorch"].activated(card);
+    } else if (card.name === "Decoy") {
+      return;
+    } else {
+      await board.moveTo(card, row, card.holder.hand);
+    }
+    var handData_after = await serializeCards(player_me.hand.cards);
+    console.log("HandData_after", handData_after);
+    comp_and_send(
+      socket,
+      JSON.stringify({
+        type: "play",
+        player: playerId,
+        card: playedCard,
+        row: nomeColuna,
+        isMeHand: handData,
+        HandMePost: handData_after,
+      }),
+    );
+    console.log("extraJSON vibe check:", extraJSON.length, extraJSON);
+    if (extraJSON.length > 0) {
+      const total = extraJSON.length;
+
+      for (let i = 0; i < total; i++) {
         const payload = extraJSON[i];
 
         // base hold + extra 500ms for each next packet
-        const delay = RegisterMovesHold + (i * 500);
+        const delay = RegisterMovesHold + i * 500;
 
         console.log(`Hold before send extraJSON ${i + 1}/${total}`, payload);
 
         showTooltip(
-            `The opponent synchronizes with the game (${i + 1}/${total}), wait ${delay / 1000}s`
+          `The opponent synchronizes with the game (${i + 1}/${total}), wait ${delay / 1000}s`,
         );
 
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
 
         comp_and_send(socket, payload);
+      }
+
+      extraJSON = [];
+    }
+    if (player_op.passed && !player_me.passed) {
+      showTooltip(
+        `The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`,
+      );
+      await sleep(RegisterMovesHold);
+      showTooltip(`You can play now again`);
+    }
+    holder.endTurn();
+    // await init_sync_hands();
+  }
+
+  // Called when the client cancels out of a card-preview
+  cancel() {
+    tocar("discard", false);
+    this.hidePreview();
+  }
+
+  // Displays a card preview then enables and highlights potential card destinations
+  showPreview(card) {
+    tocar("explaining", false);
+    this.showPreviewVisuals(card);
+    this.setSelectable(card, true);
+    document.getElementById("click-background").classList.remove("noclick");
+  }
+
+  // Sets up the graphics and description for a card preview
+  showPreviewVisuals(card) {
+    this.previewCard = card;
+    this.preview.classList.remove("hide");
+    var tmp = card.faction + "_" + card.filename;
+
+    if (card.filename === "Gaunter_Leader") {
+      tmp = "neutral_Gaunter_Leader";
     }
 
-    extraJSON = [];
-}
-			if ( player_op.passed && !player_me.passed ) {
-			showTooltip(`The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`);
-			await sleep(RegisterMovesHold); 			showTooltip(`You can play now again`);
-		}
-			pCard.holder.endTurn();
-		//	await init_sync_hands();
-		}
-	}
-	
-	// Called when the player selects a selectable CardContainer
-	// LEO - aqui de fato coloca a carta na coluna.
-	async selectRow(row, opponentCard = null){
-		extraJSON = extraJSON;
-		var handData = await serializeCards(player_me.hand.cards);
-		console.log("HandData", handData);
-		this.lastRow = row;
+    this.preview.getElementsByClassName("card-lg")[0].style.backgroundImage =
+      largeURL(tmp);
+    let desc_elem = this.preview.getElementsByClassName("card-description")[0];
+    this.setDescription(card, desc_elem);
+  }
 
-		if (this.previewCard === null && opponentCard === null) {
-			await ui.viewCardsInContainer(row);
-			return;
-		}
+  // Hides the card preview then disables and removes highlighting from card destinations
+  hidePreview() {
+    document.getElementById("click-background").classList.add("noclick");
+    player_me.hand.cards.forEach((c) => c.elem.classList.remove("noclick"));
 
-		const nomeColuna = this.lastRow.elem.id === "weather" ? this.lastRow.elem.id : this.lastRow.elem_parent.id
-		const playedCard = removeCircularReferences(this.previewCard || opponentCard);
+    this.preview.classList.add("hide");
+    this.setSelectable(null, false);
+    this.previewCard = null;
+    this.lastRow = null;
+  }
 
-		console.log("You played the card", this.previewCard)
-		if (this.previewCard.name === "Decoy")
-			return;
-
-		// comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna, isMeHand: handData}));
-
-		let card = this.previewCard || opponentCard;
-		let holder = card.holder;
-		this.hidePreview();
-		this.enablePlayer(false);
-		if (card.name === "Scorch"){
-			this.hidePreview();
-			await ability_dict["scorch"].activated(card);
-		} else if (card.name === "Decoy") {
-			return;
-		} else {
-			await board.moveTo(card, row, card.holder.hand);
-		}
-		var handData_after = await serializeCards(player_me.hand.cards);
-		console.log("HandData_after", handData_after)
-		comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna, isMeHand: handData, HandMePost: handData_after}));
-		console.log("extraJSON vibe check:", extraJSON.length, extraJSON);
-			if (extraJSON.length > 0) {
-    const total = extraJSON.length;
-
-    for (let i = 0; i < total; i++) {
-        const payload = extraJSON[i];
-
-        // base hold + extra 500ms for each next packet
-        const delay = RegisterMovesHold + (i * 500);
-
-        console.log(`Hold before send extraJSON ${i + 1}/${total}`, payload);
-
-        showTooltip(
-            `The opponent synchronizes with the game (${i + 1}/${total}), wait ${delay / 1000}s`
-        );
-
-        await new Promise(resolve => setTimeout(resolve, delay));
-
-        comp_and_send(socket, payload);
+  // Sets up description window for a card
+  setDescription(card, desc) {
+    //	console.log("SET DESCRYPTION", card, desc);
+    try {
+      if (
+        card.hero ||
+        card.row === "agile" ||
+        card.abilities.length > 0 ||
+        card.faction === "faction"
+      ) {
+        desc.classList.remove("hide");
+        let str = card.row === "agile" ? "agile" : "";
+        if (card.abilities.length)
+          str = card.abilities[card.abilities.length - 1];
+        if (str === "cerys") str = "muster";
+        if (str.startsWith("avenger")) str = "avenger";
+        if (str === "scorch_c" || str == "scorch_r" || str === "scorch_s")
+          str = "scorch";
+        if (
+          card.row === "leader" ||
+          card.faction === "faction" ||
+          (card.abilities.length === 0 && card.row !== "agile")
+        )
+          desc.children[0].style.backgroundImage = "";
+        else
+          desc.children[0].style.backgroundImage = iconURL(
+            "card_ability_" + str,
+          );
+        desc.children[1].innerHTML = card.desc_name;
+        desc.children[2].innerHTML = card.desc;
+      } else {
+        desc.classList.add("hide");
+      }
+    } catch (e) {
+      console.error("setDescription", " error", e);
+      desc.classList.add("hide");
     }
+  }
 
-    extraJSON = [];
-}
-		if ( player_op.passed && !player_me.passed ) {
-			showTooltip(`The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`);
-			await sleep(RegisterMovesHold); 			showTooltip(`You can play now again`);
-		}
-		holder.endTurn();
-		// await init_sync_hands();
-	}
-	
-	// Called when the client cancels out of a card-preview
-	cancel(){
-		tocar("discard", false);
-		this.hidePreview();
-	}
-	
-	// Displays a card preview then enables and highlights potential card destinations
-	showPreview(card) {
-		tocar("explaining", false);
-		this.showPreviewVisuals(card);
-		this.setSelectable(card, true);
-		document.getElementById("click-background").classList.remove("noclick");
-	}
-	
-	// Sets up the graphics and description for a card preview
-	showPreviewVisuals(card){
-		this.previewCard = card;
-		this.preview.classList.remove("hide");
-		var tmp = card.faction + "_" + card.filename;
-
-if (card.filename === "Gaunter_Leader") {
-	tmp = "neutral_Gaunter_Leader";
-}
-
-this.preview.getElementsByClassName("card-lg")[0].style.backgroundImage = largeURL(tmp);
-		let desc_elem = this.preview.getElementsByClassName("card-description")[0];
-		this.setDescription(card, desc_elem);
-	}
-	
-	// Hides the card preview then disables and removes highlighting from card destinations
-	hidePreview(){
-		document.getElementById("click-background").classList.add("noclick");
-		player_me.hand.cards.forEach( c => c.elem.classList.remove("noclick") );
-		
-		this.preview.classList.add("hide");
-		this.setSelectable(null, false);
-		this.previewCard = null;
-		this.lastRow = null;
-	}
-	
-	// Sets up description window for a card
-	setDescription(card, desc){
-	//	console.log("SET DESCRYPTION", card, desc);
-	try {
-		if (card.hero || card.row === "agile" || card.abilities.length > 0 || card.faction === "faction") {
-			desc.classList.remove("hide");
-			let str = card.row === "agile" ? "agile" : "";
-			if (card.abilities.length)
-				str = card.abilities[card.abilities.length-1];
-			if (str === "cerys")
-				str = "muster";
-			if (str.startsWith("avenger"))
-				str = "avenger";
-			if (str === "scorch_c" || str == "scorch_r" || str === "scorch_s")
-				str = "scorch";
-			if (card.row === "leader" || card.faction === "faction" || card.abilities.length === 0 && card.row !== "agile")
-				desc.children[0].style.backgroundImage = "";
-			else
-				desc.children[0].style.backgroundImage = iconURL("card_ability_" + str);
-			desc.children[1].innerHTML = card.desc_name;
-			desc.children[2].innerHTML = card.desc;
-		} else {
-			desc.classList.add("hide");
-		}
-	} catch (e) {
-		console.error("setDescription", " error", e);
-		desc.classList.add("hide");
-	}
-	}
-
-async waitNotificationsDone() {
+  async waitNotificationsDone() {
     console.log("[notif] WAIT START");
-	console.log("[notif]: check config:", ui_display_times.hold_pause.sleep, ui_display_times.hold_pause.needs);
+    console.log(
+      "[notif]: check config:",
+      ui_display_times.hold_pause.sleep,
+      ui_display_times.hold_pause.needs,
+    );
     let consecutiveTrueCount = 0;
     const requiredConsecutive = ui_display_times.hold_pause.needs;
 
     while (true) {
-        const isDone =
-            ui_display_times.queue.length === 0 &&
-            !ui_display_times.is_busy &&
-            !ui_display_times.is_transitioning;
+      const isDone =
+        ui_display_times.queue.length === 0 &&
+        !ui_display_times.is_busy &&
+        !ui_display_times.is_transitioning;
 
-        if (isDone) {
-            consecutiveTrueCount++;
-            console.log(`[notif] check: condition true (${consecutiveTrueCount}/${requiredConsecutive})`);
-        } else {
-            consecutiveTrueCount = 0;
-            console.log("[notif] check: condition false, reset counter");
-        }
+      if (isDone) {
+        consecutiveTrueCount++;
+        console.log(
+          `[notif] check: condition true (${consecutiveTrueCount}/${requiredConsecutive})`,
+        );
+      } else {
+        consecutiveTrueCount = 0;
+        console.log("[notif] check: condition false, reset counter");
+      }
 
-        if (consecutiveTrueCount >= requiredConsecutive) {
-            break; // exit loop after 10 consecutive true checks
-        }
-		 console.log(`[notif] check: sleeps`);
-        await sleep(ui_display_times.hold_pause.sleep);
-		console.log(`[notif] check: sleeped`);
+      if (consecutiveTrueCount >= requiredConsecutive) {
+        break; // exit loop after 10 consecutive true checks
+      }
+      console.log(`[notif] check: sleeps`);
+      await sleep(ui_display_times.hold_pause.sleep);
+      console.log(`[notif] check: sleeped`);
     }
     console.log("[notif] WAIT DONE");
-}
+  }
 
-async notification(name, duration) {
+  async notification(name, duration) {
     console.log("[notif] notification() CALL:", name, duration);
 
     if (!duration) duration = ui_display_times.notyfication;
@@ -3376,46 +3768,50 @@ async notification(name, duration) {
 
     // SOUND mapping
     const guia2 = {
-			"me-pass" : "pass",
-			"op-pass" : "pass",
-			"win-round" : "round_win",
-			"draw-round": "round_lose",
-			"lose-round" : "round_lose",
-			"me-turn" : "turn_me",
-			"op-turn" : "turn_op",
-			"op-leader" : "turn_op",
-			"op-white-flame" : "turn_op",
-			"nilfgaard-wins-draws" : "turn_op",
-			"sv-err": "server_error",
-			"win-opleft" : "round_win", // "opponent_left",
-			"round-start": "round1_start",
-			"gaunter": "necromancy_ability",
-			"darkstorm": "darknessishere"
-		};
+      "me-pass": "pass",
+      "op-pass": "pass",
+      "win-round": "round_win",
+      "draw-round": "round_lose",
+      "lose-round": "round_lose",
+      "me-turn": "turn_me",
+      "op-turn": "turn_op",
+      "op-leader": "turn_op",
+      "op-white-flame": "turn_op",
+      "nilfgaard-wins-draws": "turn_op",
+      "sv-err": "server_error",
+      "win-opleft": "round_win", // "opponent_left",
+      "round-start": "round1_start",
+      gaunter: "necromancy_ability",
+      darkstorm: "darknessishere",
+    };
 
     const temSom = Object.keys(guia2);
-    const som =
-        temSom.includes(name)
-            ? guia2[name]
-            : name === "round-start" && game.roundHistory.length === 0
-            ? "round1_start"
-            : "";
-console.log("[notif]: value to play", som);
+    const som = temSom.includes(name)
+      ? guia2[name]
+      : name === "round-start" && game.roundHistory.length === 0
+        ? "round1_start"
+        : "";
+    console.log("[notif]: value to play", som);
     if (som !== "") {
-        console.log("[notif] PLAY SOUND:", som);
-        tocar(som, false);
+      console.log("[notif] PLAY SOUND:", som);
+      tocar(som, false);
     } else {
-        console.log("[notif] NO SOUND FOR:", name);
+      console.log("[notif] NO SOUND FOR:", name);
     }
 
     // Add notification to queue
     ui_display_times.queue.push({
-        name: name,
-        duration: duration,
-        time: Date.now()
+      name: name,
+      duration: duration,
+      time: Date.now(),
     });
 
-    console.log("[notif] QUEUE PUSHED:", name, "queue size:", ui_display_times.queue.length);
+    console.log(
+      "[notif] QUEUE PUSHED:",
+      name,
+      "queue size:",
+      ui_display_times.queue.length,
+    );
 
     // Start notification loop if not already running
     this.notificationLoop();
@@ -3424,469 +3820,536 @@ console.log("[notif]: value to play", som);
     await this.waitNotificationsDone();
 
     console.log("[notif] notification() RETURN:", name);
-}
+  }
 
-async notificationLoop() {
+  async notificationLoop() {
     if (ui_display_times.is_running) {
-     //   console.log("[notif] notificationLoop already running");
-        return;
+      //   console.log("[notif] notificationLoop already running");
+      return;
     }
 
     ui_display_times.is_running = true;
     console.log("[notif] notificationLoop START");
 
     while (true) {
-        if (
-            !ui_display_times.is_busy &&
-            !ui_display_times.is_transitioning &&
-            ui_display_times.queue.length > 0
-        ) {
-            ui_display_times.is_busy = true;
+      if (
+        !ui_display_times.is_busy &&
+        !ui_display_times.is_transitioning &&
+        ui_display_times.queue.length > 0
+      ) {
+        ui_display_times.is_busy = true;
 
-            const item = ui_display_times.queue.shift();
-            console.log("[notif] SHOW:", item.name, "queue left:", ui_display_times.queue.length);
+        const item = ui_display_times.queue.shift();
+        console.log(
+          "[notif] SHOW:",
+          item.name,
+          "queue left:",
+          ui_display_times.queue.length,
+        );
 
-            try {
-                const fadeSpeed = ui_display_times.fadeSpeed;
+        try {
+          const fadeSpeed = ui_display_times.fadeSpeed;
 
-                // Show notification
-                ui_display_times.is_transitioning = true;
-                this.notif_elem.classList.remove("hide");
-                this.notif_elem.style.display = "";
-                this.notif_elem.style.opacity = 0;
+          // Show notification
+          ui_display_times.is_transitioning = true;
+          this.notif_elem.classList.remove("hide");
+          this.notif_elem.style.display = "";
+          this.notif_elem.style.opacity = 0;
 
-                this.notif_elem.children[0].id = "notif-" + item.name;
+          this.notif_elem.children[0].id = "notif-" + item.name;
 
-                console.log("[notif] fadeIn:", item.name);
-                await fadeIn(this.notif_elem, fadeSpeed);
-                console.log("[notif] fadeIn complete:", item.name);
+          console.log("[notif] fadeIn:", item.name);
+          await fadeIn(this.notif_elem, fadeSpeed);
+          console.log("[notif] fadeIn complete:", item.name);
 
-                // Wait for display duration
-                await sleep(item.duration);
+          // Wait for display duration
+          await sleep(item.duration);
 
-                console.log("[notif] fadeOut:", item.name);
-                ui_display_times.is_transitioning = true;
-                await fadeOut(this.notif_elem, fadeSpeed);
-                console.log("[notif] fadeOut complete:", item.name);
+          console.log("[notif] fadeOut:", item.name);
+          ui_display_times.is_transitioning = true;
+          await fadeOut(this.notif_elem, fadeSpeed);
+          console.log("[notif] fadeOut complete:", item.name);
 
-                // Reset state after fade out
-                this.notif_elem.classList.add("hide");
-                this.notif_elem.style.display = "none";
-                this.notif_elem.style.opacity = 0;
+          // Reset state after fade out
+          this.notif_elem.classList.add("hide");
+          this.notif_elem.style.display = "none";
+          this.notif_elem.style.opacity = 0;
 
-                console.log("[notif] DONE:", item.name);
-            } catch (e) {
-                console.error("[notif] ERROR:", e);
-                ui_display_times.is_transitioning = false;
-            }
-			console.log("[notif] done down here notif too")
-            ui_display_times.is_busy = false;
-			console.log("[notif] Notif to unpause is_transitioning sleeps for", ui_display_times.checkDelay * 2.3)
-        await sleep(ui_display_times.fadeSpeed * 2.3);
-		ui_display_times.is_transitioning = false;
-		console.log("[notif]: ui_display_times.is_transitioning = false;", ui_display_times.is_transitioning);
+          console.log("[notif] DONE:", item.name);
+        } catch (e) {
+          console.error("[notif] ERROR:", e);
+          ui_display_times.is_transitioning = false;
         }
-		await sleep(ui_display_times.checkDelay);
+        console.log("[notif] done down here notif too");
+        ui_display_times.is_busy = false;
+        console.log(
+          "[notif] Notif to unpause is_transitioning sleeps for",
+          ui_display_times.checkDelay * 2.3,
+        );
+        await sleep(ui_display_times.fadeSpeed * 2.3);
+        ui_display_times.is_transitioning = false;
+        console.log(
+          "[notif]: ui_display_times.is_transitioning = false;",
+          ui_display_times.is_transitioning,
+        );
+      }
+      await sleep(ui_display_times.checkDelay);
     }
-}
-	
-	// Displays a cancellable Carousel for a single card 
-	async viewCard(card, action) {
-		if (card === null)
-			return;
-		let container = new CardContainer();
-		container.cards.push(card);
-		await this.viewCardsInContainer(container, action);
-	}
-	
-	// Displays a cancellable Carousel for all cards in a container
-	async viewCardsInContainer(container, action) {
-		action = action ? action : function() { return this.cancel();};
+  }
 
-		await this.queueCarousel(container, 1, action, () => true, false, true);
-		comp_and_send(socket, JSON.stringify({ type: "containerClosed" }));
-	}
-	
-	// Displays a Carousel menu of filtered container items that match the predicate.
-	// Suspends gameplay until the Carousel is closed.
-	async queueCarousel(container, count, action, predicate, bSort, bQuit, title){
-		let carousel = new Carousel(container, count, action, predicate, bSort, bQuit, title);
-		if (Carousel.curr === undefined || Carousel.curr === null)
-			carousel.start();
-		else {
-			this.carousels.push(carousel);
-			return;
-		}
-		await sleepUntil( () => this.carousels.length === 0 && !Carousel.curr, 100);
-	}
-	
-	// Starts the next queued Carousel
-	quitCarousel(){
-		if (this.carousels.length > 0) {
-			this.carousels.shift().start();
-		}
-	}
-	
-	// Displays a custom confirmation menu 
-	async popup(yesName, yes, noName, no, title, description) {
-		let p = new Popup(yesName, yes, noName, no, title, description);
-		await sleepUntil( () => !Popup.curr) 
-	}
-	
-	// Enables or disables selection and highlighting of rows specific to the card
-	setSelectable(card, enable){
-		if(!enable) {
-			for (let row of board.row){
-				row.elem.classList.remove("row-selectable");
-				row.elem.classList.remove("noclick");
-				row.elem_special.classList.remove("row-selectable");
-				row.elem_special.classList.remove("noclick");
-				row.elem.classList.add("card-selectable");
-				
-				for (let card of row.cards) {
-					card.elem.classList.add("noclick");
-				}
-			}
-			weather.elem.classList.remove("row-selectable");
-			weather.elem.classList.remove("noclick");
-			return;
-		}
-		if (card.faction === "weather") {
-			for (let row of board.row){
-				row.elem.classList.add("noclick");
-				row.elem_special.classList.add("noclick");
-			}
-			weather.elem.classList.add("row-selectable");
-			return;
-		}
-		
-		weather.elem.classList.add("noclick");
-		
-		if (card.name === "Scorch") {
-			for (let r of board.row){
-				r.elem.classList.add("row-selectable");
-				r.elem_special.classList.add("row-selectable");
-			}
-			return;
-		}
-		if (card.isSpecial()){
-			for (let i=0; i<6; i++){
-				let r = board.row[i];
-				if (i < 3 || r.special !== null){
-					r.elem.classList.add("noclick");
-					r.elem_special.classList.add("noclick");
-				} else {
-					r.elem_special.classList.add("row-selectable");
-				}
-			}
-			return;
-		}
-		
-		board.row.forEach( r => r.elem_special.classList.add("noclick") );
-		
-		if (card.name === "Decoy"){
-			for (let i=0; i<6; ++i) {
-				let r = board.row[i];
-				let units = r.cards.filter(c => c.isUnit());
-				units = units.filter(unit =>
-    !unit.abilities.some(ability =>
-        NotPickUpAbilities.includes(ability)
-    )
-)
-				console.log("DECOY UNITS", units)
-				if (i < 3 || units.length === 0) {
-					r.elem.classList.add("noclick");
-					r.elem_special.classList.add("noclick");
-					r.elem.classList.remove("card-selectable");
-				} else {
-					r.elem.classList.add("row-selectable");
-					units.forEach( c => c.elem.classList.remove("noclick") );
-				}
-			}
-			return;
-		}
-		
-		let currRows = card.row === "agile" ? [board.getRow(card, "close", card.holder), board.getRow(card, "ranged", card.holder)] : [board.getRow(card, card.row, card.holder)];
-		for (let i=0; i<6; i++){
-			let row = board.row[i];
-			if (currRows.includes(row)) {
-				row.elem.classList.add("row-selectable");
-			} else {
-				row.elem.classList.add("noclick");
-			}
-		}
-	
-	}
+  // Displays a cancellable Carousel for a single card
+  async viewCard(card, action) {
+    if (card === null) return;
+    let container = new CardContainer();
+    container.cards.push(card);
+    await this.viewCardsInContainer(container, action);
+  }
+
+  // Displays a cancellable Carousel for all cards in a container
+  async viewCardsInContainer(container, action) {
+    action = action
+      ? action
+      : function () {
+          return this.cancel();
+        };
+
+    await this.queueCarousel(container, 1, action, () => true, false, true);
+    comp_and_send(socket, JSON.stringify({ type: "containerClosed" }));
+  }
+
+  // Displays a Carousel menu of filtered container items that match the predicate.
+  // Suspends gameplay until the Carousel is closed.
+  async queueCarousel(
+    container,
+    count,
+    action,
+    predicate,
+    bSort,
+    bQuit,
+    title,
+  ) {
+    let carousel = new Carousel(
+      container,
+      count,
+      action,
+      predicate,
+      bSort,
+      bQuit,
+      title,
+    );
+    if (Carousel.curr === undefined || Carousel.curr === null) carousel.start();
+    else {
+      this.carousels.push(carousel);
+      return;
+    }
+    await sleepUntil(() => this.carousels.length === 0 && !Carousel.curr, 100);
+  }
+
+  // Starts the next queued Carousel
+  quitCarousel() {
+    if (this.carousels.length > 0) {
+      this.carousels.shift().start();
+    }
+  }
+
+  // Displays a custom confirmation menu
+  async popup(yesName, yes, noName, no, title, description) {
+    let p = new Popup(yesName, yes, noName, no, title, description);
+    await sleepUntil(() => !Popup.curr);
+  }
+
+  // Enables or disables selection and highlighting of rows specific to the card
+  setSelectable(card, enable) {
+    if (!enable) {
+      for (let row of board.row) {
+        row.elem.classList.remove("row-selectable");
+        row.elem.classList.remove("noclick");
+        row.elem_special.classList.remove("row-selectable");
+        row.elem_special.classList.remove("noclick");
+        row.elem.classList.add("card-selectable");
+
+        for (let card of row.cards) {
+          card.elem.classList.add("noclick");
+        }
+      }
+      weather.elem.classList.remove("row-selectable");
+      weather.elem.classList.remove("noclick");
+      return;
+    }
+    if (card.faction === "weather") {
+      for (let row of board.row) {
+        row.elem.classList.add("noclick");
+        row.elem_special.classList.add("noclick");
+      }
+      weather.elem.classList.add("row-selectable");
+      return;
+    }
+
+    weather.elem.classList.add("noclick");
+
+    if (card.name === "Scorch") {
+      for (let r of board.row) {
+        r.elem.classList.add("row-selectable");
+        r.elem_special.classList.add("row-selectable");
+      }
+      return;
+    }
+    if (card.isSpecial()) {
+      for (let i = 0; i < 6; i++) {
+        let r = board.row[i];
+        if (i < 3 || r.special !== null) {
+          r.elem.classList.add("noclick");
+          r.elem_special.classList.add("noclick");
+        } else {
+          r.elem_special.classList.add("row-selectable");
+        }
+      }
+      return;
+    }
+
+    board.row.forEach((r) => r.elem_special.classList.add("noclick"));
+
+    if (card.name === "Decoy") {
+      for (let i = 0; i < 6; ++i) {
+        let r = board.row[i];
+        let units = r.cards.filter((c) => c.isUnit());
+        units = units.filter(
+          (unit) =>
+            !unit.abilities.some((ability) =>
+              NotPickUpAbilities.includes(ability),
+            ),
+        );
+        console.log("DECOY UNITS", units);
+        if (i < 3 || units.length === 0) {
+          r.elem.classList.add("noclick");
+          r.elem_special.classList.add("noclick");
+          r.elem.classList.remove("card-selectable");
+        } else {
+          r.elem.classList.add("row-selectable");
+          units.forEach((c) => c.elem.classList.remove("noclick"));
+        }
+      }
+      return;
+    }
+
+    let currRows =
+      card.row === "agile"
+        ? [
+            board.getRow(card, "close", card.holder),
+            board.getRow(card, "ranged", card.holder),
+          ]
+        : [board.getRow(card, card.row, card.holder)];
+    for (let i = 0; i < 6; i++) {
+      let row = board.row[i];
+      if (currRows.includes(row)) {
+        row.elem.classList.add("row-selectable");
+      } else {
+        row.elem.classList.add("noclick");
+      }
+    }
+  }
 }
 
 // Displays up to 5 cards for the client to cycle through and select to perform an action
 // Clicking the middle card performs the action on that card "count" times
 // Clicking adejacent cards shifts the menu to focus on that card
 class Carousel {
-	constructor(container, count, action, predicate, bSort, bExit = false, title) {
-		if (count <= 0 || !container || !action || container.cards.length === 0)
-			return ;
-		this.container = container;
-		this.count = count;
-		this.action = action ? action : () => this.cancel();
-		this.predicate = predicate;
-		this.bSort = bSort;
-		this.indices = [];
-		this.index = 0;
-		this.bExit = bExit;
-		this.title = title;
-		this.cancelled = false;
-		
-		if (!Carousel.elem) {
-			Carousel.elem = document.getElementById("carousel");
-			Carousel.elem.children[0].addEventListener("click", () => Carousel.curr.cancel(), false);
-		}
-		this.elem = Carousel.elem;
-		document.getElementsByTagName("main")[0].classList.remove("noclick");
-		
-		this.elem.children[0].classList.remove("noclick");
-		this.previews = this.elem.getElementsByClassName("card-lg");
-		this.desc = this.elem.getElementsByClassName("card-description")[0];
-		this.title_elem = this.elem.children[2];
-	}
-	
-	// Initializes the current Carousel
-	start(){
-		if (!this.elem)
-			return;
-		this.indices = this.container.cards.reduce((a,c,i)=> (!this.predicate || this.predicate(c)) ? a.concat([i]) : a, []);
-		if (this.indices.length <= 0)
-			return this.exit();
-		if (this.bSort)
-			this.indices.sort( (a, b) => Card.compare(this.container.cards[a],this.container.cards[b]) );
-		
-		this.update();
-		Carousel.setCurrent(this);
-		
-		if (this.title) {
-			this.title_elem.innerHTML = this.title;
-			this.title_elem.classList.remove("hide");
-		} else {
-			this.title_elem.classList.add("hide");
-		}
-		
-		this.elem.classList.remove("hide");
-		ui.enablePlayer(true);
-		tocar("explaining", false);
-	}
-	
-	// Called by the client to cycle cards displayed by n
-	shift(event, n){
-		(event || window.event).stopPropagation();
-		this.index = Math.max(0, Math.min(this.indices.length-1, this.index+n));
-		this.update();
-	}
-	
-	// Called by client to perform action on the middle card in focus
-	async select(event) {
-		(event || window.event).stopPropagation();
-		--this.count;
-		if (this.isLastSelection())
-			this.elem.classList.add("hide");
-		if (this.count <= 0)
-			ui.enablePlayer(false);
-	
-		const actionString = this.action.toString()
-		tocar("redraw", false);
-		const resp = await this.action(this.container, this.indices[this.index]);
+  constructor(
+    container,
+    count,
+    action,
+    predicate,
+    bSort,
+    bExit = false,
+    title,
+  ) {
+    if (count <= 0 || !container || !action || container.cards.length === 0)
+      return;
+    this.container = container;
+    this.count = count;
+    this.action = action ? action : () => this.cancel();
+    this.predicate = predicate;
+    this.bSort = bSort;
+    this.indices = [];
+    this.index = 0;
+    this.bExit = bExit;
+    this.title = title;
+    this.cancelled = false;
 
-		if (actionString === "(c, i) => wrapper.card=c.cards[i]" || actionString === "(c,i) => newCard = c.cards[i]") {
-			setTimeout(() => {
-				extraJSON.push(JSON.stringify({
-    type: "medicDraw",
-    card: resp.filename
-}));
-				//extraJSON = JSON.stringify({ type: "medicDraw", card: resp.filename });
-				console.log("extra json now", extraJSON);
-			}, 1000);
-		} else if (actionString.includes("board.toWeather")) {
-			setTimeout(() => {
-				comp_and_send(socket, JSON.stringify({ type: "weatherDraw", card: resp.filename }));
-			}, 1000);
-		} else if (actionString.includes("board.toGrave")) {
-			setTimeout(() => {
-				comp_and_send(socket, JSON.stringify({ type: "removeCardHand", card: resp.filename }));
-			}, 1000);
-		} else if (actionString.includes("board.toHand")) {
-			setTimeout(() => {
-				comp_and_send(socket, JSON.stringify({ type: "addCardHand", card: resp.filename  }));
-			}, 1000);
-		}
-		if (this.isLastSelection() && !this.cancelled)
-			return this.exit();
-		this.update();
-	}
-	
-	// Called by client to exit out of the current Carousel if allowed. Enables player interraction.
-	cancel(){
-		if (this.bExit){
-			this.cancelled = true;
-			tocar("discard", false);
-			this.exit();
-		}
-		ui.enablePlayer(true);
-	}
-	
-	// Returns true if there are no more cards to view or select
-	isLastSelection(){
-		return this.count <= 0 || this.indices.length === 0;
-	}
-	
-	// Updates the visuals of the current selection of cards
-	update(){
-		this.indices = this.container.cards.reduce((a,c,i)=> (!this.predicate || this.predicate(c)) ? a.concat([i]) : a, []);
-		if (this.index >= this.indices.length)
-			this.index =  this.indices.length-1;
-		for (let i=0; i<this.previews.length; i++) {
-			let curr = this.index - 2 + i;
-			if (curr >= 0 && curr < this.indices.length) {
-				let card = this.container.cards[this.indices[curr]];
-				var tmp = card.faction + "_" + card.filename;
+    if (!Carousel.elem) {
+      Carousel.elem = document.getElementById("carousel");
+      Carousel.elem.children[0].addEventListener(
+        "click",
+        () => Carousel.curr.cancel(),
+        false,
+      );
+    }
+    this.elem = Carousel.elem;
+    document.getElementsByTagName("main")[0].classList.remove("noclick");
 
-if (card.filename === "Gaunter_Leader") {
-	tmp = "neutral_Gaunter_Leader";
-}
+    this.elem.children[0].classList.remove("noclick");
+    this.previews = this.elem.getElementsByClassName("card-lg");
+    this.desc = this.elem.getElementsByClassName("card-description")[0];
+    this.title_elem = this.elem.children[2];
+  }
 
-this.previews[i].style.backgroundImage = largeURL(tmp);
-				this.previews[i].classList.remove("hide");
-				this.previews[i].classList.remove("noclick");
-			} else {
-				this.previews[i].style.backgroundImage = "";
-				this.previews[i].classList.add("hide");
-				this.previews[i].classList.add("noclick");
-			}
-		}
-		ui.setDescription(this.container.cards[this.indices[this.index]], this.desc);
-	}
-	
-	// Clears and quits the current carousel
-	exit() {
-		for (let x of this.previews)
-			x.style.backgroundImage = "";
-		this.elem.classList.add("hide");
-		Carousel.clearCurrent();
-		ui.quitCarousel();
-	}
-	
-	// Statically sets the current carousel
-	static setCurrent(curr) {
-		this.curr = curr;
-	}
-	
-	// Statically clears the current carousel
-	static clearCurrent() {
-		this.curr = null;
-	}
+  // Initializes the current Carousel
+  start() {
+    if (!this.elem) return;
+    this.indices = this.container.cards.reduce(
+      (a, c, i) => (!this.predicate || this.predicate(c) ? a.concat([i]) : a),
+      [],
+    );
+    if (this.indices.length <= 0) return this.exit();
+    if (this.bSort)
+      this.indices.sort((a, b) =>
+        Card.compare(this.container.cards[a], this.container.cards[b]),
+      );
+
+    this.update();
+    Carousel.setCurrent(this);
+
+    if (this.title) {
+      this.title_elem.innerHTML = this.title;
+      this.title_elem.classList.remove("hide");
+    } else {
+      this.title_elem.classList.add("hide");
+    }
+
+    this.elem.classList.remove("hide");
+    ui.enablePlayer(true);
+    tocar("explaining", false);
+  }
+
+  // Called by the client to cycle cards displayed by n
+  shift(event, n) {
+    (event || window.event).stopPropagation();
+    this.index = Math.max(0, Math.min(this.indices.length - 1, this.index + n));
+    this.update();
+  }
+
+  // Called by client to perform action on the middle card in focus
+  async select(event) {
+    (event || window.event).stopPropagation();
+    --this.count;
+    if (this.isLastSelection()) this.elem.classList.add("hide");
+    if (this.count <= 0) ui.enablePlayer(false);
+
+    const actionString = this.action.toString();
+    tocar("redraw", false);
+    const resp = await this.action(this.container, this.indices[this.index]);
+
+    if (
+      actionString === "(c, i) => wrapper.card=c.cards[i]" ||
+      actionString === "(c,i) => newCard = c.cards[i]"
+    ) {
+      setTimeout(() => {
+        extraJSON.push(
+          JSON.stringify({
+            type: "medicDraw",
+            card: resp.filename,
+          }),
+        );
+        //extraJSON = JSON.stringify({ type: "medicDraw", card: resp.filename });
+        console.log("extra json now", extraJSON);
+      }, 1000);
+    } else if (actionString.includes("board.toWeather")) {
+      setTimeout(() => {
+        comp_and_send(
+          socket,
+          JSON.stringify({ type: "weatherDraw", card: resp.filename }),
+        );
+      }, 1000);
+    } else if (actionString.includes("board.toGrave")) {
+      setTimeout(() => {
+        comp_and_send(
+          socket,
+          JSON.stringify({ type: "removeCardHand", card: resp.filename }),
+        );
+      }, 1000);
+    } else if (actionString.includes("board.toHand")) {
+      setTimeout(() => {
+        comp_and_send(
+          socket,
+          JSON.stringify({ type: "addCardHand", card: resp.filename }),
+        );
+      }, 1000);
+    }
+    if (this.isLastSelection() && !this.cancelled) return this.exit();
+    this.update();
+  }
+
+  // Called by client to exit out of the current Carousel if allowed. Enables player interraction.
+  cancel() {
+    if (this.bExit) {
+      this.cancelled = true;
+      tocar("discard", false);
+      this.exit();
+    }
+    ui.enablePlayer(true);
+  }
+
+  // Returns true if there are no more cards to view or select
+  isLastSelection() {
+    return this.count <= 0 || this.indices.length === 0;
+  }
+
+  // Updates the visuals of the current selection of cards
+  update() {
+    this.indices = this.container.cards.reduce(
+      (a, c, i) => (!this.predicate || this.predicate(c) ? a.concat([i]) : a),
+      [],
+    );
+    if (this.index >= this.indices.length) this.index = this.indices.length - 1;
+    for (let i = 0; i < this.previews.length; i++) {
+      let curr = this.index - 2 + i;
+      if (curr >= 0 && curr < this.indices.length) {
+        let card = this.container.cards[this.indices[curr]];
+        var tmp = card.faction + "_" + card.filename;
+
+        if (card.filename === "Gaunter_Leader") {
+          tmp = "neutral_Gaunter_Leader";
+        }
+
+        this.previews[i].style.backgroundImage = largeURL(tmp);
+        this.previews[i].classList.remove("hide");
+        this.previews[i].classList.remove("noclick");
+      } else {
+        this.previews[i].style.backgroundImage = "";
+        this.previews[i].classList.add("hide");
+        this.previews[i].classList.add("noclick");
+      }
+    }
+    ui.setDescription(
+      this.container.cards[this.indices[this.index]],
+      this.desc,
+    );
+  }
+
+  // Clears and quits the current carousel
+  exit() {
+    for (let x of this.previews) x.style.backgroundImage = "";
+    this.elem.classList.add("hide");
+    Carousel.clearCurrent();
+    ui.quitCarousel();
+  }
+
+  // Statically sets the current carousel
+  static setCurrent(curr) {
+    this.curr = curr;
+  }
+
+  // Statically clears the current carousel
+  static clearCurrent() {
+    this.curr = null;
+  }
 }
 
 // Custom confirmation windows
 class Popup {
-	constructor(yesName, yes, noName, no, header, description){
-		this.yes = yes ? yes : ()=>{};
-		this.no = no ? no : ()=>{};
-		
-		this.elem = document.getElementById("popup");
-		let main = this.elem.children[0];
-		main.children[0].innerHTML = header ? header : "";
-		main.children[1].innerHTML = description ? description : "";
-		main.children[2].children[0].innerHTML = (yesName) ? yesName : "Yes";
-		main.children[2].children[1].innerHTML = (noName) ? noName : "No";
-		
-		this.elem.classList.remove("hide");
-		Popup.setCurrent(this);
-		ui.enablePlayer(true);
-	}
-	
-	// Sets this as the current popup window
-	static setCurrent(curr){ this.curr = curr; }
-	
-	// Unsets this as the current popup window
-	static clearCurrent()  { this.curr = null; }
-	
-	// Called when client selects the positive aciton
-	selectYes() {
-		this.clear()
-		this.yes();
-		return true;
-	}
-	
-	// Called when client selects the negative option
-	selectNo() {
-		this.clear();
-		this.no();
-		return false;
-	}
-	
-	// Clears the popup and diables player interraction
-	clear() {
-		ui.enablePlayer(false);
-		this.elem.classList.add("hide");
-		Popup.clearCurrent();
-	}
-	
+  constructor(yesName, yes, noName, no, header, description) {
+    this.yes = yes ? yes : () => {};
+    this.no = no ? no : () => {};
+
+    this.elem = document.getElementById("popup");
+    let main = this.elem.children[0];
+    main.children[0].innerHTML = header ? header : "";
+    main.children[1].innerHTML = description ? description : "";
+    main.children[2].children[0].innerHTML = yesName ? yesName : "Yes";
+    main.children[2].children[1].innerHTML = noName ? noName : "No";
+
+    this.elem.classList.remove("hide");
+    Popup.setCurrent(this);
+    ui.enablePlayer(true);
+  }
+
+  // Sets this as the current popup window
+  static setCurrent(curr) {
+    this.curr = curr;
+  }
+
+  // Unsets this as the current popup window
+  static clearCurrent() {
+    this.curr = null;
+  }
+
+  // Called when client selects the positive aciton
+  selectYes() {
+    this.clear();
+    this.yes();
+    return true;
+  }
+
+  // Called when client selects the negative option
+  selectNo() {
+    this.clear();
+    this.no();
+    return false;
+  }
+
+  // Clears the popup and diables player interraction
+  clear() {
+    ui.enablePlayer(false);
+    this.elem.classList.add("hide");
+    Popup.clearCurrent();
+  }
 }
 
-
 function add_card_count(deck) {
-  deck.forEach(item => {
+  deck.forEach((item) => {
     if (!item || !item.elem) return;
 
     const el = item.elem;
 
     // ensure badge exists
-    let badge = el.querySelector('.card-count-badge');
+    let badge = el.querySelector(".card-count-badge");
 
     if (!badge) {
-      badge = document.createElement('div');
-      badge.className = 'card-count-badge';
+      badge = document.createElement("div");
+      badge.className = "card-count-badge";
 
-      badge.style.position = 'absolute';
-badge.style.bottom = '6px';
-badge.style.right = '6px';
+      badge.style.position = "absolute";
+      badge.style.bottom = "6px";
+      badge.style.right = "6px";
 
-badge.style.display = 'flex';
-badge.style.alignItems = 'center';
-badge.style.gap = '5px';
+      badge.style.display = "flex";
+      badge.style.alignItems = "center";
+      badge.style.gap = "5px";
 
-badge.style.fontSize = '14px';
-badge.style.fontWeight = '700';
+      badge.style.fontSize = "14px";
+      badge.style.fontWeight = "700";
 
-badge.style.padding = '4px 6px';
-badge.style.borderRadius = '6px';
+      badge.style.padding = "4px 6px";
+      badge.style.borderRadius = "6px";
 
-badge.style.background = 'rgb(33, 31, 29)'; // darker, less transparent #8e8880
-badge.style.color = '#5f4923'; // brighter gold
-badge.style.boxShadow = '0 2px 6px rgba(0,0,0,0.6)';
-badge.style.backdropFilter = 'blur(2px)';
-badge.style.border = '1px solid rgba(255, 210, 122, 0.25)';
+      badge.style.background = "rgb(33, 31, 29)"; // darker, less transparent #8e8880
+      badge.style.color = "#5f4923"; // brighter gold
+      badge.style.boxShadow = "0 2px 6px rgba(0,0,0,0.6)";
+      badge.style.backdropFilter = "blur(2px)";
+      badge.style.border = "1px solid rgba(255, 210, 122, 0.25)";
 
-      const img = document.createElement('img');
-      img.src = './img/icons/preview_count.png';
-      img.style.width = '16px';
-img.style.height = '16px';
-// img.style.filter = 'brightness(1.2)';
+      const img = document.createElement("img");
+      img.src = "./img/icons/preview_count.png";
+      img.style.width = "16px";
+      img.style.height = "16px";
+      // img.style.filter = 'brightness(1.2)';
 
-      const text = document.createElement('span');
+      const text = document.createElement("span");
 
       badge.appendChild(img);
       badge.appendChild(text);
       el.appendChild(badge);
 
-      if (getComputedStyle(el).position === 'static') {
-        el.style.position = 'relative';
+      if (getComputedStyle(el).position === "static") {
+        el.style.position = "relative";
       }
     }
 
     // 🔥 SOURCE OF TRUTH = existing <div>1</div>
-    const sourceDiv = el.querySelector(':scope > div');
+    const sourceDiv = el.querySelector(":scope > div");
     const value = sourceDiv ? sourceDiv.textContent.trim() : "0";
 
-    const span = badge.querySelector('span');
+    const span = badge.querySelector("span");
     if (span) {
       span.textContent = value;
     }
@@ -3896,739 +4359,900 @@ img.style.height = '16px';
 }
 // Screen used to customize, import and export deck contents
 class DeckMaker {
-	constructor() {
-		this.elem = customizationElem;
-		this.bank_elem = document.getElementById("card-bank");
-		this.deck_elem = document.getElementById("card-deck");
-		this.leader_elem = document.getElementById("card-leader");
-		this.leader_elem.children[1].addEventListener("click", () => this.selectLeader(), false);
-		
-		this.faction = Object.keys(factions)[Math.floor(Math.random() * Object.keys(factions).length)] || "realms";
-		console.log("START DECK RANDOM FACTION", this.faction);
-		this.setFaction(this.faction, true);
-		let start_deck = premade_deck.find(d => d.faction === this.faction);
-		console.log("START DECK", JSON.stringify(start_deck?.cards) || start_deck, `For faction ${factions[this.faction].name || this.faction}`);
-		start_deck.cards = start_deck.cards.map(c => ({index: c[0], count: c[1]}) );
-		this.setLeader(start_deck.leader);
-		this.makeBank(this.faction, start_deck.cards);
-		this.change_elem = document.getElementById("change-faction");
-		this.change_elem.addEventListener("click", () => this.selectFaction(), false);
-		
-		document.getElementById("download-deck").addEventListener("click", () => this.downloadDeck(), false);
-		document.getElementById("add-file").addEventListener("change", () => this.uploadDeck(), false);
-		readyButtonElem.addEventListener("click", () => this.startNewGame(), false);
-		somCarta();
-		
-		this.update();
-	}
-	
-	// Called when client selects a deck faction. Clears previous cards and makes valid cards available.
-	setFaction(faction_name, silent){
-		if (!silent && this.faction === faction_name)
-			return false;
-		if (!silent) {
-			tocar("warning", false);
-			if (!confirm("Changing factions will clear the current deck. Continue? ")) {
-				tocar("warning", false);
-				return false;
-			}
+  constructor() {
+    this.elem = customizationElem;
+    this.bank_elem = document.getElementById("card-bank");
+    this.deck_elem = document.getElementById("card-deck");
+    this.leader_elem = document.getElementById("card-leader");
+    this.leader_elem.children[1].addEventListener(
+      "click",
+      () => this.selectLeader(),
+      false,
+    );
 
-			comp_and_send(socket, JSON.stringify({ type: "opChangeFaction", faction: faction_name, info: { "me_id": playerId, "me_flag": country} }));
-			sendChatMessageStrig(`play wich ${factions[faction_name].name} faction!`)
-		}
+    this.faction =
+      Object.keys(factions)[
+        Math.floor(Math.random() * Object.keys(factions).length)
+      ] || "realms";
+    console.log("START DECK RANDOM FACTION", this.faction);
+    this.setFaction(this.faction, true);
+    let start_deck = premade_deck.find((d) => d.faction === this.faction);
+    console.log(
+      "START DECK",
+      JSON.stringify(start_deck?.cards) || start_deck,
+      `For faction ${factions[this.faction].name || this.faction}`,
+    );
+    start_deck.cards = start_deck.cards.map((c) => ({
+      index: c[0],
+      count: c[1],
+    }));
+    this.setLeader(start_deck.leader);
+    this.makeBank(this.faction, start_deck.cards);
+    this.change_elem = document.getElementById("change-faction");
+    this.change_elem.addEventListener(
+      "click",
+      () => this.selectFaction(),
+      false,
+    );
 
-		this.elem.getElementsByTagName("h1")[0].innerHTML = factions[faction_name].name;
-		this.elem.getElementsByTagName("h1")[0].style.backgroundImage = iconURL("deck_shield_" + faction_name);
-		document.getElementById("faction-description").innerHTML = factions[faction_name].description;
-		
-		this.leaders = 
-			card_dict.map((c,i) => ({index: i, card:c}) )
-			.filter(c => c.card.deck === faction_name && c.card.row === "leader");
-		if (!this.leader || this.faction !== faction_name) {
-			this.leader = this.leaders[0];
-			var tmp = this.leader.card.deck + "_" + this.leader.card.filename;
+    document
+      .getElementById("download-deck")
+      .addEventListener("click", () => this.downloadDeck(), false);
+    document
+      .getElementById("add-file")
+      .addEventListener("change", () => this.uploadDeck(), false);
+    readyButtonElem.addEventListener("click", () => this.startNewGame(), false);
+    somCarta();
 
-if (this.leader.card.filename === "Gaunter_Leader") {
-	tmp = "neutral_Gaunter_Leader";
-}
+    this.update();
+  }
 
-this.leader_elem.children[1].style.backgroundImage = largeURL(tmp);
-		}
-		this.faction = faction_name;
-		setTimeout(function() {
-			somCarta();
-		}, 300);
-		return true;
-	}
-	
-	// Called when client selects a leader for their deck
-	setLeader(index){
-		this.leader = this.leaders.find( l => l.index == index);
-		var tmp = this.leader.card.deck + "_" + this.leader.card.filename;
+  // Called when client selects a deck faction. Clears previous cards and makes valid cards available.
+  setFaction(faction_name, silent) {
+    if (!silent && this.faction === faction_name) return false;
+    if (!silent) {
+      tocar("warning", false);
+      if (
+        !confirm("Changing factions will clear the current deck. Continue? ")
+      ) {
+        tocar("warning", false);
+        return false;
+      }
 
-if (this.leader.card.filename === "Gaunter_Leader") {
-	tmp = "neutral_Gaunter_Leader";
-}
+      comp_and_send(
+        socket,
+        JSON.stringify({
+          type: "opChangeFaction",
+          faction: faction_name,
+          info: { me_id: playerId, me_flag: country },
+        }),
+      );
+      sendChatMessageStrig(`play wich ${factions[faction_name].name} faction!`);
+    }
 
-this.leader_elem.children[1].style.backgroundImage = largeURL(tmp);
-	}
-	
-	// Constructs a bank of cards that can be used by the faction's deck.
-	// If a deck is provided, will not add cards to bank that are already in the deck.
-	makeBank(faction, deck) {
-		this.clear();
-		let cards = card_dict.map((c,i) => ({card:c, index:i})).filter(
-		p => [faction, "neutral", "weather", "special"].includes(p.card.deck) && p.card.row !== "leader");
-		
-		cards.sort( function(id1, id2) {
-			let a = card_dict[id1.index], b = card_dict[id2.index];
-			let c1 = {name: a.name, basePower: -a.strength, faction: a.deck};
-			let c2 = {name: b.name, basePower: -b.strength, faction: b.deck};
-			return Card.compare(c1, c2);
-		});
-		
-		
-		let deckMap = {};
-		if (deck){
-			for (let i of Object.keys(deck)) deckMap[deck[i].index] = deck[i].count;
-		}
-		cards.forEach( p => {
-			let count = deckMap[p.index] !== undefined ? Number(deckMap[p.index]) : 0;
-			this.makePreview(p.index, Number.parseInt(p.card.count) - count, this.bank_elem, this.bank,);
-			this.makePreview(p.index, count, this.deck_elem, this.deck);
-		});
-		add_card_count(this.bank); add_card_count(this.deck);
-	}
-	
-	// Creates HTML elements for the card previews
-	makePreview(index, num, container_elem, cards){
-		let card_data = card_dict[index];
-		
-		let elem = document.createElement("div");
-		var tmp = card_data.deck + "_" + card_data.filename;
+    this.elem.getElementsByTagName("h1")[0].innerHTML =
+      factions[faction_name].name;
+    this.elem.getElementsByTagName("h1")[0].style.backgroundImage = iconURL(
+      "deck_shield_" + faction_name,
+    );
+    document.getElementById("faction-description").innerHTML =
+      factions[faction_name].description;
 
-if (card_data.filename === "Gaunter_Leader") {
-	tmp = "neutral_Gaunter_Leader";
-}
+    this.leaders = card_dict
+      .map((c, i) => ({ index: i, card: c }))
+      .filter((c) => c.card.deck === faction_name && c.card.row === "leader");
+    if (!this.leader || this.faction !== faction_name) {
+      this.leader = this.leaders[0];
+      var tmp = this.leader.card.deck + "_" + this.leader.card.filename;
 
-elem.style.backgroundImage = largeURL(tmp);
-		elem.classList.add("card-lg");
-		let count = document.createElement("div");
-		elem.appendChild(count);
-		container_elem.appendChild(elem);
-		
-		let bankID = {index: index, count: num, elem: elem};
-		let isBank = cards === this.bank;
-		count.innerHTML = bankID.count;
-		cards.push(bankID);
-		let cardIndex = cards.length-1;
-		elem.addEventListener("click", () => this.select(cardIndex, isBank), false);
+      if (this.leader.card.filename === "Gaunter_Leader") {
+        tmp = "neutral_Gaunter_Leader";
+      }
 
-		return bankID;
-	}
-	
-	// Updates the card preview elements when any changes are made to the deck
-	update(){
-		for (let x of this.bank) {
-			if (x.count)
-				x.elem.classList.remove("hide");
-			else
-				x.elem.classList.add("hide");
-		}
-		let total = 0, units = 0, special = 0, strength = 0, hero = 0;
-		for (let x of this.deck) {
-			let card_data = card_dict[x.index];
-			if (x.count)
-				x.elem.classList.remove("hide");
-			else
-				x.elem.classList.add("hide");
-			total += x.count;
-			if (card_data.deck === "special" || card_data.deck === "weather") {
-				special += x.count;
-				continue;
-			}
-			units += x.count;
-			strength += card_data.strength * x.count;
-			if (card_data.ability.split(" ").includes("hero"))
-				hero += x.count;
-		}
-		this.stats = {total: total, units: units, special: special, strength: strength, hero: hero};
-		this.updateStats();
-	}
-	
-	// Updates and displays the statistics describing the cards currently in the deck
-	updateStats(){
-		let stats = document.getElementById("deck-stats");
-		stats.children[1].innerHTML = this.stats.total;
-		stats.children[3].innerHTML = this.stats.units +(this.stats.units < ForGameStart.unitscards ? "/" + ForGameStart.unitscards : "");
-		stats.children[5].innerHTML = this.stats.special + "/" + ForGameStart.special;
-		stats.children[7].innerHTML = this.stats.strength;
-		stats.children[9].innerHTML = this.stats.hero + "/" + ForGameStart.hero;
-		
-		stats.children[3].style.color = this.stats.units < ForGameStart.unitscard ? "red" : "";
-		stats.children[5].style.color = (this.stats.special > ForGameStart.special) ? "red" : "";
-		stats.children[9].style.color = (this.stats.hero > ForGameStart.hero) ? "red" : "";
-	}
-	
-	// Opens a Carousel to allow the client to select a leader for their deck
-	selectLeader(){
-		let container = new CardContainer();
-		container.cards = this.leaders.map(c => {
-			let card = new Card(c.card, player_me);
-			card.data = c;
-			return card;
-		});
-		
-		let index = this.leaders.indexOf(this.leader);
-		ui.queueCarousel(container, 1, (c,i) => {
-			let data = c.cards[i].data;
-			this.leader = data;
-			var tmp = data.card.deck + "_" + data.card.filename;
+      this.leader_elem.children[1].style.backgroundImage = largeURL(tmp);
+    }
+    this.faction = faction_name;
+    setTimeout(function () {
+      somCarta();
+    }, 300);
+    return true;
+  }
 
-if (data.card.filename === "Gaunter_Leader") {
-	tmp = "neutral_Gaunter_Leader";
-}
+  // Called when client selects a leader for their deck
+  setLeader(index) {
+    this.leader = this.leaders.find((l) => l.index == index);
+    var tmp = this.leader.card.deck + "_" + this.leader.card.filename;
 
-this.leader_elem.children[1].style.backgroundImage = largeURL(tmp);
-		}, () => true, false, true);
-		Carousel.curr.index = index;
-		Carousel.curr.update();
-	}
-	
-	// Opens a Carousel to allow the client to select a faction for their deck
-	selectFaction() {
-		let container = new CardContainer();
-		container.cards = Object.keys(factions).map( f => {
-			return {abilities: [f], filename: f, desc_name: factions[f].name, desc: factions[f].description, faction: "faction"};
-		});
-		let index = container.cards.reduce((a,c,i) => c.filename === this.faction ? i : a, 0);
-		ui.queueCarousel(container, 1, (c,i) => {
-			const card_faction_name = c.cards[i].filename;
-			let change = this.setFaction(card_faction_name);
-			if (!change)
-				return;
-			const faction_premade_deck = premade_deck.find(d => d.faction === card_faction_name)
+    if (this.leader.card.filename === "Gaunter_Leader") {
+      tmp = "neutral_Gaunter_Leader";
+    }
 
-			if (faction_premade_deck) {
-				var is_premade = false;
-				try {
-					is_premade = faction_premade_deck?.cards[0].index
-				} catch (e) {}
-				if (!is_premade)
-					faction_premade_deck.cards = faction_premade_deck.cards.map(c => ({index: c[0], count: c[1]}) );
-				this.makeBank(card_faction_name, faction_premade_deck.cards);
-			} else	
-				this.makeBank(card_faction_name);
-			this.update();
-		}, () => true, false, true);
-		Carousel.curr.index = index;
-		Carousel.curr.update();
-	}
-	
+    this.leader_elem.children[1].style.backgroundImage = largeURL(tmp);
+  }
 
-	// Called when client selects s a preview card. Moves it from bank to deck or vice-versa then updates;
-	select(index, isBank){
-		if (isBank) {
-			tocar("menu_buy", false);
-			this.add(index, this.deck);
-			this.remove(index, this.bank);
-		} else {
-			tocar("discard", false);
-			this.add(index, this.bank);
-			this.remove(index, this.deck);
-		}
-		console.log("BANK/DECK UPDATE", "DECK", this.deck, "BANK", this.bank);
-		add_card_count(this.deck); add_card_count(this.bank);
-		this.update();
-	}
-	
-	// Adds a card to container (Bank or deck)
-async	add(index, cards) {
-		let id = cards[index];
-		id.elem.children[0].innerHTML = ++id.count;
-		try {
-		// console.log("Adds a card to container (Bank or deck)", index, cards, id, this, "\n", this.stats, "\n\n", card_dict[id.index].ability);
-		// abilities on the card, e.g. ["hero", "morale"]
-var abilities = (card_dict[id.index].ability || "")
-  .split(" ")
-  .filter(Boolean);
-var descOutput = abilities
-  .map(abilityId => ability_dict[abilityId]?.description || "")
-  .filter(Boolean);
-var descString = descOutput.join("\n");
-var timeNow = Date.now().toString();
-var shaSource =  btoa(timeNow + descString);
-// console.log("\nAdds a card to container (Bank or deck)", abilities, descOutput, descString, shaSource);
-if (2 < descString.length) {
-	console.log("Show stats for", card_dict[id.index], ` wich abilities ${card_dict[id.index].ability} `, descString, " for ", showbankms / 1000);
-	displaynow = shaSource;
-	document.getElementById("cardstatsdisplay").innerHTML =
-  descString.replace(/\n/g, "<br>");
-  await sleep(showbankms);
-  if (shaSource === displaynow){
-	console.log("Hide stats for", card_dict[id.index], ` wich abilities ${card_dict[id.index].ability} `);
-	document.getElementById("cardstatsdisplay").innerHTML = "";
-  } else {
-	console.log(`displaynow no longer valid ${displaynow} != ${shaSource}`);
-}
-}
+  // Constructs a bank of cards that can be used by the faction's deck.
+  // If a deck is provided, will not add cards to bank that are already in the deck.
+  makeBank(faction, deck) {
+    this.clear();
+    let cards = card_dict
+      .map((c, i) => ({ card: c, index: i }))
+      .filter(
+        (p) =>
+          [faction, "neutral", "weather", "special"].includes(p.card.deck) &&
+          p.card.row !== "leader",
+      );
 
+    cards.sort(function (id1, id2) {
+      let a = card_dict[id1.index],
+        b = card_dict[id2.index];
+      let c1 = { name: a.name, basePower: -a.strength, faction: a.deck };
+      let c2 = { name: b.name, basePower: -b.strength, faction: b.deck };
+      return Card.compare(c1, c2);
+    });
 
-		} catch (e) { console.log("Adds a card to container (Bank or deck)", " err", e)}
-	}
-	
-	// Removes a card from container (bank or deck)
-	remove(index, cards) {
-		let id = cards[index];
-		id.elem.children[0].innerHTML = --id.count;
-	}
-	
-	// Removes all elements in the bank and deck
-	clear(){
-		while (this.bank_elem.firstChild)
-			this.bank_elem.removeChild(this.bank_elem.firstChild);
-		while (this.deck_elem.firstChild)
-			this.deck_elem.removeChild(this.deck_elem.firstChild);
-		this.bank = [];
-		this.deck = [];
-		this.stats = {};
-	}
-	
-	// Verifies current deck, creates the players and their decks, then starts a new game
-	async startNewGame(){
-		if (!twoPlayersConnected) {
-    console.warn("Cannot start game: waiting for second player.");
-	showTooltip("Cannot start game: waiting for second player.");
-    return;
-}
-		if (amReady) {
-			comp_and_send(socket, JSON.stringify({ type: "unReady" })); showTooltip(`You are now UnReady`)
-			var btn = document.getElementById("session-start-control");
-			btn.textContent = "Ready";
-			customizationElem.classList.remove("noclick");
-			amReady = false;
-			toggleReadyWaiting(amReady);
-	//		readyButtonElem.classList.remove("ready");
-	//		customizationElem.classList.remove("noclick");
-	//		comp_and_send(socket, JSON.stringify({ type: "unReady" }));
-			return
-		}
-		console.log("[Start] \\this.stats\\", this.stats);
-		let warning = "";;
-		if (this.stats.units < ForGameStart.unitscards)
-			warning += `Your deck must have at least ${ForGameStart.unitscards} unit cards. \n`;
-		if (this.stats.special > ForGameStart.special)
-			warning += `Your deck must have no more than ${ForGameStart.special} special cards. \n`;
-		if (this.stats.hero > ForGameStart.hero)
-			warning += `Your deck must have no more than ${ForGameStart.hero} hero cards. \n`;
-			
-		if (warning != "")
-			return alert(warning);
-		else {
-			document.getElementById("session-start-control").classList.add("ready");
-			customizationElem.classList.add("noclick");
-		} 
+    let deckMap = {};
+    if (deck) {
+      for (let i of Object.keys(deck)) deckMap[deck[i].index] = deck[i].count;
+    }
+    cards.forEach((p) => {
+      let count = deckMap[p.index] !== undefined ? Number(deckMap[p.index]) : 0;
+      this.makePreview(
+        p.index,
+        Number.parseInt(p.card.count) - count,
+        this.bank_elem,
+        this.bank,
+      );
+      this.makePreview(p.index, count, this.deck_elem, this.deck);
+    });
+    add_card_count(this.bank);
+    add_card_count(this.deck);
+  }
 
-		let me_deck = { 
-			faction: this.faction,
-			leader: card_dict[this.leader.index], 
-			cards: this.deck.filter(x => x.count > 0)
-		};
+  // Creates HTML elements for the card previews
+  makePreview(index, num, container_elem, cards) {
+    let card_data = card_dict[index];
 
-		player_me = new Player(0, players.me, me_deck );
-		comp_and_send(socket, JSON.stringify({ type: "ready", deck: me_deck }));
-		amReady = true;
-		toggleReadyWaiting(amReady);
-		customizationElem.classList.add("noclick");
-		 showTooltip("You are ready, please wait for opponent!");
-		if (opponentReady) {
-			this.elem.classList.add("hide");
-			//await sleep(100);
-			game.startGame();
-		} else {
-			var btn = document.getElementById("session-start-control");
-			btn.textContent = "UnReady";
-		}
-	}
-	
-	// Converts the current deck to a JSON string
-	deckToJSON(){
-		let obj = {
-			faction: this.faction,
-			leader: this.leader.index, 
-			cards: this.deck.filter(x => x.count > 0).map(x => [x.index, x.count])
-		};
-		return JSON.stringify(obj);
-	}
-	
-	// Called by the client to download the current deck as a JSON file
-	downloadDeck(){
-		let json = this.deckToJSON();
-		let str = "data:text/json;charset=utf-8," + encodeURIComponent(json);
-		let hidden_elem = document.getElementById('download-json');
-		hidden_elem.href = str;
-		hidden_elem.download = "GwentDeck.json";
-		hidden_elem.click();
-	}
-	
-	// Called by the client to upload a JSON file representing a new deck
-	uploadDeck() {
-		let files = document.getElementById("add-file").files;
-		if (files.length <= 0)
-			return false;
-		let fr = new FileReader();
-		console.log("[DECK.U]", files, fr);
-		fr.onload = e => {
-			try {
-				console.log("[DECK.U]", `deckFromJSON`, e.target.result)
-				this.deckFromJSON(e.target.result);
-			} catch (e) {
-				console.log("DECK.U] err", e);
-				alert("Uploaded deck is not formatted correctly!");
-			}
-		}
-		fr.readAsText(files.item(0));
-		document.getElementById("add-file").value = "";
-	}
-	
-	// Creates a deck from a JSON file's contents and sets that as the current deck
-	// Notifies client with warnings if the deck is invalid
-	deckFromJSON(json) {
-		let deck;
-		try {
-			deck = JSON.parse(json);
-		} catch (e) {
-			alert("Uploaded deck is not parsable!");
-			return;
-		}
-		let warning = "";
-		if (card_dict[deck.leader].row !== "leader")
-			warning += "'" + card_dict[deck.leader].name + "' is cannot be used as a leader\n";
-		if (deck.faction != card_dict[deck.leader].deck)
-			warning += "Leader '" + card_dict[deck.leader].name + "' doesn't match deck faction '" + deck.faction + "'.\n";
-		
-		let cards = deck.cards.filter( c => {
-			let card = card_dict[c[0]];
-			if (!card) {
-				warning += "ID " + c[0] + " does not correspond to a card.\n";
-				return false
-			}
-			if (![deck.faction, "neutral", "special", "weather"].includes(card.deck)) {
-				warning += "'" + card.name + "' cannot be used in a deck of faction type '" + deck.faciton +"'\n";
-				return false;
-			}
-			if (card.count < c[1]) {
-				warning += "Deck contains " + c[1] + "/" + card.count + " available " + card_dict[c[0]].name + " cards\n";
-				return false;
-			}
-			return true;
-		})
-		.map(c => ({index:c[0], count:Math.min(c[1], card_dict[c[0]].count)}) );
-		
-		if (warning && !confirm(warning + "\n\n\Continue importing deck?"))
-			return;
-		this.setFaction(deck.faction, true);
-		comp_and_send(socket, JSON.stringify({ type: "opChangeFaction", faction: deck.faction, info: { "me_id": playerId, "me_flag": country} }));
-		sendChatMessageStrig(`play wich ${factions[deck.faction].name} faction!`)
-		if (card_dict[deck.leader].row === "leader" && deck.faction === card_dict[deck.leader].deck){
-			this.leader = this.leaders.find(c => c.index === deck.leader);
-			var tmp = this.leader.card.deck + "_" + this.leader.card.filename;
+    let elem = document.createElement("div");
+    var tmp = card_data.deck + "_" + card_data.filename;
 
-if (this.leader.card.filename === "Gaunter_Leader") {
-	tmp = "neutral_Gaunter_Leader";
-}
+    if (card_data.filename === "Gaunter_Leader") {
+      tmp = "neutral_Gaunter_Leader";
+    }
 
-this.leader_elem.children[1].style.backgroundImage = largeURL(tmp);
-		}
-		this.makeBank(deck.faction, cards);
-		this.update();
-	}
+    elem.style.backgroundImage = largeURL(tmp);
+    elem.classList.add("card-lg");
+    let count = document.createElement("div");
+    elem.appendChild(count);
+    container_elem.appendChild(elem);
+
+    let bankID = { index: index, count: num, elem: elem };
+    let isBank = cards === this.bank;
+    count.innerHTML = bankID.count;
+    cards.push(bankID);
+    let cardIndex = cards.length - 1;
+    elem.addEventListener("click", () => this.select(cardIndex, isBank), false);
+
+    return bankID;
+  }
+
+  // Updates the card preview elements when any changes are made to the deck
+  update() {
+    for (let x of this.bank) {
+      if (x.count) x.elem.classList.remove("hide");
+      else x.elem.classList.add("hide");
+    }
+    let total = 0,
+      units = 0,
+      special = 0,
+      strength = 0,
+      hero = 0;
+    for (let x of this.deck) {
+      let card_data = card_dict[x.index];
+      if (x.count) x.elem.classList.remove("hide");
+      else x.elem.classList.add("hide");
+      total += x.count;
+      if (card_data.deck === "special" || card_data.deck === "weather") {
+        special += x.count;
+        continue;
+      }
+      units += x.count;
+      strength += card_data.strength * x.count;
+      if (card_data.ability.split(" ").includes("hero")) hero += x.count;
+    }
+    this.stats = {
+      total: total,
+      units: units,
+      special: special,
+      strength: strength,
+      hero: hero,
+    };
+    this.updateStats();
+  }
+
+  // Updates and displays the statistics describing the cards currently in the deck
+  updateStats() {
+    let stats = document.getElementById("deck-stats");
+    stats.children[1].innerHTML = this.stats.total;
+    stats.children[3].innerHTML =
+      this.stats.units +
+      (this.stats.units < ForGameStart.unitscards
+        ? "/" + ForGameStart.unitscards
+        : "");
+    stats.children[5].innerHTML =
+      this.stats.special + "/" + ForGameStart.special;
+    stats.children[7].innerHTML = this.stats.strength;
+    stats.children[9].innerHTML = this.stats.hero + "/" + ForGameStart.hero;
+
+    stats.children[3].style.color =
+      this.stats.units < ForGameStart.unitscard ? "red" : "";
+    stats.children[5].style.color =
+      this.stats.special > ForGameStart.special ? "red" : "";
+    stats.children[9].style.color =
+      this.stats.hero > ForGameStart.hero ? "red" : "";
+  }
+
+  // Opens a Carousel to allow the client to select a leader for their deck
+  selectLeader() {
+    let container = new CardContainer();
+    container.cards = this.leaders.map((c) => {
+      let card = new Card(c.card, player_me);
+      card.data = c;
+      return card;
+    });
+
+    let index = this.leaders.indexOf(this.leader);
+    ui.queueCarousel(
+      container,
+      1,
+      (c, i) => {
+        let data = c.cards[i].data;
+        this.leader = data;
+        var tmp = data.card.deck + "_" + data.card.filename;
+
+        if (data.card.filename === "Gaunter_Leader") {
+          tmp = "neutral_Gaunter_Leader";
+        }
+
+        this.leader_elem.children[1].style.backgroundImage = largeURL(tmp);
+      },
+      () => true,
+      false,
+      true,
+    );
+    Carousel.curr.index = index;
+    Carousel.curr.update();
+  }
+
+  // Opens a Carousel to allow the client to select a faction for their deck
+  selectFaction() {
+    let container = new CardContainer();
+    container.cards = Object.keys(factions).map((f) => {
+      return {
+        abilities: [f],
+        filename: f,
+        desc_name: factions[f].name,
+        desc: factions[f].description,
+        faction: "faction",
+      };
+    });
+    let index = container.cards.reduce(
+      (a, c, i) => (c.filename === this.faction ? i : a),
+      0,
+    );
+    ui.queueCarousel(
+      container,
+      1,
+      (c, i) => {
+        const card_faction_name = c.cards[i].filename;
+        let change = this.setFaction(card_faction_name);
+        if (!change) return;
+        const faction_premade_deck = premade_deck.find(
+          (d) => d.faction === card_faction_name,
+        );
+
+        if (faction_premade_deck) {
+          var is_premade = false;
+          try {
+            is_premade = faction_premade_deck?.cards[0].index;
+          } catch (e) {}
+          if (!is_premade)
+            faction_premade_deck.cards = faction_premade_deck.cards.map(
+              (c) => ({ index: c[0], count: c[1] }),
+            );
+          this.makeBank(card_faction_name, faction_premade_deck.cards);
+        } else this.makeBank(card_faction_name);
+        this.update();
+      },
+      () => true,
+      false,
+      true,
+    );
+    Carousel.curr.index = index;
+    Carousel.curr.update();
+  }
+
+  // Called when client selects s a preview card. Moves it from bank to deck or vice-versa then updates;
+  select(index, isBank) {
+    if (isBank) {
+      tocar("menu_buy", false);
+      this.add(index, this.deck);
+      this.remove(index, this.bank);
+    } else {
+      tocar("discard", false);
+      this.add(index, this.bank);
+      this.remove(index, this.deck);
+    }
+    console.log("BANK/DECK UPDATE", "DECK", this.deck, "BANK", this.bank);
+    add_card_count(this.deck);
+    add_card_count(this.bank);
+    this.update();
+  }
+
+  // Adds a card to container (Bank or deck)
+  async add(index, cards) {
+    let id = cards[index];
+    id.elem.children[0].innerHTML = ++id.count;
+    try {
+      // console.log("Adds a card to container (Bank or deck)", index, cards, id, this, "\n", this.stats, "\n\n", card_dict[id.index].ability);
+      // abilities on the card, e.g. ["hero", "morale"]
+      var abilities = (card_dict[id.index].ability || "")
+        .split(" ")
+        .filter(Boolean);
+      var descOutput = abilities
+        .map((abilityId) => ability_dict[abilityId]?.description || "")
+        .filter(Boolean);
+      var descString = descOutput.join("\n");
+      var timeNow = Date.now().toString();
+      var shaSource = btoa(timeNow + descString);
+      // console.log("\nAdds a card to container (Bank or deck)", abilities, descOutput, descString, shaSource);
+      if (2 < descString.length) {
+        console.log(
+          "Show stats for",
+          card_dict[id.index],
+          ` wich abilities ${card_dict[id.index].ability} `,
+          descString,
+          " for ",
+          showbankms / 1000,
+        );
+        displaynow = shaSource;
+        document.getElementById("cardstatsdisplay").innerHTML =
+          descString.replace(/\n/g, "<br>");
+        await sleep(showbankms);
+        if (shaSource === displaynow) {
+          console.log(
+            "Hide stats for",
+            card_dict[id.index],
+            ` wich abilities ${card_dict[id.index].ability} `,
+          );
+          document.getElementById("cardstatsdisplay").innerHTML = "";
+        } else {
+          console.log(
+            `displaynow no longer valid ${displaynow} != ${shaSource}`,
+          );
+        }
+      }
+    } catch (e) {
+      console.log("Adds a card to container (Bank or deck)", " err", e);
+    }
+  }
+
+  // Removes a card from container (bank or deck)
+  remove(index, cards) {
+    let id = cards[index];
+    id.elem.children[0].innerHTML = --id.count;
+  }
+
+  // Removes all elements in the bank and deck
+  clear() {
+    while (this.bank_elem.firstChild)
+      this.bank_elem.removeChild(this.bank_elem.firstChild);
+    while (this.deck_elem.firstChild)
+      this.deck_elem.removeChild(this.deck_elem.firstChild);
+    this.bank = [];
+    this.deck = [];
+    this.stats = {};
+  }
+
+  // Verifies current deck, creates the players and their decks, then starts a new game
+  async startNewGame() {
+    if (!twoPlayersConnected) {
+      console.warn("Cannot start game: waiting for second player.");
+      showTooltip("Cannot start game: waiting for second player.");
+      return;
+    }
+    if (amReady) {
+      comp_and_send(socket, JSON.stringify({ type: "unReady" }));
+      showTooltip(`You are now UnReady`);
+      var btn = document.getElementById("session-start-control");
+      btn.textContent = "Ready";
+      customizationElem.classList.remove("noclick");
+      amReady = false;
+      toggleReadyWaiting(amReady);
+      //		readyButtonElem.classList.remove("ready");
+      //		customizationElem.classList.remove("noclick");
+      //		comp_and_send(socket, JSON.stringify({ type: "unReady" }));
+      return;
+    }
+    console.log("[Start] \\this.stats\\", this.stats);
+    let warning = "";
+    if (this.stats.units < ForGameStart.unitscards)
+      warning += `Your deck must have at least ${ForGameStart.unitscards} unit cards. \n`;
+    if (this.stats.special > ForGameStart.special)
+      warning += `Your deck must have no more than ${ForGameStart.special} special cards. \n`;
+    if (this.stats.hero > ForGameStart.hero)
+      warning += `Your deck must have no more than ${ForGameStart.hero} hero cards. \n`;
+
+    if (warning != "") return alert(warning);
+    else {
+      document.getElementById("session-start-control").classList.add("ready");
+      customizationElem.classList.add("noclick");
+    }
+
+    let me_deck = {
+      faction: this.faction,
+      leader: card_dict[this.leader.index],
+      cards: this.deck.filter((x) => x.count > 0),
+    };
+
+    player_me = new Player(0, players.me, me_deck);
+    comp_and_send(socket, JSON.stringify({ type: "ready", deck: me_deck }));
+    amReady = true;
+    toggleReadyWaiting(amReady);
+    customizationElem.classList.add("noclick");
+    showTooltip("You are ready, please wait for opponent!");
+    if (opponentReady) {
+      this.elem.classList.add("hide");
+      //await sleep(100);
+      game.startGame();
+    } else {
+      var btn = document.getElementById("session-start-control");
+      btn.textContent = "UnReady";
+    }
+  }
+
+  // Converts the current deck to a JSON string
+  deckToJSON() {
+    let obj = {
+      faction: this.faction,
+      leader: this.leader.index,
+      cards: this.deck
+        .filter((x) => x.count > 0)
+        .map((x) => [x.index, x.count]),
+    };
+    return JSON.stringify(obj);
+  }
+
+  // Called by the client to download the current deck as a JSON file
+  downloadDeck() {
+    let json = this.deckToJSON();
+    let str = "data:text/json;charset=utf-8," + encodeURIComponent(json);
+    let hidden_elem = document.getElementById("download-json");
+    hidden_elem.href = str;
+    hidden_elem.download = "GwentDeck.json";
+    hidden_elem.click();
+  }
+
+  // Called by the client to upload a JSON file representing a new deck
+  uploadDeck() {
+    let files = document.getElementById("add-file").files;
+    if (files.length <= 0) return false;
+    let fr = new FileReader();
+    console.log("[DECK.U]", files, fr);
+    fr.onload = (e) => {
+      try {
+        console.log("[DECK.U]", `deckFromJSON`, e.target.result);
+        this.deckFromJSON(e.target.result);
+      } catch (e) {
+        console.log("DECK.U] err", e);
+        alert("Uploaded deck is not formatted correctly!");
+      }
+    };
+    fr.readAsText(files.item(0));
+    document.getElementById("add-file").value = "";
+  }
+
+  // Creates a deck from a JSON file's contents and sets that as the current deck
+  // Notifies client with warnings if the deck is invalid
+  deckFromJSON(json) {
+    let deck;
+    try {
+      deck = JSON.parse(json);
+    } catch (e) {
+      alert("Uploaded deck is not parsable!");
+      return;
+    }
+    let warning = "";
+    if (card_dict[deck.leader].row !== "leader")
+      warning +=
+        "'" + card_dict[deck.leader].name + "' is cannot be used as a leader\n";
+    if (deck.faction != card_dict[deck.leader].deck)
+      warning +=
+        "Leader '" +
+        card_dict[deck.leader].name +
+        "' doesn't match deck faction '" +
+        deck.faction +
+        "'.\n";
+
+    let cards = deck.cards
+      .filter((c) => {
+        let card = card_dict[c[0]];
+        if (!card) {
+          warning += "ID " + c[0] + " does not correspond to a card.\n";
+          return false;
+        }
+        if (
+          ![deck.faction, "neutral", "special", "weather"].includes(card.deck)
+        ) {
+          warning +=
+            "'" +
+            card.name +
+            "' cannot be used in a deck of faction type '" +
+            deck.faciton +
+            "'\n";
+          return false;
+        }
+        if (card.count < c[1]) {
+          warning +=
+            "Deck contains " +
+            c[1] +
+            "/" +
+            card.count +
+            " available " +
+            card_dict[c[0]].name +
+            " cards\n";
+          return false;
+        }
+        return true;
+      })
+      .map((c) => ({
+        index: c[0],
+        count: Math.min(c[1], card_dict[c[0]].count),
+      }));
+
+    if (warning && !confirm(warning + "\n\n\Continue importing deck?")) return;
+    this.setFaction(deck.faction, true);
+    comp_and_send(
+      socket,
+      JSON.stringify({
+        type: "opChangeFaction",
+        faction: deck.faction,
+        info: { me_id: playerId, me_flag: country },
+      }),
+    );
+    sendChatMessageStrig(`play wich ${factions[deck.faction].name} faction!`);
+    if (
+      card_dict[deck.leader].row === "leader" &&
+      deck.faction === card_dict[deck.leader].deck
+    ) {
+      this.leader = this.leaders.find((c) => c.index === deck.leader);
+      var tmp = this.leader.card.deck + "_" + this.leader.card.filename;
+
+      if (this.leader.card.filename === "Gaunter_Leader") {
+        tmp = "neutral_Gaunter_Leader";
+      }
+
+      this.leader_elem.children[1].style.backgroundImage = largeURL(tmp);
+    }
+    this.makeBank(deck.faction, cards);
+    this.update();
+  }
 }
 
 // Translates a card between two containers
-async function translateTo(card, container_source, container_dest){
-	if (!container_dest || !container_source)
-		return;
-	if (container_dest === player_op.hand && container_source === player_op.deck)
-		return;
-	
-	let elem = card.elem;
-	let source = !container_source ? card.elem : getSourceElem(card, container_source, container_dest);
-	let dest = getDestinationElem(card, container_source, container_dest);
-	if (!isInDocument(elem))
-		source.appendChild(elem);
-	let x = trueOffsetLeft(dest) - trueOffsetLeft(elem) +dest.offsetWidth/2 - elem.offsetWidth;
-	let y = trueOffsetTop(dest) - trueOffsetTop(elem) +dest.offsetHeight/2 - elem.offsetHeight/2;
-	if (container_dest instanceof Row && container_dest.cards.length !== 0 && !card.isSpecial() ){
-		x += (container_dest.getSortedIndex(card) === container_dest.cards.length) ? elem.offsetWidth/2 : -elem.offsetWidth/2;
-	}
-	if (card.holder.controller instanceof ControllerOpponent)
-		x += elem.offsetWidth/2;
-	if (container_source instanceof Row && container_dest instanceof Grave && !card.isSpecial()) {
-		let mid = trueOffset(container_source.elem, true) + container_source.elem.offsetWidth/2;
-		x += trueOffset(elem, true) - mid;
-	}
-	if (container_source instanceof Row && container_dest === player_me.hand)
-		y *= 7/8;
-	await translate(elem, x, y);
-	
-	// Returns true if the element is visible in the viewport
-	function isInDocument(elem){
-		return elem.getBoundingClientRect().width !== 0;
-	}
-	
-	// Returns the true offset of a nested element in the viewport
-	function trueOffset(elem, left){
-		let total =0
-		let curr = elem;
-		while (curr){
-			total += (left ? curr.offsetLeft : curr.offsetTop);
-			curr = curr.parentElement;
-		}
-		return total;
-	}
-	function trueOffsetLeft(elem) {	return trueOffset(elem, true); }
-	function trueOffsetTop(elem) { return trueOffset(elem, false); }
-	
-	// Returns the source container's element to transition from
-	function getSourceElem(card, source, dest){
-		if (source instanceof HandOpponent)
-			return source.hidden_elem;
-		if (source instanceof Deck)
-			return source.elem.children[source.elem.children.length-2];
-		return source.elem;
-	}
+async function translateTo(card, container_source, container_dest) {
+  if (!container_dest || !container_source) return;
+  if (container_dest === player_op.hand && container_source === player_op.deck)
+    return;
 
-	// Returns the destination container's element to transition to
-	function getDestinationElem(card, source, dest){
-		if (dest instanceof HandOpponent)
-			return dest.hidden_elem;
-		if (card.isSpecial() && dest instanceof Row)
-			return dest.elem_special;
-		if (dest instanceof Row || dest instanceof Hand || dest instanceof Weather){
-			if (dest.cards.length === 0)
-				return dest.elem;
-			let index = dest.getSortedIndex(card);
-			let dcard = dest.cards[index === dest.cards.length ? index-1 : index];
-			return dcard.elem;
-		}
-		return dest.elem;
-	}
+  let elem = card.elem;
+  let source = !container_source
+    ? card.elem
+    : getSourceElem(card, container_source, container_dest);
+  let dest = getDestinationElem(card, container_source, container_dest);
+  if (!isInDocument(elem)) source.appendChild(elem);
+  let x =
+    trueOffsetLeft(dest) -
+    trueOffsetLeft(elem) +
+    dest.offsetWidth / 2 -
+    elem.offsetWidth;
+  let y =
+    trueOffsetTop(dest) -
+    trueOffsetTop(elem) +
+    dest.offsetHeight / 2 -
+    elem.offsetHeight / 2;
+  if (
+    container_dest instanceof Row &&
+    container_dest.cards.length !== 0 &&
+    !card.isSpecial()
+  ) {
+    x +=
+      container_dest.getSortedIndex(card) === container_dest.cards.length
+        ? elem.offsetWidth / 2
+        : -elem.offsetWidth / 2;
+  }
+  if (card.holder.controller instanceof ControllerOpponent)
+    x += elem.offsetWidth / 2;
+  if (
+    container_source instanceof Row &&
+    container_dest instanceof Grave &&
+    !card.isSpecial()
+  ) {
+    let mid =
+      trueOffset(container_source.elem, true) +
+      container_source.elem.offsetWidth / 2;
+    x += trueOffset(elem, true) - mid;
+  }
+  if (container_source instanceof Row && container_dest === player_me.hand)
+    y *= 7 / 8;
+  await translate(elem, x, y);
+
+  // Returns true if the element is visible in the viewport
+  function isInDocument(elem) {
+    return elem.getBoundingClientRect().width !== 0;
+  }
+
+  // Returns the true offset of a nested element in the viewport
+  function trueOffset(elem, left) {
+    let total = 0;
+    let curr = elem;
+    while (curr) {
+      total += left ? curr.offsetLeft : curr.offsetTop;
+      curr = curr.parentElement;
+    }
+    return total;
+  }
+  function trueOffsetLeft(elem) {
+    return trueOffset(elem, true);
+  }
+  function trueOffsetTop(elem) {
+    return trueOffset(elem, false);
+  }
+
+  // Returns the source container's element to transition from
+  function getSourceElem(card, source, dest) {
+    if (source instanceof HandOpponent) return source.hidden_elem;
+    if (source instanceof Deck)
+      return source.elem.children[source.elem.children.length - 2];
+    return source.elem;
+  }
+
+  // Returns the destination container's element to transition to
+  function getDestinationElem(card, source, dest) {
+    if (dest instanceof HandOpponent) return dest.hidden_elem;
+    if (card.isSpecial() && dest instanceof Row) return dest.elem_special;
+    if (
+      dest instanceof Row ||
+      dest instanceof Hand ||
+      dest instanceof Weather
+    ) {
+      if (dest.cards.length === 0) return dest.elem;
+      let index = dest.getSortedIndex(card);
+      let dcard = dest.cards[index === dest.cards.length ? index - 1 : index];
+      return dcard.elem;
+    }
+    return dest.elem;
+  }
 }
 
 // Translates an element by x from the left and y from the top
-async function translate(elem, x, y){
-	let vw100 = 100 / document.getElementById("dimensions").offsetWidth;
-	x*=vw100;
-	y*=vw100 ;
-	elem.style.transform = "translate(" + x + "vw, " + y + "vw)";
-	let margin = elem.style.marginLeft;
-	elem.style.marginRight = -elem.offsetWidth*vw100 + "vw";
-	elem.style.marginLeft = "";
-	await sleep(499);
-	elem.style.transform = "";
-	elem.style.position = "";
-	elem.style.marginLeft = margin;
-	elem.style.marginRight = margin;
+async function translate(elem, x, y) {
+  let vw100 = 100 / document.getElementById("dimensions").offsetWidth;
+  x *= vw100;
+  y *= vw100;
+  elem.style.transform = "translate(" + x + "vw, " + y + "vw)";
+  let margin = elem.style.marginLeft;
+  elem.style.marginRight = -elem.offsetWidth * vw100 + "vw";
+  elem.style.marginLeft = "";
+  await sleep(499);
+  elem.style.transform = "";
+  elem.style.position = "";
+  elem.style.marginLeft = margin;
+  elem.style.marginRight = margin;
 }
 
 // Fades out an element until hidden over the duration
 async function fadeOut(elem, duration, delay) {
-	await fade(false, elem, duration, delay);
+  await fade(false, elem, duration, delay);
 }
 
 // Fades in an element until opaque over the duration
-async function fadeIn(elem, duration, delay){
-	await fade(true, elem, duration, delay);
+async function fadeIn(elem, duration, delay) {
+  await fade(true, elem, duration, delay);
 }
 
-// Fades an element over a duration 
-async function fade(fadeIn, elem, dur, delay){
-	if (delay)
-		await sleep(delay)
-	let op = fadeIn ?  0.1 : 1;
-	elem.style.opacity = op;
-	elem.style.filter = "alpha(opacity=" + (op * 100) + ")";
-	if (fadeIn)
-		elem.classList.remove("hide");
-	let timer = setInterval( async function() {
-		op += op * (fadeIn ? 0.1 : -0.1);
-		if (op >= 1) {
-			clearInterval(timer);
-			return;
-		} else if (op <= 0.1) {
-			elem.classList.add("hide");
-			elem.style.opacity = "";
-			elem.style.filter = "";
-			clearInterval(timer);
-			return;
-		}
-		elem.style.opacity = op;
-		elem.style.filter = "alpha(opacity=" + (op * 100) + ")";
-	}, dur/24);
+// Fades an element over a duration
+async function fade(fadeIn, elem, dur, delay) {
+  if (delay) await sleep(delay);
+  let op = fadeIn ? 0.1 : 1;
+  elem.style.opacity = op;
+  elem.style.filter = "alpha(opacity=" + op * 100 + ")";
+  if (fadeIn) elem.classList.remove("hide");
+  let timer = setInterval(async function () {
+    op += op * (fadeIn ? 0.1 : -0.1);
+    if (op >= 1) {
+      clearInterval(timer);
+      return;
+    } else if (op <= 0.1) {
+      elem.classList.add("hide");
+      elem.style.opacity = "";
+      elem.style.filter = "";
+      clearInterval(timer);
+      return;
+    }
+    elem.style.opacity = op;
+    elem.style.filter = "alpha(opacity=" + op * 100 + ")";
+  }, dur / 24);
 }
 
-//      Get Image paths   
-function iconURL(name, ext = "png"){
-	const blobUrl = getTexturePackBlob("icons/" + name, ext);
-	if (blobUrl) {
-		return `url('${blobUrl}')`;
-	}
-	return imgURL("icons/" + name, ext);
+//      Get Image paths
+function iconURL(name, ext = "png") {
+  const blobUrl = getTexturePackBlob("icons/" + name, ext);
+  if (blobUrl) {
+    return `url('${blobUrl}')`;
+  }
+  return imgURL("icons/" + name, ext);
 }
-function largeURL(name, ext="jpg"){
-	const blobUrl = getTexturePackBlob("lg/" + name, ext);
-	if (blobUrl) {
-		return `url('${blobUrl}')`;
-	}
-	return imgURL("lg/" + name, ext) 
+function largeURL(name, ext = "jpg") {
+  const blobUrl = getTexturePackBlob("lg/" + name, ext);
+  if (blobUrl) {
+    return `url('${blobUrl}')`;
+  }
+  return imgURL("lg/" + name, ext);
 }
-function smallURL(name, ext="jpg"){
-	const blobUrl = getTexturePackBlob("sm/" + name, ext);
-	if (blobUrl) {
-		return `url('${blobUrl}')`;
-	}
-	return imgURL("sm/" + name, ext);
+function smallURL(name, ext = "jpg") {
+  const blobUrl = getTexturePackBlob("sm/" + name, ext);
+  if (blobUrl) {
+    return `url('${blobUrl}')`;
+  }
+  return imgURL("sm/" + name, ext);
 }
 function imgURL(path, ext) {
-	const blobUrl = getTexturePackBlob("img/" + path + "." + ext + "");
-	if (blobUrl) {
-		return `url('${blobUrl}')`;
-	}
-	// return "url('img/" + path + "." + ext;
-	return "url('img/" + path + "." + ext + "')";
+  const blobUrl = getTexturePackBlob("img/" + path + "." + ext + "");
+  if (blobUrl) {
+    return `url('${blobUrl}')`;
+  }
+  // return "url('img/" + path + "." + ext;
+  return "url('img/" + path + "." + ext + "')";
 }
 
 // Returns true if n is an Number
-function isNumber(n) { 
-	return !isNaN(parseFloat(n)) && isFinite(n);
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 // Returns true if s is a String
-function isString(s){
-	return typeof(s) === 'string' || s instanceof String;
+function isString(s) {
+  return typeof s === "string" || s instanceof String;
 }
 
 // Returns a random integer in the range [0,n)
-function randomInt(n)  {
-	return Math.floor(Math.random() * n);
+function randomInt(n) {
+  return Math.floor(Math.random() * n);
 }
 
 // Pauses execution until the passed number of milliseconds as expired
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
   //return new Promise(resolve => setTimeout(() => {if (func) func(); return resolve();}, ms));
 }
 
 // Suspends execution until the predicate condition is met, checking every ms milliseconds
 function sleepUntil(predicate, ms) {
-	return new Promise(resolve => {
-		let timer = setInterval( function () {
-			if (predicate()) {
-				clearInterval(timer);
-				resolve();
-			}
-		}, ms)
-	});
+  return new Promise((resolve) => {
+    let timer = setInterval(function () {
+      if (predicate()) {
+        clearInterval(timer);
+        resolve();
+      }
+    }, ms);
+  });
 }
-
 
 // Remove circular references to create JSON.
 function removeCircularReferences(obj) {
-	const seen = new WeakSet();
-	return JSON.parse(JSON.stringify(obj, (key, value) => {
-			if (typeof value === "object" && value !== null) {
-					if (seen.has(value)) {
-							return;
-					}
-					seen.add(value);
-			}
-			return value;
-	}));
+  const seen = new WeakSet();
+  return JSON.parse(
+    JSON.stringify(obj, (key, value) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return;
+        }
+        seen.add(value);
+      }
+      return value;
+    }),
+  );
 }
 
+function createCardElement(card) {
+  let elem = document.createElement("div");
+  var tmp = card.faction + "_" + card.filename;
 
-function createCardElement(card){
-	let elem = document.createElement("div");
-	var tmp = card.faction + "_" + card.filename;
+  if (card.filename === "Gaunter_Leader") {
+    tmp = "neutral_Gaunter_Leader";
+  }
 
-if (card.filename === "Gaunter_Leader") {
-	tmp = "neutral_Gaunter_Leader";
+  elem.style.backgroundImage = smallURL(tmp);
+  elem.classList.add("card");
+  elem.addEventListener("click", () => ui.selectCard(card), false);
+
+  if (card.row === "leader") return elem;
+
+  let power = document.createElement("div");
+  elem.appendChild(power);
+  let bg;
+  if (card.hero) {
+    bg = "power_hero";
+    elem.classList.add("hero");
+  } else if (card.faction === "weather") {
+    bg = "power_" + card.abilities[0];
+  } else if (card.faction === "special") {
+    bg = "power_" + card.abilities[0];
+    elem.classList.add("special");
+  } else {
+    bg = "power_normal";
+  }
+  power.style.backgroundImage = iconURL(bg);
+
+  let row = document.createElement("div");
+  elem.appendChild(row);
+  if (
+    card.row === "close" ||
+    card.row === "ranged" ||
+    card.row === "siege" ||
+    card.row === "agile"
+  ) {
+    let num = document.createElement("div");
+    num.appendChild(document.createTextNode(card.basePower));
+    num.classList.add("center");
+    power.appendChild(num);
+    row.style.backgroundImage = iconURL("card_row_" + card.row);
+  }
+
+  let abi = document.createElement("div");
+  elem.appendChild(abi);
+  if (
+    card.faction !== "special" &&
+    card.faction !== "weather" &&
+    card.abilities.length > 0
+  ) {
+    let str = card.abilities[card.abilities.length - 1];
+    if (str === "cerys") str = "muster";
+    if (str.startsWith("avenger")) str = "avenger";
+    if (str === "scorch_c" || str == "scorch_r" || str === "scorch_s")
+      str = "scorch";
+    abi.style.backgroundImage = iconURL("card_ability_" + str);
+  } else if (card.row === "agile")
+    abi.style.backgroundImage = iconURL("card_ability_" + "agile");
+
+  elem.appendChild(document.createElement("div")); // animation overlay
+  return elem;
 }
-
-elem.style.backgroundImage = smallURL(tmp);
-	elem.classList.add("card");
-	elem.addEventListener("click", () => ui.selectCard(card), false);
-	
-	if (card.row === "leader")
-		return elem;
-	
-	let power = document.createElement("div");
-	elem.appendChild(power);
-	let bg;
-	if (card.hero) {
-		bg = "power_hero";
-		elem.classList.add("hero");
-	} else if (card.faction === "weather") {
-		bg = "power_" + card.abilities[0];
-	} else if (card.faction === "special") {
-		bg = "power_" + card.abilities[0];
-		elem.classList.add("special");
-	} else {
-		bg = "power_normal";
-	}
-	power.style.backgroundImage = iconURL(bg);
-	
-	let row = document.createElement("div");
-	elem.appendChild(row);
-	if (card.row === "close" || card.row === "ranged" || card.row === "siege" || card.row === "agile") {
-		let num = document.createElement("div");
-		num.appendChild( document.createTextNode(card.basePower) );
-		num.classList.add("center");
-		power.appendChild(num);
-		row.style.backgroundImage = iconURL("card_row_" + card.row);
-	}
-
-	let abi = document.createElement("div");
-	elem.appendChild(abi);
-	if (card.faction !== "special" && card.faction !== "weather" && card.abilities.length > 0) {
-		let str =  card.abilities[card.abilities.length-1];
-		if (str === "cerys")
-			str = "muster";
-		if (str.startsWith("avenger"))
-			str = "avenger";
-		if (str === "scorch_c" || str == "scorch_r" || str === "scorch_s")
-			str = "scorch";
-		abi.style.backgroundImage = iconURL("card_ability_" + str);
-	} else if (card.row === "agile")
-		abi.style.backgroundImage = iconURL("card_ability_" + "agile");
-	
-	elem.appendChild( document.createElement("div") ); // animation overlay
-	return elem;
-}
-
 
 function somCarta() {
-	var classes = ["card", "card-lg"];
-	for (var i = 0; i < classes.length; i++) {
-		var cartas = document.getElementsByClassName(classes[i]);
-		for (var j = 0; j < cartas.length; j++) {
-			if (cartas[j].id != "no_sound" && cartas[j].id != "no_hover") cartas[j].addEventListener("mouseover", function() {
-				tocar("card", false);
-			});
-		}
-	}
-	var tags = ["label", "a", "button"];
-	for (var i = 0; i < tags.length; i++) {
-		var rec = document.getElementsByTagName(tags[i]);
-		for (var j = 0; j < rec.length; j++) rec[j].addEventListener("mouseover", function() {
-			tocar("card", false);
-		});
-	}
-	var ids = ["pass-button", "toggle-music"];
-	for (var i = 0; i < ids.length; i++) document.getElementById(ids[i]).addEventListener("mouseover", function() {
-		tocar("card", false);
-	});
+  var classes = ["card", "card-lg"];
+  for (var i = 0; i < classes.length; i++) {
+    var cartas = document.getElementsByClassName(classes[i]);
+    for (var j = 0; j < cartas.length; j++) {
+      if (cartas[j].id != "no_sound" && cartas[j].id != "no_hover")
+        cartas[j].addEventListener("mouseover", function () {
+          tocar("card", false);
+        });
+    }
+  }
+  var tags = ["label", "a", "button"];
+  for (var i = 0; i < tags.length; i++) {
+    var rec = document.getElementsByTagName(tags[i]);
+    for (var j = 0; j < rec.length; j++)
+      rec[j].addEventListener("mouseover", function () {
+        tocar("card", false);
+      });
+  }
+  var ids = ["pass-button", "toggle-music"];
+  for (var i = 0; i < ids.length; i++)
+    document.getElementById(ids[i]).addEventListener("mouseover", function () {
+      tocar("card", false);
+    });
 }
 
 var lastSound = "";
@@ -4636,163 +5260,161 @@ var lastSound = "";
 //function tocar(arquivo, pararMusica) {
 //	console.log("[sfx] play: arquivo, pararMusica", arquivo, pararMusica)
 //	if (arquivo != lastSound && arquivo != "") {
-	//	var s = new Audio("sfx/" + arquivo + ".mp3");
-     //   if (pararMusica && ui.youtube && ui.youtube.getPlayerState() === YT.PlayerState.PLAYING) {
-	//		ui.youtube.pauseVideo();
-	//		ui.toggleMusic_elem.classList.add("fade");
-	//	}
-	//	lastSound = arquivo;
-	//	s.play();
-	//	setTimeout(function() {
-	//		lastSound = "";
-	//	}, 50);
-	//}
+//	var s = new Audio("sfx/" + arquivo + ".mp3");
+//   if (pararMusica && ui.youtube && ui.youtube.getPlayerState() === YT.PlayerState.PLAYING) {
+//		ui.youtube.pauseVideo();
+//		ui.toggleMusic_elem.classList.add("fade");
+//	}
+//	lastSound = arquivo;
+//	s.play();
+//	setTimeout(function() {
+//		lastSound = "";
+//	}, 50);
+//}
 //}
 
 // cache:
 async function loadPackedSFX() {
-	var loadPackedSFX_pref = "[sfx] [zip]";
+  var loadPackedSFX_pref = "[sfx] [zip]";
 
-	console.log(loadPackedSFX_pref, " loading packed.zip");
+  console.log(loadPackedSFX_pref, " loading packed.zip");
 
-    const response = await fetch("sfx/packed.zip");
-    const buffer = await response.arrayBuffer();
-	console.log(loadPackedSFX_pref, " buffer ", buffer);
-    const zip = await JSZip.loadAsync(buffer);
+  const response = await fetch("sfx/packed.zip");
+  const buffer = await response.arrayBuffer();
+  console.log(loadPackedSFX_pref, " buffer ", buffer);
+  const zip = await JSZip.loadAsync(buffer);
 
-    const files = Object.keys(zip.files);
-console.log(loadPackedSFX_pref, " files ", files);
-    for (const filename of files) {
-        if (!filename.endsWith(".mp3")) continue;
+  const files = Object.keys(zip.files);
+  console.log(loadPackedSFX_pref, " files ", files);
+  for (const filename of files) {
+    if (!filename.endsWith(".mp3")) continue;
 
-        const blob = await zip.files[filename].async("blob");
+    const blob = await zip.files[filename].async("blob");
 
-        const url = URL.createObjectURL(blob);
+    const url = URL.createObjectURL(blob);
 
-        const cleanName = filename
-            .replace("sfx/", "")
-            .replace(".mp3", "");
+    const cleanName = filename.replace("sfx/", "").replace(".mp3", "");
 
-        audio_cache[cleanName] = url;
+    audio_cache[cleanName] = url;
 
-        console.log(loadPackedSFX_pref, " cached:", cleanName);
-    }
+    console.log(loadPackedSFX_pref, " cached:", cleanName);
+  }
 
-    console.log(loadPackedSFX_pref, " all sounds loaded");
+  console.log(loadPackedSFX_pref, " all sounds loaded");
 }
 // new:
 function tocar(arquivo, pararMusica) {
-	if (!arquivo.includes("card") || !arquivo.includes("game_buy")){
-		if (playBlock[btoa(arquivo)]) {
-			if (playBlock[btoa(arquivo)] === 1){
-				playBlock[btoa(arquivo)] = 2;
-//	console.log("TOCAR PLAY", playBlock, arquivo);
-			} else {
-//			console.log("TOCAR BLOCK PLAY", playBlock, arquivo);
-    	return false;
-			}
-  } else {
-	playBlock[btoa(arquivo)] = 2;
-//	console.log("TOCAR PLAY", playBlock, arquivo);
+  if (!arquivo.includes("card") || !arquivo.includes("game_buy")) {
+    if (playBlock[btoa(arquivo)]) {
+      if (playBlock[btoa(arquivo)] === 1) {
+        playBlock[btoa(arquivo)] = 2;
+        //	console.log("TOCAR PLAY", playBlock, arquivo);
+      } else {
+        //			console.log("TOCAR BLOCK PLAY", playBlock, arquivo);
+        return false;
+      }
+    } else {
+      playBlock[btoa(arquivo)] = 2;
+      //	console.log("TOCAR PLAY", playBlock, arquivo);
+    }
   }
-}
 
-	// console.log("TOCAR", arquivo, pararMusica);
-	//console.log("[sfx] tocar() called", "\n[sfx] params -> arquivo:", arquivo, "| pararMusica:", pararMusica);
-	//console.log("[sfx] current lastSound:", lastSound);
+  // console.log("TOCAR", arquivo, pararMusica);
+  //console.log("[sfx] tocar() called", "\n[sfx] params -> arquivo:", arquivo, "| pararMusica:", pararMusica);
+  //console.log("[sfx] current lastSound:", lastSound);
 
-	if (arquivo != lastSound && arquivo != "") {
-	//	console.log("[sfx] sound allowed to play");
+  if (arquivo != lastSound && arquivo != "") {
+    //	console.log("[sfx] sound allowed to play");
 
-	
-	var audioPath = getTexturePackBlob("sfx/" + arquivo + ".mp3") || audio_cache[arquivo] || ("sfx/" + arquivo + ".mp3");
+    var audioPath =
+      getTexturePackBlob("sfx/" + arquivo + ".mp3") ||
+      audio_cache[arquivo] ||
+      "sfx/" + arquivo + ".mp3";
 
-// console.log("[sfx] creating Audio with path:", audioPath);
+    // console.log("[sfx] creating Audio with path:", audioPath);
 
-var s = new Audio(audioPath);
+    var s = new Audio(audioPath);
 
-		if (pararMusica) {
-		//	console.log("[sfx] pararMusica is true");
+    if (pararMusica) {
+      //	console.log("[sfx] pararMusica is true");
 
-			if (ui.youtube) {
-			//	console.log("[sfx] youtube player exists");
+      if (ui.youtube) {
+        //	console.log("[sfx] youtube player exists");
 
-				var state = ui.youtube.getPlayerState();
-			//	console.log("[sfx] youtube player state:", state);
+        var state = ui.youtube.getPlayerState();
+        //	console.log("[sfx] youtube player state:", state);
 
-				if (state === YT.PlayerState.PLAYING) {
-			//		console.log("[sfx] youtube is playing -> pausing video");
+        if (state === YT.PlayerState.PLAYING) {
+          //		console.log("[sfx] youtube is playing -> pausing video");
 
-					ui.youtube.pauseVideo();
+          ui.youtube.pauseVideo();
 
-					if (ui.toggleMusic_elem) {
-			//			console.log("[sfx] adding fade class to toggleMusic element");
-						ui.toggleMusic_elem.classList.add("fade");
-					} else {
-			//			console.warn("[sfx] ui.toggleMusic_elem not found");
-					}
-				} else {
-			//		console.log("[sfx] youtube exists but is not playing");
-				}
-			} else {
-			//	console.warn("[sfx] ui.youtube does not exist");
-			}
-		} else {
-		//	console.log("[sfx] pararMusica is false -> not touching music");
-		}
+          if (ui.toggleMusic_elem) {
+            //			console.log("[sfx] adding fade class to toggleMusic element");
+            ui.toggleMusic_elem.classList.add("fade");
+          } else {
+            //			console.warn("[sfx] ui.toggleMusic_elem not found");
+          }
+        } else {
+          //		console.log("[sfx] youtube exists but is not playing");
+        }
+      } else {
+        //	console.warn("[sfx] ui.youtube does not exist");
+      }
+    } else {
+      //	console.log("[sfx] pararMusica is false -> not touching music");
+    }
 
-		lastSound = arquivo;
-		//console.log("[sfx] lastSound updated to:", lastSound);
+    lastSound = arquivo;
+    //console.log("[sfx] lastSound updated to:", lastSound);
 
-		s.play()
-			.then(() => {
-				if (playBlock[btoa(arquivo)]) {
-	playBlock[btoa(arquivo)] = 1;
-//	console.log("TOCAR DEL NOW:", playBlock, arquivo);
-	}
-			//	console.log("[sfx] audio playback started successfully");
-			})
-			.catch((err) => {
-				if (playBlock[btoa(arquivo)]) {
-	playBlock[btoa(arquivo)]  = 1;
-//	console.log("TOCAR DEL NOW:", playBlock, arquivo);
-	}
-			//	console.error("[sfx] audio playback failed:", err);
-			});
+    s.play()
+      .then(() => {
+        if (playBlock[btoa(arquivo)]) {
+          playBlock[btoa(arquivo)] = 1;
+          //	console.log("TOCAR DEL NOW:", playBlock, arquivo);
+        }
+        //	console.log("[sfx] audio playback started successfully");
+      })
+      .catch((err) => {
+        if (playBlock[btoa(arquivo)]) {
+          playBlock[btoa(arquivo)] = 1;
+          //	console.log("TOCAR DEL NOW:", playBlock, arquivo);
+        }
+        //	console.error("[sfx] audio playback failed:", err);
+      });
 
-		setTimeout(function () {
-		//	console.log("[sfx] resetting lastSound after timeout");
-			lastSound = "";
-		}, 50);
-
-	} else {
-		if (arquivo == "") {
-			//console.warn("[sfx] blocked: arquivo is empty");
-		} else {
-		//	console.warn("[sfx] blocked: same as lastSound:", arquivo);
-		}
-	}
+    setTimeout(function () {
+      //	console.log("[sfx] resetting lastSound after timeout");
+      lastSound = "";
+    }, 50);
+  } else {
+    if (arquivo == "") {
+      //console.warn("[sfx] blocked: arquivo is empty");
+    } else {
+      //	console.warn("[sfx] blocked: same as lastSound:", arquivo);
+    }
+  }
 }
 
 /*----------------------------------------------------*/
 
 function onYouTubeIframeAPIReady() {
-	ui.initYouTube();
+  ui.initYouTube();
 }
 
 function iniciarMusica(bypass = false) {
-	try {
-		if (ui.youtube.getPlayerState() !== YT.PlayerState.PLAYING) {
-			ui.youtube.playVideo(); 
-			console.log(bypass)
-			if (bypass){
-				ui.stopYouTube();
-			}
-			ui.toggleMusic_elem.classList.remove("fade");
-		}
-	} catch(err) {}
+  try {
+    if (ui.youtube.getPlayerState() !== YT.PlayerState.PLAYING) {
+      ui.youtube.playVideo();
+      console.log(bypass);
+      if (bypass) {
+        ui.stopYouTube();
+      }
+      ui.toggleMusic_elem.classList.remove("fade");
+    }
+  } catch (err) {}
 }
-
 
 var ui = new UI();
 
@@ -4805,77 +5427,79 @@ ui.enablePlayer(false);
 let dm = new DeckMaker();
 
 function cartaNaLinha(id, carta) {
-	if (id.charAt(0) == "f") {
-		if (!carta.hero) {
-			if (carta.name != "Decoy") {
-				var linha = parseInt(id.charAt(1));
-				if (linha == 1 || linha == 6) tocar("common3", false);
-				else if (linha == 2 || linha == 5) tocar("common2", false);
-				else if (linha == 3 || linha == 4) tocar("common1", false);
-			} else tocar("menu_buy", false);
-		} else tocar("hero", false);
-	}
+  if (id.charAt(0) == "f") {
+    if (!carta.hero) {
+      if (carta.name != "Decoy") {
+        var linha = parseInt(id.charAt(1));
+        if (linha == 1 || linha == 6) tocar("common3", false);
+        else if (linha == 2 || linha == 5) tocar("common2", false);
+        else if (linha == 3 || linha == 4) tocar("common1", false);
+      } else tocar("menu_buy", false);
+    } else tocar("hero", false);
+  }
 }
 
 function inicio() {
-	var classe = document.getElementsByClassName("abs");
-	for (var i = 0; i < classe.length; i++) classe[i].style.display = "none";
-	iniciou = true;
-	tocar("menu_opening", false);
-	//openFullscreen();
-	iniciarMusica(false);
+  var classe = document.getElementsByClassName("abs");
+  for (var i = 0; i < classe.length; i++) classe[i].style.display = "none";
+  iniciou = true;
+  tocar("menu_opening", false);
+  //openFullscreen();
+  iniciarMusica(false);
 }
 
-var iniciou = false, isLoaded = false;
-window.onload = function() {
-
-	document.getElementById("load_text").style.display = "none";
-	document.getElementById("button_start").style.display = "inline-block";
-	customizationElem.style.display = "";
-	document.getElementById("toggle-music").style.display = "";
-	document.getElementsByTagName("main")[0].style.display = "";
-	document.getElementById("button_start").addEventListener("click", function() {
-		inicio();
-		// cache audio:
-		try {
-			console.log("[sfx] In init: loadPackedSFX()");
-			loadPackedSFX();
-		} catch (e) {
-			console.log("[sfx] In init: loadPackedSFX(); err", e);
-		}
+var iniciou = false,
+  isLoaded = false;
+window.onload = function () {
+  document.getElementById("load_text").style.display = "none";
+  document.getElementById("button_start").style.display = "inline-block";
+  customizationElem.style.display = "";
+  document.getElementById("toggle-music").style.display = "";
+  document.getElementsByTagName("main")[0].style.display = "";
+  document
+    .getElementById("button_start")
+    .addEventListener("click", function () {
+      inicio();
+      // cache audio:
+      try {
+        console.log("[sfx] In init: loadPackedSFX()");
+        loadPackedSFX();
+      } catch (e) {
+        console.log("[sfx] In init: loadPackedSFX(); err", e);
+      }
     });
-	isLoaded = true;
-}
+  isLoaded = true;
+};
 
 let spacebarPressTimer;
 let isSpacebarPressed = false;
 
 function handleKeyDown(event) {
-    if (event.code === 'Space' && !isSpacebarPressed) {
-        isSpacebarPressed = true;
-        spacebarPressTimer = setTimeout(() => {
-					document.removeEventListener('keydown', handleKeyDown);
-					document.removeEventListener('keyup', handleKeyUp);
-					passButton.classList.remove("loading");
-          player_me.passRound();
-					comp_and_send(socket, JSON.stringify({ type: "pass", player: playerId }));
-        }, 2 * 1000); 
-        startLoadingEffect();
-    }
+  if (event.code === "Space" && !isSpacebarPressed) {
+    isSpacebarPressed = true;
+    spacebarPressTimer = setTimeout(() => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+      passButton.classList.remove("loading");
+      player_me.passRound();
+      comp_and_send(socket, JSON.stringify({ type: "pass", player: playerId }));
+    }, 2 * 1000);
+    startLoadingEffect();
+  }
 }
 
 function handleKeyUp(event) {
-    if (event.code === 'Space') {
-        isSpacebarPressed = false;
-        clearTimeout(spacebarPressTimer);
-        stopLoadingEffect();
-    }
+  if (event.code === "Space") {
+    isSpacebarPressed = false;
+    clearTimeout(spacebarPressTimer);
+    stopLoadingEffect();
+  }
 }
 
 function startLoadingEffect() {
-	passButton.classList.add('loading');
+  passButton.classList.add("loading");
 }
 
 function stopLoadingEffect() {
-	passButton.classList.remove('loading');
+  passButton.classList.remove("loading");
 }

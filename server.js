@@ -11,13 +11,11 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-require('dotenv').config();
+require("dotenv").config();
 
 const PORT = process.env.PORT || 8081;
 
-app.use(cors({ origin: '*' }));
-
-
+app.use(cors({ origin: "*" }));
 
 let sessions = {};
 const joinIndex = {};
@@ -25,13 +23,13 @@ let players = [];
 let nextPlayerId = 1;
 
 let database = {
-  users: []
+  users: [],
 };
 
 let databaseOriginal = "";
 let playerSockets = {};
 
-console.warn("PROCCESS ENV",  process.env, process.env.VERIF || false);
+console.warn("PROCCESS ENV", process.env, process.env.VERIF || false);
 
 const webhookUrl = process.env.WEBHOOK_LOGS_URL;
 
@@ -63,13 +61,9 @@ console.log = (message) => {
 function encryptPassword(password) {
   const salt = process.env.AUTH_HEX;
 
-  const hash = crypto.pbkdf2Sync(
-    password,
-    salt,
-    100000,
-    64,
-    "sha512"
-  ).toString("hex");
+  const hash = crypto
+    .pbkdf2Sync(password, salt, 100000, 64, "sha512")
+    .toString("hex");
 
   return `${salt}:${hash}`;
 }
@@ -80,69 +74,51 @@ function decryptPassword(stored) {
 }
 
 async function loadDatabase() {
-
   const response = await fetch(
-    `${process.env.XANO_URL}/database?id=${process.env.DB_ID}`
+    `${process.env.XANO_URL}/database?id=${process.env.DB_ID}`,
   );
 
   const json = await response.json();
 
   if (!json.ok) {
-    throw new Error(
-      "Failed loading database"
-    );
+    throw new Error("Failed loading database");
   }
 
   database = json.db || {
-    users: []
+    users: [],
   };
 
-  databaseOriginal =
-    JSON.stringify(database);
+  databaseOriginal = JSON.stringify(database);
 
-  console.log(
-    `Loaded ${database.users.length} users`
-  );
+  console.log(`Loaded ${database.users.length} users`);
 }
 
 async function saveDatabase() {
-
-  const current =
-    JSON.stringify(database);
+  const current = JSON.stringify(database);
 
   if (current === databaseOriginal) {
     return false;
   }
 
-  const response = await fetch(
-    `${process.env.XANO_URL}/database`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type":
-          "application/json"
-      },
-      body: JSON.stringify({
-        id: process.env.DB_ID,
-        overwrite: database
-      })
-    }
-  );
+  const response = await fetch(`${process.env.XANO_URL}/database`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      id: process.env.DB_ID,
+      overwrite: database,
+    }),
+  });
 
-  const json =
-    await response.json();
+  const json = await response.json();
 
   if (json.ok) {
+    database = json.db || database;
 
-    database =
-      json.db || database;
+    databaseOriginal = JSON.stringify(database);
 
-    databaseOriginal =
-      JSON.stringify(database);
-
-    console.log(
-      "Database synced"
-    );
+    console.log("Database synced");
   }
 
   return json;
@@ -150,118 +126,115 @@ async function saveDatabase() {
 
 // await loadDatabase();
 
-
 // ---------- helpers ----------
 function sha256(buffer) {
-    return crypto.createHash("sha256").update(buffer).digest("hex");
+  return crypto.createHash("sha256").update(buffer).digest("hex");
 }
 
 function percentSaved(before, after) {
-    return ((1 - after / before) * 100).toFixed(3);
+  return ((1 - after / before) * 100).toFixed(3);
 }
 
 function compressPayload(jsonString) {
-    const input = Buffer.from(jsonString, "utf8");
-    const compressed = zlib.deflateRawSync(input, { level: 9 });
-    console.log(`Bytes before ${input.length}\nBytes after ${compressed.length}\nCompressed% ${percentSaved(input.length, compressed.length)}%\nPayload sha ${sha256(compressed)}`);
-    console.log(jsonString);
-    return compressed;
+  const input = Buffer.from(jsonString, "utf8");
+  const compressed = zlib.deflateRawSync(input, { level: 9 });
+  console.log(
+    `Bytes before ${input.length}\nBytes after ${compressed.length}\nCompressed% ${percentSaved(input.length, compressed.length)}%\nPayload sha ${sha256(compressed)}`,
+  );
+  console.log(jsonString);
+  return compressed;
 }
 
 function compressString(inputString) {
   console.log(`Input for session id ${JSON.stringify(inputString)}`);
-    const input = Buffer.from(inputString, "utf8");
+  const input = Buffer.from(inputString, "utf8");
 
-    const compressed = zlib.deflateRawSync(input, {
-        level: 9,
-    });
+  const compressed = zlib.deflateRawSync(input, {
+    level: 9,
+  });
 
-    console.log(
-        `Bytes before ${input.length}\n` +
-        `Bytes after ${compressed.length}\n` +
-        `Compressed% ${percentSaved(input.length, compressed.length)}%\n` +
-        `Payload sha ${sha256(compressed)}`
-    );
+  console.log(
+    `Bytes before ${input.length}\n` +
+      `Bytes after ${compressed.length}\n` +
+      `Compressed% ${percentSaved(input.length, compressed.length)}%\n` +
+      `Payload sha ${sha256(compressed)}`,
+  );
 
-    console.log(`String compressed: ${inputString}`);
+  console.log(`String compressed: ${inputString}`);
 
-    return compressed;
+  return compressed;
 }
 
 function decompressPayload(buffer) {
   console.log(zlib.inflateRawSync(buffer).toString("utf8"));
-    return zlib.inflateRawSync(buffer).toString("utf8");
+  return zlib.inflateRawSync(buffer).toString("utf8");
 }
-
 
 // ---------- compress ----------
 //function compressPayload(jsonString) {
-   // const input = Buffer.from(jsonString, "utf8");
+// const input = Buffer.from(jsonString, "utf8");
 
-   // const compressed = zlib.brotliCompressSync(input, {
-   //     params: {
-   //         [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
-   //         [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_TEXT
-   //     }
-  //  });
+// const compressed = zlib.brotliCompressSync(input, {
+//     params: {
+//         [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+//         [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_TEXT
+//     }
+//  });
 
-    
 //
- //   return compressed;
+//   return compressed;
 //}
 
 // ---------- decompress ----------
 //function decompressPayload(buffer) {
-   // const raw = zlib.brotliDecompressSync(buffer);
-  //  return raw.toString("utf8");
+// const raw = zlib.brotliDecompressSync(buffer);
+//  return raw.toString("utf8");
 //}
 
 // ---------- send compressed ----------
 function comp_and_send(ws, objectOrString) {
-    try {
-        if (ws.readyState !== WebSocket.OPEN) {
-            console.log("Socket send failed reason: socket not open");
-            return false;
-        }
-
-        const json =
-            typeof objectOrString === "string"
-                ? objectOrString
-                : JSON.stringify(objectOrString);
-
-        const compressed = compressPayload(json);
-
-        ws.send(compressed, { binary: true }, (err) => {
-            if (err) {
-                console.log("Socket send failed reason: " + err.message);
-            }
-        });
-
-        return true;
-
-    } catch (err) {
-        console.log("Socket send failed reason: " + err.message);
-        return false;
+  try {
+    if (ws.readyState !== WebSocket.OPEN) {
+      console.log("Socket send failed reason: socket not open");
+      return false;
     }
+
+    const json =
+      typeof objectOrString === "string"
+        ? objectOrString
+        : JSON.stringify(objectOrString);
+
+    const compressed = compressPayload(json);
+
+    ws.send(compressed, { binary: true }, (err) => {
+      if (err) {
+        console.log("Socket send failed reason: " + err.message);
+      }
+    });
+
+    return true;
+  } catch (err) {
+    console.log("Socket send failed reason: " + err.message);
+    return false;
+  }
 }
 
 // ---------- receive compressed ----------
 function decodeIncoming(message) {
-    try {
-        const json = decompressPayload(message);
-        return JSON.parse(json);
-    } catch (err) {
-        console.log("Socket decode failed reason: " + err.message);
-        return null;
-    }
+  try {
+    const json = decompressPayload(message);
+    return JSON.parse(json);
+  } catch (err) {
+    console.log("Socket decode failed reason: " + err.message);
+    return null;
+  }
 }
-
 
 let genlng = 2;
 // Helper function to generate a random 4-character code
 function generateCode() {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let code = '';
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let code = "";
   for (let i = 0; i < genlng; i++) {
     code += characters.charAt(Math.floor(Math.random() * characters.length));
   }
@@ -299,97 +272,75 @@ app.get("/wake", (req, res) => {
   res.json({ ok: "ok" });
 });
 app.get("/api/custom_sync", (req, res) => {
-    res.setHeader(
-        "Access-Control-Expose-Headers",
-        "C-L, Content-Length"
-    );
+  res.setHeader("Access-Control-Expose-Headers", "C-L, Content-Length");
 
-    res.setHeader("DrMinewordGwentServer", "yes");
+  res.setHeader("DrMinewordGwentServer", "yes");
 
-    const sessionId = req.query.session;
+  const sessionId = req.query.session;
 
-    if (!sessionId) {
-        return res.status(400).json({ error: "Missing session" });
-    }
+  if (!sessionId) {
+    return res.status(400).json({ error: "Missing session" });
+  }
 
-    const session = sessions[sessionId];
+  const session = sessions[sessionId];
 
-    if (!session) {
-        return res.status(404).json({ error: "Session not found" });
-    }
+  if (!session) {
+    return res.status(404).json({ error: "Session not found" });
+  }
 
-    const payload = JSON.stringify(session.custom.conf ?? null);
-    const length = Buffer.byteLength(payload);
+  const payload = JSON.stringify(session.custom.conf ?? null);
+  const length = Buffer.byteLength(payload);
 
-    console.log(
-        `Req download custom-server config Content-Length: ${length}`
-    );
+  console.log(`Req download custom-server config Content-Length: ${length}`);
 
-    res.setHeader("Content-Type", "application/json");
-    res.setHeader("C-L", length);
+  res.setHeader("Content-Type", "application/json");
+  res.setHeader("C-L", length);
 
-    // optional
-    res.setHeader("Content-Length", length);
+  // optional
+  res.setHeader("Content-Length", length);
 
-    return res.end(payload);
+  return res.end(payload);
 });
 app.get("*", (_, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 app.post("/api/register", async (req, res) => {
-
   try {
+    const { playerId, login, password } = req.body;
 
-    const {
-      playerId,
-      login,
-      password
-    } = req.body;
-
-    if (
-      !playerId ||
-      !login ||
-      !password
-    ) {
+    if (!playerId || !login || !password) {
       return res.status(400).json({
         ok: false,
-        error: "missingFields"
+        error: "missingFields",
       });
     }
 
-    const ws =
-      playerSockets[playerId];
+    const ws = playerSockets[playerId];
 
     if (!ws) {
       return res.status(404).json({
         ok: false,
-        error: "playerNotConnected"
+        error: "playerNotConnected",
       });
     }
 
-    const exists =
-      database.users.find(
-        u =>
-          u.login.toLowerCase()
-          === login.toLowerCase()
-      );
+    const exists = database.users.find(
+      (u) => u.login.toLowerCase() === login.toLowerCase(),
+    );
 
     if (exists) {
       return res.status(409).json({
         ok: false,
-        error: "loginTaken"
+        error: "loginTaken",
       });
     }
 
     const user = {
-
       id: crypto.randomUUID(),
 
       login,
 
-      password:
-        encryptPassword(password)
-
+      password: encryptPassword(password),
     };
 
     database.users.push(user);
@@ -399,118 +350,96 @@ app.post("/api/register", async (req, res) => {
     ws.authenticated = true;
     ws.user = user;
 
-    comp_and_send(ws,{
+    comp_and_send(ws, {
       type: "welcome",
       playerId: ws.playerId,
-      login: user.login
+      login: user.login,
     });
 
     return res.json({
       ok: true,
       user: {
         id: user.id,
-        login: user.login
-      }
+        login: user.login,
+      },
     });
-
-  }
-  catch (err) {
-
+  } catch (err) {
     console.log(err);
 
     return res.status(500).json({
       ok: false,
-      error: "serverError"
+      error: "serverError",
     });
   }
-
 });
 app.post("/api/login", async (req, res) => {
-
   try {
+    const { playerId, login, password } = req.body;
 
-    const {
-      playerId,
-      login,
-      password
-    } = req.body;
-
-    if (
-      !playerId ||
-      !login ||
-      !password
-    ) {
+    if (!playerId || !login || !password) {
       return res.status(400).json({
         ok: false,
-        error: "missingFields"
+        error: "missingFields",
       });
     }
 
-    const ws =
-      playerSockets[playerId];
+    const ws = playerSockets[playerId];
 
     if (!ws) {
       return res.status(404).json({
         ok: false,
-        error: "playerNotConnected"
+        error: "playerNotConnected",
       });
     }
 
-    const user =
-      database.users.find(
-        u =>
-          u.login.toLowerCase()
-          === login.toLowerCase()
-      );
+    const user = database.users.find(
+      (u) => u.login.toLowerCase() === login.toLowerCase(),
+    );
 
     if (!user) {
       return res.status(401).json({
         ok: false,
-        error: "invalidCredentials"
+        error: "invalidCredentials",
       });
     }
 
-    console.log(`LOGGIN ATTEMPT FOR: ${JSON.stringify(user)} wich password input\n-# ${encryptPassword(password)}}`);
+    console.log(
+      `LOGGIN ATTEMPT FOR: ${JSON.stringify(user)} wich password input\n-# ${encryptPassword(password)}}`,
+    );
     var pass_check = user.password;
     const realPassword = pass_check;
 
-    if (
-      realPassword !== encryptPassword(password)
-    ) {
+    if (realPassword !== encryptPassword(password)) {
       return res.status(401).json({
         ok: false,
-        error: "invalidCredentials"
+        error: "invalidCredentials",
       });
     }
 
     ws.authenticated = true;
     ws.user = user;
 
-    comp_and_send(ws,{
+    comp_and_send(ws, {
       type: "welcome",
       playerId: ws.playerId,
-      login: user.login
+      login: user.login,
     });
 
     return res.json({
       ok: true,
       user: {
         id: user.id,
-        login: user.login
-      }
+        login: user.login,
+      },
     });
-
-  }
-  catch (err) {
-
+  } catch (err) {
     console.log(err);
 
     return res.status(500).json({
       ok: false,
-      error: "serverError"
+      error: "serverError",
     });
   }
-
 });
 app.post("/api/message", (req, res) => {
   const { session_id, player_id, message, type } = req.body;
@@ -518,14 +447,14 @@ app.post("/api/message", (req, res) => {
   // Basic validation
   if (!session_id || !player_id) {
     return res.status(400).json({
-      error: "session_id and player_id required"
+      error: "session_id and player_id required",
     });
   }
 
   // Only allow chat messages
   if (type !== "chat") {
     return res.status(403).json({
-      error: "You are not allowed to use that type!!!"
+      error: "You are not allowed to use that type!!!",
     });
   }
 
@@ -533,34 +462,32 @@ app.post("/api/message", (req, res) => {
   const session = sessions[session_id];
   if (!session) {
     return res.status(404).json({
-      error: "Session not found"
+      error: "Session not found",
     });
   }
 
   // Player validation
-  const targetPlayer = session.players.find(
-    p => p.playerId === player_id
-  );
+  const targetPlayer = session.players.find((p) => p.playerId === player_id);
 
   if (!targetPlayer) {
     return res.status(404).json({
-      error: "Player not found in session"
+      error: "Player not found in session",
     });
   }
 
   // Message validation
   if (typeof message !== "string") {
     return res.status(400).json({
-      error: "Message must be text"
+      error: "Message must be text",
     });
   }
-    // ---- RATE LIMIT (1 second) ----
+  // ---- RATE LIMIT (1 second) ----
   const key = `${session_id}:${player_id}`;
   const now = Date.now();
 
   if (lastMessageTime[key] && now - lastMessageTime[key] < 1000) {
     return res.status(429).json({
-      error: "You're sending messages too fast"
+      error: "You're sending messages too fast",
     });
   }
 
@@ -570,10 +497,7 @@ app.post("/api/message", (req, res) => {
   let cleanMessage = message.trim();
 
   // Remove control / weird invisible chars
-  cleanMessage = cleanMessage.replace(
-    /[\x00-\x1F\x7F-\x9F]/g,
-    ""
-  );
+  cleanMessage = cleanMessage.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
 
   // Collapse excessive spaces
   cleanMessage = cleanMessage.replace(/\s{2,}/g, " ");
@@ -583,51 +507,45 @@ app.post("/api/message", (req, res) => {
 
   if (cleanMessage.length === 0) {
     return res.status(400).json({
-      error: "Message cannot be empty"
+      error: "Message cannot be empty",
     });
   }
 
   if (cleanMessage.length > MAX_MESSAGE_LENGTH) {
     return res.status(400).json({
-      error: `Message too long (max ${MAX_MESSAGE_LENGTH} characters)`
+      error: `Message too long (max ${MAX_MESSAGE_LENGTH} characters)`,
     });
   }
 
   // Optional: block suspicious unicode spam
   // Allows normal unicode text/emojis while filtering odd chars
-  const suspiciousPattern =
-    /[\u202E\u202D\u2066-\u2069]/g;
+  const suspiciousPattern = /[\u202E\u202D\u2066-\u2069]/g;
 
-  cleanMessage = cleanMessage.replace(
-    suspiciousPattern,
-    ""
-  );
+  cleanMessage = cleanMessage.replace(suspiciousPattern, "");
 
   const payload = {
     type: "chat",
     message: cleanMessage,
     session_id,
-    player_id
+    player_id,
   };
   const payload_out = {
-    message: cleanMessage
+    message: cleanMessage,
   };
 
   try {
-    targetPlayer.send(
-      compressPayload(JSON.stringify(payload))
-    );
+    targetPlayer.send(compressPayload(JSON.stringify(payload)));
 
     // Return sent message too
     return res.json({
       ok: true,
-      sent: payload_out
+      sent: payload_out,
     });
   } catch (e) {
     console.error(e);
 
     return res.status(500).json({
-      error: "Failed to send message"
+      error: "Failed to send message",
     });
   }
 });
@@ -637,17 +555,17 @@ function broadcastToSession(sessionId, payload) {
   if (!session) return false;
   let payload2 = null;
   let data = null;
-  session.players.forEach(player => {
+  session.players.forEach((player) => {
     try {
       if (player.readyState === WebSocket.OPEN) {
         console.log(`Sending mod msg to ${JSON.stringify(player.playerId)}`);
-         payload2 = {
-    type: "moderation",
-    message: payload || null,
-    session_id: sessionId,
-    player_id: player.playerId
-  };
-  data = compressPayload(JSON.stringify(payload2));
+        payload2 = {
+          type: "moderation",
+          message: payload || null,
+          session_id: sessionId,
+          player_id: player.playerId,
+        };
+        data = compressPayload(JSON.stringify(payload2));
         player.send(data);
       }
     } catch (e) {
@@ -658,22 +576,19 @@ function broadcastToSession(sessionId, payload) {
   return true;
 }
 riskinfo = "{}";
-wss.on('connection', async (ws, req) => {
+wss.on("connection", async (ws, req) => {
   ws.authenticated = false;
   ws.user = null;
   ws.playerId = await generatePlayerId(req);
 
   playerSockets[ws.playerId] = ws;
-  
+
   const ip = getClientIp(req);
-  const ip2 = crypto
-    .createHash("sha256")
-    .update(ip)
-    .digest("hex")
+  const ip2 = crypto.createHash("sha256").update(ip).digest("hex");
   const ip_censor = ip.replace(
-  /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/,
-  (_, a, b, c, d) => `${a}.###.###.###`
-);;
+    /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/,
+    (_, a, b, c, d) => `${a}.###.###.###`,
+  );
   console.log(`-# Ip connected: ${ip_censor} hash ${ip2}`);
   players.push(ws);
 
@@ -684,19 +599,21 @@ wss.on('connection', async (ws, req) => {
     const res = await fetch(`http://ip-api.com/json/${ip}`);
     geo = await res.json();
     geo.query = ip_censor;
-    const res2 = await fetch(`https://proxycheck.io/v2/${ip}?key=111111-222222-333333-444444&vpn=3&asn=1&risk=2`);
+    const res2 = await fetch(
+      `https://proxycheck.io/v2/${ip}?key=111111-222222-333333-444444&vpn=3&asn=1&risk=2`,
+    );
     geo2 = await res2.json();
     geo.risk = {
       vpn: geo2[ip].vpn,
       risk: geo2[ip].risk,
       type: geo2[ip].type,
-      proxy: geo2[ip].proxy
-    }
+      proxy: geo2[ip].proxy,
+    };
     riskinfo = JSON.stringify({
       vpn: geo2[ip].vpn,
       risk: geo2[ip].risk,
       type: geo2[ip].type,
-      proxy: geo2[ip].proxy
+      proxy: geo2[ip].proxy,
     });
     // geo.geo2 = geo2
   } catch (e) {}
@@ -709,48 +626,55 @@ wss.on('connection', async (ws, req) => {
   geo.ThatRealIp = ip2;
   // Send welcome
   //comp_and_send(ws, JSON.stringify({
-   // type: 'welcome',
-   // playerId: ws.playerId,
-   // "_ip": geo
+  // type: 'welcome',
+  // playerId: ws.playerId,
+  // "_ip": geo
   //}));
-  console.log(`AUTH REQ\n-# ${JSON.stringify({
-  type:"authRequired",
-  playerId: ws.playerId,
-   "_ip": geo
-})}`);
-  comp_and_send(ws, JSON.stringify({
-  type: "authRequired",
-  playerId: ws.playerId,
-   "_ip": geo
-}));
+  console.log(
+    `AUTH REQ\n-# ${JSON.stringify({
+      type: "authRequired",
+      playerId: ws.playerId,
+      _ip: geo,
+    })}`,
+  );
+  comp_and_send(
+    ws,
+    JSON.stringify({
+      type: "authRequired",
+      playerId: ws.playerId,
+      _ip: geo,
+    }),
+  );
 
   console.log(
-    `|| Player ${ws.playerId} connected from ${ip_censor} (${country}) | ${region}, ${city} | ISP: ${isp} | Risk: ${JSON.stringify(geo.risk)}`
+    `|| Player ${ws.playerId} connected from ${ip_censor} (${country}) | ${region}, ${city} | ISP: ${isp} | Risk: ${JSON.stringify(geo.risk)}`,
   );
 
   // Send a welcome message with the player's ID
   // comp_and_send(ws, JSON.stringify({ type: 'welcome', playerId: ws.playerId }));
   console.log(`|| Player ${ws.playerId} connected`);
-console.log(JSON.stringify({
-  player: ws.playerId,
-  ip_censor,
-  country: geo.country,
-  region: geo.regionName,
-  city: geo.city,
-  isp: geo.isp,
-  org: geo.org,
-  timezone: geo.timezone,
-  proxy: geo.proxy,
-  hosting: geo.hosting
-}, null, 2));
-let sessiondigitLength = 4;
-function sessionIdToJoinCode(sessionId, digitLength = 4) {
-
+  console.log(
+    JSON.stringify(
+      {
+        player: ws.playerId,
+        ip_censor,
+        country: geo.country,
+        region: geo.regionName,
+        city: geo.city,
+        isp: geo.isp,
+        org: geo.org,
+        timezone: geo.timezone,
+        proxy: geo.proxy,
+        hosting: geo.hosting,
+      },
+      null,
+      2,
+    ),
+  );
+  let sessiondigitLength = 4;
+  function sessionIdToJoinCode(sessionId, digitLength = 4) {
     // Hash session ID
-    const hash = crypto
-        .createHash("sha256")
-        .update(sessionId)
-        .digest();
+    const hash = crypto.createHash("sha256").update(sessionId).digest();
 
     // Convert first 4 bytes into number
     const num = hash.readUInt32BE(0);
@@ -761,90 +685,88 @@ function sessionIdToJoinCode(sessionId, digitLength = 4) {
 
     // Generate fixed-length code
     return ((num % (max - min)) + min).toString();
-}
-  ws.on('message', (message) => {
+  }
+  ws.on("message", (message) => {
     const msg_is = decompressPayload(message);
     const data = JSON.parse(msg_is);
-    const msg =  JSON.stringify(data);
-    const allowedBeforeAuth = [
-  "ping"
-];
+    const msg = JSON.stringify(data);
+    const allowedBeforeAuth = ["ping"];
 
-if (
-  !ws.authenticated &&
-  !allowedBeforeAuth.includes(data.type)
-) {
+    if (!ws.authenticated && !allowedBeforeAuth.includes(data.type)) {
+      comp_and_send(ws, {
+        type: "authRequired",
+        playerId: ws.playerId,
+      });
 
-  comp_and_send(ws,{
-    type: "authRequired",
-    playerId: ws.playerId
-  });
-
-  return;
-}
+      return;
+    }
     console.log(`|| Message recived: \`\`\`\n${msg}\`\`\``);
-if (data.type === "ping"){
-  console.log(`|| Sombody pinged server!!!`);
-}
-if (data.type === "createSession") {
+    if (data.type === "ping") {
+      console.log(`|| Sombody pinged server!!!`);
+    }
+    if (data.type === "createSession") {
+      const conf = data.custom_server?.active ? data.custom_server.conf : null;
 
-    const conf = data.custom_server?.active
-        ? data.custom_server.conf
-        : null;
+      const sessionId = compressString(
+        `Ip:${ip_censor}-PlayerId:${ws.playerId}(${country_code})-Risk:${riskinfo}-IsCustom:${!!conf}\nRandomstring:${generateCode()}`,
+      ).toString("base64");
 
-    const sessionId = compressString(
-        `Ip:${ip_censor}-PlayerId:${ws.playerId}(${country_code})-Risk:${riskinfo}-IsCustom:${!!conf}\nRandomstring:${generateCode()}`
-    ).toString("base64");
+      const joinCode = `${!!conf ? `!Custom!-` : ""}${sessionIdToJoinCode(sessionId, sessiondigitLength)}`;
 
-    const joinCode = `${!!conf ? `!Custom!-` : ""}${sessionIdToJoinCode(sessionId, sessiondigitLength)}`;
-
-    sessions[sessionId] = {
+      sessions[sessionId] = {
         id: sessionId,
         joinCode,
         players: [ws],
         playersReady: 0,
         custom: {
-            active: !!conf,
-            conf: conf || null
-        }
-    };
+          active: !!conf,
+          conf: conf || null,
+        },
+      };
 
-    joinIndex[joinCode] = sessionId;
-    ws.sessionId = sessionId;
+      joinIndex[joinCode] = sessionId;
+      ws.sessionId = sessionId;
 
-    comp_and_send(ws, JSON.stringify({
-        type: "sessionCreated",
-        id: sessionId,
-        code: joinCode,
-        custom: !!sessions[sessionId].custom?.active
-    }));
-}
+      comp_and_send(
+        ws,
+        JSON.stringify({
+          type: "sessionCreated",
+          id: sessionId,
+          code: joinCode,
+          custom: !!sessions[sessionId].custom?.active,
+        }),
+      );
+    }
 
     if (data.type === "cancelSession") {
       const sessionId = data.code;
       if (!sessions[sessionId]) return;
 
-  console.log("Try notify all remaining players");
-  sessions[ws.sessionId].players.forEach((player) => {
-    try {
-        if (player === sessions[ws.sessionId].players[0]) return;
-        console.log(`${player.id} cancelled try`);
-        console.log(`SEND unready session, silent: ${data?.silent || false}`);
-        if (`${data?.silent || false}` === `${false}`){
-        player.send(
-          compressPayload(JSON.stringify({
-            type: "sessionUnready",
-            reason: "sessionCancelled"
-          }))
-        );
-      }
-    } catch (e) {
-      console.error("cancelSession notify error:", e);
-    }
-  });
+      console.log("Try notify all remaining players");
+      sessions[ws.sessionId].players.forEach((player) => {
+        try {
+          if (player === sessions[ws.sessionId].players[0]) return;
+          console.log(`${player.id} cancelled try`);
+          console.log(`SEND unready session, silent: ${data?.silent || false}`);
+          if (`${data?.silent || false}` === `${false}`) {
+            player.send(
+              compressPayload(
+                JSON.stringify({
+                  type: "sessionUnready",
+                  reason: "sessionCancelled",
+                }),
+              ),
+            );
+          }
+        } catch (e) {
+          console.error("cancelSession notify error:", e);
+        }
+      });
 
       console.log(`|| Player ${ws.playerId} cancelled Session ${sessionId}`);
-      try { delete joinIndex[sessions[ws.sessionId].joinCode]; } catch(e) {}
+      try {
+        delete joinIndex[sessions[ws.sessionId].joinCode];
+      } catch (e) {}
       delete sessions[ws.sessionId];
     }
 
@@ -853,105 +775,136 @@ if (data.type === "createSession") {
       if (!sessions[sessionId]) return;
 
       console.log(`|| Player ${ws.playerId} left Session ${sessionId}`);
-      sessions[sessionId].players = sessions[sessionId].players.filter(player => player !== ws);
-      broadcastToSession(ws.sessionId, `Player ${ws.playerId} left the session`);
+      sessions[sessionId].players = sessions[sessionId].players.filter(
+        (player) => player !== ws,
+      );
+      broadcastToSession(
+        ws.sessionId,
+        `Player ${ws.playerId} left the session`,
+      );
     }
 
-      // manual hand sync dump to opponent
-
-
-
-
+    // manual hand sync dump to opponent
 
     if (data.type === "joinSession") {
       let joinCode = null;
       let sessionId = false;
       try {
-    joinCode = data.sessionId;
+        joinCode = data.sessionId;
 
-    sessionId = joinIndex[joinCode];
-      } catch (e){
+        sessionId = joinIndex[joinCode];
+      } catch (e) {
         console.log("err session id", e);
-        comp_and_send(ws, JSON.stringify({
-            type: "sessionInvalid"
-        }));
+        comp_and_send(
+          ws,
+          JSON.stringify({
+            type: "sessionInvalid",
+          }),
+        );
         return;
       }
       try {
-    if (!sessionId) {
-        comp_and_send(ws, JSON.stringify({
-            type: "sessionInvalid"
-        }));
+        if (!sessionId) {
+          comp_and_send(
+            ws,
+            JSON.stringify({
+              type: "sessionInvalid",
+            }),
+          );
+          return;
+        }
+      } catch (e) {
+        console.log("err session id", e);
+        comp_and_send(
+          ws,
+          JSON.stringify({
+            type: "sessionInvalid",
+          }),
+        );
         return;
+      }
+
+      const session = sessions[sessionId];
+
+      if (session.players.length >= 2) {
+        comp_and_send(
+          ws,
+          JSON.stringify({
+            type: "sessionFull",
+          }),
+        );
+        return;
+      }
+
+      session.players.push(ws);
+
+      ws.sessionId = sessionId;
+
+      comp_and_send(
+        ws,
+        JSON.stringify({
+          type: "sessionJoined",
+          code: joinCode,
+          id: sessionId,
+          custom: !!session.custom?.active,
+        }),
+      );
+      sessions[sessionId].players.forEach((player, index) => {
+        player.send(
+          compressPayload(
+            JSON.stringify({ type: "sessionReady", player: index + 1 }),
+          ),
+        );
+      });
+
+      console.log(`Player joined ${joinCode}`);
+      broadcastToSession(
+        ws.sessionId,
+        `Session ${ws.sessionId} chat is now active. Please keep conversations civilized. Session IDs and player IDs may later be linked via logs!`,
+      );
     }
-  } catch (e) {
-    console.log("err session id", e);
-    comp_and_send(ws, JSON.stringify({
-            type: "sessionInvalid"
-        }));
-        return;
-  }
-
-    const session = sessions[sessionId];
-
-    if (session.players.length >= 2) {
-        comp_and_send(ws, JSON.stringify({
-            type: "sessionFull"
-        }));
-        return;
-    }
-
-    session.players.push(ws);
-
-    ws.sessionId = sessionId;
-
-    comp_and_send(ws, JSON.stringify({
-        type: "sessionJoined",
-        code: joinCode,
-        id: sessionId,
-        custom: !!session.custom?.active
-    }));
-    sessions[sessionId].players.forEach((player, index) => {
-          player.send(compressPayload(JSON.stringify({ type: 'sessionReady', player: index + 1 })));
-        });
-
-    console.log(
-        `Player joined ${joinCode}`
-    );
-    broadcastToSession(
-  ws.sessionId,
-  `Session ${ws.sessionId} chat is now active. Please keep conversations civilized. Session IDs and player IDs may later be linked via logs!`
-);
-}
 
     if (data.type === "gameStart") {
-        if (ws.sessionId && sessions[ws.sessionId]) {
-            const session = sessions[ws.sessionId]; 
-            if (!sessions[ws.sessionId]?.firstPlayer) {
-                            broadcastToSession(ws.sessionId, `Game started! Good Luck Everyone!!`);
-                const firstPlayer = session.players[Math.floor(Math.random() * session.players.length)].playerId;
-                sessions[ws.sessionId].firstPlayer = firstPlayer
-                console.log(`First player (coinflip) ${JSON.stringify(firstPlayer)}`);
-            }
-            console.log("firstPlayer = ", sessions[ws.sessionId].firstPlayer)
-            session.players.forEach((player) => {
-                player.send(compressPayload(JSON.stringify({ type: 'coinToss', player: sessions[ws.sessionId].firstPlayer })));
-              });   
-  
+      if (ws.sessionId && sessions[ws.sessionId]) {
+        const session = sessions[ws.sessionId];
+        if (!sessions[ws.sessionId]?.firstPlayer) {
+          broadcastToSession(
+            ws.sessionId,
+            `Game started! Good Luck Everyone!!`,
+          );
+          const firstPlayer =
+            session.players[Math.floor(Math.random() * session.players.length)]
+              .playerId;
+          sessions[ws.sessionId].firstPlayer = firstPlayer;
+          console.log(`First player (coinflip) ${JSON.stringify(firstPlayer)}`);
         }
+        console.log("firstPlayer = ", sessions[ws.sessionId].firstPlayer);
+        session.players.forEach((player) => {
+          player.send(
+            compressPayload(
+              JSON.stringify({
+                type: "coinToss",
+                player: sessions[ws.sessionId].firstPlayer,
+              }),
+            ),
+          );
+        });
+      }
     }
 
-    if (data.type === 'initial_reDraw') {
+    if (data.type === "initial_reDraw") {
       if (ws.sessionId && sessions[ws.sessionId]) {
         const session = sessions[ws.sessionId];
         session.playersReady += 1;
 
-        console.log(`|| Players ready in session ${ws.sessionId}: ${session.playersReady}`);
+        console.log(
+          `|| Players ready in session ${ws.sessionId}: ${session.playersReady}`,
+        );
 
         if (session.playersReady === 2) {
-            session.players.forEach((player) => {
-                player.send(compressPayload(JSON.stringify({ type: 'start' })));
-              });
+          session.players.forEach((player) => {
+            player.send(compressPayload(JSON.stringify({ type: "start" })));
+          });
           session.playersReady = 0;
         }
       }
@@ -968,7 +921,7 @@ if (data.type === "createSession") {
     }
   });
 
-  ws.on('close', () => {
+  ws.on("close", () => {
     console.log(`|| Player ${ws.playerId} disconnected`);
     delete playerSockets[ws.playerId];
     // Check if the player has an active session
@@ -978,25 +931,40 @@ if (data.type === "createSession") {
       // Check if the player is the creator of the session
       if (session.players[0] === ws) {
         // If the creator disconnects, delete the session
-        console.log(`|| Deleting session ${ws.sessionId} because the creator left`);
+        console.log(
+          `|| Deleting session ${ws.sessionId} because the creator left`,
+        );
         if (session.players.length > 1) {
           try {
-          // session.players[1].send(compressPayload(JSON.stringify({ type: 'unReady' })));
-          session.players[1].send(compressPayload(JSON.stringify({ type: 'sessionUnready' })));
+            // session.players[1].send(compressPayload(JSON.stringify({ type: 'unReady' })));
+            session.players[1].send(
+              compressPayload(JSON.stringify({ type: "sessionUnready" })),
+            );
           } catch (e) {
             console.log("Err", e);
           }
         }
-        try { delete joinIndex[sessions[ws.sessionId].joinCode]; } catch(e) {}
+        try {
+          delete joinIndex[sessions[ws.sessionId].joinCode];
+        } catch (e) {}
         delete sessions[ws.sessionId];
       } else {
         try {
-        // If a non-creator disconnects, remove them from the session and notify the creator
-        session.players = session.players.filter(player => player !== ws);
-       session.players[0].send(compressPayload(JSON.stringify({ type: 'unReady' })));
-        session.players[0].send(compressPayload(JSON.stringify({ type: 'sessionUnready' })));
-        console.log(`|| Player ${ws.playerId} left the session ${ws.sessionId}`);
-        broadcastToSession(ws.sessionId, `Player ${ws.playerId} left the session`);
+          // If a non-creator disconnects, remove them from the session and notify the creator
+          session.players = session.players.filter((player) => player !== ws);
+          session.players[0].send(
+            compressPayload(JSON.stringify({ type: "unReady" })),
+          );
+          session.players[0].send(
+            compressPayload(JSON.stringify({ type: "sessionUnready" })),
+          );
+          console.log(
+            `|| Player ${ws.playerId} left the session ${ws.sessionId}`,
+          );
+          broadcastToSession(
+            ws.sessionId,
+            `Player ${ws.playerId} left the session`,
+          );
         } catch (e) {
           console.log("Err", e);
         }
@@ -1004,20 +972,14 @@ if (data.type === "createSession") {
     }
 
     // Remove the player from the players list
-    players = players.filter(player => player !== ws);
+    players = players.filter((player) => player !== ws);
   });
 });
 
-
-
 (async () => {
-
   await loadDatabase();
 
   server.listen(PORT, () => {
-    console.log(
-      `>>> Server running ${PORT}`
-    );
+    console.log(`>>> Server running ${PORT}`);
   });
-
 })();

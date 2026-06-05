@@ -5,16 +5,16 @@
     return btoa(Date.now().toString());
   }
 
- function escapeHtml(str) {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-}
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
 
-function showOverlay(content) {
-  const overlay = document.createElement("div");
-  overlay.style = `
+  function showOverlay(content) {
+    const overlay = document.createElement("div");
+    overlay.style = `
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.9);
@@ -24,8 +24,8 @@ function showOverlay(content) {
     justify-content: center;
   `;
 
-  const box = document.createElement("div");
-  box.style = `
+    const box = document.createElement("div");
+    box.style = `
     all: unset;
     display: block;
     width: 90%;
@@ -43,22 +43,22 @@ function showOverlay(content) {
     text-align: left;
   `;
 
-  const contentEl = document.createElement("div");
-  contentEl.innerHTML = escapeHtml(content); // SAFE
-  contentEl.style = `
+    const contentEl = document.createElement("div");
+    contentEl.innerHTML = escapeHtml(content); // SAFE
+    contentEl.style = `
     white-space: pre-wrap;
     margin-bottom: 20px;
   `;
 
-  const center = document.createElement("div");
-  center.style = `
+    const center = document.createElement("div");
+    center.style = `
     text-align: center;
     margin-top: 10px;
   `;
 
-  const closeBtn = document.createElement("button");
-  closeBtn.textContent = "Close";
-  closeBtn.style = `
+    const closeBtn = document.createElement("button");
+    closeBtn.textContent = "Close";
+    closeBtn.style = `
     all: unset;
     display: inline-block;
     padding: 8px 16px;
@@ -68,17 +68,17 @@ function showOverlay(content) {
     border-radius: 4px;
     font-size: 14px;
   `;
-  closeBtn.onclick = () => overlay.remove();
+    closeBtn.onclick = () => overlay.remove();
 
-  center.appendChild(closeBtn);
+    center.appendChild(closeBtn);
 
-  box.appendChild(contentEl);
-  box.appendChild(center);
-  overlay.appendChild(box);
-  document.body.appendChild(overlay);
-}
+    box.appendChild(contentEl);
+    box.appendChild(center);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+  }
 
- const closeBtn = document.createElement("button");
+  const closeBtn = document.createElement("button");
   closeBtn.textContent = "Close";
   closeBtn.style = `
     all: unset;

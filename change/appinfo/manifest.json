@@ -1,6 +1,6 @@
 {
-  "sha": "a1c342451dbb2b5b175a12bd0d8ed9103ec8e29c261241b4c493bc0389bba48f",
-  "generatedAt": "2026-06-05T10:27:36.341Z",
+  "sha": "fe31cc7d307dc2534b30ed9004bbec72fb017948d81c305cb6bfe9038a5c886a",
+  "generatedAt": "2026-06-05T10:45:58.126Z",
   "files": [
     {
       "path": "404.html",
@@ -3619,23 +3619,23 @@
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "b75e2bb857347064a1f0f7cf0adc75faa36eea26bca561dbc2f44b62d4c32d59",
-      "size": 56692
+      "sha256": "5629eebacbbd36e6d14f2c8545e57e298cd38c17ad7c3c92d4820979f9099b56",
+      "size": 63219
     },
     {
       "path": "javascript/cards.js",
-      "sha256": "7ca220ef1aae5e2ecc26d063214a21afcd7d53683f3bd0020528463def988e69",
-      "size": 61352
+      "sha256": "df6a87edb2c89eb6daf714bc8c601e625bd08520f34629f0a4bb1565707a4225",
+      "size": 48330
     },
     {
       "path": "javascript/chat.js",
-      "sha256": "a7ad610b6b5f94d7c6629b894341787ea2c3c18721b8718a6c5b52486b78afd3",
-      "size": 6905
+      "sha256": "9a91db684b99683ddb8a61e5f593adc1eb93e0a66fd2906e5b91f4eb1cfac509",
+      "size": 5985
     },
     {
       "path": "javascript/connect_to_custom_server.js",
-      "sha256": "0580740f48fcc90b960bfdde465fadef09fd2ade85bd2231dcd23237b9e8d38f",
-      "size": 28879
+      "sha256": "9f977b39d70509b76ed0aae935d11227eb792f0092707adc10a08915d5a12044",
+      "size": 23767
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
@@ -3654,63 +3654,53 @@
     },
     {
       "path": "javascript/decks.js",
-      "sha256": "4611bff1f88aa03d89fed33c25a75cee0b49af78345cc7afebc993ed8a6635de",
-      "size": 14048
+      "sha256": "13b0f2dd4bd85f54eb4f0c6c231ee6a6358d89cf03c6fe2901d4ab1446c7f1bd",
+      "size": 14008
     },
     {
       "path": "javascript/defines.js",
-      "sha256": "4188468f7fa4667fd9e85f38d35e9fb6734c8c831f91c04975fab9590a083df7",
-      "size": 9136
+      "sha256": "a6bae3e37d030e9718a7e2d6a8c374cabe46307ad4ed156868ac934e7dd0ed3d",
+      "size": 9187
     },
     {
       "path": "javascript/factions.js",
-      "sha256": "c80c4c35d55b428a146a0a2b54944719467cecef51e6c4c14007f4e4ea88eb52",
-      "size": 5112
+      "sha256": "2f778d99f1b08e80cb83a347236c362f1921a84b83fb9b5ef6fa4876cb719022",
+      "size": 5707
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "3f6ab767d3d14262bfea50f9dddc5b026e7e973f5b1c24681cc6ad61b747d6fe",
-      "size": 157864
+      "sha256": "e34ec17c8767e463612be737e261793a0771b6b82d02f3e92d51fb173102c01f",
+      "size": 165337
     },
     {
       "path": "javascript/jszip.min.js",
-      "sha256": "acc7e41455a80765b5fd9c7ee1b8078a6d160bbbca455aeae854de65c947d59e",
-      "size": 97630
+      "sha256": "18586c3586633fca83e7806199e7e71d78179a54e296717195a249d33ea8d270",
+      "size": 223755
     },
     {
       "path": "javascript/patchnotes.js",
-      "sha256": "c2ffe2c9391f7923581d75fd596c406c06985f70fc37992b8518e33c751dcb8f",
-      "size": 2945
+      "sha256": "b579edfda1a510b9fdc7e499c29ed777ba044174ed18be43ab2c54730cb723bd",
+      "size": 2871
     },
     {
       "path": "javascript/session_registering.js",
-      "sha256": "c16c00206fe4639fd307025be4f68fdd9a4d8c7d3da2316a0f4bb7292125b933",
-      "size": 18905
+      "sha256": "64430a2763909b709d7f06386352381071f6787da016d6a2000ca590274f2a98",
+      "size": 21413
     },
     {
       "path": "javascript/session.js",
-      "sha256": "3183544e678c4feeb92c15dfcde6f96b8b93e2ef0dccaefdec514ec8cc3dc07b",
-      "size": 14804
+      "sha256": "8c4f973ba989a06c25c2747fecd2753bef6e418287e9d72f84ea91c9d6b990f1",
+      "size": 14495
     },
     {
       "path": "javascript/sync_hands.js",
-      "sha256": "52fd506d8d6a7e9e3819f4d1e943ae0aa44b3ee0ba0bc7be875b12f522256440",
-      "size": 4286
+      "sha256": "2a3bac27e33cf21fef51e71ab193b07fe011b7e87b222f59b9db27b1425f1195",
+      "size": 3982
     },
     {
       "path": "LICENSE",
       "sha256": "d785c9203e0930a99fa9a8d4b4106c3969c6850425752266462a3e00bdc783ba",
       "size": 919
-    },
-    {
-      "path": "package-lock.json",
-      "sha256": "9ffe8a75af051718133c021ccedac239aaa53f0af19ddf88b495b3dc41dfa12e",
-      "size": 96851
-    },
-    {
-      "path": "package.json",
-      "sha256": "9ca2b31e081eb22fd4418cf427efd006483a2e3d74c59f59daac415557bba890",
-      "size": 556
     },
     {
       "path": "README.md",
