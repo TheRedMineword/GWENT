@@ -1,6 +1,6 @@
 {
-  "sha": "44d9181d413e211f12d9d398ad3ea5dd61b3086d649fec43ba1837d40be08104",
-  "generatedAt": "2026-06-05T09:44:58.568Z",
+  "sha": "cfb9e884c1587ff2909fc350dc499be1665e5b943c90144077873ad12e990b87",
+  "generatedAt": "2026-06-05T09:46:12.200Z",
   "files": [
     {
       "path": "404.html",
@@ -486,11 +486,6 @@
       "path": "img/icons/card_ability_reinforce.png",
       "sha256": "e3ceb21bef3284d6fcd71ac9f1a73863aaa3ea96bb8d116f79c242cab3b450ab",
       "size": 20495
-    },
-    {
-      "path": "img/icons/card_ability_resilience — kopia.png",
-      "sha256": "de01b4dc69e89d8be1a0a6312850e1f9d9c88bc13f353422e00ffaf6093bed11",
-      "size": 18022
     },
     {
       "path": "img/icons/card_ability_resilience_igni.png",
