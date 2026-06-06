@@ -2575,6 +2575,16 @@
         "count": "0"
       },
       {
+        "name": "Tactical Forecaster — Kaedwen Division",
+        "id": "1028",
+        "deck": "realms",
+        "row": "leader",
+        "strength": "",
+        "ability": "keadwen_weather",
+        "filename": "keadwen_weather",
+        "count": "0"
+      },
+      {
         "name": "Hopeful Steward",
         "id": "3001",
         "deck": "sky",
@@ -2964,6 +2974,9 @@
       },
       "foltest_king": {
         "description": "Pick an Impenetrable Fog card from your deck and play it instantly."
+      },
+      "keadwen_weather": {
+        "description": "Play an Impenetrable Fog from your deck. If none is found, still consume leader charge. Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need 1 charge to skip turn, you get 0.2 charges per your turn, up to 1 max charges stored!"
       },
       "foltest_lord": {
         "description": "Clear any weather effects (resulting from Biting Frost, Torrential Rain or Impenetrable Fog cards) in play."
