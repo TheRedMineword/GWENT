@@ -1,6 +1,6 @@
 {
-  "sha": "6e3987173dc1ebfaf6220a2f5393b45f7468ddbe66ce8f1c53b39d09b8db285b",
-  "generatedAt": "2026-06-06T16:23:18.541Z",
+  "sha": "e76a0fb877eabc58d43e36be01efa96507ac54aebc221bfea1fcb72c717139bc",
+  "generatedAt": "2026-06-06T16:27:23.096Z",
   "files": [
     {
       "path": "404.html",
@@ -3664,8 +3664,8 @@
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "dd8a49379d7d653c5b66a7100d53903843b479df4f49b7e49cdcb69d4afac407",
-      "size": 64195
+      "sha256": "c55683821e2621742f80f6279740b0a49a8edd8526f63c65c95c3c416250aa69",
+      "size": 64197
     },
     {
       "path": "javascript/cards.js",
@@ -3684,8 +3684,8 @@
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
-      "sha256": "7aad2a3523356d13d2e990ad9919d064a8c8a7d68c25f1b5c86b5fedac5199f1",
-      "size": 81895
+      "sha256": "cc23282913a85170ed52af330e7c4ed0303f15c529390e7c9cca9f0e129dd62d",
+      "size": 81899
     },
     {
       "path": "javascript/custom_server/deafult.txt",
@@ -3704,8 +3704,8 @@
     },
     {
       "path": "javascript/defines.js",
-      "sha256": "e1e84ff791a1f36737159dad363f8bfe4a3b608aa58d354e2873972f701cd064",
-      "size": 9807
+      "sha256": "2142011e33f1afebd4c8c6ae775273d461980c37c422877cb8afc076cc79175f",
+      "size": 9809
     },
     {
       "path": "javascript/faction_ability_counter.js",

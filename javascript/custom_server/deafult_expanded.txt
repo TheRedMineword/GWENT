@@ -2976,7 +2976,7 @@
         "description": "Pick an Impenetrable Fog card from your deck and play it instantly."
       },
       "keadwen_weather": {
-        "description": "Play an Impenetrable Fog from your deck. If none is found, still consume leader charge. Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need 1 charge to skip turn, you get 0.2 charges per your turn, up to 1 max charges stored!"
+        "description": "Play an Impenetrable Fog from your deck. If none is found, still consume leader charge. Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need 1 charge to skip turn, you get 0.2 charges per your turn, up to 1 max charge(s) stored!"
       },
       "foltest_lord": {
         "description": "Clear any weather effects (resulting from Biting Frost, Torrential Rain or Impenetrable Fog cards) in play."
@@ -3000,7 +3000,7 @@
         "description": "Spawn Darkness Storm on both sides that destroys all non-hero cards in the close row"
       },
       "turn_skiper": {
-        "description": "Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need 1 charge to skip turn, you get 0.35 charges per your turn, up to 2 max charges stored!"
+        "description": "Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need 1 charge to skip turn, you get 0.35 charges per your turn, up to 2 max charge(s) stored!"
       },
       "gaunter_neutral_leader": {
         "description": "On use both sides will gain an additional (60%+1)  of the number of cards in the thier grave as additional cards from deck and all players start the game with 50% more cards in their hand (based on their starting number)"

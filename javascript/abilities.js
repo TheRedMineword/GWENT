@@ -1093,7 +1093,7 @@ var ability_dict = {
     weight: (card, ai) => ai.weightWeatherFromDeck(card, "fog"),
   },
   keadwen_weather: {
-    description: `Play an Impenetrable Fog from your deck. If none is found, still consume leader charge. Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need ${turn_skipper_conf.actiavate} charge to skip turn, you get ${Number((turn_skipper_conf.perTurn - 0.15).toFixed(2))} charges per your turn, up to ${Math.floor(turn_skipper_conf.chargeMax / 2)} max charges stored!`,
+    description: `Play an Impenetrable Fog from your deck. If none is found, still consume leader charge. Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need ${turn_skipper_conf.actiavate} charge to skip turn, you get ${Number((turn_skipper_conf.perTurn - 0.15).toFixed(2))} charges per your turn, up to ${Math.floor(turn_skipper_conf.chargeMax / 2)} max charge(s) stored!`,
 
     activated: async (card) => {
       const holder = card.holder;
