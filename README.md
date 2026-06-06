@@ -31,6 +31,8 @@ https://fontmeme.com/fonts/gwent-font/
 - Conjunction of the Spheres sound effect: https://pixabay.com/sound-effects/film-special-effects-warp-magic-2-382390/
 - Leader card sound effect: https://pixabay.com/sound-effects/film-special-effects-battle-horn-1-6931/
 - Royal Trumpet sound effect: https://pixabay.com/sound-effects/musical-medieval-fanfare-6826/
+- Ability counter use sfx: https://sounds.sfxengine.com/ability-usage-j3womwe3.wav
+> Some card/mechanics/assets are used from other project like this (For example: RandomPianist/gwent-classic-v3.1)
 
 
 # Sky Kindom Faction

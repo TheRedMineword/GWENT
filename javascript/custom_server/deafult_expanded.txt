@@ -99,6 +99,11 @@
     "skellige_bond_conf": {
       "power": 4
     },
+    "turn_skipper_conf": {
+      "perTurn": 0.25,
+      "actiavate": 1,
+      "chargeMax": 2
+    },
     "card_dict": [
       {
         "name": "Mysterious Elf",
@@ -2560,6 +2565,16 @@
         "witcher_sign": true
       },
       {
+        "name": "Udalryk an Brokvar — Gods Choosen",
+        "id": "1027",
+        "deck": "skellige",
+        "row": "leader",
+        "strength": "",
+        "ability": "turn_skiper",
+        "filename": "udalryka_leader",
+        "count": "0"
+      },
+      {
         "name": "Hopeful Steward",
         "id": "3001",
         "deck": "sky",
@@ -2970,6 +2985,9 @@
       },
       "darkness_storm_leader": {
         "description": "Spawn Darkness Storm on both sides that destroys all non-hero cards in the close row"
+      },
+      "turn_skiper": {
+        "description": "Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need 1 charge to skip turn, you get 0.35 charges per your turn, up to 2 max charges stored!"
       },
       "gaunter_neutral_leader": {
         "description": "On use both sides will gain an additional (60%+1)  of the number of cards in the thier grave as additional cards from deck and all players start the game with 50% more cards in their hand (based on their starting number)"

@@ -851,7 +851,11 @@ socket.onmessage = async (event) => {
         console.log("[RESYNC]", " FAILED", " OUT", e);
       }
       break;
-
+    case "SpecialAbility":
+      if (data.leader === "turn_skiper") {
+        await ability_turn_skiper_op(data);
+      }
+      break;
     // Game - Opponent plays card
     case "play":
       console.log(
@@ -1236,6 +1240,8 @@ class Player {
     this.passed = false;
     this.handsize = thishandsize;
     this.winning = false;
+    ability_reset("me");
+    ability_reset("op");
 
     this.enableLeader();
     this.setPassed(false);
@@ -2513,6 +2519,8 @@ class Game {
     player_op.total = 0;
     player_me.total = 0;
     board.row.forEach((r) => r.updateScore());
+    ability_disable("me");
+    ability_disable("op");
     // Cleared i hope
     await sleep(20);
     ui.youtubePlay(
@@ -2533,6 +2541,8 @@ class Game {
     this.initPlayers(player_me, player_op);
     openFullscreen();
     console.log("start game players:", player_me, player_op);
+    ability_setup("me", player_me.leader.abilities[0]);
+    ability_setup("op", player_op.leader.abilities[0]);
     var meleadercardloss =
       player_me.leader.abilities[0] === "nilf_drawmaster"
         ? nilfard_drawmaster.cardban
@@ -2801,8 +2811,25 @@ class Game {
         this.currPlayer.tag + "-pass",
         ui_display_times.pass,
       );
-    if (player_op.passed && player_me.passed) this.endRound();
-    else this.startTurn();
+    if (player_op.passed && player_me.passed) {
+      this.endRound();
+    } else {
+      if (this.currPlayer.tag === "me") {
+        // Gain power to abilities
+        if (ability_data.me.enabled) {
+          try {
+            ability_add("me", ability_data.me.add);
+          } catch (e) {}
+        }
+      } else {
+        if (ability_data.op.enabled) {
+          try {
+            ability_add("op", ability_data.op.add);
+          } catch (e) {}
+        }
+      }
+      this.startTurn();
+    }
   }
 
   // Ends the round and may end the game. Determines final scores and the round winner.
@@ -2812,6 +2839,19 @@ class Game {
       let nilf_me = player_me.deck.faction === "nilfgaard",
         nilf_op = player_op.deck.faction === "nilfgaard";
       dif = nilf_me ^ nilf_op ? (nilf_me ? 1 : -1) : 0;
+    }
+    // Gain power to abilities
+    if (ability_data.me.enabled) {
+      try {
+        var addme = ability_data.me.add * 2;
+        ability_add("me", Number(addme.toFixed(2)));
+      } catch (e) {}
+    }
+    if (ability_data.op.enabled) {
+      try {
+        var addop = ability_data.op.add * 2;
+        ability_add("op", Number(addop.toFixed(2)));
+      } catch (e) {}
     }
     let winner = dif > 0 ? player_me : dif < 0 ? player_op : null;
     let verdict = {
@@ -3040,6 +3080,8 @@ class Card {
       reinforce: "moral",
       aid: "royal_horn",
       wshield: "ally",
+      turn_skip_clone_board: "spy",
+      turn_skip_clone_hand: "moral",
     };
     var temSom = new Array();
     for (var x in guia) temSom[temSom.length] = x;
@@ -3107,6 +3149,8 @@ class Card {
       reinforce: "moral",
       aid: "royal_horn",
       wshield: "ally",
+      turn_skip_clone_board: "spy",
+      turn_skip_clone_hand: "moral",
     };
 
     const literais = [

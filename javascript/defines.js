@@ -232,6 +232,14 @@ let skellige_bond_conf = {
   power: 4,
 };
 
+let turn_skipper_conf = {
+  perTurn: 0.35,
+  actiavate: 1,
+  chargeMax: 2,
+  desc: null,
+};
+turn_skipper_conf.desc = `Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need ${turn_skipper_conf.actiavate} charge to skip turn, you get ${turn_skipper_conf.perTurn} charges per your turn, up to ${turn_skipper_conf.chargeMax} max charges stored!`;
+
 let ThisDef = {
   name: "Deafult Config",
   env_vars: {
@@ -308,6 +316,11 @@ let ThisDef = {
     tavern_yt_volume: 100,
     gaunter_lider: { extra_cards: 0.5, revive: 0.6 },
     skellige_bond_conf: { power: 4 },
+    turn_skipper_conf: {
+      perTurn: 0.25,
+      actiavate: 1,
+      chargeMax: 2,
+    },
   },
 };
 

@@ -1,0 +1,4 @@
+## June 6, 2026
+- Added one new Skellige leader card
+> Udalryk an Brokvar — Gods Choosen: Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need 1 charge to skip turn, you get 0.35 charges per your turn, up to 2 max charges stored!
+-# In future there will be more cards like this #-

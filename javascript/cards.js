@@ -2481,6 +2481,16 @@ var card_dict = [
     count: "0",
     witcher_sign: true,
   },
+  {
+    name: "Udalryk an Brokvar — Gods Choosen",
+    id: "1027",
+    deck: "skellige",
+    row: "leader",
+    strength: "",
+    ability: "turn_skiper",
+    filename: "udalryka_leader",
+    count: "0",
+  },
   // New cards for sky
   {
     name: "Hopeful Steward",

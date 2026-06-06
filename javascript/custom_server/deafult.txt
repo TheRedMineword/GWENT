@@ -98,6 +98,11 @@
     },
     "skellige_bond_conf": {
       "power": 4
+    },
+    "turn_skipper_conf": {
+      "perTurn": 0.25,
+      "actiavate": 1,
+      "chargeMax": 2
     }
   }
 }
