@@ -1,6 +1,6 @@
 {
-  "sha": "12b1c89c5c3b176dc3924312869a75ded4aa59159dfbca8f597a0e924b0ccd3e",
-  "generatedAt": "2026-06-06T13:19:56.920Z",
+  "sha": "9fddf0c2641ff30dd5868b63af118418273af3a5815a79613c75812b7484319f",
+  "generatedAt": "2026-06-06T14:25:55.857Z",
   "files": [
     {
       "path": "404.html",
@@ -3649,8 +3649,8 @@
     },
     {
       "path": "index.html",
-      "sha256": "0591e1244ff8cf3b10753068f5d97d524fabfde3356e533a84e4fd2ec3dfd26d",
-      "size": 13296
+      "sha256": "faf158559644cc92257e5decc8bb6572f5b69d42bb3094f561636f2d9db28b72",
+      "size": 13297
     },
     {
       "path": "javascript/abilities.js",
@@ -3709,8 +3709,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "5b0efb2024d1c1dfab16d0e424d20d7894c690e91c42026483aab2bd2d288ac7",
-      "size": 167315
+      "sha256": "3e95650e5963af532804f2a713cc1d3c62f7f649d3d81b2a32673b36c4f8d82b",
+      "size": 168702
     },
     {
       "path": "javascript/jszip.min.js",
@@ -3729,8 +3729,8 @@
     },
     {
       "path": "javascript/session.js",
-      "sha256": "8c4f973ba989a06c25c2747fecd2753bef6e418287e9d72f84ea91c9d6b990f1",
-      "size": 14495
+      "sha256": "5ded758b389ba99d5fea0680af729ee43a8e67c461b5db8004c78ec94745a99f",
+      "size": 19206
     },
     {
       "path": "javascript/sync_hands.js",
@@ -3744,8 +3744,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "fabd9b68477b117831eaf2f666555eae7190d2652cb0a1166d0c2d548b4a4f7c",
-      "size": 3677
+      "sha256": "58c4e4876988746d7d89043d74bc95055c913e0e4ab6adda903b9a66e2e502a4",
+      "size": 3676
     },
     {
       "path": "rules.css",

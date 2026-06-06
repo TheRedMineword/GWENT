@@ -10,8 +10,7 @@ Full credit and thanks go to CD Projekt Red for creating The Witcher 3, [asundr 
 # Copyrights
 - Images used for custom gwent cards:
 https://pngtree.com/freebackground/vintage-crinkled-paper-texture-aged-brown-background-with-sheet-of-paper_15221865.html
-- Fonts for custom gwent cards:
-https://fontmeme.com/fonts/gwent-font/
+- Fonts for custom gwent cards: https://fontmeme.com/fonts/gwent-font/
 - Gwent table bacround texture from: https://www.magnific.com/free-photo/dark-vintage-table_8208515.htm
 - Gwent table blood stains texture: https://www.magnific.com/free-vector/halloween-background-with-red-blood-splatter-design_18355620.htm
 - Rules page copied from: https://romain-durban.github.io/gwent-classic-v3.0/rules

@@ -92,10 +92,16 @@ function askForSessionMode() {
     box.style.minWidth = "260px";
     box.style.textAlign = "center";
 
-    const title = document.createElement("div");
-    title.textContent = "Choose session type";
-    title.style.marginBottom = "15px";
-    title.style.fontWeight = "bold";
+    //    const title = document.createElement("div");
+    //   title.textContent = "Choose session type";
+
+    //    title.style.margin = "0 0 15px 0";
+    //   title.style.color = "#111";
+    //    title.style.fontSize = "24px";
+    //    title.style.fontFamily = "system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
+    //    title.style.fontWeight = "600";
+    //    title.style.textAlign = "center";
+    //    title.style.letterSpacing = "0.3px";
 
     const createBtn = document.createElement("button");
     createBtn.textContent = "Create Server";
@@ -112,7 +118,7 @@ function askForSessionMode() {
     createBtn.onclick = () => cleanup({ type: "create" });
     customBtn.onclick = () => cleanup({ type: "custom" });
 
-    box.appendChild(title);
+    //    box.appendChild(title);
     box.appendChild(createBtn);
     box.appendChild(customBtn);
     overlay.appendChild(box);
@@ -222,8 +228,88 @@ async function createGame() {
     isconnectedtosession = true;
   }
 }
+function askForPlayerName() {
+  return new Promise((resolve) => {
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.background = "rgba(0,0,0,0.5)";
+    overlay.style.display = "flex";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.zIndex = "9999";
+
+    const box = document.createElement("div");
+    box.style.background = "white";
+    box.style.padding = "20px";
+    box.style.borderRadius = "10px";
+    box.style.minWidth = "300px";
+    box.style.textAlign = "center";
+
+    const title = document.createElement("h3");
+    title.textContent = "Enter Your Name (Optional)";
+
+    const style = document.createElement("style");
+    title.style.margin = "0 0 15px 0";
+    title.style.color = "#111";
+    title.style.fontSize = "20px";
+    // title.style.fontFamily = "system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
+    title.style.fontWeight = "600";
+    title.style.textAlign = "center";
+    title.style.letterSpacing = "0.3px";
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "(Example: ThatCoolUsername)";
+    input.style.width = "100%";
+    input.style.marginTop = "10px";
+    input.style.marginBottom = "15px";
+    input.style.padding = "8px";
+
+    const joinBtn = document.createElement("button");
+    joinBtn.textContent = "Join";
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.textContent = "Cancel";
+    cancelBtn.style.marginLeft = "10px";
+
+    function cleanup(value) {
+      document.body.removeChild(overlay);
+      resolve(value);
+    }
+
+    joinBtn.onclick = () => {
+      const name = input.value.trim();
+      if (!name) {
+        alert("Please enter a name");
+        return;
+      }
+      cleanup(name);
+    };
+
+    cancelBtn.onclick = () => cleanup(null);
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") joinBtn.click();
+    });
+
+    box.appendChild(title);
+    box.appendChild(input);
+    box.appendChild(joinBtn);
+    box.appendChild(cancelBtn);
+
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    input.focus();
+  });
+}
 
 function cancelSession() {
+  players.op = "Opponent";
   if (isconnectedtosession) {
     tocar("tf2/Trade_failure", false);
   }
@@ -272,6 +358,7 @@ function cancelSession() {
   });
 }
 function silent_cancelSession() {
+  players.op = "Opponent";
   amReady = false;
   opponentReady = false;
   if (isconnectedtosession) {
@@ -372,8 +459,29 @@ socket.addEventListener("message", async (event) => {
       var decodedsession = await decompressBase64(data.id);
       console.log(`[SD] Session joined data raw: ${decodedsession}`);
       if (data.custom === true) {
-        connect_to_custom_server(
+        await connect_to_custom_server(
           `${custom_url}api/custom_sync?session=${encodeURIComponent(ThisSessionId)}`,
+        );
+      }
+      var user_name = await askForPlayerName();
+      if (user_name === "ThatCoolUsername") {
+        alert("That was an EXAMPLE username, and its not even that cool\n:(");
+      }
+      console.log(user_name);
+      if (!user_name) {
+        console.log("No user name");
+        players.me = "Me";
+      } else {
+        players.me = user_name;
+        console.log("User name set", players);
+      }
+      if (players.me !== "Me" && players.me !== "You") {
+        comp_and_send(
+          socket,
+          JSON.stringify({
+            type: "MyName",
+            is: players.me,
+          }),
         );
       }
       break;
@@ -385,7 +493,7 @@ socket.addEventListener("message", async (event) => {
       isconnectedtosession = true;
       showTooltip(`Joined session: ${data.id}`);
       if (data.custom === true) {
-        connect_to_custom_server(
+        await connect_to_custom_server(
           `${custom_url}api/custom_sync?session=${encodeURIComponent(ThisSessionId)}`,
         );
       }
@@ -403,6 +511,27 @@ socket.addEventListener("message", async (event) => {
       console.log(`[SD] Session joined data ${data.code}/${data.id}`);
       var decodedsession = await decompressBase64(data.id);
       console.log(`[SD] Session joined data raw: ${decodedsession}`);
+      var user_name = await askForPlayerName();
+      if (user_name === "ThatCoolUsername") {
+        alert("That was an EXAMPLE username, and its not even that cool\n:(");
+      }
+      console.log(user_name);
+      if (!user_name) {
+        console.log("No user name");
+        players.me = "Me";
+      } else {
+        players.me = user_name;
+        console.log("User name set", players);
+      }
+      if (players.me !== "Me" && players.me !== "You") {
+        comp_and_send(
+          socket,
+          JSON.stringify({
+            type: "MyName",
+            is: players.me,
+          }),
+        );
+      }
       break;
     case "chat":
       addMessage("op", data.message);
@@ -410,6 +539,16 @@ socket.addEventListener("message", async (event) => {
 
     case "moderation":
       addMessage("system", data.message);
+      break;
+    case "MyName":
+      console.log("Nice to meet you ", data.is);
+      players.op = data.is;
+      await sleep(1200);
+      updateOpponentUI({
+        name: players["op"],
+        state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
+        status: `Ready: ${opponentReady}`,
+      });
       break;
   }
 });

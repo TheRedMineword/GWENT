@@ -652,12 +652,22 @@ socket.onmessage = async (event) => {
           info: { me_id: playerId, me_flag: country },
         }),
       );
+      if (players.me !== "Me" && players.me !== "You") {
+        comp_and_send(
+          socket,
+          JSON.stringify({
+            type: "MyName",
+            is: players.me,
+          }),
+        );
+      }
       sendChatMessageStrig(`play wich ${factions[faction_name].name} faction!`);
       break;
 
     // Opponent has left and the session is no longer ready
     case "sessionUnready":
       opponentReady = false;
+      players.op = "Opponent";
       // btnCancelElem.classList.remove("hidden");
       if (isconnectedtosession) {
         tocar("tf2/Vote_failure", false);
@@ -739,11 +749,25 @@ socket.onmessage = async (event) => {
       );
       tocar("tf2/Vote_yes", true);
       updateOpponentUI({
-        name: "Opponent",
+        name: players["op"],
         state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
         status: `Ready: ${opponentReady}`,
       });
-      player_op = new Player(1, players.op, data.deck);
+      player_op = new Player(
+        1,
+        players["op"]?.replace(
+          /[&<>"']/g,
+          (m) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[m],
+        ),
+        data.deck,
+      );
       if (amReady) {
         customizationElem.classList.add("hide");
         gameStartControlsElem.classList.add("hide");
@@ -754,7 +778,7 @@ socket.onmessage = async (event) => {
         opponentReadyElem.classList.remove("disabled");
         opponentReady = true;
         updateOpponentUI({
-          name: "Opponent",
+          name: players["op"],
           state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
           status: `Ready: ${opponentReady}`,
         });
@@ -781,7 +805,7 @@ socket.onmessage = async (event) => {
       );
       op_icon_faction = `img/icons/deck_shield_${data.faction}.png`;
       updateOpponentUI({
-        name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players.op}`,
+        name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]?.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m])}`,
         state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
         status: `Ready: ${opponentReady}`,
       });
@@ -796,7 +820,7 @@ socket.onmessage = async (event) => {
       // amReady = false;
       toggleReadyWaiting(amReady);
       updateOpponentUI({
-        name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players.op}`,
+        name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]?.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m])}`,
         state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
         status: `Ready: ${opponentReady}`,
       });
@@ -4491,6 +4515,15 @@ class DeckMaker {
           info: { me_id: playerId, me_flag: country },
         }),
       );
+      if (players.me !== "Me" && players.me !== "You") {
+        comp_and_send(
+          socket,
+          JSON.stringify({
+            type: "MyName",
+            is: players.me,
+          }),
+        );
+      }
       sendChatMessageStrig(`play wich ${factions[faction_name].name} faction!`);
     }
 
@@ -4859,7 +4892,21 @@ class DeckMaker {
     };
     previous_game_start_cards = me_deck;
 
-    player_me = new Player(0, players.me, me_deck);
+    player_me = new Player(
+      0,
+      players["me"]?.replace(
+        /[&<>"']/g,
+        (m) =>
+          ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;",
+          })[m],
+      ),
+      me_deck,
+    );
     comp_and_send(socket, JSON.stringify({ type: "ready", deck: me_deck }));
     amReady = true;
     toggleReadyWaiting(amReady);
@@ -4984,6 +5031,15 @@ class DeckMaker {
         info: { me_id: playerId, me_flag: country },
       }),
     );
+    if (players.me !== "Me" && players.me !== "You") {
+      comp_and_send(
+        socket,
+        JSON.stringify({
+          type: "MyName",
+          is: players.me,
+        }),
+      );
+    }
     sendChatMessageStrig(`play wich ${factions[deck.faction].name} faction!`);
     if (
       card_dict[deck.leader].row === "leader" &&
