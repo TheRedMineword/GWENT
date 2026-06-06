@@ -35,13 +35,15 @@ function createAbility() {
  * TOOLTIP
  * ------------------------ */
 
-function showSideTooltip(text, duration = 3200) {
-  console.log("[ABILITY_ANNOUNCE]", text, duration);
-
+function showSideTooltip(text, duration = 4200) {
   const tooltip = document.getElementById("side-tooltip");
   if (!tooltip) return;
 
   tooltip.textContent = text;
+
+  // enable line breaks via CSS
+  tooltip.style.whiteSpace = "pre-line";
+
   tooltip.classList.add("show");
 
   clearTimeout(tooltip.hideTimer);
@@ -139,7 +141,7 @@ function ability_update(side, gain = false) {
       tocar("tf2/meter", false);
 
       showSideTooltip(
-        `Your ability bar has filled (${ability.current}/${ability.max})`,
+        `Your ability bar has filled (${ability.current}/${ability.max}). \nClick counter to use leader ability!`,
       );
     } else {
       showSideTooltip(

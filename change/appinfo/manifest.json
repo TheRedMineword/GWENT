@@ -1,6 +1,6 @@
 {
-  "sha": "e76a0fb877eabc58d43e36be01efa96507ac54aebc221bfea1fcb72c717139bc",
-  "generatedAt": "2026-06-06T16:27:23.096Z",
+  "sha": "3eb4950c2a6c4582bcb6fd8f8a4d573d27d710b46761b0fc20ec671759bec62b",
+  "generatedAt": "2026-06-06T16:32:27.421Z",
   "files": [
     {
       "path": "404.html",
@@ -3709,8 +3709,8 @@
     },
     {
       "path": "javascript/faction_ability_counter.js",
-      "sha256": "fa0c2b98323cfd097d34c22807cb7718e694ed69078268bcb5092436af1e3f43",
-      "size": 10806
+      "sha256": "36d8e2fc6b0ade15efc6bd65e195c6189413085f2e864565f10295512dba763d",
+      "size": 10867
     },
     {
       "path": "javascript/factions.js",
