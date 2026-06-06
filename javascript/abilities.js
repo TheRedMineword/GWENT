@@ -1092,6 +1092,25 @@ var ability_dict = {
     },
     weight: (card, ai) => ai.weightWeatherFromDeck(card, "fog"),
   },
+  keadwen_weather: {
+    description: `Play an Impenetrable Fog from your deck. If none is found, still consume leader charge. Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need ${turn_skipper_conf.actiavate} charge to skip turn, you get ${Number((turn_skipper_conf.perTurn - 0.15).toFixed(2))} charges per your turn, up to ${Math.floor(turn_skipper_conf.chargeMax / 2)} max charges stored!`,
+
+    activated: async (card) => {
+      const holder = card.holder;
+
+      const fog = holder.deck.findCard((c) => c.name === "Impenetrable Fog");
+
+      // always consume leader charge first or guarantee consumption
+      const isPlayer = holder.id === player_me.id;
+      ability_remove_force(isPlayer ? "me" : "op", 1);
+
+      if (fog) {
+        await fog.autoplay(holder.deck);
+      }
+    },
+
+    weight: (card, ai) => ai.weightWeatherFromDeck(card, "fog"),
+  },
   foltest_lord: {
     description:
       "Clear any weather effects (resulting from Biting Frost, Torrential Rain or Impenetrable Fog cards) in play.",

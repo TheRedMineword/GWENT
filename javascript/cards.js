@@ -2491,6 +2491,16 @@ var card_dict = [
     filename: "udalryka_leader",
     count: "0",
   },
+  {
+    name: "Tactical Forecaster — Kaedwen Division",
+    id: "1028",
+    deck: "realms",
+    row: "leader",
+    strength: "",
+    ability: "keadwen_weather",
+    filename: "keadwen_weather",
+    count: "0",
+  },
   // New cards for sky
   {
     name: "Hopeful Steward",

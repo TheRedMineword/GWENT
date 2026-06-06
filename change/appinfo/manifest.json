@@ -1,6 +1,6 @@
 {
-  "sha": "9fddf0c2641ff30dd5868b63af118418273af3a5815a79613c75812b7484319f",
-  "generatedAt": "2026-06-06T14:25:55.857Z",
+  "sha": "48e43424e06be580476335f361ffefc6a25203d4bad5ed999de1555bfcdfe72d",
+  "generatedAt": "2026-06-06T16:18:39.570Z",
   "files": [
     {
       "path": "404.html",
@@ -1658,6 +1658,11 @@
       "size": 92699
     },
     {
+      "path": "img/lg/realms_keadwen_weather.jpg",
+      "sha256": "6c5d925f6f508d191ab07094320b33404b422ea3b74fa9cb4fc3ddcdd11674ab",
+      "size": 78934
+    },
+    {
       "path": "img/lg/realms_keira.jpg",
       "sha256": "baebf98604dbc45a50e322e37e2e45af8ab9eb2da89af33d2ea759cb5222621f",
       "size": 101052
@@ -2983,6 +2988,11 @@
       "size": 31383
     },
     {
+      "path": "img/sm/realms_keadwen_weather.jpg",
+      "sha256": "06aea8c8564970a696d856abffff1a0fbf218496071ed35275fecef3e4b288c3",
+      "size": 50492
+    },
+    {
       "path": "img/sm/realms_keira.jpg",
       "sha256": "4af69f5b53010dd6958dcf8c97908f47db995870345ad4532ac3a8377850e1e7",
       "size": 43513
@@ -3654,13 +3664,13 @@
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "77fac5d7dbf88c2640850bfbd70147ed0522f648188cc578a4bc1b51ae7feefc",
-      "size": 63282
+      "sha256": "dd8a49379d7d653c5b66a7100d53903843b479df4f49b7e49cdcb69d4afac407",
+      "size": 64195
     },
     {
       "path": "javascript/cards.js",
-      "sha256": "86ad6a198e20e7c46df5d2e02794a221f2c003f80fd705168dd15866aa1824b9",
-      "size": 48540
+      "sha256": "a3c9d34dbb5f031778d69ca114c4cf4d3166494f11eabe67ef0af628c624fa83",
+      "size": 48757
     },
     {
       "path": "javascript/chat.js",
@@ -3699,8 +3709,8 @@
     },
     {
       "path": "javascript/faction_ability_counter.js",
-      "sha256": "ff7ae5ed323484c12c5db4d0967bccdae0435575d146b79635114ff48d9890c9",
-      "size": 10232
+      "sha256": "fa0c2b98323cfd097d34c22807cb7718e694ed69078268bcb5092436af1e3f43",
+      "size": 10806
     },
     {
       "path": "javascript/factions.js",

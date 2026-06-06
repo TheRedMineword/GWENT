@@ -12,6 +12,12 @@ let ABILITIES = {
     onClick: null,
     add: turn_skipper_conf.perTurn,
   },
+  keadwen_weather: {
+    type: "skip",
+    max: Math.floor(turn_skipper_conf.chargeMax / 2),
+    onClick: null,
+    add: Number((turn_skipper_conf.perTurn - 0.15).toFixed(2)),
+  },
 };
 
 function createAbility() {
@@ -191,6 +197,19 @@ function ability_remove(side, value = BASE_ADD) {
   return old !== ability.current;
 }
 
+function ability_remove_force(side, value = BASE_ADD) {
+  const ability = ability_data[side];
+  const old = ability.current;
+
+  ability.current = Number((ability.current - value).toFixed(2));
+
+  ability_update(side);
+
+  console.log(`[ABILITY_REMOVE] ${side}: ${old} -> ${ability.current}`);
+
+  return old !== ability.current;
+}
+
 /* ------------------------
  * CLICK HANDLER
  * ------------------------ */
@@ -228,7 +247,10 @@ document
     console.log("Clicked faction-ability-me", ability_data, ability_data.me);
     // logic below
     tocar("card", false);
-    if (ability_data.me.type === "turn_skiper") {
+    if (
+      ability_data.me.type === "turn_skiper" ||
+      ability_data.me.type === "keadwen_weather"
+    ) {
       if (ability_data.me.current < turn_skipper_conf.actiavate) {
         showSideTooltip(
           `You dont have enought energy to activate ability (${ability_data.me.current}/${ability_data.me.max})`,
