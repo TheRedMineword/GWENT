@@ -1,6 +1,6 @@
 {
-  "sha": "69175a2dc21dcbecbbb7befb587c5ec6109875994d6566cc4b6f18b4a51db10e",
-  "generatedAt": "2026-06-07T11:37:29.717Z",
+  "sha": "5c8be83435ed490923f5178a7505fe91f0ab560df0869d901c1f0a7869e6c338",
+  "generatedAt": "2026-06-07T13:17:34.355Z",
   "files": [
     {
       "path": "404.html",
@@ -3719,8 +3719,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "51cdf4c0b788bfa96139eba1446174f49b20fb5b44c0ff49afca6195ecfd91e5",
-      "size": 169116
+      "sha256": "a633771fb48a05393de663c0b6fb79a7379a60b2929e56fd746fd47f09385d57",
+      "size": 170737
     },
     {
       "path": "javascript/jszip.min.js",

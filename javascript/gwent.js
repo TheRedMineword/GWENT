@@ -1430,7 +1430,7 @@ class Player {
           await this.activateLeader();
           var handData_after = await serializeCards(player_me.hand.cards);
           console.log("HandData post", handData_after);
-          comp_and_send(
+          await comp_and_send(
             socket,
             JSON.stringify({
               type: "useLeader",
@@ -1439,6 +1439,33 @@ class Player {
               HandMePost: handData_after,
             }),
           );
+          await sleep(100);
+          console.log("extraJSON vibe check:", extraJSON.length, extraJSON);
+          if (extraJSON.length > 0) {
+            const total = extraJSON.length;
+
+            for (let i = 0; i < total; i++) {
+              const payload = extraJSON[i];
+
+              // base hold + extra 500ms for each next packet
+              const delay = RegisterMovesHold + i * 500;
+
+              console.log(
+                `Hold before send extraJSON ${i + 1}/${total}`,
+                payload,
+              );
+
+              showTooltip(
+                `The opponent synchronizes with the game (${i + 1}/${total}), wait ${delay / 1000}s`,
+              );
+
+              await new Promise((resolve) => setTimeout(resolve, delay));
+
+              comp_and_send(socket, payload);
+            }
+
+            extraJSON = [];
+          }
           if (player_op.passed && !player_me.passed) {
             ui.enablePlayer(false);
             showTooltip(
@@ -4218,6 +4245,7 @@ class Carousel {
 
   // Called by client to perform action on the middle card in focus
   async select(event) {
+    //    console.log("SELECT EVENT DEBUG", event, " and this actionString", this.action.toString());
     (event || window.event).stopPropagation();
     --this.count;
     if (this.isLastSelection()) this.elem.classList.add("hide");
@@ -4254,22 +4282,37 @@ class Carousel {
       }, 1000);
     } else if (actionString.includes("board.toWeather")) {
       setTimeout(() => {
-        comp_and_send(
-          socket,
+        extraJSON.push(
+          JSON.stringify({ type: "weatherDraw", card: resp.filename }),
+        );
+        //extraJSON = JSON.stringify({ type: "medicDraw", card: resp.filename });
+        console.log(
+          "extra json now",
+          extraJSON,
           JSON.stringify({ type: "weatherDraw", card: resp.filename }),
         );
       }, 1000);
     } else if (actionString.includes("board.toGrave")) {
       setTimeout(() => {
-        comp_and_send(
-          socket,
+        extraJSON.push(
+          JSON.stringify({ type: "removeCardHand", card: resp.filename }),
+        );
+        //extraJSON = JSON.stringify({ type: "medicDraw", card: resp.filename });
+        console.log(
+          "extra json now",
+          extraJSON,
           JSON.stringify({ type: "removeCardHand", card: resp.filename }),
         );
       }, 1000);
     } else if (actionString.includes("board.toHand")) {
       setTimeout(() => {
-        comp_and_send(
-          socket,
+        extraJSON.push(
+          JSON.stringify({ type: "addCardHand", card: resp.filename }),
+        );
+        //extraJSON = JSON.stringify({ type: "medicDraw", card: resp.filename });
+        console.log(
+          "extra json now",
+          extraJSON,
           JSON.stringify({ type: "addCardHand", card: resp.filename }),
         );
       }, 1000);
