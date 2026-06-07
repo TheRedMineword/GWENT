@@ -361,3 +361,4 @@ let card = null;
 const playBlock = {};
 
 let previous_game_start_cards = null;
+let med_draw = null;

@@ -35,6 +35,7 @@ const IGNORE_PATTERNS = [
   "playblock",
   "currentPlayerId",
   "previous_game_start_cards",
+  "med_draw",
 ];
 
 const LOG_PREFIX = "[CUSTOM_SERVER]";

@@ -898,6 +898,10 @@ var ability_dict = {
     description:
       "Choose one card from your discard pile and play it instantly (no Heroes or Special Cards). ",
     placed: async (card) => {
+      if (card.holder.id === player_me.id) {
+        med_draw = 1; // some stupid bug happend in function that send medic draw so now we have  med_draw === 1 check
+        await sleep(200);
+      }
       let grave = board.getRow(card, "grave", card.holder);
       let units = card.holder.grave.findCards((c) => c.isUnit());
       if (units.length <= 0) return;

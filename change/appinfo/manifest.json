@@ -1,6 +1,6 @@
 {
-  "sha": "3eb4950c2a6c4582bcb6fd8f8a4d573d27d710b46761b0fc20ec671759bec62b",
-  "generatedAt": "2026-06-06T16:32:27.421Z",
+  "sha": "69175a2dc21dcbecbbb7befb587c5ec6109875994d6566cc4b6f18b4a51db10e",
+  "generatedAt": "2026-06-07T11:37:29.717Z",
   "files": [
     {
       "path": "404.html",
@@ -3664,8 +3664,8 @@
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "c55683821e2621742f80f6279740b0a49a8edd8526f63c65c95c3c416250aa69",
-      "size": 64197
+      "sha256": "177880d6b5788ad9fcfb47d06c8b49a3cca9afd3d18da4fdb2c4542fb4a0984d",
+      "size": 64395
     },
     {
       "path": "javascript/cards.js",
@@ -3679,8 +3679,8 @@
     },
     {
       "path": "javascript/connect_to_custom_server.js",
-      "sha256": "89b8afa7a66867169d9056a96b98ae37b95582743568be9998df3b78885a956b",
-      "size": 23798
+      "sha256": "c0a5fee59957441502a03ca184dfdd9106e541b378c5c390210b3c167f3ab0e6",
+      "size": 23812
     },
     {
       "path": "javascript/custom_server/deafult_expanded.txt",
@@ -3704,8 +3704,8 @@
     },
     {
       "path": "javascript/defines.js",
-      "sha256": "2142011e33f1afebd4c8c6ae775273d461980c37c422877cb8afc076cc79175f",
-      "size": 9809
+      "sha256": "aee78d30d68a13155913453b53154952bac3872a4f4457ad2a6b787acb8cc9fb",
+      "size": 9830
     },
     {
       "path": "javascript/faction_ability_counter.js",
@@ -3719,8 +3719,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "3e95650e5963af532804f2a713cc1d3c62f7f649d3d81b2a32673b36c4f8d82b",
-      "size": 168702
+      "sha256": "51cdf4c0b788bfa96139eba1446174f49b20fb5b44c0ff49afca6195ecfd91e5",
+      "size": 169116
     },
     {
       "path": "javascript/jszip.min.js",

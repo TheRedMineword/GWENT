@@ -4226,12 +4226,16 @@ class Carousel {
     const actionString = this.action.toString();
     tocar("redraw", false);
     const resp = await this.action(this.container, this.indices[this.index]);
-
     if (
-      actionString === "(c, i) => wrapper.card=c.cards[i]" ||
-      actionString === "(c,i) => newCard = c.cards[i]"
+      //     actionString === "(c, i) => wrapper.card=c.cards[i]" ||
+      //    actionString === "(c,i) => newCard = c.cards[i]"
+      med_draw === 1
+      // THERE WAS SOME BUG, I HAVE NO IDEA WHY OR HOW SO....... I added this check if === 1 ~DrMineword
+      //  99 little bugs in the code, 99 little bugs.
+      //  Take one down, patch it around, 128 bugs in the code!
     ) {
       setTimeout(() => {
+        med_draw = 0;
         extraJSON.push(
           JSON.stringify({
             type: "medicDraw",
@@ -4239,7 +4243,14 @@ class Carousel {
           }),
         );
         //extraJSON = JSON.stringify({ type: "medicDraw", card: resp.filename });
-        console.log("extra json now", extraJSON);
+        console.log(
+          "extra json now",
+          extraJSON,
+          JSON.stringify({
+            type: "medicDraw",
+            card: resp.filename,
+          }),
+        );
       }, 1000);
     } else if (actionString.includes("board.toWeather")) {
       setTimeout(() => {
