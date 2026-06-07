@@ -1443,7 +1443,16 @@ class Player {
           console.log("extraJSON vibe check:", extraJSON.length, extraJSON);
           if (extraJSON.length > 0) {
             const total = extraJSON.length;
-
+            var opponent_see_card_delay = 1.7;
+            showTooltip(
+              `Initiating sync, wait ${Math.floor((ui_display_times.faction_ability + 600) / opponent_see_card_delay) / 1000} seconds`,
+            );
+            await sleep(
+              Math.floor(
+                (ui_display_times.faction_ability + 600) /
+                  opponent_see_card_delay,
+              ),
+            );
             for (let i = 0; i < total; i++) {
               const payload = extraJSON[i];
 
