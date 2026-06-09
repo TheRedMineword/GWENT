@@ -15,7 +15,8 @@
   },
   "dependencies": {
     "express": "^5.2.1",
-    "fs-extra": "^11.3.5"
+    "fs-extra": "^11.3.5",
+    "ws": "^8.21.0"
   },
   "build": {
     "appId": "gwent.launcher",

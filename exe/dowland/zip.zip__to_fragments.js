@@ -57,7 +57,7 @@ for (let i = 0; i < fragmentCount; i++) {
 }
 
 const indexData = {
-    originalFile: 'zip.zip',
+    originalFile: 'GWENT_v.09.06.2026.zip',
     totalSize,
     fragmentCount,
     fragmentSize: CHUNK_SIZE,

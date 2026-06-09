@@ -113,26 +113,35 @@ console.log(
         } = require(SERVER_FILE);
 
         await startServer();
+const CONFIG_FILE =
+    require(
+        path.join(
+            APPDATA_ROOT,
+            'javascript/PC_scripts/window.json'
+        )
+    )
+    try { console.log(CONFIG_FILE)} catch (e) {};
+mainWindow = new BrowserWindow({
+    ...CONFIG_FILE.config_dump,
 
-        mainWindow = new BrowserWindow({
-            width: 1280,
-            height: 800,
-            autoHideMenuBar: true,
-            icon: path.join(__dirname, 'logo.ico'),
-            webPreferences: {
-                preload: path.join(__dirname, 'preload.js'),
-                contextIsolation: true,
-                nodeIntegration: false
-            }
-        });
+    icon: path.join(__dirname, 'logo.ico'),
+
+    webPreferences: {
+        preload: path.join(__dirname, 'preload.js'),
+        contextIsolation: true,
+        nodeIntegration: false
+    }
+});
+
+
 
         await new Promise(
             r => setTimeout(r, 1200)
         );
 
         await mainWindow.loadURL(
-            'http://127.0.0.1:1111/exe_app.html'
-        );
+    CONFIG_FILE.url
+);
 
         splash?.destroy();
         splash = null;
