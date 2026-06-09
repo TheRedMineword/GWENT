@@ -15,7 +15,7 @@ https://pngtree.com/freebackground/vintage-crinkled-paper-texture-aged-brown-bac
 - Gwent table blood stains texture: https://www.magnific.com/free-vector/halloween-background-with-red-blood-splatter-design_18355620.htm
 - Rules page copied from: https://romain-durban.github.io/gwent-classic-v3.0/rules
 - Gwent board stone texture from: https://www.vecteezy.com/vector-art/111496-cracked-stone-vector-texture
-- Gwent board stone texture from: https://www.vecteezy.com/vector-art/111496-cracked-stone-vector-texture
+- Gwent board leather texture from: https://www.magnific.com/pl/darmowe-zdjecie/brazowy-skorzany-tlo_4246300.htm
 - Weather box texture: https://www.magnific.com/free-photo/abstract-fractal-geometric-figure-background-with-texture_20612729.htm
 - rain effect image: https://www.pngwing.com/en/free-png-zlhiu
 - starting screen image: https://wall.alphacoders.com/big.php?i=1036489
