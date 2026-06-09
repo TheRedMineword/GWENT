@@ -1,6 +1,6 @@
 {
-  "sha": "6e0e3ca8e666d59f74c99c823f3c4b5dfdef82105e5d67282fe28c1273cb0796",
-  "generatedAt": "2026-06-09T17:23:12.833Z",
+  "sha": "323bc694a7f1450dfa79768d33008c3c0361eeb4d84dedcd480d9045d27f70a5",
+  "generatedAt": "2026-06-09T18:03:20.685Z",
   "files": [
     {
       "path": "404.html",
@@ -3739,8 +3739,8 @@
     },
     {
       "path": "javascript/PC_scripts/localhostserver.js",
-      "sha256": "36ce4fcc390564f3def78db0e53873a490d52a417daa817b32501eee0bccd599",
-      "size": 976
+      "sha256": "b6426ee1b75d492315c6c1d080cb92f034e470937e85c068ef18bb05bc89c9c4",
+      "size": 2180
     },
     {
       "path": "javascript/PC_scripts/window.json",
