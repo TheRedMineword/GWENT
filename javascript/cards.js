@@ -966,7 +966,7 @@ var card_dict = [
   //      "deck": "monsters",
   //       "row": "leader",
   //      "strength": "",
-  //      "ability": "eredin_king",
+  //      "ability": "eredin_king", // SEEMS TO BE BROKEN IN ASYNC EVENT, AS IT DONT DEFINE CARD (DAMM IT)
   //          "filename": "eredin_copper",
   //      "count": "1"
   //    },
