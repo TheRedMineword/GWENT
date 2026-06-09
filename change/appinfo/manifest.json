@@ -1,6 +1,6 @@
 {
-  "sha": "7c94997b1f8428e29100be24c568f3422774c46c753b06cd6d85577ddc190f01",
-  "generatedAt": "2026-06-09T15:14:49.385Z",
+  "sha": "a423ee9f28bfe2ddf0ed5af9ba0061f64f81a20adcae97a27e05ed3925fc349b",
+  "generatedAt": "2026-06-09T15:17:35.509Z",
   "files": [
     {
       "path": "404.html",
@@ -3656,11 +3656,6 @@
       "path": "img/web/readme.md",
       "sha256": "ec9fea14af2c4d9c8a25d0b08e7485647c08db2c538be22685cc578569050976",
       "size": 124
-    },
-    {
-      "path": "index_ver_check_script.txt",
-      "sha256": "015b9f22990c8b72f379415bce3973d84dde1456421221529d61de6fe5348640",
-      "size": 1128
     },
     {
       "path": "index.html",
