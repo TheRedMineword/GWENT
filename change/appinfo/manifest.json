@@ -1,6 +1,6 @@
 {
-  "sha": "3ec635cbcd3be050f86eb9840acfc6835c66921f3d96fa5c1068631f9dd6d381",
-  "generatedAt": "2026-06-09T16:12:25.012Z",
+  "sha": "f1ea8e5f02151061c61427505dbdecec24a48db26a295fd9dfeeb3dfb40bfc86",
+  "generatedAt": "2026-06-09T16:47:01.006Z",
   "files": [
     {
       "path": "404.html",
@@ -3739,8 +3739,13 @@
     },
     {
       "path": "javascript/PC_scripts/localhostserver.js",
-      "sha256": "0811531ba6f98d9689c5e7dc07122ac622f81514b5d21b043fc9cca544b200aa",
-      "size": 1087
+      "sha256": "ca9c42a49f185323f60ce9855445faa38ac75cfb4aacd8b63a26573880187ded",
+      "size": 1120
+    },
+    {
+      "path": "javascript/PC_scripts/window.json",
+      "sha256": "9982c684ece4b90542322ce0efade2b828d51efba177654909aecc5f8e02cfbf",
+      "size": 275
     },
     {
       "path": "javascript/session_registering.js",
