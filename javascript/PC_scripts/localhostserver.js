@@ -1,4 +1,4 @@
-const path = require('path');
+// const path = require('path'); <= is defined
 console.log("LOCALHOST SERVER ENV", process.env.GWENT_EXPRESS);
 
 

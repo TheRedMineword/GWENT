@@ -36,7 +36,7 @@ function createSplash() {
         width: 520,
         height: 220,
         frame: false,
-        resizable: false,
+        resizable: true,
         autoHideMenuBar: true,
         alwaysOnTop: true,
         icon: path.join(__dirname, 'logo.ico'),
