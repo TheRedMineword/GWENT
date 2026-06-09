@@ -1,10 +1,7 @@
-// const path = require('path'); <= is defined
-console.log("LOCALHOST SERVER ENV", process.env.GWENT_EXPRESS);
-
 const path = require('path');
 const fs = require('fs');
 const { app } = require('electron');
-const cors = require("cors");
+
 
 console.log(
     "LOCALHOST SERVER ENV",
