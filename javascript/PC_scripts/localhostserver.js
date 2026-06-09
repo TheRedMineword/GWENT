@@ -1,4 +1,26 @@
-const express = require('express');
+const path = require('path');
+console.log("LOCALHOST SERVER ENV", process.env.GWENT_EXPRESS);
+
+
+const express = require(
+    path.join(
+        process.resourcesPath,
+        'app.asar.unpacked',
+        'node_modules',
+        'express'
+    )
+);
+const fs = require('fs');
+
+console.log(
+    fs.existsSync(
+        path.join(
+            __dirname,
+            'node_modules',
+            'express'
+        )
+    )
+);
 const path = require('path');
 const { app } = require('electron');
 

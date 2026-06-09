@@ -59,14 +59,17 @@ function walk(
             );
 
         if (entry.isDirectory()) {
-
+     //       console.log("ENTRY", entry.path, fullPath);
             if (
                 IGNORE_DIRS.has(
                     entry.name
                 )
             ) {
-
-                continue;
+                if(fullPath === "C:\\Users\\LENOVO\\Desktop\\GWENT\\javascript\\PC_scripts\\node_modules"){
+                } else {
+                    console.log("IGNORE", fullPath);
+                    continue;
+                }
             }
 
             walk(

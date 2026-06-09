@@ -587,7 +587,7 @@ function cleanupFiles(
         if (
             !expected.has(relative)
         ) {
-
+            if (relative !== "version.txt"){
             console.log(
                 'Removing obsolete:',
                 relative
@@ -600,6 +600,7 @@ function cleanupFiles(
                 }
             );
         }
+    }
     }
 }
 console.log("CLEAN UP");

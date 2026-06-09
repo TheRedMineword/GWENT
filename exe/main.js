@@ -9,6 +9,24 @@ const {
 
 const { updateApp } = require('./updater');
 
+const fs = require('fs');
+
+console.log(
+    'Express exists:',
+    fs.existsSync(
+        path.join(
+            __dirname,
+            'node_modules',
+            'express'
+        )
+    ),
+    "\n\nDirName:\n"
+);
+console.log(__dirname);
+process.env.GWENT_EXPRESS =
+    require.resolve('express');
+
+    console.log("ENV CREATED:", process.env.GWENT_EXPRESS);
 let mainWindow;
 let splash;
 
@@ -48,6 +66,17 @@ async function createWindow() {
 
         await updateApp(splash);
 
+        const Module = require('module');
+const path = require('path');
+
+Module.globalPaths.push(
+    path.join(__dirname, 'node_modules')
+);
+
+console.log(
+    Module.globalPaths
+);
+
         const APPDATA_ROOT =
             path.join(
                 app.getPath('appData'),
@@ -57,7 +86,7 @@ async function createWindow() {
         const SERVER_FILE =
             path.join(
                 APPDATA_ROOT,
-                'javascript\PC_scripts\localhostserver.js'
+                'javascript/PC_scripts/localhostserver.js'
             );
 
         if (splash?.webContents) {
@@ -70,6 +99,14 @@ async function createWindow() {
         delete require.cache[
             require.resolve(SERVER_FILE)
         ];
+
+        process.env.GWENT_EXPRESS =
+    require.resolve('express');
+
+console.log(
+    'EXPRESS:',
+    process.env.GWENT_EXPRESS
+);
 
         const {
             startServer
