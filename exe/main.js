@@ -57,7 +57,7 @@ async function createWindow() {
         const SERVER_FILE =
             path.join(
                 APPDATA_ROOT,
-                'exe_scripts/server.js'
+                'javascript\PC_scripts\localhostserver.js'
             );
 
         if (splash?.webContents) {

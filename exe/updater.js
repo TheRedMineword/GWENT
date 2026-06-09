@@ -604,7 +604,7 @@ function cleanupFiles(
 }
 console.log("CLEAN UP");
 cleanupFiles(
-    APPDATA_ROOT,
+    APP_DIR,
     manifest
 );
 }

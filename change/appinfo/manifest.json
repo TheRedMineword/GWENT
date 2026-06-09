@@ -1,6 +1,6 @@
 {
-  "sha": "a423ee9f28bfe2ddf0ed5af9ba0061f64f81a20adcae97a27e05ed3925fc349b",
-  "generatedAt": "2026-06-09T15:17:35.509Z",
+  "sha": "675f128151022d25af2911f595217d020fe349512d997acdc67526978e85923b",
+  "generatedAt": "2026-06-09T15:24:57.060Z",
   "files": [
     {
       "path": "404.html",
@@ -3731,6 +3731,11 @@
       "path": "javascript/patchnotes.js",
       "sha256": "b579edfda1a510b9fdc7e499c29ed777ba044174ed18be43ab2c54730cb723bd",
       "size": 2871
+    },
+    {
+      "path": "javascript/PC_scripts/localhostserver.js",
+      "sha256": "cd7d4575c7ef65ccb4e34f1833cc080676e5d89d41b0bcd5dc1f56efc8aade11",
+      "size": 797
     },
     {
       "path": "javascript/session_registering.js",
