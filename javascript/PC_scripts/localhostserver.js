@@ -1,28 +1,22 @@
 // const path = require('path'); <= is defined
 console.log("LOCALHOST SERVER ENV", process.env.GWENT_EXPRESS);
 
-
-const express = require(
-    path.join(
-        process.resourcesPath,
-        'app.asar.unpacked',
-        'node_modules',
-        'express'
-    )
-);
+const path = require('path');
 const fs = require('fs');
+const { app } = require('electron');
 
 console.log(
-    fs.existsSync(
-        path.join(
-            __dirname,
-            'node_modules',
-            'express'
-        )
-    )
+    "LOCALHOST SERVER ENV",
+    process.env.GWENT_EXPRESS
 );
-const path = require('path');
-const { app } = require('electron');
+
+const express = require(
+    process.env.GWENT_EXPRESS
+);
+
+console.log(
+    "Express loaded"
+);
 
 function startServer() {
 
