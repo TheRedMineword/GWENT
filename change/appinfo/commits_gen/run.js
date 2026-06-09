@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const WebSocket = require('ws');
+const cors = require("cors");
 
 const ROOT_DIR =
     'C:/Users/LENOVO/Desktop/GWENT';

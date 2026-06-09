@@ -4,6 +4,7 @@ console.log("LOCALHOST SERVER ENV", process.env.GWENT_EXPRESS);
 const path = require('path');
 const fs = require('fs');
 const { app } = require('electron');
+const cors = require("cors");
 
 console.log(
     "LOCALHOST SERVER ENV",
@@ -34,7 +35,7 @@ function startServer() {
 
     serverApp.get('/', (req, res) => {
         res.sendFile(
-            path.join(APP_DIR, 'index.html')
+            path.join(APP_DIR, 'exe_app.html')
         );
     });
 

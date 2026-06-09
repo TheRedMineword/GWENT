@@ -1,0 +1,14 @@
+{
+  "url": "http://127.0.0.1:1111/",
+  "config_dump": {
+    "width": 1280,
+    "height": 800,
+    "minWidth": 1000,
+    "minHeight": 700,
+    "resizable": true,
+    "maximizable": true,
+    "fullscreen": false,
+    "show": true,
+    "autoHideMenuBar": true
+  }
+}
