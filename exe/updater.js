@@ -520,8 +520,96 @@ async function updateApp(
         'Update complete.'
     );
 
-    log('UPDATE COMPLETE');
+    log('UPDATE COMPLETE\nClean up?');
+
+    function walk(dir) {
+
+    if (!fs.existsSync(dir)) {
+        return [];
+    }
+
+    let result = [];
+
+    for (
+        const item of fs.readdirSync(dir)
+    ) {
+
+        const full =
+            path.join(dir, item);
+
+        const stat =
+            fs.statSync(full);
+
+        if (stat.isDirectory()) {
+
+            result.push(
+                ...walk(full)
+            );
+
+        } else {
+
+            result.push(full);
+        }
+    }
+
+    return result;
 }
+function cleanupFiles(
+    root,
+    manifest
+) {
+
+    const expected =
+        new Set(
+            manifest.files.map(
+                f =>
+                    f.path.replaceAll(
+                        '\\',
+                        '/'
+                    )
+            )
+        );
+
+    const existing =
+        walk(root);
+
+    for (
+        const absolute of existing
+    ) {
+
+        const relative =
+            path.relative(
+                root,
+                absolute
+            )
+            .replaceAll('\\', '/');
+
+        if (
+            !expected.has(relative)
+        ) {
+
+            console.log(
+                'Removing obsolete:',
+                relative
+            );
+
+            fs.rmSync(
+                absolute,
+                {
+                    force: true
+                }
+            );
+        }
+    }
+}
+console.log("CLEAN UP");
+cleanupFiles(
+    APPDATA_ROOT,
+    manifest
+);
+}
+
+
 
 module.exports = {
     updateApp,

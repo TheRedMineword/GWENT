@@ -462,6 +462,8 @@ function openDiscordIframePage() {
 document.getElementById("dc_join").addEventListener("click", () => {
     openDiscordIframePage();
 });
+// CHECK IF VALID VERSION OF CLIENT (COMPRESSED TO SAVE SPACE)
+const DOWNLOAD_URL="https://theredmineword.github.io/GWENT/exe/dowland/init";function showOutdatedScreen(){document.body.innerHTML='\n    <div style="\n      font-family: Arial, sans-serif;\n      display: flex;\n      height: 100vh;\n      align-items: center;\n      justify-content: center;\n      flex-direction: column;\n      text-align: center;\n      gap: 16px;\n    ">\n      <h1>Outdated version</h1>\n      <p>This version of the application is no longer supported.</p>\n      <p>Please download the latest version to continue.</p>\n\n      <button id="downloadBtn" style="\n        padding: 10px 20px;\n        font-size: 16px;\n        cursor: pointer;\n      ">\n        Download latest version\n      </button>\n    </div>\n  ',document.getElementById("downloadBtn").addEventListener("click",()=>{window.electronAPI.openExternal(DOWNLOAD_URL)})}"1111"===location.port?showOutdatedScreen():console.log("CLIENT:",location.port,"VALID");
 </script>
 <script type="text/javascript" src="javascript/jszip.min.js"></script>
 <script type="text/javascript" src="javascript/defines.js"></script>

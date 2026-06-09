@@ -1,15 +1,13 @@
+const path = require('path');
+
 const {
     app,
     BrowserWindow,
-    ipcMain
+    ipcMain,
+    shell
 } = require('electron');
 
-const path = require('path');
-
-const { startServer } = require('./server');
 const { updateApp } = require('./updater');
-
-const { shell } = require('electron');
 
 let mainWindow;
 let splash;
@@ -18,12 +16,11 @@ function createSplash() {
 
     splash = new BrowserWindow({
         width: 520,
-        height: 320,
+        height: 220,
         frame: false,
         resizable: false,
-        transparent: false,
-        alwaysOnTop: true,
         autoHideMenuBar: true,
+        alwaysOnTop: true,
         icon: path.join(__dirname, 'logo.ico'),
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
@@ -33,7 +30,11 @@ function createSplash() {
     });
 
     splash.loadFile(
-        path.join(__dirname, 'windows', 'splash.html')
+        path.join(
+            __dirname,
+            'windows',
+            'splash.html'
+        )
     );
 
     return splash;
@@ -45,25 +46,36 @@ async function createWindow() {
 
     try {
 
-        // UPDATE WITH SPLASH EVENTS
         await updateApp(splash);
 
-        if (splash && splash.webContents) {
+        const APPDATA_ROOT =
+            path.join(
+                app.getPath('appData'),
+                'GWENT'
+            );
+
+        const SERVER_FILE =
+            path.join(
+                APPDATA_ROOT,
+                'exe_scripts/server.js'
+            );
+
+        if (splash?.webContents) {
             splash.webContents.send(
                 'update-status',
-                'Starting local server...'
+                'Starting application...'
             );
         }
 
-        // START LOCAL SERVER
+        delete require.cache[
+            require.resolve(SERVER_FILE)
+        ];
+
+        const {
+            startServer
+        } = require(SERVER_FILE);
+
         await startServer();
-
-        if (splash && splash.webContents) {
-            splash.webContents.send(
-                'update-status',
-                'Opening application...'
-            );
-        }
 
         mainWindow = new BrowserWindow({
             width: 1280,
@@ -77,50 +89,53 @@ async function createWindow() {
             }
         });
 
-        // IMPORTANT
-        // Wait slightly for express/http server to bind correctly.
-        await new Promise(r => setTimeout(r, 1200));
+        await new Promise(
+            r => setTimeout(r, 1200)
+        );
 
-        await mainWindow.loadURL('http://127.0.0.1:1111');
+        await mainWindow.loadURL(
+            'http://127.0.0.1:1111'
+        );
 
-        if (splash) {
-            splash.destroy();
-            splash = null;
-        }
+        splash?.destroy();
+        splash = null;
 
     } catch (err) {
 
         console.error(err);
 
-        if (splash && splash.webContents) {
-            splash.webContents.send(
-                'update-status',
-                'Fatal error: ' + err.message
-            );
-        }
+        splash?.webContents?.send(
+            'update-status',
+            'Fatal error: ' + err.message
+        );
     }
 }
 
-// app.whenReady().then(createWindow);
 app.whenReady().then(async () => {
 
-    // IPC handlers belong here
-    //console.log("IPC MAIN UNDER");
-    ipcMain.on('open-external', async (event, url) => {
-    try {
-        await shell.openExternal(url);
-        console.log('Opened');
-    } catch (err) {
-        console.error('Failed:', err);
-    }
-});
+    ipcMain.on(
+        'open-external',
+        async (_, url) => {
+
+            try {
+                await shell.openExternal(url);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    );
 
     await createWindow();
 });
 
-app.on('window-all-closed', () => {
+app.on(
+    'window-all-closed',
+    () => {
 
-    if (process.platform !== 'darwin') {
-        app.quit();
+        if (
+            process.platform !== 'darwin'
+        ) {
+            app.quit();
+        }
     }
-});
+);

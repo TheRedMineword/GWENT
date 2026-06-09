@@ -1,0 +1,107 @@
+html,
+body{
+    margin:0;
+    padding:0;
+
+    width:100%;
+    height:100%;
+
+    overflow:hidden;
+
+    background:#313217;
+
+    font-family:
+        "Segoe UI",
+        sans-serif;
+
+    color:#ffffff;
+}
+
+body{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.card{
+    width:90%;
+    max-width:340px;
+
+    padding:16px;
+
+    border-radius:12px;
+
+    background:rgba(0,0,0,.18);
+
+    box-sizing:border-box;
+}
+
+#logo{
+    display:block;
+
+    width:40px;
+    height:40px;
+
+    margin:0 auto 10px;
+
+    filter:grayscale(1);
+    transition:.4s;
+}
+
+.ready #logo{
+    filter:none;
+}
+
+#status{
+    text-align:center;
+
+    font-size:13px;
+    font-weight:600;
+
+    color:#fff;
+
+    margin-bottom:10px;
+}
+
+.progress-wrap{
+    width:100%;
+    height:8px;
+
+    border-radius:999px;
+
+    overflow:hidden;
+
+    background:
+        rgba(255,255,255,.08);
+}
+
+#progress-fill{
+    width:0%;
+
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #cd8b1d,
+            #627600,
+            #246e18
+        );
+
+    transition:width .2s ease;
+}
+
+#details{
+    margin-top:8px;
+
+    text-align:center;
+
+    font-size:11px;
+
+    color:
+        rgba(255,255,255,.75);
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}

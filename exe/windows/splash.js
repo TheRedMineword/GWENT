@@ -13,6 +13,7 @@ window.updater.onStatus(text => {
 });
 
 window.updater.onProgress(data => {
+document.body.classList.add('ready');
 
     const percent =
         Math.floor(
@@ -27,3 +28,20 @@ window.updater.onProgress(data => {
 
     progressEl.value = percent;
 });
+
+function updateProgress(percent, text) {
+
+    document.getElementById(
+        "progress-fill"
+    ).style.width = `${percent}%`;
+
+    document.getElementById(
+        "status"
+    ).textContent = text;
+
+    if (percent > 0) {
+        document.body.classList.add(
+            "ready"
+        );
+    }
+}
