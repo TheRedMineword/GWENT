@@ -4289,18 +4289,23 @@ class Carousel {
           }),
         );
       }, 1000);
-    } else if (actionString.includes("board.toWeather")) {
-      setTimeout(() => {
-        extraJSON.push(
-          JSON.stringify({ type: "weatherDraw", card: resp.filename }),
-        );
-        //extraJSON = JSON.stringify({ type: "medicDraw", card: resp.filename });
-        console.log(
-          "extra json now",
-          extraJSON,
-          JSON.stringify({ type: "weatherDraw", card: resp.filename }),
-        );
-      }, 1000);
+    } else if (
+      // actionString.includes("board.toWeather")
+      med_draw === "EredinKIng"
+    ) {
+      // this shit here is broken, no resp
+      med_draw = 0;
+      // setTimeout(() => {
+      extraJSON.push(
+        JSON.stringify({ type: "weatherDraw", card: resp.filename }),
+      );
+      //extraJSON = JSON.stringify({ type: "medicDraw", card: resp.filename });
+      console.log(
+        "extra json now",
+        extraJSON,
+        JSON.stringify({ type: "weatherDraw", card: resp.filename }),
+      );
+      //   }, 1000);
     } else if (actionString.includes("board.toGrave")) {
       setTimeout(() => {
         extraJSON.push(

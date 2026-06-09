@@ -1344,7 +1344,8 @@ var ability_dict = {
   },
   eredin_bringer_of_death: {
     name: "Eredin : Bringer of Death",
-    description: "Restore a card from your discard pile to your hand.",
+    description: "Recive a copy of card from your discard pile to your hand.",
+
     activated: async (card) => {
       if (!card.holder.grave.cards.length) {
         card.holder.tag === "me" ? player_me.endRound() : player_op.endRound();
@@ -1352,37 +1353,45 @@ var ability_dict = {
       }
 
       let newCard;
-      if (card.holder.controller instanceof ControllerOpponent) {
-        newCard = await new Promise((resolve) => {
-          const handleMessage = async (event) => {
-            const data = await recv_and_decomp(event);
 
-            if (data.type === "containerClosed") {
-              //	const drawnCard = player_op.grave.cards.filter(c => c.isUnit() && c.filename === data.card)[0]
-              //	if (drawnCard) {
-              //		resolve(drawnCard);
-              //	}
-              //player_op.hand.cards.push({});
-              var op_counter = document.getElementById("hand-count-op");
-              op_counter.innerHTML = player_op.hand.cards.length;
-              resolve(player_op.grave.cards[0]);
-            }
-          };
-          socket.addEventListener("message", handleMessage);
-        });
-      } else {
-        Carousel.curr.exit();
-        await ui.queueCarousel(
-          card.holder.grave,
-          1,
-          (c, i) => (newCard = c.cards[i]),
-          (c) => c.isUnit(),
-          false,
-          false,
+      if (card.holder.controller instanceof ControllerOpponent) {
+        // don't wait for containerClosed
+
+        const sourceCard = card.holder.grave.cards.find((c) => c.isUnit());
+        if (!sourceCard) return;
+
+        // create a fresh copy
+        const cardData = Object.values(card_dict).find(
+          (cd) => cd.filename === sourceCard.filename,
         );
+
+        if (!cardData) return;
+
+        newCard = new Card(cardData, card.holder);
+
+        // cosmetic hand counter if needed
+        const op_counter = document.getElementById("hand-count-op");
+        if (op_counter) op_counter.innerHTML = player_op.hand.cards.length + 1;
+
+        card.holder.hand.addCard(newCard);
+
+        return;
       }
+
+      Carousel.curr.exit();
+
+      await ui.queueCarousel(
+        card.holder.grave,
+        1,
+        (c, i) => (newCard = c.cards[i]),
+        (c) => c.isUnit(),
+        false,
+        false,
+      );
+
       if (newCard) await board.toHand(newCard, card.holder.grave);
     },
+
     weight: (card, ai, max, data) => ai.weightMedic(data, 0, card.holder),
   },
   eredin_destroyer: {
@@ -1559,6 +1568,8 @@ var ability_dict = {
         });
         board.toWeather(card, deck);
       } else {
+        med_draw = "EredinKIng";
+        await sleep(100);
         Carousel.curr.cancel();
         await ui.queueCarousel(
           deck,

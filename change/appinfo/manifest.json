@@ -1,6 +1,6 @@
 {
-  "sha": "db37cdca82f2cc0aa222dd60350db5685e658a4935cc844e5e29d214ab7b6a01",
-  "generatedAt": "2026-06-09T17:04:03.498Z",
+  "sha": "6e0e3ca8e666d59f74c99c823f3c4b5dfdef82105e5d67282fe28c1273cb0796",
+  "generatedAt": "2026-06-09T17:23:12.833Z",
   "files": [
     {
       "path": "404.html",
@@ -3669,13 +3669,13 @@
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "177880d6b5788ad9fcfb47d06c8b49a3cca9afd3d18da4fdb2c4542fb4a0984d",
-      "size": 64395
+      "sha256": "1405f5a8ce1aa30a2321f0e3e944208b77b54ee6ea16219bfb30df0cfe42da79",
+      "size": 64331
     },
     {
       "path": "javascript/cards.js",
-      "sha256": "a3c9d34dbb5f031778d69ca114c4cf4d3166494f11eabe67ef0af628c624fa83",
-      "size": 48757
+      "sha256": "5b09f949a15f97cc540280e31552b2cf9d95b1fcdd70fc7aa3976169d523a5e0",
+      "size": 48754
     },
     {
       "path": "javascript/chat.js",
@@ -3724,8 +3724,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "24faec3e9457192e0e9b0fab5ca9519f1481bb7c50fcf1ed70254e6953ccf12e",
-      "size": 171144
+      "sha256": "9be1708bc2f656f62f8a213ba78985797280e2756b31104cf62f4ed3f4ad8197",
+      "size": 171244
     },
     {
       "path": "javascript/jszip.min.js",

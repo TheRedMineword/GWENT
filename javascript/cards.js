@@ -937,7 +937,7 @@ var card_dict = [
     row: "leader",
     strength: "",
     ability: "eredin_commander",
-    filename: "eredin_silver",
+    filename: "eredin_bronze",
     count: "1",
   },
   {
@@ -947,7 +947,7 @@ var card_dict = [
     row: "leader",
     strength: "",
     ability: "eredin_bringer_of_death",
-    filename: "eredin_bronze",
+    filename: "eredin_silver",
     count: "1",
   },
   {
@@ -961,15 +961,15 @@ var card_dict = [
     count: "1",
   },
   // {
-  //       "name": "Eredin - King of the Wild Hunt",
-  //       "id": "135",
-  //       "deck": "monsters",
+  //     "name": "Eredin - King of the Wild Hunt",
+  //        "id": "135",
+  //      "deck": "monsters",
   //       "row": "leader",
-  //       "strength": "",
-  //       "ability": "eredin_king",
-  //        "filename": "eredin_copper",
-  //        "count": "1"
-  //   },
+  //      "strength": "",
+  //      "ability": "eredin_king",
+  //          "filename": "eredin_copper",
+  //      "count": "1"
+  //    },
   {
     name: "Eredin Bréacc Glas - The Treacherous",
     id: "",
