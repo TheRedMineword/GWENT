@@ -1,6 +1,6 @@
 {
-  "sha": "0054018c6eef310101f5cc9097c51180dde3353402e5fb19029fbfef4b9c8998",
-  "generatedAt": "2026-06-09T16:09:58.371Z",
+  "sha": "3ec635cbcd3be050f86eb9840acfc6835c66921f3d96fa5c1068631f9dd6d381",
+  "generatedAt": "2026-06-09T16:12:25.012Z",
   "files": [
     {
       "path": "404.html",
@@ -176,6 +176,11 @@
       "path": "debug_info.txt",
       "sha256": "c454be0697379a96f45d51f5de12537d2231746b3a23ba7274ff58681f7281e7",
       "size": 97
+    },
+    {
+      "path": "exe_app.html",
+      "sha256": "c5d95092a11f5b2e5540b7ff9396673a54b3f156215f0c0bec266f6d5e1cd9f2",
+      "size": 13777
     },
     {
       "path": "favicon-16x16.png",

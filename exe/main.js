@@ -131,7 +131,7 @@ console.log(
         );
 
         await mainWindow.loadURL(
-            'http://127.0.0.1:1111'
+            'http://127.0.0.1:1111/exe_app.html'
         );
 
         splash?.destroy();
