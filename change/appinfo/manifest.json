@@ -1,6 +1,6 @@
 {
-  "sha": "2b966c99f61f5504489c8937cebfa397c6bfb655742c2925a04527648f176300",
-  "generatedAt": "2026-06-09T18:09:54.862Z",
+  "sha": "ccce6860bd71e5e6fbe4c2af10c00485c60f358c18905d86125313fc1fce17e7",
+  "generatedAt": "2026-06-10T14:00:24.983Z",
   "files": [
     {
       "path": "404.html",
@@ -173,14 +173,29 @@
       "size": 126
     },
     {
+      "path": "css/gwent.css",
+      "sha256": "48a005f0d64bdd92ac90db4d8dfaa0385ea425f53878a065fd5c3db788b14087",
+      "size": 43538
+    },
+    {
+      "path": "css/pure.min.css",
+      "sha256": "abab7fa9bc0d180a1b1557629e71f46e00005d3b95f078717e680d0cc8220901",
+      "size": 18565
+    },
+    {
+      "path": "css/rules.css",
+      "sha256": "2ef8a91328af7db45f68ac363d58c5c1bdebf62c9f935a0091c584d44d04a819",
+      "size": 6264
+    },
+    {
       "path": "debug_info.txt",
       "sha256": "c454be0697379a96f45d51f5de12537d2231746b3a23ba7274ff58681f7281e7",
       "size": 97
     },
     {
       "path": "exe_app.html",
-      "sha256": "c5d95092a11f5b2e5540b7ff9396673a54b3f156215f0c0bec266f6d5e1cd9f2",
-      "size": 13777
+      "sha256": "5621468bb645b1b1bd64f9c3dbe3182a7564a4cb91cff45aa7cca48e9bddb42c",
+      "size": 13782
     },
     {
       "path": "favicon-16x16.png",
@@ -271,11 +286,6 @@
       "path": "img/icons/anim_griffin_hand.png",
       "sha256": "b1c11ea03bba610b7cf57275a8ddf3e9c84e683f4b750a9acac85ebf7adaecd7",
       "size": 145854
-    },
-    {
-      "path": "img/icons/anim_griffin_hand.png_exiftool_tmp",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size": 0
     },
     {
       "path": "img/icons/anim_griffin.png",
@@ -953,11 +963,6 @@
       "size": 8199
     },
     {
-      "path": "img/icons/sunlight.png",
-      "sha256": "357707522719987390a443eac7eba334ca23211e9ed5efe26157e8cd76306cf2",
-      "size": 2244
-    },
-    {
       "path": "img/lg/faction_monsters.jpg",
       "sha256": "05cf9006c577f1624f022a8cb8b8ba8a62465dc55986a07360be769277a4b369",
       "size": 38267
@@ -1399,11 +1404,6 @@
     },
     {
       "path": "img/lg/nilfgaard_assire.jpg",
-      "sha256": "a2a0b6a8f29814de6fcad5c4cd6dfabddc37d716530ad5beee70adcba891ec44",
-      "size": 113423
-    },
-    {
-      "path": "img/lg/nilfgaard_assire.jpg_exiftool_tmp",
       "sha256": "a2a0b6a8f29814de6fcad5c4cd6dfabddc37d716530ad5beee70adcba891ec44",
       "size": 113423
     },
@@ -3664,8 +3664,8 @@
     },
     {
       "path": "index.html",
-      "sha256": "ae55657f80bb04307875cab4830f948b59aa4a112dd17a9e846992b90e5c4395",
-      "size": 14310
+      "sha256": "1daee54e452e17687e3d4fbba7196ccd0ef0f09259dfd875df7a38088f888f1d",
+      "size": 14314
     },
     {
       "path": "javascript/abilities.js",
@@ -3748,6 +3748,11 @@
       "size": 287
     },
     {
+      "path": "javascript/rules.js",
+      "sha256": "a723361affeabc76853a380bcc036d03c5e8bd8370aee8092f280455d61634c4",
+      "size": 1325
+    },
+    {
       "path": "javascript/session_registering.js",
       "sha256": "64430a2763909b709d7f06386352381071f6787da016d6a2000ca590274f2a98",
       "size": 21413
@@ -3773,19 +3778,9 @@
       "size": 3683
     },
     {
-      "path": "rules.css",
-      "sha256": "2ef8a91328af7db45f68ac363d58c5c1bdebf62c9f935a0091c584d44d04a819",
-      "size": 6264
-    },
-    {
       "path": "rules.html",
-      "sha256": "33e9ad976ea67f1819abc330ade0dd1ff5eb2dee41c71c4bec14245b838ac1b7",
-      "size": 63921
-    },
-    {
-      "path": "rules.js",
-      "sha256": "4330078456160564e267ef95a0ff1d47dbdfdf4152cd99200e2c098546c91537",
-      "size": 1513
+      "sha256": "a8db07cc01654eb5640fb581c2e0581d9e25bb6e008ed615daac67189afd7b11",
+      "size": 63818
     },
     {
       "path": "sfx/ability_use_from_counter.mp3",
@@ -4096,11 +4091,14 @@
       "path": "site.webmanifest",
       "sha256": "7a9e07ce1f7386689917602ddc5a75750ad842e605ff764f67173529c181bf04",
       "size": 263
-    },
-    {
-      "path": "style.css",
-      "sha256": "48a005f0d64bdd92ac90db4d8dfaa0385ea425f53878a065fd5c3db788b14087",
-      "size": 43538
     }
-  ]
+  ],
+  "totals": {
+    "size": {
+      "b": 53150976,
+      "mb": 50.69,
+      "gb": 0.05
+    },
+    "files": 818
+  }
 }

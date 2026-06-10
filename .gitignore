@@ -9,3 +9,6 @@ gwent_cards
 .env
 session_registering_oryginal.js
 index_ver_check_script.txt
+.init.bat
+.replace.env
+.server.js

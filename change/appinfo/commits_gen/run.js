@@ -244,7 +244,8 @@ function main() {
         generatedAt:
             new Date()
                 .toISOString(),
-        files: manifestFiles
+        files: manifestFiles,
+        totals: { size: getTotalSize(manifestFiles), files: manifestFiles.length }
     };
 
     fs.writeFileSync(
@@ -280,5 +281,13 @@ function main() {
         finalSha
     );
 }
+function getTotalSize(files) {
+  const bytes = files.reduce((sum, file) => sum + file.size, 0);
 
+  return {
+    b: bytes,
+    mb: +(bytes / 1024 ** 2).toFixed(2),
+    gb: +(bytes / 1024 ** 3).toFixed(2),
+  };
+}
 main();
