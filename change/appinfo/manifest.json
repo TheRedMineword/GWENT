@@ -1,6 +1,6 @@
 {
-  "sha": "a4c3eb248e2dd162f4c8bfcdea2c847387d1e2d0182e4b5cfe79b85ea843aed2",
-  "generatedAt": "2026-06-10T14:32:05.589Z",
+  "sha": "37a33710285eb5be17fab984770c95252f9f370aa6d16dc6f28617e640c5a311",
+  "generatedAt": "2026-06-10T14:44:24.764Z",
   "files": [
     {
       "path": "404.html",
@@ -173,11 +173,6 @@
       "size": 126
     },
     {
-      "path": "css/gwent.css",
-      "sha256": "48a005f0d64bdd92ac90db4d8dfaa0385ea425f53878a065fd5c3db788b14087",
-      "size": 43538
-    },
-    {
       "path": "css/pure.min.css",
       "sha256": "abab7fa9bc0d180a1b1557629e71f46e00005d3b95f078717e680d0cc8220901",
       "size": 18565
@@ -206,6 +201,11 @@
       "path": "favicon.ico",
       "sha256": "69b69c079641509a6be83f0a9d6d8c7ceaaec2644049fa37504f0f2dca94a94a",
       "size": 15406
+    },
+    {
+      "path": "gwent.css",
+      "sha256": "48a005f0d64bdd92ac90db4d8dfaa0385ea425f53878a065fd5c3db788b14087",
+      "size": 43538
     },
     {
       "path": "img/board-classic.jpg",
@@ -3659,8 +3659,8 @@
     },
     {
       "path": "index.html",
-      "sha256": "c06c3f6eeddbdf3e7029372f98188ca7b7d6ff3c9f06a23fae5112b586ef84d3",
-      "size": 16018
+      "sha256": "d6f8d6fdfa89ceda6ebf4c8d044ef1189ae934d83ff361c36bf4f972e6b35b8e",
+      "size": 15834
     },
     {
       "path": "javascript/abilities.js",
@@ -4090,7 +4090,7 @@
   ],
   "totals": {
     "size": {
-      "b": 53140211,
+      "b": 53140027,
       "mb": 50.68,
       "gb": 0.05
     },

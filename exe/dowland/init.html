@@ -407,7 +407,7 @@ async function downloadFragments() {
     const totalSize = indexData.totalSize;
 
     infoText.innerHTML = `
-        Total Size: <strong>${formatBytes(totalSize)}</strong><br>
+        Total Size: <strong>${formatBytes(totalSize)}</strong><br>(Does not include Game Assets)<br>Game Assets will be downloaded by the client upon launch)<br>
         Fragments: <strong>${totalFragments}</strong>
     `;
 
