@@ -1,6 +1,6 @@
 {
-  "sha": "8357312b5f863132af4f01ef427abf0258aafb894aebeed315fa19fc9d037c2b",
-  "generatedAt": "2026-06-10T14:58:36.296Z",
+  "sha": "9ba4bd0c220508df7990b21324cd5856f7d7f098485ea0c6d9b9bf6c86a9fb53",
+  "generatedAt": "2026-06-10T15:21:17.825Z",
   "files": [
     {
       "path": "404.html",
@@ -781,6 +781,11 @@
       "path": "img/icons/icon_player_border.png",
       "sha256": "69567b26c57a3d94f68f6baa0677c0ca276df7372ad2eb2df29107e6bb9ee493",
       "size": 14323
+    },
+    {
+      "path": "img/icons/lock_51dp_CCBBAA.svg",
+      "sha256": "963ebd193340a110b3f33d8165a3abee1f5c802086438311577adc50158ba723",
+      "size": 516
     },
     {
       "path": "img/icons/no-server.png",
@@ -3749,8 +3754,8 @@
     },
     {
       "path": "javascript/session_registering.js",
-      "sha256": "64430a2763909b709d7f06386352381071f6787da016d6a2000ca590274f2a98",
-      "size": 21413
+      "sha256": "160c97a68c9adde0fcab259f9c8b58e869446a12a79c30b2213720d9dc323643",
+      "size": 24631
     },
     {
       "path": "javascript/session.js",
@@ -4090,10 +4095,10 @@
   ],
   "totals": {
     "size": {
-      "b": 53140547,
+      "b": 53144281,
       "mb": 50.68,
       "gb": 0.05
     },
-    "files": 817
+    "files": 818
   }
 }
