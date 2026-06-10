@@ -1,5 +1,5 @@
 {
-  "url": "http://127.0.0.1:1111/exe_app.html",
+  "url": "http://localhost:1111/",
   "config_dump": {
     "width": 1280,
     "height": 800,

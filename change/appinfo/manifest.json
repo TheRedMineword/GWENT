@@ -1,6 +1,6 @@
 {
-  "sha": "ccce6860bd71e5e6fbe4c2af10c00485c60f358c18905d86125313fc1fce17e7",
-  "generatedAt": "2026-06-10T14:00:24.983Z",
+  "sha": "a4c3eb248e2dd162f4c8bfcdea2c847387d1e2d0182e4b5cfe79b85ea843aed2",
+  "generatedAt": "2026-06-10T14:32:05.589Z",
   "files": [
     {
       "path": "404.html",
@@ -191,11 +191,6 @@
       "path": "debug_info.txt",
       "sha256": "c454be0697379a96f45d51f5de12537d2231746b3a23ba7274ff58681f7281e7",
       "size": 97
-    },
-    {
-      "path": "exe_app.html",
-      "sha256": "5621468bb645b1b1bd64f9c3dbe3182a7564a4cb91cff45aa7cca48e9bddb42c",
-      "size": 13782
     },
     {
       "path": "favicon-16x16.png",
@@ -3664,8 +3659,8 @@
     },
     {
       "path": "index.html",
-      "sha256": "1daee54e452e17687e3d4fbba7196ccd0ef0f09259dfd875df7a38088f888f1d",
-      "size": 14314
+      "sha256": "c06c3f6eeddbdf3e7029372f98188ca7b7d6ff3c9f06a23fae5112b586ef84d3",
+      "size": 16018
     },
     {
       "path": "javascript/abilities.js",
@@ -3739,13 +3734,13 @@
     },
     {
       "path": "javascript/PC_scripts/localhostserver.js",
-      "sha256": "36ce4fcc390564f3def78db0e53873a490d52a417daa817b32501eee0bccd599",
-      "size": 976
+      "sha256": "57ec2d5ba0c520f3df62ecb59db169779b957738f672f340fa7f34be052b9925",
+      "size": 2301
     },
     {
       "path": "javascript/PC_scripts/window.json",
-      "sha256": "99474e3423429a5119e0aed717f19ac982a00601b9b87516363a514ba265b4b9",
-      "size": 287
+      "sha256": "aa5b83b7af494d18967929942560860f6e8340e45367600b52a45e2a1f977173",
+      "size": 275
     },
     {
       "path": "javascript/rules.js",
@@ -4095,10 +4090,10 @@
   ],
   "totals": {
     "size": {
-      "b": 53150976,
-      "mb": 50.69,
+      "b": 53140211,
+      "mb": 50.68,
       "gb": 0.05
     },
-    "files": 818
+    "files": 817
   }
 }
