@@ -5,6 +5,9 @@ const prettier = require("prettier");
 const DIR = "C:/Users/LENOVO/Desktop/GWENT/javascript/";
 
 async function beautifyFile(filePath) {
+  if (path.basename(filePath) === "session_registering.js"){
+    console.log("Ingored javascript:", filePath);
+  } else {
   const code = fs.readFileSync(filePath, "utf8");
 
   const formatted = await prettier.format(code, {
@@ -12,9 +15,9 @@ async function beautifyFile(filePath) {
   });
 
   fs.writeFileSync(filePath, formatted, "utf8");
-  console.log("Beautified:", filePath);
+  console.log("Beautified:", path.basename(filePath), filePath);
 }
-
+}
 async function scanDirectory(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
 
