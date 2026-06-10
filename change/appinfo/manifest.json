@@ -1,6 +1,6 @@
 {
-  "sha": "9ba4bd0c220508df7990b21324cd5856f7d7f098485ea0c6d9b9bf6c86a9fb53",
-  "generatedAt": "2026-06-10T15:21:17.825Z",
+  "sha": "75f0e8e99dafe0c4340a822d920fb8ac07e29909eaeb90eebba281ffbc111f65",
+  "generatedAt": "2026-06-10T15:21:42.924Z",
   "files": [
     {
       "path": "404.html",
@@ -29,7 +29,7 @@
     },
     {
       "path": "change/index.json",
-      "sha256": "cd1d8d6db7ac855cf362852ba1ac5ed16580caf41a79248cc7086d8b3b6c3f40",
+      "sha256": "3df7aef1a167aea06adc16e267ee4d75a97fd722c63fe0b93d95e6f6806907b5",
       "size": 24
     },
     {
@@ -126,6 +126,11 @@
       "path": "change/log-update20.txt",
       "sha256": "fbaa2ff124cdb3807b7f4762946c7852e04ec30aa860b1b758ea95342e8f7448",
       "size": 685
+    },
+    {
+      "path": "change/log-update21.txt",
+      "sha256": "7ce797342656765aa4b9d83c200bab9a89c6aa626b53ece967b3d0f3dacfe629",
+      "size": 551
     },
     {
       "path": "change/log-update3.txt",
@@ -4095,10 +4100,10 @@
   ],
   "totals": {
     "size": {
-      "b": 53144281,
+      "b": 53144832,
       "mb": 50.68,
       "gb": 0.05
     },
-    "files": 818
+    "files": 819
   }
 }
