@@ -1,6 +1,6 @@
 {
-  "sha": "2e0e88cb2f5ed349d99f0d8a660ce19c64f18f1b902cfc2606290bbad3f94038",
-  "generatedAt": "2026-06-10T16:03:53.060Z",
+  "sha": "f103191e87cb469f47e240f3f16747f95661d1d0ab9825aea3838e570efee888",
+  "generatedAt": "2026-06-10T18:03:18.368Z",
   "files": [
     {
       "path": "404.html",
@@ -3674,8 +3674,8 @@
     },
     {
       "path": "javascript/abilities.js",
-      "sha256": "677211272444be24092cab8d49ae745e85f2adedba79f87a6629ce63e8308b32",
-      "size": 64839
+      "sha256": "323b72acac4335ddb9d9d3bba779f98b232ac58590b48a18f84dd5ecd96cae6b",
+      "size": 65264
     },
     {
       "path": "javascript/cards.js",
@@ -3729,8 +3729,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "2a8e6747d50bcb3cf418905b28b01077bfc90855bbcac79d0471237f79818e79",
-      "size": 171334
+      "sha256": "4e3413824331411d0d4cd906a0a65f5fc7b723c538231bceeb0e09b9e3f4ab98",
+      "size": 171407
     },
     {
       "path": "javascript/jszip.min.js",
@@ -3759,8 +3759,8 @@
     },
     {
       "path": "javascript/session_registering.js",
-      "sha256": "195481988cff50c95bb6dc591935c95be40e5849d07e9594d971dc67d011cce8",
-      "size": 21298
+      "sha256": "351d60552704f29394cf3d567f3d22e0ccf0cf95a23b564a3266f3a73e2b3c35",
+      "size": 19429
     },
     {
       "path": "javascript/session.js",
@@ -4100,7 +4100,7 @@
   ],
   "totals": {
     "size": {
-      "b": 53142552,
+      "b": 53141181,
       "mb": 50.68,
       "gb": 0.05
     },

@@ -1279,11 +1279,13 @@ var ability_dict = {
   emhyr_relentless: {
     description: "Draw a card from your opponent's discard pile.",
     activated: async (card) => {
+      let resp = null;
       let grave = board.getRow(card, "grave", card.holder.opponent());
       if (grave.findCards((c) => c.isUnit()).length === 0) return;
 
       if (card.holder.controller instanceof ControllerOpponent) {
         const newCard = await new Promise((resolve) => {
+          showSideTooltip("Waiting for opponent to draw a card");
           const handleMessage = async (event) => {
             const data = await recv_and_decomp(event);
 
@@ -1314,6 +1316,16 @@ var ability_dict = {
         1,
         (c, i) => {
           let newCard = c.cards[i];
+          const resp = c.cards[i];
+          extraJSON.push(
+            JSON.stringify({ type: "addCardHand", card: resp.filename }),
+          );
+
+          console.log(
+            "extra json now",
+            extraJSON,
+            JSON.stringify({ type: "addCardHand", card: resp.filename }),
+          );
           newCard.holder = card.holder;
           board.toHand(newCard, grave);
 
@@ -1578,7 +1590,7 @@ var ability_dict = {
           deck,
           1,
           (c, i) => {
-            const resp = c.cards[i]; // 👈 capture selected card
+            const resp = c.cards[i]; // captures selected card (i hope, didnt dig into it)
 
             board.toWeather(resp, deck);
 

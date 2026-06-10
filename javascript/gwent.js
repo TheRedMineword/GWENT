@@ -4321,18 +4321,18 @@ class Carousel {
           JSON.stringify({ type: "removeCardHand", card: resp.filename }),
         );
       }, 1000);
-    } else if (actionString.includes("board.toHand")) {
-      setTimeout(() => {
-        extraJSON.push(
-          JSON.stringify({ type: "addCardHand", card: resp.filename }),
-        );
-        //extraJSON = JSON.stringify({ type: "medicDraw", card: resp.filename });
-        console.log(
-          "extra json now",
-          extraJSON,
-          JSON.stringify({ type: "addCardHand", card: resp.filename }),
-        );
-      }, 1000);
+      //    } else if (actionString.includes("board.toHand")) {
+      //      setTimeout(() => {
+      //       extraJSON.push(
+      //        JSON.stringify({ type: "addCardHand", card: resp.filename }),
+      //       );
+      //extraJSON = JSON.stringify({ type: "medicDraw", card: resp.filename });
+      //       console.log(
+      //         "extra json now",
+      //         extraJSON,
+      //        JSON.stringify({ type: "addCardHand", card: resp.filename }),
+      //      );
+      //    }, 1000);
     }
     if (this.isLastSelection() && !this.cancelled) return this.exit();
     this.update();
