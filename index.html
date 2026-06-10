@@ -462,11 +462,201 @@ function openDiscordIframePage() {
 document.getElementById("dc_join").addEventListener("click", () => {
     openDiscordIframePage();
 });
-// CHECK IF VALID VERSION OF CLIENT (COMPRESSED TO SAVE SPACE)
-function init_ver_check(){
-const DOWNLOAD_URL="https://theredmineword.github.io/GWENT/exe/dowland/init",ALLOWED_VERSIONS_URL="https://theredmineword.github.io/GWENT/javascript/PC_scripts/allowed_versions.json",v=window.v||{};function showMessageScreen(e,n,o=""){document.body.innerHTML=`\n  <div style="\n    font-family: Arial, sans-serif;\n    display: flex;\n    height: 100vh;\n    align-items: center;\n    justify-content: center;\n    flex-direction: column;\n    text-align: center;\n    gap: 16px;\n    padding: 20px;\n    background: #111;\n    color: white;\n  ">\n    <h1 style="color: white;">${e}</h1>\n    <p style="color: white;">${n}</p>\n\n    ${o?`<pre style="\n            max-width: 800px;\n            white-space: pre-wrap;\n            word-break: break-word;\n            text-align: left;\n            background: #222;\n            padding: 10px;\n            border-radius: 4px;\n            color: white;\n          ">${o}</pre>`:""}\n\n    <button id="downloadBtn" style="\n      padding: 10px 20px;\n      font-size: 16px;\n      cursor: pointer;\n    ">\n      Download latest version\n    </button>\n  </div>\n`,document.getElementById("downloadBtn")?.addEventListener("click",()=>{window.electronAPI.openExternal(DOWNLOAD_URL)})}function showOutdatedScreen(e,n){showMessageScreen("Outdated version",`Version "${e}" is not allowed.`,JSON.stringify({version:e,allowedVersions:n},null,2))}async function runVersionCheck(){let e;console.log("[CLIENT CHECK] starting");try{const n=await fetch("/local-api/get_version",{method:"POST"}),o=await n.json();if(console.log("[CLIENT CHECK] local-api response",o),1!==o.code)return void showMessageScreen("Version check failure","Failed to read local version.",JSON.stringify(o,null,2));e=o.version}catch(e){return console.error("[CLIENT CHECK] local-api failed",e),void showMessageScreen("Version check failure",e.message,String(e))}try{const n=await fetch(ALLOWED_VERSIONS_URL),o=await n.json();console.log("[CLIENT CHECK] allowed versions",o);const t=Array.isArray(o)&&o.includes(e),i=e===v.InDev;if(t||i)return void console.log("[CLIENT CHECK] version accepted",{version:e,isAllowed:t,isInDev:i});console.warn("[CLIENT CHECK] version rejected",e),showOutdatedScreen(e,o)}catch(e){console.error("[CLIENT CHECK] allowed_versions fetch failed",e),showMessageScreen("Version check failure","Failed to download allowed versions.",String(e))}}"1111"===location.port?runVersionCheck():console.log("[CLIENT CHECK] skipped",location.port);
+// CHECK IF VALID VERSION OF CLIENT
+const DOWNLOAD_URL =
+  "https://theredmineword.github.io/GWENT/exe/dowland/init";
+
+const ALLOWED_VERSIONS_URL =
+  "https://theredmineword.github.io/GWENT/javascript/PC_scripts/allowed_versions.json";
+
+const v = window.v || {};
+
+function showMessageScreen(title, message, details = "") {
+
+document.body.innerHTML = `
+  <div style="
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    padding: 20px;
+    background: #111;
+    color: white;
+  ">
+    <h1 style="color: white;">${title}</h1>
+    <p style="color: white;">${message}</p>
+
+    ${
+      details
+        ? `<pre style="
+            max-width: 800px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            text-align: left;
+            background: #222;
+            padding: 10px;
+            border-radius: 4px;
+            color: white;
+          ">${details}</pre>`
+        : ""
+    }
+
+    <button id="downloadBtn" style="
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    ">
+      Download latest version
+    </button>
+  </div>
+`;
+
+  document.getElementById("downloadBtn")?.addEventListener("click", () => {
+    window.electronAPI.openExternal(DOWNLOAD_URL);
+  });
 }
-init_ver_check();
+
+function showOutdatedScreen(version, allowedVersions) {
+
+  showMessageScreen(
+    "Outdated version",
+    `Version "${version}" is not allowed.`,
+    JSON.stringify(
+      {
+        version,
+        allowedVersions
+      },
+      null,
+      2
+    )
+  );
+}
+
+async function runVersionCheck() {
+
+  console.log("[CLIENT CHECK] starting");
+
+  let localVersion;
+
+  try {
+
+    const apiResponse = await fetch(
+      "/local-api/get_version",
+      {
+        method: "POST"
+      }
+    );
+
+    const apiResult = await apiResponse.json();
+
+    console.log(
+      "[CLIENT CHECK] local-api response",
+      apiResult
+    );
+
+    if (apiResult.code !== 1) {
+
+      showMessageScreen(
+        "Version check failure",
+        "Failed to read local version.",
+        JSON.stringify(apiResult, null, 2)
+      );
+
+      return;
+    }
+
+    localVersion = apiResult.version;
+
+  } catch (err) {
+
+    console.error(
+      "[CLIENT CHECK] local-api failed",
+      err
+    );
+
+    showMessageScreen(
+      "Version check failure",
+      err.message,
+      String(err)
+    );
+
+    return;
+  }
+
+  try {
+
+    const versionsResponse =
+      await fetch(ALLOWED_VERSIONS_URL);
+
+    const allowedVersions =
+      await versionsResponse.json();
+
+    console.log(
+      "[CLIENT CHECK] allowed versions",
+      allowedVersions
+    );
+
+    const isAllowed =
+      Array.isArray(allowedVersions)
+      && allowedVersions.includes(localVersion);
+
+    const isInDev =
+      localVersion === v.InDev;
+
+    if (isAllowed || isInDev) {
+
+      console.log(
+        "[CLIENT CHECK] version accepted",
+        {
+          version: localVersion,
+          isAllowed,
+          isInDev
+        }
+      );
+
+      return;
+    }
+
+    console.warn(
+      "[CLIENT CHECK] version rejected",
+      localVersion
+    );
+
+    showOutdatedScreen(
+      localVersion,
+      allowedVersions
+    );
+
+  } catch (err) {
+
+    console.error(
+      "[CLIENT CHECK] allowed_versions fetch failed",
+      err
+    );
+
+    showMessageScreen(
+      "Version check failure",
+      "Failed to download allowed versions.",
+      String(err)
+    );
+  }
+}
+
+if (location.port === "1111") {
+
+  runVersionCheck();
+
+} else {
+
+  console.log(
+    "[CLIENT CHECK] skipped",
+    location.port
+  );
+}
 </script>
 <script type="text/javascript" src="javascript/jszip.min.js"></script>
 <script type="text/javascript" src="javascript/defines.js"></script>

@@ -1,6 +1,6 @@
 {
-  "sha": "1a986647f3b935e0eedd82c41b2b4a7790c804553a2a687c07019c62576bdf72",
-  "generatedAt": "2026-06-10T15:55:56.966Z",
+  "sha": "2e0e88cb2f5ed349d99f0d8a660ce19c64f18f1b902cfc2606290bbad3f94038",
+  "generatedAt": "2026-06-10T16:03:53.060Z",
   "files": [
     {
       "path": "404.html",
@@ -3669,8 +3669,8 @@
     },
     {
       "path": "index.html",
-      "sha256": "2aebc2dd8823251260e563079a65d3e8e28029b16ffe93148bcdda3d88ce9f4c",
-      "size": 15886
+      "sha256": "60107e4f9834864b5c6161690c392d570b9222a649bc5c5ac7ea56bb4a48ff8f",
+      "size": 16887
     },
     {
       "path": "javascript/abilities.js",
@@ -4100,7 +4100,7 @@
   ],
   "totals": {
     "size": {
-      "b": 53141551,
+      "b": 53142552,
       "mb": 50.68,
       "gb": 0.05
     },
