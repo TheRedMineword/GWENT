@@ -1553,6 +1553,9 @@ var ability_dict = {
       // Wait for the opponent to choose which weather card to play
       if (card.holder.controller instanceof ControllerOpponent) {
         const card = await new Promise((resolve) => {
+          try {
+            showSideTooltip("Waiting for opponent to pick weather card");
+          } catch (e) {}
           const handleMessage = async (event) => {
             const data = await recv_and_decomp(event);
             if (data.type === "weatherDraw") {
@@ -1568,13 +1571,27 @@ var ability_dict = {
         });
         board.toWeather(card, deck);
       } else {
-        med_draw = "EredinKIng";
+        //        med_draw = "EredinKIng";
         await sleep(100);
         Carousel.curr.cancel();
         await ui.queueCarousel(
           deck,
           1,
-          (c, i) => board.toWeather(c.cards[i], deck),
+          (c, i) => {
+            const resp = c.cards[i]; // 👈 capture selected card
+
+            board.toWeather(resp, deck);
+
+            extraJSON.push(
+              JSON.stringify({ type: "weatherDraw", card: resp.filename }),
+            );
+
+            console.log(
+              "extra json now",
+              extraJSON,
+              JSON.stringify({ type: "weatherDraw", card: resp.filename }),
+            );
+          },
           (c) => c.faction === "weather",
           true,
         );

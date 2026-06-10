@@ -4295,16 +4295,19 @@ class Carousel {
     ) {
       // this shit here is broken, no resp
       med_draw = 0;
+
+      // Rest handled inside ability!!
+
       // setTimeout(() => {
-      extraJSON.push(
-        JSON.stringify({ type: "weatherDraw", card: resp.filename }),
-      );
+      //     extraJSON.push(
+      //      JSON.stringify({ type: "weatherDraw", card: resp.filename }),
+      //    );
       //extraJSON = JSON.stringify({ type: "medicDraw", card: resp.filename });
-      console.log(
-        "extra json now",
-        extraJSON,
-        JSON.stringify({ type: "weatherDraw", card: resp.filename }),
-      );
+      //    console.log(
+      //      "extra json now",
+      //      extraJSON,
+      //      JSON.stringify({ type: "weatherDraw", card: resp.filename }),
+      //    );
       //   }, 1000);
     } else if (actionString.includes("board.toGrave")) {
       setTimeout(() => {

@@ -960,16 +960,16 @@ var card_dict = [
     filename: "eredin_gold",
     count: "1",
   },
-  // {
-  //     "name": "Eredin - King of the Wild Hunt",
-  //        "id": "135",
-  //      "deck": "monsters",
-  //       "row": "leader",
-  //      "strength": "",
-  //      "ability": "eredin_king", // SEEMS TO BE BROKEN IN ASYNC EVENT, AS IT DONT DEFINE CARD (DAMM IT)
-  //          "filename": "eredin_copper",
-  //      "count": "1"
-  //    },
+  {
+    name: "Eredin - King of the Wild Hunt",
+    id: "135",
+    deck: "monsters",
+    row: "leader",
+    strength: "",
+    ability: "eredin_king", // SEEMS TO BE BROKEN IN ASYNC EVENT, AS IT DONT DEFINE CARD (DAMM IT)
+    filename: "eredin_copper",
+    count: "1",
+  },
   {
     name: "Eredin Bréacc Glas - The Treacherous",
     id: "",
