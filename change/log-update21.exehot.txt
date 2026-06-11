@@ -5,4 +5,5 @@
 - Eredin - King of the Wild Hunt is back!! His ability was fixed, opponent now recive what weather card was picked!
 - Small update to auth screen!
 ## 11 June, 2026
-- Updates exe app, used .rar files to drop even more dowland size just to ~92mb!! Fixed autoupdater html splash
+- Updates exe app, used .rar files to drop even more dowland size just to ~92mb!!
+- Fixed exe clients autoupdater html splash
