@@ -94,6 +94,9 @@ function sha256File(filePath) {
     return sha256Buffer(buffer);
 }
 
+function hold_sleeping(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 // =====================================================
 // GITHUB
 // =====================================================
@@ -121,7 +124,7 @@ async function getLatestCommitSha() {
 
     const json =
         await res.json();
-
+    await hold_sleeping(751); //just make sure html splash is ready
     return json.sha;
 }
 

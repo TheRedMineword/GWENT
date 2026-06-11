@@ -3,7 +3,7 @@ const path = require('path');
 const crypto = require('crypto');
 const http = require('http');
 
-const INPUT_FILE = 'C:/Users/LENOVO/Desktop/GWENT/exe/dowland/GWENT.zip';
+const INPUT_FILE = 'C:/Users/LENOVO/Desktop/GWENT/exe/dowland/GWENT.rar';
 
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const FRAGMENT_DIR = path.join(PUBLIC_DIR, 'fragment_map');
@@ -57,7 +57,7 @@ for (let i = 0; i < fragmentCount; i++) {
 }
 
 const indexData = {
-    originalFile: 'GWENT_v.09.06.2026.zip',
+    originalFile: 'GWENT_v.09.06.2026.hotfix.1.rar',
     totalSize,
     fragmentCount,
     fragmentSize: CHUNK_SIZE,

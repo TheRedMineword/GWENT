@@ -1,0 +1,27 @@
+directories:
+  output: dist
+  buildResources: build
+appId: gwent.launcher
+productName: GWENT
+compression: maximum
+asar: true
+files:
+  - filter:
+      - '**/*'
+      - '!dist/*'
+      - '!node_modules/.cache/*'
+win:
+  icon: logo.ico
+  target:
+    - target: nsis
+      arch:
+        - x64
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  installerIcon: logo.ico
+  uninstallerIcon: logo.ico
+  installerHeaderIcon: logo.ico
+electronVersion: 36.9.5

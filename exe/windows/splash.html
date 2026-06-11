@@ -157,12 +157,13 @@ document.body.classList.add('ready');
 
     detailsEl.innerText =
         `${data.current}/${data.total} : ${data.file}`;
-
-    progressEl.value = percent;
+    try {
+        progressEl.value = percent;
+    } catch (e) {}
 });
 
 function updateProgress(percent, text) {
-
+try {
     document.getElementById(
         "progress-fill"
     ).style.width = `${percent}%`;
@@ -176,6 +177,9 @@ function updateProgress(percent, text) {
             "ready"
         );
     }
+} catch (e) {
+    
+}
 }
 console.log("HI");
 </script>

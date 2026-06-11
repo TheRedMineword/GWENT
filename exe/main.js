@@ -30,7 +30,7 @@ process.env.GWENT_EXPRESS =
 let mainWindow;
 let splash;
 
-function createSplash() {
+async function createSplash() {
 
     splash = new BrowserWindow({
         width: 520,
@@ -60,7 +60,7 @@ function createSplash() {
 
 async function createWindow() {
 
-    createSplash();
+    await createSplash();
 
     try {
 

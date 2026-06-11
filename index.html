@@ -473,51 +473,93 @@ const v = window.v || {};
 
 function showMessageScreen(title, message, details = "") {
 
-document.body.innerHTML = `
-  <div style="
-    font-family: Arial, sans-serif;
-    display: flex;
-    height: 100vh;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    gap: 16px;
-    padding: 20px;
-    background: #111;
-    color: white;
-  ">
-    <h1 style="color: white;">${title}</h1>
-    <p style="color: white;">${message}</p>
+  document.documentElement.innerHTML = `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #111;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.screen {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+h1 {
+  margin: 0;
+  color: #fff !important;
+}
+
+p {
+  margin: 0;
+  color: #fff !important;
+}
+
+pre {
+  max-width: 800px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  text-align: left;
+  background: #222;
+  padding: 10px;
+  border-radius: 4px;
+  color: #fff !important;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+  <div class="screen">
+    <h1>${title}</h1>
+    <p>${message}</p>
 
     ${
       details
-        ? `<pre style="
-            max-width: 800px;
-            white-space: pre-wrap;
-            word-break: break-word;
-            text-align: left;
-            background: #222;
-            padding: 10px;
-            border-radius: 4px;
-            color: white;
-          ">${details}</pre>`
+        ? `<pre>${details}</pre>`
         : ""
     }
 
-    <button id="downloadBtn" style="
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-    ">
+    <button id="downloadBtn">
       Download latest version
     </button>
   </div>
+</body>
+</html>
 `;
 
-  document.getElementById("downloadBtn")?.addEventListener("click", () => {
-    window.electronAPI.openExternal(DOWNLOAD_URL);
-  });
+  document
+    .getElementById("downloadBtn")
+    ?.addEventListener("click", () => {
+      window.electronAPI.openExternal(DOWNLOAD_URL);
+    });
 }
 
 function showOutdatedScreen(version, allowedVersions) {
