@@ -281,6 +281,7 @@ function main() {
         'FINAL SHA:',
         finalSha
     );
+    console.log(`TOTAL SIZE: ${JSON.stringify(getTotalSize(manifestFiles))}`)
 }
 function getTotalSize(files) {
   const bytes = files.reduce((sum, file) => sum + file.size, 0);

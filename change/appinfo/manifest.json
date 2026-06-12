@@ -1,6 +1,6 @@
 {
-  "sha": "549ae56707a89e5c8768c022cf7ca1d0a1d754849f3e45275d3511a3ddac1589",
-  "generatedAt": "2026-06-12T14:28:50.015Z",
+  "sha": "a5be95401e877dfd7184a44822d717910e0a5430351136cbacf07d47cec2de4e",
+  "generatedAt": "2026-06-12T14:32:56.813Z",
   "files": [
     {
       "path": "404.html",
@@ -3729,8 +3729,8 @@
     },
     {
       "path": "javascript/jszip.min.js",
-      "sha256": "18586c3586633fca83e7806199e7e71d78179a54e296717195a249d33ea8d270",
-      "size": 223755
+      "sha256": "acc7e41455a80765b5fd9c7ee1b8078a6d160bbbca455aeae854de65c947d59e",
+      "size": 97630
     },
     {
       "path": "javascript/patchnotes.js",
@@ -4095,8 +4095,8 @@
   ],
   "totals": {
     "size": {
-      "b": 53288868,
-      "mb": 50.82,
+      "b": 53162743,
+      "mb": 50.7,
       "gb": 0.05
     },
     "files": 818
