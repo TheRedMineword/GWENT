@@ -774,6 +774,14 @@ html {
 	content: "Your opponent skipped their turn \A And you received an additional card";
 }
 
+#notif-whiteflame2-op {
+	background-image: url(img/icons/notif_nilfgaard.png);
+}
+
+#notif-whiteflame2-op::after {
+	content: "Your opponent copied your leader ability";
+}
+
 
 
 .card-preview {

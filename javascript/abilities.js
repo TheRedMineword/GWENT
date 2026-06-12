@@ -1276,6 +1276,11 @@ var ability_dict = {
   emhyr_whiteflame: {
     description: "Cancel your opponent's Leader Ability.",
   },
+  emhyr_whiteflame2: {
+    description:
+      "Copy opponents's leader card at start of the game, but your opponent will have addtional 2 initial redraws",
+    activated: async (card, deck) => {},
+  },
   emhyr_relentless: {
     description: "Draw a card from your opponent's discard pile.",
     activated: async (card) => {

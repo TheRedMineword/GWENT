@@ -36,6 +36,9 @@ const IGNORE_PATTERNS = [
   "currentPlayerId",
   "previous_game_start_cards",
   "med_draw",
+  "add_redraws",
+  "AUDIO_STATE",
+  "white_flame_lg_faction",
 ];
 
 const LOG_PREFIX = "[CUSTOM_SERVER]";

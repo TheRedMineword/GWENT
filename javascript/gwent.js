@@ -1253,6 +1253,10 @@ class Player {
 
   // Sets default values
   reset() {
+    white_flame_lg_faction = {
+      me: null,
+      op: null,
+    };
     gameended = false;
     this.grave.reset();
     this.hand.reset();
@@ -1925,7 +1929,7 @@ class Row extends CardContainer {
   async addCard(card) {
     //		console.log("ADD CARD", card);
     if (card.hero) {
-      var card_info = `${JSON.stringify({ a: card.faciton + "_" + card.filename, b: card.holder.id, c: card.holder.tag, d: card.name, f: card.row })}-${gameID}`;
+      var card_info = `${JSON.stringify({ a: card.faction + "_" + card.filename, b: card.holder.id, c: card.holder.tag, d: card.name, f: card.row })}-${gameID}`;
       var card_id_for_hero = card_info;
       //if (!herocardsdb.includes(card_id_for_hero)) {
       //  herocardsdb.push(card_id_for_hero);
@@ -2581,6 +2585,46 @@ class Game {
     board.row.forEach((r) => r.updateScore());
     ability_disable("me");
     ability_disable("op");
+    // Emhyr white flame v2
+    white_flame_lg_faction = {
+      me: player_me.leader.faction,
+      op: player_op.leader.faction,
+    };
+    add_redraws = 0;
+    if (
+      player_me.leader.abilities?.includes("emhyr_whiteflame2") &&
+      player_me.leader.filename !== player_op.leader.filename
+    ) {
+      var tmp_faction_me = player_me.leader.faction;
+      white_flame_lg_faction.me = player_op.leader.faction;
+      player_me.leader = new Card(player_op.deck_data.leader, player_me);
+      await sleep(30);
+      player_me.leader.faction = tmp_faction_me;
+      try {
+        if (typeof player_op.leader.activated[0] !== "function") {
+          player_me.disableLeader(true);
+        }
+      } catch (e) {}
+    }
+    if (
+      player_op.leader.abilities?.includes("emhyr_whiteflame2") &&
+      player_me.leader.filename !== player_op.leader.filename
+    ) {
+      var tmp_faction_op = player_op.leader.faction;
+      white_flame_lg_faction.op = player_me.leader.faction;
+      player_op.leader = new Card(player_me.deck_data.leader, player_op);
+      add_redraws = 2;
+      ui.notification("whiteflame2-op", ui_display_times.faction_ability);
+      player_op.leader.faction = tmp_faction_op;
+      await sleep(30);
+      try {
+        if (typeof player_me.leader.activated[0] !== "function") {
+          player_op.disableLeader(true);
+        }
+      } catch (e) {}
+    }
+    console.log("additional redraws:", add_redraws);
+    // End of white falme
     // Cleared i hope
     await sleep(20);
     ui.youtubePlay(
@@ -2743,7 +2787,8 @@ class Game {
       player_me.leader.abilities[0] === "nilf_drawmaster"
         ? nilfard_drawmaster.drawextra
         : 0;
-    var OnGameStartDraw2 = OnGameStartDraw + nilfard_drawmaster_draws;
+    var OnGameStartDraw2 =
+      OnGameStartDraw + nilfard_drawmaster_draws + add_redraws;
     if (debug == true)
       await ui.queueCarousel(
         player_me.hand,
@@ -3337,7 +3382,12 @@ class Card {
   createCardElem(card) {
     console.log("createcardElem", card);
     let elem = document.createElement("div");
-    var tmp = card.faction + "_" + card.filename;
+    const faction =
+      card?.row === "leader"
+        ? (white_flame_lg_faction?.[card.holder?.tag] ?? card.faction)
+        : card.faction;
+
+    var tmp = `${faction}_${card.filename}`;
 
     if (card.filename === "Gaunter_Leader") {
       tmp = "neutral_Gaunter_Leader";
@@ -3780,13 +3830,15 @@ class UI {
 
   // Sets up the graphics and description for a card preview
   showPreviewVisuals(card) {
+    //   console.log("showPreviewVisuals", card);
     this.previewCard = card;
     this.preview.classList.remove("hide");
-    var tmp = card.faction + "_" + card.filename;
+    const faction =
+      card?.row === "leader"
+        ? (white_flame_lg_faction?.[card.holder?.tag] ?? card.faction)
+        : card.faction;
 
-    if (card.filename === "Gaunter_Leader") {
-      tmp = "neutral_Gaunter_Leader";
-    }
+    var tmp = `${faction}_${card.filename}`;
 
     this.preview.getElementsByClassName("card-lg")[0].style.backgroundImage =
       largeURL(tmp);
@@ -4360,7 +4412,12 @@ class Carousel {
       let curr = this.index - 2 + i;
       if (curr >= 0 && curr < this.indices.length) {
         let card = this.container.cards[this.indices[curr]];
-        var tmp = card.faction + "_" + card.filename;
+        const faction =
+          card?.row === "leader"
+            ? (white_flame_lg_faction?.[card.holder?.tag] ?? card.faction)
+            : card.faction;
+
+        var tmp = `${faction}_${card.filename}`;
 
         if (card.filename === "Gaunter_Leader") {
           tmp = "neutral_Gaunter_Leader";
@@ -5066,7 +5123,7 @@ class DeckMaker {
             "'" +
             card.name +
             "' cannot be used in a deck of faction type '" +
-            deck.faciton +
+            deck.faction +
             "'\n";
           return false;
         }
@@ -5354,7 +5411,12 @@ function removeCircularReferences(obj) {
 
 function createCardElement(card) {
   let elem = document.createElement("div");
-  var tmp = card.faction + "_" + card.filename;
+  const faction =
+    card?.row === "leader"
+      ? (white_flame_lg_faction?.[card.holder?.tag] ?? card.faction)
+      : card.faction;
+
+  var tmp = `${faction}_${card.filename}`;
 
   if (card.filename === "Gaunter_Leader") {
     tmp = "neutral_Gaunter_Leader";

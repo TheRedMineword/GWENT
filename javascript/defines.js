@@ -369,3 +369,9 @@ const playBlock = {};
 
 let previous_game_start_cards = null;
 let med_draw = null;
+
+let add_redraws = 0;
+let white_flame_lg_faction = {
+  me: null,
+  op: null,
+};
