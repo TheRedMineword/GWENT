@@ -3526,8 +3526,9 @@ class UI {
           const seg = await fetch(
             `ost/${tavern_yt_vid}/segment_${String(i).padStart(3, "0")}.m4s`,
           ).then((r) => r.arrayBuffer());
-
-          sb.appendBuffer(seg);
+          try {
+            sb.appendBuffer(seg);
+          } catch (e) {}
 
           await new Promise((resolve) =>
             sb.addEventListener("updateend", resolve, { once: true }),
@@ -3653,8 +3654,9 @@ class UI {
               const seg = await fetch(
                 `ost/${ostId}/segment_${String(i).padStart(3, "0")}.m4s`,
               ).then((r) => r.arrayBuffer());
-
-              sb.appendBuffer(seg);
+              try {
+                sb.appendBuffer(seg);
+              } catch (e) {}
 
               await new Promise((resolve) =>
                 sb.addEventListener("updateend", resolve, { once: true }),
@@ -5764,13 +5766,21 @@ function tocar(arquivo, pararMusica) {
 //  ui.initYouTube();
 // }
 
-function iniciarMusica(bypass = false) {
+async function iniciarMusica(bypass = false) {
   try {
-    if (ui.audio.paused) {
+    try {
+      var tmp = ui.audio?.paused || false;
+    } catch (e) {
+      var tmp = false;
+    }
+    console.log("iniciarMusica TMP", tmp, bypass);
+    if (!tmp) {
       if (location.port !== "1111") {
         ui.audio.play().catch(() => {});
       } else {
-        ui.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);
+        await sleep(200);
+        await ui.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);
+        console.log("state", ui.getAudioState());
       }
 
       if (bypass) {
@@ -5807,13 +5817,18 @@ function cartaNaLinha(id, carta) {
   }
 }
 
-function inicio() {
+async function inicio() {
   var classe = document.getElementsByClassName("abs");
   for (var i = 0; i < classe.length; i++) classe[i].style.display = "none";
   iniciou = true;
   tocar("menu_opening", false);
   //openFullscreen();
-  iniciarMusica(false);
+  await iniciarMusica(false);
+  if (ui.getAudioState() !== 1) {
+    ui.toggleMusic();
+    await sleep(10);
+    ui.toggleMusic();
+  }
 }
 
 var iniciou = false,
