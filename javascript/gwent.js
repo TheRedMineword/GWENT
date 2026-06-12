@@ -3568,26 +3568,33 @@ class UI {
   }
 
   youtubePlay(ostId, volume_int = 100, repeat = false) {
-    if (this.audio) {
-      this.audio.src = `/ost/${ostId}/audio.m3u8`;
+    try {
+      if (this.audio) {
+        this.audio.src = `/ost/${ostId}/audio.m3u8`;
 
-      this.audio.volume = volume_int / 100;
+        this.audio.volume = volume_int / 100;
 
-      this.audio.loop = repeat;
+        this.audio.loop = repeat;
 
-      this.audio.load();
+        this.audio.load();
 
-      this.audio.play().catch(() => {});
+        // this.audio.play().catch(() => {});
+        this.audio.play().catch((e) => {
+          console.error("PLAY FAILED:", e);
+        });
+      }
+
+      button_is_second_sheet = 1;
+
+      if (buttonmutemode === 0) {
+        ui.stopYouTube();
+        console.log("muted");
+      }
+
+      console.log("Is second sheet:", button_is_second_sheet);
+    } catch (e) {
+      console.error(e, "audio play", ostId, volume_int, repeat);
     }
-
-    button_is_second_sheet = 1;
-
-    if (buttonmutemode === 0) {
-      ui.stopYouTube();
-      console.log("muted");
-    }
-
-    console.log("Is second sheet:", button_is_second_sheet);
   }
 
   // Called when client toggles the music
