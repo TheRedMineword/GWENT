@@ -3692,6 +3692,13 @@ class UI {
     } catch (e) {
       console.error(e, "audio play", ostId, volume_int, repeat);
     }
+    await sleep(105);
+    button_is_second_sheet = 1;
+
+    if (buttonmutemode === 0) {
+      ui.stopYouTube();
+      console.log("muted");
+    }
   }
 
   // Called when client toggles the music
@@ -5760,7 +5767,11 @@ function tocar(arquivo, pararMusica) {
 function iniciarMusica(bypass = false) {
   try {
     if (ui.audio.paused) {
-      ui.audio.play().catch(() => {});
+      if (location.port !== "1111") {
+        ui.audio.play().catch(() => {});
+      } else {
+        ui.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);
+      }
 
       if (bypass) {
         ui.stopYouTube();
