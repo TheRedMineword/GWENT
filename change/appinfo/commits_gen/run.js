@@ -241,7 +241,7 @@ function main() {
         globalHash
             .digest('hex');
 
-    const manifest = {
+    let manifest = {
         sha: finalSha,
         generatedAt:
             new Date()
@@ -249,17 +249,15 @@ function main() {
         files: manifestFiles,
         totals: { size: getTotalSize(manifestFiles), files: manifestFiles.length }
     };
+    manifest = JSON.stringify(manifest);
+ //   console.log("MANIFEST\n", manifest);
 
     fs.writeFileSync(
         path.join(
             OUTPUT_DIR,
             'manifest.json'
         ),
-        JSON.stringify(
-            manifest,
-            null,
-            2
-        ),
+        manifest,
         'utf8'
     );
 
