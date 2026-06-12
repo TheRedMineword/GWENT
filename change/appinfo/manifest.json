@@ -1,6 +1,6 @@
 {
-  "sha": "a5be95401e877dfd7184a44822d717910e0a5430351136cbacf07d47cec2de4e",
-  "generatedAt": "2026-06-12T14:32:56.813Z",
+  "sha": "ff3177bdbd4dc96a1671b8a521d59855e2684f4bb689e6e665ca1883856eaee6",
+  "generatedAt": "2026-06-12T14:39:59.947Z",
   "files": [
     {
       "path": "404.html",
@@ -214,8 +214,8 @@
     },
     {
       "path": "gwent.css",
-      "sha256": "48a005f0d64bdd92ac90db4d8dfaa0385ea425f53878a065fd5c3db788b14087",
-      "size": 43538
+      "sha256": "204bba7699ac4218841111edec0313ae5b3e504d58fc93f9280539b4a4cb1e0c",
+      "size": 43490
     },
     {
       "path": "img/board.jpg",
@@ -3664,8 +3664,8 @@
     },
     {
       "path": "index.html",
-      "sha256": "f0486ea76850e1bc3a12a0891a03fb1426785c7ed78b8ab35188ec70713d0ad8",
-      "size": 17085
+      "sha256": "7223ffcf454881f2e27fd07c11cd5632c6bc29a5e3efd6ecdee5f2edbfb35719",
+      "size": 17222
     },
     {
       "path": "javascript/abilities.js",
@@ -3724,8 +3724,8 @@
     },
     {
       "path": "javascript/gwent.js",
-      "sha256": "4e3413824331411d0d4cd906a0a65f5fc7b723c538231bceeb0e09b9e3f4ab98",
-      "size": 171407
+      "sha256": "9d71d7069f5c2bc76ef5140b71f01101d5e2198cb39343753766f453d2529179",
+      "size": 171338
     },
     {
       "path": "javascript/jszip.min.js",
@@ -3759,8 +3759,8 @@
     },
     {
       "path": "javascript/session.js",
-      "sha256": "5ded758b389ba99d5fea0680af729ee43a8e67c461b5db8004c78ec94745a99f",
-      "size": 19206
+      "sha256": "9167adb2cbe1c87fcc6a6da27d5205ced39903e6858af0297ea1b28805b76753",
+      "size": 19162
     },
     {
       "path": "javascript/sync_hands.js",
@@ -4095,7 +4095,7 @@
   ],
   "totals": {
     "size": {
-      "b": 53162743,
+      "b": 53162719,
       "mb": 50.7,
       "gb": 0.05
     },

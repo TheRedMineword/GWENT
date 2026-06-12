@@ -465,9 +465,10 @@ document.getElementById("dc_join").addEventListener("click", () => {
 // CHECK IF VALID VERSION OF CLIENT
 const DOWNLOAD_URL =
   "https://theredmineword.github.io/GWENT/exe/dowland/init";
-
+var block_cache = client_random_strng;
+try { block_cache = encodeURI(atob(client_random_strng)) } catch (e) {};
 const ALLOWED_VERSIONS_URL =
-  "https://theredmineword.github.io/GWENT/javascript/PC_scripts/allowed_versions.json";
+  `https://theredmineword.github.io/GWENT/javascript/PC_scripts/allowed_versions.json?anti_cache=${block_cache}`;
 
 const v = window.v || {};
 

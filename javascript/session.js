@@ -470,12 +470,12 @@ socket.addEventListener("message", async (event) => {
       console.log(user_name);
       if (!user_name) {
         console.log("No user name");
-        players.me = "Me";
+        players.me = "You";
       } else {
         players.me = user_name;
         console.log("User name set", players);
       }
-      if (players.me !== "Me" && players.me !== "You") {
+      if (players.me !== "You") {
         comp_and_send(
           socket,
           JSON.stringify({
@@ -518,12 +518,12 @@ socket.addEventListener("message", async (event) => {
       console.log(user_name);
       if (!user_name) {
         console.log("No user name");
-        players.me = "Me";
+        players.me = "You";
       } else {
         players.me = user_name;
         console.log("User name set", players);
       }
-      if (players.me !== "Me" && players.me !== "You") {
+      if (players.me !== "You") {
         comp_and_send(
           socket,
           JSON.stringify({

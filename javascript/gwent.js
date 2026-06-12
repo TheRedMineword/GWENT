@@ -652,7 +652,7 @@ socket.onmessage = async (event) => {
           info: { me_id: playerId, me_flag: country },
         }),
       );
-      if (players.me !== "Me" && players.me !== "You") {
+      if (players.me !== "You") {
         comp_and_send(
           socket,
           JSON.stringify({
@@ -4586,7 +4586,7 @@ class DeckMaker {
           info: { me_id: playerId, me_flag: country },
         }),
       );
-      if (players.me !== "Me" && players.me !== "You") {
+      if (players.me !== "You") {
         comp_and_send(
           socket,
           JSON.stringify({
@@ -5102,7 +5102,7 @@ class DeckMaker {
         info: { me_id: playerId, me_flag: country },
       }),
     );
-    if (players.me !== "Me" && players.me !== "You") {
+    if (players.me !== "You") {
       comp_and_send(
         socket,
         JSON.stringify({

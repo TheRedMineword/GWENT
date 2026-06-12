@@ -756,7 +756,6 @@ html {
 
 #notif-coin-true_player-me::after {
 	content: "You skipped your turn \A But your opponent received an additional card";
-	white-space: pre-line;
 }
 
 #notif-coin-false_player-op {
@@ -773,7 +772,6 @@ html {
 
 #notif-coin-true_player-op::after {
 	content: "Your opponent skipped their turn \A And you received an additional card";
-	white-space: pre-line;
 }
 
 
