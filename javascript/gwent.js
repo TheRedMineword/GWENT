@@ -3607,7 +3607,7 @@ class UI {
     }
   }
 
-  youtubePlay(ostId, volume_int = 100, repeat = false) {
+  async youtubePlay(ostId, volume_int = 100, repeat = false) {
     try {
       if (this.audio) {
         if (location.port !== "1111") {
@@ -3620,9 +3620,15 @@ class UI {
           this.audio.load();
 
           // this.audio.play().catch(() => {});
-          this.audio.play().catch((e) => {
+          await this.audio.play().catch((e) => {
             console.error("PLAY FAILED:", e);
           });
+          button_is_second_sheet = 1;
+          //      sleep(100);
+          if (buttonmutemode === 0) {
+            ui.stopYouTube();
+            console.log("muted");
+          }
         } else {
           const mediaSource = new MediaSource();
 
@@ -3660,18 +3666,26 @@ class UI {
               this.audio.loop = repeat;
               this.audio.volume = volume_int / 100;
             } catch (e) {}
-            this.audio.addEventListener("canplay", () => {
-              this.audio.play().catch(() => {});
-            });
+            this.audio.addEventListener(
+              "loadedmetadata",
+              async () => {
+                try {
+                  await this.audio.play();
+
+                  button_is_second_sheet = 1;
+
+                  if (buttonmutemode === 0) {
+                    ui.stopYouTube();
+                    console.log("muted");
+                  }
+                } catch (e) {
+                  console.error("PLAY FAILED:", e);
+                }
+              },
+              { once: true },
+            );
           });
         }
-      }
-
-      button_is_second_sheet = 1;
-
-      if (buttonmutemode === 0) {
-        ui.stopYouTube();
-        console.log("muted");
       }
 
       console.log("Is second sheet:", button_is_second_sheet);
