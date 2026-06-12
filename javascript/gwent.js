@@ -3535,7 +3535,10 @@ class UI {
         }
 
         mediaSource.endOfStream();
-
+        try {
+          this.audio.loop = true;
+          this.audio.volume = tavern_yt_volume / 100;
+        } catch (e) {}
         this.audio.play();
       });
     }
@@ -3651,7 +3654,10 @@ class UI {
             }
 
             mediaSource.endOfStream();
-
+            try {
+              this.audio.loop = repeat;
+              this.audio.volume = volume_int / 100;
+            } catch (e) {}
             this.audio.play();
           });
         }
