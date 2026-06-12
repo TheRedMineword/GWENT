@@ -1,6 +1,6 @@
 {
-  "sha": "99f371f61a7cbd9294857603a816a7347e8968db0516e848dded4b9cf9ccbeb4",
-  "generatedAt": "2026-06-11T07:05:35.461Z",
+  "sha": "549ae56707a89e5c8768c022cf7ca1d0a1d754849f3e45275d3511a3ddac1589",
+  "generatedAt": "2026-06-12T14:28:50.015Z",
   "files": [
     {
       "path": "404.html",
@@ -218,14 +218,9 @@
       "size": 43538
     },
     {
-      "path": "img/board-classic.jpg",
-      "sha256": "2daf5e8fa35891ff78f4b7f144dfd492f2ba48f90d05b4fa98f22e6b98eb49bb",
-      "size": 184968
-    },
-    {
       "path": "img/board.jpg",
-      "sha256": "9e5d92fcce0ab45a76afa8d8841655d2a13b956c95bb657445df4d09470d45fb",
-      "size": 865089
+      "sha256": "e4970437ac5ef03067b3894ce54e84e12dc6f66121b73b8e5b233c6ac5e0ce8a",
+      "size": 1140924
     },
     {
       "path": "img/deck.jpg",
@@ -789,8 +784,8 @@
     },
     {
       "path": "img/icons/icon_player_border.png",
-      "sha256": "69567b26c57a3d94f68f6baa0677c0ca276df7372ad2eb2df29107e6bb9ee493",
-      "size": 14323
+      "sha256": "1dd3f7c3e046d06d74fbd10571c8b6ba25a2d40e8e8fb5ec0546d98f2ef2ccdb",
+      "size": 15592
     },
     {
       "path": "img/icons/lock_51dp_CCBBAA.svg",
@@ -819,8 +814,8 @@
     },
     {
       "path": "img/icons/notif_me_coin.png",
-      "sha256": "e36b4b606a09fea435b77f3fbe7f3bbb9f6fa09b30c9a6b2d538f05cafc50c2e",
-      "size": 79254
+      "sha256": "de10ba7773657ee13d025d76a1ba29e018bf4a2e988c1d61439238be0ee46228",
+      "size": 197783
     },
     {
       "path": "img/icons/notif_me_turn.png",
@@ -839,8 +834,8 @@
     },
     {
       "path": "img/icons/notif_op_coin.png",
-      "sha256": "c5f80cc0301bc22447c5a00bdcb31fc8f031ca998fa79f4d710308cffe1aff7e",
-      "size": 79355
+      "sha256": "4ed01f2969d6178ee14bb938bec0082e77c07aba79ce51584855622beea81e57",
+      "size": 196665
     },
     {
       "path": "img/icons/notif_op_turn.png",
@@ -3648,11 +3643,6 @@
       "size": 35954
     },
     {
-      "path": "img/start-classic.jpg",
-      "sha256": "e10960fadc35f3ab5ea45d42cfc634a3a7ed32a94780b9c83ad16cdba6bee27f",
-      "size": 181602
-    },
-    {
       "path": "img/start.jpg",
       "sha256": "213746b6a941435727375a9d84933e2236d50d573d96a62b666e9b903196deb7",
       "size": 272698
@@ -3784,8 +3774,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "cc5068d09342bb3017087c6d06b6db54ce9e375bfdde985ba13a42632f920744",
-      "size": 3683
+      "sha256": "f34b75ddfd578e3c9e31e9738b1501b5f2beb57fd5783fb1b22d9abeb94eeab4",
+      "size": 4095
     },
     {
       "path": "rules.html",
@@ -4105,10 +4095,10 @@
   ],
   "totals": {
     "size": {
-      "b": 53142083,
-      "mb": 50.68,
+      "b": 53288868,
+      "mb": 50.82,
       "gb": 0.05
     },
-    "files": 820
+    "files": 818
   }
 }

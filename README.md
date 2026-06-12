@@ -31,6 +31,8 @@ https://pngtree.com/freebackground/vintage-crinkled-paper-texture-aged-brown-bac
 - Leader card sound effect: https://pixabay.com/sound-effects/film-special-effects-battle-horn-1-6931/
 - Royal Trumpet sound effect: https://pixabay.com/sound-effects/musical-medieval-fanfare-6826/
 - Ability counter use sfx: https://sounds.sfxengine.com/ability-usage-j3womwe3.wav
+- Player border uses texture: https://unsplash.com/photos/black-and-gray-abstract-painting-CcMcuaOX1Jk
+- Coins uses following textures; https://www.magnific.com/free-photo/smooth-wooden-surface_1124384.htm, https://www.magnific.com/free-photo/panoramic-grunge-copper-pan-texture-patina-oxidized-metal-background-old-metal-panel_37208568.htm, https://www.magnific.com/free-photo/grunge-wall-texture_1034776.htm
 > Some card/mechanics/assets are used from other project like this (For example: RandomPianist/gwent-classic-v3.1)
 
 
