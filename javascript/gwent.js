@@ -5665,7 +5665,7 @@ function iniciarMusica(bypass = false) {
       ui.toggleMusic_elem.classList.remove("fade");
     }
   } catch (err) {
-    console.log("iniciarMusica err", bypass, e);
+    console.log("iniciarMusica err", bypass, err);
   }
 }
 
