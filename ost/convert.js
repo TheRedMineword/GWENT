@@ -19,18 +19,19 @@ const outputDir = path.join("output", basename);
 fs.mkdirSync(outputDir, { recursive: true });
 
 const ffmpeg = spawn(FFMPEG, [
-  "-i",
-  input,
-  "-codec:a",
-  "aac",
-  "-b:a",
-  "192k",
-  "-hls_time",
-  "10",
-  "-hls_playlist_type",
-  "vod",
+  "-i", input,
+
+  "-c:a", "aac",
+  "-b:a", "192k",
+
+  "-hls_segment_type", "fmp4",
+  "-hls_time", "10",
+  "-hls_playlist_type", "vod",
+
+  "-hls_fmp4_init_filename", "init.mp4",
   "-hls_segment_filename",
-  path.join(outputDir, "segment_%03d.ts"),
+  path.join(outputDir, "segment_%03d.m4s"),
+
   path.join(outputDir, "audio.m3u8"),
 ]);
 

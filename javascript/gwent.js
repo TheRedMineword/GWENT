@@ -3495,15 +3495,50 @@ class UI {
     }
     this.audio.preload = "auto";
     this.audio.loop = true;
+    if (location.port !== "1111") {
+      // default soundtrack
+      this.audio.src = `ost/${tavern_yt_vid}/audio.m3u8`;
 
-    // default soundtrack
-    this.audio.src = `/ost/${tavern_yt_vid}/audio.m3u8`;
+      this.audio.volume = tavern_yt_volume / 100;
 
-    this.audio.volume = tavern_yt_volume / 100;
+      this.audio.addEventListener("canplay", () => {
+        this.audio.play().catch(() => {});
+      });
+    } else {
+      const mediaSource = new MediaSource();
 
-    this.audio.addEventListener("canplay", () => {
-      this.audio.play().catch(() => {});
-    });
+      this.audio.src = URL.createObjectURL(mediaSource);
+
+      mediaSource.addEventListener("sourceopen", async () => {
+        const sb = mediaSource.addSourceBuffer('audio/mp4; codecs="mp4a.40.2"');
+
+        const init = await fetch(`/ost/${tavern_yt_vid}/init.mp4`).then((r) =>
+          r.arrayBuffer(),
+        );
+
+        sb.appendBuffer(init);
+
+        await new Promise((resolve) =>
+          sb.addEventListener("updateend", resolve, { once: true }),
+        );
+
+        for (let i = 0; i < 100; i++) {
+          const seg = await fetch(
+            `ost/${tavern_yt_vid}/segment_${String(i).padStart(3, "0")}.m4s`,
+          ).then((r) => r.arrayBuffer());
+
+          sb.appendBuffer(seg);
+
+          await new Promise((resolve) =>
+            sb.addEventListener("updateend", resolve, { once: true }),
+          );
+        }
+
+        mediaSource.endOfStream();
+
+        this.audio.play();
+      });
+    }
 
     this.audio.addEventListener("playing", () => {
       if (ui.ytActive !== undefined) return;
@@ -3570,18 +3605,56 @@ class UI {
   youtubePlay(ostId, volume_int = 100, repeat = false) {
     try {
       if (this.audio) {
-        this.audio.src = `/ost/${ostId}/audio.m3u8`;
+        if (location.port !== "1111") {
+          this.audio.src = `ost/${ostId}/audio.m3u8`;
 
-        this.audio.volume = volume_int / 100;
+          this.audio.volume = volume_int / 100;
 
-        this.audio.loop = repeat;
+          this.audio.loop = repeat;
 
-        this.audio.load();
+          this.audio.load();
 
-        // this.audio.play().catch(() => {});
-        this.audio.play().catch((e) => {
-          console.error("PLAY FAILED:", e);
-        });
+          // this.audio.play().catch(() => {});
+          this.audio.play().catch((e) => {
+            console.error("PLAY FAILED:", e);
+          });
+        } else {
+          const mediaSource = new MediaSource();
+
+          this.audio.src = URL.createObjectURL(mediaSource);
+
+          mediaSource.addEventListener("sourceopen", async () => {
+            const sb = mediaSource.addSourceBuffer(
+              'audio/mp4; codecs="mp4a.40.2"',
+            );
+
+            const init = await fetch(`/ost/${ostId}/init.mp4`).then((r) =>
+              r.arrayBuffer(),
+            );
+
+            sb.appendBuffer(init);
+
+            await new Promise((resolve) =>
+              sb.addEventListener("updateend", resolve, { once: true }),
+            );
+
+            for (let i = 0; i < 100; i++) {
+              const seg = await fetch(
+                `ost/${ostId}/segment_${String(i).padStart(3, "0")}.m4s`,
+              ).then((r) => r.arrayBuffer());
+
+              sb.appendBuffer(seg);
+
+              await new Promise((resolve) =>
+                sb.addEventListener("updateend", resolve, { once: true }),
+              );
+            }
+
+            mediaSource.endOfStream();
+
+            this.audio.play();
+          });
+        }
       }
 
       button_is_second_sheet = 1;
