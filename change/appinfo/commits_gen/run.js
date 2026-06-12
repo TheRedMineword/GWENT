@@ -20,7 +20,8 @@ const IGNORE_DIRS = new Set([
     'commits_gen',
     'MyDecks',
     'gwent_cards',
-    'fragment_map'
+    'fragment_map',
+    'ffmpeg-7.1.1-full_build'
 ]);
 
 const IGNORE_FILES = new Set([
@@ -32,7 +33,7 @@ const IGNORE_FILES = new Set([
     '.init.bat', '.replace.env', 'server.js', '.server.js',
     '.env',
     'session_registering_oryginal.js', 'invite.json', 'package.json', 'package-lock.json', 'index_ver_check_script.txt',
-    'allowed_versions.json'
+    'allowed_versions.json', 'convert.js'
 ]);
 
 // =====================================================

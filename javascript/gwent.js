@@ -3438,111 +3438,105 @@ class UI {
 
   // Initializes the youtube background music object
   initYouTube() {
-    this.youtube = new YT.Player("youtube", {
-      videoId: tavern_yt_vid,
-      playerVars: {
-        autoplay: 1,
-        controls: 0,
-        loop: 1,
-        playlist: tavern_yt_vid,
-        rel: 0,
-        version: 3,
-        modestbranding: 1,
-      },
-      events: {
-        onStateChange: initButton,
-        onReady: (event) => {
-          event.target.setVolume(tavern_yt_volume);
-        },
-      },
+    try {
+      this.audio = document.createElement("audio");
+    } catch (e) {
+      console.error("THIS AUDIO FAILURE", e);
+    }
+    this.audio.preload = "auto";
+    this.audio.loop = true;
+
+    // default soundtrack
+    this.audio.src = `/ost/${tavern_yt_vid}/audio.m3u8`;
+
+    this.audio.volume = tavern_yt_volume / 100;
+
+    this.audio.addEventListener("canplay", () => {
+      this.audio.play().catch(() => {});
     });
 
-    function initButton() {
+    this.audio.addEventListener("playing", () => {
       if (ui.ytActive !== undefined) return;
+
       ui.ytActive = true;
-      ui.youtube.playVideo();
+
       let timer = setInterval(() => {
-        if (ui.youtube.getPlayerState() !== YT.PlayerState.PLAYING)
-          ui.youtube.playVideo();
-        else {
+        if (ui.audio.paused) {
+          ui.audio.play().catch(() => {});
+        } else {
           clearInterval(timer);
           ui.toggleMusic_elem.classList.remove("fade");
         }
       }, 500);
-    }
+    });
   }
+
+  getAudioState() {
+    if (!this.audio) return AUDIO_STATE.UNSTARTED;
+
+    if (this.audio.ended) return AUDIO_STATE.ENDED;
+
+    if (!this.audio.paused) return AUDIO_STATE.PLAYING;
+
+    return AUDIO_STATE.PAUSED;
+  }
+
   // Stops the YouTube video, but preserves mute and volume settings
   stopYouTube() {
-    if (this.youtube) {
-      // Save current volume
+    if (this.audio) {
       this.bypassPlayback = true;
-      this.savedVolume = this.youtube.getVolume();
+      this.savedVolume = this.audio.volume;
 
-      // Mute or pause depending on your preference
-      this.youtube.pauseVideo();
-
-      // Optionally, set volume to 0
-      // this.youtube.setVolume(0);
+      this.audio.pause();
     }
   }
 
   // Resumes the YouTube video with previous volume if available
   resumeYouTube() {
-    //	console.log("resumeYouTube() ", this.youtube, this.savedVolume, this.bypassPlayback, buttonmutemode);
-    if (this.youtube && this.savedVolume !== null) {
-      //	console.log("resumeYouTube() ", "was inside", buttonmutemode);
+    if (this.audio) {
       this.bypassPlayback = false;
-      // Resume playback
-      this.youtube.playVideo();
 
-      // Restore previous volume
-      this.youtube.setVolume(
-        this.savedVolume || audio_yt_vid_soundtrack_volume,
-      );
-      this.savedVolume = null; // Reset
+      this.audio.play().catch(() => {});
+
+      this.audio.volume =
+        this.savedVolume ?? audio_yt_vid_soundtrack_volume / 100;
+
+      this.savedVolume = null;
+
       if (buttonmutemode === 0) {
-        this.youtube.pauseVideo();
+        this.audio.pause();
         this.bypassPlayback = false;
       }
     }
-    //	console.log("resumeYouTube() ", this.youtube, this.savedVolume, this.bypassPlayback, buttonmutemode);
   }
 
   youtubeRestart() {
-    if (
-      this.youtube &&
-      this.youtube.getPlayerState() !== YT.PlayerState.UNSTARTED
-    ) {
-      this.youtube.seekTo(0);
-      this.youtube.playVideo();
+    if (this.audio && this.getAudioState() !== AUDIO_STATE.UNSTARTED) {
+      this.audio.currentTime = 0;
+      this.audio.play().catch(() => {});
     }
   }
 
-  youtubePlay(video_id, volume_int = 100, repeat = false) {
-    if (this.youtube) {
-      this.youtube.loadVideoById(video_id);
-      this.youtube.setVolume(volume_int);
-      this.youtube.playVideo();
+  youtubePlay(ostId, volume_int = 100, repeat = false) {
+    if (this.audio) {
+      this.audio.src = `/ost/${ostId}/audio.m3u8`;
 
-      if (repeat) {
-        // Add event listener for repeat
-        this.youtube.addEventListener("onStateChange", (event) => {
-          if (event.data === YT.PlayerState.ENDED) {
-            this.youtube.seekTo(0);
-            this.youtube.playVideo();
-          }
-        });
-      } else {
-        // Remove any previous 'ended' listener if needed
-        // (Note: YouTube API does not directly allow removing specific event listeners)
-        // You might need to implement logic to prevent multiple repeats or handle this differently.
-      }
+      this.audio.volume = volume_int / 100;
+
+      this.audio.loop = repeat;
+
+      this.audio.load();
+
+      this.audio.play().catch(() => {});
     }
+
     button_is_second_sheet = 1;
+
     if (buttonmutemode === 0) {
       ui.stopYouTube();
       console.log("muted");
     }
+
     console.log("Is second sheet:", button_is_second_sheet);
   }
 
@@ -3558,12 +3552,12 @@ class UI {
           iniciarMusica(this.bypassPlayback);
           buttonmutemode = 1;
         } else {
-          this.youtube.pauseVideo();
+          this.audio.pause();
           this.toggleMusic_elem.classList.add("fade");
           buttonmutemode = 0;
         }
         // When bypassed, just stop or resume
-        //  if (this.youtube.getPlayerState() === YT.PlayerState.PLAYING) {
+        //  if (this.getAudioState() === AUDIO_STATE.PLAYING) {
         //      this.stopYouTube();
         //  } else {
         //      this.resumeYouTube();
@@ -3583,11 +3577,11 @@ class UI {
         return;
       }
       // Existing logic
-      else if (this.youtube.getPlayerState() !== YT.PlayerState.PLAYING) {
+      else if (this.getAudioState() !== AUDIO_STATE.PLAYING) {
         buttonmutemode = 1;
         iniciarMusica(this.bypassPlayback);
       } else {
-        this.youtube.pauseVideo();
+        this.audio.pause();
         this.toggleMusic_elem.classList.add("fade");
         buttonmutemode = 0;
       }
@@ -3604,8 +3598,10 @@ class UI {
   // Enables or disables backgorund music
   setYouTubeEnabled(enable) {
     if (this.ytActive === enable) return;
-    if (enable && !this.mute) ui.youtube.playVideo();
-    else ui.youtube.pauseVideo();
+
+    if (enable && !this.mute) this.audio.play().catch(() => {});
+    else this.audio.pause();
+
     this.ytActive = enable;
   }
 
@@ -5453,7 +5449,7 @@ var lastSound = "";
 //	console.log("[sfx] play: arquivo, pararMusica", arquivo, pararMusica)
 //	if (arquivo != lastSound && arquivo != "") {
 //	var s = new Audio("sfx/" + arquivo + ".mp3");
-//   if (pararMusica && ui.youtube && ui.youtube.getPlayerState() === YT.PlayerState.PLAYING) {
+//   if (pararMusica && ui.youtube && ui.youtube.getPlayerState() === AUDIO_STATE.PLAYING) {
 //		ui.youtube.pauseVideo();
 //		ui.toggleMusic_elem.classList.add("fade");
 //	}
@@ -5536,7 +5532,7 @@ function tocar(arquivo, pararMusica) {
         var state = ui.youtube.getPlayerState();
         //	console.log("[sfx] youtube player state:", state);
 
-        if (state === YT.PlayerState.PLAYING) {
+        if (state === AUDIO_STATE.PLAYING) {
           //		console.log("[sfx] youtube is playing -> pausing video");
 
           ui.youtube.pauseVideo();
@@ -5591,21 +5587,24 @@ function tocar(arquivo, pararMusica) {
 
 /*----------------------------------------------------*/
 
-function onYouTubeIframeAPIReady() {
-  ui.initYouTube();
-}
+// function onYouTubeIframeAPIReady() {
+//  ui.initYouTube();
+// }
 
 function iniciarMusica(bypass = false) {
   try {
-    if (ui.youtube.getPlayerState() !== YT.PlayerState.PLAYING) {
-      ui.youtube.playVideo();
-      console.log(bypass);
+    if (ui.audio.paused) {
+      ui.audio.play().catch(() => {});
+
       if (bypass) {
         ui.stopYouTube();
       }
+
       ui.toggleMusic_elem.classList.remove("fade");
     }
-  } catch (err) {}
+  } catch (err) {
+    console.log("iniciarMusica err", bypass, e);
+  }
 }
 
 var ui = new UI();
@@ -5652,6 +5651,9 @@ window.onload = function () {
     .getElementById("button_start")
     .addEventListener("click", function () {
       inicio();
+      if (ui.getAudioState() === -1) {
+        ui.initYouTube();
+      }
       // cache audio:
       try {
         console.log("[sfx] In init: loadPackedSFX()");

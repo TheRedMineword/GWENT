@@ -5,7 +5,7 @@ const prettier = require("prettier");
 const DIR = "C:/Users/LENOVO/Desktop/GWENT/javascript/";
 
 async function beautifyFile(filePath) {
-  if (path.basename(filePath) === "session_registering.js" || path.basename(filePath) === "jszip.min.js"){
+  if (path.basename(filePath) === "session_registering.js" || path.basename(filePath) === "jszip.min.js" || path.basename(filePath) === "hls.js@1.js" ){
     console.log("Ingored javascript:", filePath);
   } else {
   const code = fs.readFileSync(filePath, "utf8");

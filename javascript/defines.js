@@ -174,6 +174,13 @@ let waitMusicAudio = null;
 let waitMusicPlaying = false;
 let cachedWaitMusicBlobUrl = null;
 
+const AUDIO_STATE = {
+  UNSTARTED: -1,
+  ENDED: 0,
+  PLAYING: 1,
+  PAUSED: 2,
+};
+
 async function cacheWaitMusic() {
   // Load the Blob (assuming you fetch it from server or have it)
   let response = await fetch("sfx/oldgwent/Inline.ogg");
