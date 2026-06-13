@@ -157,15 +157,40 @@ let mtg_conf = {
   unstable_mode: "random", // random/not-random/nonbe
 };
 
+function ArrayPickObjectForDay(arr) {
+  const day = Math.floor(Date.now() / 86400000); // UTC days since Unix epoch
+  const index = day % arr.length;
+
+  console.log("ArrayPickObjectForDay", {
+    utcDay: day,
+    index,
+    object: arr[index],
+  });
+
+  return arr[index];
+}
+const pick_array = {
+  lobby: [
+    { id: "yu197hlNWK0", vol: 100 },
+    { id: "8o-JI8VRyKo", vol: 100 },
+  ],
+  game: [
+    { id: "2Isa4ugEbZI", vol: 90 },
+    { id: "FTsuevfvQ9w", vol: 47 },
+    { id: "M0sflDPa9zY", vol: 90 },
+    { id: "UI3EdZNHB78", vol: 90 },
+  ],
+};
+
 let audio_cache = {};
 let buttonmutemode = 1;
 let button_is_second_sheet = 0;
 // In game, match in progress
-let audio_yt_vid_soundtrack = "FTsuevfvQ9w"; // wild hunt: "UE9fPWy1_o4" // How about round of gwent: "FTsuevfvQ9w"
-let audio_yt_vid_soundtrack_volume = 47; // 100 for wild hunt, less for other
+let audio_yt_vid_soundtrack = ArrayPickObjectForDay(pick_array.game).id; // wild hunt: "UE9fPWy1_o4" // How about round of gwent: "FTsuevfvQ9w"
+let audio_yt_vid_soundtrack_volume = ArrayPickObjectForDay(pick_array.game).vol; // 100 for wild hunt, less for other
 // Tavern (Deck menu)
-let tavern_yt_vid = "yu197hlNWK0"; // The Witcher 3: Wild Hunt OST - Skellige Tavern | Extended
-let tavern_yt_volume = 100;
+let tavern_yt_vid = ArrayPickObjectForDay(pick_array.lobby).id; // The Witcher 3: Wild Hunt OST - Skellige Tavern | Extended
+let tavern_yt_volume = ArrayPickObjectForDay(pick_array.lobby).vol;
 let gaunter_lider = {
   extra_cards: 0.5,
   revive: 0.6,
@@ -315,12 +340,10 @@ let ThisDef = {
       daily_seed: true,
       unstable_mode: "random",
     },
-    buttonmutemode: 1,
-    button_is_second_sheet: 0,
-    audio_yt_vid_soundtrack: "FTsuevfvQ9w",
-    audio_yt_vid_soundtrack_volume: 47,
-    tavern_yt_vid: "yu197hlNWK0",
-    tavern_yt_volume: 100,
+    //   audio_yt_vid_soundtrack: "FTsuevfvQ9w",
+    //   audio_yt_vid_soundtrack_volume: 47,
+    //   tavern_yt_vid: "yu197hlNWK0",
+    //   tavern_yt_volume: 100,
     gaunter_lider: { extra_cards: 0.5, revive: 0.6 },
     skellige_bond_conf: { power: 4 },
     turn_skipper_conf: {

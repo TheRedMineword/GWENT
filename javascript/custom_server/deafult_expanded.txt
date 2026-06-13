@@ -86,12 +86,6 @@
       "daily_seed": true,
       "unstable_mode": "random"
     },
-    "buttonmutemode": 1,
-    "button_is_second_sheet": 0,
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
-    "tavern_yt_vid": "yu197hlNWK0",
-    "tavern_yt_volume": 100,
     "gaunter_lider": {
       "extra_cards": 0.5,
       "revive": 0.6
@@ -3056,7 +3050,11 @@
       "skellige_bond_summoner": {
         "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
       }
-    }
+    },
+    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
+    "audio_yt_vid_soundtrack_volume": 47,
+    "tavern_yt_vid": "8o-JI8VRyKo",
+    "tavern_yt_volume": 100
   },
   "texture_pack_url": null
 }

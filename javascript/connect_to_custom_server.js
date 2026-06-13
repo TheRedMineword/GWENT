@@ -39,6 +39,7 @@ const IGNORE_PATTERNS = [
   "add_redraws",
   "AUDIO_STATE",
   "white_flame_lg_faction",
+  "pick_array",
 ];
 
 const LOG_PREFIX = "[CUSTOM_SERVER]";
@@ -75,6 +76,14 @@ async function reset_custom() {
   def.env_vars.factions = factions_base;
   def.env_vars.ability_dict = ability_dict_base;
   def.texture_pack_url = null;
+  def.env_vars.audio_yt_vid_soundtrack = ArrayPickObjectForDay(
+    pick_array.game,
+  ).id;
+  def.env_vars.audio_yt_vid_soundtrack_volume = ArrayPickObjectForDay(
+    pick_array.game,
+  ).vol;
+  def.env_vars.tavern_yt_vid = ArrayPickObjectForDay(pick_array.lobby).id;
+  def.env_vars.tavern_yt_volume = ArrayPickObjectForDay(pick_array.lobby).vol;
   resetTexturePack();
   console.log("CUSTOM POWERING DOWN DEF", def);
   await connect_to_custom_server(
