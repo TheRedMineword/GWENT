@@ -1867,7 +1867,7 @@ var card_dict = [
     deck: "skellige",
     row: "ranged",
     strength: "6",
-    ability: "scorch",
+    ability: "scorch_r",
     filename: "dimun_pirate",
     count: "1",
   },

@@ -2215,6 +2215,7 @@ class Row extends CardContainer {
 
   // Applies a local scorch effect to this row
   async scorch() {
+    //  console.log("schorch", this);
     if (this.total >= 10)
       await Promise.all(
         this.maxUnits().map(async (c) => {
