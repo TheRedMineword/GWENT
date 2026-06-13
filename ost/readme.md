@@ -4,7 +4,7 @@ GWENT and The Witcher are trademarks of CD PROJEKT RED.
 
 Card artwork, music, characters, and related assets are the property of CD PROJEKT RED and their respective creators.
 
-This is a non-commercial fan project created for entertainment purposes only.
+This is a non-commercial fan project created for entertainment purpose only.
 
 Each used track used contain its own copyright notice
 
