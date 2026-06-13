@@ -69,7 +69,7 @@ function startServer() {
 
     serverApp.get('/', (req, res) => {
         res.sendFile(
-            path.join(APP_DIR, 'exe_app.html')
+            path.join(APP_DIR, 'index.html')
         );
     });
 

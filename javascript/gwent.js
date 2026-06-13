@@ -3452,6 +3452,15 @@ class Card {
   }
 }
 
+function getSegmentCount(m3u8) {
+  var out = m3u8
+    .split("\n")
+    .filter((line) => /^segment_\d+\.m4s$/.test(line.trim())).length;
+  try {
+    console.log("getSegmentCount(", btoa(m3u8), "\nOut: ", out);
+  } catch (e) {}
+  return out;
+}
 // Handles notifications and client interration with menus
 class UI {
   constructor() {
@@ -3515,14 +3524,19 @@ class UI {
         const init = await fetch(`/ost/${tavern_yt_vid}/init.mp4`).then((r) =>
           r.arrayBuffer(),
         );
-
+        const init_count = await fetch(`/ost/${tavern_yt_vid}/audio.m3u8`).then(
+          (r) => r.arrayBuffer(),
+        );
+        const conunt_arr = getSegmentCount(
+          new TextDecoder().decode(init_count),
+        );
         sb.appendBuffer(init);
 
         await new Promise((resolve) =>
           sb.addEventListener("updateend", resolve, { once: true }),
         );
 
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < conunt_arr; i++) {
           const seg = await fetch(
             `ost/${tavern_yt_vid}/segment_${String(i).padStart(3, "0")}.m4s`,
           ).then((r) => r.arrayBuffer());
@@ -3643,14 +3657,19 @@ class UI {
             const init = await fetch(`/ost/${ostId}/init.mp4`).then((r) =>
               r.arrayBuffer(),
             );
-
+            const init_count = await fetch(`/ost/${ostId}/audio.m3u8`).then(
+              (r) => r.arrayBuffer(),
+            );
+            const conunt_arr = getSegmentCount(
+              new TextDecoder().decode(init_count),
+            );
             sb.appendBuffer(init);
 
             await new Promise((resolve) =>
               sb.addEventListener("updateend", resolve, { once: true }),
             );
 
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < conunt_arr; i++) {
               const seg = await fetch(
                 `ost/${ostId}/segment_${String(i).padStart(3, "0")}.m4s`,
               ).then((r) => r.arrayBuffer());

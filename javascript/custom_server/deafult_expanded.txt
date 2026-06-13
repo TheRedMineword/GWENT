@@ -673,7 +673,7 @@
         "row": "leader",
         "strength": "",
         "ability": "emhyr_imperial",
-        "filename": "emhyr_silver",
+        "filename": "emhyr_copper",
         "count": "1"
       },
       {
@@ -682,8 +682,8 @@
         "deck": "nilfgaard",
         "row": "leader",
         "strength": "",
-        "ability": "emhyr_whiteflame",
-        "filename": "emhyr_bronze",
+        "ability": "emhyr_whiteflame2",
+        "filename": "emhyr_silver",
         "count": "1"
       },
       {
@@ -1033,7 +1033,7 @@
         "row": "leader",
         "strength": "",
         "ability": "eredin_commander",
-        "filename": "eredin_silver",
+        "filename": "eredin_bronze",
         "count": "1"
       },
       {
@@ -1043,7 +1043,7 @@
         "row": "leader",
         "strength": "",
         "ability": "eredin_bringer_of_death",
-        "filename": "eredin_bronze",
+        "filename": "eredin_silver",
         "count": "1"
       },
       {
@@ -1054,6 +1054,16 @@
         "strength": "",
         "ability": "eredin_destroyer",
         "filename": "eredin_gold",
+        "count": "1"
+      },
+      {
+        "name": "Eredin - King of the Wild Hunt",
+        "id": "135",
+        "deck": "monsters",
+        "row": "leader",
+        "strength": "",
+        "ability": "eredin_king",
+        "filename": "eredin_copper",
         "count": "1"
       },
       {
@@ -1964,28 +1974,8 @@
         "row": "close",
         "strength": "4",
         "ability": "bond",
-        "filename": "shield_maiden",
-        "count": "1"
-      },
-      {
-        "name": "Cerys - Clan Drummond Shield Maiden",
-        "id": "",
-        "deck": "skellige",
-        "row": "close",
-        "strength": "4",
-        "ability": "bond",
-        "filename": "shield_maiden_1",
-        "count": "1"
-      },
-      {
-        "name": "Cerys - Clan Drummond Shield Maiden",
-        "id": "",
-        "deck": "skellige",
-        "row": "close",
-        "strength": "4",
-        "ability": "bond",
         "filename": "shield_maiden_2",
-        "count": "1"
+        "count": "3"
       },
       {
         "name": "Clan Heymaey Skald",
@@ -3011,6 +3001,9 @@
       "emhyr_whiteflame": {
         "description": "Cancel your opponent's Leader Ability."
       },
+      "emhyr_whiteflame2": {
+        "description": "Copy opponents's leader card at start of the game, but your opponent will have addtional 2 initial redraws"
+      },
       "emhyr_relentless": {
         "description": "Draw a card from your opponent's discard pile."
       },
@@ -3022,7 +3015,7 @@
       },
       "eredin_bringer_of_death": {
         "name": "Eredin : Bringer of Death",
-        "description": "Restore a card from your discard pile to your hand."
+        "description": "Recive a copy of card from your discard pile to your hand."
       },
       "eredin_destroyer": {
         "description": "Banish 2 cards from your hand and create a copy of a card from your deck."
