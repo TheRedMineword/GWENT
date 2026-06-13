@@ -12,5 +12,6 @@ Card artwork, music, characters, and related assets are the property of CD PROJE
 This is a non-commercial fan project created for entertainment purpose only.
 
 No copyright infringement is intended.
-
--# If you are a rights holder and would like any content removed, please open an issue or contact the maintainer.
+```
+If you are a rights holder and would like any content removed, please open an issue or contact the maintainer.
+```
