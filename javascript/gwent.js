@@ -3452,6 +3452,44 @@ class Card {
   }
 }
 
+class YouTubeAudioAdapter {
+  constructor(player) {
+    console.log("constructor yt", player);
+    this.player = player;
+    this._loop = false;
+  }
+
+  async play() {
+    this.player.playVideo();
+    return Promise.resolve();
+  }
+
+  pause() {
+    this.player.pauseVideo();
+  }
+
+  load() {}
+
+  set volume(v) {
+    this.player.setVolume(v * 100);
+  }
+
+  get volume() {
+    return this.player.getVolume() / 100;
+  }
+
+  set loop(v) {
+    this._loop = v;
+  }
+
+  get loop() {
+    return this._loop;
+  }
+
+  set src(videoId) {
+    this.player.loadVideoById(videoId);
+  }
+}
 function getSegmentCount(m3u8) {
   var out = m3u8
     .split("\n")
@@ -3494,9 +3532,22 @@ class UI {
     if (enable) main.remove("noclick");
     else main.add("noclick");
   }
-
+  async audioExists(id) {
+    try {
+      const response = await fetch(`ost/${id}/audio.m3u8`, {
+        method: "HEAD",
+      });
+      //  console.log(response.ok);
+      return response.ok;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
   // Initializes the youtube background music object
-  initYouTube() {
+  async initYouTube() {
+    var exists = await ui.audioExists(tavern_yt_vid);
+    console.log("Audio play exists", exists, tavern_yt_vid);
     try {
       this.audio = document.createElement("audio");
     } catch (e) {
@@ -3504,78 +3555,103 @@ class UI {
     }
     this.audio.preload = "auto";
     this.audio.loop = true;
-    if (location.port !== "1111") {
-      // default soundtrack
-      this.audio.src = `ost/${tavern_yt_vid}/audio.m3u8`;
+    if (exists) {
+      if (location.port !== "1111") {
+        // default soundtrack
+        this.audio.src = `ost/${tavern_yt_vid}/audio.m3u8`;
 
-      this.audio.volume = tavern_yt_volume / 100;
+        this.audio.volume = tavern_yt_volume / 100;
 
-      this.audio.addEventListener("canplay", () => {
-        this.audio.play().catch(() => {});
-      });
-    } else {
-      const mediaSource = new MediaSource();
+        this.audio.addEventListener("canplay", () => {
+          this.audio.play().catch(() => {});
+        });
+      } else {
+        const mediaSource = new MediaSource();
 
-      this.audio.src = URL.createObjectURL(mediaSource);
+        this.audio.src = URL.createObjectURL(mediaSource);
 
-      mediaSource.addEventListener("sourceopen", async () => {
-        const sb = mediaSource.addSourceBuffer('audio/mp4; codecs="mp4a.40.2"');
+        mediaSource.addEventListener("sourceopen", async () => {
+          const sb = mediaSource.addSourceBuffer(
+            'audio/mp4; codecs="mp4a.40.2"',
+          );
 
-        const init = await fetch(`/ost/${tavern_yt_vid}/init.mp4`).then((r) =>
-          r.arrayBuffer(),
-        );
-        const init_count = await fetch(`/ost/${tavern_yt_vid}/audio.m3u8`).then(
-          (r) => r.arrayBuffer(),
-        );
-        const conunt_arr = getSegmentCount(
-          new TextDecoder().decode(init_count),
-        );
-        sb.appendBuffer(init);
-
-        await new Promise((resolve) =>
-          sb.addEventListener("updateend", resolve, { once: true }),
-        );
-
-        for (let i = 0; i < conunt_arr; i++) {
-          const seg = await fetch(
-            `ost/${tavern_yt_vid}/segment_${String(i).padStart(3, "0")}.m4s`,
+          const init = await fetch(`/ost/${tavern_yt_vid}/init.mp4`).then((r) =>
+            r.arrayBuffer(),
+          );
+          const init_count = await fetch(
+            `/ost/${tavern_yt_vid}/audio.m3u8`,
           ).then((r) => r.arrayBuffer());
-          try {
-            sb.appendBuffer(seg);
-          } catch (e) {}
+          const conunt_arr = getSegmentCount(
+            new TextDecoder().decode(init_count),
+          );
+          sb.appendBuffer(init);
 
           await new Promise((resolve) =>
             sb.addEventListener("updateend", resolve, { once: true }),
           );
-        }
 
-        mediaSource.endOfStream();
-        try {
-          this.audio.loop = true;
-          this.audio.volume = tavern_yt_volume / 100;
-        } catch (e) {}
-        this.audio.addEventListener("canplay", () => {
-          this.audio.play().catch(() => {});
+          for (let i = 0; i < conunt_arr; i++) {
+            const seg = await fetch(
+              `ost/${tavern_yt_vid}/segment_${String(i).padStart(3, "0")}.m4s`,
+            ).then((r) => r.arrayBuffer());
+            try {
+              sb.appendBuffer(seg);
+            } catch (e) {}
+
+            await new Promise((resolve) =>
+              sb.addEventListener("updateend", resolve, { once: true }),
+            );
+          }
+
+          mediaSource.endOfStream();
+          try {
+            this.audio.loop = true;
+            this.audio.volume = tavern_yt_volume / 100;
+          } catch (e) {}
+          this.audio.addEventListener("canplay", () => {
+            this.audio.play().catch(() => {});
+          });
         });
+      }
+
+      this.audio.addEventListener("playing", () => {
+        if (ui.ytActive !== undefined) return;
+
+        ui.ytActive = true;
+
+        let timer = setInterval(() => {
+          if (ui.audio.paused) {
+            ui.audio.play().catch(() => {});
+          } else {
+            clearInterval(timer);
+            ui.toggleMusic_elem.classList.remove("fade");
+          }
+        }, 500);
       });
+    } else {
+      this.audio = new YouTubeAudioAdapter(
+        (this.youtube = new YT.Player("youtube", {
+          videoId: tavern_yt_vid,
+          playerVars: {
+            autoplay: 1,
+            controls: 0,
+            loop: 1,
+            playlist: tavern_yt_vid,
+            rel: 0,
+            version: 3,
+            modestbranding: 1,
+          },
+          events: {
+            onReady: (event) => {
+              event.target.setVolume(tavern_yt_volume);
+            },
+          },
+        })),
+      );
+      this.audio.src = tavern_yt_vid;
+      this.audio.loop = true;
     }
-
-    this.audio.addEventListener("playing", () => {
-      if (ui.ytActive !== undefined) return;
-
-      ui.ytActive = true;
-
-      let timer = setInterval(() => {
-        if (ui.audio.paused) {
-          ui.audio.play().catch(() => {});
-        } else {
-          clearInterval(timer);
-          ui.toggleMusic_elem.classList.remove("fade");
-        }
-      }, 500);
-    });
   }
-
   getAudioState() {
     if (!this.audio) return AUDIO_STATE.UNSTARTED;
 
@@ -3624,88 +3700,128 @@ class UI {
 
   async youtubePlay(ostId, volume_int = 100, repeat = false) {
     try {
-      if (this.audio) {
-        if (location.port !== "1111") {
-          this.audio.src = `ost/${ostId}/audio.m3u8`;
+      ui.stopYouTube();
+      var exists = await ui.audioExists(ostId);
+      console.log("Audio play exists", exists, ostId, this.audio);
+      if (exists) {
+        if (this.audio.player.videoTitle) {
+          console.log("!this audio");
+          this.audio = await document.createElement("audio");
+          await sleep(10);
+        }
+        if (this.audio) {
+          if (location.port !== "1111") {
+            this.audio.src = `ost/${ostId}/audio.m3u8`;
 
-          this.audio.volume = volume_int / 100;
+            this.audio.volume = volume_int / 100;
 
-          this.audio.loop = repeat;
+            this.audio.loop = repeat;
 
-          this.audio.load();
+            this.audio.load();
 
-          // this.audio.play().catch(() => {});
-          await this.audio.play().catch((e) => {
-            console.error("PLAY FAILED:", e);
-          });
-          button_is_second_sheet = 1;
-          //      sleep(100);
-          if (buttonmutemode === 0) {
-            ui.stopYouTube();
-            console.log("muted");
-          }
-        } else {
-          const mediaSource = new MediaSource();
+            // this.audio.play().catch(() => {});
+            await this.audio.play().catch((e) => {
+              console.error("PLAY FAILED:", e);
+            });
+            button_is_second_sheet = 1;
+            //      sleep(100);
+            if (buttonmutemode === 0) {
+              ui.stopYouTube();
+              console.log("muted");
+            }
+          } else {
+            const mediaSource = new MediaSource();
 
-          this.audio.src = URL.createObjectURL(mediaSource);
+            this.audio.src = URL.createObjectURL(mediaSource);
 
-          mediaSource.addEventListener("sourceopen", async () => {
-            const sb = mediaSource.addSourceBuffer(
-              'audio/mp4; codecs="mp4a.40.2"',
-            );
+            mediaSource.addEventListener("sourceopen", async () => {
+              const sb = mediaSource.addSourceBuffer(
+                'audio/mp4; codecs="mp4a.40.2"',
+              );
 
-            const init = await fetch(`/ost/${ostId}/init.mp4`).then((r) =>
-              r.arrayBuffer(),
-            );
-            const init_count = await fetch(`/ost/${ostId}/audio.m3u8`).then(
-              (r) => r.arrayBuffer(),
-            );
-            const conunt_arr = getSegmentCount(
-              new TextDecoder().decode(init_count),
-            );
-            sb.appendBuffer(init);
-
-            await new Promise((resolve) =>
-              sb.addEventListener("updateend", resolve, { once: true }),
-            );
-
-            for (let i = 0; i < conunt_arr; i++) {
-              const seg = await fetch(
-                `ost/${ostId}/segment_${String(i).padStart(3, "0")}.m4s`,
-              ).then((r) => r.arrayBuffer());
-              try {
-                sb.appendBuffer(seg);
-              } catch (e) {}
+              const init = await fetch(`/ost/${ostId}/init.mp4`).then((r) =>
+                r.arrayBuffer(),
+              );
+              const init_count = await fetch(`/ost/${ostId}/audio.m3u8`).then(
+                (r) => r.arrayBuffer(),
+              );
+              const conunt_arr = getSegmentCount(
+                new TextDecoder().decode(init_count),
+              );
+              sb.appendBuffer(init);
 
               await new Promise((resolve) =>
                 sb.addEventListener("updateend", resolve, { once: true }),
               );
-            }
 
-            mediaSource.endOfStream();
-            try {
-              this.audio.loop = repeat;
-              this.audio.volume = volume_int / 100;
-            } catch (e) {}
-            this.audio.addEventListener(
-              "loadedmetadata",
-              async () => {
+              for (let i = 0; i < conunt_arr; i++) {
+                const seg = await fetch(
+                  `ost/${ostId}/segment_${String(i).padStart(3, "0")}.m4s`,
+                ).then((r) => r.arrayBuffer());
                 try {
-                  await this.audio.play();
+                  sb.appendBuffer(seg);
+                } catch (e) {}
 
-                  button_is_second_sheet = 1;
+                await new Promise((resolve) =>
+                  sb.addEventListener("updateend", resolve, { once: true }),
+                );
+              }
 
-                  if (buttonmutemode === 0) {
-                    ui.stopYouTube();
-                    console.log("muted");
+              mediaSource.endOfStream();
+              try {
+                this.audio.loop = repeat;
+                this.audio.volume = volume_int / 100;
+              } catch (e) {}
+              this.audio.addEventListener(
+                "loadedmetadata",
+                async () => {
+                  try {
+                    await this.audio.play();
+
+                    button_is_second_sheet = 1;
+
+                    if (buttonmutemode === 0) {
+                      ui.stopYouTube();
+                      console.log("muted");
+                    }
+                  } catch (e) {
+                    console.error("PLAY FAILED:", e);
                   }
-                } catch (e) {
-                  console.error("PLAY FAILED:", e);
-                }
+                },
+                { once: true },
+              );
+            });
+          }
+        }
+      } else {
+        console.log("ELSE", ostId);
+        this.audio = await new YouTubeAudioAdapter(
+          (this.youtube = new YT.Player("youtube", {
+            videoId: ostId,
+            playerVars: {
+              autoplay: 1,
+              controls: 0,
+              loop: 1,
+              playlist: ostId,
+              rel: 0,
+              version: 3,
+              modestbranding: 1,
+            },
+            events: {
+              onReady: (event) => {
+                event.target.setVolume(volume_int);
               },
-              { once: true },
-            );
-          });
+            },
+          })),
+        );
+        this.audio.src = ostId;
+        this.audio.volume = volume_int / 100;
+        this.audio.loop = repeat;
+        button_is_second_sheet = 1;
+        //      sleep(100);
+        if (buttonmutemode === 0) {
+          ui.stopYouTube();
+          console.log("muted");
         }
       }
 
