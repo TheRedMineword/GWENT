@@ -3704,7 +3704,11 @@ class UI {
       var exists = await ui.audioExists(ostId);
       console.log("Audio play exists", exists, ostId, this.audio);
       if (exists) {
-        if (this.audio.player.videoTitle) {
+        var checka = false;
+        try {
+          checka = this.audio.player.videoTitle;
+        } catch (e) {}
+        if (checka) {
           console.log("!this audio");
           this.audio = await document.createElement("audio");
           await sleep(10);
