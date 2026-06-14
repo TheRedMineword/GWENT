@@ -908,7 +908,7 @@ var card_dict = [
     strength: "5",
     ability: "bond",
     filename: "young_emissary",
-    count: "1",
+    count: "2",
   },
   {
     name: "Young Emissary",
@@ -918,7 +918,7 @@ var card_dict = [
     strength: "5",
     ability: "bond",
     filename: "young_emissary_1",
-    count: "1",
+    count: "0",
   },
   {
     name: "Zerrikanian Fire Scorpion",
