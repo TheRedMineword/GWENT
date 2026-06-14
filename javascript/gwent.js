@@ -3071,6 +3071,7 @@ class Game {
     if (isconnectedtosession) {
       btnCancelElem.classList.remove("hidden");
     }
+    ui.enablePlayer(true);
   }
 
   // Restarts the last game with the same decks
