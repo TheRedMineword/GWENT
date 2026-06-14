@@ -3467,17 +3467,23 @@ class YouTubeAudioAdapter {
   }
 
   pause() {
-    this.player.pauseVideo();
+    try {
+      this.player.pauseVideo();
+    } catch (e) {}
   }
 
   load() {}
 
   set volume(v) {
-    this.player.setVolume(v * 100);
+    try {
+      this.player.setVolume(v * 100);
+    } catch (e) {}
   }
 
   get volume() {
-    return this.player.getVolume() / 100;
+    try {
+      return this.player.getVolume() / 100;
+    } catch (e) {}
   }
 
   set loop(v) {
@@ -3535,18 +3541,22 @@ class UI {
     else main.add("noclick");
   }
   async audioExists(id) {
-    try {
-      const response = await fetch(
-        `http://localhost:1111/get-audio/ost/${id}/audio.m3u8`,
-        {
-          method: "HEAD",
-        },
-      );
-      //  console.log(response.ok);
-      return response.ok;
-    } catch (error) {
-      console.log(error);
-      return false;
+    if (location.port === "1111" || location.port === "8080") {
+      try {
+        const response = await fetch(
+          `http://localhost:1111/get-audio/ost/${id}/audio.m3u8`,
+          {
+            method: "HEAD",
+          },
+        );
+        //  console.log(response.ok);
+        return response.ok;
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+    } else {
+      return false; // should not ask for permission to use locahost
     }
   }
   // Initializes the youtube background music object
@@ -3806,8 +3816,22 @@ class UI {
         }
       } else {
         console.log("ELSE", ostId);
-        this.audio = await new YouTubeAudioAdapter(
-          (this.youtube = new YT.Player("youtube", {
+
+        console.log("STATE BEFORE", {
+          ostId,
+          youtubeExists: !!this.youtube,
+          audioExists: !!this.audio,
+          youtubeType: this.youtube?.constructor?.name,
+          audioType: this.audio?.constructor?.name,
+          audio: this.audio,
+          youtube: this.youtube,
+        });
+
+        // Create player + adapter once
+        if (!this.youtube) {
+          console.log("Creating new YT.Player");
+
+          this.youtube = new YT.Player("youtube", {
             videoId: ostId,
             playerVars: {
               autoplay: 1,
@@ -3820,16 +3844,79 @@ class UI {
             },
             events: {
               onReady: (event) => {
-                event.target.setVolume(volume_int);
+                console.log("YT READY", {
+                  videoTitle: event.target?.getVideoData?.()?.title,
+                  videoId: ostId,
+                  volume: volume_int,
+                });
+
+                try {
+                  event.target.setVolume(volume_int);
+                } catch (e) {
+                  console.error("setVolume failed", e);
+                }
+              },
+              onStateChange: (event) => {
+                console.log("YT STATE CHANGE", event.data);
+              },
+              onError: (event) => {
+                console.error("YT ERROR", event.data);
               },
             },
-          })),
-        );
-        this.audio.src = ostId;
-        this.audio.volume = volume_int / 100;
-        this.audio.loop = repeat;
+          });
+
+          console.log("YT.Player created", this.youtube);
+
+          this.audio = new YouTubeAudioAdapter(this.youtube);
+
+          console.log("YouTubeAudioAdapter created", this.audio);
+        } else {
+          console.log("Reusing existing YT.Player", this.youtube);
+
+          // Ensure adapter exists
+          if (!this.audio || !(this.audio instanceof YouTubeAudioAdapter)) {
+            console.log("Recreating adapter from existing player");
+            this.audio = new YouTubeAudioAdapter(this.youtube);
+          }
+        }
+
+        console.log("STATE AFTER INIT", {
+          audio: this.audio,
+          youtube: this.youtube,
+          audioType: this.audio?.constructor?.name,
+          youtubeType: this.youtube?.constructor?.name,
+        });
+
+        try {
+          console.log("Setting adapter properties");
+
+          this.audio.src = ostId;
+          this.audio.volume = volume_int / 100;
+          this.audio.loop = repeat;
+
+          console.log("Adapter properties set", {
+            src: ostId,
+            volume: volume_int / 100,
+            loop: repeat,
+          });
+        } catch (e) {
+          console.error("Failed setting adapter properties", e);
+        }
+
+        try {
+          console.log("Checking YT state");
+
+          console.log({
+            currentVideoData: this.youtube?.getVideoData?.(),
+            playerState: this.youtube?.getPlayerState?.(),
+            iframe: this.youtube?.getIframe?.(),
+          });
+        } catch (e) {
+          console.error("Failed reading YT state", e);
+        }
+
         button_is_second_sheet = 1;
-        //      sleep(100);
+
         if (buttonmutemode === 0) {
           ui.stopYouTube();
           console.log("muted");
