@@ -1,0 +1,3 @@
+## 14 June, 2026
+- Removed from browser version ./ost (returned to youtube player)
+- Exe app will use now private assets
