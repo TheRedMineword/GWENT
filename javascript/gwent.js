@@ -5902,9 +5902,9 @@ function tocar(arquivo, pararMusica) {
 
 /*----------------------------------------------------*/
 
-// function onYouTubeIframeAPIReady() {
-//  ui.initYouTube();
-// }
+function onYouTubeIframeAPIReady() {
+  ui.initYouTube();
+}
 
 async function iniciarMusica(bypass = false) {
   try {
