@@ -3547,8 +3547,9 @@ class UI {
   }
   // Initializes the youtube background music object
   async initYouTube() {
+    //  console.log("initYouTube()")
     var exists = await ui.audioExists(tavern_yt_vid);
-    console.log("Audio play exists", exists, tavern_yt_vid);
+    //  console.log("Audio play exists", exists, tavern_yt_vid);
     try {
       this.audio = document.createElement("audio");
     } catch (e) {
@@ -3556,6 +3557,7 @@ class UI {
     }
     this.audio.preload = "auto";
     this.audio.loop = true;
+    console.log("initYouTube()", this.audio, exists);
     if (exists) {
       if (location.port !== "1111") {
         // default soundtrack
@@ -5965,9 +5967,12 @@ async function inicio() {
   //openFullscreen();
   await iniciarMusica(false);
   if (ui.getAudioState() !== 1) {
-    ui.toggleMusic();
+    await ui.toggleMusic();
     await sleep(10);
-    ui.toggleMusic();
+    await ui.toggleMusic();
+  }
+  if (ui.getAudioState() !== 1) {
+    await ui.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);
   }
 }
 
