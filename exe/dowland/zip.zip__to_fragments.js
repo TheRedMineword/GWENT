@@ -57,7 +57,7 @@ for (let i = 0; i < fragmentCount; i++) {
 }
 
 const indexData = {
-    originalFile: 'GWENT_v.09.06.2026.hotfix.1.rar',
+    originalFile: 'GWENT_v.14.06.2026.hotfix.1.rar',
     totalSize,
     fragmentCount,
     fragmentSize: CHUNK_SIZE,

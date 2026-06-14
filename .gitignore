@@ -17,3 +17,4 @@ ffmpeg-7.1.1-full_build
 .audio-bin-config.json
 encrypt_keys.js
 audio-bin-config.bin
+exe_source
