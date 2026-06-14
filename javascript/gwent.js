@@ -3535,9 +3535,12 @@ class UI {
   }
   async audioExists(id) {
     try {
-      const response = await fetch(`ost/${id}/audio.m3u8`, {
-        method: "HEAD",
-      });
+      const response = await fetch(
+        `http://localhost:1111/get-audio/ost/${id}/audio.m3u8`,
+        {
+          method: "HEAD",
+        },
+      );
       //  console.log(response.ok);
       return response.ok;
     } catch (error) {
@@ -3561,7 +3564,7 @@ class UI {
     if (exists) {
       if (location.port !== "1111") {
         // default soundtrack
-        this.audio.src = `ost/${tavern_yt_vid}/audio.m3u8`;
+        this.audio.src = `http://localhost:1111/get-audio/ost/${tavern_yt_vid}/audio.m3u8`;
 
         this.audio.volume = tavern_yt_volume / 100;
 
@@ -3578,11 +3581,11 @@ class UI {
             'audio/mp4; codecs="mp4a.40.2"',
           );
 
-          const init = await fetch(`/ost/${tavern_yt_vid}/init.mp4`).then((r) =>
-            r.arrayBuffer(),
-          );
+          const init = await fetch(
+            `http://localhost:1111/get-audio/ost/${tavern_yt_vid}/init.mp4`,
+          ).then((r) => r.arrayBuffer());
           const init_count = await fetch(
-            `/ost/${tavern_yt_vid}/audio.m3u8`,
+            `http://localhost:1111/get-audio/ost/${tavern_yt_vid}/audio.m3u8`,
           ).then((r) => r.arrayBuffer());
           const conunt_arr = getSegmentCount(
             new TextDecoder().decode(init_count),
@@ -3595,7 +3598,7 @@ class UI {
 
           for (let i = 0; i < conunt_arr; i++) {
             const seg = await fetch(
-              `ost/${tavern_yt_vid}/segment_${String(i).padStart(3, "0")}.m4s`,
+              `http://localhost:1111/get-audio/ost/${tavern_yt_vid}/segment_${String(i).padStart(3, "0")}.m4s`,
             ).then((r) => r.arrayBuffer());
             try {
               sb.appendBuffer(seg);
@@ -3718,7 +3721,7 @@ class UI {
         }
         if (this.audio) {
           if (location.port !== "1111") {
-            this.audio.src = `ost/${ostId}/audio.m3u8`;
+            this.audio.src = `http://localhost:1111/get-audio/ost/${ostId}/audio.m3u8`;
 
             this.audio.volume = volume_int / 100;
 
@@ -3746,12 +3749,12 @@ class UI {
                 'audio/mp4; codecs="mp4a.40.2"',
               );
 
-              const init = await fetch(`/ost/${ostId}/init.mp4`).then((r) =>
-                r.arrayBuffer(),
-              );
-              const init_count = await fetch(`/ost/${ostId}/audio.m3u8`).then(
-                (r) => r.arrayBuffer(),
-              );
+              const init = await fetch(
+                `http://localhost:1111/get-audio/ost/${ostId}/init.mp4`,
+              ).then((r) => r.arrayBuffer());
+              const init_count = await fetch(
+                `http://localhost:1111/get-audio/ost/${ostId}/audio.m3u8`,
+              ).then((r) => r.arrayBuffer());
               const conunt_arr = getSegmentCount(
                 new TextDecoder().decode(init_count),
               );
@@ -3763,7 +3766,7 @@ class UI {
 
               for (let i = 0; i < conunt_arr; i++) {
                 const seg = await fetch(
-                  `ost/${ostId}/segment_${String(i).padStart(3, "0")}.m4s`,
+                  `http://localhost:1111/get-audio/ost/${ostId}/segment_${String(i).padStart(3, "0")}.m4s`,
                 ).then((r) => r.arrayBuffer());
                 try {
                   sb.appendBuffer(seg);

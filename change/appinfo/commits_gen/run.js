@@ -21,7 +21,8 @@ const IGNORE_DIRS = new Set([
     'MyDecks',
     'gwent_cards',
     'fragment_map',
-    'ffmpeg-7.1.1-full_build'
+    'ffmpeg-7.1.1-full_build',
+    '.ost'
 ]);
 
 const IGNORE_FILES = new Set([
@@ -33,7 +34,7 @@ const IGNORE_FILES = new Set([
     '.init.bat', '.replace.env', 'server.js', '.server.js',
     '.env',
     'session_registering_oryginal.js', 'invite.json', 'package.json', 'package-lock.json', 'index_ver_check_script.txt',
-    'allowed_versions.json', 'convert.js'
+    'allowed_versions.json', 'convert.js', 'audio-bin-config.json', '.audio-bin-config.json', 'audio-bin-config.bin', '.audio-bin-config.bin'
 ]);
 
 // =====================================================
@@ -237,9 +238,30 @@ function main() {
         globalHash.update(fileSha);
     }
 
-    const finalSha =
-        globalHash
-            .digest('hex');
+const AUDIO_BIN =
+    'C:\\Users\\LENOVO\\Desktop\\GWENT\\javascript\\PC_scripts\\audio-bin-config.bin';
+let audioAddon = null;
+
+if (fs.existsSync(AUDIO_BIN)) {
+
+    const audioBuffer =
+        fs.readFileSync(AUDIO_BIN);
+
+    audioAddon = {
+        sha: sha256Buffer(audioBuffer),
+        content: audioBuffer.toString('base64'),
+        appdata: 'gwent-audio'
+    };
+    console.log("Audio addon", audioAddon);
+}
+    const globalSha = globalHash.digest('hex');
+    console.log("final hash 1/2", globalHash);
+const finalSha = crypto
+    .createHash('sha256')
+    .update(globalSha)
+    .update(JSON.stringify(audioAddon))
+    .digest('hex');
+  console.log("final hash 2/2", finalSha);
 
     let manifest = {
         sha: finalSha,
@@ -247,7 +269,8 @@ function main() {
             new Date()
                 .toISOString(),
         files: manifestFiles,
-        totals: { size: getTotalSize(manifestFiles), files: manifestFiles.length }
+        totals: { size: getTotalSize(manifestFiles), files: manifestFiles.length },
+    audio_addon: audioAddon
     };
     manifest = JSON.stringify(manifest);
  //   console.log("MANIFEST\n", manifest);

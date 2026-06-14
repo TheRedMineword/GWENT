@@ -1,10 +1,10 @@
 {
-  "originalFile": "GWENT_v.09.06.2026.hotfix.1.rar",
-  "totalSize": 95020860,
+  "originalFile": "GWENT_v.14.06.2026",
+  "totalSize": 94986771,
   "fragmentCount": 19,
   "fragmentSize": 5242880,
-  "sha256": "09d2d593b472279616d78f328fad29a6638d29e4d5c5ee7ffa7accaaaefa1c85",
-  "createdAt": "2026-06-11T06:55:55.236Z",
+  "sha256": "bf3b4c2d4181118f816fd6d9ccccb444c031101db2b4ad5b3c08f9331bf972d0",
+  "createdAt": "2026-06-14T12:22:03.426Z",
   "fragments": [
     {
       "id": 0,
@@ -99,7 +99,7 @@
     {
       "id": 18,
       "file": "fragment_map/fragment18.bin",
-      "size": 649020
+      "size": 614931
     }
   ]
 }

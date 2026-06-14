@@ -13,3 +13,7 @@ index_ver_check_script.txt
 .replace.env
 .server.js
 ffmpeg-7.1.1-full_build
+.ost
+.audio-bin-config.json
+encrypt_keys.js
+audio-bin-config.bin

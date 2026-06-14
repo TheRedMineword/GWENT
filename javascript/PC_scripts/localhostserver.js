@@ -54,24 +54,25 @@ console.log("///////////////////////////");
 function startServer() {
 
     const serverApp = express();
+    const serverApp2 = express();
 
     const APP_DIR =
         path.join(
             app.getPath('appData'),
             'GWENT'
         );
-
+    const APP_DIR2 = path.join(
+    app.getPath('appData'),
+    'gwent-audio',
+    'TheRedMineword-3b88b341d8d88a53d597fadefa5d79da4f8e9e7fa770a83375e3ba8bf2e8dc72-f25cd7160fbea56b5a38df6a2a893120889e6bf8'
+);
     serverApp.use(express.json());
 
     serverApp.use(
         express.static(APP_DIR)
-    );
-
-    serverApp.get('/', (req, res) => {
-        res.sendFile(
-            path.join(APP_DIR, 'index.html')
-        );
-    });
+    );;
+    
+    serverApp.use('/get-audio', express.static(APP_DIR2));
 
     serverApp.post('/local-api/get_version', async (req, res) => {
 
