@@ -1091,7 +1091,7 @@ console.log("Total: " + total);
     })));
   }
   function pb() {
-    var a = new nb, b = ["https://www.youtube.com"];
+    var a = new nb, b = ["https://www.youtube-nocookie.com"];
     b = b === undefined ? mb : b;
     na(new ma(new ka(function (c) {
       switch (c.g) {
@@ -1481,5 +1481,6 @@ console.log("Total: " + total);
   var Ob = H.onYouTubePlayerAPIReady;
   Ob && Ob();
 }.call(this));
-
-alert("v_y_1");
+try {
+alert("v_y_2");
+} catch (e) {}
