@@ -1,0 +1,607 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+  <!-- SEO-CRITICAL: title and meta description must not be changed. -->
+  <title>
+   purify video – watch purified YouTube videos with no ads
+  </title>
+  <meta content="Watch purified YouTube videos with no ads. Just focus." name="description"/>
+  <!-- Homepage is the canonical, indexable root. -->
+  <link href="https://purify.video/" rel="canonical"/>
+  <meta content="index, follow" name="robots"/>
+  <!-- Open Graph / Twitter -->
+  <meta content="website" property="og:type"/>
+  <meta content="https://purify.video/" property="og:url"/>
+  <meta content="purify video – watch purified YouTube videos with no ads" property="og:title"/>
+  <meta content="Watch purified YouTube videos with no ads. Just focus." property="og:description"/>
+  <meta content="purify video" property="og:site_name"/>
+  <meta content="summary" name="twitter:card"/>
+  <meta content="purify video – watch purified YouTube videos with no ads" name="twitter:title"/>
+  <meta content="Watch purified YouTube videos with no ads. Just focus." name="twitter:description"/>
+  <meta content="#0b0d10" media="(prefers-color-scheme: dark)" name="theme-color"/>
+  <meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+  <link href="/favicon.ico" rel="icon" sizes="any"/>
+  <link href="/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png"/>
+  <link href="/favicon.svg" rel="icon" type="image/svg+xml"/>
+  <link href="/favicon.ico" rel="shortcut icon"/>
+  <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+  <link href="/site.webmanifest" rel="manifest"/>
+  <link href="css/styles.css" rel="stylesheet"/>
+  <!-- Apply saved theme synchronously to avoid flash on load. -->
+  <script>
+   (function () {
+      try {
+        var t = localStorage.getItem('purify.theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <!-- Structured data: WebSite + SearchAction so URL submissions can show up in SERPs. -->
+  <script type="application/ld+json">
+   {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "purify video",
+    "url": "https://purify.video/",
+    "description": "Watch purified YouTube videos with no ads. Just focus.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://purify.video/watch?v={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+ </head>
+ <body class="page-home">
+  <a class="skip-link" href="#main">
+   Skip to content
+  </a>
+  <header class="site-header" role="banner">
+   <a aria-label="purify video home" class="brand" href="/">
+    <span aria-hidden="true" class="brand-mark">
+     <svg height="22" viewbox="0 0 24 24" width="22">
+      <path d="M9 7l9 5-9 5z" fill="#fff">
+      </path>
+     </svg>
+    </span>
+    <span class="brand-text">
+     purify.
+     <span class="brand-text-accent">
+      video
+     </span>
+    </span>
+   </a>
+   <nav aria-label="Primary" class="site-nav">
+    <a href="#how">
+     How it works
+    </a>
+    <a href="#faq">
+     FAQ
+    </a>
+    <button class="member-login-link" id="memberLoginBtn" title="Verify your Purify Video membership" type="button">
+     Member login
+    </button>
+    <button aria-label="Toggle dark mode" class="theme-toggle" id="themeToggle" type="button">
+     <span aria-hidden="true" class="theme-toggle-icon">
+      ◐
+     </span>
+    </button>
+   </nav>
+  </header>
+  <main id="main">
+   <!-- HERO: SEO-critical headings preserved verbatim. -->
+   <section class="home-hero">
+    <div class="home-hero-inner">
+     <p class="home-eyebrow">
+      Free · No account · No ads
+     </p>
+     <h1 class="home-h1">
+      purify video
+     </h1>
+     <h2 class="home-h2">
+      Watch purified YouTube videos with no ads. Just focus
+     </h2>
+     <form action="/watch" aria-label="Paste a YouTube link to purify" class="home-form" id="purifyForm" method="get" role="search">
+      <label class="visually-hidden" for="urlInput">
+       Paste a YouTube link
+      </label>
+      <div class="home-input-row">
+       <input aria-describedby="purifyError purifyHint" autocapitalize="off" autocomplete="off" id="urlInput" inputmode="url" name="v" placeholder="Paste a YouTube link" spellcheck="false" type="text"/>
+       <button class="home-btn" id="purifyBtn" type="submit">
+        Purify
+       </button>
+      </div>
+      <p class="home-error" hidden="" id="purifyError" role="alert">
+      </p>
+      <p class="home-hint" id="purifyHint">
+       Works with videos, Shorts, playlists, and youtu.be short links.
+      </p>
+     </form>
+     <ul aria-label="What you get" class="home-pill-row">
+      <li class="home-pill">
+       youtube no ads
+      </li>
+      <li class="home-pill">
+       distraction-free
+      </li>
+      <li class="home-pill">
+       no comments
+      </li>
+      <li class="home-pill">
+       no sidebar
+      </li>
+     </ul>
+    </div>
+   </section>
+   <!-- ABOUT: required wording preserved verbatim, in natural prose. -->
+   <section aria-labelledby="aboutHeading" class="home-prose">
+    <h2 id="aboutHeading">
+     A clean, minimal way to watch YouTube
+    </h2>
+    <p>
+     Are you looking for a way to enhance your YouTube viewing experience? This app offers a clean and minimalistic interface for a distraction-free experience.
+    </p>
+    <p>
+     Teachers, students, parents, and organizers can use our app to remove ads, comments, and distracting sidebar videos. Ensure your viewers see only the content you want them to see—nothing more, nothing less.
+    </p>
+   </section>
+   <!-- HOW IT WORKS: three simple steps. -->
+   <section aria-labelledby="howHeading" class="home-steps" id="how">
+    <h2 class="home-section-title" id="howHeading">
+     How it works
+    </h2>
+    <ol class="home-step-list">
+     <li class="home-step">
+      <span class="home-step-num">
+       1
+      </span>
+      <h3>
+       Paste a YouTube link
+      </h3>
+      <p>
+       Drop any YouTube URL into the box above. Regular videos, Shorts, playlists, and
+       <code>
+        youtu.be
+       </code>
+       short links all work.
+      </p>
+     </li>
+     <li class="home-step">
+      <span class="home-step-num">
+       2
+      </span>
+      <h3>
+       Press Purify
+      </h3>
+      <p>
+       We parse the link, validate the video ID, and take you straight to the clean player at
+       <code>
+        purify.video/watch
+       </code>
+       .
+      </p>
+     </li>
+     <li class="home-step">
+      <span class="home-step-num">
+       3
+      </span>
+      <h3>
+       Just watch
+      </h3>
+      <p>
+       No ads. No comments. No sidebar of recommended videos. Only the content you came for.
+      </p>
+     </li>
+    </ol>
+   </section>
+   <!-- FEATURES -->
+   <section aria-labelledby="featuresHeading" class="home-features">
+    <h2 class="home-section-title" id="featuresHeading">
+     Why purify video
+    </h2>
+    <ul class="home-feature-grid">
+     <li class="home-feature">
+      <h3>
+       No ads
+      </h3>
+      <p>
+       Watch purified YouTube videos with no ads. Just focus on what you came to see.
+      </p>
+     </li>
+     <li class="home-feature">
+      <h3>
+       No comments, no sidebar
+      </h3>
+      <p>
+       Remove ads, comments, and distracting sidebar videos. Only the player. Only the video.
+      </p>
+     </li>
+     <li class="home-feature">
+      <h3>
+       Playlists supported
+      </h3>
+      <p>
+       Paste any YouTube playlist URL and watch the whole list in our clean player.
+      </p>
+     </li>
+     <li class="home-feature">
+      <h3>
+       SponsorBlock built in
+      </h3>
+      <p>
+       Auto-skip sponsored segments using the community-powered SponsorBlock database. Toggle on or off any time.
+      </p>
+     </li>
+     <li class="home-feature">
+      <h3>
+       Made for sharing
+      </h3>
+      <p>
+       Great for teachers, students, parents, and organizers. Share a clean watch link with no surprises.
+      </p>
+     </li>
+     <li class="home-feature">
+      <h3>
+       Lightweight &amp; private
+      </h3>
+      <p>
+       No account. No tracking pixels. Your watch history stays in your browser.
+      </p>
+     </li>
+    </ul>
+   </section>
+   <!-- FAQ -->
+   <section aria-labelledby="faqHeading" class="home-faq" id="faq">
+    <h2 class="home-section-title" id="faqHeading">
+     Frequently asked questions
+    </h2>
+    <details>
+     <summary>
+      How do I watch YouTube with no ads?
+     </summary>
+     <p>
+      Paste any YouTube link into the box above and press
+      <strong>
+       Purify
+      </strong>
+      . You'll be taken to our clean player, which loads the video without ads, comments, or sidebar distractions. Works with regular videos, Shorts, and playlists.
+     </p>
+    </details>
+    <details>
+     <summary>
+      What is the official Purify Video domain?
+     </summary>
+     <p>
+      The official domain is
+      <a href="https://purify.video/">
+       purify.video
+      </a>
+      . You may also see
+      <a href="https://purifyvideo.com/">
+       purifyvideo.com
+      </a>
+      , which redirects here.
+     </p>
+    </details>
+    <details>
+     <summary>
+      Is Purify Video the same as SkipVids?
+     </summary>
+     <p>
+      Purify Video is maintained by
+      <a href="https://skipvids.com/" rel="noopener">
+       SkipVids
+      </a>
+      . Purify is the minimalist, paste-and-watch tool. SkipVids is the
+      <a href="https://skipvids.com/youtube-no-ads" rel="noopener">
+       full YouTube no ads player
+      </a>
+      with playlists, continue watching, background play, and more.
+     </p>
+    </details>
+    <details>
+     <summary>
+      Does Purify Video block comments and sidebar distractions?
+     </summary>
+     <p>
+      Yes. The player removes ads, comments, and the sidebar of recommended videos. You see only the content you came to see—nothing more, nothing less.
+     </p>
+    </details>
+    <details>
+     <summary>
+      Does it support YouTube playlists?
+     </summary>
+     <p>
+      Yes. Paste a YouTube playlist URL (one containing
+      <code>
+       list=
+      </code>
+      ) and the player will load the whole playlist in our clean interface.
+     </p>
+    </details>
+    <details>
+     <summary>
+      Does it support SponsorBlock?
+     </summary>
+     <p>
+      Yes. Sponsored segments are auto-skipped using the
+      <a href="https://sponsor.ajay.app/" rel="noopener">
+       SponsorBlock
+      </a>
+      community database. You can disable it from the player page if you prefer.
+     </p>
+    </details>
+    <details>
+     <summary>
+      Does it preserve YouTube start times?
+     </summary>
+     <p>
+      Yes. If your link includes
+      <code>
+       ?t=60
+      </code>
+      ,
+      <code>
+       ?t=1m30s
+      </code>
+      , or
+      <code>
+       #t=42
+      </code>
+      , the player jumps to that timestamp. Share-friendly time-coded URLs work out of the box.
+     </p>
+    </details>
+    <details>
+     <summary>
+      How do I use background play on mobile?
+     </summary>
+     <p>
+      When you minimize the browser on iOS or Android, the video may appear in your notification panel with playback controls. Background playback varies by browser and device. For the most reliable experience, try the
+      <a href="https://skipvids.com/chrome-extension" rel="noopener">
+       SkipVids browser extension
+      </a>
+      .
+     </p>
+    </details>
+    <details>
+     <summary>
+      Is my watch history private?
+     </summary>
+     <p>
+      Yes. Your "Recently watched" list is stored only in your browser using
+      <code>
+       localStorage
+      </code>
+      . It never leaves your device. Clear it any time from the player page.
+     </p>
+    </details>
+    <details>
+     <summary>
+      Does Purify Video store my data?
+     </summary>
+     <p>
+      No accounts, no profiles, no server-side history. The only data is what your browser keeps locally for your own convenience.
+     </p>
+    </details>
+   </section>
+   <!-- SkipVids CTA: subtle, useful, not spammy. -->
+   <section aria-labelledby="skipvidsHeading" class="home-skipvids">
+    <h2 class="home-section-title" id="skipvidsHeading">
+     Want more?
+    </h2>
+    <p>
+     Want background play, continue watching, and more advanced features? Try the
+     <a href="https://skipvids.com/" rel="noopener">
+      full YouTube no ads player
+     </a>
+     at SkipVids, or install the
+     <a href="https://skipvids.com/chrome-extension" rel="noopener">
+      SkipVids browser extension
+     </a>
+     .
+    </p>
+   </section>
+  </main>
+  <footer class="site-footer" role="contentinfo">
+   <p>
+    Purify Video is maintained by
+    <a href="https://skipvids.com/" rel="noopener">
+     SkipVids
+    </a>
+    .
+   </p>
+   <p class="footer-links">
+    <a href="https://skipvids.com/" rel="noopener">
+     SkipVids
+    </a>
+    <span aria-hidden="true">
+     ·
+    </span>
+    <a href="https://skipvids.com/youtube-no-ads" rel="noopener">
+     YouTube no ads
+    </a>
+    <span aria-hidden="true">
+     ·
+    </span>
+    <a href="https://skipvids.com/chrome-extension" rel="noopener">
+     Get the extension
+    </a>
+   </p>
+  </footer>
+  <!--
+  Homepage script: form parsing + theme toggle ONLY.
+  Does NOT run any of the watch/player code (no iframe, no SponsorBlock, no history, no PiP).
+  app.js is loaded so we can reuse parseInput() and buildWatchPath() for the form.
+-->
+  <script src="js/app.js">
+  </script>
+  <script src="js/purify-input-helper.js">
+  </script>
+  <script>
+   (function () {
+  'use strict';
+
+  var P = window.Purify;
+  if (!P) {
+    // app.js failed to load. Native form submission to /watch?v=<raw> still works as a fallback.
+    console.error('Purify: /app.js did not load. Form will submit natively to /watch.');
+    return;
+  }
+
+  // ---- Theme toggle ----
+  var themeBtn = document.getElementById('themeToggle');
+  if (themeBtn) themeBtn.addEventListener('click', function () { P.toggleTheme(); });
+
+// ----- Member login -----
+// Shows "Member login" for free users.
+// Shows "Logged in" once this browser has a valid supporter token.
+var memberLoginBtn = document.getElementById('memberLoginBtn');
+
+function decodePurifyBase64Url(str) {
+  str = String(str || '').replace(/-/g, '+').replace(/_/g, '/');
+
+  while (str.length % 4) {
+    str += '=';
+  }
+
+  return atob(str);
+}
+
+function hasPurifySupporterToken() {
+  var token = localStorage.getItem('pv_supporter_token') || '';
+
+  if (token.indexOf('.') === -1) {
+    return false;
+  }
+
+  try {
+    var body = token.split('.')[0];
+    var payload = JSON.parse(decodePurifyBase64Url(body));
+    var now = Math.floor(Date.now() / 1000);
+
+    return !!(
+      payload &&
+      payload.exp &&
+      now < payload.exp &&
+      payload.scope === 'purify_supporter'
+    );
+  } catch (e) {
+    return false;
+  }
+}
+
+function updateMemberLoginButton() {
+  if (!memberLoginBtn) {
+    return;
+  }
+
+  if (hasPurifySupporterToken()) {
+    memberLoginBtn.textContent = 'Logged in';
+    memberLoginBtn.classList.add('is-logged-in');
+    memberLoginBtn.title = 'Purify Video membership verified on this browser';
+    return;
+  }
+
+  memberLoginBtn.textContent = 'Member login';
+  memberLoginBtn.classList.remove('is-logged-in');
+  memberLoginBtn.title = 'Verify your Purify Video membership';
+}
+
+if (memberLoginBtn) {
+  updateMemberLoginButton();
+
+  memberLoginBtn.addEventListener('click', function () {
+    // Already logged in, so do nothing.
+    if (hasPurifySupporterToken()) {
+      return;
+    }
+
+    if (window.PurifyMembership && typeof window.PurifyMembership.openVerifyOverlay === 'function') {
+      window.PurifyMembership.openVerifyOverlay();
+      return;
+    }
+
+    // Fallback if premiumtimer.js has not loaded.
+    window.location.href = '/members/unlock.html?return=' + encodeURIComponent(window.location.href);
+  });
+}
+
+  // ---- Legacy ?v=ENCODED_URL safety net (server .htaccess handles this first) ----
+  (function legacyRedirect() {
+    var sp = new URLSearchParams(window.location.search);
+    if (!sp.has('v') && !sp.has('list')) return;
+    var parsed = P.parseInput(window.location.href);
+    if (!parsed) return;
+    var path = P.buildWatchPath(parsed);
+    if (path) window.location.replace(path);
+  })();
+
+  // ---- Form: parse URL client-side and navigate to clean /watch?v=ID or /watch?list=PL ----
+  var form = document.getElementById('purifyForm');
+  var input = document.getElementById('urlInput');
+  var errorEl = document.getElementById('purifyError');
+
+  function showError(msg) {
+    errorEl.textContent = msg;
+    errorEl.hidden = false;
+    if (input) input.setAttribute('aria-invalid', 'true');
+  }
+  function clearError() {
+    errorEl.textContent = '';
+    errorEl.hidden = true;
+    if (input) input.removeAttribute('aria-invalid');
+  }
+  if (input) input.addEventListener('input', clearError);
+
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var raw = (input.value || '').trim();
+      if (!raw) {
+        showError('Paste a YouTube link first.');
+        if (input) input.focus();
+        return;
+      }
+      var parsed = P.parseInput(raw);
+      if (!parsed) {
+        showError("That doesn't look like a YouTube link. Try a full URL like https://www.youtube.com/watch?v=…");
+        return;
+      }
+      var path = P.buildWatchPath(parsed);
+      if (!path) {
+        showError('Could not read that link.');
+        return;
+      }
+      // Navigate to the clean watch URL: /watch?v=VIDEO_ID or /watch?list=PLAYLIST_ID
+      // Store a very short-lived intent so the watch page can use muted autoplay when needed.
+      try {
+        sessionStorage.setItem('purify.autoplayIntent', '1');
+        sessionStorage.setItem('purify.autoplayAt', String(Date.now()));
+      } catch (_) {}
+      window.location.assign(path);
+    });
+  }
+})();
+  </script>
+  <!-- Default Statcounter code for Purify.Video Domain
+https://purify.video -->
+  <script type="text/javascript">
+   var sc_project=13239672; 
+var sc_invisible=1; 
+var sc_security="79d211c7";
+  </script>
+  <script async="" src="js/counter.js" type="text/javascript">
+  </script>
+  <noscript>
+   <div class="statcounter">
+    <a href="https://statcounter.com/" target="_blank" title="Web Analytics">
+     <img alt="Web Analytics" class="statcounter" referrerpolicy="no-referrer-when-downgrade" src="https://c.statcounter.com/13239672/0/79d211c7/1/"/>
+    </a>
+   </div>
+  </noscript>
+  <!-- End of Statcounter Code -->
+  <script crossorigin="anonymous" data-cf-beacon='{"version":"2024.11.0","token":"3fdd200a8a584f8ba1d9154b67580cf5","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' defer="" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" src="js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447">
+  </script>
+ </body>
+</html>
