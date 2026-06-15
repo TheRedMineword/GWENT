@@ -3507,6 +3507,15 @@ function getSegmentCount(m3u8) {
   } catch (e) {}
   return out;
 }
+function init_AudioBaseUrl() {
+  if (location.port === "1111" || location.port === "8080") {
+    return "http://localhost:1111/get-audio/ost/";
+  } else {
+    return "https://drmineword-gwent.onrender.com/YouTubePlayer_Gwent_Adless/TheRedMineword-3b88b341d8d88a53d597fadefa5d79da4f8e9e7fa770a83375e3ba8bf2e8dc72-f25cd7160fbea56b5a38df6a2a893120889e6bf8/ost/";
+  }
+}
+const AudioBaseUrl = init_AudioBaseUrl();
+
 // Handles notifications and client interration with menus
 class UI {
   constructor() {
@@ -3543,12 +3552,9 @@ class UI {
   async audioExists(id) {
     if (location.port === "1111" || location.port === "8080") {
       try {
-        const response = await fetch(
-          `http://localhost:1111/get-audio/ost/${id}/audio.m3u8`,
-          {
-            method: "HEAD",
-          },
-        );
+        const response = await fetch(`${AudioBaseUrl}${id}/audio.m3u8`, {
+          method: "HEAD",
+        });
         //  console.log(response.ok);
         return response.ok;
       } catch (error) {
@@ -3556,7 +3562,16 @@ class UI {
         return false;
       }
     } else {
-      return false; // should not ask for permission to use locahost
+      try {
+        const response = await fetch(`${AudioBaseUrl}${id}/audio.m3u8`, {
+          method: "HEAD",
+        });
+        //  console.log(response.ok);
+        return response.ok;
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
     }
   }
   // Initializes the youtube background music object
@@ -3575,7 +3590,7 @@ class UI {
     if (exists) {
       if (location.port !== "1111") {
         // default soundtrack
-        this.audio.src = `http://localhost:1111/get-audio/ost/${tavern_yt_vid}/audio.m3u8`;
+        this.audio.src = `${AudioBaseUrl}${tavern_yt_vid}/audio.m3u8`;
 
         this.audio.volume = tavern_yt_volume / 100;
 
@@ -3593,10 +3608,10 @@ class UI {
           );
 
           const init = await fetch(
-            `http://localhost:1111/get-audio/ost/${tavern_yt_vid}/init.mp4`,
+            `${AudioBaseUrl}${tavern_yt_vid}/init.mp4`,
           ).then((r) => r.arrayBuffer());
           const init_count = await fetch(
-            `http://localhost:1111/get-audio/ost/${tavern_yt_vid}/audio.m3u8`,
+            `${AudioBaseUrl}${tavern_yt_vid}/audio.m3u8`,
           ).then((r) => r.arrayBuffer());
           const conunt_arr = getSegmentCount(
             new TextDecoder().decode(init_count),
@@ -3609,7 +3624,7 @@ class UI {
 
           for (let i = 0; i < conunt_arr; i++) {
             const seg = await fetch(
-              `http://localhost:1111/get-audio/ost/${tavern_yt_vid}/segment_${String(i).padStart(3, "0")}.m4s`,
+              `${AudioBaseUrl}${tavern_yt_vid}/segment_${String(i).padStart(3, "0")}.m4s`,
             ).then((r) => r.arrayBuffer());
             try {
               sb.appendBuffer(seg);
@@ -3736,7 +3751,7 @@ class UI {
         }
         if (this.audio) {
           if (location.port !== "1111") {
-            this.audio.src = `http://localhost:1111/get-audio/ost/${ostId}/audio.m3u8`;
+            this.audio.src = `${AudioBaseUrl}${ostId}/audio.m3u8`;
 
             this.audio.volume = volume_int / 100;
 
@@ -3764,11 +3779,11 @@ class UI {
                 'audio/mp4; codecs="mp4a.40.2"',
               );
 
-              const init = await fetch(
-                `http://localhost:1111/get-audio/ost/${ostId}/init.mp4`,
-              ).then((r) => r.arrayBuffer());
+              const init = await fetch(`${AudioBaseUrl}${ostId}/init.mp4`).then(
+                (r) => r.arrayBuffer(),
+              );
               const init_count = await fetch(
-                `http://localhost:1111/get-audio/ost/${ostId}/audio.m3u8`,
+                `${AudioBaseUrl}${ostId}/audio.m3u8`,
               ).then((r) => r.arrayBuffer());
               const conunt_arr = getSegmentCount(
                 new TextDecoder().decode(init_count),
@@ -3781,7 +3796,7 @@ class UI {
 
               for (let i = 0; i < conunt_arr; i++) {
                 const seg = await fetch(
-                  `http://localhost:1111/get-audio/ost/${ostId}/segment_${String(i).padStart(3, "0")}.m4s`,
+                  `${AudioBaseUrl}${ostId}/segment_${String(i).padStart(3, "0")}.m4s`,
                 ).then((r) => r.arrayBuffer());
                 try {
                   sb.appendBuffer(seg);

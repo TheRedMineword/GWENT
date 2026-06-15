@@ -11,14 +11,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "adm-zip": "^0.5.17",
     "cors": "^2.8.6",
     "crypto": "^1.0.1",
     "dotenv": "^17.4.2",
-    "express": "^4.21.2",
+    "express": "^4.22.2",
     "fs-extra": "^11.3.5",
     "prettier": "^3.8.3",
     "puppeteer": "^24.42.0",
     "sharp": "^0.34.5",
+    "vm": "^0.1.0",
     "ws": "^8.18.0"
   }
 }
