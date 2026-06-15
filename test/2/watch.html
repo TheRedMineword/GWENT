@@ -1,7 +1,8 @@
 <script>
   // 8o-JI8VRyKo
   function createIframe(){
-  let player = document.getElementById('movie_player');
+    try {
+  let player = document.getElementById('a');
   let iframeApi = document.createElement('div');
   iframeApi.id = 'iframe-api';
   iframeApi.style.display = 'flex';
@@ -26,6 +27,8 @@
 
   let iframeContainer = document.getElementById('iframe-api');
   iframeContainer.appendChild(iframe);
+    } catch (e) {
+      alert("err")}
 }
 
 function removeIframe(){
