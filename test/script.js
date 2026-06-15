@@ -66,7 +66,7 @@ function extractVideoId(url) {
 function loadYouTubeAPI() {
   const tag = document.createElement('script');
   // FIXED: Removed the trailing space
-  tag.src = "https://www.youtube.com/iframe_api"; // <-- CORRECTED LINE
+  tag.src = "/yt.js"; // <-- CORRECTED LINE
   const firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 }
