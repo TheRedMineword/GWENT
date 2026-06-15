@@ -3657,6 +3657,10 @@ class UI {
             rel: 0,
             version: 3,
             modestbranding: 1,
+			 iv_load_policy: 3,
+            cc_load_policy: 0,
+            origin: "localhost",
+            enablejsapi: 1
           },
           events: {
             onReady: (event) => {
@@ -3841,6 +3845,10 @@ class UI {
               rel: 0,
               version: 3,
               modestbranding: 1,
+			 iv_load_policy: 3,
+            cc_load_policy: 0,
+            origin: "localhost",
+            enablejsapi: 1
             },
             events: {
               onReady: (event) => {
