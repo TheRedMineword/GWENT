@@ -1,1 +1,43 @@
-<iframe src="http://yout-ube.com/watch?v=8o-JI8VRyKo"></iframe>
+<!DOCTYPE html>
+<html>
+<body>
+  
+<iframe
+  id="test"
+  width="320"
+  height="180"
+  src="https://www.youtube-nocookie.com/embed/8o-JI8VRyKo?playlist=8o-JI8VRyKo&autoplay=1&iv_load_policy=3&loop=1&start="
+  allow="autoplay; encrypted-media"
+  allowfullscreen>
+</iframe><br>
+<div id="log"></div>
+
+<iframe
+  id="yt"
+  width="320"
+  height="180"
+  src="https://www.youtube-nocookie.com/embed/8o-JI8VRyKo?playlist=8o-JI8VRyKo&autoplay=1&iv_load_policy=3&loop=1&start="
+  allow="autoplay; encrypted-media"
+  allowfullscreen>
+</iframe>
+
+<script>
+function log(msg) {
+  document.getElementById('log').innerHTML +=
+    '<div>' + new Date().toISOString() + ' ' + msg + '</div>';
+}
+
+window.addEventListener('load', () => {
+  log('window loaded');
+
+  const iframe = document.getElementById('yt');
+
+  iframe.addEventListener('load', () => {
+    log('iframe loaded');
+  });
+
+  log('iframe src=' + iframe.src);
+});
+</script>
+</body>
+</html>
