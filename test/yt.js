@@ -1151,7 +1151,7 @@ console.log("Total: " + total);
     if (a = typeof a === "string" ? c.getElementById(a) : a) {
       xb.yt_embedsEnableRsaforFromIframeApi && pb();
       c = a.tagName.toLowerCase() === "iframe";
-      b.host || (b.host = c ? jb(a.src) : "https://www.youtube.com");
+      b.host || (b.host = c ? jb(a.src) : "https://www.youtube-nocookie.com");
       this.options = b || {};
       b = [this.options, window.YTConfig || {}];
       for (var d = 0; d < b.length; d++) b[d].host && (b[d].host = b[d].host.toString().replace("http://", "https://"));
@@ -1481,3 +1481,5 @@ console.log("Total: " + total);
   var Ob = H.onYouTubePlayerAPIReady;
   Ob && Ob();
 }.call(this));
+
+alert("v_y_1");
