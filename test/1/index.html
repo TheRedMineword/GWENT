@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Single Video Player</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #111;
+      --panel: #181818;
+      --text: #f3f3f3;
+      --muted: #a7a7a7;
+      --border: #2a2a2a;
+      --accent: #ff0000;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, #0f0f10, #151515 70%);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+    .wrap {
+      width: min(980px, 100%);
+      background: rgba(24,24,24,.92);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 16px 50px rgba(0,0,0,.35);
+      overflow: hidden;
+    }
+    header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    h1 {
+      font-size: 18px;
+      margin: 0 0 6px;
+      font-weight: 650;
+    }
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .player-shell {
+      aspect-ratio: 16 / 9;
+      background: #000;
+      width: 100%;
+    }
+    #player {
+      width: 100%;
+      height: 100%;
+    }
+    .bar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+    }
+    .url {
+      font-size: 13px;
+      color: var(--muted);
+      word-break: break-all;
+    }
+    .pill {
+      border: 1px solid var(--border);
+      background: #202020;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+    .error {
+      padding: 14px 20px;
+      color: #ffb4b4;
+      border-top: 1px solid var(--border);
+      display: none;
+    }
+    a { color: #8ab4f8; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Single YouTube video from <code>?v=</code></h1>
+      <p>Put an 11-character video id or a full YouTube link in the <code>v</code> parameter.</p>
+    </header>
+
+    <div class="player-shell">
+      <div id="player"></div>
+    </div>
+
+    <div class="bar">
+      <div class="pill" id="status">Waiting for video id…</div>
+      <div class="url" id="sourceUrl"></div>
+    </div>
+
+    <div class="error" id="error"></div>
+  </div>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    let player = null;
+    let pendingVideoId = null;
+
+    function extractVideoId(input) {
+      if (!input) return null;
+
+      const trimmed = String(input).trim();
+
+      // Allow raw IDs as well as common YouTube URL formats.
+      const patterns = [
+        /^([a-zA-Z0-9_-]{11})$/,
+        /[?&]v=([a-zA-Z0-9_-]{11})/,
+        /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+        /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+        /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
+      ];
+
+      for (const re of patterns) {
+        const match = trimmed.match(re);
+        if (match && match[1]) return match[1];
+      }
+
+      return null;
+    }
+
+    function getVideoIdFromUrlParam() {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get("v");
+      return extractVideoId(raw);
+    }
+
+    function setStatus(msg) {
+      document.getElementById("status").textContent = msg;
+    }
+
+    function setError(msg) {
+      const el = document.getElementById("error");
+      el.textContent = msg;
+      el.style.display = "block";
+    }
+
+    function setSourceUrl(text) {
+      document.getElementById("sourceUrl").textContent = text || "";
+    }
+
+    function onYouTubeIframeAPIReady() {
+      const videoId = pendingVideoId || getVideoIdFromUrlParam();
+
+      player = new YT.Player("player", {
+        videoId: videoId || "",
+        width: "100%",
+        height: "100%",
+        playerVars: {
+          autoplay: 1,
+          playsinline: 1,
+          rel: 0,
+          modestbranding: 1,
+          controls: 1,
+          iv_load_policy: 3,
+          disablekb: 0,
+          fs: 1,
+          origin: window.location.origin
+        },
+        events: {
+          onReady: (event) => {
+            if (videoId) {
+              setStatus("Loaded: " + videoId);
+              setError("");
+              try { event.target.playVideo(); } catch (_) {}
+            } else {
+              setStatus("No valid video id in ?v=");
+              setError("Add ?v=VIDEO_ID to the URL, or pass a full YouTube link in the v parameter.");
+            }
+          },
+          onError: () => {
+            setStatus("Player error");
+            setError("The video could not be loaded.");
+          }
+        }
+      });
+    }
+
+    // In case the API arrives after our function is defined.
+    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+
+    // Show what came in.
+    const params = new URLSearchParams(window.location.search);
+    setSourceUrl(window.location.href);
+
+    // If someone passes a full URL in the v param, this still works.
+    pendingVideoId = getVideoIdFromUrlParam();
+
+    if (!params.has("v")) {
+      setError("Example: ?v=dQw4w9WgXcQ");
+    }
+  </script>
+</body>
+</html>
