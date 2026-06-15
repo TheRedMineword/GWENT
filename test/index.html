@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#ff0000">
+  <meta name="description" content="Ad Free Player - Create YouTube playlists without ads">
+
+  <!-- PWA Meta Tags -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Ad Free Player">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <title>🎵 Ad Free YouTube Player</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Your Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Icons -->
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512x512.png">
+
+
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="container-fluid py-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <h1 class="app-title mb-0">
+            <i class="bi bi-play-btn-fill me-2"></i>
+            Ad Free Player
+          </h1>
+          <div>
+            <!-- --- NEW: Link to Playlists Page --- -->
+            <a href="playlists.html" class="btn btn-sm btn-outline-info me-2" title="Browse Pre-made Playlists">
+                <i class="bi bi-collection-playlist me-1"></i> Explore Playlists
+            </a>
+            <!-- --- END NEW --- -->
+
+            <button id="importPlaylistBtn" class="btn btn-sm btn-outline-info me-2" title="Import Playlist">
+                <i class="bi bi-box-arrow-in-down"></i> Import
+            </button>
+            <input type="file" id="importFileInput" accept=".json">
+            <button id="exportPlaylistBtn" class="btn btn-sm btn-outline-success me-2 d-none" title="Export Playlist">
+                <i class="bi bi-box-arrow-up"></i> Export
+            </button>
+            <button class="btn btn-sm btn-outline-light" id="clearPlaylistBtn" title="Clear Playlist">
+                <i class="bi bi-trash me-1"></i> Clear
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-content">
+      <div class="input-section">
+        <div class="input-group">
+          <input type="text" id="videoUrl" class="form-control" placeholder="Paste YouTube URL or Video ID..." autocomplete="off">
+          <button class="btn btn-primary" type="button" id="addVideoBtn">
+            <i class="bi bi-plus-circle me-1"></i> Add
+          </button>
+        </div>
+      </div>
+
+      <div id="videoInfo" class="video-info d-none">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="text-truncate">
+            <strong>Now Playing:</strong> <br>
+            <span id="currentVideoInfo" class="text-truncate d-inline-block" style="max-width: 200px;"></span>
+          </div>
+          <span class="badge bg-primary">
+            <i class="bi bi-collection-play"></i>
+            <span id="playlistPosition"></span>
+          </span>
+        </div>
+      </div>
+
+      <div class="player-section">
+        <div id="player-container">
+             <div id="player"></div>
+             <!-- PLAYER PLACEHOLDER -->
+             <div id="player-placeholder" class="placeholder-text">
+                <i class="bi bi-play-btn" style="font-size: 3rem; opacity: 0.2;"></i>
+                <p class="mb-0 mt-2">Add videos to start playing</p>
+             </div>
+        </div>
+      </div>
+
+      <div class="playlist-section">
+        <div class="playlist-header d-flex justify-content-between align-items-center">
+          <h3 class="mb-0">
+            <i class="bi bi-list-ul me-2"></i> Playlist
+          </h3>
+          <span class="badge bg-primary">
+            <span id="playlistCount">0</span> videos
+          </span>
+        </div>
+        <div class="playlist-content" id="playlist">
+          <div class="empty-playlist">
+            <i class="bi bi-music-note-list"></i>
+            <h5>No videos yet</h5>
+            <p>Add YouTube videos using the input above</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="app-footer">
+      <div class="container-fluid">
+        <div class="footer-content">
+          Designed by <a href="https://aaqidmasoodi.com" target="_blank" class="footer-link">Aaqid Masoodi</a>
+          | Copyright © <span id="currentYear"></span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // --- Playlist Loader Script (Place RIGHT AFTER opening <body> tag) ---
+    // Check for a playlist to load from the Playlists page
+    (function() {
+        const playlistToLoadJson = localStorage.getItem('ytPlaylistToLoad');
+        if (playlistToLoadJson) {
+            try {
+                const playlistToLoad = JSON.parse(playlistToLoadJson);
+                if (Array.isArray(playlistToLoad) && playlistToLoad.length > 0) {
+                    // Clear existing playlist
+                    localStorage.removeItem('ytPlaylist');
+                    // Save the new playlist
+                    localStorage.setItem('ytPlaylist', JSON.stringify(playlistToLoad));
+                    console.log("Playlist loaded from Playlists page.");
+                }
+            } catch (e) {
+                console.error("Error parsing playlist from Playlists page:", e);
+            } finally {
+                // Always remove the temporary item
+                localStorage.removeItem('ytPlaylistToLoad');
+            }
+        }
+    })();
+    // --- End of playlist loader script ---
+  </script>
+
+  <!-- Your Custom Script -->
+  <script src="script.js" type="module"></script> <!-- Using type="module" is good practice -->
+
+</body>
+</html>
