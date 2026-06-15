@@ -155,8 +155,8 @@ function createPlayer(videoId) {
   }
 
   player = new YT.Player('player', {
-    height: '199',
-    width: '199',
+    height: '120px',
+    width: '120px',
     videoId: videoId,
     playerVars: {
       'autoplay': 1,
@@ -843,4 +843,4 @@ if (document.readyState === 'loading') {
 
 // Expose YT callback globally as it's called by the YouTube API script
 window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
-try {alert("V2");} catch (e) {}
+try {alert("V3");} catch (e) {}
