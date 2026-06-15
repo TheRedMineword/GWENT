@@ -139,7 +139,8 @@ display: flex;
   border-radius: 12px;
   overflow: hidden;
   background: #000;
-  height: 120px;
+  height: 90px;
+  height: 90px
   position: relative; /* Needed for absolute positioning of placeholder */
 }
 
@@ -148,8 +149,8 @@ display: flex;
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 120px;
+  height: 120px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -170,8 +171,8 @@ display: flex;
 #player {
   position: relative;
   z-index: 0; /* Behind the placeholder */
-  width: 100%;
-  height: 100%;
+  width: 120px;
+  height: 120px;
 }
 
 
