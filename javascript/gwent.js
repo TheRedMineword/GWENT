@@ -3563,7 +3563,7 @@ class UI {
       }
     } else {
       try {
-        const response = await fetch(`${AudioBaseUrl}${id}/audio.m3u8`, {
+        const response = await fetch(`${AudioBaseUrl}${id}/readme.md`, {
           method: "HEAD",
         });
         //  console.log(response.ok);

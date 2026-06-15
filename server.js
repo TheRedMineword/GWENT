@@ -1063,7 +1063,9 @@ wss.on("connection", async (ws, req) => {
 
   server.listen(PORT, () => {
     console.log(`>>> Server running ${PORT}`);
-    if (!process.env.B) {
+    console.log(`ADDON SPECIAL: ${process.env.B}`);
+    if (process.env.B === "YES") {
+      console.log("TRY INIT ADDON");
       init_addon();
     }
   });
