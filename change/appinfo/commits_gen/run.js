@@ -35,7 +35,8 @@ const IGNORE_FILES = new Set([
     '.init.bat', '.replace.env', 'server.js', '.server.js',
     '.env',
     'session_registering_oryginal.js', 'invite.json', 'package.json', 'package-lock.json', 'index_ver_check_script.txt',
-    'allowed_versions.json', 'convert.js', 'audio-bin-config.json', '.audio-bin-config.json', 'audio-bin-config.bin', '.audio-bin-config.bin'
+    'allowed_versions.json', 'convert.js', 'audio-bin-config.json', '.audio-bin-config.json', 'audio-bin-config.bin', '.audio-bin-config.bin',
+    '404.html'
 ]);
 
 // =====================================================
