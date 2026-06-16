@@ -3516,6 +3516,27 @@ function init_AudioBaseUrl() {
 }
 const AudioBaseUrl = init_AudioBaseUrl();
 
+  const KEY = "yt_notice_last_shown";
+  const COOLDOWN_DAYS = 30;
+
+  function shouldShowNotice() {
+    const last = localStorage.getItem(KEY);
+    if (!last) return true;
+
+    const now = Date.now();
+    const diffDays = (now - parseInt(last, 10)) / (1000 * 60 * 60 * 24);
+
+    return diffDays >= COOLDOWN_DAYS;
+  }
+
+  function showNotice() {
+    document.getElementById("yt-notice").style.display = "block";
+  }
+
+  function closeNotice() {
+    document.getElementById("yt-notice").style.display = "none";
+    localStorage.setItem(KEY, Date.now().toString());
+  }
 // Handles notifications and client interration with menus
 class UI {
   constructor() {
@@ -3549,7 +3570,16 @@ class UI {
     if (enable) main.remove("noclick");
     else main.add("noclick");
   }
-  async audioExists(id) {
+  async audioExists(id){
+    var val = await this.audioExists_real(id);
+    if (!val){
+              if (shouldShowNotice()) {
+      showNotice();
+    }
+    }
+    return val;
+  }
+  async audioExists_real(id) {
     if (location.port === "1111" || location.port === "8080") {
       try {
         const response = await fetch(`${AudioBaseUrl}${id}/audio.m3u8`, {
@@ -3835,7 +3865,7 @@ class UI {
         }
       } else {
         console.log("ELSE", ostId);
-
+        
         console.log("STATE BEFORE", {
           ostId,
           youtubeExists: !!this.youtube,

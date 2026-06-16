@@ -65,6 +65,39 @@
     font-size: 12px;
     opacity: 0.7;
 }
+
+  #yt-notice {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    width: 280px;
+    background: rgba(20, 20, 20, 0.95);
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    padding: 12px 12px 10px 12px;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    z-index: 999999;
+  }
+
+  #yt-notice button {
+    margin-top: 8px;
+    background: #ff4d4d;
+    border: none;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  #yt-notice a {
+    color: #4da3ff;
+    text-decoration: none;
+  }
+
+
 </style>
 <script>
 	(function () {
@@ -76,6 +109,17 @@
 })();
 </script>
 <body>
+	<div id="yt-notice" style="display:none;">
+  <div>
+    Sorry for interruption.<br>
+	As an OST player using YouTube embed,<br>
+    ads may appear due to YouTube’s system.
+    <br><br>
+    If you have feedback or issues, please report them on our Discord server.
+  </div>
+
+  <button onclick="closeNotice()">Got it</button>
+</div>
 	<div class = "abs" id = "very_start_bg1"></div>
 	<div class = "abs" id = "very_start_bg2">
 		<div id = "very_start" class = "abs" style = "padding-top:55%">
@@ -726,6 +770,7 @@ if (location.port === "1111") {
 <script type="text/javascript" src="javascript/chat.js"></script>
 <script type="text/javascript" src="javascript/faction_ability_counter.js"></script>
 <script type="text/javascript" src="javascript/connect_to_custom_server.js"></script>
+
 </body>
 
 </html>
