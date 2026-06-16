@@ -22,7 +22,8 @@ const IGNORE_DIRS = new Set([
     'gwent_cards',
     'fragment_map',
     'ffmpeg-7.1.1-full_build',
-    '.ost'
+    '.ost',
+    'storage'
 ]);
 
 const IGNORE_FILES = new Set([
