@@ -397,8 +397,13 @@ app.post("/api/register", async (req, res) => {
       });
     }
 
+    const userAgent = req.get("User-Agent") || "unknown";
     const ws = playerSockets[playerId];
 
+      console.log(
+    `REGISTER ATTEMPT login=${req.body.login} ua=${userAgent}`
+  );
+  
     if (!ws) {
       return res.status(404).json({
         ok: false,
@@ -464,7 +469,7 @@ app.post("/api/login", async (req, res) => {
         error: "missingFields",
       });
     }
-
+    const userAgent = req.get("User-Agent") || "unknown";
     const ws = playerSockets[playerId];
 
     if (!ws) {
@@ -486,8 +491,9 @@ app.post("/api/login", async (req, res) => {
     }
 
     console.log(
-      `LOGGIN ATTEMPT FOR: ${JSON.stringify(user)} wich password input\n-# ${encryptPassword(password)}}`,
+      `LOGGIN ATTEMPT FOR: ${JSON.stringify(user)} wich password input\n-# ${encryptPassword(password)}} ua=${userAgent}`,
     );
+
     var pass_check = user.password;
     const realPassword = pass_check;
 
@@ -706,6 +712,7 @@ wss.on("connection", async (ws, req) => {
   const city = geo.city || "Unknown";
   const isp = geo.isp || "Unknown";
   geo.ThatRealIp = ip2;
+  const userAgent = req.headers["user-agent"] || "unknown";
   // Send welcome
   //comp_and_send(ws, JSON.stringify({
   // type: 'welcome',
@@ -717,14 +724,17 @@ wss.on("connection", async (ws, req) => {
       type: "authRequired",
       playerId: ws.playerId,
       _ip: geo,
+      _useragent: userAgent
     })}`,
   );
+  ws.userAgent = userAgent;
   comp_and_send(
     ws,
     JSON.stringify({
       type: "authRequired",
       playerId: ws.playerId,
       _ip: geo,
+      _useragent: userAgent
     }),
   );
 
