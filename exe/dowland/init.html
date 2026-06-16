@@ -321,13 +321,13 @@ button:disabled{
 </style>
 </head>
 <script>
-	(function () {
+	function check_if_redirect() {
     const host = window.location.hostname;
-
+        console.log("REDIR CHECK HOST", host);
     if (host === "drmineword-gwent.onrender.com") {
-        window.location.replace("https://theredmineword.github.io/GWENT/exe/dowland/init");
+        window.location.replace(`https://theredmineword.github.io/GWENT${window.location.pathname}`);
     }
-})();
+};
 </script>
 <body>
 
@@ -486,6 +486,8 @@ downloadBtn.addEventListener(
     downloadFragments
 );
 </script>
-
+<script>
+	check_if_redirect();
+</script>
 </body>
 </html>
