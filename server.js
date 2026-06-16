@@ -400,10 +400,8 @@ app.post("/api/register", async (req, res) => {
     const userAgent = req.get("User-Agent") || "unknown";
     const ws = playerSockets[playerId];
 
-      console.log(
-    `REGISTER ATTEMPT login=${req.body.login} ua=${userAgent}`
-  );
-  
+    console.log(`REGISTER ATTEMPT login=${req.body.login} ua=${userAgent}`);
+
     if (!ws) {
       return res.status(404).json({
         ok: false,
@@ -724,7 +722,7 @@ wss.on("connection", async (ws, req) => {
       type: "authRequired",
       playerId: ws.playerId,
       _ip: geo,
-      _useragent: userAgent
+      _useragent: userAgent,
     })}`,
   );
   ws.userAgent = userAgent;
@@ -734,7 +732,7 @@ wss.on("connection", async (ws, req) => {
       type: "authRequired",
       playerId: ws.playerId,
       _ip: geo,
-      _useragent: userAgent
+      _useragent: userAgent,
     }),
   );
 
