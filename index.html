@@ -92,6 +92,20 @@
 		</div>
 	</div>
 
+	<div id="chat-overlay" class="hidden">
+    <div id="chat-header">
+        Messages
+        <span id="chat-close">✕</span>
+    </div>
+
+    <div id="chat-log"></div>
+
+    <div id="chat-controls">
+        <input id="chat-input" maxlength="120" placeholder="Message...">
+        <button id="chat-send">Send</button>
+    </div>
+</div>
+
 <div id="dimensions" style="position:fixed;width:100vw;height:calc(100vw * 1080 / 1920);"></div>
 <div id="youtube"></div>
 <div id="waitMusicYTPlayer" style="position:absolute; width:0; height:0; overflow:hidden;"></div>
@@ -384,20 +398,6 @@
 <div id="no-server">
     <div id="no-server-icon"></div>
     <span>No server connection</span>
-</div>
-
-<div id="chat-overlay" class="hidden">
-    <div id="chat-header">
-        Messages
-        <span id="chat-close">✕</span>
-    </div>
-
-    <div id="chat-log"></div>
-
-    <div id="chat-controls">
-        <input id="chat-input" maxlength="120" placeholder="message...">
-        <button id="chat-send">Send</button>
-    </div>
 </div>
 
 <script>
