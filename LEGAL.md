@@ -1,7 +1,7 @@
 The MIT License applies only to the source code contained in this repository unless otherwise noted.
 
 Third-party assets, artwork, audio, textures, trademarks, and other media may be subject to separate licenses or copyright notices.
-See README.md, LEGAL__CREDITS_NOTICE.md, full-credits.txt and asset-specific copyright notices/files for details.
+See README.md, LEGAL__CREDITS_NOTICE.md, full-credits.md and asset-specific copyright notices/files for details.
 
 # Credits
 
