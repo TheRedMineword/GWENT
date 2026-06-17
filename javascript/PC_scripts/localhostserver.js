@@ -64,10 +64,11 @@ function startServer() {
     const APP_DIR2 = path.join(
     app.getPath('appData'),
     'gwent-audio',
-    'TheRedMineword-3b88b341d8d88a53d597fadefa5d79da4f8e9e7fa770a83375e3ba8bf2e8dc72-f25cd7160fbea56b5a38df6a2a893120889e6bf8'
+    'TheRedMineword-3b88b341d8d88a53d597fadefa5d79da4f8e9e7fa770a83375e3ba8bf2e8dc72-0e75b2c62ad3a2968d04487c4826c228f4fab92d'
 );
-    serverApp.use(express.json());
 
+    serverApp.use(express.json());
+    console.log("DATA DIR:", APP_DIR, APP_DIR2);
     serverApp.use(
         express.static(APP_DIR)
     );;

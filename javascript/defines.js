@@ -173,7 +173,7 @@ const pick_array = {
   lobby: [
     { id: "yu197hlNWK0", vol: 100 }, // The Witcher 3: Wild Hunt OST - Skellige Tavern | Extended
     { id: "8o-JI8VRyKo", vol: 100 }, // Back On The Path
-    { id: "6U9gVpMHhiA", vol: 70 }, // The Mandragora
+    { id: "6U9gVpMHhiA", vol: 80 }, // The Mandragora
   ],
   game: [
     { id: "2Isa4ugEbZI", vol: 90 }, // A Story You Won't Believe
