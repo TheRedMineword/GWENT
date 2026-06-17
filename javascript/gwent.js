@@ -2770,9 +2770,14 @@ class Game {
           game.firstPlayer = player;
           game.currPlayer = player;
 
+          var special = "";
+          try {
+            special = data.special;
+          } catch (e) {}
+
           socket.removeEventListener("message", handleMessage);
           await ui.notification(
-            game.firstPlayer.tag + "-coin",
+            game.firstPlayer.tag + "-coin" + special,
             ui_display_times.coin,
           );
           resolve(true);

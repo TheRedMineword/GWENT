@@ -515,16 +515,32 @@ html {
 	background-image: url(img/icons/notif_me_coin.png);
 }
 
+#notif-me-coin-lambert {
+	background-image: url(img/icons/notif_me_coin-lambert.png);
+}
+
 #notif-me-coin::after {
 	content: "You will go first";
+}
+
+#notif-me-coin-lambert::after {
+	content: "Lambert lets you start the game";
 }
 
 #notif-op-coin {
 	background-image: url(img/icons/notif_op_coin.png);
 }
 
+#notif-op-coin-lambert {
+	background-image: url(img/icons/notif_op_coin-lambert.png);
+}
+
 #notif-op-coin::after {
 	content: "Your opponent will go first";
+}
+
+#notif-op-coin-lambert::after {
+	content: "Lambert says that you suck! \A The opponent starts the game!";
 }
 
 #notif-round-start {

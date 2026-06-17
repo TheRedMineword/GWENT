@@ -966,7 +966,10 @@ wss.on("connection", async (ws, req) => {
             session.players[Math.floor(Math.random() * session.players.length)]
               .playerId;
           sessions[ws.sessionId].firstPlayer = firstPlayer;
-          console.log(`First player (coinflip) ${JSON.stringify(firstPlayer)}`);
+          sessions[ws.sessionId].special = Math.random() < 1 ? "-lambert" : "";
+          console.log(
+            `First player (coinflip) ${JSON.stringify(firstPlayer)}${sessions[ws.sessionId].special || ""}`,
+          );
         }
         console.log("firstPlayer = ", sessions[ws.sessionId].firstPlayer);
         session.players.forEach((player) => {
@@ -975,6 +978,7 @@ wss.on("connection", async (ws, req) => {
               JSON.stringify({
                 type: "coinToss",
                 player: sessions[ws.sessionId].firstPlayer,
+                special: sessions[ws.sessionId].special,
               }),
             ),
           );
