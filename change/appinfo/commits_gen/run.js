@@ -23,7 +23,8 @@ const IGNORE_DIRS = new Set([
     'fragment_map',
     'ffmpeg-7.1.1-full_build',
     '.ost',
-    'storage'
+    'storage',
+    '.special_content'
 ]);
 
 const IGNORE_FILES = new Set([
