@@ -3884,13 +3884,16 @@ class UI {
         // Create player + adapter once
         if (!this.youtube) {
           console.log("Creating new YT.Player");
-
+          var repate_int = 0;
+          if (repeat) {
+            repate_int = 1;
+          }
           this.youtube = new YT.Player("youtube", {
             videoId: ostId,
             playerVars: {
               autoplay: 1,
               controls: 0,
-              loop: 1,
+              loop: repate_int,
               playlist: ostId,
               rel: 0,
               version: 3,
@@ -3950,7 +3953,7 @@ class UI {
 
           this.audio.src = ostId;
           this.audio.volume = volume_int / 100;
-          this.audio.loop = repeat;
+          //  this.audio.loop = repeat;
 
           console.log("Adapter properties set", {
             src: ostId,

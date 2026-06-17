@@ -171,14 +171,15 @@ function ArrayPickObjectForDay(arr) {
 }
 const pick_array = {
   lobby: [
-    { id: "yu197hlNWK0", vol: 100 },
-    { id: "8o-JI8VRyKo", vol: 100 },
+    { id: "yu197hlNWK0", vol: 100 }, // The Witcher 3: Wild Hunt OST - Skellige Tavern | Extended
+    { id: "8o-JI8VRyKo", vol: 100 }, // Back On The Path
+    { id: "6U9gVpMHhiA", vol: 70 }, // The Mandragora
   ],
   game: [
-    { id: "2Isa4ugEbZI", vol: 90 },
-    { id: "FTsuevfvQ9w", vol: 47 },
-    { id: "M0sflDPa9zY", vol: 90 },
-    { id: "UI3EdZNHB78", vol: 90 },
+    { id: "2Isa4ugEbZI", vol: 90 }, // A Story You Won't Believe
+    { id: "FTsuevfvQ9w", vol: 47 }, // How About a Round of Gwent?
+    { id: "M0sflDPa9zY", vol: 90 }, // Drink Up, There's More!
+    { id: "UI3EdZNHB78", vol: 90 }, // Another Round For Everyone
   ],
 };
 
