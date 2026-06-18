@@ -405,3 +405,9 @@ let white_flame_lg_faction = {
   me: null,
   op: null,
 };
+
+let yt_repeat_conf = null;
+let yt_repeat_launch = {
+  id: 0,
+  vol: 0,
+};

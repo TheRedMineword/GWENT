@@ -41,8 +41,9 @@ const IGNORE_PATTERNS = [
   "white_flame_lg_faction",
   "pick_array",
   "resolveScorch",
+  "yt_repeat_conf",
+  "yt_repeat_launch",
 ];
-
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 
 // ===============================

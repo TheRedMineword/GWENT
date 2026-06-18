@@ -3500,7 +3500,10 @@ class YouTubeAudioAdapter {
   }
 
   set loop(v) {
+    console.log("set yt loop", v);
     this._loop = v;
+    this.loop = v;
+    console.log("set yt loop", v, this);
   }
 
   get loop() {
@@ -3704,31 +3707,66 @@ class UI {
         }, 500);
       });
     } else {
+      yt_repeat_conf = true;
+      console.log("Will yt repeat?", yt_repeat_conf, true, "!");
+      yt_repeat_launch.id = tavern_yt_vid;
+      yt_repeat_launch.vol = tavern_yt_volume;
       this.audio = new YouTubeAudioAdapter(
         (this.youtube = new YT.Player("youtube", {
           videoId: tavern_yt_vid,
           playerVars: {
             autoplay: 1,
             controls: 0,
-            loop: 1,
+            loop: 0,
             playlist: tavern_yt_vid,
             rel: 0,
             version: 3,
             modestbranding: 1,
             iv_load_policy: 3,
             cc_load_policy: 0,
-            origin: "localhost",
+            origin: location.origin,
             enablejsapi: 1,
           },
           events: {
             onReady: (event) => {
               event.target.setVolume(tavern_yt_volume);
             },
+            onStateChange: (event) => {
+              console.log("STATE", event.data, performance.now());
+
+              if (event.data === YT.PlayerState.ENDED) {
+                const X = 500; // <-- your "X" delay in ms
+
+                setTimeout(() => {
+                  const state = this.youtube.getPlayerState();
+                  console.log(
+                    yt_repeat_conf,
+                    "X ms later:",
+                    state,
+                    yt_repeat_conf,
+                    YT.PlayerState.ENDED,
+                  );
+
+                  if (state === YT.PlayerState.ENDED) {
+                    console.log("a");
+                    if (yt_repeat_conf) {
+                      console.log("b");
+                      yt_repeat_conf = true;
+                      ui.youtubePlay(
+                        yt_repeat_launch.id,
+                        yt_repeat_launch.vol,
+                        true,
+                      );
+                    } // your custom command
+                  }
+                }, X);
+              }
+            },
           },
         })),
       );
       this.audio.src = tavern_yt_vid;
-      this.audio.loop = true;
+      this.audio.loop = false;
     }
   }
   getAudioState() {
@@ -3777,7 +3815,14 @@ class UI {
     }
   }
 
-  async youtubePlay(ostId, volume_int = 100, repeat = false) {
+  async youtubePlay(ostId, volume_int, repeat) {
+    console.log(
+      "INIT",
+      "youtubePlay(ostId, volume_int = 100, repeat = false)",
+      ostId,
+      volume_int,
+      repeat,
+    );
     try {
       ui.stopYouTube();
       var exists = await ui.audioExists(ostId);
@@ -3877,6 +3922,11 @@ class UI {
           }
         }
       } else {
+        yt_repeat_conf = repeat;
+        console.log("Will yt repeat?", yt_repeat_conf, repeat, "!");
+        yt_repeat_launch.id = ostId;
+        yt_repeat_launch.vol = volume_int;
+        repeat = false;
         console.log("ELSE", ostId);
 
         console.log("STATE BEFORE", {
@@ -3908,7 +3958,7 @@ class UI {
               modestbranding: 1,
               iv_load_policy: 3,
               cc_load_policy: 0,
-              origin: "localhost",
+              origin: location.origin,
               enablejsapi: 1,
             },
             events: {
@@ -3926,10 +3976,35 @@ class UI {
                 }
               },
               onStateChange: (event) => {
-                console.log("YT STATE CHANGE", event.data);
-              },
-              onError: (event) => {
-                console.error("YT ERROR", event.data);
+                console.log("STATE", event.data, performance.now());
+
+                if (event.data === YT.PlayerState.ENDED) {
+                  const X = 500; // <-- your "X" delay in ms
+
+                  setTimeout(() => {
+                    const state = this.youtube.getPlayerState();
+                    console.log(
+                      yt_repeat_conf,
+                      "X ms later:",
+                      state,
+                      yt_repeat_conf,
+                      YT.PlayerState.ENDED,
+                    );
+
+                    if (state === YT.PlayerState.ENDED) {
+                      console.log("a");
+                      if (yt_repeat_conf) {
+                        console.log("b");
+                        yt_repeat_conf = true;
+                        ui.youtubePlay(
+                          yt_repeat_launch.id,
+                          yt_repeat_launch.vol,
+                          true,
+                        );
+                      } // your custom command
+                    }
+                  }, X);
+                }
               },
             },
           });
@@ -3962,12 +4037,18 @@ class UI {
           this.audio.src = ostId;
           this.audio.volume = volume_int / 100;
           //  this.audio.loop = repeat;
+          /// ui.audio.loop = repeat;
 
-          console.log("Adapter properties set", {
-            src: ostId,
-            volume: volume_int / 100,
-            loop: repeat,
-          });
+          console.log(
+            "Adapter properties set",
+            {
+              src: ostId,
+              volume: volume_int / 100,
+              loop: repeat,
+            },
+            "or",
+            ui.audio,
+          );
         } catch (e) {
           console.error("Failed setting adapter properties", e);
         }
