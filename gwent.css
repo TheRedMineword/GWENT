@@ -1241,13 +1241,13 @@ html {
 	height: 12.5%;
 	width: 88.5%;
 	margin-bottom: -27%;
-	background-color: rgba(20, 20, 20, .6);
+	background-color: rgba(20, 20, 20, .0);
 	outline: none !important;
   border: none !important;
 }
 
 .current-turn {
-	box-shadow: -3vw 0 1vw .1vw goldenrod;
+    box-shadow: -3vw 0 1.5vw 0.25vw rgba(255, 215, 0, 1);
 }
 
 #stats-op {
