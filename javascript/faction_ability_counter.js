@@ -11,12 +11,21 @@ let ABILITIES = {
     max: turn_skipper_conf.chargeMax,
     onClick: null,
     add: turn_skipper_conf.perTurn,
+    start: 0,
   },
   keadwen_weather: {
     type: "skip",
     max: Math.floor(turn_skipper_conf.chargeMax / 2),
     onClick: null,
     add: Number((turn_skipper_conf.perTurn - 0.15).toFixed(2)),
+    start: 0,
+  },
+  scorchstopper: {
+    type: "antischorch",
+    max: scorch_stopper.max,
+    onClick: null,
+    add: 0,
+    start: scorch_stopper.max,
   },
 };
 
@@ -28,6 +37,7 @@ function createAbility() {
     max: 9,
     onClick: null,
     add: 0,
+    start: 0,
   };
 }
 
@@ -57,7 +67,7 @@ function showSideTooltip(text, duration = 4200) {
  * SETUP
  * ------------------------ */
 
-function ability_setup(side, abilityId) {
+async function ability_setup(side, abilityId) {
   const config = ABILITIES[abilityId];
 
   if (!config) {
@@ -71,7 +81,8 @@ function ability_setup(side, abilityId) {
     current: 0,
     max: config.max,
     onClick: config.onClick,
-    add: config?.add || BASE_ADD,
+    add: config?.add, // || BASE_ADD,
+    start: config?.start || 0,
   };
 
   ability_update(side);
@@ -163,7 +174,20 @@ function ability_update(side, gain = false) {
 /* ------------------------
  * POWER CHANGES
  * ------------------------ */
-
+async function set_start_power(side) {
+  if (side === "me") {
+    if (ability_data.me !== null) {
+      ability_data.me.current = ability_data.me.start;
+    }
+  } else {
+    if (ability_data.op !== null) {
+      ability_data.op.current = ability_data.op.start;
+    }
+  }
+  console.log("ABILITY START UPDATE", ability_data);
+  ability_update(side);
+  return ability_data[side];
+}
 function ability_add(side, value = BASE_ADD) {
   if (value < 0) {
     return ability_remove(side, Math.abs(value));
@@ -267,6 +291,10 @@ document
           "Opponent will have 50/50 to copy card from board!",
         );
       }
+    } else if (ability_data.me.type === "scorchstopper") {
+      showSideTooltip(
+        `You have ${ability_data.me.current}/${ability_data.me.max} of shield charges`,
+      );
     }
   });
 document

@@ -149,52 +149,120 @@ var ability_dict = {
   scorch: {
     name: "Scorch",
     description:
-      "Discard after playing. Kills the strongest card(s) on the battlefield. ",
+      "Discard after playing. Kills the strongest card(s) on the battlefield.",
+
     activated: async (card) => {
       await ability_dict["scorch"].placed(card);
       await board.toGrave(card, card.holder.hand);
     },
-    placed: async (card, row) => {
-      if (row !== undefined) row.cards.splice(row.cards.indexOf(card), 1);
-      let maxUnits = board.row
-        .map((r) => [r, r.maxUnits()])
-        .filter((p) => p[1].length > 0);
-      if (row !== undefined) row.cards.push(card);
-      let maxPower = maxUnits.reduce((a, p) => Math.max(a, p[1][0].power), 0);
-      let scorched = maxUnits.filter((p) => p[1][0].power === maxPower);
-      let cards = scorched.reduce(
-        (a, p) => a.concat(p[1].map((u) => [p[0], u])),
-        [],
-      );
 
-      await Promise.all(
-        cards.map(async (u) => await u[1].animate("scorch", true, false)),
-      );
-      await Promise.all(
-        cards.map(async (u) => await board.toGrave(u[1], u[0])),
-      );
+    placed: async (card, row) => {
+      if (
+        (card.holder?.leader?.abilities?.[0] === "scorchstopper" ||
+          card.holder?.leader?.abilities?.[0] === "scorch_stopper") &&
+        scorch_stopper.break_shield_if_you_use
+      ) {
+        tocar("round_lose", false);
+        ability_data[card.holder.tag].current = 0;
+        console.log(
+          "SCORCH REST VALUES!!",
+          ability_data,
+          ability_data[card.holder.tag],
+        );
+        ability_update(card.holder.tag);
+      }
+      // Temporarily remove the scorch card itself from consideration
+      if (row !== undefined) {
+        row.cards.splice(row.cards.indexOf(card), 1);
+      }
+
+      await ability_dict.resolveScorch(board.row, false);
+
+      // Put it back
+      if (row !== undefined) {
+        row.cards.push(card);
+      }
     },
   },
   scorch_c: {
     name: "Scorch - Close Combat",
     description:
-      "Destroy your enemy's strongest Close Combat unit(s) if the combined strength of all his or her Close Combat units is 10 or more. ",
-    placed: async (card) =>
-      await board.getRow(card, "close", card.holder.opponent()).scorch(),
+      "Destroy your enemy's strongest Close Combat unit(s) if the combined strength of all his or her Close Combat units is 10 or more.",
+    placed: async (card) => {
+      if (
+        (card.holder?.leader?.abilities?.[0] === "scorchstopper" ||
+          card.holder?.leader?.abilities?.[0] === "scorch_stopper") &&
+        scorch_stopper.break_shield_if_you_use
+      ) {
+        tocar("round_lose", false);
+        ability_data[card.holder.tag].current = 0;
+        console.log(
+          "SCORCH REST VALUES!!",
+          ability_data,
+          ability_data[card.holder.tag],
+        );
+        ability_update(card.holder.tag);
+      }
+      await ability_dict.resolveScorch(
+        [board.getRow(card, "close", card.holder.opponent())],
+        true,
+      );
+    },
   },
+
   scorch_r: {
     name: "Scorch - Ranged",
     description:
-      "Destroy your enemy's strongest Ranged Combat unit(s) if the combined strength of all his or her Ranged Combat units is 10 or more. ",
-    placed: async (card) =>
-      await board.getRow(card, "ranged", card.holder.opponent()).scorch(),
+      "Destroy your enemy's strongest Ranged Combat unit(s) if the combined strength of all his or her Ranged Combat units is 10 or more.",
+    placed: async (card) => {
+      if (
+        (card.holder?.leader?.abilities?.[0] === "scorchstopper" ||
+          card.holder?.leader?.abilities?.[0] === "scorch_stopper") &&
+        scorch_stopper.break_shield_if_you_use
+      ) {
+        tocar("round_lose", false);
+        ability_data[card.holder.tag].current = 0;
+        console.log(
+          "SCORCH REST VALUES!!",
+          ability_data,
+          ability_data[card.holder.tag],
+        );
+        ability_update(card.holder.tag);
+      }
+      await ability_dict.resolveScorch(
+        [board.getRow(card, "ranged", card.holder.opponent())],
+        true,
+      );
+    },
   },
+
   scorch_s: {
     name: "Scorch - Siege",
     description:
-      "Destroys your enemy's strongest Siege Combat unit(s) if the combined strength of all his or her Siege Combat units is 10 or more. ",
-    placed: async (card) =>
-      await board.getRow(card, "siege", card.holder.opponent()).scorch(),
+      "Destroy your enemy's strongest Siege Combat unit(s) if the combined strength of all his or her Siege Combat units is 10 or more.",
+    placed: async (card) => {
+      if (
+        (card.holder?.leader?.abilities?.[0] === "scorchstopper" ||
+          card.holder?.leader?.abilities?.[0] === "scorch_stopper") &&
+        scorch_stopper.break_shield_if_you_use
+      ) {
+        tocar("round_lose", false);
+        ability_data[card.holder.tag].current = 0;
+        console.log(
+          "SCORCH REST VALUES!!",
+          ability_data,
+          ability_data[card.holder.tag],
+        );
+        ability_update(card.holder.tag);
+      }
+      await ability_dict.resolveScorch(
+        [board.getRow(card, "siege", card.holder.opponent())],
+        true,
+      );
+    },
+  },
+  scorchstopper: {
+    description: `Protect your cards from any Scorch effect as long as you have enough Shield Charges. Each save costs ${scorch_stopper.save_charge} charge. Starts with ${scorch_stopper.max} charges and cannot be recharged${scorch_stopper.break_shield_if_you_use ? ". Shield break when youuse any Scorch card! " : ". "}`,
   },
   agile: {
     name: "agile",
@@ -1418,6 +1486,11 @@ var ability_dict = {
     activated: async (card) => {
       let hand = board.getRow(card, "hand", card.holder);
       let deck = player_me.deck;
+      deck.cards = shuffleSeeded(
+        deck.cards,
+        btoa(`${Math.random().toString(36).substring(2, 10)}`),
+        false,
+      ).array;
 
       console.log("[EREDIN_DESTROYER] Ability activated.");
 
@@ -2005,6 +2078,83 @@ var ability_dict = {
       return 30;
     },
   },
+};
+
+ability_dict.resolveScorch = async (rows, require10 = true) => {
+  let targets = [];
+
+  if (!require10) {
+    // Classic scorch: strongest unit(s) on entire board
+
+    const maxUnits = rows
+      .map((r) => [r, r.maxUnits()])
+      .filter(([, units]) => units.length > 0);
+
+    if (maxUnits.length === 0) return;
+
+    const maxPower = Math.max(...maxUnits.map(([, units]) => units[0].power));
+
+    targets = maxUnits
+      .filter(([, units]) => units[0].power === maxPower)
+      .flatMap(([row, units]) => units.map((unit) => [row, unit]));
+  } else {
+    // Row scorch: strongest unit(s) in rows with total >= 10
+
+    targets = rows
+      .map((row) => [row, row.maxUnits()])
+      .filter(([row, units]) => units.length > 0 && row.total >= 10)
+      .flatMap(([row, units]) => units.map((unit) => [row, unit]));
+  }
+
+  if (targets.length === 0) return;
+
+  // Deterministic ordering
+  targets.sort((a, b) => {
+    const ua = a[1];
+    const ub = b[1];
+
+    if (ua.id != null && ub.id != null) {
+      return ua.id - ub.id;
+    }
+
+    return (ua.name || "").localeCompare(ub.name || "") || ua.power - ub.power;
+  });
+
+  const saved = [];
+  const scorched = [];
+
+  for (const [row, unit] of targets) {
+    const leader = unit.holder?.leader;
+    const tag = leader?.holder?.tag;
+
+    const hasShield =
+      leader?.abilities?.includes("scorch_stopper") ||
+      leader?.abilities?.includes("scorchstopper");
+
+    const hasCharge =
+      tag != null && ability_data[tag]?.current >= scorch_stopper.save_charge;
+
+    if (hasShield && hasCharge) {
+      ability_remove(tag, scorch_stopper.save_charge);
+
+      saved.push([row, unit]);
+    } else {
+      scorched.push([row, unit]);
+    }
+  }
+
+  await Promise.all([
+    ...saved.map(async ([, unit]) => {
+      console.log("Saved:", unit);
+      await unit.animate2("scorch_fail");
+    }),
+
+    ...scorched.map(async ([, unit]) => {
+      await unit.animate("scorch", true, false);
+    }),
+  ]);
+
+  await Promise.all(scorched.map(([row, unit]) => board.toGrave(unit, row)));
 };
 
 const ability_dict_base = deepClone(ability_dict);

@@ -1326,6 +1326,7 @@ class Player {
 
   // Plays a scorch card
   async playScorch(card) {
+    console.log("playScorch", card, this);
     await this.playCardAction(
       card,
       async () => await ability_dict["scorch"].activated(card),
@@ -2215,10 +2216,11 @@ class Row extends CardContainer {
 
   // Applies a local scorch effect to this row
   async scorch() {
-    //  console.log("schorch", this);
+    console.log("schorch play", this);
     if (this.total >= 10)
       await Promise.all(
         this.maxUnits().map(async (c) => {
+          //        console.log("schroch", c);
           await c.animate("scorch", true, false);
           await board.toGrave(c, this);
         }),
@@ -2226,6 +2228,7 @@ class Row extends CardContainer {
   }
 
   async scorch_a_card(card) {
+    console.log("scorch_a_card", name, this);
     if (!card) return;
     console.log("scorch_a_card(card)", card);
     if (card.hero) return;
@@ -2646,8 +2649,11 @@ class Game {
     this.initPlayers(player_me, player_op);
     openFullscreen();
     console.log("start game players:", player_me, player_op);
-    ability_setup("me", player_me.leader.abilities[0]);
-    ability_setup("op", player_op.leader.abilities[0]);
+    await ability_setup("me", player_me.leader.abilities[0]);
+    await ability_setup("op", player_op.leader.abilities[0]);
+    await sleep(5);
+    await set_start_power("me");
+    await set_start_power("op");
     var meleadercardloss =
       player_me.leader.abilities[0] === "nilf_drawmaster"
         ? nilfard_drawmaster.cardban
@@ -3194,6 +3200,7 @@ class Card {
       wshield: "ally",
       turn_skip_clone_board: "spy",
       turn_skip_clone_hand: "moral",
+      scorch_fail: "knockback",
     };
     var temSom = new Array();
     for (var x in guia) temSom[temSom.length] = x;
@@ -3263,6 +3270,7 @@ class Card {
       wshield: "ally",
       turn_skip_clone_board: "spy",
       turn_skip_clone_hand: "moral",
+      scorch_fail: "knockback",
     };
 
     const literais = [
@@ -3340,7 +3348,7 @@ class Card {
 
   // Animates the scorch effect
   async scorch(name) {
-    console.log("async scorch(", name, ")");
+    //    console.log("async scorch(", name, ")");
     let anim = this.elem.children[3];
     anim.style.backgroundSize = "cover";
     anim.style.backgroundImage = iconURL("anim_" + name);
@@ -5993,33 +6001,10 @@ function tocar(arquivo, pararMusica) {
     var s = new Audio(audioPath);
 
     if (pararMusica) {
-      //	console.log("[sfx] pararMusica is true");
-
-      if (ui.youtube) {
-        //	console.log("[sfx] youtube player exists");
-
-        var state = ui.youtube.getPlayerState();
-        //	console.log("[sfx] youtube player state:", state);
-
-        if (state === AUDIO_STATE.PLAYING) {
-          //		console.log("[sfx] youtube is playing -> pausing video");
-
-          ui.youtube.pauseVideo();
-
-          if (ui.toggleMusic_elem) {
-            //			console.log("[sfx] adding fade class to toggleMusic element");
-            ui.toggleMusic_elem.classList.add("fade");
-          } else {
-            //			console.warn("[sfx] ui.toggleMusic_elem not found");
-          }
-        } else {
-          //		console.log("[sfx] youtube exists but is not playing");
-        }
-      } else {
-        //	console.warn("[sfx] ui.youtube does not exist");
+      console.log("[sfx] pararMusica is true", ui.getAudioState());
+      if (ui.getAudioState() === 1) {
+        ui.stopYouTube();
       }
-    } else {
-      //	console.log("[sfx] pararMusica is false -> not touching music");
     }
 
     lastSound = arquivo;

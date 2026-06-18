@@ -358,7 +358,7 @@ var card_dict = [
     strength: "1",
     ability: "morale",
     filename: "kaedwen_siege",
-    count: "1",
+    count: "0",
   },
   {
     name: "Kaedweni Siege Expert",
@@ -368,7 +368,7 @@ var card_dict = [
     strength: "1",
     ability: "morale",
     filename: "kaedwen_siege_1",
-    count: "1",
+    count: "3",
   },
   {
     name: "Kaedweni Siege Expert",
@@ -378,7 +378,7 @@ var card_dict = [
     strength: "1",
     ability: "morale",
     filename: "kaedwen_siege_2",
-    count: "1",
+    count: "0",
   },
   {
     name: "Keira Metz",
@@ -548,7 +548,7 @@ var card_dict = [
     strength: "6",
     ability: "",
     filename: "trebuchet",
-    count: "1",
+    count: "0",
   },
   {
     name: "Trebuchet",
@@ -558,7 +558,7 @@ var card_dict = [
     strength: "6",
     ability: "",
     filename: "trebuchet_1",
-    count: "1",
+    count: "2",
   },
   {
     name: "Emhyr var Emreis - His Imperial Majesty",
@@ -638,7 +638,7 @@ var card_dict = [
     strength: "10",
     ability: "",
     filename: "black_archer",
-    count: "1",
+    count: "0",
   },
   {
     name: "Black Infantry Archer",
@@ -648,7 +648,7 @@ var card_dict = [
     strength: "10",
     ability: "",
     filename: "black_archer_1",
-    count: "1",
+    count: "2",
   },
   {
     name: "Cahir Mawr Dyffryn aep Ceallach",
@@ -678,7 +678,7 @@ var card_dict = [
     strength: "1",
     ability: "medic",
     filename: "archer_support",
-    count: "1",
+    count: "2",
   },
   {
     name: "Etolian Auxiliary Archers",
@@ -688,7 +688,7 @@ var card_dict = [
     strength: "1",
     ability: "medic",
     filename: "archer_support_1",
-    count: "1",
+    count: "0",
   },
   {
     name: "Fringilla Vigo",
@@ -988,7 +988,7 @@ var card_dict = [
     strength: "4",
     ability: "muster",
     filename: "arachas",
-    count: "1",
+    count: "0",
   },
   {
     name: "Arachas ",
@@ -998,7 +998,7 @@ var card_dict = [
     strength: "4",
     ability: "muster",
     filename: "arachas_1",
-    count: "1",
+    count: "3",
   },
   {
     name: "Arachas ",
@@ -1008,7 +1008,7 @@ var card_dict = [
     strength: "4",
     ability: "muster",
     filename: "arachas_2",
-    count: "1",
+    count: "0",
   },
   {
     name: "Arachas- Behemoth",
@@ -1178,7 +1178,7 @@ var card_dict = [
     strength: "1",
     ability: "muster",
     filename: "ghoul",
-    count: "1",
+    count: "3",
   },
   {
     name: "Ghoul",
@@ -1188,7 +1188,7 @@ var card_dict = [
     strength: "1",
     ability: "muster",
     filename: "ghoul_1",
-    count: "1",
+    count: "0",
   },
   {
     name: "Ghoul",
@@ -1198,7 +1198,7 @@ var card_dict = [
     strength: "1",
     ability: "muster",
     filename: "ghoul_2",
-    count: "1",
+    count: "0",
   },
   {
     name: "Grave Hag",
@@ -1279,7 +1279,7 @@ var card_dict = [
     strength: "2",
     ability: "muster",
     filename: "nekker",
-    count: "1",
+    count: "3",
   },
   {
     name: "Nekker",
@@ -1289,7 +1289,7 @@ var card_dict = [
     strength: "2",
     ability: "muster",
     filename: "nekker_1",
-    count: "1",
+    count: "0",
   },
   {
     name: "Nekker",
@@ -1299,7 +1299,7 @@ var card_dict = [
     strength: "2",
     ability: "muster",
     filename: "nekker_2",
-    count: "1",
+    count: "0",
   },
   {
     name: "Plague Maiden",
@@ -1489,7 +1489,7 @@ var card_dict = [
     strength: "6",
     ability: "",
     filename: "dol_infantry",
-    count: "1",
+    count: "0",
   },
   {
     name: "Dol Blathanna Scout",
@@ -1499,7 +1499,7 @@ var card_dict = [
     strength: "6",
     ability: "",
     filename: "dol_infantry_1",
-    count: "1",
+    count: "0",
   },
   {
     name: "Dol Blathanna Scout",
@@ -1509,7 +1509,7 @@ var card_dict = [
     strength: "6",
     ability: "",
     filename: "dol_infantry_2",
-    count: "1",
+    count: "3",
   },
   {
     name: "Dwarven Skirmisher",
@@ -1519,7 +1519,7 @@ var card_dict = [
     strength: "3",
     ability: "muster",
     filename: "dwarf",
-    count: "1",
+    count: "3",
   },
   {
     name: "Dwarven Skirmisher",
@@ -1529,7 +1529,7 @@ var card_dict = [
     strength: "3",
     ability: "muster",
     filename: "dwarf_1",
-    count: "1",
+    count: "0",
   },
   {
     name: "Dwarven Skirmisher",
@@ -1539,7 +1539,7 @@ var card_dict = [
     strength: "3",
     ability: "muster",
     filename: "dwarf_2",
-    count: "1",
+    count: "0",
   },
   {
     name: "Eithné",
@@ -1559,7 +1559,7 @@ var card_dict = [
     strength: "2",
     ability: "muster",
     filename: "elf_skirmisher",
-    count: "1",
+    count: "0",
   },
   {
     name: "Elven Skirmisher",
@@ -1569,7 +1569,7 @@ var card_dict = [
     strength: "2",
     ability: "muster",
     filename: "elf_skirmisher_1",
-    count: "1",
+    count: "3",
   },
   {
     name: "Elven Skirmisher",
@@ -1579,7 +1579,7 @@ var card_dict = [
     strength: "2",
     ability: "muster",
     filename: "elf_skirmisher_2",
-    count: "1",
+    count: "0",
   },
   {
     name: "Filavandrel aen Fidhail",
@@ -1599,7 +1599,7 @@ var card_dict = [
     strength: "0",
     ability: "medic",
     filename: "havekar_nurse",
-    count: "1",
+    count: "0",
   },
   {
     name: "Havekar Healer",
@@ -1609,7 +1609,7 @@ var card_dict = [
     strength: "0",
     ability: "medic",
     filename: "havekar_nurse_1",
-    count: "1",
+    count: "0",
   },
   {
     name: "Havekar Healer",
@@ -1619,7 +1619,7 @@ var card_dict = [
     strength: "0",
     ability: "medic",
     filename: "havekar_nurse_2",
-    count: "1",
+    count: "3",
   },
   {
     name: "Havekar Smuggler",
@@ -1629,7 +1629,7 @@ var card_dict = [
     strength: "5",
     ability: "muster",
     filename: "havekar_support",
-    count: "1",
+    count: "0",
   },
   {
     name: "Havekar Smuggler",
@@ -1639,7 +1639,7 @@ var card_dict = [
     strength: "5",
     ability: "muster",
     filename: "havekar_support_1",
-    count: "1",
+    count: "0",
   },
   {
     name: "Havekar Smuggler",
@@ -1649,7 +1649,7 @@ var card_dict = [
     strength: "5",
     ability: "muster",
     filename: "havekar_support_2",
-    count: "1",
+    count: "3",
   },
   {
     name: "Ida Emean aep Sivney",
@@ -1689,7 +1689,7 @@ var card_dict = [
     strength: "5",
     ability: "",
     filename: "mahakam",
-    count: "1",
+    count: "0",
   },
   {
     name: "Mahakaman Defender",
@@ -1699,7 +1699,7 @@ var card_dict = [
     strength: "5",
     ability: "",
     filename: "mahakam_1",
-    count: "1",
+    count: "0",
   },
   {
     name: "Mahakaman Defender",
@@ -1709,7 +1709,7 @@ var card_dict = [
     strength: "5",
     ability: "",
     filename: "mahakam_2",
-    count: "1",
+    count: "0",
   },
   {
     name: "Mahakaman Defender",
@@ -1719,7 +1719,7 @@ var card_dict = [
     strength: "5",
     ability: "",
     filename: "mahakam_3",
-    count: "1",
+    count: "0",
   },
   {
     name: "Mahakaman Defender",
@@ -1729,7 +1729,7 @@ var card_dict = [
     strength: "5",
     ability: "",
     filename: "mahakam_4",
-    count: "1",
+    count: "5",
   },
   {
     name: "Milva",
@@ -1789,7 +1789,7 @@ var card_dict = [
     strength: "5",
     ability: "",
     filename: "vrihedd_brigade",
-    count: "1",
+    count: "0",
   },
   {
     name: "Vrihedd Brigade Veteran",
@@ -1799,7 +1799,7 @@ var card_dict = [
     strength: "5",
     ability: "",
     filename: "vrihedd_brigade_1",
-    count: "1",
+    count: "2",
   },
   {
     name: "Yaevinn",
@@ -2499,6 +2499,16 @@ var card_dict = [
     strength: "",
     ability: "keadwen_weather",
     filename: "keadwen_weather",
+    count: "0",
+  },
+  {
+    name: "Radovid V the Stern — In Madness",
+    id: "1029",
+    deck: "realms",
+    row: "leader",
+    strength: "",
+    ability: "scorchstopper",
+    filename: "radovid_stern",
     count: "0",
   },
   // New cards for sky

@@ -40,6 +40,7 @@ const IGNORE_PATTERNS = [
   "AUDIO_STATE",
   "white_flame_lg_faction",
   "pick_array",
+  "resolveScorch",
 ];
 
 const LOG_PREFIX = "[CUSTOM_SERVER]";

@@ -458,7 +458,7 @@
         "strength": "1",
         "ability": "morale",
         "filename": "kaedwen_siege",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Kaedweni Siege Expert",
@@ -468,7 +468,7 @@
         "strength": "1",
         "ability": "morale",
         "filename": "kaedwen_siege_1",
-        "count": "1"
+        "count": "3"
       },
       {
         "name": "Kaedweni Siege Expert",
@@ -478,7 +478,7 @@
         "strength": "1",
         "ability": "morale",
         "filename": "kaedwen_siege_2",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Keira Metz",
@@ -648,7 +648,7 @@
         "strength": "6",
         "ability": "",
         "filename": "trebuchet",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Trebuchet",
@@ -658,7 +658,7 @@
         "strength": "6",
         "ability": "",
         "filename": "trebuchet_1",
-        "count": "1"
+        "count": "2"
       },
       {
         "name": "Emhyr var Emreis - His Imperial Majesty",
@@ -728,7 +728,7 @@
         "strength": "10",
         "ability": "",
         "filename": "black_archer",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Black Infantry Archer",
@@ -738,7 +738,7 @@
         "strength": "10",
         "ability": "",
         "filename": "black_archer_1",
-        "count": "1"
+        "count": "2"
       },
       {
         "name": "Cahir Mawr Dyffryn aep Ceallach",
@@ -768,7 +768,7 @@
         "strength": "1",
         "ability": "medic",
         "filename": "archer_support",
-        "count": "1"
+        "count": "2"
       },
       {
         "name": "Etolian Auxiliary Archers",
@@ -778,7 +778,7 @@
         "strength": "1",
         "ability": "medic",
         "filename": "archer_support_1",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Fringilla Vigo",
@@ -998,7 +998,7 @@
         "strength": "5",
         "ability": "bond",
         "filename": "young_emissary",
-        "count": "1"
+        "count": "2"
       },
       {
         "name": "Young Emissary",
@@ -1008,7 +1008,7 @@
         "strength": "5",
         "ability": "bond",
         "filename": "young_emissary_1",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Zerrikanian Fire Scorpion",
@@ -1078,7 +1078,7 @@
         "strength": "4",
         "ability": "muster",
         "filename": "arachas",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Arachas ",
@@ -1088,7 +1088,7 @@
         "strength": "4",
         "ability": "muster",
         "filename": "arachas_1",
-        "count": "1"
+        "count": "3"
       },
       {
         "name": "Arachas ",
@@ -1098,7 +1098,7 @@
         "strength": "4",
         "ability": "muster",
         "filename": "arachas_2",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Arachas- Behemoth",
@@ -1268,7 +1268,7 @@
         "strength": "1",
         "ability": "muster",
         "filename": "ghoul",
-        "count": "1"
+        "count": "3"
       },
       {
         "name": "Ghoul",
@@ -1278,7 +1278,7 @@
         "strength": "1",
         "ability": "muster",
         "filename": "ghoul_1",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Ghoul",
@@ -1288,7 +1288,7 @@
         "strength": "1",
         "ability": "muster",
         "filename": "ghoul_2",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Grave Hag",
@@ -1369,7 +1369,7 @@
         "strength": "2",
         "ability": "muster",
         "filename": "nekker",
-        "count": "1"
+        "count": "3"
       },
       {
         "name": "Nekker",
@@ -1379,7 +1379,7 @@
         "strength": "2",
         "ability": "muster",
         "filename": "nekker_1",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Nekker",
@@ -1389,7 +1389,7 @@
         "strength": "2",
         "ability": "muster",
         "filename": "nekker_2",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Plague Maiden",
@@ -1579,7 +1579,7 @@
         "strength": "6",
         "ability": "",
         "filename": "dol_infantry",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Dol Blathanna Scout",
@@ -1589,7 +1589,7 @@
         "strength": "6",
         "ability": "",
         "filename": "dol_infantry_1",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Dol Blathanna Scout",
@@ -1599,7 +1599,7 @@
         "strength": "6",
         "ability": "",
         "filename": "dol_infantry_2",
-        "count": "1"
+        "count": "3"
       },
       {
         "name": "Dwarven Skirmisher",
@@ -1609,7 +1609,7 @@
         "strength": "3",
         "ability": "muster",
         "filename": "dwarf",
-        "count": "1"
+        "count": "3"
       },
       {
         "name": "Dwarven Skirmisher",
@@ -1619,7 +1619,7 @@
         "strength": "3",
         "ability": "muster",
         "filename": "dwarf_1",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Dwarven Skirmisher",
@@ -1629,7 +1629,7 @@
         "strength": "3",
         "ability": "muster",
         "filename": "dwarf_2",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Eithné",
@@ -1649,7 +1649,7 @@
         "strength": "2",
         "ability": "muster",
         "filename": "elf_skirmisher",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Elven Skirmisher",
@@ -1659,7 +1659,7 @@
         "strength": "2",
         "ability": "muster",
         "filename": "elf_skirmisher_1",
-        "count": "1"
+        "count": "3"
       },
       {
         "name": "Elven Skirmisher",
@@ -1669,7 +1669,7 @@
         "strength": "2",
         "ability": "muster",
         "filename": "elf_skirmisher_2",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Filavandrel aen Fidhail",
@@ -1689,7 +1689,7 @@
         "strength": "0",
         "ability": "medic",
         "filename": "havekar_nurse",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Havekar Healer",
@@ -1699,7 +1699,7 @@
         "strength": "0",
         "ability": "medic",
         "filename": "havekar_nurse_1",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Havekar Healer",
@@ -1709,7 +1709,7 @@
         "strength": "0",
         "ability": "medic",
         "filename": "havekar_nurse_2",
-        "count": "1"
+        "count": "3"
       },
       {
         "name": "Havekar Smuggler",
@@ -1719,7 +1719,7 @@
         "strength": "5",
         "ability": "muster",
         "filename": "havekar_support",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Havekar Smuggler",
@@ -1729,7 +1729,7 @@
         "strength": "5",
         "ability": "muster",
         "filename": "havekar_support_1",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Havekar Smuggler",
@@ -1739,7 +1739,7 @@
         "strength": "5",
         "ability": "muster",
         "filename": "havekar_support_2",
-        "count": "1"
+        "count": "3"
       },
       {
         "name": "Ida Emean aep Sivney",
@@ -1779,7 +1779,7 @@
         "strength": "5",
         "ability": "",
         "filename": "mahakam",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Mahakaman Defender",
@@ -1789,7 +1789,7 @@
         "strength": "5",
         "ability": "",
         "filename": "mahakam_1",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Mahakaman Defender",
@@ -1799,7 +1799,7 @@
         "strength": "5",
         "ability": "",
         "filename": "mahakam_2",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Mahakaman Defender",
@@ -1809,7 +1809,7 @@
         "strength": "5",
         "ability": "",
         "filename": "mahakam_3",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Mahakaman Defender",
@@ -1819,7 +1819,7 @@
         "strength": "5",
         "ability": "",
         "filename": "mahakam_4",
-        "count": "1"
+        "count": "5"
       },
       {
         "name": "Milva",
@@ -1879,7 +1879,7 @@
         "strength": "5",
         "ability": "",
         "filename": "vrihedd_brigade",
-        "count": "1"
+        "count": "0"
       },
       {
         "name": "Vrihedd Brigade Veteran",
@@ -1889,7 +1889,7 @@
         "strength": "5",
         "ability": "",
         "filename": "vrihedd_brigade_1",
-        "count": "1"
+        "count": "2"
       },
       {
         "name": "Yaevinn",
@@ -1957,7 +1957,7 @@
         "deck": "skellige",
         "row": "ranged",
         "strength": "6",
-        "ability": "scorch",
+        "ability": "scorch_r",
         "filename": "dimun_pirate",
         "count": "1"
       },
@@ -2569,6 +2569,16 @@
         "count": "0"
       },
       {
+        "name": "Radovid V the Stern — In Madness",
+        "id": "1029",
+        "deck": "realms",
+        "row": "leader",
+        "strength": "",
+        "ability": "scorchstopper",
+        "filename": "radovid_stern",
+        "count": "0"
+      },
+      {
         "name": "Hopeful Steward",
         "id": "3001",
         "deck": "sky",
@@ -2850,19 +2860,22 @@
       },
       "scorch": {
         "name": "Scorch",
-        "description": "Discard after playing. Kills the strongest card(s) on the battlefield. "
+        "description": "Discard after playing. Kills the strongest card(s) on the battlefield."
       },
       "scorch_c": {
         "name": "Scorch - Close Combat",
-        "description": "Destroy your enemy's strongest Close Combat unit(s) if the combined strength of all his or her Close Combat units is 10 or more. "
+        "description": "Destroy your enemy's strongest Close Combat unit(s) if the combined strength of all his or her Close Combat units is 10 or more."
       },
       "scorch_r": {
         "name": "Scorch - Ranged",
-        "description": "Destroy your enemy's strongest Ranged Combat unit(s) if the combined strength of all his or her Ranged Combat units is 10 or more. "
+        "description": "Destroy your enemy's strongest Ranged Combat unit(s) if the combined strength of all his or her Ranged Combat units is 10 or more."
       },
       "scorch_s": {
         "name": "Scorch - Siege",
-        "description": "Destroys your enemy's strongest Siege Combat unit(s) if the combined strength of all his or her Siege Combat units is 10 or more. "
+        "description": "Destroy your enemy's strongest Siege Combat unit(s) if the combined strength of all his or her Siege Combat units is 10 or more."
+      },
+      "scorchstopper": {
+        "description": "Protect your cards from any Scorch effect as long as you have enough Shield Charges. Each save costs 1 charge. Starts with 5 charges and cannot be recharged. Shield break when youuse any Scorch card! "
       },
       "agile": {
         "name": "agile",
@@ -3051,9 +3064,9 @@
         "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
       }
     },
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
-    "tavern_yt_vid": "8o-JI8VRyKo",
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack_volume": 90,
+    "tavern_yt_vid": "yu197hlNWK0",
     "tavern_yt_volume": 100
   },
   "texture_pack_url": null
