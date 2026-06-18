@@ -2511,6 +2511,16 @@ var card_dict = [
     filename: "radovid_stern",
     count: "0",
   },
+  {
+    name: "False Ciri — Empress of Nilfgaard",
+    id: "1030",
+    deck: "nilfgaard",
+    row: "leader",
+    strength: "",
+    ability: "turn_skiper",
+    filename: "fake_ciri",
+    count: "0",
+  },
   // New cards for sky
   {
     name: "Hopeful Steward",
@@ -2704,6 +2714,16 @@ var card_dict = [
     filename: "aviary_medic",
     count: "1",
     discord: "1074082782998966342",
+  },
+  {
+    name: "Elder of the Vault — Two Embers",
+    id: "3030",
+    deck: "sky",
+    row: "leader",
+    strength: "",
+    ability: "turn_skiper",
+    filename: "vault_elder_s2e",
+    count: "0",
   },
 ];
 

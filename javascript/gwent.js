@@ -747,7 +747,7 @@ socket.onmessage = async (event) => {
       showTooltip(
         "Opponent is ready. If you are ready begin the game immediately",
       );
-      tocar("tf2/Vote_yes", true);
+      tocar("tf2/Vote_yes", false);
       updateOpponentUI({
         name: players["op"],
         state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
@@ -815,7 +815,7 @@ socket.onmessage = async (event) => {
     case "unReady":
       opponentReady = false;
       if (isconnectedtosession) {
-        tocar("tf2/Vote_no", true);
+        tocar("tf2/Vote_no", false);
       }
       // amReady = false;
       toggleReadyWaiting(amReady);
@@ -3044,7 +3044,7 @@ class Game {
       gameended = true;
     } else {
       var end_screen = true;
-      tocar("game_lose");
+      tocar("game_lose", true);
       endScreen.children[0].classList.add("end-lose");
       endScreen.children[0].classList.add("end-lose");
       console.log("Game over || Defeat");
