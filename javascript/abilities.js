@@ -1261,6 +1261,34 @@ var ability_dict = {
       }
     },
   },
+  temeria_call: {
+    description:
+      "Spawn Temeria Special Forcess attack in close combat row. Commander Horn in close combat row will lost its effect but close row will be partialy protected partialy from weather effects. After use makes you pass!",
+
+    activated: async (card) => {
+      // Find Temeria in card_dict
+      const targetData = Object.values(card_dict).find(
+        (c) => c.id === "1032",
+        // alternatively: c.filename === "temeriacall"
+      );
+
+      if (!targetData) {
+        console.warn("Temeria card not found");
+        return;
+      }
+
+      // Create a fresh copy for the leader's owner
+      const spawned = new Card(targetData, card.holder);
+
+      // Place it in the close combat row
+      await board.addCardToRow(spawned, "close", card.holder);
+      if (card.holder.tag === "me") {
+        player_me.setPassed(true);
+      } else {
+        player_op.setPassed(true);
+      }
+    },
+  },
   darkness_storm_leader: {
     description:
       "Spawn Darkness Storm on both sides that destroys all non-hero cards in the close row",

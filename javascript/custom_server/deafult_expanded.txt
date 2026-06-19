@@ -2589,6 +2589,93 @@
         "count": "0"
       },
       {
+        "name": "White Frost",
+        "id": "1031",
+        "deck": "weather",
+        "row": "",
+        "strength": "",
+        "ability": "frost fog",
+        "filename": "whitefrost",
+        "count": "3"
+      },
+      {
+        "name": "Temeria",
+        "id": "1032",
+        "deck": "realms",
+        "row": "close",
+        "strength": "0",
+        "ability": "hero reinforce",
+        "filename": "temeriacall",
+        "count": "0"
+      },
+      {
+        "name": "Blue Stripe Commando — Scout",
+        "id": "1033",
+        "deck": "realms",
+        "row": "close",
+        "strength": "0",
+        "ability": "hero morale",
+        "filename": "temeriamoral",
+        "count": "0",
+        "reinforce": {
+          "owner_name": "Temeria",
+          "spawn_count": 2
+        }
+      },
+      {
+        "name": "Blue Stripe Commando — Soldier",
+        "id": "1034",
+        "deck": "realms",
+        "row": "close",
+        "strength": "1",
+        "ability": "bond",
+        "filename": "temeriabluestripe",
+        "count": "0",
+        "reinforce": {
+          "owner_name": "Temeria",
+          "spawn_count": 1
+        }
+      },
+      {
+        "name": "Blue Stripe Commando — Soldier",
+        "id": "1034",
+        "deck": "realms",
+        "row": "close",
+        "strength": "1",
+        "ability": "bond",
+        "filename": "temeriabluestripe_2",
+        "count": "0",
+        "reinforce": {
+          "owner_name": "Temeria",
+          "spawn_count": 1
+        }
+      },
+      {
+        "name": "Blue Stripe Commando — Quen",
+        "id": "1035",
+        "deck": "realms",
+        "row": "close",
+        "strength": "0",
+        "ability": "hero wshield",
+        "filename": "temeriamoral_1",
+        "count": "0",
+        "witcher_sign": false,
+        "reinforce": {
+          "owner_name": "Temeria",
+          "spawn_count": 1
+        }
+      },
+      {
+        "name": "Vernon Roche – Blue Stripes Commando Leader",
+        "id": "1036",
+        "deck": "realms",
+        "row": "leader",
+        "strength": "",
+        "ability": "temeria_call",
+        "filename": "vernontemeria_call",
+        "count": "0"
+      },
+      {
         "name": "Hopeful Steward",
         "id": "3001",
         "deck": "sky",
@@ -3013,6 +3100,9 @@
       "nilf_drawmaster": {
         "description": "On use, if your hand has fewer than 3 cards, draw 1 cards from your deck, plus 1 additional card for each unit in your graveyard (up to 3 bonus cards). You start the game with 2 fewer cards in hand but you can on game start redraw extra 1 card(s)."
       },
+      "temeria_call": {
+        "description": "Spawn Temeria Special Forcess attack in close combat row. Commander Horn in close combat row will lost its effect but close row will be partialy protected partialy from weather effects. "
+      },
       "darkness_storm_leader": {
         "description": "Spawn Darkness Storm on both sides that destroys all non-hero cards in the close row"
       },
@@ -3084,10 +3174,10 @@
         "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
       }
     },
-    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
     "audio_yt_vid_soundtrack_volume": 90,
     "tavern_yt_vid": "yu197hlNWK0",
-    "tavern_yt_volume": 100
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }
