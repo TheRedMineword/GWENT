@@ -270,7 +270,7 @@ function askForPlayerName() {
     input.style.padding = "8px";
 
     const joinBtn = document.createElement("button");
-    joinBtn.textContent = "Join";
+    joinBtn.textContent = "Ok";
 
     const cancelBtn = document.createElement("button");
     cancelBtn.textContent = "Cancel";
