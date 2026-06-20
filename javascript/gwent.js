@@ -817,6 +817,13 @@ socket.onmessage = async (event) => {
       if (isconnectedtosession) {
         tocar("tf2/Vote_no", false);
       }
+      if (twoPlayersConnected === true) {
+        ui.stopYouTube();
+        play_wait_music();
+      } else {
+        stop_wait_music();
+        ui.resumeYouTube();
+      }
       // amReady = false;
       toggleReadyWaiting(amReady);
       updateOpponentUI({
@@ -1272,7 +1279,19 @@ class Player {
     ability_reset("op");
 
     this.enableLeader();
-    this.setPassed(false);
+    try {
+      player_me.passed = false;
+    } catch (e) {}
+    try {
+      player_op.passed = false;
+    } catch (e) {}
+    try {
+      document.getElementById("passed-me").classList.remove("passed");
+    } catch (e) {}
+    try {
+      document.getElementById("passed-op").classList.remove("passed");
+    } catch (e) {}
+    // this.setPassed(false);
     document.getElementById("gem1-" + this.tag).classList.add("gem-on");
     document.getElementById("gem2-" + this.tag).classList.add("gem-on");
   }

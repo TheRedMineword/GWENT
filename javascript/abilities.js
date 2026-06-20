@@ -1520,7 +1520,7 @@ var ability_dict = {
         false,
       ).array;
 
-      console.log("[EREDIN_DESTROYER] Ability activated.");
+      console.log("[EREDIN_DESTROYER] Ability activated.", hand, deck);
 
       // Don't simulate opponent
       if (player_me.id !== card.holder.id) {
@@ -1528,6 +1528,11 @@ var ability_dict = {
           "[EREDIN_DESTROYER] Opponent played card, waiting for sync.",
         );
         return;
+      }
+
+      if (hand.cards.length < 2) {
+        console.log("FAILED NOT ENOUGHT CARDS");
+        return false;
       }
 
       if (Carousel.curr) Carousel.curr.exit();
