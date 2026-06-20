@@ -1,3 +1,0 @@
-## June 1, 2026
-- Added simple auth, to play just make up login/password
-- Working on discord server

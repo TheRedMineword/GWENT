@@ -1,5 +1,0 @@
-## May 16, 2026
-- Improved deck maker card shuffle
-- Attemped to fix op left bug where avenger card stayed for next game (partial succces?)
-- Conjunction of the Spheres random cards pick have now pick cards based on GameID and round count + seed, GameID is count of games on that client session
-- Added end of round count tooltip

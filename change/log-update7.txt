@@ -1,6 +1,0 @@
-## May 12, 2026
-- Added an exe app (BETA), exe app have build in updater to dowland GWENT updates, and is powered by index.html
-> Check readme.md on Github for dowland link
-- Added Eskel avenger card
-- Added avenger card animation
-- Working on card animation for hero cards

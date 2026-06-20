@@ -1,5 +1,0 @@
-## 12 June, 2026
-- Updated UI! Coin icons and bacround for avatars are now color coded blue/red (blue for you, red for opponent)
-- Updated audio player to no longer use youtube, now its build in player based on .m3u8 files!
-- Updated Emhyr var Emreis: The White Flame card! Insted disabling opponent leader ability, lets you copy thier ability!
-- Bug fixes

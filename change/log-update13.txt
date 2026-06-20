@@ -1,4 +1,0 @@
-## May 19, 2026
-- Fixed "noclick" in customizationElem
-- Tried fixing render not returning content lenght
-- Patched client location to country flag

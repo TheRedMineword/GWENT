@@ -1,5 +1,0 @@
-## 16 June, 2026
-- Attempt was made to fix chat being "disabled" (Unable to type for some reason
-- Updated 404.html
-- Added notif about YouTube ads (Sorry)
-- Render app will redirect now to github pages

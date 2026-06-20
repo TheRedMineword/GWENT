@@ -1,8 +1,0 @@
-## June 4, 2026
-- Added 3 new Skellige leader cards (feedback)
-> Eist Tuirseach — King Of Citra: Pick a Skellige Storm card from your deck and play it instantly.
-> Svalblod Cult: Spawn a Mardroeme card in the row with the most Berserkers.
-> Arnjolf the Patricide: Banish a card with strenght greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand.
-- Added new Skellige card (only available through the leader card's ability)
-> Svalblod Cult - Transformation: Hero card wich strenght 0 and ability mardroeme, can be created in all 3 rows
-- Bug fixes and small changes
