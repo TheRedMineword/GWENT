@@ -16,6 +16,6 @@
 # Gwent Was Patched!
 - Skellige ability now sanitze cards to prevent activation of unwanted effects!
 - Ignii card now remove itself on second board cleanup when round ends!
-- Fixed Gaunter Neutral Leader card preview not previewing itslef when ability is used
+- Fixed Gaunter Neutral Leader card preview not previewing itself when ability is used
 - Fixed one ost overlay
 - Eredin The Destroyer was stoped, it can be used when hand is x < 2 cards!
