@@ -2270,15 +2270,15 @@ class Row extends CardContainer {
     console.log("Before:", this.cards);
 
     this.cards
-      .filter((c) => c.noRemove === false || !c.noRemove)
+      .filter((c) => c.noRemove === "1" || !c.noRemove)
       .forEach((c) => board.toGrave(c, this));
 
     console.log("After grave:", this.cards);
 
     this.cards
-      .filter((c) => c.noRemove === true)
+      .filter((c) => c.noRemove === "0")
       .forEach(
-        (c) => (c.noRemove = false),
+        (c) => (c.noRemove = "1"),
         console.log("NO REMOVE REMOVED FROM C"),
       );
 
@@ -2428,6 +2428,7 @@ class Board {
 
   // Sends and translates a card from the source to the Grave of the card's holder
   async toGrave(card, source) {
+    //  console.log("To grave wich you", card, source);
     await this.moveTo(card, "grave", source);
   }
 
@@ -3079,7 +3080,9 @@ class Game {
 
   // Returns the client to the deck customization screen
   returnToCustomization() {
-    ui.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);
+    if (!waitMusicPlaying) {
+      ui.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);
+    }
     comp_and_send(socket, JSON.stringify({ type: "unReady" }));
     amReady = false;
     toggleReadyWaiting(amReady);
@@ -4354,6 +4357,10 @@ class UI {
         : card.faction;
 
     var tmp = `${faction}_${card.filename}`;
+
+    if (card.filename === "Gaunter_Leader") {
+      tmp = "neutral_Gaunter_Leader";
+    }
 
     this.preview.getElementsByClassName("card-lg")[0].style.backgroundImage =
       largeURL(tmp);

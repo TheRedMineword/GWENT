@@ -338,10 +338,11 @@ var ability_dict = {
     description:
       "Remains on the board for the following round. Adds +1 to all units in the row (excluding itself). Effects dont stacks",
     placed: async (card) => {
+      card.noRemove = "0";
       game.roundEnd.push(async () => {
-        card.noRemove = true;
-        await card.animate("resilience");
-
+        if (card.noRemove === "0") {
+          await card.animate("resilience");
+        }
         //		game.roundStart.push(async () => {
         //			delete card.noRemove;
         //			return true;
@@ -391,7 +392,11 @@ var ability_dict = {
               c.abilities.includes("gryffinSchool") ||
               c.abilities.includes("magicthegathering") ||
               c.abilities.includes("tgc_portal") ||
-              c.abilities.includes("hero")
+              c.abilities.includes("hero") ||
+              c.abilities.includes("scorch_c") ||
+              c.abilities.includes("scorch_r") ||
+              c.abilities.includes("scorch_s") ||
+              c.abilities.includes("scorch")
             ) {
               console.log("AARD SKIPPED ", c, " becuase it had bad abilities");
             } else {

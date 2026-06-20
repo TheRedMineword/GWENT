@@ -84,29 +84,69 @@ var factions = {
     factionAbility: (player) =>
       game.roundStart.push(async () => {
         if (game.roundCount != 3) return false;
+
         await ui.notification(
           "skellige-" + player.tag,
           ui_display_times.faction_ability,
         );
 
-        // Edit by Rick: Previously this'd revive two random cards from the graveyard but the random selection was different per client.
-        // Easiest fix is to have it behave the same way as the altered Medic ability when affected by a Nilfgaard leader card;
-        // Find the two highest valued cards (and in the case of a tie, sort by filename), ensuring no chance for desyncs.
-        // OLD: await Promise.all(player.grave.findCardsRandom(c => c.isUnit(), 2).map(c => board.toRow(c, player.grave)));
+        // Deterministic selection:
+        // revive the 2 strongest units from the graveyard.
         const units = player.grave.cards.filter((c) => c.isUnit());
+
         units.sort((a, b) => {
           const powerDiff = b.basePower - a.basePower;
           if (powerDiff !== 0) return powerDiff;
-          return a.filename.localeCompare(b.filename); // Fallback, if points are tied then use filename as a tiebreaker.
+
+          // Fallback to filename to prevent desyncs.
+          return a.filename.localeCompare(b.filename);
         });
+
+        const keptAbilities = new Set([
+          "hero",
+          "spy",
+          "sabotage",
+          "morale",
+          "horn",
+          "reinforce",
+          "wshield",
+          "bond",
+          "resilience",
+          "resilience_igni",
+          "agile",
+
+          // Keep all Axii variants alive
+          "axii",
+          "axii2_desc",
+          "axii2_desc_playable",
+        ]);
+
         const chosen = units.slice(0, 2);
+
+        for (const c of chosen) {
+          const oldAbilities = [...c.abilities];
+
+          c.abilities = c.abilities.filter((ability) =>
+            keptAbilities.has(ability),
+          );
+
+          console.log(
+            "[SKELLIGE REVIVE]",
+            c.name,
+            "abilities:",
+            oldAbilities,
+            "→",
+            c.abilities,
+          );
+        }
+
         await Promise.all(chosen.map((c) => board.toRow(c, player.grave)));
 
         return true;
       }),
-    // OLD: description: "2 random cards from the graveyard are placed on the battlefield at the start of the third round."
+
     description:
-      "The strongest 2 cards from the graveyard are placed on the battlefield at the start of the third round.",
+      "The strongest 2 cards from the graveyard are placed on the battlefield at the start of the third round. Revived cards lose most abilities.",
   },
   sky: {
     name: "Sky Kindom",
