@@ -90,15 +90,11 @@ var factions = {
           ui_display_times.faction_ability,
         );
 
-        // Deterministic selection:
-        // revive the 2 strongest units from the graveyard.
         const units = player.grave.cards.filter((c) => c.isUnit());
 
         units.sort((a, b) => {
           const powerDiff = b.basePower - a.basePower;
           if (powerDiff !== 0) return powerDiff;
-
-          // Fallback to filename to prevent desyncs.
           return a.filename.localeCompare(b.filename);
         });
 
@@ -115,7 +111,7 @@ var factions = {
           "resilience_igni",
           "agile",
 
-          // Keep all Axii variants alive
+          // AXII FAMILY (kept alive)
           "axii",
           "axii2_desc",
           "axii2_desc_playable",
@@ -124,17 +120,33 @@ var factions = {
         const chosen = units.slice(0, 2);
 
         for (const c of chosen) {
-          const oldAbilities = [...c.abilities];
+          const before = [...c.abilities];
 
-          c.abilities = c.abilities.filter((ability) =>
-            keptAbilities.has(ability),
+          // detect if unit had any "unsafe / non-kept" abilities
+          const hadUnwantedAbilities = before.some(
+            (a) => !keptAbilities.has(a),
           );
 
+          // 1. strip ability strings
+          c.abilities = c.abilities.filter((a) => keptAbilities.has(a));
+
+          // 2. normalize lifecycle hooks safely
+          if (!Array.isArray(c.placed)) c.placed = [];
+          if (!Array.isArray(c.activated)) c.activated = [];
+          if (!Array.isArray(c.removed)) c.removed = [];
+
+          // 3. only hard-reset lifecycle hooks if sanitization actually happened
+          if (hadUnwantedAbilities) {
+            c.placed = [];
+            c.activated = [];
+            c.removed = [];
+          }
+
           console.log(
-            "[SKELLIGE REVIVE]",
+            "[SKELLIGE CLEAN]",
             c.name,
             "abilities:",
-            oldAbilities,
+            before,
             "→",
             c.abilities,
           );
