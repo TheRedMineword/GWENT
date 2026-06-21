@@ -51,7 +51,7 @@ let ui_display_times = {
   queue: [],
   is_running: false,
   is_busy: false,
-  round_end_result: 2200,
+  round_end_result: 2800,
   notyfication: 2200, // From async notification(name, duration) // a fail save value
   fadeSpeed: 150,
   checkDelay: 25,
@@ -301,7 +301,7 @@ let ThisDef = {
       queue: [],
       is_running: false,
       is_busy: false,
-      round_end_result: 2200,
+      round_end_result: 2800,
       notyfication: 2200,
       fadeSpeed: 150,
       checkDelay: 25,

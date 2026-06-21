@@ -31,7 +31,7 @@
       "queue": [],
       "is_running": false,
       "is_busy": false,
-      "round_end_result": 2200,
+      "round_end_result": 2800,
       "notyfication": 2200,
       "fadeSpeed": 150,
       "checkDelay": 25,
