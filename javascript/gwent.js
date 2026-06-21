@@ -5695,13 +5695,17 @@ class DeckMaker {
         if (
           ![deck.faction, "neutral", "special", "weather"].includes(card.deck)
         ) {
-          warning +=
-            "'" +
-            card.name +
-            "' cannot be used in a deck of faction type '" +
-            deck.faction +
-            "'\n";
-          return false;
+          if (deck.faction !== "syndicate") {
+            warning +=
+              "'" +
+              card.name +
+              "' cannot be used in a deck of faction type '" +
+              deck.faction +
+              "'\n";
+            return false;
+          } else {
+            //  return true;
+          }
         }
         if (card.count < c[1]) {
           warning +=
