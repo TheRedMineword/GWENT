@@ -53,10 +53,10 @@ function processFolder(folder) {
 
       if (newSize > 0 && newSize < originalSize) {
         fs.renameSync(temp, full);
-        console.log(`Optimized: ${file}`);
+        console.log(`Optimized: ${folder}/${file}   !!`);
       } else {
         fs.unlinkSync(temp);
-        console.log(`Skipped: ${file}`);
+        console.log(`Skipped: ${folder}/${file}`);
       }
     } catch (err) {
       console.log(`Failed: ${file}`);
