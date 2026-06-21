@@ -826,8 +826,22 @@ var ability_dict = {
           if (c.row === "leader") return false;
 
           // syndicate = all factions allowed (ignore faction filter)
-          if (faction === "syndicate") {
+          if (enemyFaction === "syndicate") {
+            console.log("[DOPLER WARN] IS SINDICATE");
             return (
+              c.deck !== "neutral" &&
+              !isNaN(strength) &&
+              strength >= 7 &&
+              strength <= 15 &&
+              c.row !== "agile" &&
+              !c.token &&
+              !c.generated
+            );
+          } else {
+            // normal faction filtering
+            console.log("[DOPLER WARN] IS NOT SINDICATE");
+            return (
+              c.deck === enemyFaction &&
               !isNaN(strength) &&
               strength >= 7 &&
               strength <= 15 &&
@@ -836,17 +850,6 @@ var ability_dict = {
               !c.generated
             );
           }
-
-          // normal faction filtering
-          return (
-            c.deck === enemyFaction &&
-            !isNaN(strength) &&
-            strength >= 7 &&
-            strength <= 15 &&
-            c.row !== "agile" &&
-            !c.token &&
-            !c.generated
-          );
         });
 
         // ====================================

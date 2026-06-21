@@ -2378,7 +2378,7 @@ var card_dict = [
     count: "1",
   },
   {
-    name: "dopler",
+    name: "Dopler",
     id: "1016",
     deck: "neutral",
     row: "siege",
