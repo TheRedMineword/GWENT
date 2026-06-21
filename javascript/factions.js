@@ -175,7 +175,8 @@ var factions = {
           }
         } catch (e) {}
       }),
-    description: "Starts the game with the Fisstech card on the board.",
+    description:
+      "Starts the game with the Fisstech card on the board. Can create deck from all faction non-leader cards.",
   },
   sky: {
     name: "Sky Kindom",

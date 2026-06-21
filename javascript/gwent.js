@@ -5255,54 +5255,81 @@ class DeckMaker {
   // Constructs a bank of cards that can be used by the faction's deck.
   // If a deck is provided, will not add cards to bank that are already in the deck.
   makeBank(faction, deck) {
-    console.log("MAKE BANK FOR", faction, deck);
-    this.clear();
+    if (faction !== "syndicate") {
+      this.clear();
+      let cards = card_dict
+        .map((c, i) => ({ card: c, index: i }))
+        .filter(
+          (p) =>
+            [faction, "neutral", "weather", "special"].includes(p.card.deck) &&
+            p.card.row !== "leader",
+        );
 
-    let cards = card_dict
-      .map((c, i) => ({ card: c, index: i }))
-      .filter((p) => {
-        // always exclude leaders
-        if (p.card.row === "leader") return false;
-
-        // syndicate = can access all cards (except leaders already handled)
-        if (faction === "syndicate") return true;
-
-        // normal faction filtering
-        return [faction, "neutral", "weather", "special"].includes(p.card.deck);
+      cards.sort(function (id1, id2) {
+        let a = card_dict[id1.index],
+          b = card_dict[id2.index];
+        let c1 = { name: a.name, basePower: -a.strength, faction: a.deck };
+        let c2 = { name: b.name, basePower: -b.strength, faction: b.deck };
+        return Card.compare(c1, c2);
       });
 
-    cards.sort(function (id1, id2) {
-      let a = card_dict[id1.index],
-        b = card_dict[id2.index];
-
-      let c1 = { name: a.name, basePower: -a.strength, faction: a.deck };
-      let c2 = { name: b.name, basePower: -b.strength, faction: b.deck };
-
-      return Card.compare(c1, c2);
-    });
-
-    let deckMap = {};
-    if (deck) {
-      for (let i of Object.keys(deck)) {
-        deckMap[deck[i].index] = deck[i].count;
+      let deckMap = {};
+      if (deck) {
+        for (let i of Object.keys(deck)) deckMap[deck[i].index] = deck[i].count;
       }
+      cards.forEach((p) => {
+        let count =
+          deckMap[p.index] !== undefined ? Number(deckMap[p.index]) : 0;
+        this.makePreview(
+          p.index,
+          Number.parseInt(p.card.count) - count,
+          this.bank_elem,
+          this.bank,
+        );
+        this.makePreview(p.index, count, this.deck_elem, this.deck);
+      });
+      add_card_count(this.bank);
+      add_card_count(this.deck);
+    } else {
+      this.clear();
+      let cards = card_dict
+        .map((c, i) => ({ card: c, index: i }))
+        .filter(
+          (p) =>
+            [
+              ...Object.keys(factions),
+              "neutral",
+              "weather",
+              "special",
+            ].includes(p.card.deck) && p.card.row !== "leader",
+        );
+
+      cards.sort(function (id1, id2) {
+        let a = card_dict[id1.index],
+          b = card_dict[id2.index];
+        let c1 = { name: a.name, basePower: -a.strength, faction: a.deck };
+        let c2 = { name: b.name, basePower: -b.strength, faction: b.deck };
+        return Card.compare(c1, c2);
+      });
+
+      let deckMap = {};
+      if (deck) {
+        for (let i of Object.keys(deck)) deckMap[deck[i].index] = deck[i].count;
+      }
+      cards.forEach((p) => {
+        let count =
+          deckMap[p.index] !== undefined ? Number(deckMap[p.index]) : 0;
+        this.makePreview(
+          p.index,
+          Number.parseInt(p.card.count) - count,
+          this.bank_elem,
+          this.bank,
+        );
+        this.makePreview(p.index, count, this.deck_elem, this.deck);
+      });
+      add_card_count(this.bank);
+      add_card_count(this.deck);
     }
-
-    cards.forEach((p) => {
-      let count = deckMap[p.index] !== undefined ? Number(deckMap[p.index]) : 0;
-
-      this.makePreview(
-        p.index,
-        Number.parseInt(p.card.count),
-        this.bank_elem,
-        this.bank,
-      );
-
-      this.makePreview(p.index, count, this.deck_elem, this.deck);
-    });
-
-    add_card_count(this.bank);
-    add_card_count(this.deck);
   }
 
   // Creates HTML elements for the card previews
