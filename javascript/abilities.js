@@ -90,6 +90,7 @@ var ability_dict = {
     name: "Witcher Signs: Yrden",
     description:
       "Witchers Magic Trap, place on enemy ranged row to aplly -1 to each unit card. Effects stacks. Decoy can be used to pick up the card! ",
+    placed: async (card) => (card.holder = card.holder.opponent()),
   },
   horn: {
     name: "Commander's Horn",
@@ -821,17 +822,30 @@ var ability_dict = {
         let filteredCards = Object.values(card_dict).filter((c) => {
           let strength = Number(c.strength);
 
+          // always exclude leaders
+          if (c.row === "leader") return false;
+
+          // syndicate = all factions allowed (ignore faction filter)
+          if (faction === "syndicate") {
+            return (
+              !isNaN(strength) &&
+              strength >= 7 &&
+              strength <= 15 &&
+              c.row !== "agile" &&
+              !c.token &&
+              !c.generated
+            );
+          }
+
+          // normal faction filtering
           return (
             c.deck === enemyFaction &&
             !isNaN(strength) &&
             strength >= 7 &&
             strength <= 15 &&
-            c.row !== "leader" &&
             c.row !== "agile" &&
             !c.token &&
-            !c.generated // &&
-
-            // !c.ability?.includes("hero")
+            !c.generated
           );
         });
 
@@ -972,66 +986,110 @@ var ability_dict = {
       "Choose one card from your discard pile and play it instantly (no Heroes or Special Cards). ",
     placed: async (card) => {
       if (card.holder.id === player_me.id) {
-        med_draw = 1; // some stupid bug happend in function that send medic draw so now we have  med_draw === 1 check
+        med_draw = 1;
         await sleep(200);
       }
+
       let grave = board.getRow(card, "grave", card.holder);
-      let units = card.holder.grave.findCards((c) => c.isUnit());
-      if (units.length <= 0) return;
-      let wrapper = { card: null };
 
-      if (game.randomRespawn) {
-        // Edit by Rick: Previously if game.randomRespawn is true (Nilfgaard leader card) it would pick a random card to revive.
-        // This random card differed per client so would cause a massive desync.
-        // I changed it to instead search for the HIGHEST valued card, and in the case of multiple cards with that value base it on filename.
-        // Very arbitrary but looks random enough.
-        // Could argue that this leader card's "sabotaging" nature should make it pick the LOWEST valued card instead but I think that makes it too easy to sabotage yourself.
-        // OLD: wrapper.card = grave.findCardsRandom(c => c.isUnit())[0];
-        units.sort((a, b) => {
-          const powerDiff = b.basePower - a.basePower;
-          if (powerDiff !== 0) return powerDiff;
-          return a.filename.localeCompare(b.filename); // Fallback, if points are tied then use filename as a tiebreaker.
-        });
-        wrapper.card = units[0];
-      } else if (card.holder.controller instanceof ControllerOpponent) {
-        console.log(
-          "Opponent has played a medic, wait for him to chose which card to respawn",
-        );
-        // Wait for the opponent to choose which card to revive
-        wrapper.card = await new Promise((resolve) => {
-          const handleMessage = async (event) => {
-            console.log(
-              "PING, medic draw op?",
-              event,
-              await recv_and_decomp(event),
-            );
-            const data = await recv_and_decomp(event);
-            if (data.type === "medicDraw") {
-              const drawnCard = grave.cards.filter(
-                (c) => c.filename === data.card,
-              )[0];
-              if (drawnCard) {
-                resolve(drawnCard);
-                return;
+      // Use medicsdraw if defined, otherwise default to 1
+      var reviveCount = typeof medicsdraw === "number" ? medicsdraw : 1;
+      if (
+        player_me.leader?.abilities?.[0] === "mediclove" ||
+        player_op.leader?.abilities?.[0] === "mediclove"
+      ) {
+        reviveCount++;
+        // await ui.notification("medicextra", ui_display_times.faction_ability);
+      }
+
+      for (let revive = 0; revive < reviveCount; revive++) {
+        let units = card.holder.grave.findCards((c) => c.isUnit());
+
+        if (units.length <= 0) break;
+
+        let wrapper = { card: null };
+
+        if (game.randomRespawn) {
+          units.sort((a, b) => {
+            const powerDiff = b.basePower - a.basePower;
+            if (powerDiff !== 0) return powerDiff;
+            return a.filename.localeCompare(b.filename);
+          });
+
+          wrapper.card = units[0];
+        } else if (card.holder.controller instanceof ControllerOpponent) {
+          console.log(
+            "Opponent has played a medic, wait for him to choose which card to respawn",
+          );
+
+          wrapper.card = await new Promise((resolve) => {
+            const handleMessage = async (event) => {
+              const data = await recv_and_decomp(event);
+
+              console.log("PING, medic draw op?", event, data);
+
+              if (data.type === "medicDraw") {
+                const drawnCard = grave.cards.filter(
+                  (c) => c.filename === data.card,
+                )[0];
+
+                if (drawnCard) {
+                  socket.removeEventListener("message", handleMessage);
+                  resolve(drawnCard);
+                }
               }
-            }
-          };
+            };
 
-          socket.addEventListener("message", handleMessage);
-        });
-      } else
-        await ui.queueCarousel(
-          card.holder.grave,
-          1,
-          (c, i) => (wrapper.card = c.cards[i]),
-          (c) => c.isUnit(),
-          true,
-        );
-      let res = wrapper.card;
-      grave.removeCard(res);
-      grave.addCard(res);
-      await res.animate("medic");
-      await res.autoplay(grave);
+            socket.addEventListener("message", handleMessage);
+          });
+        } else {
+          await ui.queueCarousel(
+            card.holder.grave,
+            1,
+            (c, i) => (wrapper.card = c.cards[i]),
+            (c) => c.isUnit(),
+            true,
+          );
+        }
+
+        const res = wrapper.card;
+
+        if (!res) break;
+
+        console.log("Medic revived:", res.filename);
+
+        // Manually send medicDraw for each revive after the first selection
+        // since medicsdraw > 1 bypasses the original single-send logic.
+        if (
+          card.holder.id === player_me.id &&
+          !(card.holder.controller instanceof ControllerOpponent)
+        ) {
+          extraJSON.push(
+            JSON.stringify({
+              type: "medicDraw",
+              card: res.filename,
+            }),
+          );
+
+          console.log(
+            "extra json now",
+            extraJSON,
+            JSON.stringify({
+              type: "medicDraw",
+              card: res.filename,
+            }),
+          );
+        }
+
+        grave.removeCard(res);
+        grave.addCard(res);
+
+        await res.animate("medic");
+
+        // Wait until the revived card is actually played to the board
+        await res.autoplay(grave);
+      }
+
       return;
     },
   },
@@ -1817,6 +1875,10 @@ var ability_dict = {
         );
       }
     },
+  },
+  mediclove: {
+    description:
+      "Both players can revive extra card when using medic card ability. ",
   },
   crach_an_craite: {
     description:

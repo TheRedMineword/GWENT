@@ -54,6 +54,7 @@ socket.onclose = () => {
   createdSessionId = null;
   joinedSessionId = null;
   ThisSessionId = null;
+  isconnectedtosession = false;
   alert("Disconnected from the server");
   showBrickScreen();
 };
@@ -335,6 +336,7 @@ function cancelSession() {
     );
     createdSessionId = null;
     ThisSessionId = null;
+    isconnectedtosession = false;
   } else if (joinedSessionId) {
     console.log("Left Session:", joinedSessionId);
     comp_and_send(
@@ -346,6 +348,7 @@ function cancelSession() {
     );
     joinedSessionId = null;
     ThisSessionId = null;
+    isconnectedtosession = false;
     btnCancelElem.classList.add("hidden");
   }
   joinedSessionId = null;
@@ -385,6 +388,7 @@ function silent_cancelSession() {
     );
     createdSessionId = null;
     ThisSessionId = null;
+    isconnectedtosession = false;
   } else if (joinedSessionId) {
     console.log("Left Session:", joinedSessionId);
     comp_and_send(
@@ -397,6 +401,7 @@ function silent_cancelSession() {
     );
     joinedSessionId = null;
     ThisSessionId = null;
+    isconnectedtosession = false;
     btnCancelElem.classList.add("hidden");
   }
   joinedSessionId = null;
@@ -420,6 +425,7 @@ function reset_menu() {
   // sessionDisplay.classList.add("hidden");
   createdSessionId = null;
   ThisSessionId = null;
+  isconnectedtosession = false;
   btnCancelElem.classList.add("hidden");
   joinedSessionId = null;
   reset_custom();

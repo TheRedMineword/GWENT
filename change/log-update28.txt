@@ -19,3 +19,14 @@
 - Fixed Gaunter Neutral Leader card preview not previewing itself when ability is used
 - Fixed one ost overlay
 - Eredin The Destroyer was stoped, it can be used when hand is x < 2 cards!
+
+## 21 June, 2026
+# New Faction!!
+Coming from RandomPianist/gwent-classic-v3.1, Syndicate faction was added!
+Syndicate ability let you begin game wich morale card on board at game start! Additionally, this faction has access to all non-leader cards from all other factions!
+- Added new leader ability, letting medic revive extra card
+- Added medicsdraw config
+- Added 2 new cards for syndicate Fisstech (morale ability), Sigi Reuven (Leader: extra medic revive)
+- Removed cards modified at patch 18 June, 2026, due to issues (I hope its ends now)
+> Also all card exports can now be broken!
+- Added different ui.notif when Nilfgaard wins round via draw

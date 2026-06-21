@@ -287,8 +287,12 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
       console.warn("Card not found:", name);
       continue;
     }
-
-    const factionCards = matchingCards.filter((card) => card.deck === faction);
+    var factionCards = null;
+    if (faction === "syndicate") {
+      factionCards = matchingCards;
+    } else {
+      factionCards = matchingCards.filter((card) => card.deck === faction);
+    }
 
     const neutralCards = matchingCards.filter((card) =>
       GLOBAL_DECKS.includes(card.deck),
@@ -313,13 +317,21 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
   // =====================================================
 
   while (unitCount < minUnits) {
-    let added = tryAddRandom(
-      getAvailableCards(
-        (card) => card.deck === faction && isUnit(card) && !isHero(card),
-      ),
-      3,
-    );
-
+    let added = null;
+    var factionCards = null;
+    if (faction === "syndicate") {
+      added = tryAddRandom(
+        getAvailableCards((card) => isUnit(card) && !isHero(card)),
+        3,
+      );
+    } else {
+      added = tryAddRandom(
+        getAvailableCards(
+          (card) => card.deck === faction && isUnit(card) && !isHero(card),
+        ),
+        3,
+      );
+    }
     if (!added) {
       added = tryAddRandom(
         getAvailableCards((card) => card.deck === "neutral" && isUnit(card)),
@@ -370,18 +382,33 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
     }, 0);
 
     const candidatePools = [];
-
-    candidatePools.push(
-      getAvailableCards(
-        (card) => card.deck === faction && isUnit(card) && !isHero(card),
-      ),
-    );
-
-    if (heroCount < heroLimit) {
+    if (faction === "syndicate") {
       candidatePools.push(
-        getAvailableCards((card) => card.deck === faction && isHero(card)),
+        getAvailableCards((card) => isUnit(card) && !isHero(card)),
       );
 
+      if (heroCount < heroLimit) {
+        candidatePools.push(getAvailableCards((card) => isHero(card)));
+      }
+      candidatePools.push(
+        getAvailableCards((card) => card.deck === "neutral" && isHero(card)),
+      );
+    } else {
+      candidatePools.push(
+        getAvailableCards((card) => isUnit(card) && !isHero(card)),
+      );
+
+      if (faction !== "syndicate") {
+        if (heroCount < heroLimit) {
+          candidatePools.push(
+            getAvailableCards((card) => card.deck === faction && isHero(card)),
+          );
+        }
+      } else {
+        if (heroCount < heroLimit) {
+          candidatePools.push(getAvailableCards((card) => isHero(card)));
+        }
+      }
       candidatePools.push(
         getAvailableCards((card) => card.deck === "neutral" && isHero(card)),
       );
@@ -542,8 +569,13 @@ function gen_premade_decks() {
     // Work in progress
     {
       faction: "sky",
-      leader: getLeaderIndex("darkness_storm_leader"), // change later when better leader
+      leader: getLeaderIndex("darkness_storm_leader"),
       cards: getCardsIndex("sky", [["Royal Guard", 3]]),
+    },
+    {
+      faction: "syndicate",
+      leader: getLeaderIndex("Sigi Reuven"), // change later when better leader
+      cards: getCardsIndex("syndicate", []),
     },
   ];
 }

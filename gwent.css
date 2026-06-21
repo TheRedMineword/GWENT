@@ -483,6 +483,23 @@ html {
 	content: "Nilfgaard wins draws";
 }
 
+#notif-me_win_via_nilfgaard {
+	background-image: url(img/icons/notif_nilfgaard.png);
+}
+
+#notif-me_win_via_nilfgaard::after {
+	content: "Nilfgaard  faction ability triggered: \A Nilfgaard wins any round that ends in a draw. ";
+}
+
+#notif-op_win_via_nilfgaard {
+	background-image: url(img/icons/notif_nilfgaard.png);
+}
+
+#notif-op_win_via_nilfgaard::after {
+	content: "Nilfgaard  faction ability triggered: \A Nilfgaard wins any round that ends in a draw. ";
+}
+
+
 #notif-op-leader::after {
 	content: "Opponent uses leader";
 }
@@ -501,6 +518,14 @@ html {
 
 #notif-meve_white_queen::after {
 	content: "Lyria & Rivia leader allows both players to restore \A 2 units when using the medic ability.";
+}
+
+#notif-medicextra {
+	background-image: url(img/icons/anim_medic.png);
+}
+
+#notif-medicextra::after {
+	content: "You and opponent can revive extra card from medic ability! ";
 }
 
 #notif-me-first::after {

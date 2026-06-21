@@ -10,6 +10,7 @@
       "else": true
     },
     "OnGameStartDraw": 2,
+    "medicsdraw": 1,
     "ForGameStart": {
       "unitscards": 22,
       "special": 10,
@@ -452,16 +453,6 @@
       },
       {
         "name": "Kaedweni Siege Expert",
-        "id": "98",
-        "deck": "realms",
-        "row": "siege",
-        "strength": "1",
-        "ability": "morale",
-        "filename": "kaedwen_siege",
-        "count": "0"
-      },
-      {
-        "name": "Kaedweni Siege Expert",
         "id": "99",
         "deck": "realms",
         "row": "siege",
@@ -469,16 +460,6 @@
         "ability": "morale",
         "filename": "kaedwen_siege_1",
         "count": "3"
-      },
-      {
-        "name": "Kaedweni Siege Expert",
-        "id": "100",
-        "deck": "realms",
-        "row": "siege",
-        "strength": "1",
-        "ability": "morale",
-        "filename": "kaedwen_siege_2",
-        "count": "0"
       },
       {
         "name": "Keira Metz",
@@ -522,23 +503,13 @@
       },
       {
         "name": "Redanian Foot Soldier",
-        "id": "96",
-        "deck": "realms",
-        "row": "close",
-        "strength": "1",
-        "ability": "",
-        "filename": "redania",
-        "count": "1"
-      },
-      {
-        "name": "Redanian Foot Soldier",
         "id": "97",
         "deck": "realms",
         "row": "close",
         "strength": "1",
         "ability": "",
         "filename": "redania_1",
-        "count": "1"
+        "count": "2"
       },
       {
         "name": "Sheldon Skaggs",
@@ -642,16 +613,6 @@
       },
       {
         "name": "Trebuchet",
-        "id": "77",
-        "deck": "realms",
-        "row": "siege",
-        "strength": "6",
-        "ability": "",
-        "filename": "trebuchet",
-        "count": "0"
-      },
-      {
-        "name": "Trebuchet",
         "id": "78",
         "deck": "realms",
         "row": "siege",
@@ -722,16 +683,6 @@
       },
       {
         "name": "Black Infantry Archer",
-        "id": "47",
-        "deck": "nilfgaard",
-        "row": "ranged",
-        "strength": "10",
-        "ability": "",
-        "filename": "black_archer",
-        "count": "0"
-      },
-      {
-        "name": "Black Infantry Archer",
         "id": "48",
         "deck": "nilfgaard",
         "row": "ranged",
@@ -769,16 +720,6 @@
         "ability": "medic",
         "filename": "archer_support",
         "count": "2"
-      },
-      {
-        "name": "Etolian Auxiliary Archers",
-        "id": "73",
-        "deck": "nilfgaard",
-        "row": "ranged",
-        "strength": "1",
-        "ability": "medic",
-        "filename": "archer_support_1",
-        "count": "0"
       },
       {
         "name": "Fringilla Vigo",
@@ -1001,16 +942,6 @@
         "count": "2"
       },
       {
-        "name": "Young Emissary",
-        "id": "59",
-        "deck": "nilfgaard",
-        "row": "close",
-        "strength": "5",
-        "ability": "bond",
-        "filename": "young_emissary_1",
-        "count": "0"
-      },
-      {
         "name": "Zerrikanian Fire Scorpion",
         "id": "57",
         "deck": "nilfgaard",
@@ -1072,16 +1003,6 @@
       },
       {
         "name": "Arachas ",
-        "id": "27",
-        "deck": "monsters",
-        "row": "close",
-        "strength": "4",
-        "ability": "muster",
-        "filename": "arachas",
-        "count": "0"
-      },
-      {
-        "name": "Arachas ",
         "id": "28",
         "deck": "monsters",
         "row": "close",
@@ -1089,16 +1010,6 @@
         "ability": "muster",
         "filename": "arachas_1",
         "count": "3"
-      },
-      {
-        "name": "Arachas ",
-        "id": "29",
-        "deck": "monsters",
-        "row": "close",
-        "strength": "4",
-        "ability": "muster",
-        "filename": "arachas_2",
-        "count": "0"
       },
       {
         "name": "Arachas- Behemoth",
@@ -1271,26 +1182,6 @@
         "count": "3"
       },
       {
-        "name": "Ghoul",
-        "id": "45",
-        "deck": "monsters",
-        "row": "close",
-        "strength": "1",
-        "ability": "muster",
-        "filename": "ghoul_1",
-        "count": "0"
-      },
-      {
-        "name": "Ghoul",
-        "id": "46",
-        "deck": "monsters",
-        "row": "close",
-        "strength": "1",
-        "ability": "muster",
-        "filename": "ghoul_2",
-        "count": "0"
-      },
-      {
         "name": "Grave Hag",
         "id": "25",
         "deck": "monsters",
@@ -1370,26 +1261,6 @@
         "ability": "muster",
         "filename": "nekker",
         "count": "3"
-      },
-      {
-        "name": "Nekker",
-        "id": "42",
-        "deck": "monsters",
-        "row": "close",
-        "strength": "2",
-        "ability": "muster",
-        "filename": "nekker_1",
-        "count": "0"
-      },
-      {
-        "name": "Nekker",
-        "id": "43",
-        "deck": "monsters",
-        "row": "close",
-        "strength": "2",
-        "ability": "muster",
-        "filename": "nekker_2",
-        "count": "0"
       },
       {
         "name": "Plague Maiden",
@@ -1573,26 +1444,6 @@
       },
       {
         "name": "Dol Blathanna Scout",
-        "id": "107",
-        "deck": "scoiatael",
-        "row": "agile",
-        "strength": "6",
-        "ability": "",
-        "filename": "dol_infantry",
-        "count": "0"
-      },
-      {
-        "name": "Dol Blathanna Scout",
-        "id": "108",
-        "deck": "scoiatael",
-        "row": "agile",
-        "strength": "6",
-        "ability": "",
-        "filename": "dol_infantry_1",
-        "count": "0"
-      },
-      {
-        "name": "Dol Blathanna Scout",
         "id": "109",
         "deck": "scoiatael",
         "row": "agile",
@@ -1612,26 +1463,6 @@
         "count": "3"
       },
       {
-        "name": "Dwarven Skirmisher",
-        "id": "124",
-        "deck": "scoiatael",
-        "row": "close",
-        "strength": "3",
-        "ability": "muster",
-        "filename": "dwarf_1",
-        "count": "0"
-      },
-      {
-        "name": "Dwarven Skirmisher",
-        "id": "125",
-        "deck": "scoiatael",
-        "row": "close",
-        "strength": "3",
-        "ability": "muster",
-        "filename": "dwarf_2",
-        "count": "0"
-      },
-      {
         "name": "Eithné",
         "id": "17",
         "deck": "scoiatael",
@@ -1643,16 +1474,6 @@
       },
       {
         "name": "Elven Skirmisher",
-        "id": "127",
-        "deck": "scoiatael",
-        "row": "ranged",
-        "strength": "2",
-        "ability": "muster",
-        "filename": "elf_skirmisher",
-        "count": "0"
-      },
-      {
-        "name": "Elven Skirmisher",
         "id": "128",
         "deck": "scoiatael",
         "row": "ranged",
@@ -1660,16 +1481,6 @@
         "ability": "muster",
         "filename": "elf_skirmisher_1",
         "count": "3"
-      },
-      {
-        "name": "Elven Skirmisher",
-        "id": "129",
-        "deck": "scoiatael",
-        "row": "ranged",
-        "strength": "2",
-        "ability": "muster",
-        "filename": "elf_skirmisher_2",
-        "count": "0"
       },
       {
         "name": "Filavandrel aen Fidhail",
@@ -1683,26 +1494,6 @@
       },
       {
         "name": "Havekar Healer",
-        "id": "131",
-        "deck": "scoiatael",
-        "row": "ranged",
-        "strength": "0",
-        "ability": "medic",
-        "filename": "havekar_nurse",
-        "count": "0"
-      },
-      {
-        "name": "Havekar Healer",
-        "id": "132",
-        "deck": "scoiatael",
-        "row": "ranged",
-        "strength": "0",
-        "ability": "medic",
-        "filename": "havekar_nurse_1",
-        "count": "0"
-      },
-      {
-        "name": "Havekar Healer",
         "id": "133",
         "deck": "scoiatael",
         "row": "ranged",
@@ -1710,26 +1501,6 @@
         "ability": "medic",
         "filename": "havekar_nurse_2",
         "count": "3"
-      },
-      {
-        "name": "Havekar Smuggler",
-        "id": "110",
-        "deck": "scoiatael",
-        "row": "close",
-        "strength": "5",
-        "ability": "muster",
-        "filename": "havekar_support",
-        "count": "0"
-      },
-      {
-        "name": "Havekar Smuggler",
-        "id": "111",
-        "deck": "scoiatael",
-        "row": "close",
-        "strength": "5",
-        "ability": "muster",
-        "filename": "havekar_support_1",
-        "count": "0"
       },
       {
         "name": "Havekar Smuggler",
@@ -1770,46 +1541,6 @@
         "ability": "hero morale",
         "filename": "isengrim",
         "count": "1"
-      },
-      {
-        "name": "Mahakaman Defender",
-        "id": "115",
-        "deck": "scoiatael",
-        "row": "close",
-        "strength": "5",
-        "ability": "",
-        "filename": "mahakam",
-        "count": "0"
-      },
-      {
-        "name": "Mahakaman Defender",
-        "id": "116",
-        "deck": "scoiatael",
-        "row": "close",
-        "strength": "5",
-        "ability": "",
-        "filename": "mahakam_1",
-        "count": "0"
-      },
-      {
-        "name": "Mahakaman Defender",
-        "id": "117",
-        "deck": "scoiatael",
-        "row": "close",
-        "strength": "5",
-        "ability": "",
-        "filename": "mahakam_2",
-        "count": "0"
-      },
-      {
-        "name": "Mahakaman Defender",
-        "id": "118",
-        "deck": "scoiatael",
-        "row": "close",
-        "strength": "5",
-        "ability": "",
-        "filename": "mahakam_3",
-        "count": "0"
       },
       {
         "name": "Mahakaman Defender",
@@ -1870,16 +1601,6 @@
         "ability": "",
         "filename": "vrihedd_cadet",
         "count": "1"
-      },
-      {
-        "name": "Vrihedd Brigade Veteran",
-        "id": "113",
-        "deck": "scoiatael",
-        "row": "agile",
-        "strength": "5",
-        "ability": "",
-        "filename": "vrihedd_brigade",
-        "count": "0"
       },
       {
         "name": "Vrihedd Brigade Veteran",
@@ -2306,6 +2027,16 @@
         "name": "Gaunter o'Dim",
         "id": "1004",
         "deck": "sky",
+        "row": "leader",
+        "strength": "0",
+        "ability": "gaunter_neutral_leader",
+        "filename": "Gaunter_Leader",
+        "count": "1"
+      },
+      {
+        "name": "Gaunter o'Dim",
+        "id": "1004",
+        "deck": "syndicate",
         "row": "leader",
         "strength": "0",
         "ability": "gaunter_neutral_leader",
@@ -2880,6 +2611,26 @@
         "ability": "turn_skiper",
         "filename": "vault_elder_s2e",
         "count": "0"
+      },
+      {
+        "name": "Fisstech",
+        "id": "4001",
+        "deck": "syndicate",
+        "row": "agile",
+        "strength": "3",
+        "ability": "morale",
+        "filename": "fisstech",
+        "count": "2"
+      },
+      {
+        "name": "Sigi Reuven",
+        "id": "4002",
+        "deck": "syndicate",
+        "row": "leader",
+        "strength": "0",
+        "ability": "mediclove",
+        "filename": "sigi_reuven",
+        "count": "2"
       }
     ],
     "factions": {
@@ -2901,7 +2652,11 @@
       },
       "skellige": {
         "name": "Skellige",
-        "description": "The strongest 2 cards from the graveyard are placed on the battlefield at the start of the third round."
+        "description": "The strongest 2 cards from the graveyard are placed on the battlefield at the start of the third round. Revived cards lose most abilities."
+      },
+      "syndicate": {
+        "name": "Syndicate",
+        "description": "Starts the game with the Fisstech card on the board."
       },
       "sky": {
         "name": "Sky Kindom",
@@ -3101,7 +2856,7 @@
         "description": "On use, if your hand has fewer than 3 cards, draw 1 cards from your deck, plus 1 additional card for each unit in your graveyard (up to 3 bonus cards). You start the game with 2 fewer cards in hand but you can on game start redraw extra 1 card(s)."
       },
       "temeria_call": {
-        "description": "Spawn Temeria Special Forcess attack in close combat row. Commander Horn in close combat row will lost its effect but close row will be partialy protected partialy from weather effects. "
+        "description": "Spawn Temeria Special Forcess attack in close combat row. Commander Horn in close combat row will lost its effect but close row will be partialy protected partialy from weather effects. After use makes you pass!"
       },
       "darkness_storm_leader": {
         "description": "Spawn Darkness Storm on both sides that destroys all non-hero cards in the close row"
@@ -3158,6 +2913,9 @@
       "francesca_hope": {
         "description": "Move agile units to whichever valid row maximizes their strength (don't move units already in optimal row)."
       },
+      "mediclove": {
+        "description": "Both players can revive extra card when using medic card ability. "
+      },
       "crach_an_craite": {
         "description": "Shuffle all cards from each player's graveyard back into their decks."
       },
@@ -3174,10 +2932,10 @@
         "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
       }
     },
-    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
-    "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "yu197hlNWK0",
-    "tavern_yt_volume": 90
+    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
+    "audio_yt_vid_soundtrack_volume": 47,
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 50
   },
   "texture_pack_url": null
 }

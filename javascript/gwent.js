@@ -740,6 +740,11 @@ socket.onmessage = async (event) => {
       if (data?.reason || null === "sessionCancelled") {
         silent_cancelSession();
       }
+
+      createdSessionId = null;
+      joinedSessionId = null;
+      ThisSessionId = null;
+      isconnectedtosession = false;
       break;
 
     // Opponent is ready. If you are ready begin the game immediately
@@ -2648,6 +2653,12 @@ class Game {
       } catch (e) {}
     }
     console.log("additional redraws:", add_redraws);
+    if (
+      player_me.leader?.abilities?.[0] === "mediclove" ||
+      player_op.leader?.abilities?.[0] === "mediclove"
+    ) {
+      await ui.notification("medicextra", ui_display_times.faction_ability);
+    }
     // End of white falme
     // Cleared i hope
     await sleep(20);
@@ -2972,11 +2983,25 @@ class Game {
   // Ends the round and may end the game. Determines final scores and the round winner.
   async endRound() {
     let dif = player_me.total - player_op.total;
+
+    // null = no Nilfgaard tie-break, "me" = I won by Nilfgaard, "op" = opponent won by Nilfgaard
+    let nilfgaardWin = "no";
+
     if (dif === 0) {
       let nilf_me = player_me.deck.faction === "nilfgaard",
         nilf_op = player_op.deck.faction === "nilfgaard";
-      dif = nilf_me ^ nilf_op ? (nilf_me ? 1 : -1) : 0;
+
+      if (nilf_me ^ nilf_op) {
+        nilfgaardWin = nilf_me ? "me" : "op";
+        dif = nilf_me ? 1 : -1;
+      }
     }
+
+    // nilfgaardWin is now:
+    // - "no"  -> normal result (win/lose/draw)
+    // - "me"  -> player_me won because of Nilfgaard
+    // - "op"  -> player_op won because of Nilfgaard
+
     // Gain power to abilities
     if (ability_data.me.enabled) {
       try {
@@ -3005,20 +3030,32 @@ class Game {
 
     player_me.endRound(dif > 0);
     player_op.endRound(dif < 0);
+    if (nilfgaardWin === "no") {
+      if (dif > 0)
+        await ui.notification("win-round", ui_display_times.round_end_result);
+      else if (dif < 0)
+        await ui.notification("lose-round", ui_display_times.round_end_result);
+      else
+        await ui.notification("draw-round", ui_display_times.round_end_result);
 
-    if (dif > 0)
-      await ui.notification("win-round", ui_display_times.round_end_result);
-    else if (dif < 0)
-      await ui.notification("lose-round", ui_display_times.round_end_result);
-    else await ui.notification("draw-round", ui_display_times.round_end_result);
-
-    if (player_me.health === 0 || player_op.health === 0) {
-      this.endGame();
+      if (player_me.health === 0 || player_op.health === 0) {
+        this.endGame();
+      } else {
+        this.startRound();
+      }
     } else {
-      this.startRound();
+      await ui.notification(
+        `${nilfgaardWin}_win_via_nilfgaard`,
+        ui_display_times.round_end_result,
+      );
+
+      if (player_me.health === 0 || player_op.health === 0) {
+        this.endGame();
+      } else {
+        this.startRound();
+      }
     }
   }
-
   // Sets up and displays the end-game screen
   async endGame() {
     document.getElementById("session-start-control").classList.remove("ready");
@@ -4467,6 +4504,8 @@ class UI {
       "win-round": "round_win",
       "draw-round": "round_lose",
       "lose-round": "round_lose",
+      me_win_via_nilfgaard: "round_win",
+      op_win_via_nilfgaard: "round_lose",
       "me-turn": "turn_me",
       "op-turn": "turn_op",
       "op-leader": "turn_op",
@@ -4836,7 +4875,7 @@ class Carousel {
     if (
       //     actionString === "(c, i) => wrapper.card=c.cards[i]" ||
       //    actionString === "(c,i) => newCard = c.cards[i]"
-      med_draw === 1
+      med_draw === 10
       // THERE WAS SOME BUG, I HAVE NO IDEA WHY OR HOW SO....... I added this check if === 1 ~DrMineword
       //  99 little bugs in the code, 99 little bugs.
       //  Take one down, patch it around, 128 bugs in the code!
@@ -5216,37 +5255,52 @@ class DeckMaker {
   // Constructs a bank of cards that can be used by the faction's deck.
   // If a deck is provided, will not add cards to bank that are already in the deck.
   makeBank(faction, deck) {
+    console.log("MAKE BANK FOR", faction, deck);
     this.clear();
+
     let cards = card_dict
       .map((c, i) => ({ card: c, index: i }))
-      .filter(
-        (p) =>
-          [faction, "neutral", "weather", "special"].includes(p.card.deck) &&
-          p.card.row !== "leader",
-      );
+      .filter((p) => {
+        // always exclude leaders
+        if (p.card.row === "leader") return false;
+
+        // syndicate = can access all cards (except leaders already handled)
+        if (faction === "syndicate") return true;
+
+        // normal faction filtering
+        return [faction, "neutral", "weather", "special"].includes(p.card.deck);
+      });
 
     cards.sort(function (id1, id2) {
       let a = card_dict[id1.index],
         b = card_dict[id2.index];
+
       let c1 = { name: a.name, basePower: -a.strength, faction: a.deck };
       let c2 = { name: b.name, basePower: -b.strength, faction: b.deck };
+
       return Card.compare(c1, c2);
     });
 
     let deckMap = {};
     if (deck) {
-      for (let i of Object.keys(deck)) deckMap[deck[i].index] = deck[i].count;
+      for (let i of Object.keys(deck)) {
+        deckMap[deck[i].index] = deck[i].count;
+      }
     }
+
     cards.forEach((p) => {
       let count = deckMap[p.index] !== undefined ? Number(deckMap[p.index]) : 0;
+
       this.makePreview(
         p.index,
-        Number.parseInt(p.card.count) - count,
+        Number.parseInt(p.card.count),
         this.bank_elem,
         this.bank,
       );
+
       this.makePreview(p.index, count, this.deck_elem, this.deck);
     });
+
     add_card_count(this.bank);
     add_card_count(this.deck);
   }

@@ -25,6 +25,7 @@ let ForGameStart = {
   hero: 9,
 };
 let killoverpowercard = 999;
+let medicsdraw = 1;
 let darknessstorm_await = false;
 let maxhealth = 2; // Dont change it, it also should do nothing
 let thishandsize = 10;
@@ -286,6 +287,7 @@ let ThisDef = {
     players: { sys: "Gwent Bot" },
     fullscreenConfig: { localhost: false, else: true },
     OnGameStartDraw: 2,
+    medicsdraw: 1,
     ForGameStart: { unitscards: 22, special: 10, hero: 9 },
     killoverpowercard: 999,
     darknessstorm_await: false,
