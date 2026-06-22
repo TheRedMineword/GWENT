@@ -967,7 +967,7 @@ wss.on("connection", async (ws, req) => {
               .playerId;
           sessions[ws.sessionId].firstPlayer = firstPlayer;
           sessions[ws.sessionId].special =
-            Math.random() < 0.05 ? "-lambert" : "";
+            Math.random() < 0.05 ? "_lambert" : "";
           console.log(
             `First player (coinflip) ${JSON.stringify(firstPlayer)}${sessions[ws.sessionId].special || ""}`,
           );

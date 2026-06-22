@@ -35,6 +35,8 @@ https://pngtree.com/freebackground/vintage-crinkled-paper-texture-aged-brown-bac
 - Coins uses following textures; https://www.magnific.com/free-photo/smooth-wooden-surface_1124384.htm, https://www.magnific.com/free-photo/panoramic-grunge-copper-pan-texture-patina-oxidized-metal-background-old-metal-panel_37208568.htm, https://www.magnific.com/free-photo/grunge-wall-texture_1034776.htm
 - White Frost card: https://static.wikia.nocookie.net/witcher/images/c/c8/Gwent_cardart_neutral_white_frost.png/revision/latest?cb=20181028221727
 - realms_temeriamoral: https://static.wikia.nocookie.net/witcher/images/e/e3/Gwent_cardart_northern_blue_stripes_scout.jpg/revision/latest?cb=20180423190703
+- Coin flip sfx: https://pixabay.com/sound-effects/film-special-effects-coin-flip-88793/
+- Coin land sfx (unused): https://www.storyblocks.com/audio/stock/coin-multiple-drop-hx_u6knhlpbk0wxtpvl
 > Some card/mechanics/assets are used from other project like this (For example: RandomPianist/gwent-classic-v3.1, other similar project are mentioned at start of this copyright notice)
 
 

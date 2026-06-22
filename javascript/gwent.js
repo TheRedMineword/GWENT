@@ -2815,9 +2815,43 @@ class Game {
           } catch (e) {}
 
           socket.removeEventListener("message", handleMessage);
-          await ui.notification(
-            game.firstPlayer.tag + "-coin" + special,
-            ui_display_times.coin,
+          //  await ui.notification(
+          //   game.firstPlayer.tag + "-coin" + special,
+          //    ui_display_times.coin,
+          //  );
+          var map_results_txt = {
+            me: "You go first",
+            op: "Opponent goes first",
+            me_lambert: "Lambert lets you start the game",
+            op_lambert:
+              "Lambert says that you suck!\nThe opponent starts the game!",
+          };
+          var map_results_color = {
+            realms: "#1E224F",
+            nilfgaard: "#ABAA27",
+            scoiatael: "#0E790F",
+            monsters: "#660101",
+            skelige: "#54016C",
+            sky: "#2D9DA0",
+            syndicate: "#804400",
+          };
+          await displayCoinToss(
+            game.firstPlayer.tag,
+            {
+              me: `img/icons/notif_me_coin${special}.png`,
+              op: `img/icons/notif_op_coin${special}.png`,
+            },
+            map_results_txt[`${game.firstPlayer.tag}${special}`],
+
+            player_me.leader.filename,
+            player_me.name,
+            map_results_color[player_me.leader.faction],
+            player_me.leader.faction,
+
+            player_op.leader.filename,
+            player_op.name,
+            map_results_color[player_op.leader.faction],
+            player_op.leader.faction,
           );
           resolve(true);
         }
