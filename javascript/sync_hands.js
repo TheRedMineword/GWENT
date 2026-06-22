@@ -136,6 +136,7 @@ async function init_sync_hands() {
         socket,
         JSON.stringify({
           type: "ping",
+          userid: playerId || "N/A User ID",
         }),
       );
     } catch (e) {
