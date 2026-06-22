@@ -99,6 +99,23 @@
       "actiavate": 1,
       "chargeMax": 2
     },
+    "syndicate_faction_clone": {
+      "nilfgaard": {
+        "name": "Nilfgaardian Empire"
+      },
+      "scoiatael": {
+        "name": "Scoia'tael"
+      },
+      "skellige": {
+        "name": "Skellige"
+      },
+      "syndicate": {
+        "name": "Syndicate"
+      },
+      "sky": {
+        "name": "Sky Kindom"
+      }
+    },
     "card_dict": [
       {
         "name": "Mysterious Elf",
@@ -2165,7 +2182,7 @@
         "count": "1"
       },
       {
-        "name": "dopler",
+        "name": "Dopler",
         "id": "1016",
         "deck": "neutral",
         "row": "siege",
@@ -2656,11 +2673,11 @@
       },
       "syndicate": {
         "name": "Syndicate",
-        "description": "Starts the game with the Fisstech card on the board."
+        "description": "Starts the game with the morale card on the board. \nCan create deck from Nilfgaardian Empire, Scoia'tael, Skellige, Syndicate, Sky Kindom factions non-leader cards."
       },
       "sky": {
         "name": "Sky Kindom",
-        "description": "Keeps the strongest Unit Card out after each round. \nFactions full of morale boosting cards."
+        "description": "Keeps the strongest Unit Card out after each round. Factions full of morale boosting cards."
       }
     },
     "ability_dict": {
@@ -2932,10 +2949,10 @@
         "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
       }
     },
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 50
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack_volume": 90,
+    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }

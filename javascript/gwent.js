@@ -5217,8 +5217,13 @@ class DeckMaker {
     this.elem.getElementsByTagName("h1")[0].style.backgroundImage = iconURL(
       "deck_shield_" + faction_name,
     );
-    document.getElementById("faction-description").innerHTML =
-      factions[faction_name].description;
+    const description = factions[faction_name].description;
+
+    document.getElementById("faction-description").innerHTML = description
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\n/g, "<br>");
 
     this.leaders = card_dict
       .map((c, i) => ({ index: i, card: c }))
@@ -5297,7 +5302,7 @@ class DeckMaker {
         .filter(
           (p) =>
             [
-              ...Object.keys(factions),
+              ...Object.keys(syndicate_faction_clone),
               "neutral",
               "weather",
               "special",

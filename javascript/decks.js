@@ -11,6 +11,7 @@ const TARGET_NEUTRAL_RATIO = 0.25;
 
 // Calculate if you don't already have it elsewhere
 const MAX_SPECIAL = Math.floor(TARGET_TOTAL * TARGET_SPECIAL_RATIO);
+//const MAX_SPECIAL = 10;
 
 // ======================================================
 // STRING HELPERS
@@ -155,6 +156,7 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
 
   const MIN_SPECIAL = 2;
   const MAX_SPECIAL = Math.floor(TARGET_TOTAL * TARGET_SPECIAL_RATIO);
+  // const MAX_SPECIAL = 10;
 
   // =====================================================
   // CARD TYPES
@@ -289,7 +291,9 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
     }
     var factionCards = null;
     if (faction === "syndicate") {
-      factionCards = matchingCards;
+      factionCards = matchingCards.filter((card) =>
+        Object.keys(syndicate_faction_clone).includes(card.deck),
+      );
     } else {
       factionCards = matchingCards.filter((card) => card.deck === faction);
     }
@@ -321,7 +325,12 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
     var factionCards = null;
     if (faction === "syndicate") {
       added = tryAddRandom(
-        getAvailableCards((card) => isUnit(card) && !isHero(card)),
+        getAvailableCards(
+          (card) =>
+            Object.keys(syndicate_faction_clone).includes(card.deck) &&
+            isUnit(card) &&
+            !isHero(card),
+        ),
         3,
       );
     } else {
@@ -365,9 +374,13 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
   // =====================================================
   // FILL REMAINING SLOTS
   // =====================================================
-
-  while (totalCards < TARGET_TOTAL) {
-    const heroLimit = ForGameStart.hero;
+  var times = 1;
+  if (faction === "syndicate") {
+    times = 1.45;
+  }
+  while (totalCards < Math.floor(TARGET_TOTAL * times)) {
+    let heroLimit = ForGameStart.hero;
+    heroLimit = 4;
 
     const neutralLimit = Math.floor(TARGET_TOTAL * TARGET_NEUTRAL_RATIO);
 
@@ -380,15 +393,25 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
 
       return sum;
     }, 0);
-
     const candidatePools = [];
     if (faction === "syndicate") {
       candidatePools.push(
-        getAvailableCards((card) => isUnit(card) && !isHero(card)),
+        getAvailableCards(
+          (card) =>
+            Object.keys(syndicate_faction_clone).includes(card.deck) &&
+            isUnit(card) &&
+            !isHero(card),
+        ),
       );
 
       if (heroCount < heroLimit) {
-        candidatePools.push(getAvailableCards((card) => isHero(card)));
+        candidatePools.push(
+          getAvailableCards(
+            (card) =>
+              Object.keys(syndicate_faction_clone).includes(card.deck) &&
+              isHero(card),
+          ),
+        );
       }
       candidatePools.push(
         getAvailableCards((card) => card.deck === "neutral" && isHero(card)),
@@ -406,7 +429,13 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
         }
       } else {
         if (heroCount < heroLimit) {
-          candidatePools.push(getAvailableCards((card) => isHero(card)));
+          candidatePools.push(
+            getAvailableCards(
+              (card) =>
+                Object.keys(syndicate_faction_clone).includes(card.deck) &&
+                isHero(card),
+            ),
+          );
         }
       }
       candidatePools.push(

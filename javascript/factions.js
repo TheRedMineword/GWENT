@@ -175,8 +175,11 @@ var factions = {
           }
         } catch (e) {}
       }),
-    description:
-      "Starts the game with the Fisstech card on the board. Can create deck from all faction non-leader cards.",
+    description: `Starts the game with the morale card on the board. \nCan create deck from ${Object.values(
+      syndicate_faction_clone,
+    )
+      .map((faction) => faction.name)
+      .join(", ")} factions non-leader cards.`,
   },
   sky: {
     name: "Sky Kindom",
@@ -210,7 +213,7 @@ var factions = {
       }),
     // OLD: description: "Keeps a random Unit Card out after each round."
     description:
-      "Keeps the strongest Unit Card out after each round. \nFactions full of morale boosting cards.",
+      "Keeps the strongest Unit Card out after each round. Factions full of morale boosting cards.",
   },
 };
 

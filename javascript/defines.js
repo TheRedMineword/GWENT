@@ -278,6 +278,24 @@ let scorch_stopper = {
   break_shield_if_you_use: true,
 };
 
+let syndicate_faction_clone = {
+  nilfgaard: {
+    name: "Nilfgaardian Empire",
+  },
+  scoiatael: {
+    name: "Scoia'tael",
+  },
+  skellige: {
+    name: "Skellige",
+  },
+  syndicate: {
+    name: "Syndicate",
+  },
+  sky: {
+    name: "Sky Kindom",
+  },
+};
+
 turn_skipper_conf.desc = `Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need ${turn_skipper_conf.actiavate} charge to skip turn, you get ${turn_skipper_conf.perTurn} charges per your turn, up to ${turn_skipper_conf.chargeMax} max charge(s) stored!`;
 
 let ThisDef = {
@@ -359,6 +377,23 @@ let ThisDef = {
       perTurn: 0.25,
       actiavate: 1,
       chargeMax: 2,
+    },
+    syndicate_faction_clone: {
+      nilfgaard: {
+        name: "Nilfgaardian Empire",
+      },
+      scoiatael: {
+        name: "Scoia'tael",
+      },
+      skellige: {
+        name: "Skellige",
+      },
+      syndicate: {
+        name: "Syndicate",
+      },
+      sky: {
+        name: "Sky Kindom",
+      },
     },
   },
 };
