@@ -149,6 +149,7 @@ function askForSessionId() {
     box.style.borderRadius = "10px";
     box.style.minWidth = "250px";
     box.style.textAlign = "center";
+    box.classList.add("allow-click");
 
     // input
     const input = document.createElement("input");
@@ -739,6 +740,7 @@ socket.onmessage = async (event) => {
       clearUnread();
       if (data?.reason || null === "sessionCancelled") {
         silent_cancelSession();
+      } else {
       }
 
       createdSessionId = null;

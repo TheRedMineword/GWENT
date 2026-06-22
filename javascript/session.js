@@ -92,6 +92,7 @@ function askForSessionMode() {
     box.style.borderRadius = "10px";
     box.style.minWidth = "260px";
     box.style.textAlign = "center";
+    box.classList.add("allow-click");
 
     //    const title = document.createElement("div");
     //   title.textContent = "Choose session type";
@@ -145,6 +146,7 @@ function askForCustomConfig() {
     box.style.padding = "20px";
     box.style.borderRadius = "10px";
     box.style.minWidth = "300px";
+    box.classList.add("allow-click");
 
     const input = document.createElement("textarea");
     input.placeholder = "Enter JSON config...";
@@ -249,6 +251,7 @@ function askForPlayerName() {
     box.style.borderRadius = "10px";
     box.style.minWidth = "300px";
     box.style.textAlign = "center";
+    box.classList.add("allow-click");
 
     const title = document.createElement("h3");
     title.textContent = "Enter Your Name (Optional)";
@@ -262,8 +265,22 @@ function askForPlayerName() {
     title.style.textAlign = "center";
     title.style.letterSpacing = "0.3px";
 
+    const loginName = (() => {
+      try {
+        const value = JSON.parse(localStorage.saved_auth)?.login;
+
+        if (typeof value !== "string") {
+          return null;
+        }
+
+        return value.includes("@") ? value.split("@")[0] : value;
+      } catch {
+        return null;
+      }
+    })();
     const input = document.createElement("input");
     input.type = "text";
+    input.value = loginName;
     input.placeholder = "(Example: ThatCoolUsername)";
     input.style.width = "100%";
     input.style.marginTop = "10px";

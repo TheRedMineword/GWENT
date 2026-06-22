@@ -2685,5 +2685,9 @@ html {
  }
 
 .noclick {
-	pointer-events: none !important;
+    pointer-events: none !important;
+}
+
+.noclick .allow-click {
+    pointer-events: auto !important;
 }
