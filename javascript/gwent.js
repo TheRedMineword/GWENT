@@ -1246,6 +1246,7 @@ class Player {
     this.deck_data = deck;
 
     this.leader = new Card(deck.leader, this);
+    this.leader_init = new Card(deck.leader, this);
     this.elem_leader = document.getElementById("leader-" + this.tag);
     this.elem_leader.children[0].appendChild(this.leader.elem);
 
@@ -2843,15 +2844,15 @@ class Game {
             },
             map_results_txt[`${game.firstPlayer.tag}${special}`],
 
-            player_me.leader.filename,
+            player_me.leader_init.filename,
             player_me.name,
             map_results_color[player_me.leader.faction],
-            player_me.leader.faction,
+            player_me.leader_init.faction,
 
-            player_op.leader.filename,
+            player_op.leader_init.filename,
             player_op.name,
             map_results_color[player_op.leader.faction],
-            player_op.leader.faction,
+            player_op.leader_init.faction,
           );
           resolve(true);
         }

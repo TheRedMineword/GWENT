@@ -217,7 +217,11 @@ async function displayCoinToss(
     } else {
       leaderImg.src = `img/sm/neutral_Gaunter_Leader.jpg`;
     }
-
+    console.log(
+      "COIN ASSETS LEADER PFP",
+      leaderImg.src,
+      `${faction}_${leader}`,
+    );
     const factionImg = document.createElement("img");
     factionImg.className = "faction";
     factionImg.src = `img/icons/deck_shield_${faction}.png`;

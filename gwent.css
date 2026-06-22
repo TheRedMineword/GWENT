@@ -784,7 +784,7 @@ html {
 }
 
 #notif-coin-false_player-me {
-	background-image: url(img/icons/notif_me_coin.png);
+	background-image: url(img/icons/coin_classic_notif/notif_me_coin.png);
 }
 
 #notif-coin-false_player-me::after {
@@ -792,7 +792,7 @@ html {
 }
 
 #notif-coin-true_player-me {
-	background-image: url(img/icons/notif_op_coin.png);
+	background-image: url(img/icons/coin_classic_notif/notif_op_coin.png);
 }
 
 #notif-coin-true_player-me::after {
@@ -800,7 +800,7 @@ html {
 }
 
 #notif-coin-false_player-op {
-	background-image: url(img/icons/notif_op_coin.png);
+	background-image: url(img/icons/coin_classic_notif/notif_op_coin.png);
 }
 
 #notif-coin-false_player-op::after {
@@ -808,7 +808,7 @@ html {
 }
 
 #notif-coin-true_player-op {
-	background-image: url(img/icons/notif_me_coin.png);
+	background-image: url(img/icons/coin_classic_notif/notif_me_coin.png);
 }
 
 #notif-coin-true_player-op::after {
@@ -816,7 +816,7 @@ html {
 }
 
 #notif-whiteflame2-op {
-	background-image: url(img/icons/notif_nilfgaard.png);
+	background-image: url(img/icons/notif_lyria_rivia.png);
 }
 
 #notif-whiteflame2-op::after {

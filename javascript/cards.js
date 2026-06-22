@@ -2830,9 +2830,19 @@ var card_dict = [
     strength: "0",
     ability: "mediclove",
     filename: "sigi_reuven",
-    count: "2",
+    count: "0",
   },
-];
+  {
+    name: "King of Begger",
+    id: "4003",
+    deck: "syndicate",
+    row: "leader",
+    strength: "0",
+    ability: "emhyr_whiteflame2",
+    filename: "king_of_beggers",
+    count: "0",
+  },
+]; // syndicate_king_of_beggers.jpg
 
 const witcher_signs = Object.entries(card_dict)
   .filter(([_, card]) => card.witcher_sign)
