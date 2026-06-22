@@ -2832,7 +2832,7 @@ class Game {
             nilfgaard: "#ABAA27",
             scoiatael: "#0E790F",
             monsters: "#660101",
-            skelige: "#54016C",
+            skellige: "#54016C",
             sky: "#2D9DA0",
             syndicate: "#804400",
           };

@@ -211,28 +211,35 @@ async function displayCoinToss(
     const leaderImg = document.createElement("img");
     leaderImg.className = "leader";
 
-    // ✅ FIXED PATH (your request)
-    if ("Gaunter_Leader" !== leader) {
+    if (leader !== "Gaunter_Leader") {
       leaderImg.src = `img/sm/${faction}_${leader}.jpg`;
     } else {
       leaderImg.src = `img/sm/neutral_Gaunter_Leader.jpg`;
     }
-    console.log(
-      "COIN ASSETS LEADER PFP",
-      leaderImg.src,
-      `${faction}_${leader}`,
-    );
+
     const factionImg = document.createElement("img");
     factionImg.className = "faction";
     factionImg.src = `img/icons/deck_shield_${faction}.png`;
 
     const span = document.createElement("span");
     span.textContent = name;
-
-    // keep readability but allow CSS override too
     span.style.color = textColor;
 
-    div.append(leaderImg, factionImg, span);
+    // ✅ IMPORTANT: ordering fix
+    if (side === "op") {
+      // name - shield - leader
+      div.append(span, factionImg, leaderImg);
+    } else {
+      // leader - shield - name
+      div.append(leaderImg, factionImg, span);
+    }
+
+    console.log(
+      "COIN ASSETS LEADER PFP",
+      leaderImg.src,
+      `${faction}_${leader}`,
+    );
+
     return div;
   }
 
