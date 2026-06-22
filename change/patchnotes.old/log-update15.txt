@@ -1,0 +1,4 @@
+## May 22, 2026
+- Added Doppler card wich Doppler ability
+> Send a shapeshifter to enemy fields that will will disguise itself as a strong card from the opponent's faction, so next round they can find a knife in their back
+- Fixed some images

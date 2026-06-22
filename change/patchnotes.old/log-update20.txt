@@ -1,0 +1,5 @@
+## June 6, 2026
+- Added one new Skellige leader card and one for Northern Realms
+> Udalryk an Brokvar — Gods Choosen: Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need 1 charge to skip turn, you get 0.35 charges per your turn, up to 2 max charges stored!
+> Tactical Forecaster — Kaedwen Division: Play an Impenetrable Fog from your deck. If none is found, still consume leader charge. Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need 1 charge to skip turn, you get 0.2 charges per your turn, up to 1 max charges stored!
+-# In future there will be more cards like this #-

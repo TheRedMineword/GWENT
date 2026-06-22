@@ -1,0 +1,4 @@
+## May 5, 2026
+- Added an display for patchnotes
+- Opponent status box was moved to the multiplayer menu
+- Opponent status box is now more usefull

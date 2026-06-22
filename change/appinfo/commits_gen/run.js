@@ -24,7 +24,8 @@ const IGNORE_DIRS = new Set([
     'ffmpeg-7.1.1-full_build',
     '.ost',
     'storage',
-    '.special_content'
+    '.special_content',
+    'patchnotes.old'
 ]);
 
 const IGNORE_FILES = new Set([

@@ -1,0 +1,9 @@
+## May 6, 2026
+- Fixed board having for some reason value of 12 at opponent siege row during game start
+- Fixed avanger card ability (Its now seek correct card in card_dict insted of having hard coded index)
+- Fixed Berserk card transforming into wrong card
+- Added special ability "Power Gain"
+> "Card base power grows by 1.05 for each card in the row (excluding itself). Card base power is not affected by weather, but its bonus power is reduced by 75% under weather effects. Values are rounded down."
+- Adedd new neutral card "Roach" wich new ability "Power Gain"
+
+- Added Lambert Hero card wich axii ability

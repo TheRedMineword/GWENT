@@ -1,0 +1,6 @@
+## May 20, 2026
+- Fixed chain medic revive
+- Added animation for opponent on decoy use
+
+- Eredin The destoryer is back!!
+> Banish 2 cards from your hand and create a copy of a card from your deck.

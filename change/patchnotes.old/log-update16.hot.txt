@@ -1,0 +1,9 @@
+## May 23, 2026
+- Added new sound effects: player ready/unready, session ready/unready, server joined/left
+- Added animation while ready and waiting for opponent
+## [HOTFIX] May 24, 2026
+- Removed Horn Of Support Card and replaced it wich fixed version of Lyria and Rivia Banner
+- Added new sfx for Leader cards and Lyria and Rivia Banner card
+- Bug fixes
+- Added sfx when opponent send you a message
+- Fixed audio bug where op-pass had no sound effect

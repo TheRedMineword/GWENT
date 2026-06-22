@@ -1,0 +1,13 @@
+## 17 June, 2026
+## SUMMER TIME SOON!! ##
+- Updated the board, deck customization background and the start screen as a seasonal holiday background.
+- Added easter egg wich Lambert during coin toss (Lambert, Lambert - What a prick, yes i will let you decide who start game... Sometimes)
+
+## 18 June, 2026
+- Removed multiple card variants (due to issue wich random deck generator letting you pick inf number of them), this change dont afect gameplay, just visual, you still can have same amount of cards
+- Added new leader card; Radovid V the Stern — In Madness: Protect your cards from any Scorch effect as long as you have enough Shield Charges. Each save costs 1 charge. Starts with 5 charges and cannot be recharged. Shield break when youuse any Scorch card! 
+- Turn skipper leader ability recived new cards for faction: Nilfgaard and Sky Kindom!
+
+## 19 June, 2026
+- Added White Frost weather card (ability: frost and fog)
+- Added: Vernon Roche – Blue Stripes Commando Leader leader card; Spawns Blue Stripes Commando attack force in close row, but makes you pass. (Could need a rebalnce, waiting for feedback)

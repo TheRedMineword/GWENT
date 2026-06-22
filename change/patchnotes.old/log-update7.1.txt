@@ -1,0 +1,3 @@
+## May 13, 2026
+- Added animation for clear weather, and hero cards place
+- Added animation for cards that stays on board via Monster or Sky Kindom faction ability

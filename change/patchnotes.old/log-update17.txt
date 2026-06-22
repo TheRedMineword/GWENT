@@ -1,0 +1,2 @@
+## May 28, 2026
+- Added premade deck generation, some cards will be randomly picked there!!

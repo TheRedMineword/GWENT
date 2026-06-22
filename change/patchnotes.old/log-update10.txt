@@ -1,0 +1,4 @@
+## May 15, 2026
+- Added special sabotage cards for all faction!!
+- Added new Medic card for Sky Kindom
+- Added card counter in bank/deck in deck maker

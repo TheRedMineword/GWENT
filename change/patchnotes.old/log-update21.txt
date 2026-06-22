@@ -1,0 +1,6 @@
+## 9 June, 2026
+- Updated exe client: dowland size is back to 116mb (assets dowland size not included), exposed localhost server to appdata so it can be autoupdated (i can add now now things wichout need to redowland full zip, updated updater screen and let it delete not wanted assets)
+- Fixed 2 Eredin leader card (both needed filename swap and eredin the destroyer needed an fix)
+## 10 June, 2026
+- Eredin - King of the Wild Hunt is back!! His ability was fixed, opponent now recive what weather card was picked!
+- Small update to auth screen!

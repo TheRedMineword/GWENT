@@ -1,0 +1,5 @@
+## May 8, 2026
+- While in deck maker, card ability text will be displayed below stats
+- Removed premade decks
+
+- Fixed websocket failuer issue, by catching failures

@@ -1,0 +1,2 @@
+## May 14, 2026
+- Added Conjunction of the Spheres card, that let you draw one card to hand, out of 25 randomly choosen cards

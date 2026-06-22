@@ -1,0 +1,5 @@
+## May 17, 2026
+- Changed Conjunction of the Spheres card to give random cards daily!!
+- Added option for custom configs servers
+
+- Added Conjunction of the Spheres reskin, Happy 20th Birthday ThatGameCompany!!
