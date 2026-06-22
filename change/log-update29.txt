@@ -30,3 +30,9 @@ Syndicate ability let you begin game wich morale card on board at game start! Ad
 - Removed cards modified at patch 18 June, 2026, due to issues (I hope its ends now)
 > Also all card exports can now be broken!
 - Added different ui.notif when Nilfgaard wins round via draw
+
+## 22 June, 2026
+- Rebalance for syndicate faction!
+- Small changes and bug fixes
+- Updated coin toss (now wich animation)
+- Added new syndicate leader that copy opponent ability!
