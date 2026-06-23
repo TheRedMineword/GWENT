@@ -1,12 +1,12 @@
 {
-  "url": "http://localhost:1111/",
+  "url": "http://localhost:1111/javascript/PC_scripts/info_page.html",
   "config_dump": {
-    "width": 1280,
-    "height": 800,
-    "minWidth": 1000,
-    "minHeight": 700,
+  "width": 800,
+  "height": 500,
+  "minWidth": 600,
+  "minHeight": 400,
     "resizable": true,
-    "maximizable": true,
+    "maximizable": false,
     "fullscreen": false,
     "show": true,
     "autoHideMenuBar": true

@@ -2705,7 +2705,7 @@ class Game {
     this.reset();
   }
 
-  reset() {
+  async reset() {
     this.firstPlayer;
     this.currPlayer = null;
 
@@ -2722,7 +2722,11 @@ class Game {
     this.doubleSpyPower = false;
 
     weather.reset();
-    board.row.forEach((r) => r.reset());
+    await board.row.forEach((r) => r.reset());
+    player_me.total = 0;
+    player_op.total = 0;
+    player_me.winning = false;
+    player_op.winning = false;
   }
 
   // Sets up player faction abilities and psasive leader abilities
