@@ -1513,6 +1513,26 @@ html {
   font-weight: lighter;
 }
 
+#surrender-button {
+	top: 56.5%;
+  left: 25%;
+  width: 162px;
+  height: 40px;
+  background-color: #0f0f0f;
+  font-size: 1rem;
+  font-weight: lighter;
+}
+
+#action-buttons {
+    display: flex;
+	left: -20%;
+    gap: 10px;
+
+    background: rgba(30,30,30,0);
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
 .key-hint, .key-hint-accent {
 	padding-right: 4px;
 }

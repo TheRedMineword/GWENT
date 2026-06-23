@@ -576,6 +576,136 @@ document.getElementById("copy-session").onclick = () => {
   }
 };
 
+function showSurrenderVote() {
+  return new Promise((resolve) => {
+    const overlay = document.createElement("div");
+    overlay.style.cssText = `
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.72);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:999999999;
+      backdrop-filter:blur(3px);
+    `;
+
+    const box = document.createElement("div");
+    box.style.cssText = `
+      width:520px;
+      max-width:90vw;
+      padding:30px;
+      border:2px solid #9d7a43;
+      border-radius:12px;
+      background:
+        linear-gradient(
+          to bottom,
+          #24180f,
+          #17110b
+        );
+      box-shadow:
+        0 0 40px rgba(0,0,0,.9),
+        0 0 20px rgba(212,168,87,.25);
+      color:#e6c98c;
+      text-align:center;
+      font-family:serif;
+    `;
+
+    box.innerHTML = `
+      <div style="
+        font-size:56px;
+        margin-bottom:12px;
+      ">
+        🗡️
+      </div>
+
+      <div style="
+        font-size:28px;
+        letter-spacing:2px;
+        margin-bottom:18px;
+      ">
+        SURRENDER REQUEST
+      </div>
+
+      <div style="
+        font-size:19px;
+        color:#d9bf8a;
+        margin-bottom:30px;
+        line-height:1.5;
+      ">
+        Your opponent has cast down their sword<br>
+        and seeks an honorable defeat.
+      </div>
+
+      <div style="
+        display:flex;
+        justify-content:center;
+        gap:20px;
+      ">
+        <button id="surrender-accept-btn">
+          Grant Mercy
+        </button>
+
+        <button id="surrender-reject-btn">
+          Fight On
+        </button>
+      </div>
+    `;
+
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    const accept = box.querySelector("#surrender-accept-btn");
+
+    const reject = box.querySelector("#surrender-reject-btn");
+
+    accept.onclick = () => {
+      tocar("tf2/Vote_yes", false);
+      overlay.remove();
+      resolve(true);
+    };
+
+    reject.onclick = () => {
+      tocar("tf2/Vote_no", false);
+      overlay.remove();
+      resolve(false);
+    };
+  });
+}
+async function endGameBySurrender(winner, loser) {
+  gameended = true;
+
+  ui.enablePlayer(false);
+
+  //  winner.health = Math.max(winner.health, 1);
+  //  loser.health = 0;
+
+  //  winner.setWinning(true);
+  //  loser.setWinning(false);
+
+  //  await game.returnToCustomization();
+
+  //  reset_menu();
+  //  clearUnread();
+
+  //  isconnectedtosession = false;
+  await game.surrenderEnd(winner);
+}
+function askforsurrender() {
+  tocar("tf2/Vote_started", false);
+  ui.enableSurrender(false);
+  sendChatMessageStrig("asked to surrender!");
+  comp_and_send(
+    socket,
+    JSON.stringify({
+      type: "surrenderRequest",
+    }),
+  );
+  showSideTooltip("You asked to surrender!");
+}
+document
+  .getElementById("surrender-button")
+  .addEventListener("click", askforsurrender);
 let ip_data = null;
 let country = null;
 let current_op = null;
@@ -997,6 +1127,43 @@ socket.onmessage = async (event) => {
 
     case "sessionInvalid":
       alert("Invalid session ID");
+      break;
+
+    case "surrenderRequest":
+      tocar("tf2/Vote_started", false);
+
+      const accepted = await showSurrenderVote();
+
+      if (accepted) {
+        comp_and_send(
+          socket,
+          JSON.stringify({
+            type: "surrenderResponse",
+            accepted: true,
+          }),
+        );
+        endGameBySurrender(player_me, player_op);
+      } else {
+        comp_and_send(
+          socket,
+          JSON.stringify({
+            type: "surrenderResponse",
+            accepted: false,
+          }),
+        );
+        showSideTooltip("You refused your opponent's surrender.");
+      }
+      break;
+    case "surrenderResponse":
+      ui.enableSurrender(true);
+      if (data.accepted) {
+        //  alert("accepted flag");
+        endGameBySurrender(player_op, player_me);
+      } else {
+        //  alert("rejected surrender");
+        tocar("tf2/Vote_no", false);
+        showSideTooltip("Your request to surrender has been denied.");
+      }
       break;
     //case "medicDraw":
     //	var data2 = data;
@@ -2810,6 +2977,7 @@ class Game {
           if (data.player === playerId) {
             player = player_me;
             passButton.classList.remove("hidden");
+            ui.showSurrender(true);
             document.addEventListener("keydown", handleKeyDown);
             document.addEventListener("keyup", handleKeyUp);
           } else {
@@ -2932,11 +3100,13 @@ class Game {
     }
     if (this.currPlayer === player_me) {
       passButton.classList.remove("hidden");
+      ui.showSurrender(true);
       document.addEventListener("keydown", handleKeyDown);
       document.addEventListener("keyup", handleKeyUp);
       ui.enablePlayer(true);
     } else {
       passButton.classList.add("hidden");
+      ui.showSurrender(false);
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
     }
@@ -3142,6 +3312,66 @@ class Game {
     } else {
       ui.enablePlayer(false);
     }
+  }
+  async surrenderEnd(winner) {
+    //  document
+    //    .getElementById("session-start-control")
+    //    .classList.remove("ready");
+
+    const endScreen = document.getElementById("end-screen");
+    const rows = endScreen.getElementsByTagName("tr");
+
+    rows[1].children[0].innerHTML = player_me.name;
+    rows[2].children[0].innerHTML = player_op.name;
+
+    // Fill rounds exactly like normal game
+    for (let i = 1; i < 4; ++i) {
+      const round = this.roundHistory[i - 1];
+
+      rows[1].children[i].innerHTML = round ? round.score_me : 0;
+
+      rows[2].children[i].innerHTML = round ? round.score_op : 0;
+
+      rows[1].children[i].style.color =
+        round && round.winner === player_me ? "goldenrod" : "";
+
+      rows[2].children[i].style.color =
+        round && round.winner === player_op ? "goldenrod" : "";
+    }
+
+    endScreen.children[0].className = "";
+
+    gameended = true;
+    ui.enablePlayer(false);
+
+    const subtitle = endScreen.querySelector("p");
+
+    if (winner === player_me) {
+      console.log("Game over || Victory by surrender");
+
+      tocar("game_win", true);
+
+      endScreen.children[0].classList.add("end-win");
+
+      if (subtitle) {
+        subtitle.classList.remove("hide");
+        subtitle.innerHTML = "Your opponent has surrendered.";
+      }
+    } else {
+      console.log("Game over || Defeat by surrender");
+
+      tocar("game_lose", true);
+
+      endScreen.children[0].classList.add("end-lose");
+
+      if (subtitle) {
+        subtitle.classList.remove("hide");
+        subtitle.innerHTML = "You have surrendered.";
+      }
+    }
+
+    fadeIn(endScreen, 300);
+    ui.enablePlayer(true);
   }
 
   // Returns the client to the deck customization screen
@@ -4810,6 +5040,24 @@ class UI {
       }
     }
   }
+  enableSurrender = function (enabled = true) {
+    const btn = document.getElementById("surrender-button");
+
+    if (!btn) return;
+
+    btn.classList.toggle("hidden", !enabled);
+    btn.classList.toggle("disabled", !enabled);
+
+    btn.style.pointerEvents = enabled ? "auto" : "none";
+
+    btn.style.opacity = enabled ? "1" : "0.5";
+  };
+  showSurrender = function (show = true) {
+    const btn = document.getElementById("surrender-button");
+    if (!btn) return;
+
+    btn.classList.toggle("hidden", !show);
+  };
 }
 
 // Displays up to 5 cards for the client to cycle through and select to perform an action
@@ -6369,7 +6617,7 @@ let spacebarPressTimer;
 let isSpacebarPressed = false;
 
 function handleKeyDown(event) {
-  if (event.code === "Space" && !isSpacebarPressed) {
+  if (event.code === "xxxxxxSpace" && !isSpacebarPressed) {
     isSpacebarPressed = true;
     spacebarPressTimer = setTimeout(() => {
       document.removeEventListener("keydown", handleKeyDown);

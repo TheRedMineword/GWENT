@@ -573,6 +573,11 @@ socket.addEventListener("message", async (event) => {
         status: `Ready: ${opponentReady}`,
       });
       break;
+    case "leaveSession":
+      cancelSession();
+      reset_custom();
+      disableChat();
+      break;
   }
 });
 
