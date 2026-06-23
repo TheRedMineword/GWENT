@@ -3876,7 +3876,7 @@ function closeNotice() {
   document.getElementById("yt-notice").style.display = "none";
   localStorage.setItem(KEY, Date.now().toString());
 }
-const localhost1111modeissecond = false;
+const localhost1111modeissecond = 11110;
 // Handles notifications and client interration with menus
 class UI {
   constructor() {
@@ -3958,7 +3958,7 @@ class UI {
     this.audio.loop = true;
     console.log("initYouTube()", this.audio, exists);
     if (exists) {
-      if (location.port !== "1111" && localhost1111modeissecond) {
+      if (location.port !== localhost1111modeissecond) {
         // default soundtrack
         this.audio.src = `${AudioBaseUrl}${tavern_yt_vid}/audio.m3u8`;
 
@@ -4162,7 +4162,7 @@ class UI {
           await sleep(10);
         }
         if (this.audio) {
-          if (location.port !== "1111" && localhost1111modeissecond) {
+          if (location.port !== localhost1111modeissecond) {
             this.audio.src = `${AudioBaseUrl}${ostId}/audio.m3u8`;
 
             this.audio.volume = volume_int / 100;
