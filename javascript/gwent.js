@@ -651,6 +651,7 @@ function showSurrenderVote() {
         </button>
       </div>
     `;
+    box.classList.add("allow-click");
 
     overlay.appendChild(box);
     document.body.appendChild(overlay);
