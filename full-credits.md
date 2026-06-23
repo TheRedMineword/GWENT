@@ -37,6 +37,7 @@ https://pngtree.com/freebackground/vintage-crinkled-paper-texture-aged-brown-bac
 - realms_temeriamoral: https://static.wikia.nocookie.net/witcher/images/e/e3/Gwent_cardart_northern_blue_stripes_scout.jpg/revision/latest?cb=20180423190703
 - Coin flip sfx: https://pixabay.com/sound-effects/film-special-effects-coin-flip-88793/
 - Coin land sfx (unused): https://www.storyblocks.com/audio/stock/coin-multiple-drop-hx_u6knhlpbk0wxtpvl
+- Coin Scoiatael icon: https://gwent.one/image/icon/faction/hc/Scoiatael.png
 > Some card/mechanics/assets are used from other project like this (For example: RandomPianist/gwent-classic-v3.1, other similar project are mentioned at start of this copyright notice)
 
 

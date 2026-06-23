@@ -19,15 +19,15 @@ function getDarkerHex(hex, factor = 0.7) {
   );
 }
 function getContrastingTextColor(hex) {
-  // Convert to RGB
   hex = hex.replace("#", "");
+
   const r = parseInt(hex.substring(0, 2), 16);
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
-  // Calculate luminance
-  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  // Return black for bright backgrounds, white for dark
-  return luminance > 0.5 ? "#000000" : "#FFFFFF";
+
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+
+  return yiq >= 186 ? "#000000" : "#FFFFFF";
 }
 
 async function displayCoinToss(
@@ -172,15 +172,21 @@ async function displayCoinToss(
     transform: rotateY(180deg);
 }
 
-.result{
-    position:absolute;
-    left:130%;
-    top:50%;
-    transform:translateY(-50%);
-    opacity:0;
-    white-space:nowrap;
-    color:#d8bc7d;
-    font-size:clamp(28px,2.3vw,52px);
+.result {
+    position: absolute;
+    left: 130%;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 460px;      /* adjust as needed */
+    text-align: center;
+
+    opacity: 0;
+    white-space: normal;
+
+    color: #d8bc7d;
+    font-size: clamp(28px, 2.3vw, 52px);
+
     text-shadow:
         0 0 10px black,
         0 0 20px black,
@@ -424,3 +430,334 @@ async function displayCoinToss(
 
   log("Finished.");
 }
+
+// toss an "fake" scoliatle coin after opponent pick first player
+async function scol_fake_coin() {
+  await displayCoinToss(
+    game.firstPlayer.tag,
+    {
+      me: `img/icons/notif_${game.firstPlayer.tag}_coin_squirrel.png`,
+      op: `img/icons/notif_${game.firstPlayer.tag}_coin_squirrel.png`,
+    },
+    `Scoia'tael rigged the coin\n\n${map_results_txt[game.firstPlayer.tag]}`,
+
+    player_me.leader_init.filename,
+    player_me.name,
+    map_results_color[player_me.leader.faction],
+    player_me.leader_init.faction,
+
+    player_op.leader_init.filename,
+    player_op.name,
+    map_results_color[player_op.leader.faction],
+    player_op.leader_init.faction,
+  );
+  return true;
+}
+
+// D20
+("use strict");
+
+async function displayD20Roll(resultValue = null, options = {}) {
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  const {
+    title = "",
+    titleColor = "#d8bc7d",
+    message = "",
+    messageColor = "#d8bc7d",
+  } = options;
+
+  if (resultValue == null) {
+    resultValue = Math.floor(Math.random() * 20) + 1;
+  }
+
+  resultValue = Math.max(1, Math.min(20, resultValue));
+
+  let old = document.getElementById("gwent-d20-overlay");
+  if (old) old.remove();
+
+  if (!document.getElementById("gwent-d20-style")) {
+    const style = document.createElement("style");
+    style.id = "gwent-d20-style";
+
+    style.textContent = `
+#gwent-d20-overlay{
+    position:fixed;
+    inset:0;
+    z-index:999999999;
+    background:rgba(0,0,0,.82);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    pointer-events:none;
+    font-family:serif;
+}
+
+.gwent-d20-box{
+    width:min(40vw,520px);
+    height:min(40vw,520px);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(40,28,12,.95),
+            rgba(10,8,5,.95)
+        );
+
+    border:3px solid #d4af37;
+    border-radius:18px;
+
+    box-shadow:
+        0 0 40px rgba(0,0,0,.9),
+        0 0 30px rgba(212,175,55,.25);
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+}
+
+.gwent-d20-title{
+    position:absolute;
+    top:24px;
+    left:0;
+    right:0;
+
+    text-align:center;
+    font-size:clamp(22px,2vw,40px);
+    font-weight:bold;
+    text-shadow:
+        0 0 10px black,
+        0 0 20px black;
+    opacity:0;
+}
+
+.gwent-d20{
+    width:min(18vw,220px);
+    height:min(18vw,220px);
+    object-fit:contain;
+
+    filter:
+        drop-shadow(0 0 20px rgba(212,175,55,.5))
+        drop-shadow(0 0 8px rgba(0,0,0,.9));
+}
+
+.gwent-d20-result{
+    margin-top:30px;
+    color:#d8bc7d;
+    font-size:clamp(30px,2.4vw,54px);
+    opacity:0;
+
+    text-shadow:
+        0 0 12px black,
+        0 0 24px black;
+}
+
+.gwent-d20-message{
+    position:absolute;
+    bottom:24px;
+    left:20px;
+    right:20px;
+
+    text-align:center;
+    font-size:clamp(18px,1.4vw,28px);
+    text-shadow:
+        0 0 10px black,
+        0 0 20px black;
+    opacity:0;
+}
+`;
+    document.head.appendChild(style);
+  }
+
+  const overlay = document.createElement("div");
+  overlay.id = "gwent-d20-overlay";
+
+  const box = document.createElement("div");
+  box.className = "gwent-d20-box";
+
+  const titleEl = document.createElement("div");
+  titleEl.className = "gwent-d20-title";
+  titleEl.textContent = title;
+  titleEl.style.color = titleColor;
+
+  const dice = document.createElement("img");
+  dice.className = "gwent-d20";
+
+  const result = document.createElement("div");
+  result.className = "gwent-d20-result";
+
+  const messageEl = document.createElement("div");
+  messageEl.className = "gwent-d20-message";
+  messageEl.textContent = message;
+  messageEl.style.color = messageColor;
+
+  box.append(titleEl, dice, result, messageEl);
+
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+
+  function makeD20SVG(number) {
+    return (
+      "data:image/svg+xml;charset=utf-8," +
+      encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 256 256">
+
+    <polygon
+        points="128,12 230,80 190,210 66,210 26,80"
+        fill="#d4af37"
+        stroke="#6b4f14"
+        stroke-width="10"/>
+
+    <polygon
+        points="128,35 205,88 176,185 80,185 51,88"
+        fill="#111"/>
+
+    <text
+        x="128"
+        y="150"
+        text-anchor="middle"
+        font-size="72"
+        fill="#d8bc7d"
+        font-family="serif"
+        font-weight="bold">
+        ${number}
+    </text>
+
+</svg>
+`)
+    );
+  }
+
+  const textures = [];
+
+  for (let i = 1; i <= 20; i++) {
+    textures[i] = makeD20SVG(i);
+  }
+
+  dice.src = textures[1];
+
+  if (title) {
+    titleEl.animate(
+      [
+        { opacity: 0, transform: "translateY(-10px)" },
+        { opacity: 1, transform: "translateY(0)" },
+      ],
+      {
+        duration: 500,
+        fill: "forwards",
+      },
+    );
+  }
+
+  await wait(150);
+
+  if (typeof tocar === "function") {
+    try {
+      //           tocar("dice_roll", false);
+    } catch (e) {}
+  }
+
+  const duration = 3000;
+  const interval = 80;
+
+  const spinAnim = dice.animate(
+    [
+      {
+        transform: "translateY(0) rotate(0deg) scale(.75)",
+      },
+      {
+        transform: "translateY(-30px) rotate(2160deg) scale(1.15)",
+      },
+      {
+        transform: "translateY(0) rotate(2520deg) scale(1)",
+      },
+    ],
+    {
+      duration,
+      easing: "cubic-bezier(.15,.8,.2,1)",
+      fill: "forwards",
+    },
+  );
+
+  const stopRollingAt = duration - 350;
+  const start = performance.now();
+
+  while (performance.now() - start < stopRollingAt) {
+    dice.src = textures[Math.floor(Math.random() * 20) + 1];
+
+    await wait(interval);
+  }
+
+  // Lock final value BEFORE animation ends
+  dice.src = textures[resultValue];
+
+  await spinAnim.finished;
+
+  if (typeof tocar === "function") {
+    try {
+      //           tocar("dice_land", false);
+    } catch (e) {}
+  }
+
+  result.textContent = `Rolled: ${resultValue}`;
+
+  result.animate(
+    [
+      {
+        opacity: 0,
+        transform: "scale(.8)",
+      },
+      {
+        opacity: 1,
+        transform: "scale(1)",
+      },
+    ],
+    {
+      duration: 400,
+      fill: "forwards",
+    },
+  );
+
+  if (message) {
+    messageEl.animate(
+      [
+        {
+          opacity: 0,
+          transform: "translateY(10px)",
+        },
+        {
+          opacity: 1,
+          transform: "translateY(0)",
+        },
+      ],
+      {
+        duration: 500,
+        fill: "forwards",
+      },
+    );
+  }
+
+  await wait(2500);
+
+  overlay.animate([{ opacity: 1 }, { opacity: 0 }], {
+    duration: 500,
+    fill: "forwards",
+  });
+
+  await wait(500);
+
+  overlay.remove();
+
+  return resultValue;
+}
+
+// displayD20Roll(1, {
+//    title: "Attack monster",
+//    titleColor: "#ffcc33",
+//    message: "roll failure",
+//    messageColor: "#ff6666"
+//});

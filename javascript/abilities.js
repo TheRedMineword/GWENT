@@ -830,6 +830,7 @@ var ability_dict = {
             console.log("[DOPLER WARN] IS SINDICATE");
             return (
               c.deck !== "neutral" &&
+              Object.keys(syndicate_faction_clone).includes(c.deck) &&
               !isNaN(strength) &&
               strength >= 7 &&
               strength <= 15 &&
@@ -872,7 +873,7 @@ var ability_dict = {
         // SEEDED SHUFFLE
         // ====================================
 
-        var seed_is = `${time_now_utc_to_b64()}${mtg_conf.version}${turncount}${gameID}${enemyFaction}${time_now_utc_to_b64()}`;
+        var seed_is = `${mtg_conf.version}${turncount}${enemyFaction}`;
 
         let shuffled = shuffleSeeded(
           filteredCards,

@@ -74,6 +74,7 @@ var factions = {
               first: game.firstPlayer.tag,
             }),
           );
+          await scol_fake_coin();
         }
         return true;
       }),

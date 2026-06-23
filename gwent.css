@@ -815,15 +815,37 @@ html {
 	content: "Your opponent skipped their turn \A And you received an additional card";
 }
 
-#notif-whiteflame2-op {
-	background-image: url(img/icons/notif_lyria_rivia.png);
+#notif-whiteflame2-op_nilfgaard {
+	background-image: url(img/icons/notif_nilfgaard.png);
 }
 
-#notif-whiteflame2-op::after {
+#notif-whiteflame2-op_nilfgaard::after {
 	content: "Your opponent copied your leader ability";
 }
 
+#notif-whiteflame2-op_syndicate {
+	background-image: url(img/icons/notif_syndicate.png);
+}
 
+#notif-whiteflame2-op_syndicate::after {
+	content: "Your opponent copied your leader ability";
+}
+
+#notif-whiteflame2-me_nilfgaard {
+	background-image: url(img/icons/notif_nilfgaard.png);
+}
+
+#notif-whiteflame2-me_nilfgaard::after {
+	content: "You copied opponent leader ability!";
+}
+
+#notif-whiteflame2-me_syndicate {
+	background-image: url(img/icons/notif_syndicate.png);
+}
+
+#notif-whiteflame2-me_syndicate::after {
+	content: "You copied opponent leader ability!";
+}
 
 .card-preview {
 	position: relative;

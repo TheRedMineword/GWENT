@@ -295,7 +295,21 @@ let syndicate_faction_clone = {
     name: "Sky Kindom",
   },
 };
-
+let map_results_txt = {
+  me: "You go first",
+  op: "Opponent goes first",
+  me_lambert: "Lambert lets you start the game",
+  op_lambert: "Lambert says that you suck!\nThe opponent starts the game!",
+};
+let map_results_color = {
+  realms: "#1E224F",
+  nilfgaard: "#ABAA27",
+  scoiatael: "#0E790F",
+  monsters: "#660101",
+  skellige: "#54016C",
+  sky: "#2D9DA0",
+  syndicate: "#804400",
+};
 turn_skipper_conf.desc = `Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need ${turn_skipper_conf.actiavate} charge to skip turn, you get ${turn_skipper_conf.perTurn} charges per your turn, up to ${turn_skipper_conf.chargeMax} max charge(s) stored!`;
 
 let ThisDef = {
@@ -393,6 +407,22 @@ let ThisDef = {
       },
       sky: {
         name: "Sky Kindom",
+      },
+      map_results_txt: {
+        me: "You go first",
+        op: "Opponent goes first",
+        me_lambert: "Lambert lets you start the game",
+        op_lambert:
+          "Lambert says that you suck!\nThe opponent starts the game!",
+      },
+      map_results_color: {
+        realms: "#1E224F",
+        nilfgaard: "#ABAA27",
+        scoiatael: "#0E790F",
+        monsters: "#660101",
+        skellige: "#54016C",
+        sky: "#2D9DA0",
+        syndicate: "#804400",
       },
     },
   },

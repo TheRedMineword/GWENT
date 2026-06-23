@@ -2630,6 +2630,10 @@ class Game {
       var tmp_faction_me = player_me.leader.faction;
       white_flame_lg_faction.me = player_op.leader.faction;
       player_me.leader = new Card(player_op.deck_data.leader, player_me);
+      await ui.notification(
+        `whiteflame2-me_${player_me.leader_init.faction}`,
+        ui_display_times.faction_ability,
+      );
       await sleep(30);
       player_me.leader.faction = tmp_faction_me;
       try {
@@ -2646,7 +2650,10 @@ class Game {
       white_flame_lg_faction.op = player_me.leader.faction;
       player_op.leader = new Card(player_me.deck_data.leader, player_op);
       add_redraws = 2;
-      ui.notification("whiteflame2-op", ui_display_times.faction_ability);
+      await ui.notification(
+        `whiteflame2-op_${player_op.leader_init.faction}`,
+        ui_display_times.faction_ability,
+      );
       player_op.leader.faction = tmp_faction_op;
       await sleep(30);
       try {
@@ -2766,6 +2773,7 @@ class Game {
             socket.removeEventListener("message", handleMessage);
             var btn4 = document.getElementById("session-start-control");
             btn4.textContent = "Game In Progress";
+            await scol_fake_coin();
             resolve(true);
           }
         };
@@ -2820,22 +2828,6 @@ class Game {
           //   game.firstPlayer.tag + "-coin" + special,
           //    ui_display_times.coin,
           //  );
-          var map_results_txt = {
-            me: "You go first",
-            op: "Opponent goes first",
-            me_lambert: "Lambert lets you start the game",
-            op_lambert:
-              "Lambert says that you suck!\nThe opponent starts the game!",
-          };
-          var map_results_color = {
-            realms: "#1E224F",
-            nilfgaard: "#ABAA27",
-            scoiatael: "#0E790F",
-            monsters: "#660101",
-            skellige: "#54016C",
-            sky: "#2D9DA0",
-            syndicate: "#804400",
-          };
           await displayCoinToss(
             game.firstPlayer.tag,
             {
