@@ -484,9 +484,9 @@ function openDiscordIframePage() {
         host === "127.0.0.1" ||
         host === "[::1]";
 
-    const isDevLocal = isLocalhost || location.port === "1111_";
+    const isDevLocal = isLocalhost || location.port === "1111";
 	const mode = isDevLocal
-        ? true
+        ? false //true
         : false;
     const url = isDevLocal
         ? `${location.origin}/api/discord-iframe/page.html`
