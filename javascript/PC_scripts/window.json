@@ -1,8 +1,8 @@
 {
   "url": "http://localhost:1111/javascript/PC_scripts/info_page.html",
   "config_dump": {
-  "width": 800,
-  "height": 500,
+  "width": 400,
+  "height": 250,
   "minWidth": 600,
   "minHeight": 400,
     "resizable": true,

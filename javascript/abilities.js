@@ -79,7 +79,7 @@ var ability_dict = {
   wshield: {
     name: "Shield",
     description:
-      "Partialy protects all cards in same row from weather card effects, Commander's Horn will have no effect in that row. Cant be picked up after placing. ",
+      "Partialy protects all cards in same row from weather card effects and axii, Commander's Horn will have no effect in that row. Cant be picked up after placing. ",
     placed: async (card) => await card.animate("wshield"),
   },
   quen_desc: {
@@ -1975,10 +1975,6 @@ var ability_dict = {
   king_bran: {
     description:
       "Units only lose half their Strength in bad weather conditions.",
-    placed: (card) =>
-      board.row
-        .filter((c, i) => (card.holder === player_me) ^ (i < 3))
-        .forEach((r) => (r.halfWeather = true)),
   },
   eist_tuirseach: {
     description:

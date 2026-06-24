@@ -2098,6 +2098,8 @@ class Row extends CardContainer {
     this.elem_special = elem.getElementsByClassName("row-special")[0];
     this.special = null;
     this.total = 0;
+    this._id = { raw: elem.id, short: elem.id.split("-")[1] };
+    this.id = elem.id.split("-")[1];
     this.effects = {
       weather: false,
       bond: {},
@@ -2119,6 +2121,7 @@ class Row extends CardContainer {
     this.elem.addEventListener("mouseout", function () {
       this.style.boxShadow = "0 0 0 #6d5210";
     });
+    console.log("[ROW CONSTRUCT]", elem.id, this);
   }
 
   // Override
@@ -2264,15 +2267,33 @@ class Row extends CardContainer {
     return totalpower;
   }
   calcCardScore_work(card) {
-    // console.log("calcCardScore(card)", card, this); //this.cards[0].holder.leader.abilities to get card 0 leader abilities, could be usefull in future
+    //  console.log("calcCardScore(card)", card, this); //this.cards[0].holder.leader.abilities to get card 0 leader abilities, could be usefull in future
     if (card.name === "decoy") return 0;
     let total = card.basePower;
-    let this_row_have_quen = [false, 1, 2]; // should bool, multiplayer, axii weather etc, horn
+    var row_name = this.id;
+    var player = card.holder;
+    var leader_ability = player.leader.abilities[0];
+    //   console.log("CARD HOLDER PLAYER", player);
+    // outdated let this_row_have_quen = [false, 1, 2]; // should bool, multiplayer, axii weather etc, horn
+    let this_row_have_quen = {
+      siege: [false, 1, 2, 1], // bool (active), weather, horn, axii
+      ranged: [false, 1, 2, 1],
+      melee: [false, 1, 2, 1],
+    };
+    console.log("CALC swicth", leader_ability);
+    switch (leader_ability) {
+      case "king_bran":
+        this_row_have_quen[row_name][0] = true;
+        this_row_have_quen[row_name][1] = 0.5;
+        //    console.log("this_row_have_quen change", this_row_have_quen);
+        break;
+    }
     if (
       this.cards.some((c) => c.filename === "wshield" || c.filename === "quen")
     ) {
-      this_row_have_quen = [true, 0.5, 1];
+      this_row_have_quen[row_name] = [true, 0.5, 1, 0.45];
     }
+    ///   console.log("QUEEN", this_row_have_quen);
     if (this.cards.some((c) => c.filename === "darkstorm")) {
       if (card.hero === false) {
         card.pendingScorch = true;
@@ -2284,7 +2305,8 @@ class Row extends CardContainer {
       this.cards.some((c) => c.filename === "axii" || c.filename === "axii_p")
     ) {
       if (0 < total && total < axii.IfBasePowerUnder) {
-        total = total - Math.ceil(axii.TakeAway * this_row_have_quen[1]);
+        total =
+          total - Math.ceil(axii.TakeAway * this_row_have_quen[row_name][3]);
       }
     }
     if (this.cards.some((c) => c.filename === "yrden")) {
@@ -2355,7 +2377,8 @@ class Row extends CardContainer {
 
       // apply weather debuff
       if (this.effects.weather) {
-        bonus *= powergain.WeatherDebuffPercent * this_row_have_quen[1];
+        bonus *=
+          powergain.WeatherDebuffPercent * this_row_have_quen[row_name][1];
         console.log(
           "[POWERGAIN]",
           ` Total valid cards: ${count}, making it ${bonus} (lost ${powergain.WeatherDebuffPercent} by weather) bonus power by ${powergain.ForEachCardGain} for each card!`,
@@ -2377,8 +2400,8 @@ class Row extends CardContainer {
     // card.animate("powergain");
     if (card.hero) return total;
     if (this.effects.weather)
-      if (this_row_have_quen[0]) {
-        total = Math.ceil(total * this_row_have_quen[1]);
+      if (this_row_have_quen[row_name][0]) {
+        total = Math.ceil(total * this_row_have_quen[row_name][1]);
       } else {
         total = Math.min(1, total);
       }
@@ -2397,7 +2420,7 @@ class Row extends CardContainer {
     );
     if (this.effects.horn - (card.abilities.includes("horn") ? 1 : 0) > 0)
       //	card.animate("powergain");
-      total *= this_row_have_quen[2];
+      total *= this_row_have_quen[row_name][2];
     return total;
   }
 
@@ -3028,6 +3051,8 @@ class Game {
 
   // Allows the player to swap out up to two cards from their iniitial hand
   async initialRedraw() {
+    amReady = false;
+    opponentReady = false;
     var nilfard_drawmaster_draws =
       player_me.leader.abilities[0] === "nilf_drawmaster"
         ? nilfard_drawmaster.drawextra
@@ -3278,7 +3303,11 @@ class Game {
       rows[2].children[i].style.color =
         round && round.winner === player_op ? "goldenrod" : "";
     }
-
+    const subtitle = endScreen.querySelector("p");
+    if (subtitle) {
+      subtitle.classList.add("hide");
+      subtitle.innerHTML = "";
+    }
     endScreen.children[0].className = "";
     console.log("---------------------");
     if (player_op.health <= 0 && player_me.health <= 0) {
@@ -3387,7 +3416,7 @@ class Game {
     comp_and_send(socket, JSON.stringify({ type: "unReady" }));
     amReady = false;
     toggleReadyWaiting(amReady);
-    opponentReady = false;
+    //  opponentReady = false;
     document.getElementById("session-start-control").classList.remove("ready");
 
     ui.toggleMusic_elem.style.left = "20.5vw";
