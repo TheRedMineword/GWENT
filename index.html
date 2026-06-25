@@ -100,10 +100,13 @@
 
 </style>
 <script>
+		const domain = "https://gwent--hsmineword2.replit.app/"
+	const socket_domain = "wss://gwent--hsmineword2.replit.app"
+	const domain_raw = "gwent--hsmineword2.replit.app"
 	function check_if_redirect() {
     const host = window.location.hostname;
 		console.log("REDIR CHECK HOST", host);
-    if (host === "drmineword-gwent.onrender.com") {
+    if (host === domain_raw) {
         window.location.replace(`https://theredmineword.github.io/GWENT${window.location.pathname}`);
     }
 };
@@ -458,9 +461,6 @@
 </div>
 
 <script>
-	const domain = "https://gwent--hsmineword2.replit.app/"
-	const socket_domain = "wss://gwent--hsmineword2.replit.app"
-	const domain_raw = "gwent--hsmineword2.replit.app"
 function random_string_gen(){
 	return Math.random().toString(36).substring(2, 10);
 }
@@ -496,7 +496,7 @@ function openDiscordIframePage() {
         : false;
     const url = isDevLocal
         ? `${location.origin}/api/discord-iframe/page.html`
-        : "https://drmineword-gwent.onrender.com/api/discord-iframe/page.html";
+        : `${domain}/discord-iframe/page.html`;
 
     const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 

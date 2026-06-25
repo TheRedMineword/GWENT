@@ -321,10 +321,11 @@ button:disabled{
 </style>
 </head>
 <script>
+	const domain_raw = "gwent--hsmineword2.replit.app"
 	function check_if_redirect() {
     const host = window.location.hostname;
-        console.log("REDIR CHECK HOST", host);
-    if (host === "drmineword-gwent.onrender.com") {
+		console.log("REDIR CHECK HOST", host);
+    if (host === domain_raw) {
         window.location.replace(`https://theredmineword.github.io/GWENT${window.location.pathname}`);
     }
 };
