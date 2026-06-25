@@ -275,7 +275,7 @@ document.getElementById("copy-session").onclick = () => {
 
 // Websocket and Server config.
 
-const wakeUrl = "https://drmineword-gwent.onrender.com/wake";
+const wakeUrl = `${domain}wake`;
 
 const host = window.location.hostname; // wrong define window.location?
 
@@ -287,10 +287,10 @@ const isLocalhost =
 const isElectronLauncher = isLocalhost && location.port === "1111";
 
 const wsUrl = isElectronLauncher
-  ? "wss://drmineword-gwent.onrender.com"
+  ? socket_domain
   : isLocalhost
     ? "ws://localhost:8081"
-    : "wss://drmineword-gwent.onrender.com";
+    : socket_domain;
 
 function showBrickScreen() {
   document.documentElement.innerHTML = `
@@ -3889,7 +3889,7 @@ function init_AudioBaseUrl() {
   if (location.port === "1111" || location.port === "8080") {
     return "http://localhost:1111/get-audio/ost/";
   } else {
-    return "https://drmineword-gwent.onrender.com/YouTubePlayer_Gwent_Adless/TheRedMineword-3b88b341d8d88a53d597fadefa5d79da4f8e9e7fa770a83375e3ba8bf2e8dc72-f25cd7160fbea56b5a38df6a2a893120889e6bf8/ost/";
+    return `${domain}YouTubePlayer_Gwent_Adless/TheRedMineword-3b88b341d8d88a53d597fadefa5d79da4f8e9e7fa770a83375e3ba8bf2e8dc72-f25cd7160fbea56b5a38df6a2a893120889e6bf8/ost/`;
   }
 }
 const AudioBaseUrl = init_AudioBaseUrl();

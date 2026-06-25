@@ -26,10 +26,10 @@ let ThisSessionId = null;
 // SOCKET EVENTS
 // --------------------
 const custom_url = isElectronLauncher
-  ? "https://drmineword-gwent.onrender.com/"
+  ? domain
   : isLocalhost
     ? "http://localhost:8081/"
-    : "https://drmineword-gwent.onrender.com/";
+    : domain;
 socket.onopen = () => {
   console.log("Connected to the server");
 

@@ -25,10 +25,10 @@ const isLocalhost_chat =
 const isElectronLauncher_chat = isLocalhost_chat && location.port === "1111";
 
 const api_url_msg = isElectronLauncher_chat
-  ? "drmineword-gwent.onrender.com"
+  ? domain_raw
   : isLocalhost_chat
     ? "localhost:8081"
-    : "drmineword-gwent.onrender.com";
+    : domain_raw;
 const api_url_msg_mode = isElectronLauncher_chat
   ? "aHR0cHM="
   : isLocalhost_chat

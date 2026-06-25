@@ -116,7 +116,7 @@ async function init_sync_hands() {
     return;
   }
 
-  const WAKE_URL = "https://drmineword-gwent.onrender.com/wake";
+  const WAKE_URL = `${domain}wake`;
   const INTERVAL_MS = 75 * 1000; // 90 seconds
   console.log("[WAKE] 8080:", WAKE_URL, INTERVAL_MS / 1000);
   const pingWakeEndpoint = () => {
