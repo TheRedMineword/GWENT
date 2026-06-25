@@ -83,7 +83,7 @@
       "max_power": 13,
       "count_needed": 0,
       "shuffle_few_times": false,
-      "version": "sanidsayuftusidfgnyudsfgnudsf",
+      "version": "9fab1a38ced21b1f047f5dc92ff88e60de73827a6663d4d3c0f1b2ca20ce9e68",
       "daily_seed": true,
       "unstable_mode": "random"
     },
@@ -98,6 +98,12 @@
       "perTurn": 0.25,
       "actiavate": 1,
       "chargeMax": 2
+    },
+    "d20cloner": {
+      "perTurn": 0.16,
+      "actiavate": 1,
+      "chargeMax": 1,
+      "desc": null
     },
     "syndicate_faction_clone": {
       "nilfgaard": {
@@ -1996,16 +2002,6 @@
         "count": "1"
       },
       {
-        "name": "Jan Calveit: Calculated Recovery",
-        "id": "1003",
-        "deck": "nilfgaard",
-        "row": "leader",
-        "strength": "0",
-        "ability": "nilf_drawmaster",
-        "filename": "nilf_drawmaster",
-        "count": "1"
-      },
-      {
         "name": "Gaunter o'Dim",
         "id": "1004",
         "deck": "monsters",
@@ -2073,6 +2069,16 @@
         "strength": "0",
         "ability": "gaunter_neutral_leader",
         "filename": "Gaunter_Leader",
+        "count": "1"
+      },
+      {
+        "name": "Ida Emean – Elven Divination",
+        "id": "1003",
+        "deck": "scoiatael",
+        "row": "leader",
+        "strength": "0",
+        "ability": "d20cloner",
+        "filename": "Ida_Emean_d20",
         "count": "1"
       },
       {
@@ -2906,6 +2912,9 @@
       "turn_skiper": {
         "description": "Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need 1 charge to skip turn, you get 0.35 charges per your turn, up to 2 max charge(s) stored!"
       },
+      "d20cloner": {
+        "description": "Let you roll D20 for chance to get additional card from board, but what card you can get depends on roll result. Success on even roll. You need 1 charge to skip turn, you get 0.16 charges per your turn, up to 1 max charge(s) stored!"
+      },
       "gaunter_neutral_leader": {
         "description": "On use both sides will gain an additional (60%+1)  of the number of cards in the thier grave as additional cards from deck and all players start the game with 50% more cards in their hand (based on their starting number)"
       },
@@ -2974,10 +2983,10 @@
         "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
       }
     },
-    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
-    "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 50
+    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
+    "audio_yt_vid_soundtrack_volume": 47,
+    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }

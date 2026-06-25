@@ -413,9 +413,9 @@ html {
 }
 
 /* Fix giant vw-based sizing */
-#top-menu #opponent-ready label {
+#top-menu #opponent-ready p {
+  margin: 0;
   font-size: 12px;
-  margin-bottom: 4px;
 }
 
 #top-menu #opponent-ready img {

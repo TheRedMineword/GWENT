@@ -629,55 +629,55 @@ let op_icon_faction =
   "img/icons/google_fonts__signal_disconnected_99dp_CCCCCC_FILL0_wght400_GRAD0_opsz48.png";
 function updateOpponentUI(data) {
   console.log("[OP UPDATE MENU]", data);
+
   const box = document.getElementById("opponent-ready");
   if (!box) return;
 
-  const label = document.getElementById("opponent-name");
+  const nameEl = document.getElementById("opponent-name");
   const img = box.querySelector("img");
-  const span = box.querySelector("span");
+  const statusEl = box.querySelector("span");
 
-  if (!label || !img || !span) return;
+  if (!nameEl || !img || !statusEl) return;
 
   // reset state
   box.classList.add("hidden");
 
+  // always clean previous dynamic SVG/text node safely
+  const oldStateNode = box.querySelector(".opponent-state");
+  if (oldStateNode) oldStateNode.remove();
+
+  // NO DATA STATE
   if (!data) {
-    label.textContent = "No Opponent";
+    nameEl.textContent = "No Opponent";
     img.src =
       "img/icons/google_fonts__signal_disconnected_99dp_CCCCCC_FILL0_wght400_GRAD0_opsz48.png";
-    span.textContent = "";
+    statusEl.textContent = "";
 
     box.classList.add("disabled");
     box.classList.remove("hidden");
     return;
   }
 
+  // ACTIVE STATE
   box.classList.remove("hidden", "disabled");
 
-  label.textContent = data.name || "Opponent";
+  nameEl.textContent = data.name || "Opponent";
+  statusEl.textContent = data.status || "";
 
-  span.textContent = data.status; //Readys
+  const state2 = data.state;
 
-  // img.src = data.state;
-  var state2 = data.state;
-  const container = document.getElementById("opponent-ready");
-
-  const p = container.querySelector("p");
-  if (p) {
-    p.remove();
-  }
-  // detect svg string
+  // detect inline SVG
   if (typeof state2 === "string" && state2.trim().startsWith("<svg")) {
-    // not an image URL → treat as inline SVG/text
+    // remove image src safely
     img.removeAttribute("src");
 
     const p = document.createElement("p");
+    p.className = "opponent-state";
     p.innerHTML = state2;
 
     img.insertAdjacentElement("afterend", p);
-    img._fallbackNode = p;
   } else {
-    // normal image (can be /img/src/a.png or full URL)
-    img.src = state2;
+    // normal image URL
+    img.src = state2 || "";
   }
 }

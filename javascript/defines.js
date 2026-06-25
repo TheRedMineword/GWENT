@@ -153,7 +153,7 @@ let mtg_conf = {
   max_power: 13,
   count_needed: 0, // count > count_needed
   shuffle_few_times: false,
-  version: "sanidsayuftusidfgnyudsfgnudsf",
+  version: "9fab1a38ced21b1f047f5dc92ff88e60de73827a6663d4d3c0f1b2ca20ce9e68",
   daily_seed: true,
   unstable_mode: "random", // random/not-random/nonbe
 };
@@ -277,7 +277,12 @@ let scorch_stopper = {
   max: 5,
   break_shield_if_you_use: true,
 };
-
+let d20cloner = {
+  perTurn: 0.16,
+  actiavate: 1,
+  chargeMax: 1,
+  desc: null,
+};
 let syndicate_faction_clone = {
   nilfgaard: {
     name: "Nilfgaardian Empire",
@@ -311,7 +316,7 @@ let map_results_color = {
   syndicate: "#804400",
 };
 turn_skipper_conf.desc = `Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need ${turn_skipper_conf.actiavate} charge to skip turn, you get ${turn_skipper_conf.perTurn} charges per your turn, up to ${turn_skipper_conf.chargeMax} max charge(s) stored!`;
-
+d20cloner.desc = `Let you roll D20 for chance to get additional card from board, but what card you can get depends on roll result. Success on even roll. You need ${d20cloner.actiavate} charge to skip turn, you get ${d20cloner.perTurn} charges per your turn, up to ${d20cloner.chargeMax} max charge(s) stored!`;
 let ThisDef = {
   name: "Deafult Config",
   env_vars: {
@@ -377,7 +382,8 @@ let ThisDef = {
       max_power: 13,
       count_needed: 0,
       shuffle_few_times: false,
-      version: "sanidsayuftusidfgnyudsfgnudsf",
+      version:
+        "9fab1a38ced21b1f047f5dc92ff88e60de73827a6663d4d3c0f1b2ca20ce9e68",
       daily_seed: true,
       unstable_mode: "random",
     },
@@ -391,6 +397,12 @@ let ThisDef = {
       perTurn: 0.25,
       actiavate: 1,
       chargeMax: 2,
+    },
+    d20cloner: {
+      perTurn: 0.16,
+      actiavate: 1,
+      chargeMax: 1,
+      desc: null,
     },
     syndicate_faction_clone: {
       nilfgaard: {

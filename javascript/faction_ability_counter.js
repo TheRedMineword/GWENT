@@ -27,6 +27,13 @@ let ABILITIES = {
     add: 0,
     start: scorch_stopper.max,
   },
+  d20cloner: {
+    type: "d20cloner",
+    max: d20cloner.chargeMax,
+    onClick: null,
+    add: d20cloner.perTurn,
+    start: 0,
+  },
 };
 
 function createAbility() {
@@ -295,6 +302,21 @@ document
       showSideTooltip(
         `You have ${ability_data.me.current}/${ability_data.me.max} of shield charges`,
       );
+    } else if (ability_data.me.type === "d20cloner") {
+      if (ability_data.me.current < d20cloner.actiavate) {
+        showSideTooltip(
+          `You dont have enought energy to activate ability (${ability_data.me.current}/${ability_data.me.max})`,
+        );
+      } else {
+        await ui.popup(
+          "Yes",
+          () => ability_counter_d20__me(),
+          "No",
+          () => ability_turn_skipper_no(),
+          "Roll the die to try and get another card?",
+          "",
+        );
+      }
     }
   });
 document
@@ -428,7 +450,7 @@ async function ability_turn_skiper_op(payload) {
   const data = payload.data || {};
 
   var skip_turn_coin = `coin-${data.coin_toss}_player-op`;
-  tocar("ability_use_from_counter", false);
+  //  tocar("ability_use_from_counter", false);
   await ui.notification(skip_turn_coin, ui_display_times.faction_ability);
   if (data.coin_toss && data.seed) {
     console.log("[TURN_SKIPER_OP] Rebuilding selection using seed:", data.seed);
@@ -471,4 +493,390 @@ async function ability_turn_skipper_no() {
   await sleep(600);
   ui.enablePlayer(true);
   showSideTooltip(`You have ${ability_data.me.current}/${ability_data.me.max}`);
+}
+
+// D20 copy from board
+
+async function ability_counter_d20__resolve(
+  roll,
+  owner,
+  target,
+  data = {},
+  tag = owner.tag,
+) {
+  console.log(
+    `[COUNTER_OP] START | roll=${roll} owner=${owner?.tag} target=${target?.tag} viewer=${tag}`,
+  );
+
+  // ====================
+  // FAILURES
+  // ====================
+
+  if (roll === 1) {
+    console.log("[COUNTER_OP] Critical failure");
+    switch (tag) {
+      case "me":
+        try {
+          showSideTooltip(
+            'You rolled "1"\nOpponent draw an additional card!',
+            3000,
+          );
+          player_op.deck.draw(player_op.hand);
+          await sleep(2800);
+        } catch (e) {}
+        break;
+      case "op":
+        try {
+          showSideTooltip('Opponent rolled "1"\nYou draw an additional card!');
+          player_me.deck.draw(player_me.hand);
+        } catch (e) {}
+        break;
+    }
+    return;
+  }
+
+  if (roll === 20) {
+    console.log("[COUNTER_OP] Natural 20 reserved");
+    // MAGIC THE GATHERING ON STEREOIDS
+    if (tag === "me") {
+      let wrapper = { card: null };
+      // Get cards directly from card_dict
+      let filteredCards = Object.values(card_dict).filter((c) => {
+        let strength = Number(c.strength);
+        let count = Number(c.count);
+
+        return (
+          !isNaN(strength) &&
+          !isNaN(count) &&
+          count > mtg_conf.count_needed &&
+          strength > mtg_conf.min_power &&
+          strength < mtg_conf.max_power &&
+          c.row !== "leader" //&&
+          //c.deck !== "special" &&
+          //c.deck !== "weather" &&	//Lets keep that
+
+          //!c.witcher_sign &&
+          //!c.token &&
+          //!c.generated &&
+
+          //!c.ability?.includes("hero")
+        );
+      });
+      var seed_is = `${mtg_conf.daily_seed ? `${time_now_utc_to_b64()}` : ""}${mtg_conf.version}${turncount}${gameID}`;
+      // Don't simulate opponent
+
+      // Shuffle multiple times
+      if (mtg_conf.shuffle_few_times) {
+        for (let i = 0; i < 4; i++) {
+          filteredCards.sort(() => Math.random() - 0.5);
+        }
+      }
+      console.log(
+        "MTG CARDS ",
+        filteredCards,
+        " OR ",
+        filteredCards.slice(0, mtg_conf.random_max),
+      );
+
+      var tmp_c = shuffleSeeded(
+        filteredCards,
+        btoa(seed_is),
+        `MTG ABILITY Seeded from ${seed_is}`,
+      );
+      filteredCards = tmp_c.array;
+      tmp_c = null;
+      filteredCards = filteredCards.slice(
+        0,
+        Math.floor(mtg_conf.random_max * 2),
+      );
+      if (filteredCards.length <= 0) return;
+
+      // Create TEMP cards for preview carousel
+      let previewCards = filteredCards.map((data) => {
+        return new Card(data, card.holder);
+      });
+
+      let container = {
+        cards: previewCards,
+      };
+
+      await ui.queueCarousel(
+        container,
+        1,
+        (c, i) => (wrapper.card = c.cards[i]),
+        () => true,
+        true,
+        false,
+        mtg_conf.topic,
+      );
+
+      let picked = wrapper.card;
+
+      if (!picked) return;
+
+      // Create REAL spawned copy
+      let cardData = Object.values(card_dict).find(
+        (c) => c.filename === picked.filename,
+      );
+
+      if (!cardData) return;
+
+      let created = new Card(cardData, player_me);
+      owner.hand.addCard(created);
+      created.animate(mtg_conf.anim);
+      //  card.animate(mtg_conf.anim);
+    }
+    return;
+  }
+
+  if (roll % 2 === 1) {
+    console.log("[COUNTER_OP] Failed roll");
+    return;
+  }
+
+  // ====================
+  // SUCCESS TIERS
+  // ====================
+
+  let reveal = true;
+  let maxPower = 5;
+  let allowHero = false;
+
+  if (roll >= 2 && roll <= 8) {
+    reveal = true;
+    maxPower = 5;
+
+    console.log(
+      `[COUNTER_OP] LOW SUCCESS | reveal=${reveal} maxPower=${maxPower}`,
+    );
+  } else if (roll >= 10 && roll <= 14) {
+    reveal = false;
+    maxPower = 9;
+
+    console.log(
+      `[COUNTER_OP] MEDIUM SUCCESS | reveal=${reveal} maxPower=${maxPower}`,
+    );
+  } else if (roll >= 16 && roll <= 18) {
+    reveal = false;
+    maxPower = 14;
+    allowHero = true;
+
+    console.log(
+      `[COUNTER_OP] HIGH SUCCESS | reveal=${reveal} maxPower=${maxPower} allowHero=${allowHero}`,
+    );
+  }
+
+  let shouldReveal = reveal;
+
+  console.log(
+    `[COUNTER_OP] Visual reveal=${shouldReveal} (base=${reveal}, viewer=${tag})`,
+  );
+
+  // ====================
+  // FIND TARGETS
+  // ====================
+
+  let candidates = board.row
+    .flatMap((r) => r.cards)
+    .filter((c) => {
+      if (!allowHero && c.hero) return false;
+      return c.power <= maxPower;
+    });
+
+  candidates.sort((a, b) => {
+    const name = a.filename.localeCompare(b.filename);
+    if (name !== 0) return name;
+
+    return a.power - b.power;
+  });
+
+  console.log(
+    `[COUNTER_OP] Candidates found: ${candidates.length}`,
+    candidates.map((c) => ({
+      name: c.name,
+      power: c.power,
+      hero: c.hero,
+      file: c.filename,
+    })),
+  );
+
+  if (!candidates.length) {
+    console.warn("[COUNTER_OP] No valid candidates");
+    return;
+  }
+
+  // ====================
+  // SEEDED PICK
+  // ====================
+
+  console.log(`[COUNTER_OP] Using remote seed: ${data.seed}`);
+
+  const shuffled = shuffleSeeded(
+    [...candidates],
+    data.seed,
+    "COUNTER_OP",
+  ).array;
+
+  const picked = shuffled[0];
+
+  console.log(`[COUNTER_OP] Picked card:`, {
+    name: picked.name,
+    power: picked.power,
+    hero: picked.hero,
+    filename: picked.filename,
+  });
+
+  // ====================
+  // REVEAL ANIMATION
+  // ====================
+  if (tag === "me") {
+    shouldReveal = true;
+  }
+  if (shouldReveal) {
+    console.log(`[COUNTER_OP] Showing reveal animation for ${picked.name}`);
+
+    await picked.animate2("turn_skip_clone_board");
+  }
+
+  // ====================
+  // CREATE COPY
+  // ====================
+
+  const cardData = Object.values(card_dict).find(
+    (cd) => cd.filename === picked.filename,
+  );
+
+  if (!cardData) {
+    console.error(
+      `[COUNTER_OP] Failed to locate card data for ${picked.filename}`,
+    );
+    return;
+  }
+
+  console.log(
+    `[COUNTER_OP] Creating copy of ${cardData.name} for ${owner.tag}`,
+  );
+
+  const copy = new Card(cardData, owner);
+
+  owner.hand.addCard(copy);
+
+  console.log(
+    `[COUNTER_OP] Copy added to hand. Hand size=${owner.hand.cards.length}`,
+  );
+
+  if (shouldReveal) {
+    console.log(`[COUNTER_OP] Showing hand animation for ${copy.name}`);
+
+    await copy.animate("turn_skip_clone_hand");
+  }
+
+  console.log("[COUNTER_OP] END");
+}
+
+async function ability_counter_d20__me() {
+  ui.enablePlayer(false);
+  if (!ability_remove("me", d20cloner.actiavate)) {
+    ability_turn_skipper_no();
+    return false;
+  }
+  tocar("ability_use_from_counter", false);
+  let roll = Math.floor(Math.random() * 20) + 1;
+  // debug
+  //roll = 20;
+
+  await displayD20Roll(roll, {
+    title: "Fate Roll",
+    titleColor: "#ffcc33",
+    message:
+      roll === 1
+        ? "Critical Failure"
+        : roll === 20
+          ? "Natural 20!"
+          : roll % 2 === 0
+            ? "Success"
+            : "Failure",
+
+    messageColor:
+      roll === 1
+        ? "#ff0000"
+        : roll === 20
+          ? "#ffd700" // gold
+          : roll % 2 === 0
+            ? "#66ff66"
+            : "#ff6666",
+  });
+  var seed = btoa(
+    `${gameID}_${turncount}_${roll}_ClientRandomSeed:${client_random_strng}_${btoa(`Random:${random_string_gen()}`)}`,
+  );
+
+  console.log(`[COUNTER_OP] Generated seed: ${atob(seed)}`, seed);
+  const payload = {
+    type: "SpecialAbility",
+    leader: ability_data.me.type,
+    cost: d20cloner.actiavate,
+    data: {
+      roll,
+      seed,
+    },
+    hand: { before: serializeCards(player_me.hand.cards), after: null },
+  };
+
+  await ability_counter_d20__resolve(
+    roll,
+    player_me,
+    player_op,
+    payload.data,
+    "me",
+  );
+  payload.hand.after = serializeCards(player_me.hand.cards);
+  await comp_and_send(socket, JSON.stringify(payload));
+  if (player_op.passed && !player_me.passed) {
+    ui.enablePlayer(false);
+    showTooltip(
+      `The opponent synchronizes with the game, wait ${(RegisterMovesHold * 1.3) / 1000} seconds, and think about the next move`,
+    );
+    ui.enablePlayer(false);
+    await sleep(RegisterMovesHold * 1.3);
+    showTooltip(`You can play now again`);
+    ui.enablePlayer(true);
+    //         player_me.endTurn();
+  }
+  player_me.endTurn();
+}
+
+async function ability_counter_d20__op(payload) {
+  ability_remove("op", payload.cost);
+  const roll = payload.data.roll;
+
+  await displayD20Roll(roll, {
+    title: "Opponent roll dice for addtional cards",
+    titleColor: "#ff3333",
+    message:
+      roll === 1
+        ? "Critical Failure"
+        : roll === 20
+          ? "Natural 20!"
+          : roll % 2 === 0
+            ? "Success"
+            : "Failure",
+
+    messageColor:
+      roll === 1
+        ? "#ff0000"
+        : roll === 20
+          ? "#ffd700" // gold
+          : roll % 2 === 0
+            ? "#66ff66"
+            : "#ff6666",
+  });
+
+  await ability_counter_d20__resolve(
+    roll,
+    player_op,
+    player_me,
+    payload.data,
+    "op",
+  );
+  player_op.endTurn();
 }

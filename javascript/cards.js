@@ -2175,16 +2175,16 @@ var card_dict = [
     filename: "aidhorn",
     count: "1",
   },
-  {
-    name: "Jan Calveit: Calculated Recovery",
-    id: "1003",
-    deck: "nilfgaard",
-    row: "leader",
-    strength: "0",
-    ability: "nilf_drawmaster",
-    filename: "nilf_drawmaster",
-    count: "1",
-  },
+  //  { //Yeah this card sucks
+  //   name: "Jan Calveit: Calculated Recovery",
+  //   id: "1003",
+  //    deck: "nilfgaard",
+  //    row: "leader",
+  //    strength: "0",
+  //   ability: "nilf_drawmaster",
+  //   filename: "nilf_drawmaster",
+  //   count: "1",
+  // },
   {
     name: "Gaunter o'Dim",
     id: "1004",
@@ -2253,6 +2253,16 @@ var card_dict = [
     strength: "0",
     ability: "gaunter_neutral_leader",
     filename: "Gaunter_Leader",
+    count: "1",
+  },
+  {
+    name: "Ida Emean — Elven Divination",
+    id: "1003", // Replaced id from Jan Calveit: Calculated Recovery
+    deck: "scoiatael",
+    row: "leader",
+    strength: "0",
+    ability: "d20cloner",
+    filename: "Ida_Emean_d20",
     count: "1",
   },
   {

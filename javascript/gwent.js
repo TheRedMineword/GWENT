@@ -1021,8 +1021,18 @@ socket.onmessage = async (event) => {
       }
       break;
     case "SpecialAbility":
-      if (data.leader === "turn_skiper") {
-        await ability_turn_skiper_op(data);
+      tocar("ability_use_from_counter", false);
+      switch (data.leader) {
+        case "turn_skiper":
+          await ability_turn_skiper_op(data);
+          break;
+        case "d20cloner":
+          var cards_init = await deserializeCards(data?.hand.before, player_op);
+          player_op.hand.cards = cards_init;
+          await ability_counter_d20__op(data);
+          var cards_after = await deserializeCards(data?.hand.after, player_op);
+          player_op.hand.cards = cards_after;
+          break;
       }
       break;
     // Game - Opponent plays card
@@ -6478,7 +6488,8 @@ async function loadPackedSFX() {
 }
 // new:
 function tocar(arquivo, pararMusica) {
-  if (!arquivo.includes("card") || !arquivo.includes("game_buy")) {
+  if (arquivo.includes("card") || arquivo.includes("game_buy")) {
+  } else {
     if (playBlock[btoa(arquivo)]) {
       if (playBlock[btoa(arquivo)] === 1) {
         playBlock[btoa(arquivo)] = 2;

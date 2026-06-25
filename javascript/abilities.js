@@ -1385,6 +1385,9 @@ var ability_dict = {
   turn_skiper: {
     description: turn_skipper_conf.desc,
   },
+  d20cloner: {
+    description: d20cloner.desc,
+  },
   gaunter_neutral_leader: {
     description: `On use both sides will gain an additional (${gaunter_lider.revive * 100}%+1)  of the number of cards in the thier grave as additional cards from deck and all players start the game with ${gaunter_lider.extra_cards * 100}% more cards in their hand (based on their starting number)`,
     activated: async (card) => {
