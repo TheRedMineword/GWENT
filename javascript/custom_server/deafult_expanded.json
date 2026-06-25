@@ -2913,7 +2913,7 @@
         "description": "Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need 1 charge to skip turn, you get 0.35 charges per your turn, up to 2 max charge(s) stored!"
       },
       "d20cloner": {
-        "description": "Let you roll D20 for chance to get additional card from board, but what card you can get depends on roll result. Success on even roll. You need 1 charge to skip turn, you get 0.16 charges per your turn, up to 1 max charge(s) stored!"
+        "description": "Let you roll D20 for chance to get additional card from board, but what card you can get depends on roll result. Success on even roll. You need 1 charge to roll dice, you get 0.16 charges per your turn, up to 1 max charge(s) stored!"
       },
       "gaunter_neutral_leader": {
         "description": "On use both sides will gain an additional (60%+1)  of the number of cards in the thier grave as additional cards from deck and all players start the game with 50% more cards in their hand (based on their starting number)"

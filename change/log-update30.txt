@@ -39,6 +39,6 @@ Syndicate ability let you begin game wich morale card on board at game start! Ad
 
 ## 25 June, 2026
 - Removed: Jan Calveit: Calculated Recovery leader card (It was just bad desing one)
-- Added Scoia'tael new leader card; Ida Emean — Elven Divination: Let you roll D20 for chance to get additional card from board, but what card you can get depends on roll result. Success on even roll. You need 1 charge to skip turn, you get 0.16 charges per your turn, up to 1 max charge(s) stored!
+- Added Scoia'tael new leader card; Ida Emean — Elven Divination: Let you roll D20 for chance to get additional card from board, but what card you can get depends on roll result. Success on even roll. You need 1 charge to roll dice, you get 0.16 charges per your turn, up to 1 max charge(s) stored!
 > Ability is to be rebalnced!
 - Fixed audio bug wich sfx/card.mp3 not playing
