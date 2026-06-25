@@ -17,8 +17,6 @@ const wss = new WebSocket.Server({ server });
 
 const PORT = process.env.PORT || 8081;
 
-app.use(cors({ origin: "*" }));
-
 let sessions = {};
 const joinIndex = {};
 let players = [];
@@ -324,7 +322,7 @@ function checkCors(req, res) {
 
   return false;
 }
-
+app.use(cors({ origin: "*" }));
 app.get(process.env.A, (req, res) => {
   if (!checkCors(req, res)) {
     return res.status(403).json({
@@ -348,6 +346,7 @@ app.get(process.env.A, (req, res) => {
 
   res.sendFile(filePath);
 });
+// app.use(cors({ origin: "*" }));
 app.use(express.static(__dirname));
 app.use(express.json());
 app.get("/wake", (req, res) => {
