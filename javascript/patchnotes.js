@@ -166,6 +166,63 @@ function formatPatchText(text) {
 
       continue;
     }
+    // %%video
+    {
+      const regex =
+        /%%video\s+src="([^"]+)"(?:\s+style="([^"]*)")?((?:\s+\w+)*)\s*%%/g;
+
+      const matches = [...raw.matchAll(regex)];
+
+      if (matches.length) {
+        closeList();
+
+        for (const m of matches) {
+          const src = m[1];
+          const style = m[2] || "";
+          const flags = m[3] || "";
+
+          const attrs = [];
+
+          if (flags.includes("controls")) attrs.push("controls");
+          if (flags.includes("autoplay")) attrs.push("autoplay");
+          if (flags.includes("muted")) attrs.push("muted");
+          if (flags.includes("loop")) attrs.push("loop");
+          if (flags.includes("playsinline")) attrs.push("playsinline");
+
+          html += `<video src="${src}" style="${style}" ${attrs.join(" ")}></video>`;
+        }
+
+        continue;
+      }
+    }
+    // %%audio
+    {
+      const regex =
+        /%%audio\s+src="([^"]+)"(?:\s+style="([^"]*)")?((?:\s+\w+)*)\s*%%/g;
+
+      const matches = [...raw.matchAll(regex)];
+
+      if (matches.length) {
+        closeList();
+
+        for (const m of matches) {
+          const src = m[1];
+          const style = m[2] || "";
+          const flags = m[3] || "";
+
+          const attrs = [];
+
+          if (flags.includes("controls")) attrs.push("controls");
+          if (flags.includes("autoplay")) attrs.push("autoplay");
+          if (flags.includes("loop")) attrs.push("loop");
+          if (flags.includes("muted")) attrs.push("muted");
+
+          html += `<audio src="${src}" style="${style}" ${attrs.join(" ")}></audio>`;
+        }
+
+        continue;
+      }
+    }
     // ``` blocks
     if (line.startsWith("```")) {
       if (!inCode) {
@@ -569,6 +626,21 @@ ${data.button.name}
 `;
 
   overlay.querySelector(".briefing-button").onclick = () => overlay.remove();
+  document.querySelectorAll("video[data-src]").forEach((video) => {
+    const src = video.dataset.src;
+
+    if (src.endsWith(".m3u8")) {
+      if (video.canPlayType("application/vnd.apple.mpegurl")) {
+        video.src = src;
+      } else if (window.Hls && Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(src);
+        hls.attachMedia(video);
+      }
+    } else {
+      video.src = src;
+    }
+  });
 }
 
 async function run_patchnotes() {
