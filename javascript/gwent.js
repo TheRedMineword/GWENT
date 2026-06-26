@@ -4497,7 +4497,9 @@ class UI {
     } catch (e) {
       console.log("Music toggle error:", e);
       try {
-        ui.initYouTube();
+        if (ui.getAudioState() !== 1) {
+          ui.initYouTube();
+        }
       } catch (e) {
         console.log("ui.initYouTube(); error", e);
       }
@@ -6562,7 +6564,9 @@ function tocar(arquivo, pararMusica) {
 /*----------------------------------------------------*/
 
 function onYouTubeIframeAPIReady() {
-  ui.initYouTube();
+  if (ui.getAudioState() !== 1) {
+    ui.initYouTube();
+  }
 }
 
 async function iniciarMusica(bypass = false) {
@@ -6578,7 +6582,9 @@ async function iniciarMusica(bypass = false) {
         ui.audio.play().catch(() => {});
       } else {
         await sleep(200);
-        await ui.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);
+        if (ui.getAudioState() !== 1) {
+          await ui.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);
+        }
         console.log("state", ui.getAudioState());
       }
 
@@ -6645,7 +6651,7 @@ window.onload = function () {
     .getElementById("button_start")
     .addEventListener("click", function () {
       inicio();
-      if (ui.getAudioState() === -1) {
+      if (ui.getAudioState() !== 1) {
         ui.initYouTube();
       }
       // cache audio:

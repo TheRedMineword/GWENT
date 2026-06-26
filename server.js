@@ -1014,7 +1014,65 @@ wss.on("connection", async (ws, req) => {
       });
     }
   });
+  ws.on("error", (err) => {
+    console.log(`Socket error ${ws.playerId}:`, err.code, err.message);
+    try {
+      console.log(`|| Player ${ws.playerId} disconnected`);
+      delete playerSockets[ws.playerId];
+      // Check if the player has an active session
+      if (ws.sessionId && sessions[ws.sessionId]) {
+        const session = sessions[ws.sessionId];
 
+        // Check if the player is the creator of the session
+        if (session.players[0] === ws) {
+          // If the creator disconnects, delete the session
+          console.log(
+            `|| Deleting session ${ws.sessionId} because the creator left`,
+          );
+          if (session.players.length > 1) {
+            try {
+              // session.players[1].send(compressPayload(JSON.stringify({ type: 'unReady' })));
+              session.players[1].send(
+                compressPayload(JSON.stringify({ type: "sessionUnready" })),
+              );
+            } catch (e) {
+              console.log("Err", e);
+            }
+          }
+          try {
+            delete joinIndex[sessions[ws.sessionId].joinCode];
+          } catch (e) {}
+          delete sessions[ws.sessionId];
+        } else {
+          try {
+            // If a non-creator disconnects, remove them from the session and notify the creator
+            session.players = session.players.filter((player) => player !== ws);
+            session.players[0].send(
+              compressPayload(JSON.stringify({ type: "unReady" })),
+            );
+            session.players[0].send(
+              compressPayload(JSON.stringify({ type: "sessionUnready" })),
+            );
+            console.log(
+              `|| Player ${ws.playerId} left the session ${ws.sessionId}`,
+            );
+            broadcastToSession(
+              ws.sessionId,
+              `Player ${ws.playerId} left the session`,
+            );
+          } catch (e) {
+            console.log("Err", e);
+          }
+        }
+      }
+
+      // Remove the player from the players list
+      players = players.filter((player) => player !== ws);
+      // });
+    } catch (e) {
+      console.error(e);
+    }
+  });
   ws.on("close", () => {
     console.log(`|| Player ${ws.playerId} disconnected`);
     delete playerSockets[ws.playerId];

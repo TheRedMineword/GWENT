@@ -1,0 +1,58 @@
+<small_text.text>
+NEWS / PATCHNOTES
+</small_text.text>
+
+<images.logo>
+/img/web/logo.png
+</images.logo>
+
+<images.banner>
+/img/web/bar.png
+</images.banner>
+
+<box.lines_outline_hex>
+#debf81
+</box.lines_outline_hex>
+
+<box.title>
+VICTORY
+</box.title>
+
+<box.text>
+# Patch 1.4
+
+## New Features
+
+### Missions
+%%img src="https://fastly.picsum.photos/id/871/536/354.jpg?hmac=qo4tHTSoxyMyagkIxVbpDCr80KoK2eb_-0rpAZojojg" style="max-width:100%"%%
+Welcome to the update.
+
+**This is bold**
+
+*This is italic*
+
+-# Small developer note
+
+> This is a quote
+
+Visit [Discord](https://discord.gg/example)
+
+```diff
++ Added new missions
++ Added daily rewards
+--- Improved matchmaking
+- Removed old event
+```
+</box.text>
+
+<button.name>
+CONTINUE
+</button.name>
+
+<load.text>
+<l>INCOMING MESSAGE</l>
+</load.text>
+
+<load.duration_ms>
+3000
+</load.duration_ms>

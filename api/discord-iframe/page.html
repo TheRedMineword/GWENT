@@ -1,5 +1,15 @@
+<link rel="icon" href="https://theredmineword.github.io/GWENT/favicon.ico">
 <div id="discordInvite"></div>
-
+<script>
+	const domain_raw = "drmineword-gwent.onrender.com"
+	function check_if_redirect() {
+    const host = window.location.hostname;
+		console.log("REDIR CHECK HOST", host);
+    if (host === domain_raw) {
+        window.location.replace(`https://theredmineword.github.io/GWENT${window.location.pathname}`);
+    }
+};
+</script>
 <script>
 (async () => {
 
