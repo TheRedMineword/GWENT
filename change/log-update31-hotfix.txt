@@ -90,6 +90,11 @@ Syndicate ability let you begin game wich morale card on board at game start! Ad
 --- Updated this patchnotes screen!
 --- Updated multiple htmls
 ```
+### Hotfix:
+```diff
+--- Fixed patchnotes screen button hover
+--- Fixed when opponent have custom name set, country code next to his name is gone
+```
 </box.text>
 
 <button.name>
