@@ -437,11 +437,6 @@ cursor:pointer;
 transition:.2s;
 }
 
-.briefing-button:hover{
-transform:translateY(-2px);
-filter:brightness(1.1);
-}
-
 .briefing-button:active{
 transform:none;
 }
