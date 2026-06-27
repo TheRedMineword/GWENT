@@ -113,10 +113,12 @@ More information on the [Discord server](https://theredmineword.github.io/GWENT/
 --- Updated Sky Kindom faction card\_back images wich a bit better quality ones!
 --- Updated Sky Kindom The Trevor Project card lg assets!
 + Added Sky Kindom Sky Anniversary ranged morale card!
+--- Droped volume of "The Mandragora" from 50 to 30 (Was too loud)
+--- Fixed Days of Color Guide card (Improved quality of assets)
 <fat2>
 %%img src="img/lg/sky_natureguide.jpg" style="max-width:25%"%% %%img src="img/lg/sky_naturecollab.jpg" style="max-width:25%"%%  %%img src="img/lg/sky_skyfest.jpg" style="max-width:25%"%% 
 <fat1>
-%%img src="img/lg/sky_colorcollab.jpg" style="max-width:25%"%%
+%%img src="img/lg/sky_colorcollab.jpg" style="max-width:25%"%% %%img src="img/lg/sky_colorguide.jpg" style="max-width:25%"%%
 <fat1>
 %%img src="img/lg/faction_sky.jpg" style="max-width:17%"%%
 ```

@@ -172,7 +172,7 @@ function ArrayPickObjectForDay(arr) {
 }
 const pick_array = {
   lobby: [
-    { id: "6U9gVpMHhiA", vol: 50 }, // The Mandragora
+    { id: "6U9gVpMHhiA", vol: 30 }, // The Mandragora
     { id: "yu197hlNWK0", vol: 90 }, // The Witcher 3: Wild Hunt OST - Skellige Tavern | Extended
     { id: "8o-JI8VRyKo", vol: 90 }, // Back On The Path
   ],
