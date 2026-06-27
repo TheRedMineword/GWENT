@@ -2617,7 +2617,7 @@ var card_dict = [
     filename: "vernontemeria_call",
     count: "0",
   },
-  // New cards for sky
+  // Custom faction or something
   {
     name: "Hopeful Steward",
     id: "3001",
@@ -2821,7 +2821,6 @@ var card_dict = [
     filename: "vault_elder_s2e",
     count: "0",
   },
-  // SYNDICATE FACTION
   {
     name: "Fisstech",
     id: "4001",
@@ -2851,6 +2850,27 @@ var card_dict = [
     ability: "emhyr_whiteflame2",
     filename: "king_of_beggers",
     count: "0",
+  },
+  {
+    name: "Days Of Nature Guide",
+    id: "3031",
+    deck: "sky",
+    row: "agile",
+    strength: "1",
+    ability: "reinforce",
+    filename: "natureguide",
+    count: "1",
+  },
+  {
+    name: "The Ocean Cleanup",
+    id: "3032",
+    deck: "sky",
+    row: "siege",
+    strength: "4",
+    ability: "morale",
+    filename: "naturecollab",
+    count: "0",
+    reinforce: { owner_name: "Days Of Nature Guide", spawn_count: 1 },
   },
 ]; // syndicate_king_of_beggers.jpg
 
