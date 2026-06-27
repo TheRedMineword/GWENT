@@ -662,13 +662,19 @@ async function run_patchnotes() {
 
     if (shown === id) return;
 
-    const txtRes = await fetch(
-      `change/log-${id}.txt`, // ?v=${cacheBust()}`
-    );
+    const txtRes = await fetch(`change/log-${id}.txt.bin?v=${cacheBust()}`);
 
     if (!txtRes.ok) return;
 
-    const text = await txtRes.text();
+    //  const text = await txtRes.text();
+
+    const text = await decompressBase64(
+      btoa(
+        Array.from(new Uint8Array(await txtRes.arrayBuffer()), (b) =>
+          String.fromCharCode(b),
+        ).join(""),
+      ),
+    );
 
     const data = parsePatchNotes(text);
 

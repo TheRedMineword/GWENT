@@ -1,0 +1,126 @@
+<small_text.text>
+NEWS / PATCHNOTES
+</small_text.text>
+
+<images.logo>
+img/web/logo_round.png
+</images.logo>
+
+<images.banner>
+img/web/bar.png
+</images.banner>
+
+<box.lines_outline_hex>
+#CF8E09
+</box.lines_outline_hex>
+
+<box.title>
+Patch Notes:
+</box.title>
+
+<box.text>
+# 17 June, 2026
+## \#\# SUMMER TIME SOON!! \#\#
+```diff
+--- Updated the board, deck customization background and the start screen as a seasonal holiday background.
++ Added easter egg wich Lambert during coin toss (Lambert, Lambert - What a prick, yes i will let you decide who start game... Sometimes)
+%%img src="img/icons/notif_me_coin_lambert.png" style="max-width:10%"%% %%img src="img/icons/notif_op_coin_lambert.png" style="max-width:10%"%% 
+```
+# 18 June, 2026
+```diff
+- Removed multiple card variants (due to issue wich random deck generator letting you pick inf number of them), this change dont afect gameplay, just visual, you still can have same amount of cards
++ Added new leader card; Radovid V the Stern — In Madness: Protect your cards from any Scorch effect as long as you have enough Shield Charges. Each save costs 1 charge. Starts with 5 charges and cannot be recharged. Shield break when youuse any Scorch card!
++ Turn skipper leader ability recived new cards for faction: Nilfgaard and Sky Kindom!
+%%img src="img/lg/realms_radovid_stern.jpg" style="max-width:25%"%% %%img src="img/lg/nilfgaard_fake_ciri.jpg" style="max-width:25%"%% %%img src="img/lg/sky_vault_elder_s2e.jpg" style="max-width:25%"%% 
+```
+
+# 19 June, 2026
+```diff
++ Added White Frost weather card (ability: frost and fog)
++ Added: Vernon Roche – Blue Stripes Commando Leader leader card; Spawns Blue Stripes Commando attack force in close row, but makes you pass. (Could need a rebalnce, waiting for feedback)
+%%img src="img/lg/weather_whitefrost.jpg" style="max-width:25%"%% %%img src="img/lg/realms_vernontemeria_call.jpg" style="max-width:25%"%%
+```
+
+# 20 June, 2026
+## Gwent Was Patched!
+```diff
+--- Skellige ability now sanitze cards to prevent activation of unwanted effects!
+--- Ignii card now remove itself on second board cleanup when round ends!
+--- Fixed Gaunter Neutral Leader card preview not previewing itself when ability is used
+--- Fixed one ost overlay
+--- Eredin The Destroyer was stoped, it can be used when hand is x < 2 cards!
+```
+
+# 21 June, 2026
+## New Faction!!
+Coming from RandomPianist/gwent-classic-v3.1, Syndicate faction was added!
+Syndicate ability let you begin game wich morale card on board at game start! Additionally, this faction has access to all non-leader cards from all other factions!
+```diff
++ Added new leader ability, letting medic revive extra card
++ Added medicsdraw config
++ Added 2 new cards for syndicate Fisstech (morale ability), Sigi Reuven (Leader: extra medic revive)
+- Removed cards modified at patch 18 June, 2026, due to issues (I hope its ends now)
+  Also all card exports can now be broken!
++ Added different ui.notif when Nilfgaard wins round via draw
+%%img src="img/lg/syndicate_fisstech.jpg" style="max-width:25%"%% %%img src="img/lg/syndicate_sigi_reuven.jpg" style="max-width:25%"%%
+```
+
+# 22 June, 2026
+```diff
+--- Rebalance for syndicate faction!
+--- Small changes and bug fixes
+--- Updated coin toss (now wich animation)
++ Added new syndicate leader that copy opponent ability!
+%%img src="img/lg/syndicate_king_of_beggers.jpg" style="max-width:25%"%%
+
+%%img src="img/icons/notif_me_coin.png" style="max-width:10%"%% %%img src="img/icons/notif_op_coin.png" style="max-width:10%"%% %%img src="img/icons/notif_me_coin_lambert.png" style="max-width:10%"%% %%img src="img/icons/notif_op_coin_lambert.png" style="max-width:10%"%% %%img src="img/icons/notif_me_coin_squirrel.png" style="max-width:10%"%% %%img src="img/icons/notif_op_coin_squirrel.png" style="max-width:10%"%% 
+```
+
+# 25 June, 2026
+```diff
+- Removed: Jan Calveit: Calculated Recovery leader card (It was just bad desing one)
++ Added Scoia'tael new leader card; Ida Emean — Elven Divination: Let you roll D20 for chance to get additional card from board, but what card you can get depends on roll result. Success on even roll. You need 1 charge to roll dice, you get 0.16 charges per your turn, up to 1 max charge(s) stored!
+  Ability is to be rebalnced!
+--- Fixed audio bug wich sfx/card.mp3 not playing
+%%img src="img/lg/scoiatael_Ida_Emean_d20.jpg" style="max-width:25%"%% 
+```
+
+# 26 June, 2026
+```diff
+--- Updated this patchnotes screen!
+--- Updated multiple htmls
+```
+### Hotfix:
+```diff
+--- Fixed patchnotes screen button hover
+--- Fixed when opponent have custom name set, country code next to his name is gone
+```
+
+# 26 June, 2026
+This is the last patch I’ll be making for the time being; Gwent won’t receive any updates over the next few days.
+More information on the [Discord server](https://theredmineword.github.io/GWENT/api/discord-iframe/page) or in tomorrow's message.
+```diff
++ Added Days of Nature Guide Sky Kindom faction wich reinforce ability!
++ Added The Ocean Cleanup card that get summoned after use of Days of Nature Guide card!
+--- Updated Sky Kindom faction card\_back images wich a bit better quality ones!
+--- Updated Sky Kindom The Trevor Project card lg assets!
++ Added Sky Kindom Sky Anniversary ranged morale card!
+%%img src="img/lg/sky_natureguide.jpg" style="max-width:25%"%% %%img src="img/lg/sky_naturecollab.jpg" style="max-width:25%"%%  %%img src="img/lg/sky_skyfest.jpg" style="max-width:25%"%% 
+
+%%img src="img/lg/sky_colorcollab.jpg" style="max-width:25%"%%
+
+%%img src="img/lg/faction_sky.jpg" style="max-width:17%"%%
+```
+</box.text>
+
+<button.name>
+CONTINUE
+</button.name>
+
+<load.text>
+<l>INCOMING PATCHNOTES</l>
+</load.text>
+
+<load.duration_ms>
+3000
+</load.duration_ms>
