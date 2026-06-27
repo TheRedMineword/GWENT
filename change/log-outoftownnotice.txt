@@ -3,11 +3,11 @@ NEWS / NOTICE
 </small_text.text>
 
 <images.logo>
-/img/web/logo_round.png
+img/web/logo_round.png
 </images.logo>
 
 <images.banner>
-/img/web/other/devoutoftown/bar.jpg
+img/web/other/devoutoftown/bar.jpg
 </images.banner>
 
 <box.lines_outline_hex>
