@@ -96,7 +96,7 @@ Syndicate ability let you begin game wich morale card on board at game start! Ad
 --- Fixed when opponent have custom name set, country code next to his name is gone
 ```
 
-# 26 June, 2026
+# 27 June, 2026
 This is the last patch I’ll be making for the time being; Gwent won’t receive any updates over the next few days.
 More information on the [Discord server](https://theredmineword.github.io/GWENT/api/discord-iframe/page) or in tomorrow's message.
 ```diff
