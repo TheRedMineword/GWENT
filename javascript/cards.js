@@ -2872,6 +2872,16 @@ var card_dict = [
     count: "0",
     reinforce: { owner_name: "Days Of Nature Guide", spawn_count: 1 },
   },
+  {
+    name: "Sky Anniversary",
+    id: "3033",
+    deck: "sky",
+    row: "ranged",
+    strength: "3",
+    ability: "morale",
+    filename: "skyfest",
+    count: "1",
+  },
 ]; // syndicate_king_of_beggers.jpg
 
 const witcher_signs = Object.entries(card_dict)
