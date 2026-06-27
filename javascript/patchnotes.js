@@ -147,8 +147,27 @@ function formatPatchText(text) {
     //   html += `<p>${formatInline(line.substring(1))}</p>`;
     //   continue;
     //}
+    console.log(line);
     const raw = line;
     line = unescape(line);
+    if (line === escapeHtml("<fat1>")) {
+      closeList();
+      html += '<div class="patch-gap-1"></div>';
+      continue;
+    }
+
+    if (line === escapeHtml("<fat2>")) {
+      closeList();
+      html += '<div class="patch-gap-2"></div>';
+      continue;
+    }
+
+    if (line === escapeHtml("<fat3>")) {
+      closeList();
+      html += '<div class="patch-gap-3"></div>';
+      continue;
+    }
+
     //  console.log(`[Patch notes: Per Each Line], line raw:${JSON.stringify(raw)}, unescape:${JSON.stringify(line)}`)
     const regex = /%%img\s+src="([^"]+)"(?:\s+style="([^"]*)")?\s*%%/g;
 
@@ -453,11 +472,16 @@ color:#fff;
 flex:1;
 overflow-y:auto;
 padding:24px;
-font-size:17px;
-line-height:1.7;
+    font-size:16px;
+    line-height:1.35;
 color:#fff;
 word-break:break-word;
 white-space:normal;
+}
+
+.briefing-scrollable-text p{
+    margin:0 0 2px;
+    line-height:inherit;
 }
 
 .briefing-scrollable-text::-webkit-scrollbar{
@@ -501,35 +525,35 @@ transform:none;
 /* ---------- Markdown ---------- */
 
 .patch-h1{
-margin:0 0 18px;
+ margin:0 0 8px;
 font-size:34px;
 font-weight:700;
 color:${color};
 }
 
 .patch-h2{
-margin:22px 0 12px;
+margin:10px 0 4px;
 font-size:27px;
 font-weight:700;
 color: ${color};
 }
 
 .patch-h3{
-margin:18px 0 8px;
+margin:8px 0 3px;
 font-size:21px;
 font-weight:700;
 color: ${color};
 }
 
 .patch-small{
-margin:6px 0;
+margin:2px 0;
 font-size:12px;
 opacity:.65;
 font-style:italic;
 }
 
 .patch-quote{
-margin:16px 0;
+margin:6px 0;
 padding-left:14px;
 border-left:3px solid ${color};
 opacity:.85;
@@ -548,19 +572,32 @@ text-decoration:underline;
 .patch-add{
 color:#77dd77;
 font-weight:bold;
-margin:4px 0;
+margin:1px 0;
+    line-height:1.35;
 }
 
 .patch-modify{
 color:#f2b24d;
 font-weight:bold;
-margin:4px 0;
+margin:1px 0;
+    line-height:1.35;
 }
 
 .patch-remove{
 color:#ff7373;
 font-weight:bold;
-margin:4px 0;
+margin:1px 0;
+    line-height:1.35;
+}
+
+.briefing-scrollable-text ul{
+    margin:2px 0;
+    padding-left:22px;
+}
+
+.briefing-scrollable-text li{
+    margin:0;
+    line-height:1.35;
 }
 
 .patch-code{
@@ -571,6 +608,18 @@ border:1px solid #333;
 border-radius:8px;
 font-family:Consolas,monospace;
 white-space:pre-wrap;
+}
+
+.patch-gap-1{
+    height:6px;
+}
+
+.patch-gap-2{
+    height:12px;
+}
+
+.patch-gap-3{
+    height:20px;
 }
 `;
 

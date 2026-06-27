@@ -21,13 +21,9 @@ Developer Out Of Town!
 <box.text>
 ## Hello Everone!
 **DrMineword** here!
-
 If you see this message its mean I am or I will be sunbathe on the beach!
-
 Dont worry, will be back, but till then this Gwent wont have perfect technical support.
-
 Its all i wanted to say, also remember to join our [Discord Server](https://theredmineword.github.io/GWENT/api/discord-iframe/page) for updates!
-
 Stay hydrated and etc, see ya!
 </box.text>
 
