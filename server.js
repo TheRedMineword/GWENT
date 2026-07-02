@@ -1137,10 +1137,6 @@ wss.on("connection", async (ws, req) => {
     if (process.env.B === "YES") {
       console.log("TRY INIT ADDON");
       init_addon();
-    } else {
-      try {
-      console.log(`Cant run Addon Special check env file becuase: B=${process.env.B}`);
-      } catch (e){
-      }
+    }
   });
 })();
