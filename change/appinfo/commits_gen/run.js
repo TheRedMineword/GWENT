@@ -27,7 +27,8 @@ const IGNORE_DIRS = new Set([
     '.special_content',
     'patchnotes.old',
     '.removed_content',
-    'raw'
+    'raw',
+    '.tmp'
 ]);
 
 const IGNORE_FILES = new Set([
