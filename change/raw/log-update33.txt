@@ -21,7 +21,7 @@ Patch Notes:
 <box.text>
 # 10 July, 2026
 ## Developer Back In Town!
-Hello **everyone** its me **DrMineword**
+Hello **everyone** it's me **DrMineword**
 Im back and ready to work on **Gwent**, starting tommorow I will start add changes to the game from the to-do list!
 I've rested enough to keep working. And few new patches are now on the way!!`
 See ya soon!! and remember to join the [Discord server](https://theredmineword.github.io/GWENT/api/discord-iframe/page) for more news!
