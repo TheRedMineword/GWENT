@@ -147,7 +147,7 @@ function formatPatchText(text) {
     //   html += `<p>${formatInline(line.substring(1))}</p>`;
     //   continue;
     //}
-    console.log(line);
+    //  console.log(line);
     const raw = line;
     line = unescape(line);
     if (line === escapeHtml("<fat1>")) {
