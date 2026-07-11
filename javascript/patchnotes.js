@@ -278,6 +278,8 @@ function formatPatchText(text) {
           html += `<div class="patch-modify">${formatInline(line)}</div>`;
         } else if (line.startsWith("-")) {
           html += `<div class="patch-remove">${formatInline(line)}</div>`;
+        } else if (line.startsWith("?")) {
+          html += `<div class="patch-rebalnce">${formatInline(line)}</div>`;
         } else {
           html += `<div>${formatInline(line)}</div>`;
         }
@@ -340,13 +342,27 @@ function formatPatchText(text) {
   }
 
   closeList();
-
+  html = html = html.replaceAll("!new!", '<span class="new-badge">NEW</span>');
   return html;
 }
 function installStyles(color) {
   const style = document.createElement("style");
 
   style.textContent = `
+.new-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  margin: 0 3px;
+  border-radius: 999px;
+  background: #5d8fb3;
+  color: #eef8ff;
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 0 4px rgba(93, 143, 179, 0.35);
+}
+
 .diff-add{
 color:#6BCB77;
 font-weight:bold;
@@ -589,7 +605,12 @@ font-weight:bold;
 margin:1px 0;
     line-height:1.35;
 }
-
+.patch-rebalnce{
+color:#8FD3FF;
+font-weight:bold;
+margin:1px 0;
+    line-height:1.35;
+}
 .briefing-scrollable-text ul{
     margin:2px 0;
     padding-left:22px;
