@@ -2882,7 +2882,17 @@ var card_dict = [
     filename: "skyfest",
     count: "1",
   },
-]; // syndicate_king_of_beggers.jpg
+  {
+    name: "Magister",
+    id: "4004",
+    deck: "syndicate",
+    row: "agile",
+    strength: "6",
+    ability: "hero scorch_a",
+    filename: "magister",
+    count: "1",
+  },
+];
 
 const witcher_signs = Object.entries(card_dict)
   .filter(([_, card]) => card.witcher_sign)

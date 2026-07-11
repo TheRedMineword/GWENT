@@ -265,6 +265,41 @@ var ability_dict = {
       );
     },
   },
+  scorch_a: {
+    name: "Scorch - Agilie",
+    description:
+      "Destroy your enemy's strongest opposite row Combat unit(s) if the combined strength of all his or her opposite row Combat units is 10 or more.",
+    placed: async (card, row) => {
+      if (
+        (card.holder?.leader?.abilities?.[0] === "scorchstopper" ||
+          card.holder?.leader?.abilities?.[0] === "scorch_stopper") &&
+        scorch_stopper.break_shield_if_you_use
+      ) {
+        tocar("round_lose", false);
+        ability_data[card.holder.tag].current = 0;
+        console.log(
+          "SCORCH REST VALUES!!",
+          ability_data,
+          ability_data[card.holder.tag],
+        );
+        ability_update(card.holder.tag);
+      }
+      var names_of_rows = {
+        melee: "close",
+        ranged: "ranged",
+      };
+      await ability_dict.resolveScorch(
+        [
+          board.getRow(
+            card,
+            names_of_rows[row._id.short],
+            card.holder.opponent(),
+          ),
+        ],
+        true,
+      );
+    },
+  },
   scorchstopper: {
     description: `Prevents Scorch effects by spending ${scorch_stopper.save_charge} Shield Charge${scorch_stopper.save_charge === 1 ? "" : "s"} per saved card. Starts with ${scorch_stopper.max} charge${scorch_stopper.max === 1 ? "" : "s"}, cannot be recharged${scorch_stopper.break_shield_if_you_use ? ", and breaks if you play any Scorch card." : "."}`,
   },

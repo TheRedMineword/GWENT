@@ -2713,6 +2713,16 @@
         "ability": "morale",
         "filename": "skyfest",
         "count": "1"
+      },
+      {
+        "name": "Magister",
+        "id": "4004",
+        "deck": "syndicate",
+        "row": "agile",
+        "strength": "6",
+        "ability": "hero scorch_a",
+        "filename": "magister",
+        "count": "1"
       }
     ],
     "factions": {
@@ -2817,6 +2827,10 @@
       "scorch_s": {
         "name": "Scorch - Siege",
         "description": "Destroy your enemy's strongest Siege Combat unit(s) if the combined strength of all his or her Siege Combat units is 10 or more."
+      },
+      "scorch_a": {
+        "name": "Scorch - Agilie",
+        "description": "Destroy your enemy's strongest opposite row Combat unit(s) if the combined strength of all his or her opposite row Combat units is 10 or more."
       },
       "scorchstopper": {
         "description": "Prevents Scorch effects by spending 1 Shield Charge per saved card. Starts with 5 charges, cannot be recharged, and breaks if you play any Scorch card."
