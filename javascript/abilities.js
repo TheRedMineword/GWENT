@@ -90,7 +90,10 @@ var ability_dict = {
     name: "Witcher Signs: Yrden",
     description:
       "Witchers Magic Trap, place on enemy ranged row to aplly -1 to each unit card. Effects stacks. Decoy can be used to pick up the card! ",
-    placed: async (card) => (card.holder = card.holder.opponent()),
+    placed: async (card) => {
+      card.holder = card.holder.opponent();
+      await card.animate("debuff");
+    },
   },
   horn: {
     name: "Commander's Horn",
@@ -263,7 +266,7 @@ var ability_dict = {
     },
   },
   scorchstopper: {
-    description: `Protect your cards from any Scorch effect as long as you have enough Shield Charges. Each save costs ${scorch_stopper.save_charge} charge. Starts with ${scorch_stopper.max} charges and cannot be recharged${scorch_stopper.break_shield_if_you_use ? ". Shield break when youuse any Scorch card! " : ". "}`,
+    description: `Prevents Scorch effects by spending ${scorch_stopper.save_charge} Shield Charge${scorch_stopper.save_charge === 1 ? "" : "s"} per saved card. Starts with ${scorch_stopper.max} charge${scorch_stopper.max === 1 ? "" : "s"}, cannot be recharged${scorch_stopper.break_shield_if_you_use ? ", and breaks if you play any Scorch card." : "."}`,
   },
   agile: {
     name: "agile",
@@ -2213,15 +2216,41 @@ ability_dict.resolveScorch = async (rows, require10 = true) => {
 
   // Deterministic ordering
   targets.sort((a, b) => {
-    const ua = a[1];
-    const ub = b[1];
+    const [rowA, cardA] = a;
+    const [rowB, cardB] = b;
 
-    if (ua.id != null && ub.id != null) {
-      return ua.id - ub.id;
-    }
+    // 1. Player
+    const player = (cardA.holder?.ThatPlayerId || "").localeCompare(
+      cardB.holder?.ThatPlayerId || "",
+    );
+    if (player) return player;
 
-    return (ua.name || "").localeCompare(ub.name || "") || ua.power - ub.power;
+    // 2. Card name
+    if (cardA.name !== cardB.name) return cardA.name < cardB.name ? -1 : 1;
+
+    // 3. Row
+    if (rowA.type !== rowB.type) return rowA.type < rowB.type ? -1 : 1;
+
+    // 4. Power
+    if (cardA.power !== cardB.power) return cardA.power - cardB.power;
+
+    // 5. Base power
+    if (cardA.basePower !== cardB.basePower)
+      return cardA.basePower - cardB.basePower;
+
+    // 6. Hero
+    if (cardA.hero !== cardB.hero)
+      return Number(cardA.hero) - Number(cardB.hero);
+
+    // 7. Ability string
+    const abilA = cardA.abilities.join(",");
+    const abilB = cardB.abilities.join(",");
+    if (abilA !== abilB) return abilA < abilB ? -1 : 1;
+
+    return 0;
   });
+
+  console.log("scorch targets", targets);
 
   const saved = [];
   const scorched = [];
@@ -2248,7 +2277,7 @@ ability_dict.resolveScorch = async (rows, require10 = true) => {
 
   await Promise.all([
     ...saved.map(async ([, unit]) => {
-      console.log("Saved:", unit);
+      //  console.log("Saved:", unit);
       await unit.animate2("scorch_fail");
     }),
 

@@ -956,14 +956,26 @@ wss.on("connection", async (ws, req) => {
     if (data.type === "gameStart") {
       if (ws.sessionId && sessions[ws.sessionId]) {
         const session = sessions[ws.sessionId];
+        delete sessions[ws.sessionId].firstPlayer;
+        delete sessions[ws.sessionId].special;
         if (!sessions[ws.sessionId]?.firstPlayer) {
           broadcastToSession(
             ws.sessionId,
             `Game started! Good Luck Everyone!!`,
           );
+
           const firstPlayer =
             session.players[Math.floor(Math.random() * session.players.length)]
               .playerId;
+          console.log(
+            JSON.stringify({
+              chosen: firstPlayer,
+              players: session.players.map((p, i) => ({
+                index: i,
+                id: p.playerId,
+              })),
+            }),
+          );
           sessions[ws.sessionId].firstPlayer = firstPlayer;
           sessions[ws.sessionId].special =
             Math.random() < 0.05 ? "_lambert" : "";

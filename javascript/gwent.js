@@ -3563,6 +3563,7 @@ class Card {
       turn_skip_clone_board: "spy",
       turn_skip_clone_hand: "moral",
       scorch_fail: "knockback",
+      debuff: "moral",
     };
     var temSom = new Array();
     for (var x in guia) temSom[temSom.length] = x;
@@ -3633,6 +3634,7 @@ class Card {
       turn_skip_clone_board: "spy",
       turn_skip_clone_hand: "moral",
       scorch_fail: "knockback",
+      debuff: "moral",
     };
 
     const literais = [

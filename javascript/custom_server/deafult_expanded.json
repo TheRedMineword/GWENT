@@ -2072,7 +2072,7 @@
         "count": "1"
       },
       {
-        "name": "Ida Emean – Elven Divination",
+        "name": "Ida Emean — Elven Divination",
         "id": "1003",
         "deck": "scoiatael",
         "row": "leader",
@@ -2679,6 +2679,40 @@
         "ability": "emhyr_whiteflame2",
         "filename": "king_of_beggers",
         "count": "0"
+      },
+      {
+        "name": "Days Of Nature Guide",
+        "id": "3031",
+        "deck": "sky",
+        "row": "agile",
+        "strength": "1",
+        "ability": "reinforce",
+        "filename": "natureguide",
+        "count": "1"
+      },
+      {
+        "name": "The Ocean Cleanup",
+        "id": "3032",
+        "deck": "sky",
+        "row": "siege",
+        "strength": "4",
+        "ability": "morale",
+        "filename": "naturecollab",
+        "count": "0",
+        "reinforce": {
+          "owner_name": "Days Of Nature Guide",
+          "spawn_count": 1
+        }
+      },
+      {
+        "name": "Sky Anniversary",
+        "id": "3033",
+        "deck": "sky",
+        "row": "ranged",
+        "strength": "3",
+        "ability": "morale",
+        "filename": "skyfest",
+        "count": "1"
       }
     ],
     "factions": {
@@ -2785,7 +2819,7 @@
         "description": "Destroy your enemy's strongest Siege Combat unit(s) if the combined strength of all his or her Siege Combat units is 10 or more."
       },
       "scorchstopper": {
-        "description": "Protect your cards from any Scorch effect as long as you have enough Shield Charges. Each save costs 1 charge. Starts with 5 charges and cannot be recharged. Shield break when youuse any Scorch card! "
+        "description": "Prevents Scorch effects by spending 1 Shield Charge per saved card. Starts with 5 charges, cannot be recharged, and breaks if you play any Scorch card."
       },
       "agile": {
         "name": "agile",
@@ -2985,7 +3019,7 @@
     },
     "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
     "audio_yt_vid_soundtrack_volume": 47,
-    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_vid": "8o-JI8VRyKo",
     "tavern_yt_volume": 90
   },
   "texture_pack_url": null
