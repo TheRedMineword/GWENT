@@ -36,7 +36,7 @@ This patch bring bug fixes and small improvements!
 + Added reskin of medic ability: necromancy ability, basicly it change sfx and animation
 ? Made Yennefer of Vengerberg necromancer
 <fat1>
-%%img src="img/lg/syndicate_magister.jpg" style="max-width:25%"%% 
+%%img src="img/lg/syndicate_magister.jpg" style="max-width:25%"%% %%img src="img/lg/realms_spice_trader.jpg" style="max-width:25%"%% 
 ```
 <fat2>
 Patchnotes was imporoved added new effect and also now diff supports:
