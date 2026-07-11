@@ -1,4 +1,5 @@
 "use strict";
+const debuglunchcustomcards = true; // if false when ready use: lunch_gwent_ui
 let twoPlayersConnected = false; //host alone
 let extraJSON = [];
 let displaynow = null;

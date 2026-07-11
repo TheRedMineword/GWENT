@@ -1,0 +1,1 @@
+For personal use: https://fontmeme.com/fonts/gwent-font/

@@ -1,0 +1,1 @@
+https://font.download/font/acumin-pro

@@ -6613,7 +6613,9 @@ var game = new Game();
 var player_me, player_op;
 
 ui.enablePlayer(false);
-let dm = new DeckMaker();
+if (debuglunchcustomcards) {
+  let dm = new DeckMaker();
+}
 
 function cartaNaLinha(id, carta) {
   if (id.charAt(0) == "f") {
@@ -6648,6 +6650,35 @@ async function inicio() {
 var iniciou = false,
   isLoaded = false;
 window.onload = function () {
+  if (debuglunchcustomcards) {
+    document.getElementById("load_text").style.display = "none";
+    document.getElementById("button_start").style.display = "inline-block";
+    customizationElem.style.display = "";
+    document.getElementById("toggle-music").style.display = "";
+    document.getElementsByTagName("main")[0].style.display = "";
+    document
+      .getElementById("button_start")
+      .addEventListener("click", function () {
+        inicio();
+        if (ui.getAudioState() !== 1) {
+          ui.initYouTube();
+        }
+        // cache audio:
+        try {
+          console.log("[sfx] In init: loadPackedSFX()");
+          loadPackedSFX();
+        } catch (e) {
+          console.log("[sfx] In init: loadPackedSFX(); err", e);
+        }
+      });
+    isLoaded = true;
+  } else {
+    document.getElementById("load_text").textContent =
+      "Waiting for card builds...";
+  }
+};
+
+function lunch_gwent_ui() {
   document.getElementById("load_text").style.display = "none";
   document.getElementById("button_start").style.display = "inline-block";
   customizationElem.style.display = "";
@@ -6669,7 +6700,9 @@ window.onload = function () {
       }
     });
   isLoaded = true;
-};
+
+  let dm = new DeckMaker();
+}
 
 let spacebarPressTimer;
 let isSpacebarPressed = false;
