@@ -1,5 +1,21 @@
-<link rel="icon" href="https://theredmineword.github.io/GWENT/favicon.ico">
-<div id="discordInvite"></div>
+<head>
+    	<title>Gwent - Discord</title>
+	<link rel="icon" href="https://theredmineword.github.io/GWENT/favicon.ico">
+	<meta charset="utf-8" />
+	<meta name="author" content="DrMineword" />
+	<meta name="description" content="Discord Redirect Url" />
+	<meta name="theme-color" content="#DAA520">
+	<meta property="og:image" content="https://theredmineword.github.io/GWENT/img/web/bar.png" />
+	<meta property="og:image:width" content="16000">
+	<meta property="og:image:height" content="690">
+
+	<meta property="og:type" content="website">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<div id="discordInvite">
+    <div class="loader"></div>
+</div>
 <script>
 	const domain_raw = "drmineword-gwent.onrender.com"
 	function check_if_redirect() {
@@ -33,20 +49,31 @@ const api_url_discordInvite=
             : "https://drmineword-gwent.onrender.com";
 
     const api_url_login_reg = api_url_discordInvite;
-
+    const params = new URLSearchParams(window.location.search);
+    const var64 = params.get("64") || false;
+    var url_is = `${api_url_login_reg}/api/discord-iframe/invite.json`;
+    if (var64){
+        url_is = `data:text/plain;charset=utf-8;base64,${var64}`;
+    }
     const cfg = await fetch(
-        `${api_url_login_reg}/api/discord-iframe/invite.json`
+        url_is
     ).then(r => r.json());
 
     let widgetData = null;
     let inviteData = null;
 
+    let var_cus_banner = null;
     try {
-        widgetData = await fetch(cfg.widget)
-            .then(r => r.json());
-    } catch (e) {
-        console.error("Widget fetch failed", e);
+        var_cus_banner = cfg.c_banner;
+    } catch (e){
+
     }
+//   try {
+//        widgetData = await fetch(cfg.widget)
+//            .then(r => r.json());
+//    } catch (e) {
+//       console.error("Widget fetch failed", e);
+//    }
 
     try {
         inviteData = await fetch(
@@ -64,16 +91,17 @@ const api_url_discordInvite=
         guild.name ||
         widgetData?.name ||
         "Discord Server";
-
+    console.log("guild / name\n", JSON.stringify(guild), "/", serverName);
     const icon =
         guild.icon
             ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=512`
             : "";
 
-    const banner =
-        guild.banner
-            ? `https://cdn.discordapp.com/banners/${guild.id}/${guild.banner}.png?size=2048`
-            : "";
+    const banner = var_cus_banner
+    ? var_cus_banner
+    : guild.banner
+        ? `https://cdn.discordapp.com/banners/${guild.id}/${guild.banner}.png?size=2048`
+        : "";
 
     const online =
         inviteData?.approximate_presence_count ??
@@ -136,10 +164,11 @@ const api_url_discordInvite=
         await getDominantColor(
             banner || icon
         );
-
+    console.log("color", color);
+    console.log("color url", banner || icon);
     const root =
         document.getElementById("discordInvite");
-
+    console.log("root", root);
     root.innerHTML = `
         <div class="discord-card">
             ${
@@ -204,6 +233,20 @@ const api_url_discordInvite=
 </script>
 
 <style>
+    .loader {
+    width: 56px;
+    height: 56px;
+    border: 5px solid rgba(255,255,255,.15);
+    border-top-color: #5865F2;
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
 .discord-card {
     width: 420px;
     overflow: hidden;
