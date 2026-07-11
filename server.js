@@ -967,15 +967,6 @@ wss.on("connection", async (ws, req) => {
           const firstPlayer =
             session.players[Math.floor(Math.random() * session.players.length)]
               .playerId;
-          console.log(
-            JSON.stringify({
-              chosen: firstPlayer,
-              players: session.players.map((p, i) => ({
-                index: i,
-                id: p.playerId,
-              })),
-            }),
-          );
           sessions[ws.sessionId].firstPlayer = firstPlayer;
           sessions[ws.sessionId].special =
             Math.random() < 0.05 ? "_lambert" : "";

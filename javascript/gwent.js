@@ -695,6 +695,7 @@ async function endGameBySurrender(winner, loser) {
 function askforsurrender() {
   tocar("tf2/Vote_started", false);
   ui.enableSurrender(false);
+  ui.enablePlayer(false);
   sendChatMessageStrig("asked to surrender!");
   comp_and_send(
     socket,
@@ -1174,6 +1175,7 @@ socket.onmessage = async (event) => {
         //  alert("rejected surrender");
         tocar("tf2/Vote_no", false);
         showSideTooltip("Your request to surrender has been denied.");
+        ui.enablePlayer(true);
       }
       break;
     //case "medicDraw":
@@ -3564,6 +3566,7 @@ class Card {
       turn_skip_clone_hand: "moral",
       scorch_fail: "knockback",
       debuff: "moral",
+      necromancy: "necro_reviv",
     };
     var temSom = new Array();
     for (var x in guia) temSom[temSom.length] = x;
@@ -3635,6 +3638,7 @@ class Card {
       turn_skip_clone_hand: "moral",
       scorch_fail: "knockback",
       debuff: "moral",
+      necromancy: "necro_reviv",
     };
 
     const literais = [

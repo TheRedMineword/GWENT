@@ -426,6 +426,7 @@ var ability_dict = {
               c.abilities.includes("reinforce") ||
               c.abilities.includes("muster") ||
               c.abilities.includes("medic") ||
+              c.abilities.includes("medic_n") ||
               c.abilities.includes("sabotage") ||
               c.abilities.includes("spy") ||
               c.abilities.includes("gryffinSchool") ||
@@ -1127,6 +1128,121 @@ var ability_dict = {
         grave.addCard(res);
 
         await res.animate("medic");
+
+        // Wait until the revived card is actually played to the board
+        await res.autoplay(grave);
+      }
+
+      return;
+    },
+  },
+  medic_n: {
+    name: "necromancy",
+    description:
+      "Choose one card from your discard pile and play it instantly (no Heroes or Special Cards). ",
+    placed: async (card) => {
+      if (card.holder.id === player_me.id) {
+        med_draw = 1;
+        await sleep(200);
+      }
+
+      let grave = board.getRow(card, "grave", card.holder);
+
+      // Use medicsdraw if defined, otherwise default to 1
+      var reviveCount = typeof medicsdraw === "number" ? medicsdraw : 1;
+      if (
+        player_me.leader?.abilities?.[0] === "mediclove" ||
+        player_op.leader?.abilities?.[0] === "mediclove"
+      ) {
+        reviveCount++;
+        // await ui.notification("medicextra", ui_display_times.faction_ability);
+      }
+
+      for (let revive = 0; revive < reviveCount; revive++) {
+        let units = card.holder.grave.findCards((c) => c.isUnit());
+
+        if (units.length <= 0) break;
+
+        let wrapper = { card: null };
+
+        if (game.randomRespawn) {
+          units.sort((a, b) => {
+            const powerDiff = b.basePower - a.basePower;
+            if (powerDiff !== 0) return powerDiff;
+            return a.filename.localeCompare(b.filename);
+          });
+
+          wrapper.card = units[0];
+        } else if (card.holder.controller instanceof ControllerOpponent) {
+          console.log(
+            "Opponent has played a medic, wait for him to choose which card to respawn",
+          );
+
+          wrapper.card = await new Promise((resolve) => {
+            const handleMessage = async (event) => {
+              const data = await recv_and_decomp(event);
+
+              console.log("PING, medic draw op?", event, data);
+
+              if (data.type === "medicDraw") {
+                const drawnCard = grave.cards.filter(
+                  (c) => c.filename === data.card,
+                )[0];
+
+                if (drawnCard) {
+                  socket.removeEventListener("message", handleMessage);
+                  resolve(drawnCard);
+                }
+              }
+            };
+
+            socket.addEventListener("message", handleMessage);
+          });
+        } else {
+          await ui.queueCarousel(
+            card.holder.grave,
+            1,
+            (c, i) => (wrapper.card = c.cards[i]),
+            (c) => c.isUnit(),
+            true,
+          );
+        }
+
+        const res = wrapper.card;
+
+        if (!res) break;
+
+        console.log("Medic revived:", res.filename);
+
+        // Manually send medicDraw for each revive after the first selection
+        // since medicsdraw > 1 bypasses the original single-send logic.
+        if (
+          card.holder.id === player_me.id &&
+          !(card.holder.controller instanceof ControllerOpponent)
+        ) {
+          extraJSON.push(
+            JSON.stringify({
+              type: "medicDraw",
+              card: res.filename,
+              _n: true,
+            }),
+          );
+
+          console.log(
+            "extra json now",
+            extraJSON,
+            JSON.stringify({
+              type: "medicDraw",
+              card: res.filename,
+              _n: true,
+            }),
+          );
+        }
+
+        grave.removeCard(res);
+        grave.addCard(res);
+
+        await res.animate("necromancy");
 
         // Wait until the revived card is actually played to the board
         await res.autoplay(grave);

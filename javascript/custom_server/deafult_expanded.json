@@ -294,7 +294,7 @@
         "deck": "neutral",
         "row": "ranged",
         "strength": "7",
-        "ability": "hero medic",
+        "ability": "hero medic_n",
         "filename": "yennefer",
         "count": "1"
       },
@@ -2901,6 +2901,10 @@
       },
       "medic": {
         "name": "medic",
+        "description": "Choose one card from your discard pile and play it instantly (no Heroes or Special Cards). "
+      },
+      "medic_n": {
+        "name": "necromancy",
         "description": "Choose one card from your discard pile and play it instantly (no Heroes or Special Cards). "
       },
       "morale": {

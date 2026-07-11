@@ -155,7 +155,7 @@ var card_dict = [
     deck: "neutral",
     row: "ranged",
     strength: "7",
-    ability: "hero medic",
+    ability: "hero medic_n",
     filename: "yennefer",
     count: "1",
   },
