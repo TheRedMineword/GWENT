@@ -6284,12 +6284,26 @@ function largeURL(name, ext = "jpg") {
   if (blobUrl) {
     return `url('${blobUrl}')`;
   }
+  const bloburl_custom = getCustomCardBlob(
+    "lg",
+    name.substring(name.indexOf("_") + 1),
+  );
+  if (bloburl_custom) {
+    return `url('${bloburl_custom}')`;
+  }
   return imgURL("lg/" + name, ext);
 }
 function smallURL(name, ext = "jpg") {
   const blobUrl = getTexturePackBlob("sm/" + name, ext);
   if (blobUrl) {
     return `url('${blobUrl}')`;
+  }
+  const bloburl_custom = getCustomCardBlob(
+    "sm",
+    name.substring(name.indexOf("_") + 1),
+  );
+  if (bloburl_custom) {
+    return `url('${bloburl_custom}')`;
   }
   return imgURL("sm/" + name, ext);
 }
@@ -6613,8 +6627,10 @@ var game = new Game();
 var player_me, player_op;
 
 ui.enablePlayer(false);
+let dm = null;
 if (debuglunchcustomcards) {
-  let dm = new DeckMaker();
+  dm = new DeckMaker();
+} else {
 }
 
 function cartaNaLinha(id, carta) {
@@ -6649,7 +6665,7 @@ async function inicio() {
 
 var iniciou = false,
   isLoaded = false;
-window.onload = function () {
+window.onload = async function () {
   if (debuglunchcustomcards) {
     document.getElementById("load_text").style.display = "none";
     document.getElementById("button_start").style.display = "inline-block";
@@ -6675,6 +6691,14 @@ window.onload = function () {
   } else {
     document.getElementById("load_text").textContent =
       "Waiting for card builds...";
+    try {
+      await custom_card_builder_init();
+    } catch (e) {
+      alert(
+        "Fatal error at custom_card_builder_init()\n\nGame failed to lunch\n\nCheck console for more!",
+      );
+      console.log("FATAL", e);
+    }
   }
 };
 
@@ -6701,7 +6725,8 @@ function lunch_gwent_ui() {
     });
   isLoaded = true;
 
-  let dm = new DeckMaker();
+  dm = new DeckMaker();
+  console.log("DM", dm);
 }
 
 let spacebarPressTimer;

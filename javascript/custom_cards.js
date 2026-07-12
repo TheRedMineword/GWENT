@@ -469,23 +469,107 @@ async function DEBUGGER_make_json(
   return card_json;
 }
 
-var blob = await renderTemplate(
-  await DEBUGGER_make_json(
-    false,
-    "syndicate",
-    "ranged",
-    "muster",
-    "img/sm/nilfgaard_fake_ciri.jpg",
-    "Fake Ciri",
-    6,
-    "A girl...\nBut not Ciri",
-  ),
-  410,
-  775,
-);
+//var url_blob = URL.createObjectURL(blob);
+//console.log(url_blob);
+//fetch(url_blob);
 
-console.log(blob); // Should print Blob { size: ..., type: "image/jpeg" }
+// database:
+let sm_custom_cards_map = {};
+let lg_custom_cards_map = {};
+const custom_blob_urls = new Map();
+let init_done = false;
 
-var url_blob = URL.createObjectURL(blob);
-console.log(url_blob);
-fetch(url_blob);
+// run
+
+async function rebuildCustomCardsMaps() {
+  // reset every rebuild
+  sm_custom_cards_map = {};
+  lg_custom_cards_map = {};
+  for (const url of custom_blob_urls.values()) {
+    URL.revokeObjectURL(url);
+  }
+
+  custom_blob_urls.clear();
+
+  for (const card of Object.values(card_dict)) {
+    if (!card?.filename?.startsWith("custom!")) continue;
+
+    const assets = card.customassets || {};
+
+    //
+    // SMALL
+    //
+    if (assets.sm) {
+      switch (assets.sm.type) {
+        case "url":
+          sm_custom_cards_map[card.filename] = assets.sm.url;
+          break;
+
+        case "build":
+          // placeholder
+          sm_custom_cards_map[card.filename] = null;
+          break;
+      }
+    }
+
+    //
+    // LARGE
+    //
+    if (assets.lg) {
+      const json = await DEBUGGER_make_json(
+        assets.lg.hero,
+        card.deck,
+        card.row,
+        assets.lg.ability,
+        sm_custom_cards_map[card.filename] || assets.sm?.url,
+        assets.lg.name,
+        card.strength,
+        assets.lg.desc,
+      );
+
+      const blob = await renderTemplate(json, 410, 775);
+
+      lg_custom_cards_map[card.filename] = blob;
+    }
+  }
+
+  return {
+    sm_custom_cards_map,
+    lg_custom_cards_map,
+  };
+}
+
+async function custom_card_builder_init() {
+  var res = await rebuildCustomCardsMaps();
+  console.log("Custom cards builded:", res);
+  if (!init_done) {
+    init_done = true;
+    lunch_gwent_ui();
+  }
+  return res;
+}
+function getCustomCardBlob(size, filename) {
+  const map =
+    size === "sm"
+      ? sm_custom_cards_map
+      : size === "lg"
+        ? lg_custom_cards_map
+        : null;
+
+  if (!map) return false;
+
+  const asset = map[filename];
+
+  if (!asset) return false;
+
+  if (asset instanceof Blob) {
+    if (!custom_blob_urls.has(asset)) {
+      custom_blob_urls.set(asset, URL.createObjectURL(asset));
+    }
+
+    return custom_blob_urls.get(asset);
+  }
+
+  return asset;
+}
+console.log("Custom card builder ready, use: custom_card_builder_init()");

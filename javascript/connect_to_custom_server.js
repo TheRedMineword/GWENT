@@ -43,6 +43,10 @@ const IGNORE_PATTERNS = [
   "resolveScorch",
   "yt_repeat_conf",
   "yt_repeat_launch",
+  "sm_custom_cards_map",
+  "lg_custom_cards_map",
+  "custom_blob_urls",
+  "init_done",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 
@@ -560,6 +564,8 @@ async function connect_to_custom_server(URL) {
       99,
       `Finalizing the connection with ${s_name_low}`,
     );
+    updateLoader("Almost there", 99, `Building cards!`);
+    await custom_card_builder_init();
     await reloadRuntimeConfigs();
     await sleep(1500);
     updateLoader("Done", 100, `${s_name} Fully Loaded`);
