@@ -1500,11 +1500,15 @@ class Player {
 
   // Puts the player in the winning state
   setWinning(isWinning) {
-    if (this.winning ^ isWinning)
-      document
-        .getElementById("score-total-" + this.tag)
-        .classList.toggle("score-leader");
-    this.winning = isWinning;
+    this.winning = Boolean(isWinning);
+
+    document
+      .getElementById(`score-total-${this.tag}`)
+      .classList.toggle("score-leader", this.winning);
+  }
+
+  resetWinning() {
+    this.setWinning(false);
   }
 
   // Puts the player in the passed state
@@ -2895,6 +2899,10 @@ class Game {
     await sleep(10);
     player_op.total = 0;
     player_me.total = 0;
+    player_me.setWinning(false);
+    player_op.setWinning(false);
+    this.resetTurnUI("me");
+    this.resetTurnUI("op");
     ui.toggleMusic_elem.style.left = "26vw";
 
     ui.toggleMusic_elem.classList.remove("music-customization");
@@ -2983,6 +2991,8 @@ class Game {
             const player = data.first === "me" ? player_op : player_me;
             game.firstPlayer = player;
             game.currPlayer = player;
+            this.resetTurnUI("me");
+            this.resetTurnUI("op");
             socket.removeEventListener("message", handleMessage);
             var btn4 = document.getElementById("session-start-control");
             btn4.textContent = "Game In Progress";
@@ -3031,6 +3041,8 @@ class Game {
           }
           game.firstPlayer = player;
           game.currPlayer = player;
+          this.resetTurnUI("me");
+          this.resetTurnUI("op");
 
           var special = "";
           try {
@@ -3149,17 +3161,28 @@ class Game {
     if (this.currPlayer === player_me) {
       passButton.classList.remove("hidden");
       ui.showSurrender(true);
-      document.addEventListener("keydown", handleKeyDown);
-      document.addEventListener("keyup", handleKeyUp);
+      //     document.addEventListener("keydown", handleKeyDown);
+      //     document.addEventListener("keyup", handleKeyUp);
       ui.enablePlayer(true);
     } else {
       passButton.classList.add("hidden");
       ui.showSurrender(false);
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keyup", handleKeyUp);
+      //      document.removeEventListener("keydown", handleKeyDown);
+      //    document.removeEventListener("keyup", handleKeyUp);
     }
 
     this.currPlayer.startTurn();
+  }
+
+  resetTurnUI(side) {
+    var pla = player_op;
+    if (side === "me") {
+      pla = player_me;
+    }
+    document.getElementById("stats-" + side).classList.remove("current-turn");
+    passButton.classList.toggle("hidden", true);
+    ui.showSurrender(false);
+    ui.enablePlayer(false);
   }
 
   // Ends the current turn and may end round. Disables client interraction in client's turn.
