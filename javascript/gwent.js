@@ -2801,6 +2801,7 @@ class Game {
 
   // Initializes player abilities, hands and waits for cointoss
   async startGame() {
+    await game.reset();
     var btn = document.getElementById("session-start-control");
     btn.textContent = "Game \nStarting";
     ui.enablePlayer(false);
@@ -2819,6 +2820,7 @@ class Game {
     await sleep(10);
     player_op.grave.reset();
     player_me.grave.reset();
+    await sleep(10);
     player_op.total = 0;
     player_me.total = 0;
     board.row.forEach((r) => r.updateScore());
@@ -2890,11 +2892,15 @@ class Game {
       state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
       status: `Game In Progress!`,
     });
+    await sleep(10);
+    player_op.total = 0;
+    player_me.total = 0;
     ui.toggleMusic_elem.style.left = "26vw";
 
     ui.toggleMusic_elem.classList.remove("music-customization");
     this.currPlayer = player_me;
     this.initPlayers(player_me, player_op);
+    console.log("[FS] running fullscreen req");
     openFullscreen();
     console.log("start game players:", player_me, player_op);
     await ability_setup("me", player_me.leader.abilities[0]);

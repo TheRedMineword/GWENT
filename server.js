@@ -959,10 +959,10 @@ wss.on("connection", async (ws, req) => {
         delete sessions[ws.sessionId].firstPlayer;
         delete sessions[ws.sessionId].special;
         if (!sessions[ws.sessionId]?.firstPlayer) {
-          broadcastToSession(
-            ws.sessionId,
-            `Game started! Good Luck Everyone!!`,
-          );
+          //        broadcastToSession(
+          //         ws.sessionId,
+          //         `Game started! Good Luck Everyone!!`,
+          //       );
 
           const firstPlayer =
             session.players[Math.floor(Math.random() * session.players.length)]
