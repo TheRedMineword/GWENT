@@ -160,7 +160,7 @@ let mtg_conf = {
 };
 
 function ArrayPickObjectForDay(arr) {
-  const day = Math.floor(Date.now() / 86400000); // UTC days since Unix epoch
+  const day = Math.floor(Clock.now() / 86400000); // UTC days since Unix epoch
   const index = day % arr.length;
 
   console.log("ArrayPickObjectForDay", {

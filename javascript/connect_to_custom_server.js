@@ -48,6 +48,11 @@ const IGNORE_PATTERNS = [
   "custom_blob_urls",
   "init_done",
   "loadedFonts",
+  "useSecureClock",
+  "serverTimestamp",
+  "syncPerf",
+  "sha",
+  "timezone",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 

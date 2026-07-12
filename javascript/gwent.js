@@ -6673,7 +6673,8 @@ async function inicio() {
 
 var iniciou = false,
   isLoaded = false;
-window.onload = async function () {
+// window.onload = async function () {
+async function postscripinit() {
   if (debuglunchcustomcards) {
     document.getElementById("load_text").style.display = "none";
     document.getElementById("button_start").style.display = "inline-block";
@@ -6708,7 +6709,7 @@ window.onload = async function () {
       console.error("FATAL", e);
     }
   }
-};
+}
 
 function lunch_gwent_ui() {
   document.getElementById("load_text").style.display = "none";

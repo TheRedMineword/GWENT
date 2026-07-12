@@ -82,7 +82,7 @@ function parsePatchNotes(text) {
 }
 
 function getActiveId(index) {
-  const now = Date.now();
+  const now = Clock.now();
 
   if (Array.isArray(index.timed)) {
     for (let i = index.timed.length - 1; i >= 0; i--) {

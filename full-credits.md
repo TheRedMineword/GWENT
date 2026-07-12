@@ -1,6 +1,7 @@
 # Credits
 Full credit and thanks go to CD Projekt Red for creating The Witcher 3, [asundr for the base browser recreation of Gwent](https://github.com/asundr/gwent-classic) and [Leo-Felde for the base multiplayer fork](https://github.com/Leo-Felde/gwent-multiplayer). I only added some fixes. And started modify base verison
 
+Gwent clock is synced via: [World Time](https://time.now) [API](https://time.now/developer) [by Time.Now](https://time.now)
 
 # Copyrights
 `This project is an unofficial and non commercial fan project and is not affiliated with,
