@@ -189,6 +189,18 @@ function normalizePath(
 
 function main() {
 
+        const configPath = "C:/Users/LENOVO/Desktop/GWENT/javascript/clock_config.json";
+
+const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
+
+config.sha = crypto.randomBytes(20).toString("hex").substring(0, 5);
+
+fs.writeFileSync(
+    configPath,
+    JSON.stringify(config, null, 2),
+    "utf8"
+);
+
     fs.mkdirSync(
         OUTPUT_DIR,
         {
@@ -310,17 +322,6 @@ const finalSha = crypto
         'FINAL SHA:',
         finalSha
     );
-    const configPath = "C:/Users/LENOVO/Desktop/GWENT/javascript/clock_config.json";
-
-const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
-
-config.sha = finalSha.substring(0, 5);
-
-fs.writeFileSync(
-    configPath,
-    JSON.stringify(config, null, 2),
-    "utf8"
-);
 
 console.log("clock_config.json updated:", config);
     console.log(`TOTAL SIZE: ${JSON.stringify(getTotalSize(manifestFiles))}`)

@@ -2899,7 +2899,7 @@ var card_dict = [
     row: "siege",
     strength: "1",
     ability: "powergain",
-    filename: "custom!power_place_debug",
+    filename: "custom!power_place",
     count: "1",
     customassets: {
       lg: {
