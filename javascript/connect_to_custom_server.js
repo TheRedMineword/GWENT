@@ -538,7 +538,7 @@ async function connect_to_custom_server(URL) {
       var s_name = "Server";
       var s_name_low = "server";
     }
-
+    card_dict = card_dict_base;
     if (data.env_vars?.card_dict) {
       card_dict = data.env_vars?.card_dict;
       console.log(LOG_PREFIX, data.env_vars?.card_dict, `NEW CARDS`);
