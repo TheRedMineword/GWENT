@@ -2892,6 +2892,43 @@ var card_dict = [
     filename: "magister",
     count: "1",
   },
+  {
+    name: "Circle of Elements",
+    id: "1037",
+    deck: "neutral",
+    row: "siege",
+    strength: "1",
+    ability: "powergain",
+    filename: "custom!power_place_debug",
+    count: "1",
+    customassets: {
+      lg: {
+        hero: false,
+        ability: "powergain",
+        name: [
+          "Circle of Elements: Quen",
+          "Circle of Elements: Axii",
+          "Circle of Elements: Igni",
+          "Circle of Elements: Aard",
+          "Circle of Elements: Yrden",
+        ],
+        desc: ["An Place of Power...."],
+        txt_timed_a: true,
+      },
+      sm: {
+        type: "timed_a", // url/build/timed
+        build: [],
+        url: null,
+        timed: [
+          "img/sm/power_place/quen.jpg",
+          "img/sm/power_place/axii.jpg",
+          "img/sm/power_place/igni.jpg",
+          "img/sm/power_place/aard.jpg",
+          "img/sm/power_place/yrden.jpg",
+        ],
+      },
+    },
+  },
 ];
 
 const witcher_signs = Object.entries(card_dict)

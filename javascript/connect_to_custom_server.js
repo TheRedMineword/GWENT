@@ -47,6 +47,7 @@ const IGNORE_PATTERNS = [
   "lg_custom_cards_map",
   "custom_blob_urls",
   "init_done",
+  "loadedFonts",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 

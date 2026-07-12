@@ -4005,7 +4005,11 @@ class UI {
     if (exists) {
       if (location.port !== localhost1111modeissecond) {
         // default soundtrack
-        this.audio.src = `${AudioBaseUrl}${tavern_yt_vid}/audio.m3u8`;
+        const hls = new Hls();
+
+        hls.loadSource(`${AudioBaseUrl}${tavern_yt_vid}/audio.m3u8`);
+        hls.attachMedia(this.audio);
+        //       this.audio.src = `${AudioBaseUrl}${tavern_yt_vid}/audio.m3u8`;
 
         this.audio.volume = tavern_yt_volume / 100;
 
@@ -4208,7 +4212,11 @@ class UI {
         }
         if (this.audio) {
           if (location.port !== localhost1111modeissecond) {
-            this.audio.src = `${AudioBaseUrl}${ostId}/audio.m3u8`;
+            const hls = new Hls();
+
+            hls.loadSource(`${AudioBaseUrl}${ostId}/audio.m3u8`);
+            hls.attachMedia(this.audio);
+            //            this.audio.src = `${AudioBaseUrl}${ostId}/audio.m3u8`;
 
             this.audio.volume = volume_int / 100;
 
@@ -6697,7 +6705,7 @@ window.onload = async function () {
       alert(
         "Fatal error at custom_card_builder_init()\n\nGame failed to lunch\n\nCheck console for more!",
       );
-      console.log("FATAL", e);
+      console.error("FATAL", e);
     }
   }
 };

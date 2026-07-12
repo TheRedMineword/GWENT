@@ -13,22 +13,29 @@ const loadedFonts = new Map();
 async function loadFont(url) {
   if (loadedFonts.has(url)) return loadedFonts.get(url);
 
-  const name = "f_" + btoa(url).replace(/[^a-zA-Z0-9]/g, "");
+  const promise = (async () => {
+    const name = "f_" + btoa(url).replace(/[^a-zA-Z0-9]/g, "");
 
-  const font = new FontFace(name, `url(${url})`);
+    const font = new FontFace(name, `url(${url})`);
 
-  await font.load();
-  document.fonts.add(font);
+    await font.load();
+    document.fonts.add(font);
 
-  loadedFonts.set(url, name);
+    await document.fonts.load(`16px "${name}"`);
 
-  return name;
+    return name;
+  })();
+
+  loadedFonts.set(url, promise);
+
+  return promise;
 }
 
 async function drawText(ctx, obj) {
   const conf = obj.font_conf || {};
 
   const family = await loadFont(obj.font);
+  await document.fonts.ready;
 
   const x = parseFloat((obj.pos.left || "0").replace(",", "."));
   const y = parseFloat((obj.pos.top || "0").replace(",", "."));
@@ -40,12 +47,20 @@ async function drawText(ctx, obj) {
 
   ctx.save();
 
-  ctx.font = `${conf.weight || 400} ${fontSize}px "${family}"`;
+  console.log(ctx.font);
+  console.log(ctx.measureText(obj.text).width);
+  // ctx.font = `${conf.weight || 400} ${fontSize}px "${family}"`;
+  ctx.font =
+    `${conf.style || "normal"} ` +
+    `${conf.weight || 400} ` +
+    `${fontSize}px ` +
+    `"${family}"`;
   ctx.fillStyle = conf.color || "#000";
   ctx.globalAlpha = conf.opacity ?? 1;
 
   ctx.textAlign = conf.align || "left";
   ctx.textBaseline = "alphabetic";
+  //ctx.textBaseline = "top";
 
   if (conf.shadow) {
     ctx.shadowColor = conf.shadow.color || "#000";
@@ -509,6 +524,11 @@ async function rebuildCustomCardsMaps() {
           // placeholder
           sm_custom_cards_map[card.filename] = null;
           break;
+        case "timed_a":
+          sm_custom_cards_map[card.filename] = ArrayPickObjectForDay(
+            card.customassets.sm.timed,
+          );
+          break;
       }
     }
 
@@ -516,15 +536,24 @@ async function rebuildCustomCardsMaps() {
     // LARGE
     //
     if (assets.lg) {
+      var text_name = null;
+      var text_desc = null;
+      if (assets.lg.txt_timed_a) {
+        text_name = ArrayPickObjectForDay(assets.lg.name);
+        text_desc = ArrayPickObjectForDay(assets.lg.desc);
+      } else {
+        text_name = assets.lg.name;
+        text_desc = assets.lg.desc;
+      }
       const json = await DEBUGGER_make_json(
         assets.lg.hero,
         card.deck,
         card.row,
         assets.lg.ability,
         sm_custom_cards_map[card.filename] || assets.sm?.url,
-        assets.lg.name,
+        text_name,
         card.strength,
-        assets.lg.desc,
+        text_desc,
       );
 
       const blob = await renderTemplate(json, 410, 775);

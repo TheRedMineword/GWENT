@@ -154,7 +154,7 @@ let mtg_conf = {
   max_power: 13,
   count_needed: 0, // count > count_needed
   shuffle_few_times: false,
-  version: "9fab1a38ced21b1f047f5dc92ff88e60de73827a6663d4d3c0f1b2ca20ce9e68",
+  version: "24ab1a38ced21b1f047f5dc92ff88e60de73827a6663d4d3c0f1b2ca20ce9e68",
   daily_seed: true,
   unstable_mode: "random", // random/not-random/nonbe
 };
