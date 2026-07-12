@@ -2725,7 +2725,7 @@
         "count": "1"
       },
       {
-        "name": "Power Place",
+        "name": "Circle of Elements",
         "id": "1037",
         "deck": "neutral",
         "row": "siege",
@@ -2738,11 +2738,11 @@
             "hero": false,
             "ability": "powergain",
             "name": [
-              "Circles of Elements: Quen",
-              "Circles of Elements: Axii",
-              "Circles of Elements: Igni",
-              "Circles of Elements: Aard",
-              "Circles of Elements: Yrden"
+              "Circle of Elements: Quen",
+              "Circle of Elements: Axii",
+              "Circle of Elements: Igni",
+              "Circle of Elements: Aard",
+              "Circle of Elements: Yrden"
             ],
             "desc": [
               "An Place of Power...."
@@ -2760,6 +2760,40 @@
               "img/sm/power_place/aard.jpg",
               "img/sm/power_place/yrden.jpg"
             ]
+          }
+        }
+      },
+      {
+        "name": "Traveling Spirit",
+        "id": "3034",
+        "deck": "sky",
+        "row": "close",
+        "strength": "6",
+        "ability": "",
+        "filename": "custom!traveling_spirit",
+        "count": "0",
+        "count_monitor": {
+          "base": 1,
+          "monitor": "ts",
+          "id": "ts_count",
+          "duration": {
+            "start": "null",
+            "duration": "1"
+          }
+        },
+        "customassets": {
+          "lg": {
+            "hero": false,
+            "ability": false,
+            "name": "Traveling spirit",
+            "desc": "A special guest from times long gone.",
+            "txt_timed_a": false
+          },
+          "sm": {
+            "type": "ts",
+            "build": [],
+            "url": null,
+            "timed": []
           }
         }
       }
