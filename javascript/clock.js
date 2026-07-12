@@ -3,7 +3,7 @@
   let serverTimestamp = 0;
   let syncPerf = 0;
   let timezone = "UTC";
-  let sha = "";
+  let sha = "abcde";
 
   const scripts = [
     "javascript/jszip.min.js",
@@ -75,30 +75,35 @@
       sha = json.sha || "";
 
       console.log("Clock config", json);
+      if (window.location.port !== "8080" && window.location.port !== "8081") {
+        const start = performance.now();
 
-      const start = performance.now();
+        const response = await fetch(
+          `https://time.now/developer/api/timezone/${encodeURIComponent(timezone)}`,
+          {
+            cache: "no-store",
+          },
+        );
 
-      const response = await fetch(
-        `https://time.now/developer/api/timezone/${encodeURIComponent(timezone)}`,
-        {
-          cache: "no-store",
-        },
-      );
+        const midpoint = performance.now();
 
-      const midpoint = performance.now();
+        const body = await response.json();
 
-      const body = await response.json();
+        serverTimestamp = new Date(body.datetime).getTime();
 
-      serverTimestamp = new Date(body.datetime).getTime();
+        syncPerf = (start + midpoint) / 2;
 
-      syncPerf = (start + midpoint) / 2;
+        useSecureClock = true;
 
-      useSecureClock = true;
+        console.log(
+          "Secure clock synced",
+          new Date(serverTimestamp).toISOString(),
+        );
+      } else {
+        console.warn("Secure clock unavailable, using device clock.");
 
-      console.log(
-        "Secure clock synced",
-        new Date(serverTimestamp).toISOString(),
-      );
+        useSecureClock = false;
+      }
     } catch (e) {
       console.warn("Secure clock unavailable, using device clock.", e);
 
