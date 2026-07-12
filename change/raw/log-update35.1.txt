@@ -27,8 +27,10 @@ This is an expansion of yesterday's update; the changes introduce fixes and new 
 --- Tried making Gwent clock synced to global UTC clock, for now it works fine
 + Custom Card Builder, make card from json defined in card_dict during game lunch or joining custom server !new!
 + Added daily Circle of Elements card !new!
++ Added logic for cards being avitable during selected time period !new!
++ Added Traveling Spirit for Sky faction card (Will be avitable wich Spirit That visit in game) !new!
 <fat1>
-%%img src="img/web/other/card_builder_cards/axii.jpg" style="max-width:25%"%% 
+%%img src="img/web/other/card_builder_cards/axii.jpg" style="max-width:25%"%% %%img src="img/web/other/card_builder_cards/bird_guy.jpg" style="max-width:25%"%%
 ```
 
 <fat3>

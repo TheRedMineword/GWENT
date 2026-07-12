@@ -53,6 +53,7 @@ const IGNORE_PATTERNS = [
   "syncPerf",
   "sha",
   "timezone",
+  "timed_count_change",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 
@@ -572,6 +573,12 @@ async function connect_to_custom_server(URL) {
     );
     updateLoader("Almost there", 99, `Building cards!`);
     await custom_card_builder_init();
+    timed_count_change = [];
+    card_dict.forEach((card) => {
+      if (card.count_monitor) {
+        pushTimedCount(card);
+      }
+    });
     await reloadRuntimeConfigs();
     await sleep(1500);
     updateLoader("Done", 100, `${s_name} Fully Loaded`);

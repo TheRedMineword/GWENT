@@ -6762,7 +6762,7 @@ function lunch_gwent_ui() {
       }
     });
   isLoaded = true;
-
+  console.log("dm init", card_dict);
   dm = new DeckMaker();
   console.log("DM", dm);
 }

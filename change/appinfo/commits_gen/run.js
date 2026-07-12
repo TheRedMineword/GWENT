@@ -28,7 +28,8 @@ const IGNORE_DIRS = new Set([
     'patchnotes.old',
     '.removed_content',
     'raw',
-    '.tmp'
+    '.tmp',
+    'web-only'
 ]);
 
 const IGNORE_FILES = new Set([

@@ -1,3 +1,4 @@
+let timed_count_change = [];
 var card_dict = [
   {
     name: "Mysterious Elf",
@@ -2929,6 +2930,37 @@ var card_dict = [
       },
     },
   },
+  {
+    name: "Traveling Spirit",
+    id: "3034",
+    deck: "sky",
+    row: "close",
+    strength: "6",
+    ability: "",
+    filename: "custom!traveling_spirit",
+    count: "0",
+    count_monitor: {
+      base: 1,
+      monitor: "ts",
+      id: "ts_count",
+      duration: { start: "null", duration: "1" },
+    },
+    customassets: {
+      lg: {
+        hero: false,
+        ability: false,
+        name: "Traveling spirit",
+        desc: "A special guest from times long gone.",
+        txt_timed_a: false,
+      },
+      sm: {
+        type: "ts", // url/build/timed
+        build: [],
+        url: null,
+        timed: [],
+      },
+    },
+  },
 ];
 
 const witcher_signs = Object.entries(card_dict)
@@ -2938,5 +2970,89 @@ const witcher_signs = Object.entries(card_dict)
     id: key,
     ...card,
   }));
+
 console.log("Cards array", card_dict, witcher_signs);
 const card_dict_base = deepClone(card_dict);
+
+function setupSpiritTimer(card, data) {
+  card.count_monitor = {
+    base: 1,
+    monitor: "based",
+    id: "ts_count",
+    duration: {
+      start: data.when.arrive,
+      duration: Number(data.when.duration),
+    },
+  };
+
+  pushTimedCount(card);
+
+  console.log("[SPIRIT TIMER SETUP]", card.name, card.count_monitor);
+}
+
+function pushTimedCount(card) {
+  if (!card.count_monitor) return;
+  if (card.count_monitor.monitor !== "based") return;
+
+  let timer = {
+    card_id: card.id,
+    monitor_id: card.count_monitor.id,
+    start: new Date(card.count_monitor.duration.start).getTime(),
+    duration: Number(card.count_monitor.duration.duration) * 1000,
+    activated: false,
+  };
+
+  timed_count_change.push(timer);
+
+  console.log("[TIMER ADDED]", timer);
+}
+
+// Scan timers
+function scanTimedCountChange() {
+  let now = Clock.now();
+
+  timed_count_change.forEach((timer, index) => {
+    let card = card_dict.find((c) => c.id === timer.card_id);
+
+    if (!card) {
+      console.log("[ERROR] Card missing", timer.card_id);
+      return;
+    }
+
+    // Start time reached
+    if (!timer.activated && now >= timer.start) {
+      card.count = card.count_monitor.base;
+
+      timer.activated = true;
+
+      console.log(
+        "[ACTIVATED]",
+        card.name,
+        "count:",
+        card.count,
+        "monitor:",
+        timer.monitor_id,
+      );
+    }
+
+    // Duration finished
+    if (timer.activated && now >= timer.start + timer.duration) {
+      card.count = 0;
+
+      console.log("[EXPIRED]", card.name, "count reset to:", card.count);
+
+      // remove timer
+      timed_count_change.splice(index, 1);
+    }
+  });
+}
+
+// Run every second
+setInterval(scanTimedCountChange, 1000);
+
+// Initial load
+card_dict.forEach((card) => {
+  if (card.count_monitor) {
+    pushTimedCount(card);
+  }
+});

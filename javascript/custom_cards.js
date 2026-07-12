@@ -9,6 +9,12 @@ async function loadImage(src) {
   });
 }
 
+const isGitHubPages = window.location.hostname === "theredmineword.github.io";
+
+const IMAGE_SOURCE_TS = isGitHubPages
+  ? "http://theredmineword.github.io/GWENT/"
+  : "";
+
 const loadedFonts = new Map();
 
 async function loadFont(url) {
@@ -30,6 +36,58 @@ async function loadFont(url) {
   loadedFonts.set(url, promise);
 
   return promise;
+}
+
+function drawCover(ctx, img, x, y, w, h) {
+  const scale = Math.max(w / img.width, h / img.height);
+
+  const dw = img.width * scale;
+  const dh = img.height * scale;
+
+  ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+}
+
+async function buildTravelingSpiritSmall(filename, data) {
+  const arrive = new Date(data.when.arrive).getTime(); // ms
+  const duration = Number(data.when.duration) * 1000; // sec -> ms
+  const now = Clock.now();
+
+  // choose card
+  let card = card_dict.find((c) => c.id === "3034");
+
+  // activate timer
+  setupSpiritTimer(card, data);
+
+  if (now < arrive || now >= arrive + duration) {
+    sm_custom_cards_map[filename] = `${IMAGE_SOURCE_TS}${data.no_spirit}`;
+    lg_custom_cards_map[filename] = null;
+    return data.no_spirit;
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = 309;
+  canvas.height = 444;
+
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  const bg = await loadImage(
+    `${IMAGE_SOURCE_TS}${data.images[data.when.behind]}`,
+  );
+  drawCover(ctx, bg, 0, 0, 309, 444);
+
+  // Spirit
+  const spirit = await loadImage(`${IMAGE_SOURCE_TS}${data.when.who}`);
+  ctx.drawImage(spirit, (309 - 299) / 2, (444 - 411.125) / 2, 299, 411.125);
+
+  const blob = await new Promise((resolve) =>
+    canvas.toBlob(resolve, "image/jpeg", 0.95),
+  );
+
+  sm_custom_cards_map[filename] = URL.createObjectURL(blob);
+  lg_custom_cards_map[filename] = null;
+
+  return blob;
 }
 
 async function drawText(ctx, obj) {
@@ -195,8 +253,20 @@ async function renderTemplate(template, width, height) {
       const x = parseInt(item.pos.left || 0);
       const y = parseInt(item.pos.top || 0);
 
-      const w = parseInt(item.size.width);
-      const h = parseInt(item.size.height);
+      let w = item.size.width === "auto" ? null : parseFloat(item.size.width);
+      let h = item.size.height === "auto" ? null : parseFloat(item.size.height);
+
+      // Preserve aspect ratio when one dimension is "auto"
+      if (w === null && h === null) {
+        w = img.width;
+        h = img.height;
+      } else if (w === null) {
+        w = img.width * (h / img.height);
+      } else if (h === null) {
+        h = img.height * (w / img.width);
+      }
+
+      ctx.drawImage(img, x, y, w, h);
 
       ctx.drawImage(img, x, y, w, h);
     }
@@ -326,18 +396,78 @@ async function DEBUGGER_make_json(
     });
   }
   if (faction !== "neutral") {
+    var sizes = {
+      syndicate: {
+        width: "94,5236px",
+        height: "690,8468px",
+      },
+      sky: {
+        width: "111,6125 px",
+        height: "701,8821 px",
+      },
+      skellige: {
+        width: "100px",
+        height: "691,05px",
+      },
+      monsters: {
+        width: "100px",
+        height: "690,8852px",
+      },
+      scoiatael: {
+        width: "100px",
+        height: "690,2204 px",
+      },
+      realms: {
+        width: "100px",
+        height: "688,8352 px",
+      },
+      nilfgaard: {
+        width: "100px",
+        height: "689 px",
+      },
+    };
+    var sizes2 = {
+      syndicate: {
+        left: "11,0863px",
+        top: "-4,0833px",
+      },
+      sky: {
+        left: "2,5419px",
+        top: "-4,0833px",
+      },
+      skellige: {
+        left: "8,3481 px",
+        top: "-1,8879 px",
+      },
+      monsters: {
+        left: "7,3552 px",
+        top: "-1,7231 px",
+      },
+      scoiatael: {
+        left: "8,3481 px",
+        top: "-1,5583 px",
+      },
+      realms: {
+        left: "7,0562 px",
+        top: "-1,2287 px",
+      },
+      nilfgaard: {
+        left: "7,6542 px",
+        top: "-1,3935 px",
+      },
+    };
     card_json.push({
       _name: "faction_bar",
       type: "img",
       pos: {
-        left: "11,0863px",
-        top: "-4,0833px",
+        left: sizes2[faction].left,
+        top: sizes2[faction].top,
         right: null,
         bottom: null,
       },
       size: {
-        width: "94,5236px",
-        height: "690,8468px",
+        width: sizes[faction].width,
+        height: sizes[faction].height,
       },
       file: `img/c_builder/bars/${faction}.png`,
       layer: 90,
@@ -529,6 +659,13 @@ async function rebuildCustomCardsMaps() {
           sm_custom_cards_map[card.filename] = ArrayPickObjectForDay(
             card.customassets.sm.timed,
           );
+          break;
+        case "ts":
+          const ts = await (
+            await fetch("img/c_builder/traveling_spirits/arrive.json")
+          ).json();
+
+          await buildTravelingSpiritSmall("custom!traveling_spirit", ts);
           break;
       }
     }
