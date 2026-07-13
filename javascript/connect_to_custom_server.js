@@ -213,7 +213,7 @@ async function showThirdPartyWarning(url) {
     </p>
 
     <p>
-      <b>${url}</b>
+      <b>${url.length > 75 ? `${url.slice(0, 75)}....` : url}</b>
     </p>
 
     <p>
