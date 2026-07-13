@@ -342,7 +342,17 @@ function formatPatchText(text) {
   }
 
   closeList();
-  html = html = html.replaceAll("!new!", '<span class="new-badge">NEW</span>');
+  html = html.replaceAll("!new!", '<span class="new-badge">NEW</span>');
+  html = html.replace(/!time:([^!]+)!/g, (_, iso) => {
+    const d = new Date(iso);
+
+    if (isNaN(d)) return iso;
+
+    return d.toLocaleString(undefined, {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+  });
   return html;
 }
 function installStyles(color) {

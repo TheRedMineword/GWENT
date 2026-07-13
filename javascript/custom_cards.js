@@ -53,6 +53,7 @@ async function buildTravelingSpiritSmall(filename, data) {
   const arrive = new Date(data.when.arrive).getTime(); // ms
   const duration = Number(data.when.duration) * 1000; // sec -> ms
   const now = Clock.now();
+  const PRELOAD_TIME = 4 * 60 * 60 * 1000;
 
   // choose card
   let card = card_dict.find((c) => c.id === "3034");
@@ -60,7 +61,7 @@ async function buildTravelingSpiritSmall(filename, data) {
   // activate timer
   setupSpiritTimer(card, data);
 
-  if (now < arrive || now >= arrive + duration) {
+  if (now < arrive - PRELOAD_TIME || now >= arrive + duration) {
     sm_custom_cards_map[filename] = `${IMAGE_SOURCE_TS}${data.no_spirit}`;
     lg_custom_cards_map[filename] = null;
     return data.no_spirit;

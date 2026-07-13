@@ -2961,7 +2961,186 @@ var card_dict = [
       },
     },
   },
+  {
+    name: "Vincent Van Gogh",
+    id: "3035",
+    deck: "sky",
+    row: "close",
+    strength: "5",
+    ability: "hero reinforce",
+    filename: "custom!sky_vincent",
+    count: "0",
+    count_monitor: {
+      base: 1,
+      monitor: "based",
+      id: "vincent_allowed",
+      duration: {
+        start: "2026-07-21T07:00:00.000Z",
+        duration: "9999999999999999999999999",
+      },
+    },
+    customassets: {
+      lg: {
+        hero: true,
+        ability: "reinforce",
+        name: "Vincent Van Gogh",
+        desc: "The world knows the legend.\nFew know the full story.",
+        txt_timed_a: false,
+      },
+      sm: {
+        type: "url", // url/build/timed
+        build: [],
+        url: "img/sm/dear_van_gogh/vincent.jpg",
+        timed: [],
+      },
+    },
+    reinforce: { owner_name: "Season of Dear Van Gogh", spawn_count: 1 },
+  },
+  {
+    name: "Vincent Van Gogh: Painting",
+    id: "3036", // Keep sky  faction ID
+    deck: "neutral",
+    row: "ranged",
+    strength: "1",
+    ability: "powergain",
+    filename: "custom!vincent_painting_power",
+    count: "0",
+    customassets: {
+      lg: {
+        hero: false,
+        ability: "powergain",
+        name: [
+          "Vase with Twelve Sunflowers",
+          "The Starry Night",
+          "Irises",
+          "Bedroom in Arles",
+        ],
+        desc: [
+          "A dozen suns, forever in bloom.",
+          "A thousand lights defied the dark.",
+          "Grace blooms where silence lingers.",
+          "Home is where the heart dares to rest.",
+        ],
+        txt_timed_a: true,
+      },
+      sm: {
+        type: "timed_a", // url/build/timed
+        build: [],
+        url: null,
+        timed: [
+          "img/sm/dear_van_gogh/switching/vase_of_flowers.jpg",
+          "img/sm/dear_van_gogh/switching/starry_night.jpg",
+          "img/sm/dear_van_gogh/switching/iris.jpg",
+          "img/sm/dear_van_gogh/switching/bedroom.jpg",
+        ],
+      },
+    },
+    reinforce: { owner_name: "Vincent Van Gogh", spawn_count: 1 },
+  },
+  {
+    name: "Dear Van Gogh Seasonal Spirits",
+    id: "3037",
+    deck: "sky",
+    row: "ranged",
+    strength: "3",
+    ability: "bond",
+    filename: "custom!sky_vincent_guys",
+    count: "0",
+    count_monitor: {
+      base: 3,
+      monitor: "based",
+      id: "vincent_seasonal_spirits",
+      duration: {
+        start: "2026-07-17T07:00:00.000Z",
+        duration: "9999999999999999999999999",
+      },
+    },
+    customassets: {
+      lg: {
+        hero: false,
+        ability: "bond",
+        name: "Dear Van Gogh Seasonal Spirits",
+        desc: "Seasonal Spirits and their stories can take various forms.",
+        txt_timed_a: false,
+      },
+      sm: {
+        type: "url", // url/build/timed
+        build: [],
+        url: "img/sm/dear_van_gogh/seasonal_travelers.jpg",
+        timed: [],
+      },
+    },
+  },
+  {
+    name: "Dear Van Gogh Seasonal Hearth",
+    id: "3038",
+    deck: "sky",
+    row: "close",
+    strength: "2",
+    ability: "medic",
+    filename: "custom!sky_vincent_medic",
+    count: "0",
+    count_monitor: {
+      base: 1,
+      monitor: "based",
+      id: "vincent_seasonal_Hearth",
+      duration: {
+        start: "2026-07-17T07:00:00.000Z",
+        duration: "9999999999999999999999999",
+      },
+    },
+    customassets: {
+      lg: {
+        hero: false,
+        ability: "medic",
+        name: "Dear Van Gogh Seasonal Hearth",
+        desc: "Every ember remembers the sun.",
+        txt_timed_a: false,
+      },
+      sm: {
+        type: "url", // url/build/timed
+        build: [],
+        url: "img/sm/dear_van_gogh/vincent_medic.jpg",
+        timed: [],
+      },
+    },
+  },
 ];
+
+// temponary
+card_dict.push({
+  name: "Season of Dear Van Gogh",
+  id: "tempnary_card_001",
+  deck: "neutral",
+  row: "agile",
+  strength: "0",
+  ability: "reinforce",
+  filename: "custom!sky_vincent_season",
+  count: "0",
+  count_monitor: {
+    base: 1,
+    monitor: "based",
+    id: "vincent_seaon_start_reinforce",
+    duration: { start: "2026-07-17T07:00:00.000Z", duration: "345599" },
+  },
+  customassets: {
+    lg: {
+      hero: false,
+      ability: "reinforce",
+      name: "Season of Dear Van Gogh",
+      desc: "The world knows the legend.\nFew know the full story.",
+      txt_timed_a: false,
+    },
+    sm: {
+      type: "url", // url/build/timed
+      build: [],
+      url: "https://theredmineword.github.io/GWENT/img/sm/dear_van_gogh/web-only/seaonal_visitor.jpg",
+      timed: [],
+    },
+  },
+});
+
+//img/sm/dear_van_gogh/seasonal_travelers.jpg
 
 const witcher_signs = Object.entries(card_dict)
   .filter(([_, card]) => card.witcher_sign)
