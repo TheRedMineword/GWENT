@@ -1,1 +1,65 @@
-{"when":{"arrive":"2026-07-16T07:00:00.000Z","duration":"345600","who":"img/c_builder/traveling_spirits/web-only/spirits/Flight-Spirit-Light-Whisperer.webp","behind":"windpaths"},"images":{"sanctuary":"img/c_builder/traveling_spirits/web-only/back/sky_wiki/DP_SanctuaryIslands.webp","windpaths":"img/c_builder/traveling_spirits/web-only/back/private/lambert/windpaths.webp","prophecycave":"img/c_builder/traveling_spirits/web-only/back/private/drmineword/prophecycave.webp","starlightdesert":"img/c_builder/traveling_spirits/web-only/back/private/drmineword/littleprince.webp","isleofdawn":"img/c_builder/traveling_spirits/web-only/back/private/drmineword/isle.webp","valley_icering":"img/c_builder/traveling_spirits/web-only/back/private/drmineword/ice_ring.webp","forest_brook":"img/c_builder/traveling_spirits/web-only/back/private/drmineword/forest_brook.webp","valley_village":"img/c_builder/traveling_spirits/web-only/back/private/drmineword/dream_village.webp"},"no_spirit":"img/c_builder/traveling_spirits/none.jpg","special_visitors":[{"name":"Test Visitor","id":"visitor000","deck":"sky","row":"agile","strength":"0","ability":"","filename":"custom!test_special_visitors","count":"0","count_monitor":{"base":1,"monitor":"based","id":"test_special_visitors","duration":{"start":"2025-07-17T07:00:00.000Z","duration":"345599"}},"customassets":{"lg":{"hero":false,"ability":"","name":"Special Visitor","desc":"N/A","txt_timed_a":false},"sm":{"type":"ts2","build":[{"back":"img/c_builder/traveling_spirits/none.jpg"},{"face":"img/c_builder/traveling_spirits/none.jpg"}],"url":null,"timed":[]}}}]}
+{
+  "when": {
+    "arrive": "2026-07-16T07:00:00.000Z",
+    "duration": "345600",
+    "who": "img/c_builder/traveling_spirits/web-only/spirits/Flight-Spirit-Light-Whisperer.webp",
+    "behind": "windpaths"
+  },
+  "images": {
+    "sanctuary": "img/c_builder/traveling_spirits/web-only/back/sky_wiki/DP_SanctuaryIslands.webp",
+    "windpaths": "img/c_builder/traveling_spirits/web-only/back/private/lambert/windpaths.webp",
+    "prophecycave": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/prophecycave.webp",
+    "starlightdesert": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/littleprince.webp",
+    "isleofdawn": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/isle.webp",
+    "valley_icering": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/ice_ring.webp",
+    "forest_brook": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/forest_brook.webp",
+    "valley_village": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/dream_village.webp",
+    "crescentoasis": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/oais.webp",
+    "vault_middle": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/middle_vault.webp",
+    "vault_lobby": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/bottom_vault.webp"
+  },
+  "no_spirit": "img/c_builder/traveling_spirits/none.jpg",
+  "special_visitors": [
+    {
+      "name": "Test Visitor",
+      "id": "visitor000",
+      "deck": "sky",
+      "row": "agile",
+      "strength": "0",
+      "ability": "",
+      "filename": "custom!test_special_visitors",
+      "count": "0",
+      "count_monitor": {
+        "base": 1,
+        "monitor": "based",
+        "id": "test_special_visitors",
+        "duration": {
+          "start": "2025-07-17T07:00:00.000Z",
+          "duration": "345599"
+        }
+      },
+      "customassets": {
+        "lg": {
+          "hero": false,
+          "ability": "",
+          "name": "Special Visitor",
+          "desc": "N/A",
+          "txt_timed_a": false
+        },
+        "sm": {
+          "type": "ts2",
+          "build": [
+            {
+              "back": "img/c_builder/traveling_spirits/none.jpg"
+            },
+            {
+              "face": "img/c_builder/traveling_spirits/none.jpg"
+            }
+          ],
+          "url": null,
+          "timed": []
+        }
+      }
+    }
+  ]
+}
