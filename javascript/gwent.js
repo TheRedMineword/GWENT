@@ -6684,6 +6684,7 @@ function cartaNaLinha(id, carta) {
 }
 
 async function inicio() {
+  openFullscreen();
   var classe = document.getElementsByClassName("abs");
   for (var i = 0; i < classe.length; i++) classe[i].style.display = "none";
   iniciou = true;

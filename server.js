@@ -956,8 +956,6 @@ wss.on("connection", async (ws, req) => {
     if (data.type === "gameStart") {
       if (ws.sessionId && sessions[ws.sessionId]) {
         const session = sessions[ws.sessionId];
-        delete sessions[ws.sessionId].firstPlayer;
-        delete sessions[ws.sessionId].special;
         if (!sessions[ws.sessionId]?.firstPlayer) {
           //        broadcastToSession(
           //         ws.sessionId,
@@ -990,6 +988,10 @@ wss.on("connection", async (ws, req) => {
     }
 
     if (data.type === "initial_reDraw") {
+      try {
+        delete sessions[ws.sessionId].firstPlayer;
+        delete sessions[ws.sessionId].special;
+      } catch (e) {}
       if (ws.sessionId && sessions[ws.sessionId]) {
         const session = sessions[ws.sessionId];
         session.playersReady += 1;

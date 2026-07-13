@@ -619,7 +619,12 @@ function openFullscreen() {
     elem.webkitRequestFullscreen();
   } else if (elem.msRequestFullscreen) {
     console.log("[FS] Using msRequestFullscreen()");
-    elem.msRequestFullscreen();
+    elem
+      .requestFullscreen()
+      .then(() => console.log("[FS] Success"))
+      .catch((err) => {
+        console.error("[FS] Failed:", err.name, err.message);
+      });
   } else {
     console.error("[FS] Fullscreen API not supported");
   }

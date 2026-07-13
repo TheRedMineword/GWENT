@@ -108,6 +108,8 @@ async function reset_custom() {
 function createLoaderOverlay() {
   if (loaderOverlay) return;
 
+  openFullscreen();
+
   loaderOverlay = document.createElement("div");
   loaderOverlay.id = "custom-server-loader";
 
