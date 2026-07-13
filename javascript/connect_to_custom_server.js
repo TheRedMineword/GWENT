@@ -573,12 +573,15 @@ async function connect_to_custom_server(URL) {
     );
     updateLoader("Almost there", 99, `Building cards!`);
     await custom_card_builder_init();
+    updateLoader("Almost there", 99, `Updating cards!`);
     timed_count_change = [];
     card_dict.forEach((card) => {
       if (card.count_monitor) {
         pushTimedCount(card);
       }
     });
+    await sleep(750);
+    updateLoader("Almost there", 99, `Reloading UI!`);
     await reloadRuntimeConfigs();
     if (!waitMusicPlaying) {
       ui.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);

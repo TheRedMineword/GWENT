@@ -3139,7 +3139,7 @@ card_dict_base.push({
     },
   },
 });
-console.log("is ts", card_dict_base[256]);
+
 var card_dict = deepClone(card_dict_base);
 
 const witcher_signs = Object.entries(card_dict)
