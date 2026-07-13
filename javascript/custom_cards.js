@@ -93,6 +93,31 @@ async function buildTravelingSpiritSmall(filename, data) {
   return blob;
 }
 
+async function sky_spirit_sm_blob(images, filename) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 309;
+  canvas.height = 444;
+
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  const bg = await loadImage(`${IMAGE_SOURCE_TS}${images[0].back}`);
+  drawCover(ctx, bg, 0, 0, 309, 444);
+
+  // Spirit
+  const spirit = await loadImage(`${IMAGE_SOURCE_TS}${images[1].face}`);
+  ctx.drawImage(spirit, (309 - 299) / 2, (444 - 411.125) / 2, 299, 411.125);
+
+  const blob = await new Promise((resolve) =>
+    canvas.toBlob(resolve, "image/jpeg", 0.95),
+  );
+
+  sm_custom_cards_map[filename] = URL.createObjectURL(blob);
+  lg_custom_cards_map[filename] = null;
+
+  return blob;
+}
+
 async function drawText(ctx, obj) {
   const conf = obj.font_conf || {};
 
@@ -640,6 +665,22 @@ async function rebuildCustomCardsMaps() {
 
   custom_blob_urls.clear();
 
+  const txtRes = await fetch("img/c_builder/traveling_spirits/arrive.bin");
+
+  const text = await decompressBase64(
+    btoa(
+      Array.from(new Uint8Array(await txtRes.arrayBuffer()), (b) =>
+        String.fromCharCode(b),
+      ).join(""),
+    ),
+  );
+
+  const ts = JSON.parse(text);
+  console.log("CARD BUILDER arrive.json", ts);
+
+  console.log(ts.special_visitors, "visit");
+  card_dict.push(...ts.special_visitors);
+
   for (const card of Object.values(card_dict)) {
     if (!card?.filename?.startsWith("custom!")) continue;
 
@@ -664,11 +705,11 @@ async function rebuildCustomCardsMaps() {
           );
           break;
         case "ts":
-          const ts = await (
-            await fetch("img/c_builder/traveling_spirits/arrive.json")
-          ).json();
-
           await buildTravelingSpiritSmall("custom!traveling_spirit", ts);
+          break;
+        case "ts2":
+          //  console.log("TS2", assets.sm.build, card.filename);
+          await sky_spirit_sm_blob(assets.sm.build, card.filename);
           break;
       }
     }

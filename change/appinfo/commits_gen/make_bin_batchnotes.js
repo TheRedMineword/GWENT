@@ -8,6 +8,9 @@ const deflateRaw = promisify(zlib.deflateRaw);
 const INPUT_DIR = "C:/Users/LENOVO/Desktop/GWENT/change/raw";
 const OUTPUT_DIR = "C:/Users/LENOVO/Desktop/GWENT/change";
 
+const JSON_INPUT = "C:/Users/LENOVO/Desktop/GWENT/img/c_builder/traveling_spirits/arrive-raw.json";
+const JSON_OUTPUT = "C:/Users/LENOVO/Desktop/GWENT/img/c_builder/traveling_spirits/arrive.bin";
+
 async function main() {
     const entries = await fs.readdir(INPUT_DIR, { withFileTypes: true });
 
@@ -35,6 +38,27 @@ async function main() {
 
         console.log(
             `${entry.name}\n` +
+            `  ${data.length.toLocaleString()} B -> ${compressed.length.toLocaleString()} B (${ratio}%)`
+        );
+    }
+
+    // Compress arrive-raw.json -> arrive.bin
+    {
+        const data = await fs.readFile(JSON_INPUT);
+
+        const compressed = await deflateRaw(data, {
+            level: zlib.constants.Z_BEST_COMPRESSION,
+        });
+
+        await fs.writeFile(JSON_OUTPUT, compressed);
+
+        totalOriginal += data.length;
+        totalCompressed += compressed.length;
+
+        const ratio = (compressed.length / data.length * 100).toFixed(2);
+
+        console.log(
+            `arrive-raw.json\n` +
             `  ${data.length.toLocaleString()} B -> ${compressed.length.toLocaleString()} B (${ratio}%)`
         );
     }

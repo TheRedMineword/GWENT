@@ -42,7 +42,7 @@ const IGNORE_FILES = new Set([
     '.env',
     'session_registering_oryginal.js', 'invite.json', 'package.json', 'package-lock.json', 'index_ver_check_script.txt',
     'allowed_versions.json', 'convert.js', 'audio-bin-config.json', '.audio-bin-config.json', 'audio-bin-config.bin', '.audio-bin-config.bin',
-    '404.html'
+    '404.html', 'arrive-raw.json'
 ]);
 
 // =====================================================
