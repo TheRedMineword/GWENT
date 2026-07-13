@@ -3105,6 +3105,16 @@ var card_dict_base = [
       },
     },
   },
+  {
+    name: "Hym",
+    id: "1038",
+    deck: "monsters",
+    row: "ranged",
+    strength: "0",
+    ability: "medic_n",
+    filename: "hym",
+    count: "2",
+  },
 ];
 
 // temponary

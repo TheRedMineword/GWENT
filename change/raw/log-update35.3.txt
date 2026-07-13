@@ -23,6 +23,9 @@ Patch Notes:
 ```diff
 --- Fixed Traveling Spirit card for exe app
 --- Custom server now restarts tavern ost (Deck Maker soundtrack)
++ Added Hym: Monster faction necromancer card !new!
+? You can see now cards you have in deck (Cards will be shown in alphabetic order), by clicking in match deck card pile!
+%%img src="img/lg/monsters_hym.jpg" style="max-width:25%"%%
 ```
 <fat3>
 <fat2>

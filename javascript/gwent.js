@@ -6799,3 +6799,18 @@ function startLoadingEffect() {
 function stopLoadingEffect() {
   passButton.classList.remove("loading");
 }
+
+async function ShowDeckMe() {
+  console.log("Loading deck...");
+  const deck = {
+    ...player_me.deck,
+    cards: [...player_me.deck.cards],
+  };
+
+  deck.cards.sort((a, b) => a.name.localeCompare(b.name));
+  ui.viewCardsInContainer(deck);
+}
+
+document.getElementById("deck-me").addEventListener("click", async () => {
+  await ShowDeckMe();
+});
