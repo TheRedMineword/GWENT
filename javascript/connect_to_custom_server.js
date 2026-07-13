@@ -580,6 +580,7 @@ async function connect_to_custom_server(URL) {
       }
     });
     await reloadRuntimeConfigs();
+    ui.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);
     await sleep(1500);
     updateLoader("Done", 100, `${s_name} Fully Loaded`);
 

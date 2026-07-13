@@ -9,11 +9,13 @@ async function loadImage(src) {
   });
 }
 
-const isGitHubPages = window.location.hostname === "theredmineword.github.io";
+const isGitHubPages =
+  window.location.hostname === "localhost" &&
+  (window.location.port === "8080" || window.location.port === "8081");
 
 const IMAGE_SOURCE_TS = isGitHubPages
-  ? "http://theredmineword.github.io/GWENT/"
-  : "";
+  ? ""
+  : "http://theredmineword.github.io/GWENT/";
 
 const loadedFonts = new Map();
 
