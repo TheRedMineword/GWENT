@@ -3060,7 +3060,7 @@ class Game {
               me: `img/icons/notif_me_coin${special}.png`,
               op: `img/icons/notif_op_coin${special}.png`,
             },
-            map_results_txt[`${game.firstPlayer.tag}${special}`],
+            map_results_txt[`_${game.firstPlayer.tag}${special}`],
 
             player_me.leader_init.filename,
             player_me.name,

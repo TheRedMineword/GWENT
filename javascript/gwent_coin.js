@@ -439,7 +439,7 @@ async function scol_fake_coin() {
       me: `img/icons/notif_${game.firstPlayer.tag}_coin_squirrel.png`,
       op: `img/icons/notif_${game.firstPlayer.tag}_coin_squirrel.png`,
     },
-    `Scoia'tael rigged the coin\n\n${map_results_txt[game.firstPlayer.tag]}`,
+    `${map_results_txt.cheater}\n\n${map_results_txt[`_${game.firstPlayer.tag}`]}`,
 
     player_me.leader_init.filename,
     player_me.name,

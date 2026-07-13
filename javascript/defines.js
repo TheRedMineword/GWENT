@@ -302,10 +302,11 @@ let syndicate_faction_clone = {
   },
 };
 let map_results_txt = {
-  me: "You go first",
-  op: "Opponent goes first",
-  me_lambert: "Lambert lets you start the game",
-  op_lambert: "Lambert says that you suck!\nThe opponent starts the game!",
+  _me: "You go first",
+  _op: "Opponent goes first",
+  _me_lambert: "Lambert lets you start the game",
+  _op_lambert: "Lambert says that you suck!\nThe opponent starts the game!",
+  cheater: "Scoia'tael rigged the coin",
 };
 let map_results_color = {
   realms: "#1E224F",
@@ -421,22 +422,22 @@ let ThisDef = {
       sky: {
         name: "Sky Kindom",
       },
-      map_results_txt: {
-        me: "You go first",
-        op: "Opponent goes first",
-        me_lambert: "Lambert lets you start the game",
-        op_lambert:
-          "Lambert says that you suck!\nThe opponent starts the game!",
-      },
-      map_results_color: {
-        realms: "#1E224F",
-        nilfgaard: "#ABAA27",
-        scoiatael: "#0E790F",
-        monsters: "#660101",
-        skellige: "#54016C",
-        sky: "#2D9DA0",
-        syndicate: "#804400",
-      },
+    },
+    map_results_txt: {
+      _me: "You go first",
+      _op: "Opponent goes first",
+      _me_lambert: "Lambert lets you start the game",
+      _op_lambert: "Lambert says that you suck!\nThe opponent starts the game!",
+      cheater: "Scoia'tael rigged the coin",
+    },
+    map_results_color: {
+      realms: "#1E224F",
+      nilfgaard: "#ABAA27",
+      scoiatael: "#0E790F",
+      monsters: "#660101",
+      skellige: "#54016C",
+      sky: "#2D9DA0",
+      syndicate: "#804400",
     },
   },
 };
