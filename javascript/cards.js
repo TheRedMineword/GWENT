@@ -1,5 +1,5 @@
 let timed_count_change = [];
-var card_dict = [
+var card_dict_base = [
   {
     name: "Mysterious Elf",
     id: "142",
@@ -3108,7 +3108,7 @@ var card_dict = [
 ];
 
 // temponary
-card_dict.push({
+card_dict_base.push({
   name: "Season of Dear Van Gogh",
   id: "tempnary_card_001",
   deck: "neutral",
@@ -3139,8 +3139,8 @@ card_dict.push({
     },
   },
 });
-
-//img/sm/dear_van_gogh/seasonal_travelers.jpg
+console.log("is ts", card_dict_base[256]);
+var card_dict = deepClone(card_dict_base);
 
 const witcher_signs = Object.entries(card_dict)
   .filter(([_, card]) => card.witcher_sign)
@@ -3151,7 +3151,6 @@ const witcher_signs = Object.entries(card_dict)
   }));
 
 console.log("Cards array", card_dict, witcher_signs);
-const card_dict_base = deepClone(card_dict);
 
 function setupSpiritTimer(card, data) {
   card.count_monitor = {
