@@ -1,5 +1,5 @@
 @ECHO OFF
-node init.js
+node init.mjs
 node encrypt_keys.js
 node beatify.js
 node make_bin_batchnotes.js
