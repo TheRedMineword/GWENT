@@ -23,6 +23,7 @@ Patch Notes:
 ```diff
 --- Fixed Udalryk an Brokvar — Gods Choosen lg image
 --- Fixed typos in Sky Kingdom faction!
+--- Fixed again soundtrack player on web, hope it will work again, I have also no idea how it works
 %%img src="img/lg/skellige_udalryka_leader.jpg" style="max-width:25%"%%
 ```
 <fat3>
@@ -41,9 +42,9 @@ Patch Notes:
 With the start of the new season in **Sky: Children of the Light**, new cards themed around that season will be added to **Gwent**.
 These cards will be available on **!time:2026-07-17T07:00:00.000Z!**, and more information about them will be available on the same day.
 <fat2>
-Join our Gwent [Discord Server](https://theredmineword.github.io/GWENT/api/discord-iframe/page) for updates!
+Join our Gwent [Discord Server](api/discord-iframe/page) for updates!
 <fat1>
-About Dear Van Gogh: [ThatSkyGame Post](https://www.thatskygame.com/dearvangogh/), [Sky Children of The Light Discord Server](https://theredmineword.github.io/GWENT/api/discord-iframe/page?64=eyJpbnZpdGUiOiJ0aGF0c2t5Z2FtZSJ9)
+About Dear Van Gogh: [ThatSkyGame Post](https://www.thatskygame.com/dearvangogh/), [Sky Children of The Light Discord Server](api/discord-iframe/page?64=eyJpbnZpdGUiOiJ0aGF0c2t5Z2FtZSJ9)
 %%img src="img/web/other/dearvangogh/bar-thin.jpg" style="max-width:100%"%%
 <fat3>
 # 12 July, 2026
@@ -93,11 +94,11 @@ Patchnotes was imporoved added new effect and also now diff supports:
 Hello **everyone** it's me **DrMineword**
 Im back and ready to work on **Gwent**, starting tommorow I will start add changes to the game from the to-do list!
 I've rested enough to keep working. And few new patches are now on the way!!`
-See ya soon!! and remember to join the [Discord server](https://theredmineword.github.io/GWENT/api/discord-iframe/page) for more news!
+See ya soon!! and remember to join the [Discord server](api/discord-iframe/page) for more news!
 <fat3>
 # 27 June, 2026
 This is the last patch I’ll be making for the time being; Gwent won’t receive any updates over the next few days.
-More information on the [Discord server](https://theredmineword.github.io/GWENT/api/discord-iframe/page) or in tomorrow's message.
+More information on the [Discord server](api/discord-iframe/page) or in tomorrow's message.
 ```diff
 + Added Days of Nature Guide Sky Kingdom faction wich reinforce ability!
 + Added The Ocean Cleanup card that get summoned after use of Days of Nature Guide card!

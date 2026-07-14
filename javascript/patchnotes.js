@@ -107,7 +107,7 @@ function escapeHtml(text) {
 
 function formatInline(text) {
   text = text.replace(
-    /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+    /\[([^\]]+)\]\(([^)\s]+)\)/g,
     '<a class="patch-link" href="$2" target="_blank" rel="noopener">$1</a>',
   );
 

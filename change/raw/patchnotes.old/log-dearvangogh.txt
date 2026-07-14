@@ -1,0 +1,46 @@
+<small_text.text>
+NEWS / SPECIAL EVENT
+</small_text.text>
+
+<images.logo>
+img/web/logo_round.png
+</images.logo>
+
+<images.banner>
+img/web/other/dearvangogh/bar.jpg
+</images.banner>
+
+<box.lines_outline_hex>
+#36427a
+</box.lines_outline_hex>
+
+<box.title>
+New Cards Now Available!
+</box.title>
+
+<box.text>
+### Season of Dear Van Gogh has begun!
+To celebrate this season, special cards have been added to Gwent!
+```diff
++ "Vincent Van Gogh": Hero reinforce card that summons a ranged powergain card !new!
+? Available until !time:2026-07-21T06:59:59.000Z! only as a Reinforce summon card (for balance reasons)
++ "Vincent Van Gogh: Painting": Daily-changing powergain card !new!
++ "Dear Van Gogh Seasonal Spirits": Bond ranged cards (up to 3 copies in deck) !new!
++ "Dear Van Gogh Seasonal Hearth": New medic card !new!
+```
+During **!time:2026-07-17T07:00:00.000Z!** to **!time:2026-07-21T06:59:59.000Z!** (4 days) **Vincent Van Gogh** card will be available only by placing on board **Season of Dear Van Gogh** neutral card, after that time card will be available in Sky Kingdom Deck, and neutral one will be gone!
+<fat3>
+[ThatSkyGame Post](https://www.thatskygame.com/dearvangogh/), [Sky Children of The Light Discord Server](api/discord-iframe/page?64=eyJpbnZpdGUiOiJ0aGF0c2t5Z2FtZSJ9)
+</box.text>
+
+<button.name>
+DISMISS
+</button.name>
+
+<load.text>
+<l>INCOMING NEWS</l>
+</load.text>
+
+<load.duration_ms>
+4000
+</load.duration_ms>
