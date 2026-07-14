@@ -6,7 +6,7 @@
     "behind": "windpaths"
   },
   "images": {
-    "sanctuary": "img/c_builder/traveling_spirits/web-only/back/sky_wiki/DP_SanctuaryIslands.webp",
+    "sanctuary": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/escapefromreality.webp",
     "windpaths": "img/c_builder/traveling_spirits/web-only/back/private/lambert/windpaths.webp",
     "prophecycave": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/prophecycave.webp",
     "starlightdesert": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/littleprince.webp",
@@ -16,7 +16,12 @@
     "valley_village": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/dream_village.webp",
     "crescentoasis": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/oais.webp",
     "vault_middle": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/middle_vault.webp",
-    "vault_lobby": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/bottom_vault.webp"
+    "vault_lobby": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/bottom_vault.webp",
+    "golden_brokentemplate": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/brokentemplate.webp",
+    "golden_graveyard": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/graveyard.webp",
+    "golden_shipwreck": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/brokenship.webp",
+    "golden_TreasureReef": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/brokenship.webp",
+    "golden_forgottenark": "img/c_builder/traveling_spirits/web-only/back/private/drmineword/ark.webp"
   },
   "no_spirit": "img/c_builder/traveling_spirits/none.jpg",
   "special_visitors": [
