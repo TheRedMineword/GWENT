@@ -3898,7 +3898,7 @@ class YouTubeAudioAdapter {
 
   set loop(v) {
     //   console.log("set yt loop", v);
-    //  this._loop = v;
+    // this._loop = v;
     //  this.loop = v;
     //   console.log("set yt loop", v, this);
   }
@@ -3908,8 +3908,10 @@ class YouTubeAudioAdapter {
   }
 
   set src(videoId) {
-    //   console.log(this, `this.player.loadVideoById("${videoId}")`);
-    //   this.player.loadVideoById(videoId);
+    try {
+      console.log(this, `error("${videoId}")`);
+      this.player.loadVideoById(videoId);
+    } catch (e) {}
   }
 }
 function getSegmentCount(m3u8) {
@@ -4134,7 +4136,7 @@ class UI {
             onReady: (event) => {
               event.target.setVolume(tavern_yt_volume);
             },
-            onStateChange: (event) => {
+            onStateChange: async (event) => {
               console.log("STATE", event.data, performance.now());
 
               if (event.data === YT.PlayerState.ENDED) {
@@ -4155,11 +4157,12 @@ class UI {
                     if (yt_repeat_conf) {
                       console.log("b");
                       yt_repeat_conf = true;
-                      ui.youtubePlay(
+                      var ret = ui.youtubePlay(
                         yt_repeat_launch.id,
                         yt_repeat_launch.vol,
                         true,
                       );
+                      console.log("YT REPEAT:", ret);
                     } // your custom command
                   }
                 }, X);
@@ -4399,7 +4402,7 @@ class UI {
                   console.error("setVolume failed", e);
                 }
               },
-              onStateChange: (event) => {
+              onStateChange: async (event) => {
                 console.log("STATE", event.data, performance.now());
 
                 if (event.data === YT.PlayerState.ENDED) {
@@ -4420,11 +4423,12 @@ class UI {
                       if (yt_repeat_conf) {
                         console.log("b");
                         yt_repeat_conf = true;
-                        ui.youtubePlay(
+                        var ret = ui.youtubePlay(
                           yt_repeat_launch.id,
                           yt_repeat_launch.vol,
                           true,
                         );
+                        console.log("YT REPEAT:", ret);
                       } // your custom command
                     }
                   }, X);
