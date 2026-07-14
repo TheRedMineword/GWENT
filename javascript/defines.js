@@ -7,7 +7,7 @@ let extraJSON = [];
 let displaynow = null;
 let showbankms = 9000;
 let gameended = false;
-const medicdrawextrasecondswait = 3.2;
+const medicdrawextrasecondswait = 4.2; // extraJson hold
 //host alone
 let players = {
   me: "You",

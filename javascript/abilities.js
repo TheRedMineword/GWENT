@@ -1484,9 +1484,19 @@ var ability_dict = {
   },
   temeria_call: {
     description:
-      "Spawn Temeria Special Forcess attack in close combat row. Commander Horn in close combat row will lost its effect but close row will be partialy protected partialy from weather effects. After use makes you pass!",
+      "Spawn Temeria Special Forcess attack in close combat row. Commander Horn in close combat row will lost its effect but close row will be partialy protected partialy from weather effects. After use makes you pass! Cant be used when opponent passed!",
 
     activated: async (card) => {
+      var is_allowed = false;
+      if (card.holder.tag === "me") {
+        is_allowed = player_op.passed;
+      } else {
+        is_allowed = player_me.passed;
+      }
+      console.log("TEMERIAAAAAAA", is_allowed, card.holder.tag);
+      if (is_allowed) {
+        return false;
+      }
       // Find Temeria in card_dict
       const targetData = Object.values(card_dict).find(
         (c) => c.id === "1032",
