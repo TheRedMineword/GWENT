@@ -4023,6 +4023,66 @@ class UI {
       }
     }
   }
+
+  async createYoutubePlayer_v2() {
+    console.log("[YT_API] createYoutubePlayer()");
+
+    if (!YT.loaded || !YT.Player) {
+      throw new Error("YouTube API not ready");
+    }
+
+    await new Promise((resolve) => {
+      this.youtube = new YT.Player("youtube", {
+        videoId: tavern_yt_vid,
+
+        playerVars: {
+          autoplay: 1,
+          controls: 0,
+          loop: 1,
+          playlist: tavern_yt_vid,
+          rel: 0,
+          enablejsapi: 1,
+          origin: location.origin,
+        },
+
+        events: {
+          onReady: async (event) => {
+            console.log("[YT_API] READY");
+
+            // Wait until metadata exists
+            let tries = 0;
+
+            while (tries < 50 && !event.target.getVideoData()?.video_id) {
+              await new Promise((r) => setTimeout(r, 100));
+              tries++;
+            }
+
+            console.log("[YT_API] VIDEO LOADED", {
+              data: event.target.getVideoData(),
+              state: event.target.getPlayerState(),
+            });
+
+            event.target.setVolume(tavern_yt_volume);
+
+            resolve();
+          },
+
+          onStateChange: (event) => {
+            console.log("[YT_API] STATE", event.data);
+          },
+
+          onError: (event) => {
+            console.error("[YT_API] ERROR", event.data);
+          },
+        },
+      });
+    });
+
+    this.audio = new YouTubeAudioAdapter(this.youtube);
+
+    console.log("[YT_API] fully initialized");
+  }
+
   // Initializes the youtube background music object
   async initYouTube() {
     //  console.log("initYouTube()")
@@ -4119,61 +4179,12 @@ class UI {
       yt_repeat_launch.id = tavern_yt_vid;
       yt_repeat_launch.vol = tavern_yt_volume;
       console.log("[YT_API] [this.youtube] A");
-      this.audio = new YouTubeAudioAdapter(
-        (this.youtube = new YT.Player("youtube", {
-          videoId: tavern_yt_vid,
-          playerVars: {
-            autoplay: 1,
-            controls: 0,
-            loop: 0,
-            playlist: tavern_yt_vid,
-            rel: 0,
-            version: 3,
-            modestbranding: 1,
-            iv_load_policy: 3,
-            cc_load_policy: 0,
-            origin: location.origin,
-            enablejsapi: 1,
-          },
-          events: {
-            onReady: (event) => {
-              event.target.setVolume(tavern_yt_volume);
-            },
-            onStateChange: async (event) => {
-              console.log("STATE", event.data, performance.now());
-
-              if (event.data === YT.PlayerState.ENDED) {
-                const X = 500; // <-- your "X" delay in ms
-
-                setTimeout(() => {
-                  const state = this.youtube.getPlayerState();
-                  console.log(
-                    yt_repeat_conf,
-                    "X ms later:",
-                    state,
-                    yt_repeat_conf,
-                    YT.PlayerState.ENDED,
-                  );
-
-                  if (state === YT.PlayerState.ENDED) {
-                    console.log("a");
-                    if (yt_repeat_conf) {
-                      console.log("b");
-                      yt_repeat_conf = true;
-                      var ret = ui.youtubePlay(
-                        yt_repeat_launch.id,
-                        yt_repeat_launch.vol,
-                        true,
-                      );
-                      console.log("YT REPEAT:", ret);
-                    } // your custom command
-                  }
-                }, X);
-              }
-            },
-          },
-        })),
-      );
+      await this.createYoutubePlayer_v2();
+      console.log("[YT_API] dump past init A", {
+        apiLoaded: YT.loaded,
+        video: this.youtube?.getVideoData?.(),
+        state: this.youtube?.getPlayerState?.(),
+      });
       this.audio.src = tavern_yt_vid;
       this.audio.loop = false;
     }
