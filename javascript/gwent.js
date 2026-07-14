@@ -6766,7 +6766,52 @@ async function postscripinit() {
   }
 }
 
-function lunch_gwent_ui() {
+async function loadYouTubeAPI() {
+  // Already ready
+  if (window.YT?.Player) return window.YT;
+
+  // Promise that resolves when the API is ready
+  let resolveReady;
+  const ready = new Promise((resolve) => {
+    resolveReady = resolve;
+  });
+
+  // Preserve any existing callback
+  const previous = window.onYouTubeIframeAPIReady;
+
+  window.onYouTubeIframeAPIReady = () => {
+    previous?.();
+    window.onYouTubeIframeAPIReady_status = true;
+    resolveReady(window.YT);
+  };
+
+  // Force fetch only once
+  if (
+    !document.querySelector('script[src="https://www.youtube.com/iframe_api"]')
+  ) {
+    const script = document.createElement("script");
+    script.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(script);
+  }
+
+  // Wait forever until the callback fires
+  while (!window.onYouTubeIframeAPIReady_status) {
+    await Promise.race([
+      ready,
+      new Promise((resolve) => setTimeout(resolve, 100)),
+    ]);
+  }
+
+  return window.YT;
+}
+
+async function lunch_gwent_ui() {
+  document.getElementById("load_text").textContent = `Loading music...`;
+  await loadYouTubeAPI();
+  console.log("YouTube API is ready!");
+  document.getElementById("load_text").textContent =
+    `Running lunch_gwent_ui()...`;
+
   document.getElementById("load_text").style.display = "none";
   document.getElementById("button_start").style.display = "inline-block";
   customizationElem.style.display = "";
@@ -6789,7 +6834,7 @@ function lunch_gwent_ui() {
     });
   isLoaded = true;
   console.log("dm init", card_dict);
-  onYouTubeIframeAPIReady();
+  //  onYouTubeIframeAPIReady();
   dm = new DeckMaker();
   console.log("DM", dm);
 }

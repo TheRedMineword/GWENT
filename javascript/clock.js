@@ -17,7 +17,7 @@
     "javascript/gwent_coin.js",
     "javascript/gwent.js",
     "javascript/session_registering.js",
-    "https://www.youtube.com/iframe_api",
+    //  "https://www.youtube.com/iframe_api",
     "javascript/patchnotes.js",
     "javascript/sync_hands.js",
     "javascript/session.js",
