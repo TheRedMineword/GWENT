@@ -6643,6 +6643,7 @@ function tocar(arquivo, pararMusica) {
 /*----------------------------------------------------*/
 
 function onYouTubeIframeAPIReady() {
+  console.warn("YT IFRAME IS READY");
   if (ui.getAudioState() !== 1) {
     ui.initYouTube();
   }
