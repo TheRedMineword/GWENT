@@ -3869,6 +3869,7 @@ class YouTubeAudioAdapter {
     console.log("constructor yt", player);
     this.player = player;
     this._loop = false;
+    this._is_yt = true;
   }
 
   async play() {
@@ -4179,14 +4180,15 @@ class UI {
       yt_repeat_launch.id = tavern_yt_vid;
       yt_repeat_launch.vol = tavern_yt_volume;
       console.log("[YT_API] [this.youtube] A");
-      await this.createYoutubePlayer_v2();
-      console.log("[YT_API] dump past init A", {
-        apiLoaded: YT.loaded,
-        video: this.youtube?.getVideoData?.(),
-        state: this.youtube?.getPlayerState?.(),
-      });
-      this.audio.src = tavern_yt_vid;
-      this.audio.loop = false;
+      await this.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);
+      // await this.createYoutubePlayer_v2();
+      //     console.log("[YT_API] dump past init A", {
+      //      apiLoaded: YT.loaded,
+      //      video: this.youtube?.getVideoData?.(),
+      //      state: this.youtube?.getPlayerState?.(),
+      //    });
+      //  this.audio.src = tavern_yt_vid;
+      //  this.audio.loop = false;
     }
   }
   getAudioState() {
@@ -4389,8 +4391,8 @@ class UI {
       console.log("[YT_API] Reusing existing YouTube player");
     }
 
-    if (!(this.audio instanceof YouTubeAudioAdapter)) {
-      console.log("[YT_API] Recreating YouTubeAudioAdapter");
+    if (!this.audio || !this.audio._is_yt) {
+      console.log("[YT_API] Creating YouTubeAudioAdapter");
       this.audio = new YouTubeAudioAdapter(this.youtube);
     }
 
