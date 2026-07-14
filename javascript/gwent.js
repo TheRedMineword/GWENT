@@ -6619,27 +6619,14 @@ async function postscripinit() {
 async function loadYTByEval() {
   if (window.YT?.Player) return window.YT;
 
-  let resolveReady;
-  const ready = new Promise((resolve) => {
-    resolveReady = resolve;
-  });
-
-  window.onYouTubeIframeAPIReady = () => {
-    window.onYouTubeIframeAPIReady_status = true;
-    resolveReady(window.YT);
-  };
-
   const code = await fetch("javascript/yt/iframe_api.js").then((r) => r.text());
 
   // Execute the downloaded API
   (0, eval)(code);
 
-  // Wait indefinitely until the API calls the callback
-  while (!window.onYouTubeIframeAPIReady_status) {
-    await Promise.race([
-      ready,
-      new Promise((resolve) => setTimeout(resolve, 100)),
-    ]);
+  // Wait until the API becomes usable
+  while (!window.YT?.Player) {
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
 
   return window.YT;
