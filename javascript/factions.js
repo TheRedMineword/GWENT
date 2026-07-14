@@ -183,7 +183,7 @@ var factions = {
       .join(", ")} factions non-leader cards.`,
   },
   sky: {
-    name: "Sky Kindom",
+    name: "Sky Kingdom",
     factionAbility: (player) =>
       game.roundEnd.push(() => {
         let units = board.row

@@ -3019,7 +3019,7 @@
         "description": "Starts the game with the morale card on the board. \nCan create deck from Nilfgaardian Empire, Scoia'tael, Skellige, Syndicate, Sky Kindom factions non-leader cards."
       },
       "sky": {
-        "name": "Sky Kindom",
+        "name": "Sky Kingdom",
         "description": "Keeps the strongest Unit Card out after each round. Factions full of morale boosting cards."
       }
     },
@@ -3303,9 +3303,9 @@
         "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
       }
     },
-    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
+    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_vid": "8o-JI8VRyKo",
     "tavern_yt_volume": 90
   },
   "texture_pack_url": null
