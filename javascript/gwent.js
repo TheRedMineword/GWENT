@@ -4118,6 +4118,7 @@ class UI {
       console.log("Will yt repeat?", yt_repeat_conf, true, "!");
       yt_repeat_launch.id = tavern_yt_vid;
       yt_repeat_launch.vol = tavern_yt_volume;
+      console.log("[YT_API] [this.youtube] A");
       this.audio = new YouTubeAudioAdapter(
         (this.youtube = new YT.Player("youtube", {
           videoId: tavern_yt_vid,
@@ -4408,7 +4409,7 @@ class UI {
     }
 
     console.log("[YT_API] Creating YT.Player");
-
+    console.log("[YT_API] [this.youtube] B");
     await new Promise((resolve) => {
       this.youtube = new YT.Player("youtube", {
         playerVars: {
