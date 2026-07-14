@@ -3908,11 +3908,7 @@ class YouTubeAudioAdapter {
   }
 
   set src(videoId) {
-    console.log(this);
-    console.log(player);
-    console.log(typeof player.loadVideoById);
-    console.log(Object.keys(player));
-    console.log(player.constructor?.name);
+    console.log(this, `this.player.loadVideoById("${videoId}")`);
     this.player.loadVideoById(videoId);
   }
 }
@@ -4179,8 +4175,25 @@ class UI {
   getAudioState() {
     if (!this.audio) return AUDIO_STATE.UNSTARTED;
 
-    if (this.audio.ended) return AUDIO_STATE.ENDED;
+    if (this.audio instanceof YouTubeAudioAdapter) {
+      const state = this.youtube.getPlayerState();
 
+      switch (state) {
+        case YT.PlayerState.PLAYING:
+          return AUDIO_STATE.PLAYING;
+
+        case YT.PlayerState.PAUSED:
+          return AUDIO_STATE.PAUSED;
+
+        case YT.PlayerState.ENDED:
+          return AUDIO_STATE.ENDED;
+
+        default:
+          return AUDIO_STATE.UNSTARTED;
+      }
+    }
+
+    if (this.audio.ended) return AUDIO_STATE.ENDED;
     if (!this.audio.paused) return AUDIO_STATE.PLAYING;
 
     return AUDIO_STATE.PAUSED;
