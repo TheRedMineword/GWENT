@@ -101,11 +101,11 @@ async function sky_spirit_sm_blob(images, filename) {
   const ctx = canvas.getContext("2d");
 
   // Background
-  const bg = await loadImage(`${IMAGE_SOURCE_TS}${images[0].back}`);
+  const bg = await loadImage(images[0].back);
   drawCover(ctx, bg, 0, 0, 309, 444);
 
   // Spirit
-  const spirit = await loadImage(`${IMAGE_SOURCE_TS}${images[1].face}`);
+  const spirit = await loadImage(images[1].face);
   ctx.drawImage(spirit, (309 - 299) / 2, (444 - 411.125) / 2, 299, 411.125);
 
   const blob = await new Promise((resolve) =>
