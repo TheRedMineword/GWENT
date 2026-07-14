@@ -298,7 +298,7 @@ let syndicate_faction_clone = {
     name: "Syndicate",
   },
   sky: {
-    name: "Sky Kindom",
+    name: "Sky Kingdom",
   },
 };
 let map_results_txt = {
@@ -420,7 +420,7 @@ let ThisDef = {
         name: "Syndicate",
       },
       sky: {
-        name: "Sky Kindom",
+        name: "Sky Kingdom",
       },
     },
     map_results_txt: {

@@ -119,7 +119,7 @@
         "name": "Syndicate"
       },
       "sky": {
-        "name": "Sky Kindom"
+        "name": "Sky Kingdom"
       }
     },
     "map_results_txt": {
@@ -3016,7 +3016,7 @@
       },
       "syndicate": {
         "name": "Syndicate",
-        "description": "Starts the game with the morale card on the board. \nCan create deck from Nilfgaardian Empire, Scoia'tael, Skellige, Syndicate, Sky Kindom factions non-leader cards."
+        "description": "Starts the game with the morale card on the board. \nCan create deck from Nilfgaardian Empire, Scoia'tael, Skellige, Syndicate, Sky Kingdom factions non-leader cards."
       },
       "sky": {
         "name": "Sky Kingdom",

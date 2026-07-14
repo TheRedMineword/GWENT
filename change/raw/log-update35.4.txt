@@ -19,6 +19,13 @@ Patch Notes:
 </box.title>
 
 <box.text>
+# 14 July, 2026
+```diff
+--- Fixed Udalryk an Brokvar — Gods Choosen lg image
+--- Fixed typos in Sky Kingdom faction!
+%%img src="img/lg/skellige_udalryka_leader.jpg" style="max-width:25%"%%
+```
+<fat3>
 # 13 July, 2026
 ```diff
 --- Fixed Traveling Spirit card for exe app
@@ -92,11 +99,11 @@ See ya soon!! and remember to join the [Discord server](https://theredmineword.g
 This is the last patch I’ll be making for the time being; Gwent won’t receive any updates over the next few days.
 More information on the [Discord server](https://theredmineword.github.io/GWENT/api/discord-iframe/page) or in tomorrow's message.
 ```diff
-+ Added Days of Nature Guide Sky Kindom faction wich reinforce ability!
++ Added Days of Nature Guide Sky Kingdom faction wich reinforce ability!
 + Added The Ocean Cleanup card that get summoned after use of Days of Nature Guide card!
---- Updated Sky Kindom faction card_back images wich a bit better quality ones!
---- Updated Sky Kindom The Trevor Project card lg assets!
-+ Added Sky Kindom Sky Anniversary ranged morale card!
+--- Updated Sky Kingdom faction card_back images wich a bit better quality ones!
+--- Updated Sky Kingdom The Trevor Project card lg assets!
++ Added Sky Kingdom Sky Anniversary ranged morale card!
 --- Droped volume of "The Mandragora" from 50 to 30 (Was too loud)
 --- Fixed Days of Color Guide card (Improved quality of assets)
 <fat2>
@@ -178,7 +185,7 @@ Syndicate ability let you begin game wich morale card on board at game start! Ad
 ```diff
 - Removed multiple card variants (due to issue wich random deck generator letting you pick inf number of them), this change dont afect gameplay, just visual, you still can have same amount of cards
 + Added new leader card; Radovid V the Stern — In Madness: Protect your cards from any Scorch effect as long as you have enough Shield Charges. Each save costs 1 charge. Starts with 5 charges and cannot be recharged. Shield break when youuse any Scorch card!
-+ Turn skipper leader ability recived new cards for faction: Nilfgaard and Sky Kindom!
++ Turn skipper leader ability recived new cards for faction: Nilfgaard and Sky Kingdom!
 <fat2>
 %%img src="img/lg/realms_radovid_stern.jpg" style="max-width:25%"%% %%img src="img/lg/nilfgaard_fake_ciri.jpg" style="max-width:25%"%% %%img src="img/lg/sky_vault_elder_s2e.jpg" style="max-width:25%"%%
 ```
