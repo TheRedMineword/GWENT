@@ -1659,7 +1659,7 @@ class Player {
           console.log("extraJSON vibe check:", extraJSON.length, extraJSON);
           if (extraJSON.length > 0) {
             const total = extraJSON.length;
-            var opponent_see_card_delay = 1.7;
+            var opponent_see_card_delay = 2.5;
             showTooltip(
               `Initiating sync, wait ${Math.floor((ui_display_times.faction_ability + 600) / opponent_see_card_delay) / 1000} seconds`,
             );
@@ -1673,7 +1673,8 @@ class Player {
               const payload = extraJSON[i];
 
               // base hold + extra 500ms for each next packet
-              const delay = RegisterMovesHold + i * 500;
+              const delay =
+                RegisterMovesHold + i * 500 + medicdrawextrasecondswait * 1000;
 
               console.log(
                 `Hold before send extraJSON ${i + 1}/${total}`,
@@ -4624,7 +4625,8 @@ class UI {
           const payload = extraJSON[i];
 
           // base hold + extra 500ms for each next packet
-          const delay = RegisterMovesHold + i * 500;
+          const delay =
+            RegisterMovesHold + i * 500 + medicdrawextrasecondswait * 1000;
 
           console.log(`Hold before send extraJSON ${i + 1}/${total}`, payload);
 
@@ -4710,7 +4712,8 @@ class UI {
         const payload = extraJSON[i];
 
         // base hold + extra 500ms for each next packet
-        const delay = RegisterMovesHold + i * 500;
+        const delay =
+          RegisterMovesHold + i * 500 + medicdrawextrasecondswait * 1000;
 
         console.log(`Hold before send extraJSON ${i + 1}/${total}`, payload);
 
