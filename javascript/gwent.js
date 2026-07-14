@@ -3897,10 +3897,10 @@ class YouTubeAudioAdapter {
   }
 
   set loop(v) {
-    console.log("set yt loop", v);
-    this._loop = v;
-    this.loop = v;
-    console.log("set yt loop", v, this);
+    //   console.log("set yt loop", v);
+    //  this._loop = v;
+    //  this.loop = v;
+    //   console.log("set yt loop", v, this);
   }
 
   get loop() {
@@ -3908,8 +3908,8 @@ class YouTubeAudioAdapter {
   }
 
   set src(videoId) {
-    console.log(this, `this.player.loadVideoById("${videoId}")`);
-    this.player.loadVideoById(videoId);
+    //   console.log(this, `this.player.loadVideoById("${videoId}")`);
+    //   this.player.loadVideoById(videoId);
   }
 }
 function getSegmentCount(m3u8) {
