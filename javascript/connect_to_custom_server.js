@@ -2,8 +2,9 @@ let IsNowCustom = false;
 // ===============================
 // CONFIG
 // ===============================
-
 const IGNORE_PATTERNS = [
+  "onYouTubeIframeAPIReady_status",
+  "custom_updater",
   "*.factionAbility",
   "*.placed",
   "*.removed",
@@ -570,11 +571,18 @@ async function connect_to_custom_server(URL) {
     await sleep(300);
     updateLoader(
       "Almost There",
-      99,
+      90,
       `Finalizing the connection with ${s_name_low}`,
     );
-    updateLoader("Almost there", 99, `Building cards!`);
+    updateLoader(
+      "Building cards!",
+      93,
+      `Finalizing the connection with ${s_name_low}`,
+    );
+    custom_updater = true;
+    await sleep(300);
     await custom_card_builder_init();
+    custom_updater = false;
     updateLoader("Almost there", 99, `Updating cards!`);
     timed_count_change = [];
     card_dict.forEach((card) => {

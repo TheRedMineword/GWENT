@@ -6641,11 +6641,13 @@ function tocar(arquivo, pararMusica) {
 }
 
 /*----------------------------------------------------*/
-
 function onYouTubeIframeAPIReady() {
-  console.warn("YT IFRAME IS READY");
-  if (ui.getAudioState() !== 1) {
-    ui.initYouTube();
+  if (!onYouTubeIframeAPIReady_status) {
+    onYouTubeIframeAPIReady_status = true;
+    console.warn("YT IFRAME IS READY");
+    if (ui.getAudioState() !== 1) {
+      ui.initYouTube();
+    }
   }
 }
 
@@ -6787,6 +6789,7 @@ function lunch_gwent_ui() {
     });
   isLoaded = true;
   console.log("dm init", card_dict);
+  onYouTubeIframeAPIReady();
   dm = new DeckMaker();
   console.log("DM", dm);
 }

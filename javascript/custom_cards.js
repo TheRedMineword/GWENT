@@ -654,6 +654,28 @@ const custom_blob_urls = new Map();
 let init_done = false;
 
 // run
+async function update_updater_on_rebuild(
+  right_now,
+  all_of_then,
+  type,
+  debug,
+  full_debug,
+) {
+  console.log(
+    "Building cards ",
+    `${right_now}/${all_of_then}##${type}/${debug} (${full_debug})`,
+  );
+  if (custom_updater) {
+    updateLoader(
+      "Building cards!",
+      93,
+      `${right_now}/${all_of_then}##${type}/${debug}`,
+    );
+  } else {
+    document.getElementById("load_text").textContent =
+      `Building cards: ${right_now}/${all_of_then}`;
+  }
+}
 
 async function rebuildCustomCardsMaps() {
   // reset every rebuild
@@ -680,16 +702,30 @@ async function rebuildCustomCardsMaps() {
 
   console.log(ts.special_visitors, "visit");
   card_dict.push(...ts.special_visitors);
-
+  var to_check = Object.values(card_dict).reduce(
+    (count, card) => count + (card?.filename?.startsWith("custom!") ? 1 : 0),
+    0,
+  );
+  to_check = to_check * 2;
+  var now = 0;
+  var name = null;
   for (const card of Object.values(card_dict)) {
     if (!card?.filename?.startsWith("custom!")) continue;
-
+    name = card.filename;
     const assets = card.customassets || {};
 
     //
     // SMALL
     //
     if (assets.sm) {
+      now = now + 1;
+      update_updater_on_rebuild(
+        now,
+        to_check,
+        "sm",
+        name.split("custom!")[1],
+        card.filename,
+      );
       switch (assets.sm.type) {
         case "url":
           sm_custom_cards_map[card.filename] = assets.sm.url;
@@ -718,6 +754,14 @@ async function rebuildCustomCardsMaps() {
     // LARGE
     //
     if (assets.lg) {
+      now = now + 1;
+      update_updater_on_rebuild(
+        now,
+        to_check,
+        "lg",
+        name.split("custom!")[1],
+        card.filename,
+      );
       var text_name = null;
       var text_desc = null;
       if (assets.lg.txt_timed_a) {
