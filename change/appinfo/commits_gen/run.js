@@ -29,7 +29,8 @@ const IGNORE_DIRS = new Set([
     '.removed_content',
     'raw',
     '.tmp',
-    'web-only'
+    'web-only',
+    'wrapper'
 ]);
 
 const IGNORE_FILES = new Set([

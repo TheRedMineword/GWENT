@@ -3908,6 +3908,11 @@ class YouTubeAudioAdapter {
   }
 
   set src(videoId) {
+    console.log(this);
+    console.log(player);
+    console.log(typeof player.loadVideoById);
+    console.log(Object.keys(player));
+    console.log(player.constructor?.name);
     this.player.loadVideoById(videoId);
   }
 }
