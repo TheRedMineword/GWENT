@@ -4237,132 +4237,261 @@ class UI {
       this.audio.play().catch(() => {});
     }
   }
+async youtubePlay(ostId, volume = 100, repeat = false) {
+  console.log("[YT_API] youtubePlay() called", {
+    ostId,
+    volume,
+    repeat,
+    currentAudio: this.audio,
+    youtubePlayer: this.youtube,
+  });
 
-  async youtubePlay(ostId, volume = 100, repeat = false) {
-    console.log("youtubePlay", { ostId, volume, repeat });
+  try {
+    console.log("[YT_API] Stopping current YouTube playback");
+    ui.stopYouTube();
 
-    try {
-      ui.stopYouTube();
+    console.log("[YT_API] Checking if hosted audio exists:", ostId);
+    const exists = await ui.audioExists(ostId);
 
-      const exists = await ui.audioExists(ostId);
+    console.log("[YT_API] audioExists() result:", exists);
 
-      if (exists) {
-        return await this.playHostedAudio(ostId, volume, repeat);
-      }
-
-      return await this.playYouTube(ostId, volume, repeat);
-    } catch (e) {
-      console.error("youtubePlay failed", e);
+    if (exists) {
+      console.log("[YT_API] Hosted audio found, using HLS");
+      return await this.playHostedAudio(ostId, volume, repeat);
     }
 
-    await sleep(100);
-
-    button_is_second_sheet = 1;
-
-    if (buttonmutemode === 0) {
-      ui.stopYouTube();
-    }
+    console.log("[YT_API] Hosted audio not found, falling back to YouTube");
+    return await this.playYouTube(ostId, volume, repeat);
+  } catch (e) {
+    console.error("[YT_API] youtubePlay() failed", e);
   }
 
-  async playHostedAudio(ostId, volume, repeat) {
-    if (this.audio?.player?.videoTitle) {
-      this.audio = document.createElement("audio");
-      await sleep(10);
-    }
+  console.warn("[YT_API] Reached fallback cleanup");
 
-    if (!this.audio || !(this.audio instanceof HTMLAudioElement)) {
-      this.audio = document.createElement("audio");
-    }
+  await sleep(100);
 
-    const hls = new Hls();
+  button_is_second_sheet = 1;
+  console.log("[YT_API] button_is_second_sheet =", button_is_second_sheet);
 
-    hls.loadSource(`${AudioBaseUrl}${ostId}/audio.m3u8`);
-    hls.attachMedia(this.audio);
+  if (buttonmutemode === 0) {
+    console.log("[YT_API] buttonmutemode == 0, stopping YouTube");
+    ui.stopYouTube();
+  }
+}
 
-    this.audio.volume = volume / 100;
-    this.audio.loop = repeat;
+async playHostedAudio(ostId, volume, repeat) {
+  console.log("[YT_API] playHostedAudio()", {
+    ostId,
+    volume,
+    repeat,
+    audio: this.audio,
+  });
 
-    await this.audio.play().catch(console.error);
-
-    button_is_second_sheet = 1;
-
-    if (buttonmutemode === 0) {
-      ui.stopYouTube();
-    }
+  if (this.audio?.player?.videoTitle) {
+    console.log("[YT_API] Current audio is YouTube adapter, replacing with HTMLAudioElement");
+    this.audio = document.createElement("audio");
+    await sleep(10);
   }
 
-  async playYouTube(ostId, volume, repeat) {
-    yt_repeat_conf = repeat;
+  if (!this.audio || !(this.audio instanceof HTMLAudioElement)) {
+    console.log("[YT_API] Creating new HTMLAudioElement");
+    this.audio = document.createElement("audio");
+  }
 
-    yt_repeat_launch = {
-      id: ostId,
-      vol: volume,
-    };
+  console.log("[YT_API] Creating HLS instance");
+  const hls = new Hls();
 
-    if (!this.youtube) {
-      await this.createYoutubePlayer();
+  const source = `${AudioBaseUrl}${ostId}/audio.m3u8`;
 
-      this.audio.src = ostId;
-      this.audio.volume = volume / 100;
-    }
+  console.log("[YT_API] Loading HLS source:", source);
 
-    if (!(this.audio instanceof YouTubeAudioAdapter)) {
-      this.audio = new YouTubeAudioAdapter(this.youtube);
-    }
+  hls.loadSource(source);
+
+  console.log("[YT_API] Attaching media");
+  hls.attachMedia(this.audio);
+
+  this.audio.volume = volume / 100;
+  this.audio.loop = repeat;
+
+  console.log("[YT_API] Audio configured", {
+    volume: this.audio.volume,
+    loop: this.audio.loop,
+  });
+
+  console.log("[YT_API] Calling audio.play()");
+  await this.audio.play().then(() => {
+    console.log("[YT_API] HTML audio playback started");
+  }).catch((err) => {
+    console.error("[YT_API] HTML audio play() failed", err);
+  });
+
+  button_is_second_sheet = 1;
+  console.log("[YT_API] button_is_second_sheet =", button_is_second_sheet);
+
+  if (buttonmutemode === 0) {
+    console.log("[YT_API] buttonmutemode == 0, stopping YouTube");
+    ui.stopYouTube();
+  }
+}
+
+async playYouTube(ostId, volume, repeat) {
+  console.log("[YT_API] playYouTube()", {
+    ostId,
+    volume,
+    repeat,
+    youtubeExists: !!this.youtube,
+    audio: this.audio,
+  });
+
+  yt_repeat_conf = repeat;
+
+  yt_repeat_launch = {
+    id: ostId,
+    vol: volume,
+  };
+
+  console.log("[YT_API] Repeat config updated", {
+    yt_repeat_conf,
+    yt_repeat_launch,
+  });
+
+  if (!this.youtube) {
+    console.log("[YT_API] YouTube player doesn't exist, creating");
+
+    await this.createYoutubePlayer();
+
+    console.log("[YT_API] YouTube player created");
 
     this.audio.src = ostId;
     this.audio.volume = volume / 100;
 
-    button_is_second_sheet = 1;
-
-    if (buttonmutemode === 0) {
-      ui.stopYouTube();
-    }
+    console.log("[YT_API] Initial audio adapter configured");
+  } else {
+    console.log("[YT_API] Reusing existing YouTube player");
   }
 
-  async createYoutubePlayer() {
-    if (this.youtube) return;
-
-    await new Promise((resolve) => {
-      this.youtube = new YT.Player("youtube", {
-        playerVars: {
-          autoplay: 1,
-          controls: 0,
-          rel: 0,
-          enablejsapi: 1,
-          origin: location.origin,
-        },
-
-        events: {
-          onReady: (event) => {
-            resolve();
-          },
-
-          onStateChange: (event) => {
-            this.handleYoutubeState(event);
-          },
-        },
-      });
-    });
-
+  if (!(this.audio instanceof YouTubeAudioAdapter)) {
+    console.log("[YT_API] Recreating YouTubeAudioAdapter");
     this.audio = new YouTubeAudioAdapter(this.youtube);
   }
 
-  handleYoutubeState(event) {
-    if (event.data !== YT.PlayerState.ENDED) return;
+  console.log("[YT_API] Setting adapter src:", ostId);
 
-    setTimeout(() => {
-      if (this.youtube.getPlayerState() !== YT.PlayerState.ENDED) {
-        return;
-      }
+  this.audio.src = ostId;
 
-      if (!yt_repeat_conf) {
-        return;
-      }
+  console.log("[YT_API] Setting adapter volume:", volume / 100);
 
-      ui.youtubePlay(yt_repeat_launch.id, yt_repeat_launch.vol, true);
-    }, 500);
+  this.audio.volume = volume / 100;
+
+  button_is_second_sheet = 1;
+  console.log("[YT_API] button_is_second_sheet =", button_is_second_sheet);
+
+  if (buttonmutemode === 0) {
+    console.log("[YT_API] buttonmutemode == 0, stopping YouTube");
+    ui.stopYouTube();
   }
+}
+
+async createYoutubePlayer() {
+  console.log("[YT_API] createYoutubePlayer()");
+
+  if (this.youtube) {
+    console.log("[YT_API] Player already exists");
+    return;
+  }
+
+  console.log("[YT_API] Creating YT.Player");
+
+  await new Promise((resolve) => {
+    this.youtube = new YT.Player("youtube", {
+      playerVars: {
+        autoplay: 1,
+        controls: 0,
+        rel: 0,
+        enablejsapi: 1,
+        origin: location.origin,
+      },
+
+      events: {
+        onReady: (event) => {
+          console.log("[YT_API] onReady fired", event);
+
+          try {
+            console.log("[YT_API] Player info", {
+              state: this.youtube?.getPlayerState?.(),
+              iframe: this.youtube?.getIframe?.(),
+            });
+          } catch (e) {}
+
+          resolve();
+        },
+
+        onStateChange: (event) => {
+          console.log("[YT_API] onStateChange", {
+            state: event.data,
+            stateName: {
+              "-1": "UNSTARTED",
+              "0": "ENDED",
+              "1": "PLAYING",
+              "2": "PAUSED",
+              "3": "BUFFERING",
+              "5": "CUED",
+            }[event.data],
+          });
+
+          this.handleYoutubeState(event);
+        },
+
+        onError: (event) => {
+          console.error("[YT_API] onError", event);
+        },
+      },
+    });
+  });
+
+  console.log("[YT_API] Wrapping player in YouTubeAudioAdapter");
+
+  this.audio = new YouTubeAudioAdapter(this.youtube);
+
+  console.log("[YT_API] createYoutubePlayer() finished");
+}
+
+handleYoutubeState(event) {
+  console.log("[YT_API] handleYoutubeState()", {
+    state: event.data,
+  });
+
+  if (event.data !== YT.PlayerState.ENDED) {
+    console.log("[YT_API] Ignoring state:", event.data);
+    return;
+  }
+
+  console.log("[YT_API] Video ended");
+
+  setTimeout(() => {
+    const state = this.youtube.getPlayerState();
+
+    console.log("[YT_API] Post-end state check", state);
+
+    if (state !== YT.PlayerState.ENDED) {
+      console.log("[YT_API] Player no longer ended, aborting repeat");
+      return;
+    }
+
+    if (!yt_repeat_conf) {
+      console.log("[YT_API] Repeat disabled");
+      return;
+    }
+
+    console.log("[YT_API] Restarting playback", yt_repeat_launch);
+
+    ui.youtubePlay(
+      yt_repeat_launch.id,
+      yt_repeat_launch.vol,
+      true
+    );
+  }, 500);
+}
 
   // Called when client toggles the music
   toggleMusic() {
