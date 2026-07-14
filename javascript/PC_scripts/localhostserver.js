@@ -67,11 +67,34 @@ function startServer() {
     'TheRedMineword-3b88b341d8d88a53d597fadefa5d79da4f8e9e7fa770a83375e3ba8bf2e8dc72-0e75b2c62ad3a2968d04487c4826c228f4fab92d'
 );
 
-    serverApp.use(express.json());
+    serverApp.use((req, res, next) => {
+    // Ignore API routes
+    if (
+        req.path.startsWith('/local-api') ||
+        req.path.startsWith('/get-audio')
+    ) {
+        return next();
+    }
+
+    let filePath = path.join(APP_DIR, req.path);
+
+    // /
+    if (req.path === "/") {
+        filePath = path.join(APP_DIR, "index.html");
+    } else {
+        filePath += ".html";
+    }
+
+    if (fs.existsSync(filePath)) {
+        return res.sendFile(filePath);
+    }
+
+    next();
+});
+
+serverApp.use(express.static(APP_DIR));
     console.log("DATA DIR:", APP_DIR, APP_DIR2);
-    serverApp.use(
-        express.static(APP_DIR)
-    );;
+
     
     serverApp.use('/get-audio', express.static(APP_DIR2));
 
