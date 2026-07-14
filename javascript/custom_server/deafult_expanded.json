@@ -3224,7 +3224,7 @@
         "description": "On use, if your hand has fewer than 3 cards, draw 1 cards from your deck, plus 1 additional card for each unit in your graveyard (up to 3 bonus cards). You start the game with 2 fewer cards in hand but you can on game start redraw extra 1 card(s)."
       },
       "temeria_call": {
-        "description": "Spawn Temeria Special Forcess attack in close combat row. Commander Horn in close combat row will lost its effect but close row will be partialy protected partialy from weather effects. After use makes you pass!"
+        "description": "Spawn Temeria Special Forcess attack in close combat row. Commander Horn in close combat row will lost its effect but close row will be partialy protected partialy from weather effects. After use makes you pass! Cant be used when opponent passed!"
       },
       "darkness_storm_leader": {
         "description": "Spawn Darkness Storm on both sides that destroys all non-hero cards in the close row"
