@@ -2935,9 +2935,9 @@ var card_dict_base = [
     name: "Traveling Spirit",
     id: "3034",
     deck: "sky",
-    row: "close",
+    row: "agile",
     strength: "5",
-    ability: "agile",
+    ability: "",
     filename: "custom!traveling_spirit",
     count: "0",
     count_monitor: {
