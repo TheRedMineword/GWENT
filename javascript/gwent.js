@@ -4257,7 +4257,7 @@ class UI {
       console.log("Will yt repeat?", yt_repeat_conf, true, "!");
       yt_repeat_launch.id = tavern_yt_vid;
       yt_repeat_launch.vol = tavern_yt_volume;
-      console.log("[YT_API] [this.youtube] A");
+      //  console.log("[YT_API] [this.youtube] A");
       await this.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);
       // await this.createYoutubePlayer_v2();
       //     console.log("[YT_API] dump past init A", {
@@ -4454,20 +4454,20 @@ class UI {
       yt_repeat_launch,
     });
 
-    if (!this.youtube) {
-      console.log("[YT_API] YouTube player doesn't exist, creating");
+    //  if (!this.youtube) {
+    console.log("[YT_API] YouTube player doesn't exist, creating");
 
-      await this.createYoutubePlayer();
+    await this.createYoutubePlayer(ostId);
 
-      console.log("[YT_API] YouTube player created");
+    console.log("[YT_API] YouTube player created");
 
-      this.audio.src = ostId;
-      this.audio.volume = volume / 100;
+    this.audio.src = ostId;
+    this.audio.volume = volume / 100;
 
-      console.log("[YT_API] Initial audio adapter configured");
-    } else {
-      console.log("[YT_API] Reusing existing YouTube player");
-    }
+    console.log("[YT_API] Initial audio adapter configured");
+    //   } else {
+    //      console.log("[YT_API] Reusing existing YouTube player");
+    //    }
 
     if (!this.audio || !this.audio._is_yt) {
       console.log("[YT_API] Creating YouTubeAudioAdapter");
@@ -4491,9 +4491,33 @@ class UI {
     }
   }
 
-  async createYoutubePlayer() {
+  isYTPlayerHealthy(player) {
+    return !!(
+      player &&
+      typeof player.playVideo === "function" &&
+      typeof player.loadVideoById === "function" &&
+      typeof player.getPlayerState === "function" &&
+      typeof player.getVideoData === "function"
+    );
+  }
+
+  async createYoutubePlayer(vid) {
     console.log("[YT_API] createYoutubePlayer()");
 
+    if (!this.isYTPlayerHealthy(this.youtube)) {
+      try {
+        ui.youtube?.destroy?.();
+
+        document.getElementById("youtube")?.remove();
+
+        const div = document.createElement("div");
+        div.id = "youtube";
+        document.body.appendChild(div);
+      } catch (e) {}
+      try {
+        this.youtube = null;
+      } catch (e) {}
+    }
     if (this.youtube) {
       console.log("[YT_API] Player already exists");
       return;
@@ -4503,6 +4527,7 @@ class UI {
     console.log("[YT_API] [this.youtube] B");
     await new Promise((resolve) => {
       this.youtube = new YT.Player("youtube", {
+        videoId: vid,
         playerVars: {
           autoplay: 1,
           controls: 0,
