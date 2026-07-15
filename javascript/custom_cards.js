@@ -360,7 +360,7 @@ async function buildSeasonCard(season, data) {
   // if (card.customassets?.lg) {
   card.customassets.lg.name = name;
   card.customassets.lg.desc = season.qoute;
-  card.customassets.lg.ability = season.abilities.card;
+  card.customassets.lg.ability = season.abilities.generator;
   // }
 
   // if (card.customassets?.sm) {
