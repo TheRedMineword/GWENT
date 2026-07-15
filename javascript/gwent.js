@@ -343,10 +343,12 @@ console.log("Websocket", wsUrl);
 // const socket = new WebSocket('ws://127.0.0.1:8080');				// Example line for when using local installation instead of remote deployment.
 let socket = null;
 
+loadingscreenupdate("Starting webscoket");
 socket = new WebSocket(wsUrl);
 
 socket.onopen = () => {
   console.log("WebSocket connected");
+  loadingscreenupdate("Webscoket OK");
 };
 
 socket.onerror = (err) => {
@@ -6752,8 +6754,7 @@ async function postscripinit() {
       });
     isLoaded = true;
   } else {
-    document.getElementById("load_text").textContent =
-      "Waiting for card builds...";
+    loadingscreenupdate(`Waiting for card builds...`);
     try {
       await custom_card_builder_init();
     } catch (e) {
@@ -6782,11 +6783,10 @@ async function loadYTByEval() {
 }
 
 async function lunch_gwent_ui() {
-  document.getElementById("load_text").textContent = `Loading music...`;
+  loadingscreenupdate(`Loading music...`);
   await loadYTByEval();
   console.log("YouTube API is ready!");
-  document.getElementById("load_text").textContent =
-    `Running lunch_gwent_ui()...`;
+  loadingscreenupdate(`Running lunch_gwent_ui()...`);
 
   document.getElementById("load_text").style.display = "none";
   document.getElementById("button_start").style.display = "inline-block";

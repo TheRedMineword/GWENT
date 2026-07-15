@@ -1,4 +1,5 @@
 "use strict";
+loadingscreenupdate("Creating env vars!");
 const debuglunchcustomcards = false; // if false when ready use: lunch_gwent_ui
 let onYouTubeIframeAPIReady_status = false;
 let custom_updater = false;

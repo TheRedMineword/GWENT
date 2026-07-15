@@ -1,3 +1,4 @@
+loadingscreenupdate(`Preparing card_dict`);
 let timed_count_change = [];
 var card_dict_base = [
   {
@@ -3152,6 +3153,8 @@ card_dict_base.push({
 
 var card_dict = deepClone(card_dict_base);
 
+loadingscreenupdate(`Loaded ${card_dict.length} cards!`);
+
 const witcher_signs = Object.entries(card_dict)
   .filter(([_, card]) => card.witcher_sign)
   .sort(([, a], [, b]) => a.name.localeCompare(b.name))
@@ -3160,6 +3163,7 @@ const witcher_signs = Object.entries(card_dict)
     ...card,
   }));
 
+loadingscreenupdate(`Loaded ${witcher_signs.length} witcher signs!`);
 console.log("Cards array", card_dict, witcher_signs);
 
 function setupSpiritTimer(card, data) {
@@ -3241,6 +3245,9 @@ setInterval(scanTimedCountChange, 1000);
 // Initial load
 card_dict.forEach((card) => {
   if (card.count_monitor) {
+    loadingscreenupdate(
+      `Checking timer for ${card.filename.split("custom!")[1]}!`,
+    );
     pushTimedCount(card);
   }
 });

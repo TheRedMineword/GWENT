@@ -672,8 +672,7 @@ async function update_updater_on_rebuild(
       `${right_now}/${all_of_then}##${type}/${debug}`,
     );
   } else {
-    document.getElementById("load_text").textContent =
-      `Building cards: ${right_now}/${all_of_then}`;
+    loadingscreenupdate(`Building cards: ${right_now}/${all_of_then}`);
   }
 }
 

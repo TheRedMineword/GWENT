@@ -1,4 +1,10 @@
+"use strict";
+function loadingscreenupdate(strng) {
+  document.getElementById("load_text").textContent = strng;
+  console.log(`[LOADING]: "${strng}"`);
+}
 (() => {
+  loadingscreenupdate("Starting clock synchronization");
   let useSecureClock = false;
   let serverTimestamp = 0;
   let syncPerf = 0;
@@ -56,11 +62,13 @@
     for (const script of scripts) {
       console.log("Loading", script);
 
+      loadingscreenupdate(`Loading ${script}...`);
       await loadScript(script);
     }
   }
 
   async function syncClock() {
+    loadingscreenupdate("Fetching clock config...");
     try {
       const config = await fetch(
         `javascript/clock_config.json?date=${random_string_gen()}`,
@@ -71,8 +79,12 @@
 
       const json = await config.json();
 
+      loadingscreenupdate("Parsing clock response...");
+
       timezone = json.zone || "UTC";
       sha = json.sha || "";
+
+      loadingscreenupdate(`Clock synchronization to ${timezone} in progress`);
 
       console.log("Clock config", json);
       if (window.location.port !== "8080" && window.location.port !== "8081") {
@@ -109,8 +121,9 @@
 
       useSecureClock = false;
     }
-
+    loadingscreenupdate("Clock ready, lunching scripts!");
     await loadScripts();
+    loadingscreenupdate("Running postscripinit()");
     await postscripinit();
   }
 

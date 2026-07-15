@@ -166,3 +166,4 @@ async function init_sync_hands() {
   //    clearInterval(intervalId);
   //  });
 })();
+loadingscreenupdate("Ping interval set");

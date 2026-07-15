@@ -219,3 +219,4 @@ var factions = {
 };
 
 const factions_base = deepClone(factions);
+loadingscreenupdate(`Loaded ${Object.keys(factions).length} factions!`);

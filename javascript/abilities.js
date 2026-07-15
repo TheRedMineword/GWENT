@@ -42,6 +42,8 @@ const NotPickUpAbilities = [
   "wshield",
 ];
 
+loadingscreenupdate(`Preparing ability_dict`);
+
 var ability_dict = {
   clear: {
     name: "Clear Weather",
@@ -2346,7 +2348,7 @@ var ability_dict = {
     },
   },
 };
-
+loadingscreenupdate(`Adding resolveScorch to ability_dict`);
 ability_dict.resolveScorch = async (rows, require10 = true) => {
   let targets = [];
 
@@ -2451,3 +2453,6 @@ ability_dict.resolveScorch = async (rows, require10 = true) => {
 };
 
 const ability_dict_base = deepClone(ability_dict);
+loadingscreenupdate(
+  `ability_dict lenght is ${Object.keys(ability_dict).length}!`,
+);
