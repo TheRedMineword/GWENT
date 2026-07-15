@@ -309,6 +309,81 @@ async function renderTemplate(template, width, height) {
   );
 }
 
+async function buildSeasonCard(season, data) {
+  const template = card_dict.find((c) => c._replace_me === season.replace_me);
+  const index = card_dict.findIndex((c) => c._replace_me === season.replace_me);
+  console.warn("sky_season", template, index);
+  if (!template) return null;
+
+  // --- Build square icon as data URI ---
+  const bg = await loadImage(`${IMAGE_SOURCE_TS}${data[season.behind]}`);
+
+  const img = await loadImage(`${IMAGE_SOURCE_TS}${season.who}`);
+
+  const canvas = document.createElement("canvas");
+  canvas.width = 309;
+  canvas.height = 444;
+
+  const ctx = canvas.getContext("2d");
+
+  // Draw background (cropped to square)
+  drawCover(ctx, bg, 0, 0, 309, 444);
+
+  // Draw foreground
+  const scale = parseFloat(season.size_who || "100") / 100;
+
+  const w = img.width * scale;
+  const h = img.height * scale;
+
+  ctx.drawImage(img, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
+
+  const dataUri = canvas.toDataURL("image/png");
+
+  //console.log("SKY_SEASON", dataUri);
+  // Clone template and replace values
+  const card = {}; //structuredClone(template);
+  var name = season.name;
+  if (season._name_start_wich_season_of) {
+    name = `Season of ${name}`;
+  }
+  card.name = name;
+  card.deck = season.faction;
+  card.row = season.row;
+  card.strength = String(season.strenght);
+  card.ability = season.abilities.card;
+  card.filename = season.filename;
+  card.id = season.id;
+  card.count = String(0);
+  card.customassets ??= {};
+  card.customassets.lg ??= {};
+  card.customassets.sm ??= {};
+  // if (card.customassets?.lg) {
+  card.customassets.lg.name = name;
+  card.customassets.lg.desc = season.qoute;
+  card.customassets.lg.ability = season.abilities.card;
+  // }
+
+  // if (card.customassets?.sm) {
+  card.customassets.sm.type = "url";
+  card.customassets.sm.url = dataUri;
+  card.count_monitor = {
+    base: season.count,
+    monitor: "based",
+    id: `${season.replace_me}_countdown`,
+    duration: {
+      start: season.when.start,
+      duration: Math.floor(
+        (new Date(season.when.end) - new Date(season.when.start)) / 1000,
+      ),
+    },
+  };
+  // }
+  if (index !== -1) {
+    card_dict[index] = card;
+  }
+  return card;
+}
+
 async function DEBUGGER_make_json(
   is_hero,
   faction,
@@ -701,6 +776,16 @@ async function rebuildCustomCardsMaps() {
 
   console.log(ts.special_visitors, "visit");
   card_dict.push(...ts.special_visitors);
+
+  update_updater_on_rebuild(
+    0,
+    0,
+    "sm",
+    ts.season.filename.split("custom!")[1],
+    ts.season.filename,
+  );
+  var s_res = await buildSeasonCard(ts.season, ts.images);
+  console.log("BUILD CARDS SKY SEASON", s_res);
 
   timed_count_change = [];
   card_dict.forEach((card) => {

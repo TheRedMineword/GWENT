@@ -6839,7 +6839,7 @@ function onYouTubeIframeAPIReady() {
     }
   }
 }
-loadingscreenupdate("nYouTubeIframeAPIReady() ready...");
+loadingscreenupdate("YouTubeIframeAPIReady() ready...");
 
 async function iniciarMusica(bypass = false) {
   try {

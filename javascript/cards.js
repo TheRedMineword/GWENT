@@ -2962,6 +2962,7 @@ var card_dict_base = [
       },
     },
   },
+  { _replace_me: "sky_season" },
   {
     name: "Vincent Van Gogh",
     id: "3035",
@@ -3039,7 +3040,7 @@ var card_dict_base = [
     reinforce: { owner_name: "Vincent Van Gogh", spawn_count: 1 },
   },
   {
-    name: "Dear Van Gogh Seasonal Spirits",
+    name: "Dear Van Gogh — Seasonal Spirits",
     id: "3037",
     deck: "sky",
     row: "ranged",
@@ -3060,7 +3061,7 @@ var card_dict_base = [
       lg: {
         hero: false,
         ability: "bond",
-        name: "Dear Van Gogh Seasonal Spirits",
+        name: "Dear Van Gogh — Seasonal Spirits",
         desc: "Seasonal Spirits and their stories can take various forms.",
         txt_timed_a: false,
       },
@@ -3073,7 +3074,7 @@ var card_dict_base = [
     },
   },
   {
-    name: "Dear Van Gogh Seasonal Hearth",
+    name: "Dear Van Gogh — Seasonal Hearth",
     id: "3038",
     deck: "sky",
     row: "close",
@@ -3094,7 +3095,7 @@ var card_dict_base = [
       lg: {
         hero: false,
         ability: "medic",
-        name: "Dear Van Gogh Seasonal Hearth",
+        name: "Dear Van Gogh — Seasonal Hearth",
         desc: "Every ember remembers the sun.",
         txt_timed_a: false,
       },

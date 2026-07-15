@@ -1,6 +1,6 @@
 # Image Attribution Notice
 
-The images in this directory were obtained from the **Sky: Children of the Light Wiki** unless **stated otherwise** and remain the property of their respective copyright holders and contributors.
+The images in this directory were obtained from the **Sky: Children of the Light Wiki** and remain the property of their respective copyright holders and contributors.
 
 **Source:** Sky: Children of the Light Wiki (Fandom)
 

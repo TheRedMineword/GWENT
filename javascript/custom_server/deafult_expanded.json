@@ -2768,8 +2768,8 @@
         "name": "Traveling Spirit",
         "id": "3034",
         "deck": "sky",
-        "row": "close",
-        "strength": "6",
+        "row": "agile",
+        "strength": "5",
         "ability": "",
         "filename": "custom!traveling_spirit",
         "count": "0",
@@ -2785,7 +2785,7 @@
         "customassets": {
           "lg": {
             "hero": false,
-            "ability": false,
+            "ability": "agile",
             "name": "Traveling spirit",
             "desc": "A special guest from times long gone.",
             "txt_timed_a": false
@@ -2797,6 +2797,9 @@
             "timed": []
           }
         }
+      },
+      {
+        "_replace_me": "sky_season"
       },
       {
         "name": "Vincent Van Gogh",
@@ -2881,7 +2884,7 @@
         }
       },
       {
-        "name": "Dear Van Gogh Seasonal Spirits",
+        "name": "Dear Van Gogh — Seasonal Spirits",
         "id": "3037",
         "deck": "sky",
         "row": "ranged",
@@ -2902,7 +2905,7 @@
           "lg": {
             "hero": false,
             "ability": "bond",
-            "name": "Dear Van Gogh Seasonal Spirits",
+            "name": "Dear Van Gogh — Seasonal Spirits",
             "desc": "Seasonal Spirits and their stories can take various forms.",
             "txt_timed_a": false
           },
@@ -2915,7 +2918,7 @@
         }
       },
       {
-        "name": "Dear Van Gogh Seasonal Hearth",
+        "name": "Dear Van Gogh — Seasonal Hearth",
         "id": "3038",
         "deck": "sky",
         "row": "close",
@@ -2936,7 +2939,7 @@
           "lg": {
             "hero": false,
             "ability": "medic",
-            "name": "Dear Van Gogh Seasonal Hearth",
+            "name": "Dear Van Gogh — Seasonal Hearth",
             "desc": "Every ember remembers the sun.",
             "txt_timed_a": false
           },
@@ -3303,10 +3306,10 @@
         "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
       }
     },
-    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
-    "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "8o-JI8VRyKo",
-    "tavern_yt_volume": 90
+    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
+    "audio_yt_vid_soundtrack_volume": 47,
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }
