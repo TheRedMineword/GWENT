@@ -701,6 +701,17 @@ async function rebuildCustomCardsMaps() {
 
   console.log(ts.special_visitors, "visit");
   card_dict.push(...ts.special_visitors);
+
+  timed_count_change = [];
+  card_dict.forEach((card) => {
+    if (card.count_monitor) {
+      loadingscreenupdate(
+        `Checking timer for ${card.filename.split("custom!")[1]}!`,
+      );
+      pushTimedCount(card);
+    }
+  });
+
   var to_check = Object.values(card_dict).reduce(
     (count, card) => count + (card?.filename?.startsWith("custom!") ? 1 : 0),
     0,

@@ -2936,8 +2936,8 @@ var card_dict_base = [
     id: "3034",
     deck: "sky",
     row: "close",
-    strength: "6",
-    ability: "",
+    strength: "5",
+    ability: "agile",
     filename: "custom!traveling_spirit",
     count: "0",
     count_monitor: {
@@ -2949,7 +2949,7 @@ var card_dict_base = [
     customassets: {
       lg: {
         hero: false,
-        ability: false,
+        ability: "agile",
         name: "Traveling spirit",
         desc: "A special guest from times long gone.",
         txt_timed_a: false,
@@ -3241,13 +3241,3 @@ function scanTimedCountChange() {
 
 // Run every second
 setInterval(scanTimedCountChange, 1000);
-
-// Initial load
-card_dict.forEach((card) => {
-  if (card.count_monitor) {
-    loadingscreenupdate(
-      `Checking timer for ${card.filename.split("custom!")[1]}!`,
-    );
-    pushTimedCount(card);
-  }
-});

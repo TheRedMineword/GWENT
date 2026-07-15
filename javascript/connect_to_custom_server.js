@@ -583,14 +583,14 @@ async function connect_to_custom_server(URL) {
     await sleep(300);
     await custom_card_builder_init();
     custom_updater = false;
-    updateLoader("Almost there", 99, `Updating cards!`);
-    timed_count_change = [];
-    card_dict.forEach((card) => {
-      if (card.count_monitor) {
-        pushTimedCount(card);
-      }
-    });
-    await sleep(750);
+    //    updateLoader("Almost there", 99, `Updating cards!`);
+    // timed_count_change = [];
+    // card_dict.forEach((card) => {
+    //    if (card.count_monitor) {
+    //      pushTimedCount(card);
+    //    }
+    //  });
+    await sleep(350);
     updateLoader("Almost there", 99, `Reloading UI!`);
     await reloadRuntimeConfigs();
     if (!waitMusicPlaying) {
