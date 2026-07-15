@@ -779,7 +779,7 @@ async function rebuildCustomCardsMaps() {
 
   update_updater_on_rebuild(
     0,
-    0,
+    "?",
     "sm",
     ts.season.filename.split("custom!")[1],
     ts.season.filename,
