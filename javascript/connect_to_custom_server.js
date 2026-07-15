@@ -484,14 +484,14 @@ async function connect_to_custom_server(URL) {
       chunks.push(value);
       received += value.length;
 
-      let percent = 6;
+      let percent = 5;
       let rawPercent = 0;
-      if (total > 0 && Number.isFinite(total)) {
-        rawPercent =
-          total > 0 ? Math.min(100, Math.floor((received / total) * 100)) : 0;
 
-        // map 0-100 -> 5-40
-        percent = 5 + Math.floor((rawPercent / 100) * (74 - 5));
+      if (total > 0 && Number.isFinite(total)) {
+        rawPercent = Math.min(100, Math.floor((received / total) * 100));
+
+        // map 0-100 -> 60-63
+        percent = 5 + (rawPercent / 100) * (63 - 5);
       }
 
       updateLoader(
@@ -518,7 +518,7 @@ async function connect_to_custom_server(URL) {
 
     console.log(LOG_PREFIX, "Downloaded response text length:", text.length);
     await sleep(600);
-    updateLoader("Parsing response...", 75);
+    updateLoader("Parsing response...", 64);
 
     // ===========================
     // PARSE JSON RESPONSE
@@ -552,9 +552,9 @@ async function connect_to_custom_server(URL) {
     // ===========================
     // APPLY ENV VARS
     // ===========================
-    updateLoader("Parsing bit more...", 76);
+    updateLoader("Parsing bit more...", 68);
     if (data?.texture_pack_url || null !== null) {
-      updateLoader("Loading texture pack", 79);
+      updateLoader("Loading texture pack", 70);
       await showThirdPartyWarning(data.texture_pack_url);
     }
     if (data.env_vars) {
@@ -571,12 +571,12 @@ async function connect_to_custom_server(URL) {
     await sleep(300);
     updateLoader(
       "Almost There",
-      90,
+      85,
       `Finalizing the connection with ${s_name_low}`,
     );
     updateLoader(
       "Building cards!",
-      93,
+      88,
       `Finalizing the connection with ${s_name_low}`,
     );
     custom_updater = true;
@@ -591,7 +591,7 @@ async function connect_to_custom_server(URL) {
     //    }
     //  });
     await sleep(350);
-    updateLoader("Almost there", 99, `Reloading UI!`);
+    updateLoader("Almost there", 98, `Reloading UI!`);
     await reloadRuntimeConfigs();
     if (!waitMusicPlaying) {
       ui.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);

@@ -736,14 +736,25 @@ async function update_updater_on_rebuild(
   debug,
   full_debug,
 ) {
+  let progress =
+    Number.isInteger(right_now) &&
+    Number.isInteger(all_of_then) &&
+    all_of_then > 0
+      ? Math.min(Math.max(right_now / all_of_then, 0), 1)
+      : 0;
+  progress = progress * 100;
+  const x = 88;
+  const y = 97;
+
+  const value = x + (progress / 100) * (y - x);
   console.log(
     "Building cards ",
-    `${right_now}/${all_of_then}##${type}/${debug} (${full_debug})`,
+    `${right_now}/${all_of_then}##${type}/${debug} (${full_debug})\n${progress}% (${value})`,
   );
   if (custom_updater) {
     updateLoader(
       "Building cards!",
-      93,
+      value,
       `${right_now}/${all_of_then}##${type}/${debug}`,
     );
   } else {
