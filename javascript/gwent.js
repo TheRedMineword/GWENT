@@ -129,65 +129,140 @@ function toggleReadyWaiting(amReady) {
 }
 function askForSessionId() {
   return new Promise((resolve) => {
-    // overlay background
+    // Overlay
     const overlay = document.createElement("div");
-    overlay.style.position = "fixed";
-    overlay.style.top = "0";
-    overlay.style.left = "0";
-    overlay.style.width = "100%";
-    overlay.style.height = "100%";
-    overlay.style.background = "rgba(0,0,0,0.5)";
-    overlay.style.display = "flex";
-    overlay.style.alignItems = "center";
-    overlay.style.justifyContent = "center";
-    overlay.style.zIndex = "9999";
+    Object.assign(overlay.style, {
+      position: "fixed",
+      inset: "0",
+      background: "rgba(10, 8, 5, 0.75)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: "99999",
+      backdropFilter: "blur(2px)",
+    });
 
-    // dialog box
+    // Dialog
     const box = document.createElement("div");
-    box.style.background = "white";
-    box.style.padding = "20px";
-    box.style.borderRadius = "10px";
-    box.style.minWidth = "250px";
-    box.style.textAlign = "center";
+    Object.assign(box.style, {
+      width: "420px",
+      maxWidth: "90vw",
+      background: "linear-gradient(#efe7d3, #ddd0b3)",
+      border: "2px solid #6f5830",
+      borderRadius: "8px",
+      boxShadow: "0 10px 30px rgba(0,0,0,.55)",
+      color: "#2d2418",
+      fontFamily: "Georgia, serif",
+      overflow: "hidden",
+    });
     box.classList.add("allow-click");
 
-    // input
+    // Header
+    const header = document.createElement("div");
+    header.textContent = "Join Session";
+    Object.assign(header.style, {
+      padding: "10px 16px",
+      background: "#6f5830",
+      color: "#f4e7c3",
+      fontSize: "18px",
+      fontWeight: "bold",
+      textAlign: "center",
+      borderBottom: "1px solid #4f3d22",
+    });
+
+    // Content
+    const content = document.createElement("div");
+    Object.assign(content.style, {
+      padding: "24px",
+      textAlign: "center",
+    });
+
+    const label = document.createElement("div");
+    label.textContent = "Enter Session ID";
+    Object.assign(label.style, {
+      fontSize: "18px",
+      marginBottom: "16px",
+    });
+
+    // Input
     const input = document.createElement("input");
     input.type = "text";
-    input.placeholder = "Enter Session ID";
-    input.style.width = "100%";
-    input.style.marginBottom = "10px";
+    input.placeholder = "Session ID";
+    Object.assign(input.style, {
+      width: "100%",
+      boxSizing: "border-box",
+      padding: "10px",
+      marginBottom: "20px",
+      fontSize: "16px",
+      border: "1px solid #6f5830",
+      borderRadius: "4px",
+      background: "#f8f3e8",
+      color: "#2d2418",
+    });
 
-    // buttons
-    const ok = document.createElement("button");
-    ok.textContent = "Join";
-    ok.style.marginRight = "10px";
+    // Button row
+    const buttons = document.createElement("div");
+    Object.assign(buttons.style, {
+      display: "flex",
+      justifyContent: "center",
+      gap: "14px",
+    });
 
-    const cancel = document.createElement("button");
-    cancel.textContent = "Cancel";
+    function makeButton(label) {
+      const btn = document.createElement("button");
+      btn.textContent = label;
+      Object.assign(btn.style, {
+        minWidth: "90px",
+        padding: "8px 18px",
+        background: "#7a5b2e",
+        color: "#f6edd8",
+        border: "1px solid #4f3d22",
+        borderRadius: "4px",
+        fontSize: "16px",
+        fontWeight: "bold",
+        cursor: "pointer",
+        transition: "0.15s",
+      });
+
+      btn.onmouseenter = () => {
+        btn.style.background = "#9b7539";
+      };
+
+      btn.onmouseleave = () => {
+        btn.style.background = "#7a5b2e";
+      };
+
+      return btn;
+    }
+
+    const join = makeButton("Join");
+    const cancel = makeButton("Cancel");
 
     function cleanup(value) {
       document.body.removeChild(overlay);
       resolve(value);
     }
 
-    ok.onclick = () => {
+    join.onclick = () => {
       const value = input.value.trim();
       cleanup(value || null);
     };
 
     cancel.onclick = () => cleanup(null);
 
-    // allow Enter key
     input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") ok.click();
+      if (e.key === "Enter") join.click();
       if (e.key === "Escape") cancel.click();
     });
 
-    // assemble
-    box.appendChild(input);
-    box.appendChild(ok);
-    box.appendChild(cancel);
+    content.appendChild(label);
+    content.appendChild(input);
+    buttons.appendChild(join);
+    buttons.appendChild(cancel);
+    content.appendChild(buttons);
+
+    box.appendChild(header);
+    box.appendChild(content);
     overlay.appendChild(box);
     document.body.appendChild(overlay);
 
@@ -5571,13 +5646,126 @@ class DeckMaker {
   }
 
   // Called when client selects a deck faction. Clears previous cards and makes valid cards available.
-  setFaction(faction_name, silent) {
+  async setFaction(faction_name, silent) {
     if (!silent && this.faction === faction_name) return false;
     if (!silent) {
       tocar("warning", false);
-      if (
-        !confirm("Changing factions will clear the current deck. Continue? ")
-      ) {
+      var res = await new Promise((resolve) => {
+        // Overlay
+        const overlay = document.createElement("div");
+        Object.assign(overlay.style, {
+          position: "fixed",
+          inset: "0",
+          background: "rgba(10, 8, 5, 0.75)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: "99999",
+          backdropFilter: "blur(2px)",
+        });
+
+        // Dialog
+        const box = document.createElement("div");
+        Object.assign(box.style, {
+          width: "420px",
+          maxWidth: "90vw",
+          background: "linear-gradient(#efe7d3, #ddd0b3)",
+          border: "2px solid #6f5830",
+          borderRadius: "8px",
+          boxShadow: "0 10px 30px rgba(0,0,0,.55)",
+          color: "#2d2418",
+          fontFamily: "Georgia, serif",
+          overflow: "hidden",
+        });
+        box.classList.add("allow-click");
+
+        // Header
+        const header = document.createElement("div");
+        header.textContent = "Confirm";
+        Object.assign(header.style, {
+          padding: "10px 16px",
+          background: "#6f5830",
+          color: "#f4e7c3",
+          fontSize: "18px",
+          fontWeight: "bold",
+          textAlign: "center",
+          borderBottom: "1px solid #4f3d22",
+        });
+
+        // Message
+        const text = document.createElement("div");
+        text.innerHTML =
+          "Change faction?<br><br>This will clear your current deck!";
+        Object.assign(text.style, {
+          padding: "24px",
+          fontSize: "18px",
+          lineHeight: "1.5",
+          textAlign: "center",
+        });
+
+        // Button row
+        const buttons = document.createElement("div");
+        Object.assign(buttons.style, {
+          display: "flex",
+          justifyContent: "center",
+          gap: "14px",
+          padding: "0 0 20px",
+        });
+
+        function makeButton(label) {
+          const btn = document.createElement("button");
+          btn.textContent = label;
+          Object.assign(btn.style, {
+            minWidth: "90px",
+            padding: "8px 18px",
+            background: "#7a5b2e",
+            color: "#f6edd8",
+            border: "1px solid #4f3d22",
+            borderRadius: "4px",
+            fontSize: "16px",
+            fontWeight: "bold",
+            cursor: "pointer",
+            transition: "0.15s",
+          });
+
+          btn.onmouseenter = () => {
+            btn.style.background = "#9b7539";
+          };
+
+          btn.onmouseleave = () => {
+            btn.style.background = "#7a5b2e";
+          };
+
+          return btn;
+        }
+
+        const yes = makeButton("Yes");
+        const no = makeButton("No");
+
+        function cleanup(result) {
+          document.body.removeChild(overlay);
+          resolve(result);
+        }
+
+        yes.onclick = () => cleanup(true);
+        no.onclick = () => cleanup(false);
+
+        overlay.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") cleanup(true);
+          if (e.key === "Escape") cleanup(false);
+        });
+
+        buttons.appendChild(yes);
+        buttons.appendChild(no);
+        box.appendChild(header);
+        box.appendChild(text);
+        box.appendChild(buttons);
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+
+        yes.focus();
+      });
+      if (!res) {
         tocar("warning", false);
         return false;
       }

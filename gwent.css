@@ -2733,5 +2733,9 @@ html {
 .noclick .allow-click {
     pointer-events: auto !important;
 }
-
+.allow-click textarea::selection,
+.allow-click input::selection {
+    background: #6f5830;
+    color: #f4e7c3;
+}
 

@@ -19,6 +19,14 @@ Patch Notes:
 </box.title>
 
 <box.text>
+# 15 July, 2026
+This update adds small quality-of-life changes!
+```diff
+--- Updated all user input function (change faction, join session, create session) wich new UI!
+--- Tried fixing issue where extraJSON was being send too fast, slowed each send for few seconds so other client can keep up!
+--- Added game init loading status! !new!
+```
+<fat3>
 # 14 July, 2026
 ```diff
 --- Fixed Udalryk an Brokvar — Gods Choosen lg image

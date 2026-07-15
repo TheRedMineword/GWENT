@@ -71,95 +71,338 @@ btnCancelElem.addEventListener("click", cancelSession);
 // --------------------
 // FUNCTIONS
 // --------------------
-
 function askForSessionMode() {
   return new Promise((resolve) => {
     const overlay = document.createElement("div");
-    overlay.style.position = "fixed";
-    overlay.style.top = "0";
-    overlay.style.left = "0";
-    overlay.style.width = "100%";
-    overlay.style.height = "100%";
-    overlay.style.background = "rgba(0,0,0,0.5)";
-    overlay.style.display = "flex";
-    overlay.style.alignItems = "center";
-    overlay.style.justifyContent = "center";
-    overlay.style.zIndex = "9999";
+    Object.assign(overlay.style, {
+      position: "fixed",
+      inset: "0",
+      background: "rgba(10, 8, 5, 0.75)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: "99999",
+      backdropFilter: "blur(2px)",
+    });
 
     const box = document.createElement("div");
-    box.style.background = "white";
-    box.style.padding = "20px";
-    box.style.borderRadius = "10px";
-    box.style.minWidth = "260px";
-    box.style.textAlign = "center";
+    Object.assign(box.style, {
+      width: "420px",
+      maxWidth: "90vw",
+      background: "linear-gradient(#efe7d3, #ddd0b3)",
+      border: "2px solid #6f5830",
+      borderRadius: "8px",
+      boxShadow: "0 10px 30px rgba(0,0,0,.55)",
+      color: "#2d2418",
+      fontFamily: "Georgia, serif",
+      overflow: "hidden",
+    });
     box.classList.add("allow-click");
 
-    //    const title = document.createElement("div");
-    //   title.textContent = "Choose session type";
+    const header = document.createElement("div");
+    header.textContent = "Session";
+    Object.assign(header.style, {
+      padding: "10px 16px",
+      background: "#6f5830",
+      color: "#f4e7c3",
+      fontSize: "18px",
+      fontWeight: "bold",
+      textAlign: "center",
+      borderBottom: "1px solid #4f3d22",
+    });
 
-    //    title.style.margin = "0 0 15px 0";
-    //   title.style.color = "#111";
-    //    title.style.fontSize = "24px";
-    //    title.style.fontFamily = "system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
-    //    title.style.fontWeight = "600";
-    //    title.style.textAlign = "center";
-    //    title.style.letterSpacing = "0.3px";
+    const content = document.createElement("div");
+    Object.assign(content.style, {
+      padding: "24px",
+      textAlign: "center",
+    });
 
-    const createBtn = document.createElement("button");
-    createBtn.textContent = "Create Server";
-    createBtn.style.marginRight = "10px";
+    const text = document.createElement("div");
+    text.textContent = "Choose session type";
+    Object.assign(text.style, {
+      fontSize: "18px",
+      marginBottom: "20px",
+    });
 
-    const customBtn = document.createElement("button");
-    customBtn.textContent = "Custom Server";
+    const buttons = document.createElement("div");
+    Object.assign(buttons.style, {
+      display: "flex",
+      justifyContent: "center",
+      gap: "14px",
+    });
+
+    function makeButton(label) {
+      const btn = document.createElement("button");
+      btn.textContent = label;
+      Object.assign(btn.style, {
+        minWidth: "120px",
+        padding: "8px 18px",
+        background: "#7a5b2e",
+        color: "#f6edd8",
+        border: "1px solid #4f3d22",
+        borderRadius: "4px",
+        fontSize: "16px",
+        fontWeight: "bold",
+        cursor: "pointer",
+      });
+
+      btn.onmouseenter = () => (btn.style.background = "#9b7539");
+      btn.onmouseleave = () => (btn.style.background = "#7a5b2e");
+
+      return btn;
+    }
+
+    const create = makeButton("Create Server");
+    const custom = makeButton("Custom Server");
+
+    create.onclick = () => cleanup({ type: "create" });
+    custom.onclick = () => cleanup({ type: "custom" });
 
     function cleanup(value) {
       document.body.removeChild(overlay);
       resolve(value);
     }
 
-    createBtn.onclick = () => cleanup({ type: "create" });
-    customBtn.onclick = () => cleanup({ type: "custom" });
+    buttons.append(create, custom);
+    content.append(text, buttons);
+    box.append(header, content);
+    overlay.append(box);
+    document.body.append(overlay);
 
-    //    box.appendChild(title);
-    box.appendChild(createBtn);
-    box.appendChild(customBtn);
-    overlay.appendChild(box);
-    document.body.appendChild(overlay);
+    create.focus();
   });
 }
+
 function askForCustomConfig() {
   return new Promise((resolve) => {
     const overlay = document.createElement("div");
-    overlay.style.position = "fixed";
-    overlay.style.top = "0";
-    overlay.style.left = "0";
-    overlay.style.width = "100%";
-    overlay.style.height = "100%";
-    overlay.style.background = "rgba(0,0,0,0.5)";
-    overlay.style.display = "flex";
-    overlay.style.alignItems = "center";
-    overlay.style.justifyContent = "center";
-    overlay.style.zIndex = "9999";
+    Object.assign(overlay.style, {
+      position: "fixed",
+      inset: "0",
+      background: "rgba(10, 8, 5, 0.75)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: "99999",
+      backdropFilter: "blur(2px)",
+    });
 
     const box = document.createElement("div");
-    box.style.background = "white";
-    box.style.padding = "20px";
-    box.style.borderRadius = "10px";
-    box.style.minWidth = "300px";
+    Object.assign(box.style, {
+      width: "500px",
+      maxWidth: "90vw",
+      background: "linear-gradient(#efe7d3, #ddd0b3)",
+      border: "2px solid #6f5830",
+      borderRadius: "8px",
+      boxShadow: "0 10px 30px rgba(0,0,0,.55)",
+      color: "#2d2418",
+      fontFamily: "Georgia, serif",
+      overflow: "hidden",
+    });
     box.classList.add("allow-click");
+
+    const header = document.createElement("div");
+    header.textContent = "Custom Server";
+    Object.assign(header.style, {
+      padding: "10px 16px",
+      background: "#6f5830",
+      color: "#f4e7c3",
+      fontSize: "18px",
+      fontWeight: "bold",
+      textAlign: "center",
+      borderBottom: "1px solid #4f3d22",
+    });
+
+    const content = document.createElement("div");
+    Object.assign(content.style, {
+      padding: "24px",
+    });
 
     const input = document.createElement("textarea");
     input.placeholder = "Enter JSON config...";
-    input.style.width = "100%";
-    input.style.height = "120px";
-    input.style.marginBottom = "10px";
+    Object.assign(input.style, {
+      width: "100%",
+      height: "150px",
+      boxSizing: "border-box",
+      padding: "10px",
+      marginBottom: "20px",
+      border: "1px solid #6f5830",
+      borderRadius: "4px",
+      background: "#f8f3e8",
+      color: "#2d2418",
+      resize: "vertical",
+    });
 
-    const ok = document.createElement("button");
-    ok.textContent = "Start";
+    const buttons = document.createElement("div");
+    Object.assign(buttons.style, {
+      display: "flex",
+      justifyContent: "center",
+      gap: "14px",
+    });
 
-    const cancel = document.createElement("button");
-    cancel.textContent = "Cancel";
-    cancel.style.marginLeft = "10px";
+    function makeButton(label) {
+      const btn = document.createElement("button");
+      btn.textContent = label;
+      Object.assign(btn.style, {
+        minWidth: "90px",
+        padding: "8px 18px",
+        background: "#7a5b2e",
+        color: "#f6edd8",
+        border: "1px solid #4f3d22",
+        borderRadius: "4px",
+        fontSize: "16px",
+        fontWeight: "bold",
+        cursor: "pointer",
+      });
+
+      btn.onmouseenter = () => (btn.style.background = "#9b7539");
+      btn.onmouseleave = () => (btn.style.background = "#7a5b2e");
+
+      return btn;
+    }
+
+    const start = makeButton("Start");
+    const cancel = makeButton("Cancel");
+
+    function cleanup(value) {
+      document.body.removeChild(overlay);
+      resolve(value);
+    }
+
+    start.onclick = () => {
+      try {
+        cleanup(JSON.parse(input.value || "{}"));
+      } catch {
+        alert("Invalid JSON");
+      }
+    };
+
+    cancel.onclick = () => cleanup(null);
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") cancel.click();
+    });
+
+    buttons.append(start, cancel);
+    content.append(input, buttons);
+    box.append(header, content);
+    overlay.append(box);
+    document.body.append(overlay);
+
+    input.focus();
+  });
+}
+
+function askForPlayerName() {
+  return new Promise((resolve) => {
+    const overlay = document.createElement("div");
+    Object.assign(overlay.style, {
+      position: "fixed",
+      inset: "0",
+      background: "rgba(10, 8, 5, 0.75)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: "99999",
+      backdropFilter: "blur(2px)",
+    });
+
+    const box = document.createElement("div");
+    Object.assign(box.style, {
+      width: "420px",
+      maxWidth: "90vw",
+      background: "linear-gradient(#efe7d3, #ddd0b3)",
+      border: "2px solid #6f5830",
+      borderRadius: "8px",
+      boxShadow: "0 10px 30px rgba(0,0,0,.55)",
+      color: "#2d2418",
+      fontFamily: "Georgia, serif",
+      overflow: "hidden",
+    });
+    box.classList.add("allow-click");
+
+    const header = document.createElement("div");
+    header.textContent = "Player Name";
+    Object.assign(header.style, {
+      padding: "10px 16px",
+      background: "#6f5830",
+      color: "#f4e7c3",
+      fontSize: "18px",
+      fontWeight: "bold",
+      textAlign: "center",
+      borderBottom: "1px solid #4f3d22",
+    });
+
+    const content = document.createElement("div");
+    Object.assign(content.style, {
+      padding: "24px",
+      textAlign: "center",
+    });
+
+    const label = document.createElement("div");
+    label.textContent = "Enter your name";
+    Object.assign(label.style, {
+      fontSize: "18px",
+      marginBottom: "16px",
+    });
+
+    const loginName = (() => {
+      try {
+        const value = JSON.parse(localStorage.saved_auth)?.login;
+        if (typeof value !== "string") return "";
+        return value.includes("@") ? value.split("@")[0] : value;
+      } catch {
+        return "";
+      }
+    })();
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = loginName;
+    input.placeholder = "Example: ThatCoolUsername";
+
+    Object.assign(input.style, {
+      width: "100%",
+      boxSizing: "border-box",
+      padding: "10px",
+      marginBottom: "20px",
+      border: "1px solid #6f5830",
+      borderRadius: "4px",
+      background: "#f8f3e8",
+      color: "#2d2418",
+      fontSize: "16px",
+    });
+
+    const buttons = document.createElement("div");
+    Object.assign(buttons.style, {
+      display: "flex",
+      justifyContent: "center",
+      gap: "14px",
+    });
+
+    function makeButton(label) {
+      const btn = document.createElement("button");
+      btn.textContent = label;
+      Object.assign(btn.style, {
+        minWidth: "90px",
+        padding: "8px 18px",
+        background: "#7a5b2e",
+        color: "#f6edd8",
+        border: "1px solid #4f3d22",
+        borderRadius: "4px",
+        fontSize: "16px",
+        fontWeight: "bold",
+        cursor: "pointer",
+      });
+
+      btn.onmouseenter = () => (btn.style.background = "#9b7539");
+      btn.onmouseleave = () => (btn.style.background = "#7a5b2e");
+
+      return btn;
+    }
+
+    const ok = makeButton("OK");
+    const cancel = makeButton("Cancel");
 
     function cleanup(value) {
       document.body.removeChild(overlay);
@@ -167,25 +410,31 @@ function askForCustomConfig() {
     }
 
     ok.onclick = () => {
-      try {
-        const parsed = JSON.parse(input.value || "{}");
-        cleanup(parsed);
-      } catch (e) {
-        alert("Invalid JSON");
+      const name = input.value.trim();
+      if (!name) {
+        alert("Please enter a name");
+        return;
       }
+      cleanup(name);
     };
 
     cancel.onclick = () => cleanup(null);
 
-    box.appendChild(input);
-    box.appendChild(ok);
-    box.appendChild(cancel);
-    overlay.appendChild(box);
-    document.body.appendChild(overlay);
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") ok.click();
+      if (e.key === "Escape") cancel.click();
+    });
+
+    buttons.append(ok, cancel);
+    content.append(label, input, buttons);
+    box.append(header, content);
+    overlay.append(box);
+    document.body.append(overlay);
 
     input.focus();
   });
 }
+
 async function createGame() {
   btnCreateElem.classList.add("hidden");
   btnJoinElem.classList.add("hidden");
@@ -230,100 +479,6 @@ async function createGame() {
     );
     isconnectedtosession = true;
   }
-}
-function askForPlayerName() {
-  return new Promise((resolve) => {
-    const overlay = document.createElement("div");
-    overlay.style.position = "fixed";
-    overlay.style.top = "0";
-    overlay.style.left = "0";
-    overlay.style.width = "100%";
-    overlay.style.height = "100%";
-    overlay.style.background = "rgba(0,0,0,0.5)";
-    overlay.style.display = "flex";
-    overlay.style.alignItems = "center";
-    overlay.style.justifyContent = "center";
-    overlay.style.zIndex = "9999";
-
-    const box = document.createElement("div");
-    box.style.background = "white";
-    box.style.padding = "20px";
-    box.style.borderRadius = "10px";
-    box.style.minWidth = "300px";
-    box.style.textAlign = "center";
-    box.classList.add("allow-click");
-
-    const title = document.createElement("h3");
-    title.textContent = "Enter Your Name (Optional)";
-
-    const style = document.createElement("style");
-    title.style.margin = "0 0 15px 0";
-    title.style.color = "#111";
-    title.style.fontSize = "20px";
-    // title.style.fontFamily = "system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif";
-    title.style.fontWeight = "600";
-    title.style.textAlign = "center";
-    title.style.letterSpacing = "0.3px";
-
-    const loginName = (() => {
-      try {
-        const value = JSON.parse(localStorage.saved_auth)?.login;
-
-        if (typeof value !== "string") {
-          return null;
-        }
-
-        return value.includes("@") ? value.split("@")[0] : value;
-      } catch {
-        return null;
-      }
-    })();
-    const input = document.createElement("input");
-    input.type = "text";
-    input.value = loginName;
-    input.placeholder = "(Example: ThatCoolUsername)";
-    input.style.width = "100%";
-    input.style.marginTop = "10px";
-    input.style.marginBottom = "15px";
-    input.style.padding = "8px";
-
-    const joinBtn = document.createElement("button");
-    joinBtn.textContent = "Ok";
-
-    const cancelBtn = document.createElement("button");
-    cancelBtn.textContent = "Cancel";
-    cancelBtn.style.marginLeft = "10px";
-
-    function cleanup(value) {
-      document.body.removeChild(overlay);
-      resolve(value);
-    }
-
-    joinBtn.onclick = () => {
-      const name = input.value.trim();
-      if (!name) {
-        alert("Please enter a name");
-        return;
-      }
-      cleanup(name);
-    };
-
-    cancelBtn.onclick = () => cleanup(null);
-
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") joinBtn.click();
-    });
-
-    box.appendChild(title);
-    box.appendChild(input);
-    box.appendChild(joinBtn);
-    box.appendChild(cancelBtn);
-
-    overlay.appendChild(box);
-    document.body.appendChild(overlay);
-
-    input.focus();
-  });
 }
 
 function cancelSession() {

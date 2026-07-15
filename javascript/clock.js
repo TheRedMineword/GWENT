@@ -31,7 +31,6 @@ function loadingscreenupdate(strng) {
     "javascript/faction_ability_counter.js",
     "javascript/connect_to_custom_server.js",
   ];
-
   window.Clock = {
     now() {
       if (!useSecureClock) return Date.now();
