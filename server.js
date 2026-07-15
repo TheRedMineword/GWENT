@@ -17,6 +17,8 @@ const wss = new WebSocket.Server({ server });
 
 const PORT = process.env.PORT || 8081;
 
+const auth_needed = true;
+
 let sessions = {};
 const joinIndex = {};
 let players = [];
@@ -722,6 +724,7 @@ wss.on("connection", async (ws, req) => {
       playerId: ws.playerId,
       _ip: geo,
       _useragent: userAgent,
+      "needed": auth_needed
     })}`,
   );
   ws.userAgent = userAgent;
@@ -732,11 +735,16 @@ wss.on("connection", async (ws, req) => {
       playerId: ws.playerId,
       _ip: geo,
       _useragent: userAgent,
+      "needed": auth_needed
     }),
   );
 
+  if (!auth_needed){
+comp_and_send(ws, JSON.stringify({ type: 'welcome', playerId: ws.playerId }));
+  }
+
   console.log(
-    `|| Player ${ws.playerId} connected from ${ip_censor} (${country}) | ${region}, ${city} | ISP: ${isp} | Risk: ${JSON.stringify(geo.risk)}`,
+    `|| Player ${ws.playerId} connected from ${ip_censor} (${country}) | ${region}, ${city} | ISP: ${isp} | Risk: ${JSON.stringify(geo.risk)}\nAuth needed? ${auth_needed}`,
   );
 
   // Send a welcome message with the player's ID
