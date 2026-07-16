@@ -2941,7 +2941,7 @@ var card_dict_base = [
     filename: "custom!traveling_spirit",
     count: "0",
     count_monitor: {
-      base: 1,
+      base: 2, // not really doing anything, the base value
       monitor: "ts",
       id: "ts_count",
       duration: { start: "null", duration: "1" },
@@ -2951,7 +2951,7 @@ var card_dict_base = [
         hero: false,
         ability: "agile",
         name: "Traveling spirit",
-        desc: "A special guest from times long gone.",
+        desc: "A special guest from times long gone...",
         txt_timed_a: false,
       },
       sm: {
@@ -3169,7 +3169,7 @@ console.log("Cards array", card_dict, witcher_signs);
 
 function setupSpiritTimer(card, data) {
   card.count_monitor = {
-    base: 1,
+    base: data.when.card_count,
     monitor: "based",
     id: "ts_count",
     duration: {
