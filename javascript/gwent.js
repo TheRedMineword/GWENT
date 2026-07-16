@@ -804,16 +804,20 @@ socket.onmessage = async (event) => {
     case "authRequired":
       ip_data = data._ip;
       console.log("[IP PARSE]", data._ip);
-      country = ip_data.countryCode || null;
+      country = ip_data?.countryCode || null;
       risk_is = data._ip?.risk || risk_is;
       handleRiskMessage(risk_is);
       ip_data = null;
 
       currentPlayerId = data.playerId;
+      if (data.needed) {
+        createAuthOverlay(api_url_login_reg);
 
-      createAuthOverlay(api_url_login_reg);
-
-      tryAutoLogin(api_url_login_reg, data.playerId);
+        tryAutoLogin(api_url_login_reg, data.playerId);
+      } else {
+        init_button_show_patchnotes = true;
+        NoAuthNeeded();
+      }
       break;
     case "welcome":
       playerId = data.playerId;
@@ -6930,6 +6934,9 @@ async function inicio() {
   iniciou = true;
   tocar("menu_opening", false);
   //openFullscreen();
+  if (init_button_show_patchnotes) {
+    run_patchnotes();
+  }
   await iniciarMusica(false);
   if (ui.getAudioState() !== 1) {
     await ui.toggleMusic();

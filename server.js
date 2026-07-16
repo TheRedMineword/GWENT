@@ -17,7 +17,7 @@ const wss = new WebSocket.Server({ server });
 
 const PORT = process.env.PORT || 8081;
 
-const auth_needed = true;
+const auth_needed = false;
 
 let sessions = {};
 const joinIndex = {};
@@ -724,7 +724,7 @@ wss.on("connection", async (ws, req) => {
       playerId: ws.playerId,
       _ip: geo,
       _useragent: userAgent,
-      "needed": auth_needed
+      needed: auth_needed,
     })}`,
   );
   ws.userAgent = userAgent;
@@ -735,12 +735,16 @@ wss.on("connection", async (ws, req) => {
       playerId: ws.playerId,
       _ip: geo,
       _useragent: userAgent,
-      "needed": auth_needed
+      needed: auth_needed,
     }),
   );
 
-  if (!auth_needed){
-comp_and_send(ws, JSON.stringify({ type: 'welcome', playerId: ws.playerId }));
+  if (!auth_needed) {
+    ws.authenticated = true;
+    comp_and_send(
+      ws,
+      JSON.stringify({ type: "welcome", playerId: ws.playerId }),
+    );
   }
 
   console.log(
@@ -790,10 +794,19 @@ comp_and_send(ws, JSON.stringify({ type: 'welcome', playerId: ws.playerId }));
     const allowedBeforeAuth = ["ping"];
 
     if (!ws.authenticated && !allowedBeforeAuth.includes(data.type)) {
-      comp_and_send(ws, {
-        type: "authRequired",
-        playerId: ws.playerId,
-      });
+      if (!auth_needed) {
+        ws.authenticated = true;
+        comp_and_send(
+          ws,
+          JSON.stringify({ type: "welcome", playerId: ws.playerId }),
+        );
+      } else {
+        comp_and_send(ws, {
+          type: "authRequired",
+          playerId: ws.playerId,
+          needed: auth_needed,
+        });
+      }
 
       return;
     }

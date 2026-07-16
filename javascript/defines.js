@@ -2,6 +2,7 @@
 loadingscreenupdate("Creating env vars!");
 const debuglunchcustomcards = false; // if false when ready use: lunch_gwent_ui
 let onYouTubeIframeAPIReady_status = false;
+var init_button_show_patchnotes = true;
 let custom_updater = false;
 let twoPlayersConnected = false; //host alone
 let extraJSON = [];
