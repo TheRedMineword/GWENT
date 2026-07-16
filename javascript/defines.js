@@ -3,13 +3,16 @@ loadingscreenupdate("Creating env vars!");
 const debuglunchcustomcards = false; // if false when ready use: lunch_gwent_ui
 let onYouTubeIframeAPIReady_status = false;
 var init_button_show_patchnotes = true;
+// Shared queue for medic cards, do not modify!!
+let medicrevivethat = [];
 let custom_updater = false;
 let twoPlayersConnected = false; //host alone
 let extraJSON = [];
 let displaynow = null;
 let showbankms = 9000;
 let gameended = false;
-const medicdrawextrasecondswait = 4.2; // extraJson hold
+const medicdrawextrasecondswait = 2.2; // extraJson hold // no longer used
+const medic_ability_revive_wait_a_second = 1.7 * 1000;
 //host alone
 let players = {
   me: "You",

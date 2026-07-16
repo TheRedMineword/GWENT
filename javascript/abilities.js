@@ -42,6 +42,22 @@ const NotPickUpAbilities = [
   "wshield",
 ];
 
+function waitForMedicRevive() {
+  return new Promise((resolve) => {
+    const check = () => {
+      if (medicrevivethat.length > 0) {
+        // Remove immediately so no other medic can take it
+        const revive = medicrevivethat.shift();
+        resolve(revive);
+      } else {
+        setTimeout(check, 10);
+      }
+    };
+
+    check();
+  });
+}
+
 loadingscreenupdate(`Preparing ability_dict`);
 
 var ability_dict = {
@@ -1053,7 +1069,7 @@ var ability_dict = {
         if (units.length <= 0) break;
 
         let wrapper = { card: null };
-
+        var res = null;
         if (game.randomRespawn) {
           units.sort((a, b) => {
             const powerDiff = b.basePower - a.basePower;
@@ -1061,32 +1077,23 @@ var ability_dict = {
             return a.filename.localeCompare(b.filename);
           });
 
-          wrapper.card = units[0];
+          res = units[0];
         } else if (card.holder.controller instanceof ControllerOpponent) {
           console.log(
             "Opponent has played a medic, wait for him to choose which card to respawn",
           );
+          await sleep(medic_ability_revive_wait_a_second);
+          let reviveData = await waitForMedicRevive();
+          console.log("reviveData 1", reviveData);
+          reviveData = grave.cards.filter(
+            (c) => c.filename === reviveData.card,
+          )[0];
+          console.log("reviveData 2", reviveData);
+          if (!reviveData) break;
 
-          wrapper.card = await new Promise((resolve) => {
-            const handleMessage = async (event) => {
-              const data = await recv_and_decomp(event);
+          res = reviveData;
 
-              console.log("PING, medic draw op?", event, data);
-
-              if (data.type === "medicDraw") {
-                const drawnCard = grave.cards.filter(
-                  (c) => c.filename === data.card,
-                )[0];
-
-                if (drawnCard) {
-                  socket.removeEventListener("message", handleMessage);
-                  resolve(drawnCard);
-                }
-              }
-            };
-
-            socket.addEventListener("message", handleMessage);
-          });
+          // if (!res) break;
         } else {
           await ui.queueCarousel(
             card.holder.grave,
@@ -1095,25 +1102,25 @@ var ability_dict = {
             (c) => c.isUnit(),
             true,
           );
+          res = wrapper.card;
         }
 
-        const res = wrapper.card;
-
         if (!res) break;
-
         console.log("Medic revived:", res.filename);
-
-        // Manually send medicDraw for each revive after the first selection
-        // since medicsdraw > 1 bypasses the original single-send logic.
+        // Wait until something is assigned to this medic.
+        // waitForMedicRevive() should shift() the first entry from medicrevivethat.
+        // Send the revive choice to the opponent if this is our client.
         if (
           card.holder.id === player_me.id &&
           !(card.holder.controller instanceof ControllerOpponent)
         ) {
           extraJSON.push(
-            JSON.stringify({
+            //    JSON.stringify({
+            {
               type: "medicDraw",
               card: res.filename,
-            }),
+            },
+            //   }),
           );
 
           console.log(
@@ -1126,13 +1133,20 @@ var ability_dict = {
           );
         }
 
-        grave.removeCard(res);
-        grave.addCard(res);
+        // On the remote client, wait for the owner to tell us which card was revived.
+        if (card.holder.controller instanceof ControllerOpponent) {
+          grave.removeCard(res);
+          grave.addCard(res);
 
-        await res.animate("medic");
+          await res.animate("medic");
+          await res.autoplay(grave);
+        } else {
+          grave.removeCard(res);
+          grave.addCard(res);
 
-        // Wait until the revived card is actually played to the board
-        await res.autoplay(grave);
+          await res.animate("medic");
+          await res.autoplay(grave);
+        }
       }
 
       return;
@@ -1166,7 +1180,7 @@ var ability_dict = {
         if (units.length <= 0) break;
 
         let wrapper = { card: null };
-
+        var res = null;
         if (game.randomRespawn) {
           units.sort((a, b) => {
             const powerDiff = b.basePower - a.basePower;
@@ -1174,32 +1188,23 @@ var ability_dict = {
             return a.filename.localeCompare(b.filename);
           });
 
-          wrapper.card = units[0];
+          res = units[0];
         } else if (card.holder.controller instanceof ControllerOpponent) {
           console.log(
             "Opponent has played a medic, wait for him to choose which card to respawn",
           );
+          await sleep(medic_ability_revive_wait_a_second);
+          let reviveData = await waitForMedicRevive();
+          console.log("reviveData 1", reviveData);
+          reviveData = grave.cards.filter(
+            (c) => c.filename === reviveData.card,
+          )[0];
+          console.log("reviveData 2", reviveData);
+          if (!reviveData) break;
 
-          wrapper.card = await new Promise((resolve) => {
-            const handleMessage = async (event) => {
-              const data = await recv_and_decomp(event);
+          res = reviveData;
 
-              console.log("PING, medic draw op?", event, data);
-
-              if (data.type === "medicDraw") {
-                const drawnCard = grave.cards.filter(
-                  (c) => c.filename === data.card,
-                )[0];
-
-                if (drawnCard) {
-                  socket.removeEventListener("message", handleMessage);
-                  resolve(drawnCard);
-                }
-              }
-            };
-
-            socket.addEventListener("message", handleMessage);
-          });
+          // if (!res) break;
         } else {
           await ui.queueCarousel(
             card.holder.grave,
@@ -1208,26 +1213,25 @@ var ability_dict = {
             (c) => c.isUnit(),
             true,
           );
+          res = wrapper.card;
         }
 
-        const res = wrapper.card;
-
         if (!res) break;
-
         console.log("Medic revived:", res.filename);
-
-        // Manually send medicDraw for each revive after the first selection
-        // since medicsdraw > 1 bypasses the original single-send logic.
+        // Wait until something is assigned to this medic.
+        // waitForMedicRevive() should shift() the first entry from medicrevivethat.
+        // Send the revive choice to the opponent if this is our client.
         if (
           card.holder.id === player_me.id &&
           !(card.holder.controller instanceof ControllerOpponent)
         ) {
           extraJSON.push(
-            JSON.stringify({
+            //    JSON.stringify({
+            {
               type: "medicDraw",
               card: res.filename,
-              _n: true,
-            }),
+            },
+            //   }),
           );
 
           console.log(
@@ -1236,18 +1240,24 @@ var ability_dict = {
             JSON.stringify({
               type: "medicDraw",
               card: res.filename,
-              _n: true,
             }),
           );
         }
 
-        grave.removeCard(res);
-        grave.addCard(res);
+        // On the remote client, wait for the owner to tell us which card was revived.
+        if (card.holder.controller instanceof ControllerOpponent) {
+          grave.removeCard(res);
+          grave.addCard(res);
 
-        await res.animate("necromancy");
+          await res.animate("necromancy");
+          await res.autoplay(grave);
+        } else {
+          grave.removeCard(res);
+          grave.addCard(res);
 
-        // Wait until the revived card is actually played to the board
-        await res.autoplay(grave);
+          await res.animate("necromancy");
+          await res.autoplay(grave);
+        }
       }
 
       return;

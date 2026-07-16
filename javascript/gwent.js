@@ -1117,6 +1117,11 @@ socket.onmessage = async (event) => {
           break;
       }
       break;
+    case "medicrevivedata":
+      medicrevivethat = [];
+      medicrevivethat = data.data;
+      console.log("Medic revive recived:", data);
+      break;
     // Game - Opponent plays card
     case "play":
       console.log(
@@ -1750,25 +1755,34 @@ class Player {
                   opponent_see_card_delay,
               ),
             );
-            for (let i = 0; i < total; i++) {
-              const payload = extraJSON[i];
-
-              // base hold + extra 500ms for each next packet
-              const delay =
-                RegisterMovesHold + i * 500 + medicdrawextrasecondswait * 1000;
-
-              console.log(
-                `Hold before send extraJSON ${i + 1}/${total}`,
-                payload,
+            if (med_draw === 1) {
+              comp_and_send(
+                socket,
+                JSON.stringify({ type: "medicrevivedata", data: extraJSON }),
               );
+            } else {
+              for (let i = 0; i < total; i++) {
+                const payload = extraJSON[i];
 
-              showTooltip(
-                `The opponent synchronizes with the game (${i + 1}/${total}), wait ${delay / 1000}s`,
-              );
+                // base hold + extra 500ms for each next packet
+                const delay =
+                  RegisterMovesHold +
+                  i * 500 +
+                  medicdrawextrasecondswait * 1000;
 
-              await new Promise((resolve) => setTimeout(resolve, delay));
+                console.log(
+                  `Hold before send extraJSON ${i + 1}/${total}`,
+                  payload,
+                );
 
-              comp_and_send(socket, payload);
+                showTooltip(
+                  `The opponent synchronizes with the game (${i + 1}/${total}), wait ${delay / 1000}s`,
+                );
+
+                await new Promise((resolve) => setTimeout(resolve, delay));
+
+                comp_and_send(socket, payload);
+              }
             }
 
             extraJSON = [];
@@ -4726,25 +4740,33 @@ class UI {
       console.log("extraJSON vibe check:", extraJSON.length, extraJSON);
       if (extraJSON.length > 0) {
         const total = extraJSON.length;
-
-        for (let i = 0; i < total; i++) {
-          const payload = extraJSON[i];
-
-          // base hold + extra 500ms for each next packet
-          const delay =
-            RegisterMovesHold + i * 500 + medicdrawextrasecondswait * 1000;
-
-          console.log(`Hold before send extraJSON ${i + 1}/${total}`, payload);
-
-          showTooltip(
-            `The opponent synchronizes with the game (${i + 1}/${total}), wait ${delay / 1000}s`,
+        if (med_draw === 1) {
+          comp_and_send(
+            socket,
+            JSON.stringify({ type: "medicrevivedata", data: extraJSON }),
           );
+        } else {
+          for (let i = 0; i < total; i++) {
+            const payload = extraJSON[i];
 
-          await new Promise((resolve) => setTimeout(resolve, delay));
+            // base hold + extra 500ms for each next packet
+            const delay =
+              RegisterMovesHold + i * 500 + medicdrawextrasecondswait * 1000;
 
-          comp_and_send(socket, payload);
+            console.log(
+              `Hold before send extraJSON ${i + 1}/${total}`,
+              payload,
+            );
+
+            showTooltip(
+              `The opponent synchronizes with the game (${i + 1}/${total}), wait ${delay / 1000}s`,
+            );
+
+            await new Promise((resolve) => setTimeout(resolve, delay));
+
+            comp_and_send(socket, payload);
+          }
         }
-
         extraJSON = [];
       }
       if (player_op.passed && !player_me.passed) {
@@ -4813,25 +4835,30 @@ class UI {
     console.log("extraJSON vibe check:", extraJSON.length, extraJSON);
     if (extraJSON.length > 0) {
       const total = extraJSON.length;
-
-      for (let i = 0; i < total; i++) {
-        const payload = extraJSON[i];
-
-        // base hold + extra 500ms for each next packet
-        const delay =
-          RegisterMovesHold + i * 500 + medicdrawextrasecondswait * 1000;
-
-        console.log(`Hold before send extraJSON ${i + 1}/${total}`, payload);
-
-        showTooltip(
-          `The opponent synchronizes with the game (${i + 1}/${total}), wait ${delay / 1000}s`,
+      if (med_draw === 1) {
+        comp_and_send(
+          socket,
+          JSON.stringify({ type: "medicrevivedata", data: extraJSON }),
         );
+      } else {
+        for (let i = 0; i < total; i++) {
+          const payload = extraJSON[i];
 
-        await new Promise((resolve) => setTimeout(resolve, delay));
+          // base hold + extra 500ms for each next packet
+          const delay =
+            RegisterMovesHold + i * 500 + medicdrawextrasecondswait * 1000;
 
-        comp_and_send(socket, payload);
+          console.log(`Hold before send extraJSON ${i + 1}/${total}`, payload);
+
+          showTooltip(
+            `The opponent synchronizes with the game (${i + 1}/${total}), wait ${delay / 1000}s`,
+          );
+
+          await new Promise((resolve) => setTimeout(resolve, delay));
+
+          comp_and_send(socket, payload);
+        }
       }
-
       extraJSON = [];
     }
     if (player_op.passed && !player_me.passed) {
