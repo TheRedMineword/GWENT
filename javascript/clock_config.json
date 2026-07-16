@@ -1,10 +1,20 @@
 {
   "zone": "UTC",
-  "sha": "5004c",
+  "sha": "1a366",
   "graphic": {
     "timed": [
       {
         "start": "2026-06-01T00:00:00.000Z",
+        "end": "2026-07-17T06:59:00Z",
+        "content": "summer"
+      },
+      {
+        "start": "2026-07-17T07:00:00Z",
+        "end": "2026-07-21T06:59:00Z",
+        "content": "_dearvangogh"
+      },
+      {
+        "start": "2026-07-21T07:00:00Z",
         "end": "2026-08-31T23:59:59.000Z",
         "content": "summer"
       }
@@ -14,6 +24,11 @@
         "board": "img/bacrounds/summer/board.jpg",
         "deck": "img/bacrounds/summer/deck.jpg",
         "start": "img/bacrounds/summer/start.jpg"
+      },
+      "_dearvangogh": {
+        "board": "img/bacrounds/dear_van_gogh/board.jpg",
+        "deck": "img/bacrounds/dear_van_gogh/deck.jpg",
+        "start": "img/bacrounds/dear_van_gogh/start.jpg"
       }
     },
     "fallback": {
