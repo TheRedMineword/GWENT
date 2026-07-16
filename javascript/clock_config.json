@@ -1,6 +1,6 @@
 {
   "zone": "UTC",
-  "sha": "1a366",
+  "sha": "468c7",
   "graphic": {
     "timed": [
       {
@@ -21,20 +21,20 @@
     ],
     "images": {
       "summer": {
-        "board": "img/bacrounds/summer/board.jpg",
-        "deck": "img/bacrounds/summer/deck.jpg",
-        "start": "img/bacrounds/summer/start.jpg"
+        "board": "img/backgrounds/summer/board.jpg",
+        "deck": "img/backgrounds/summer/deck.jpg",
+        "start": "img/backgrounds/summer/start.jpg"
       },
       "_dearvangogh": {
-        "board": "img/bacrounds/dear_van_gogh/board.jpg",
-        "deck": "img/bacrounds/dear_van_gogh/deck.jpg",
-        "start": "img/bacrounds/dear_van_gogh/start.jpg"
+        "board": "img/backgrounds/dear_van_gogh/board.jpg",
+        "deck": "img/backgrounds/dear_van_gogh/deck.jpg",
+        "start": "img/backgrounds/dear_van_gogh/start.jpg"
       }
     },
     "fallback": {
-      "board": "img/bacrounds/normal/board.jpg",
-      "deck": "img/bacrounds/normal/deck.jpg",
-      "start": "img/bacrounds/normal/start.jpg"
+      "board": "img/backgrounds/normal/board.jpg",
+      "deck": "img/backgrounds/normal/deck.jpg",
+      "start": "img/backgrounds/normal/start.jpg"
     }
   }
 }

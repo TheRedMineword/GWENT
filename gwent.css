@@ -295,7 +295,7 @@ main {
 	position: absolute;
 	width: 100%;
 	height: calc(100vw * 1080 / 1920);
-	background-image: url(img/bacrounds/placeholder/Tw3_Conjunction_of_the_Spheres.webp);
+	background-image: url(img/backgrounds/placeholder/Tw3_Conjunction_of_the_Spheres.webp);
 	background-size: 100% auto;
 	background-repeat: no-repeat;
 }
@@ -312,7 +312,7 @@ div.abs {
 }
 
 #very_start_bg1 {
-	background-image: url(img/bacrounds/placeholder/Tw3_Conjunction_of_the_Spheres.webp);
+	background-image: url(img/backgrounds/placeholder/Tw3_Conjunction_of_the_Spheres.webp);
 	background-size: 100% auto;
 	background-repeat: no-repeat;
 }
@@ -1776,7 +1776,7 @@ html {
 	width: 100%;
 	height: 100%;
 
-	background-image: url('img/bacrounds/placeholder/Tw3_Conjunction_of_the_Spheres.webp');
+	background-image: url('img/backgrounds/placeholder/Tw3_Conjunction_of_the_Spheres.webp');
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -2738,4 +2738,3 @@ html {
     background: #6f5830;
     color: #f4e7c3;
 }
-

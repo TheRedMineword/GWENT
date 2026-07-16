@@ -4,7 +4,7 @@ function loadingscreenupdate(strng) {
   console.log(`[LOADING]: "${strng}"`);
 }
 
-function set_new_image(key, path) {
+function set_new_image(key, path, isvideo = false) {
   //  console.log("Visual", key, path);
   var the_key = false;
   if (key === "board") {
@@ -14,13 +14,13 @@ function set_new_image(key, path) {
   }
   if (the_key !== false) {
     const doc = document.querySelector(the_key);
-    // console.log(`document.querySelector(${JSON.stringify(the_key)}).style.backgroundImage = \`url("${path}")\`;\n`,doc)
     doc.style.backgroundImage = `url("${path}")`;
   } else {
     document.getElementById("very_start_bg1").style.backgroundImage =
       `url("${path}")`;
   }
 }
+
 let the_image_json = {};
 function setupTimedImages(config, set_new_image) {
   let timer = null;
