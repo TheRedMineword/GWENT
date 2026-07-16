@@ -19,6 +19,15 @@ Patch Notes:
 </box.title>
 
 <box.text>
+# 16 July, 2026
+This update bring small improvements to the Gwent!
+```diff
+? Updated Traveling Spirit card descryption, count and abilities!
+--- The requirement to log in to play Gwent has been disabled for an indefinite period.
+--- Patchnotes will now load after pressing the "button_start" button (lunching game button after loading).
+? Medic abilitie was improved! Clients will immediately tell each other what card(s) are revived!
+```
+<fat3>
 # 15 July, 2026
 This update adds small quality-of-life changes!
 ```diff
