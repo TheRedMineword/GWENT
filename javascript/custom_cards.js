@@ -261,6 +261,7 @@ async function drawText(ctx, obj) {
 }
 
 async function renderTemplate(template, width, height) {
+  //  console.log("render", template, width, height);
   const canvas = document.createElement("canvas");
   canvas.width = width;
   canvas.height = height;
@@ -304,6 +305,7 @@ async function renderTemplate(template, width, height) {
     }
   }
 
+  // console.log("render cabvas", canvas);
   return await new Promise((resolve) =>
     canvas.toBlob(resolve, "image/jpeg", 0.95),
   );
@@ -838,8 +840,16 @@ async function rebuildCustomCardsMaps() {
           break;
 
         case "build":
-          // placeholder
-          sm_custom_cards_map[card.filename] = null;
+          var res = await renderTemplate(assets.sm.build, 410, 588, 5484);
+          console.log(
+            "[Builded:",
+            res,
+            "\n",
+            assets.sm.build,
+            "410px",
+            "588,5484px",
+          );
+          sm_custom_cards_map[card.filename] = URL.createObjectURL(res);
           break;
         case "timed_a":
           sm_custom_cards_map[card.filename] = ArrayPickObjectForDay(
