@@ -2774,7 +2774,7 @@
         "filename": "custom!traveling_spirit",
         "count": "0",
         "count_monitor": {
-          "base": 1,
+          "base": 2,
           "monitor": "ts",
           "id": "ts_count",
           "duration": {
@@ -2787,7 +2787,7 @@
             "hero": false,
             "ability": "agile",
             "name": "Traveling spirit",
-            "desc": "A special guest from times long gone.",
+            "desc": "A special guest from times long gone...",
             "txt_timed_a": false
           },
           "sm": {
@@ -2853,16 +2853,16 @@
             "hero": false,
             "ability": "powergain",
             "name": [
-              "Vase with Twelve Sunflowers",
               "The Starry Night",
               "Irises",
-              "Bedroom in Arles"
+              "Bedroom in Arles",
+              "Vase with Twelve Sunflowers"
             ],
             "desc": [
-              "A dozen suns, forever in bloom.",
               "A thousand lights defied the dark.",
               "Grace blooms where silence lingers.",
-              "Home is where the heart dares to rest."
+              "Home is where the heart dares to rest.",
+              "A dozen suns, forever in bloom."
             ],
             "txt_timed_a": true
           },
@@ -2871,10 +2871,10 @@
             "build": [],
             "url": null,
             "timed": [
-              "img/sm/dear_van_gogh/switching/vase_of_flowers.jpg",
               "img/sm/dear_van_gogh/switching/starry_night.jpg",
               "img/sm/dear_van_gogh/switching/iris.jpg",
-              "img/sm/dear_van_gogh/switching/bedroom.jpg"
+              "img/sm/dear_van_gogh/switching/bedroom.jpg",
+              "img/sm/dear_van_gogh/switching/vase_of_flowers.jpg"
             ]
           }
         },
@@ -3306,10 +3306,10 @@
         "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
       }
     },
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 30
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack_volume": 90,
+    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }
