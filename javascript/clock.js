@@ -3,6 +3,116 @@ function loadingscreenupdate(strng) {
   document.getElementById("load_text").textContent = strng;
   console.log(`[LOADING]: "${strng}"`);
 }
+function warn_screen(content, type = "alert", title = "Warning") {
+  return new Promise((resolve) => {
+    const overlay = document.createElement("div");
+    Object.assign(overlay.style, {
+      position: "fixed",
+      inset: "0",
+      background: "rgba(10, 8, 5, 0.75)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: "99999",
+      backdropFilter: "blur(2px)",
+    });
+
+    const box = document.createElement("div");
+    Object.assign(box.style, {
+      width: "420px",
+      maxWidth: "90vw",
+      background: "linear-gradient(#efe7d3, #ddd0b3)",
+      border: "2px solid #6f5830",
+      borderRadius: "8px",
+      boxShadow: "0 10px 30px rgba(0,0,0,.55)",
+      color: "#2d2418",
+      fontFamily: "Georgia, serif",
+      overflow: "hidden",
+    });
+
+    box.classList.add("allow-click");
+
+    const header = document.createElement("div");
+    header.textContent = title;
+    Object.assign(header.style, {
+      padding: "10px 16px",
+      background: "#6f5830",
+      color: "#f4e7c3",
+      fontSize: "18px",
+      fontWeight: "bold",
+      textAlign: "center",
+    });
+
+    const body = document.createElement("div");
+    Object.assign(body.style, {
+      padding: "24px",
+      textAlign: "left",
+      fontSize: "17px",
+      lineHeight: "1.5",
+      whiteSpace: "pre-line", // <-- supports \n
+      maxHeight: "300px", // <-- scroll area
+      overflowY: "auto", // <-- enables scrolling
+    });
+    body.textContent = content;
+
+    const buttons = document.createElement("div");
+    Object.assign(buttons.style, {
+      display: "flex",
+      justifyContent: "center",
+      gap: "14px",
+      paddingBottom: "20px",
+    });
+
+    function makeButton(label) {
+      const btn = document.createElement("button");
+      btn.textContent = label;
+
+      Object.assign(btn.style, {
+        minWidth: "100px",
+        padding: "8px 18px",
+        background: "#7a5b2e",
+        color: "#f6edd8",
+        border: "1px solid #4f3d22",
+        borderRadius: "4px",
+        fontSize: "16px",
+        fontWeight: "bold",
+        cursor: "pointer",
+      });
+
+      btn.onmouseenter = () => (btn.style.background = "#9b7539");
+      btn.onmouseleave = () => (btn.style.background = "#7a5b2e");
+
+      return btn;
+    }
+
+    function close(value) {
+      document.body.removeChild(overlay);
+      resolve(value);
+    }
+
+    if (type === "confirm") {
+      const yes = makeButton("Confirm");
+      const no = makeButton("Cancel");
+
+      yes.onclick = () => close(true);
+      no.onclick = () => close(false);
+
+      buttons.append(yes, no);
+      yes.focus();
+    } else {
+      const ok = makeButton("OK");
+
+      ok.onclick = () => close(true);
+
+      buttons.append(ok);
+      ok.focus();
+    }
+
+    box.append(header, body, buttons);
+    overlay.append(box);
+    document.body.append(overlay);
+  });
+}
 (() => {
   loadingscreenupdate("Starting clock synchronization");
   let useSecureClock = false;
@@ -20,6 +130,7 @@ function loadingscreenupdate(strng) {
     "javascript/abilities.js",
     "javascript/factions.js",
     "javascript/hls.js@1.js",
+    "javascript/external_deck.js",
     "javascript/gwent_coin.js",
     "javascript/gwent.js",
     "javascript/session_registering.js",

@@ -2189,7 +2189,7 @@ var card_dict_base = [
   // },
   {
     name: "Gaunter o'Dim",
-    id: "1004",
+    id: "1004-mon",
     deck: "monsters",
     row: "leader",
     strength: "0",
@@ -2199,7 +2199,7 @@ var card_dict_base = [
   },
   {
     name: "Gaunter o'Dim",
-    id: "1004",
+    id: "1004-nilf",
     deck: "nilfgaard",
     row: "leader",
     strength: "0",
@@ -2209,7 +2209,7 @@ var card_dict_base = [
   },
   {
     name: "Gaunter o'Dim",
-    id: "1004",
+    id: "1004-realms",
     deck: "realms",
     row: "leader",
     strength: "0",
@@ -2219,7 +2219,7 @@ var card_dict_base = [
   },
   {
     name: "Gaunter o'Dim",
-    id: "1004",
+    id: "1004-scol",
     deck: "scoiatael",
     row: "leader",
     strength: "0",
@@ -2229,7 +2229,7 @@ var card_dict_base = [
   },
   {
     name: "Gaunter o'Dim",
-    id: "1004",
+    id: "1004-skel",
     deck: "skellige",
     row: "leader",
     strength: "0",
@@ -2239,7 +2239,7 @@ var card_dict_base = [
   },
   {
     name: "Gaunter o'Dim",
-    id: "1004",
+    id: "1004-sky",
     deck: "sky",
     row: "leader",
     strength: "0",
@@ -2249,7 +2249,7 @@ var card_dict_base = [
   },
   {
     name: "Gaunter o'Dim",
-    id: "1004",
+    id: "1004-synd",
     deck: "syndicate",
     row: "leader",
     strength: "0",

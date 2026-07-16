@@ -5691,10 +5691,18 @@ class DeckMaker {
 
     document
       .getElementById("download-deck")
-      .addEventListener("click", () => this.downloadDeck(), false);
+      .addEventListener(
+        "click",
+        () => deck_importo_exporto.downloadDeck(),
+        false,
+      );
     document
       .getElementById("add-file")
-      .addEventListener("change", () => this.uploadDeck(), false);
+      .addEventListener(
+        "change",
+        () => deck_importo_exporto.uploadDeck(),
+        false,
+      );
     readyButtonElem.addEventListener("click", () => this.startNewGame(), false);
     somCarta();
 
@@ -6287,148 +6295,7 @@ class DeckMaker {
       btn.textContent = "UnReady";
     }
   }
-
-  // Converts the current deck to a JSON string
-  deckToJSON() {
-    let obj = {
-      faction: this.faction,
-      leader: this.leader.index,
-      cards: this.deck
-        .filter((x) => x.count > 0)
-        .map((x) => [x.index, x.count]),
-    };
-    return JSON.stringify(obj);
-  }
-
-  // Called by the client to download the current deck as a JSON file
-  downloadDeck() {
-    let json = this.deckToJSON();
-    let str = "data:text/json;charset=utf-8," + encodeURIComponent(json);
-    let hidden_elem = document.getElementById("download-json");
-    hidden_elem.href = str;
-    hidden_elem.download = "GwentDeck.json";
-    hidden_elem.click();
-  }
-
-  // Called by the client to upload a JSON file representing a new deck
-  uploadDeck() {
-    let files = document.getElementById("add-file").files;
-    if (files.length <= 0) return false;
-    let fr = new FileReader();
-    console.log("[DECK.U]", files, fr);
-    fr.onload = (e) => {
-      try {
-        console.log("[DECK.U]", `deckFromJSON`, e.target.result);
-        this.deckFromJSON(e.target.result);
-      } catch (e) {
-        console.log("DECK.U] err", e);
-        alert("Uploaded deck is not formatted correctly!");
-      }
-    };
-    fr.readAsText(files.item(0));
-    document.getElementById("add-file").value = "";
-  }
-
-  // Creates a deck from a JSON file's contents and sets that as the current deck
-  // Notifies client with warnings if the deck is invalid
-  deckFromJSON(json) {
-    let deck;
-    try {
-      deck = JSON.parse(json);
-    } catch (e) {
-      alert("Uploaded deck is not parsable!");
-      return;
-    }
-    let warning = "";
-    if (card_dict[deck.leader].row !== "leader")
-      warning +=
-        "'" + card_dict[deck.leader].name + "' is cannot be used as a leader\n";
-    if (deck.faction != card_dict[deck.leader].deck)
-      warning +=
-        "Leader '" +
-        card_dict[deck.leader].name +
-        "' doesn't match deck faction '" +
-        deck.faction +
-        "'.\n";
-
-    let cards = deck.cards
-      .filter((c) => {
-        let card = card_dict[c[0]];
-        if (!card) {
-          warning += "ID " + c[0] + " does not correspond to a card.\n";
-          return false;
-        }
-        if (
-          ![deck.faction, "neutral", "special", "weather"].includes(card.deck)
-        ) {
-          if (deck.faction !== "syndicate") {
-            warning +=
-              "'" +
-              card.name +
-              "' cannot be used in a deck of faction type '" +
-              deck.faction +
-              "'\n";
-            return false;
-          } else {
-            //  return true;
-          }
-        }
-        if (card.count < c[1]) {
-          warning +=
-            "Deck contains " +
-            c[1] +
-            "/" +
-            card.count +
-            " available " +
-            card_dict[c[0]].name +
-            " cards\n";
-          return false;
-        }
-        return true;
-      })
-      .map((c) => ({
-        index: c[0],
-        count: Math.min(c[1], card_dict[c[0]].count),
-      }));
-
-    if (warning && !confirm(warning + "\n\n\Continue importing deck?")) return;
-    this.setFaction(deck.faction, true);
-    comp_and_send(
-      socket,
-      JSON.stringify({
-        type: "opChangeFaction",
-        faction: deck.faction,
-        info: { me_id: playerId, me_flag: country },
-      }),
-    );
-    if (players.me !== "You") {
-      comp_and_send(
-        socket,
-        JSON.stringify({
-          type: "MyName",
-          is: players.me,
-        }),
-      );
-    }
-    sendChatMessageStrig(`play wich ${factions[deck.faction].name} faction!`);
-    if (
-      card_dict[deck.leader].row === "leader" &&
-      deck.faction === card_dict[deck.leader].deck
-    ) {
-      this.leader = this.leaders.find((c) => c.index === deck.leader);
-      var tmp = this.leader.card.deck + "_" + this.leader.card.filename;
-
-      if (this.leader.card.filename === "Gaunter_Leader") {
-        tmp = "neutral_Gaunter_Leader";
-      }
-
-      this.leader_elem.children[1].style.backgroundImage = largeURL(tmp);
-    }
-    this.makeBank(deck.faction, cards);
-    this.update();
-  }
 }
-
 // Translates a card between two containers
 async function translateTo(card, container_source, container_dest) {
   if (!container_dest || !container_source) return;
