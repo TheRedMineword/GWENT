@@ -3,6 +3,91 @@ function loadingscreenupdate(strng) {
   document.getElementById("load_text").textContent = strng;
   console.log(`[LOADING]: "${strng}"`);
 }
+
+function set_new_image(key, path) {
+  //  console.log("Visual", key, path);
+  var the_key = false;
+  if (key === "board") {
+    the_key = "main";
+  } else if (key === "deck") {
+    the_key = ".deck-bg";
+  }
+  if (the_key !== false) {
+    const doc = document.querySelector(the_key);
+    // console.log(`document.querySelector(${JSON.stringify(the_key)}).style.backgroundImage = \`url("${path}")\`;\n`,doc)
+    doc.style.backgroundImage = `url("${path}")`;
+  } else {
+    document.getElementById("very_start_bg1").style.backgroundImage =
+      `url("${path}")`;
+  }
+}
+let the_image_json = {};
+function setupTimedImages(config, set_new_image) {
+  let timer = null;
+  let currentContent = null;
+
+  function apply() {
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
+
+    const now = Clock.now();
+
+    let active = null;
+    let nextChange = Infinity;
+
+    for (const item of config.timed) {
+      const start = Date.parse(item.start);
+      const end = Date.parse(item.end);
+
+      if (now >= start && now < end) {
+        active = item;
+
+        if (end < nextChange) {
+          nextChange = end;
+        }
+      } else if (now < start) {
+        if (start < nextChange) {
+          nextChange = start;
+        }
+      }
+    }
+
+    const images = active ? config.images[active.content] : config.fallback;
+
+    const contentKey = active ? active.content : "__fallback__";
+
+    // Only update if something actually changed
+    if (contentKey !== currentContent) {
+      currentContent = contentKey;
+
+      for (const [key, path] of Object.entries(images)) {
+        set_new_image(key, path);
+      }
+    }
+
+    // Schedule next update
+    if (nextChange !== Infinity) {
+      const delay = Math.max(0, nextChange - Date.now());
+
+      // setTimeout max is ~24.8 days
+      const MAX_DELAY = 0x7fffffff;
+
+      timer = setTimeout(apply, Math.min(delay, MAX_DELAY));
+    }
+  }
+
+  apply();
+
+  return {
+    refresh: apply, // if config changes later
+    destroy() {
+      if (timer) clearTimeout(timer);
+    },
+  };
+}
+
 function warn_screen(content, type = "alert", title = "Warning") {
   return new Promise((resolve) => {
     const overlay = document.createElement("div");
@@ -188,7 +273,7 @@ function warn_screen(content, type = "alert", title = "Warning") {
       );
 
       const json = await config.json();
-
+      the_image_json = json.graphic;
       loadingscreenupdate("Parsing clock response...");
 
       timezone = json.zone || "UTC";
@@ -231,6 +316,12 @@ function warn_screen(content, type = "alert", title = "Warning") {
 
       useSecureClock = false;
     }
+    loadingscreenupdate("Loading deck visual!");
+    // await sleep(270);
+    const watcher = setupTimedImages(the_image_json, (key, path) => {
+      set_new_image(key, path);
+    });
+    console.log("bg watcher", watcher);
     loadingscreenupdate("Clock ready, lunching scripts!");
     await loadScripts();
     loadingscreenupdate("Running postscripinit()");

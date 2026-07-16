@@ -19,6 +19,8 @@ const PORT = process.env.PORT || 8081;
 
 const auth_needed = false;
 
+const ADMIN_ENDPOINT_LOGIN = process.env.ADMIN_ENDPOINT_LOGIN;
+
 let sessions = {};
 const joinIndex = {};
 let players = [];
@@ -350,7 +352,11 @@ app.get(process.env.A, (req, res) => {
 });
 // app.use(cors({ origin: "*" }));
 app.use(express.static(__dirname));
-app.use(express.json());
+app.use(
+  express.json({
+    limit: "700mb",
+  }),
+);
 app.get("/wake", (req, res) => {
   res.json({ ok: "ok" });
 });
@@ -387,6 +393,55 @@ app.get("/api/custom_sync", (req, res) => {
 app.get("*", (_, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
+app.post(
+  "/api/admin/broadcast",
+  express.json({ limit: "900mb" }),
+  async (req, res) => {
+    const login = req.get("X-Admin-Key");
+    const { payload } = req.body;
+
+    //   console.log(`${login} !== ${ADMIN_ENDPOINT_LOGIN} (${login !== ADMIN_ENDPOINT_LOGIN})`)
+    if (login !== ADMIN_ENDPOINT_LOGIN) {
+      return res.status(401).json({
+        ok: false,
+        error: "Unauthorized",
+      });
+    }
+
+    if (!Array.isArray(payload)) {
+      return res.status(400).json({
+        ok: false,
+        error: "Payload must be an array",
+      });
+    }
+
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    let totalSent = 0;
+
+    for (const packet of payload) {
+      let sent = 0;
+
+      for (const ws of players) {
+        if (comp_and_send(ws, packet)) {
+          sent++;
+        }
+      }
+
+      totalSent += sent;
+
+      console.log(`[ADMIN] Broadcasted packet to ${sent} clients`);
+
+      await sleep(250);
+    }
+
+    res.json({
+      ok: true,
+      packets: payload.length,
+      totalSent,
+    });
+  },
+);
 app.post("/api/register", async (req, res) => {
   try {
     const { playerId, login, password } = req.body;

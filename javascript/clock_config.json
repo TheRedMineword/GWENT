@@ -1,4 +1,25 @@
 {
   "zone": "UTC",
-  "sha": "0269b"
+  "sha": "5004c",
+  "graphic": {
+    "timed": [
+      {
+        "start": "2026-06-01T00:00:00.000Z",
+        "end": "2026-08-31T23:59:59.000Z",
+        "content": "summer"
+      }
+    ],
+    "images": {
+      "summer": {
+        "board": "img/bacrounds/summer/board.jpg",
+        "deck": "img/bacrounds/summer/deck.jpg",
+        "start": "img/bacrounds/summer/start.jpg"
+      }
+    },
+    "fallback": {
+      "board": "img/bacrounds/normal/board.jpg",
+      "deck": "img/bacrounds/normal/deck.jpg",
+      "start": "img/bacrounds/normal/start.jpg"
+    }
+  }
 }

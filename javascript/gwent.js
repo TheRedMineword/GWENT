@@ -801,6 +801,13 @@ socket.onmessage = async (event) => {
   const data = event_parsed; //.data;
   console.log("onmsg data:", data);
   switch (data.type) {
+    case "new_visual":
+      try {
+        set_new_image(data.key, data.path);
+      } catch (e) {
+        console.error("apply new vars err", e);
+      }
+      break;
     case "authRequired":
       ip_data = data._ip;
       console.log("[IP PARSE]", data._ip);

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Broadcast</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+input, textarea, button {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 15px;
+}
+
+textarea {
+    height: 300px;
+    font-family: Consolas, monospace;
+}
+
+button {
+    cursor: pointer;
+}
+
+#result {
+    white-space: pre-wrap;
+    background: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+}
+</style>
+</head>
+<body>
+
+<h2>Admin Broadcast Sender</h2>
+
+<label>Endpoint URL</label>
+<input
+    id="url"
+    value="http://localhost:8081/api/admin/broadcast / http://drmineword-gwent.onrender.com/api/admin/broadcast"
+>
+
+<label>Admin Key</label>
+<input
+    id="key"
+    type="password"
+>
+
+<label>JSON Payload</label>
+<textarea id="json">[{
+  "type": "new_visual",
+  "key": "board",
+  "path": "img/bacrounds/normal/board.jpg"
+},{
+  "type": "new_visual",
+  "key": "deck",
+  "path": "img/bacrounds/normal/deck.jpg"
+},{
+  "type": "new_visual",
+  "key": "start",
+  "path": "img/bacrounds/normal/start.jpg"
+}]</textarea>
+
+<button onclick="send()">Send Broadcast</button>
+
+<h3>Response</h3>
+<pre id="result"></pre>
+
+<script>
+async function send() {
+    const result = document.getElementById("result");
+
+    let payload;
+
+    try {
+        payload = JSON.parse(document.getElementById("json").value);
+    } catch (e) {
+        result.textContent = "Invalid JSON:\n" + e.message;
+        return;
+    }
+
+    try {
+        const response = await fetch(document.getElementById("url").value, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Admin-Key": document.getElementById("key").value
+            },
+            body: JSON.stringify({
+                payload
+            })
+        });
+
+        const text = await response.text();
+
+        try {
+            result.textContent = JSON.stringify(JSON.parse(text), null, 2);
+        } catch {
+            result.textContent = text;
+        }
+
+    } catch (e) {
+        result.textContent = e.toString();
+    }
+}
+</script>
+
+</body>
+</html>
