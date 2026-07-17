@@ -1308,9 +1308,7 @@ html {
   border: none !important;
 }
 
-.current-turn {
-    box-shadow: -3vw 0 1.5vw 0.25vw rgba(255, 215, 0, 1);
-}
+
 
 #stats-op {
 	top: 24.25%;
@@ -1613,18 +1611,20 @@ html {
 }
 
 .row-special {
-	width: 14.25%;
-	height: 100%;
-	left: 5.1%;
+	position: absolute; /* or relative */
+    top: 6%;
+	height: 95%;
+	width: 13.4%;
+	left: 6%;
 	margin-bottom: -12.65%;
 }
 
 .row-cards {
-	height: 100%;
-	width: 80.65%;
-	left: 19.35%;
-	left: 20%;
-	width: 79.7%;
+	position: absolute; /* or relative */
+    top: 6%;
+	height: 95%;
+	left: 19.65%;
+	width: 80.4%;
 }
 
 .row-weather {
@@ -1673,22 +1673,6 @@ html {
     left: 7.1%;
     width: 92.5%;
     z-index: 2;
-}
-
-.row-selectable {
-	background-color: rgba(255, 255, 0, .08);
-}
-
-.row-selectable:hover {
-	box-shadow: 0 0 .25vw rgba(255, 255, 0, 1);
-	box-sizing: border-box;
-}
-
-.card-selectable>.card:hover {
-	border: .12vw outset goldenrod;
-	border-radius: .3vw;
-	margin-bottom: 1vw;
-	z-index: 1;
 }
 
 .cardpile {

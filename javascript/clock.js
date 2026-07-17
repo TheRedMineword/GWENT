@@ -1,4 +1,5 @@
 "use strict";
+document.documentElement.style.setProperty("--card-hover-shadow", "#6d5210");
 function loadingscreenupdate(strng) {
   document.getElementById("load_text").textContent = strng;
   console.log(`[LOADING]: "${strng}"`);
@@ -19,6 +20,57 @@ function set_new_image(key, path, isvideo = false) {
     document.getElementById("very_start_bg1").style.backgroundImage =
       `url("${path}")`;
   }
+}
+
+function hexWithAlpha(hex, alpha) {
+  // alpha: 0.0 - 1.0
+  hex = hex.replace("#", "");
+
+  // Support #RGB
+  if (hex.length === 3) {
+    hex = hex
+      .split("")
+      .map((c) => c + c)
+      .join("");
+  }
+
+  const alphaHex = Math.round(alpha * 255)
+    .toString(16)
+    .padStart(2, "0");
+
+  return `#${hex}${alphaHex}`;
+}
+
+function generateCSS(theme) {
+  console.log("setting css", theme);
+  document.documentElement.style.setProperty(
+    "--card-hover-shadow",
+    theme.rowHover.color,
+  );
+  return `
+.current-turn {
+    box-shadow: ${theme.currentTurn.offsetX}
+                ${theme.currentTurn.offsetY}
+                ${theme.currentTurn.blur}
+                ${theme.currentTurn.spread}
+                ${theme.currentTurn.color};
+}
+
+.row-selectable:hover {
+    box-shadow: 0 0 ${theme.rowHover.blur} ${theme.rowHover.color};
+    box-sizing: border-box;
+}
+
+.card-selectable > .card:hover {
+    border: ${theme.cardHover.borderWidth} outset ${theme.cardHover.color};
+    border-radius: ${theme.cardHover.borderRadius};
+    margin-bottom: ${theme.cardHover.marginBottom};
+    z-index: 1;
+}
+    .row-selectable {
+	background-color: ${hexWithAlpha(theme.rowselectable.hex, theme.rowselectable.alpha)};
+}
+`;
 }
 
 async function setBackground(source) {
@@ -107,11 +159,11 @@ async function setBackground(source) {
 }
 
 let the_image_json = {};
-function setupTimedImages(config, set_new_image) {
+async function setupTimedImages(config, set_new_image) {
   let timer = null;
   let currentContent = null;
 
-  function apply() {
+  async function apply() {
     if (timer) {
       clearTimeout(timer);
       timer = null;
@@ -148,7 +200,16 @@ function setupTimedImages(config, set_new_image) {
       currentContent = contentKey;
 
       for (const [key, path] of Object.entries(images)) {
-        set_new_image(key, path);
+        if (key !== "_animate" && key !== "_theme") {
+          if (key === "board") {
+            await setBackground(images._animate);
+          }
+          set_new_image(key, path);
+        } else if (key === "_theme") {
+          document.getElementById("dynamic-css").textContent = generateCSS(
+            images._theme,
+          );
+        }
       }
     }
 
@@ -283,6 +344,24 @@ function warn_screen(content, type = "alert", title = "Warning") {
     document.body.append(overlay);
   });
 }
+async function loadScript2(src) {
+  return new Promise((resolve, reject) => {
+    // Already loaded
+    if (window.Hls) {
+      resolve(window.Hls);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = true;
+
+    script.onload = () => resolve(window.Hls);
+    script.onerror = () => reject(new Error(`Failed to load ${src}`));
+
+    document.head.appendChild(script);
+  });
+}
 (() => {
   loadingscreenupdate("Starting clock synchronization");
   let useSecureClock = false;
@@ -299,7 +378,7 @@ function warn_screen(content, type = "alert", title = "Warning") {
     "javascript/decks.js",
     "javascript/abilities.js",
     "javascript/factions.js",
-    "javascript/hls.js@1.js",
+    //  "javascript/hls.js@1.js",
     "javascript/external_deck.js",
     "javascript/gwent_coin.js",
     "javascript/gwent.js",
@@ -401,12 +480,17 @@ function warn_screen(content, type = "alert", title = "Warning") {
 
       useSecureClock = false;
     }
-    loadingscreenupdate("Loading deck visual!");
+    loadingscreenupdate("Loading deck visual! 1/2");
+    const Hls = await loadScript2("javascript/hls.js@1.js"); //https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js");
     // await sleep(270);
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+    }
+    loadingscreenupdate("Loading deck visual! 2/2");
     const watcher = setupTimedImages(the_image_json, (key, path) => {
       set_new_image(key, path);
     });
-    console.log("bg watcher", watcher);
+    //   console.log("bg watcher", watcher);
     loadingscreenupdate("Clock ready, lunching scripts!");
     await loadScripts();
     loadingscreenupdate("Running postscripinit()");

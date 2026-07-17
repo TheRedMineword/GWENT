@@ -57,7 +57,8 @@ button {
 <textarea id="json">[{
   "type": "new_visual",
   "key": "board",
-  "path": "img/backgrounds/normal/board.jpg"
+  "path": "img/backgrounds/normal/board.jpg",
+  "vid": null
 },{
   "type": "new_visual",
   "key": "deck",
@@ -66,6 +67,31 @@ button {
   "type": "new_visual",
   "key": "start",
   "path": "img/backgrounds/normal/start.jpg"
+},{
+    "type": "new_css",
+    "theme": {
+    "currentTurn": {
+        "color": "#FFD700",
+        "blur": "1.5vw",
+        "spread": "0.25vw",
+        "offsetX": "-3vw",
+        "offsetY": "0"
+    },
+    "rowHover": {
+        "color": "#FFFF00",
+        "blur": "1.25vw"
+    },
+    "cardHover": {
+        "color": "goldenrod",
+        "borderWidth": ".12vw",
+        "borderRadius": ".3vw",
+        "marginBottom": "1vw"
+    },
+    "rowselectable": {
+      "hex": "#FFFF00",
+      "alpha": 0.08
+    }
+}
 }]</textarea>
 
 <button onclick="send()">Send Broadcast</button>

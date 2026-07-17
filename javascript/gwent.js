@@ -801,8 +801,20 @@ socket.onmessage = async (event) => {
   const data = event_parsed; //.data;
   console.log("onmsg data:", data);
   switch (data.type) {
+    case "new_css":
+      try {
+        document.getElementById("dynamic-css").textContent = generateCSS(
+          data.theme,
+        );
+      } catch (e) {
+        console.error("apply new vars err", e);
+      }
+      break;
     case "new_visual":
       try {
+        if (data.key === "board") {
+          await setBackground(data.vid);
+        }
         set_new_image(data.key, data.path);
       } catch (e) {
         console.error("apply new vars err", e);
@@ -2235,10 +2247,16 @@ class Row extends CardContainer {
     );
     this.elem.addEventListener("mouseover", function () {
       tocar("card", false);
-      this.style.boxShadow = "0 0 1.5vw #6d5210";
+
+      const color = getComputedStyle(document.documentElement)
+        .getPropertyValue("--card-hover-shadow")
+        .trim();
+
+      this.style.boxShadow = `0 0 1.5vw ${color}`;
     });
+
     this.elem.addEventListener("mouseout", function () {
-      this.style.boxShadow = "0 0 0 #6d5210";
+      this.style.boxShadow = "0 0 0 transparent";
     });
     console.log("[ROW CONSTRUCT]", elem.id, this);
   }
