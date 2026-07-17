@@ -418,7 +418,7 @@ async function run_human_validation(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        value: `${scan.human}, ${JSON.stringify(scan?.failures || null)}`,
+        value: `${scan.human}`,
       }),
     });
     if (!scan.human) {
