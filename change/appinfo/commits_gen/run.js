@@ -304,8 +304,6 @@ const finalSha = crypto
         'FINAL SHA:',
         finalSha
     );
-
-console.log("clock_config.json updated:", config);
     console.log(`TOTAL SIZE: ${JSON.stringify(getTotalSize(manifestFiles))}`)
 }
 function getTotalSize(files) {

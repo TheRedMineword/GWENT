@@ -456,12 +456,12 @@ async function loadScript2(src) {
         },
       );
       var res_build = await decompressBase64_init(
-      btoa(
-        Array.from(new Uint8Array(await config.arrayBuffer()), (b) =>
-          String.fromCharCode(b),
-        ).join(""),
-      ),
-    );
+        btoa(
+          Array.from(new Uint8Array(await config.arrayBuffer()), (b) =>
+            String.fromCharCode(b),
+          ).join(""),
+        ),
+      );
       const json = JSON.parse(res_build);
       console.log("CLOCK CONFIG", json, config);
       the_image_json = json.graphic;

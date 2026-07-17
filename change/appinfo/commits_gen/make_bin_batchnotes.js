@@ -105,6 +105,7 @@ fs2.writeFileSync(
             `clock_config.json\n` +
             `  ${data.length.toLocaleString()} B -> ${compressed.length.toLocaleString()} B (${ratio}%)`
         );
+        console.log("clock_config.json updated:", config);
     }
 
     console.log("\nDone.");
