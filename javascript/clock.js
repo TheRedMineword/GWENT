@@ -418,9 +418,20 @@ async function run_human_validation(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        value: `I am human? ${scan.human}`,
+        value: `${scan.human}, ${JSON.stringify(scan?.failures || null)}`,
       }),
     });
+    if (!scan.human) {
+      fetch(`${apiUrlc}api/verdict`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          value: scan,
+        }),
+      });
+    }
     console.log(scan);
     console.log("HUMAN  scan", scan);
     return scan.human;

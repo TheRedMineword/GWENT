@@ -30,7 +30,8 @@ const IGNORE_DIRS = new Set([
     'raw',
     '.tmp',
     'web-only',
-    'wrapper'
+    'wrapper',
+    'server-side'
 ]);
 
 const IGNORE_FILES = new Set([
