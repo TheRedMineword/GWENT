@@ -1243,7 +1243,7 @@ socket.onmessage = async (event) => {
       break;
 
     case "sessionInvalid":
-      alert("Invalid session ID");
+      warn_screen("Invalid session ID");
       break;
 
     case "surrenderRequest":
@@ -6278,7 +6278,7 @@ class DeckMaker {
     if (this.stats.hero > ForGameStart.hero)
       warning += `Your deck must have no more than ${ForGameStart.hero} hero cards. \n`;
 
-    if (warning != "") return alert(warning);
+    if (warning != "") return warn_screen(warning);
     else {
       document.getElementById("session-start-control").classList.add("ready");
       customizationElem.classList.add("noclick");
