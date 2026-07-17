@@ -412,7 +412,7 @@ async function run_human_validation(
       console.table(scan.failures);
     }
 
-    fetch(`${apiUrlc}api/bot-check`, {
+    fetch(`${apiUrlc}api/verdict`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
