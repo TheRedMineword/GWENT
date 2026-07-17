@@ -228,7 +228,7 @@ module.exports = function analyseBot(data = {}) {
     // ------------------------------------------------
 
     if (
-        browser.name === "Chrome" &&
+        browser.name === "Chrome_a" &&
         (finger.plugins || []).length === 0
     ) {
 
@@ -240,8 +240,8 @@ module.exports = function analyseBot(data = {}) {
     }
 
     if (
-        browser.name === "Chrome" &&
-        (finger.mimeTypes || []).length === 0
+        browser.name === "Chrome_a" &&
+        (finger.mimeTypes || []).length === 0 
     ) {
 
         add(
