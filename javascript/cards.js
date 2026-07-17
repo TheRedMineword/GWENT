@@ -3047,16 +3047,16 @@ var card_dict_base = [
     strength: "3",
     ability: "bond",
     filename: "custom!sky_vincent_guys",
-    count: "0",
-    count_monitor: {
-      base: 3,
-      monitor: "based",
-      id: "vincent_seasonal_spirits",
-      duration: {
-        start: "2026-07-17T07:00:00.000Z",
-        duration: "9999999999999999999999999",
-      },
-    },
+    count: "3",
+    //  count_monitor: {
+    //    base: 3,
+    //    monitor: "based",
+    //    id: "vincent_seasonal_spirits",
+    //     duration: {
+    //       start: "2026-07-17T07:00:00.000Z",
+    //       duration: "9999999999999999999999999",
+    //     },
+    //   },// Noted out so i have template for future
     customassets: {
       lg: {
         hero: false,
@@ -3081,16 +3081,7 @@ var card_dict_base = [
     strength: "2",
     ability: "medic",
     filename: "custom!sky_vincent_medic",
-    count: "0",
-    count_monitor: {
-      base: 1,
-      monitor: "based",
-      id: "vincent_seasonal_Hearth",
-      duration: {
-        start: "2026-07-17T07:00:00.000Z",
-        duration: "9999999999999999999999999",
-      },
-    },
+    count: "1",
     customassets: {
       lg: {
         hero: false,

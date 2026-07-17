@@ -2004,7 +2004,7 @@
       },
       {
         "name": "Gaunter o'Dim",
-        "id": "1004",
+        "id": "1004-mon",
         "deck": "monsters",
         "row": "leader",
         "strength": "0",
@@ -2014,7 +2014,7 @@
       },
       {
         "name": "Gaunter o'Dim",
-        "id": "1004",
+        "id": "1004-nilf",
         "deck": "nilfgaard",
         "row": "leader",
         "strength": "0",
@@ -2024,7 +2024,7 @@
       },
       {
         "name": "Gaunter o'Dim",
-        "id": "1004",
+        "id": "1004-realms",
         "deck": "realms",
         "row": "leader",
         "strength": "0",
@@ -2034,7 +2034,7 @@
       },
       {
         "name": "Gaunter o'Dim",
-        "id": "1004",
+        "id": "1004-scol",
         "deck": "scoiatael",
         "row": "leader",
         "strength": "0",
@@ -2044,7 +2044,7 @@
       },
       {
         "name": "Gaunter o'Dim",
-        "id": "1004",
+        "id": "1004-skel",
         "deck": "skellige",
         "row": "leader",
         "strength": "0",
@@ -2054,7 +2054,7 @@
       },
       {
         "name": "Gaunter o'Dim",
-        "id": "1004",
+        "id": "1004-sky",
         "deck": "sky",
         "row": "leader",
         "strength": "0",
@@ -2064,7 +2064,7 @@
       },
       {
         "name": "Gaunter o'Dim",
-        "id": "1004",
+        "id": "1004-synd",
         "deck": "syndicate",
         "row": "leader",
         "strength": "0",
@@ -2891,16 +2891,7 @@
         "strength": "3",
         "ability": "bond",
         "filename": "custom!sky_vincent_guys",
-        "count": "0",
-        "count_monitor": {
-          "base": 3,
-          "monitor": "based",
-          "id": "vincent_seasonal_spirits",
-          "duration": {
-            "start": "2026-07-17T07:00:00.000Z",
-            "duration": "9999999999999999999999999"
-          }
-        },
+        "count": "3",
         "customassets": {
           "lg": {
             "hero": false,
@@ -2925,16 +2916,7 @@
         "strength": "2",
         "ability": "medic",
         "filename": "custom!sky_vincent_medic",
-        "count": "0",
-        "count_monitor": {
-          "base": 1,
-          "monitor": "based",
-          "id": "vincent_seasonal_Hearth",
-          "duration": {
-            "start": "2026-07-17T07:00:00.000Z",
-            "duration": "9999999999999999999999999"
-          }
-        },
+        "count": "1",
         "customassets": {
           "lg": {
             "hero": false,
@@ -3306,9 +3288,9 @@
         "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
       }
     },
-    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_vid": "8o-JI8VRyKo",
     "tavern_yt_volume": 90
   },
   "texture_pack_url": null
