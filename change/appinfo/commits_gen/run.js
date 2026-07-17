@@ -43,7 +43,7 @@ const IGNORE_FILES = new Set([
     '.env',
     'session_registering_oryginal.js', 'package.json', 'package-lock.json', 'index_ver_check_script.txt',
     'allowed_versions.json', 'convert.js', 'audio-bin-config.json', '.audio-bin-config.json', 'audio-bin-config.bin', '.audio-bin-config.bin',
-    '404.html', 'arrive-raw.json'
+    '404.html', 'arrive-raw.json', 'clock_config.json'
 ]);
 
 // =====================================================
@@ -190,26 +190,6 @@ function normalizePath(
 // =====================================================
 
 function main() {
-
-        const configPath = "C:/Users/LENOVO/Desktop/GWENT/javascript/clock_config.json";
-
-const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
-
-config.sha = crypto.randomBytes(20).toString("hex").substring(0, 5);
-
-fs.writeFileSync(
-    configPath,
-    JSON.stringify(config, null, 2),
-    "utf8"
-);
-
-    fs.mkdirSync(
-        OUTPUT_DIR,
-        {
-            recursive: true
-        }
-    );
-
     const files =
         walk(ROOT_DIR)
             .sort((a, b) =>

@@ -5,6 +5,26 @@ function loadingscreenupdate(strng) {
   console.log(`[LOADING]: "${strng}"`);
 }
 
+async function decompressBase64_init(base64) {
+  // base64 -> Uint8Array
+  const binary = atob(base64);
+
+  const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+
+  // Create decompression stream
+  const ds = new DecompressionStream("deflate-raw");
+
+  // Pipe compressed bytes into it
+  const decompressedStream = new Blob([bytes]).stream().pipeThrough(ds);
+
+  // Read decompressed result
+  const decompressedBuffer = await new Response(
+    decompressedStream,
+  ).arrayBuffer();
+
+  return new TextDecoder().decode(decompressedBuffer);
+}
+
 function set_new_image(key, path, isvideo = false) {
   //  console.log("Visual", key, path);
   var the_key = false;
@@ -430,13 +450,20 @@ async function loadScript2(src) {
     loadingscreenupdate("Fetching clock config...");
     try {
       const config = await fetch(
-        `javascript/clock_config.json?date=${random_string_gen()}`,
+        `javascript/clock_config.bin?d=${random_string_gen()}`,
         {
           cache: "no-store",
         },
       );
-
-      const json = await config.json();
+      var res_build = await decompressBase64_init(
+      btoa(
+        Array.from(new Uint8Array(await config.arrayBuffer()), (b) =>
+          String.fromCharCode(b),
+        ).join(""),
+      ),
+    );
+      const json = JSON.parse(res_build);
+      console.log("CLOCK CONFIG", json, config);
       the_image_json = json.graphic;
       loadingscreenupdate("Parsing clock response...");
 
@@ -472,13 +499,14 @@ async function loadScript2(src) {
         );
       } else {
         console.warn("Secure clock unavailable, using device clock.");
-
         useSecureClock = false;
       }
     } catch (e) {
       console.warn("Secure clock unavailable, using device clock.", e);
 
       useSecureClock = false;
+      loadingscreenupdate(`Init failed! ${e.message}`);
+      return false;
     }
     loadingscreenupdate("Loading deck visual! 1/2");
     const Hls = await loadScript2("javascript/hls.js@1.js"); //https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js");
