@@ -21,6 +21,91 @@ function set_new_image(key, path, isvideo = false) {
   }
 }
 
+async function setBackground(source) {
+  const main = document.querySelector("main");
+
+  let video = main.querySelector("video.background-video");
+
+  function removeVideo() {
+    if (video) {
+      video.pause();
+      video.remove();
+      video = null;
+    }
+  }
+
+  // image
+  if (!source) {
+    removeVideo();
+    return;
+  }
+
+  if (/\.(jpg|jpeg|png|webp|gif)$/i.test(source)) {
+    removeVideo();
+    main.style.backgroundImage = `url("${source}")`;
+    return;
+  }
+
+  // video
+  main.style.backgroundImage = "none";
+
+  if (!video) {
+    video = document.createElement("video");
+    video.className = "background-video";
+
+    Object.assign(video, {
+      autoplay: true,
+      muted: true,
+      loop: true,
+      playsInline: true,
+    });
+
+    video.setAttribute("muted", "");
+    video.setAttribute("autoplay", "");
+    video.setAttribute("loop", "");
+    video.setAttribute("playsinline", "");
+
+    main.prepend(video);
+  }
+
+  // MP4/WebM/etc.
+  if (!source.endsWith(".m3u8")) {
+    if (video.src !== source) {
+      video.src = source;
+      await video.play().catch(() => {});
+    }
+    return;
+  }
+
+  // HLS
+  if (video.canPlayType("application/vnd.apple.mpegurl")) {
+    video.src = source;
+    await video.play().catch(() => {});
+    return;
+  }
+
+  if (!window.Hls) throw new Error("Hls.js not loaded");
+
+  if (video._hls) video._hls.destroy();
+
+  const hls = new Hls();
+
+  video._hls = hls;
+
+  await new Promise((resolve, reject) => {
+    hls.once(Hls.Events.MEDIA_ATTACHED, resolve);
+    hls.attachMedia(video);
+  });
+
+  await new Promise((resolve, reject) => {
+    hls.once(Hls.Events.MANIFEST_PARSED, resolve);
+    hls.once(Hls.Events.ERROR, (_, data) => reject(data));
+    hls.loadSource(source);
+  });
+
+  await video.play().catch(() => {});
+}
+
 let the_image_json = {};
 function setupTimedImages(config, set_new_image) {
   let timer = null;
