@@ -361,37 +361,51 @@ app.use(
 app.get("/wake", (req, res) => {
   res.json({ ok: "ok" });
 });
-app.get("/api/bot-check", async (req, res) => {
+app.post("/api/bot-check", async (req, res) => {
 
     const ip = getClientIp(req);
+
+    const {
+        finger = {},
+        canvasFingerprint,
+        audioFingerprint,
+        webglFingerprint,
+        native = {}
+    } = req.body || {};
 
     let geo = {};
     let proxy = {};
 
     try {
 
-        const r1 = await fetch(`http://ip-api.com/json/${ip}`);
-        geo = await r1.json();
+        const geoReq = await fetch(`http://ip-api.com/json/${ip}`);
+        geo = await geoReq.json();
 
-        const r2 = await fetch(
-            `https://proxycheck.io/v2/${ip}?key=111111-222222-333333-444444&vpn=3&asn=1&risk=2`
+        const proxyReq = await fetch(
+            `https://proxycheck.io/v2/${ip}?key=YOURKEY&vpn=3&risk=2&asn=1`
         );
 
-        const geo2 = await r2.json();
-        proxy = geo2[ip] || {};
+        const proxyJson = await proxyReq.json();
+        proxy = proxyJson[ip] || {};
 
     } catch {}
 
     const result = analyseBot({
+        ip,
         headers: req.headers,
         geo,
         proxy,
-        userAgent: req.headers["user-agent"]
+        finger,
+        canvasFingerprint,
+        audioFingerprint,
+        webglFingerprint,
+        native
     });
 
     res.json({
         ok: true,
         timestamp: Date.now(),
+        ip,
         result
     });
 

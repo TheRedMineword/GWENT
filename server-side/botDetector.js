@@ -24,111 +24,323 @@ function containsHosting(str = "") {
     return HOSTING.some(x => str.includes(x));
 }
 
-module.exports = function analyseBot(data) {
+module.exports = function analyseBot(data = {}) {
 
     const headers = data.headers || {};
+    const geo = data.geo || {};
+    const proxy = data.proxy || {};
+
+    const finger = data.finger || {};
+    const native = data.native || {};
 
     const ua =
+        finger.userAgent ||
         data.userAgent ||
         headers["user-agent"] ||
         "";
-
-    const geo = data.geo || {};
-    const proxy = data.proxy || {};
 
     const parser = new UAParser(ua);
 
     const browser = parser.getBrowser();
     const os = parser.getOS();
+    const cpu = parser.getCPU();
     const device = parser.getDevice();
 
-    let score = 0;
     const reasons = [];
+    const suspicious = [];
+
+    const breakdown = {
+        crawler: 0,
+        headless: 0,
+        webdriver: 0,
+        vpn: 0,
+        proxy: 0,
+        tor: 0,
+        risk: 0,
+        hosting: 0,
+        headers: 0,
+        uaMismatch: 0,
+        language: 0,
+        timezone: 0,
+        plugins: 0,
+        mimeTypes: 0,
+        webgl: 0,
+        canvas: 0,
+        audio: 0,
+        mobileHosting: 0
+    };
+
+    function add(category, points, reason) {
+        breakdown[category] += points;
+        suspicious.push(reason);
+    }
+
+    // ------------------------------------------------
+    // User-Agent
+    // ------------------------------------------------
 
     if (isbot(ua)) {
-        score += 100;
-        reasons.push("Known crawler");
+        add("crawler", 100, "Known crawler");
     }
 
-    if (/Headless/i.test(ua)) {
-        score += 100;
-        reasons.push("Headless browser");
+    if (/Headless|PhantomJS|Playwright|Puppeteer/i.test(ua)) {
+        add("headless", 100, "Headless browser");
     }
 
-    if (proxy.vpn === "yes") {
-        score += 30;
-        reasons.push("VPN");
+    // ------------------------------------------------
+    // webdriver
+    // ------------------------------------------------
+
+    if (finger.webdriver || native.webdriver) {
+        add("webdriver", 80, "navigator.webdriver=true");
+    } else {
+        reasons.push("WebDriver disabled");
     }
 
-    if (proxy.proxy === "yes") {
-        score += 30;
-        reasons.push("Proxy");
-    }
+    // ------------------------------------------------
+    // Proxy
+    // ------------------------------------------------
 
-    if ((proxy.risk || 0) >= 50) {
-        score += 20;
-        reasons.push("High IP risk");
-    }
+    if (proxy.vpn === "yes")
+        add("vpn", 35, "VPN detected");
+
+    if (proxy.proxy === "yes")
+        add("proxy", 35, "Proxy detected");
+
+    if (proxy.tor === "yes")
+        add("tor", 80, "TOR exit node");
+
+    if ((proxy.risk || 0) >= 75)
+        add("risk", 35, `High IP risk (${proxy.risk})`);
+    else if ((proxy.risk || 0) >= 40)
+        add("risk", 15, `Medium IP risk (${proxy.risk})`);
+
+    // ------------------------------------------------
+    // Hosting
+    // ------------------------------------------------
 
     const network =
         `${geo.isp || ""} ${geo.org || ""} ${geo.as || ""}`;
 
     if (containsHosting(network)) {
-        score += 40;
-        reasons.push("Hosting ASN");
+        add("hosting", 40, "Hosting ASN");
+    } else {
+        reasons.push("Residential ISP");
     }
 
-    if (device.type === "mobile" && containsHosting(network)) {
-        score += 35;
-        reasons.push("Mobile device from hosting network");
+    if (
+        device.type === "mobile" &&
+        containsHosting(network)
+    ) {
+        add(
+            "mobileHosting",
+            35,
+            "Mobile UA from hosting network"
+        );
     }
 
-    if (!headers["accept-language"]) {
-        score += 10;
-        reasons.push("Missing Accept-Language");
+    // ------------------------------------------------
+    // Headers
+    // ------------------------------------------------
+
+    if (!headers["accept-language"])
+        add("headers", 10, "Missing Accept-Language");
+
+    if (!headers["sec-fetch-site"])
+        add("headers", 10, "Missing Sec-Fetch-Site");
+
+    if (!headers["sec-fetch-mode"])
+        add("headers", 10, "Missing Sec-Fetch-Mode");
+
+    if (!headers["sec-ch-ua"])
+        add("headers", 15, "Missing Sec-CH-UA");
+
+    // ------------------------------------------------
+    // Language
+    // ------------------------------------------------
+
+    if (
+        finger.languages &&
+        headers["accept-language"]
+    ) {
+
+        const first =
+            headers["accept-language"]
+                .split(",")[0]
+                .trim()
+                .toLowerCase();
+
+        if (
+            finger.languages.length &&
+            !finger.languages[0]
+                .toLowerCase()
+                .startsWith(first.slice(0, 2))
+        ) {
+
+            add(
+                "language",
+                15,
+                "Browser language mismatch"
+            );
+        }
     }
 
-    if (!headers["sec-fetch-site"]) {
-        score += 10;
-        reasons.push("Missing Sec-Fetch");
+    // ------------------------------------------------
+    // Timezone
+    // ------------------------------------------------
+
+    const tz = finger.timezone || "";
+
+    if (
+        geo.country === "Poland" &&
+        !tz.includes("Warsaw")
+    ) {
+        add(
+            "timezone",
+            10,
+            "Timezone inconsistent with IP"
+        );
     }
+
+    // ------------------------------------------------
+    // Plugins
+    // ------------------------------------------------
+
+    if (
+        browser.name === "Chrome" &&
+        (finger.plugins || []).length === 0
+    ) {
+
+        add(
+            "plugins",
+            15,
+            "Chrome without plugins"
+        );
+    }
+
+    if (
+        browser.name === "Chrome" &&
+        (finger.mimeTypes || []).length === 0
+    ) {
+
+        add(
+            "mimeTypes",
+            10,
+            "Chrome without mime types"
+        );
+    }
+
+    // ------------------------------------------------
+    // Graphics
+    // ------------------------------------------------
+
+    if (!data.canvasFingerprint)
+        add("canvas", 10, "Canvas fingerprint missing");
+
+    if (!data.audioFingerprint)
+        add("audio", 10, "Audio fingerprint missing");
+
+    if (
+        !data.webglFingerprint ||
+        !data.webglFingerprint.renderer
+    ) {
+        add("webgl", 20, "WebGL unavailable");
+    }
+
+    // ------------------------------------------------
+
+    const score =
+        Object.values(breakdown)
+            .reduce((a, b) => a + b, 0);
 
     let verdict = "human";
 
-    if (score >= 80)
+    if (score >= 120)
+        verdict = "bot";
+    else if (score >= 70)
         verdict = "likely_bot";
-    else if (score >= 40)
+    else if (score >= 35)
         verdict = "suspicious";
+
+    const confidence =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                verdict === "human"
+                    ? 100 - score
+                    : score
+            )
+        );
 
     return {
 
         verdict,
         score,
+        confidence,
+        maxScore: 250,
+
         reasons,
+        suspicious,
 
         parsed: {
             browser,
             os,
-            device
+            cpu,
+            device,
+            detectRTC: finger.detectRTC
         },
 
         network: {
+            country: geo.country,
+            city: geo.city,
             isp: geo.isp,
             org: geo.org,
             as: geo.as,
-            country: geo.country,
-            city: geo.city,
             vpn: proxy.vpn,
             proxy: proxy.proxy,
+            tor: proxy.tor,
+            hosting: containsHosting(network),
             risk: proxy.risk
         },
 
+        browser: {
+            webdriver: !!finger.webdriver,
+            visitorId: finger.visitorId,
+            platform: finger.platform,
+            vendor: finger.vendor,
+            language: finger.language,
+            languages: finger.languages,
+            timezone: finger.timezone,
+            plugins: (finger.plugins || []).length,
+            mimeTypes: (finger.mimeTypes || []).length,
+            deviceMemory: finger.deviceMemory,
+            hardwareConcurrency: finger.hardwareConcurrency,
+            touchPoints: finger.maxTouchPoints
+        },
+
+        graphics: {
+            canvas: !!data.canvasFingerprint,
+            audio: !!data.audioFingerprint,
+            webglVendor: data.webglFingerprint?.vendor,
+            webglRenderer: data.webglFingerprint?.renderer
+        },
+
+        native,
+
         headers: {
-            acceptLanguage: !!headers["accept-language"],
-            secFetch: !!headers["sec-fetch-site"],
+            userAgent: ua,
+            acceptLanguage: headers["accept-language"] || null,
+            secFetchSite: headers["sec-fetch-site"] || null,
+            secFetchMode: headers["sec-fetch-mode"] || null,
+            secFetchDest: headers["sec-fetch-dest"] || null,
             secCHUA: headers["sec-ch-ua"] || null,
-            platform: headers["sec-ch-ua-platform"] || null
+            secCHPlatform: headers["sec-ch-ua-platform"] || null,
+            secCHMobile: headers["sec-ch-ua-mobile"] || null
+        },
+
+        debug: {
+            scoreBreakdown: breakdown
         }
     };
-
 };
