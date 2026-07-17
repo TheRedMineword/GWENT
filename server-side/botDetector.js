@@ -271,11 +271,6 @@ if (
     ua.includes("Edg/")
 )
     add("uaMismatch",15,"UA parser mismatch");
-    if (
-    finger.fpComponents?.fonts?.value &&
-    finger.fpComponents.fonts.value.length < 5
-)
-    add("risk",20,"Very few installed fonts");
 
     // ------------------------------------------------
     // Graphics
