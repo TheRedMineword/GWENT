@@ -2,21 +2,42 @@ const { UAParser } = require("ua-parser-js");
 const { isbot } = require("isbot");
 
 const HOSTING = [
-    "amazon",
-    "aws",
-    "google",
-    "azure",
-    "microsoft",
-    "oracle",
+    "amazon","aws",
+    "google","gcp",
+    "azure","microsoft",
+    "oracle","oci",
     "digitalocean",
     "hetzner",
     "ovh",
     "linode",
     "vultr",
-    "datacamp",
-    "choopa",
     "leaseweb",
-    "contabo"
+    "contabo",
+    "choopa",
+    "scaleway",
+    "upcloud",
+    "akamai",
+    "fastly",
+    "cloudflare",
+    "stackpath",
+    "ibm cloud",
+    "alibaba",
+    "tencent",
+    "huawei cloud",
+    "exoscale",
+    "online sas",
+    "interserver",
+    "hostwinds",
+    "psychz",
+    "quadranet",
+    "colo",
+    "serverhub",
+    "m247",
+    "it7",
+    "i3d",
+    "cdn77",
+    "vps",
+    "dedicated"
 ];
 
 function containsHosting(str = "") {
@@ -191,16 +212,16 @@ module.exports = function analyseBot(data = {}) {
 
     const tz = finger.timezone || "";
 
-    if (
-        geo.country === "Poland" &&
-        !tz.includes("Warsaw")
-    ) {
-        add(
-            "timezone",
-            10,
-            "Timezone inconsistent with IP"
-        );
-    }
+ //   if (
+ //       geo.country === "Poland" &&
+ //       !tz.includes("Warsaw")
+ //   ) {
+  //      add(
+ //           "timezone",
+  //          10,
+ //           "Timezone inconsistent with IP"
+ //       );
+  //  }
 
     // ------------------------------------------------
     // Plugins
@@ -229,6 +250,32 @@ module.exports = function analyseBot(data = {}) {
             "Chrome without mime types"
         );
     }
+
+if (
+    browser.name === "Chrome" &&
+    finger.vendor !== "Google Inc."
+)
+    add("uaMismatch",20,"Chrome vendor mismatch");
+    if (
+    browser.name === "Firefox" &&
+    headers["sec-ch-ua"]
+)
+    add("headers",25,"Firefox sent Chromium hints");
+    if (
+    browser.name==="Safari" &&
+    os.name==="Windows"
+)
+    add("uaMismatch",40,"Impossible browser/OS");
+    if (
+    browser.name==="Chrome" &&
+    ua.includes("Edg/")
+)
+    add("uaMismatch",15,"UA parser mismatch");
+    if (
+    finger.fpComponents?.fonts?.value &&
+    finger.fpComponents.fonts.value.length < 5
+)
+    add("risk",20,"Very few installed fonts");
 
     // ------------------------------------------------
     // Graphics

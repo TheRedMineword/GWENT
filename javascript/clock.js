@@ -1,4 +1,5 @@
 "use strict";
+let menubntconfig = { color: "", wasINIT: false };
 let isHuman = false;
 document.documentElement.style.setProperty("--card-hover-shadow", "#6d5210");
 function loadingscreenupdate(strng) {
@@ -64,6 +65,10 @@ function hexWithAlpha(hex, alpha) {
 
 function generateCSS(theme) {
   console.log("setting css", theme);
+  if (menubntconfig.wasINIT) {
+    document.getElementById("top-menu-btn").style.color = theme.menu_color;
+  }
+  menubntconfig.color = theme.menu_color;
   document.documentElement.style.setProperty(
     "--card-hover-shadow",
     theme.rowHover.color,

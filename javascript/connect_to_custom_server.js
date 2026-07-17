@@ -3,6 +3,7 @@ let IsNowCustom = false;
 // CONFIG
 // ===============================
 const IGNORE_PATTERNS = [
+  "menubntconfig.*",
   "the_image_json",
   "medicrevivethat",
   "onYouTubeIframeAPIReady_status",

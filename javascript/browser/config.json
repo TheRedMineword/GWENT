@@ -2,7 +2,7 @@
     "allowedVerdicts": [
         "human"
     ],
-    "maxScore": 20,
+    "maxScore": 24,
     "minConfidence": 83,
     "allowVPN": true,
     "allowHosting": false,

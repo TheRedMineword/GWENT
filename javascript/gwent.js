@@ -425,7 +425,9 @@ if (isHuman) {
   socket = new WebSocket(wsUrl);
 } else {
   showBrickScreen();
-  alert("Failed to connect to multiplayer server.");
+  alert(
+    "!!BOT DETECTED!!\nFailed to connect to multiplayer server.\n\nIf you are human report is as bug!\n\n!!BOT DETECTED!!",
+  );
 }
 
 socket.onopen = () => {
@@ -855,12 +857,16 @@ socket.onmessage = async (event) => {
       console.log("Welcome, your id is " + playerId);
       ep_id.textContent = `Hello PlayerID:\n${playerId}`;
       ep_id.style.color = "";
-      menuBtn.style.transition = "color 2s ease";
-      menuBtn.style.color = "lightgreen";
+      //  menuBtn.style.transition = "color 2s ease";
+      //  menuBtn.style.color = "lightgreen";
 
-      setTimeout(() => {
-        menuBtn.style.color = "";
-      }, ui_display_times.socketready);
+      //  setTimeout(() => {
+      //      menuBtn.style.color = "";
+      //   }, ui_display_times.socketready);
+      //    await sleep(1000);
+      menuBtn.style.color = menubntconfig.color;
+      console.log("menubntconfig", menubntconfig, "is ready");
+      menubntconfig.wasINIT = true;
       break;
 
     // Opponent has joined and the session is ready
