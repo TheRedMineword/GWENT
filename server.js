@@ -361,21 +361,40 @@ app.use(
 app.get("/wake", (req, res) => {
   res.json({ ok: "ok" });
 });
-app.get("/api/bot-check", (req, res) => {
-  try {
-    const result = analyseBot(req.body);
+app.get("/api/bot-check", async (req, res) => {
+
+    const ip = getClientIp(req);
+
+    let geo = {};
+    let proxy = {};
+
+    try {
+
+        const r1 = await fetch(`http://ip-api.com/json/${ip}`);
+        geo = await r1.json();
+
+        const r2 = await fetch(
+            `https://proxycheck.io/v2/${ip}?key=111111-222222-333333-444444&vpn=3&asn=1&risk=2`
+        );
+
+        const geo2 = await r2.json();
+        proxy = geo2[ip] || {};
+
+    } catch {}
+
+    const result = analyseBot({
+        headers: req.headers,
+        geo,
+        proxy,
+        userAgent: req.headers["user-agent"]
+    });
 
     res.json({
-      ok: true,
-      timestamp: Date.now(),
-      result,
+        ok: true,
+        timestamp: Date.now(),
+        result
     });
-  } catch (e) {
-    res.status(500).json({
-      ok: false,
-      error: e.message,
-    });
-  }
+
 });
 app.get("/api/custom_sync", (req, res) => {
   res.setHeader("Access-Control-Expose-Headers", "C-L, Content-Length");
