@@ -8,6 +8,7 @@ const crypto = require("crypto");
 const zlib = require("zlib");
 const { json } = require("stream/consumers");
 const fs = require("fs");
+const analyseBot = require("./server-side/botDetector.js");
 
 require("dotenv").config();
 
@@ -359,6 +360,22 @@ app.use(
 );
 app.get("/wake", (req, res) => {
   res.json({ ok: "ok" });
+});
+app.get("/api/bot-check", (req, res) => {
+  try {
+    const result = analyseBot(req.body);
+
+    res.json({
+      ok: true,
+      timestamp: Date.now(),
+      result,
+    });
+  } catch (e) {
+    res.status(500).json({
+      ok: false,
+      error: e.message,
+    });
+  }
 });
 app.get("/api/custom_sync", (req, res) => {
   res.setHeader("Access-Control-Expose-Headers", "C-L, Content-Length");
@@ -741,6 +758,7 @@ wss.on("connection", async (ws, req) => {
     const res = await fetch(`http://ip-api.com/json/${ip}`);
     geo = await res.json();
     geo.query = ip_censor;
+    //ws.bot = bot;
     const res2 = await fetch(
       `https://proxycheck.io/v2/${ip}?key=111111-222222-333333-444444&vpn=3&asn=1&risk=2`,
     );
