@@ -361,54 +361,59 @@ app.use(
 app.get("/wake", (req, res) => {
   res.json({ ok: "ok" });
 });
+app.post("/api/verdict", (req, res) => {
+  const { value } = req.body;
+
+  console.log(`Client verdict: ${JSON.stringify(value)}`);
+
+  res.json({
+    ok: true,
+  });
+});
 app.post("/api/bot-check", async (req, res) => {
+  const ip = getClientIp(req);
 
-    const ip = getClientIp(req);
+  const {
+    finger = {},
+    canvasFingerprint,
+    audioFingerprint,
+    webglFingerprint,
+    native = {},
+  } = req.body || {};
 
-    const {
-        finger = {},
-        canvasFingerprint,
-        audioFingerprint,
-        webglFingerprint,
-        native = {}
-    } = req.body || {};
+  let geo = {};
+  let proxy = {};
 
-    let geo = {};
-    let proxy = {};
+  try {
+    const geoReq = await fetch(`http://ip-api.com/json/${ip}`);
+    geo = await geoReq.json();
 
-    try {
+    const proxyReq = await fetch(
+      `https://proxycheck.io/v2/${ip}?key=YOURKEY&vpn=3&risk=2&asn=1`,
+    );
 
-        const geoReq = await fetch(`http://ip-api.com/json/${ip}`);
-        geo = await geoReq.json();
+    const proxyJson = await proxyReq.json();
+    proxy = proxyJson[ip] || {};
+  } catch {}
 
-        const proxyReq = await fetch(
-            `https://proxycheck.io/v2/${ip}?key=YOURKEY&vpn=3&risk=2&asn=1`
-        );
+  const result = analyseBot({
+    ip,
+    headers: req.headers,
+    geo,
+    proxy,
+    finger,
+    canvasFingerprint,
+    audioFingerprint,
+    webglFingerprint,
+    native,
+  });
 
-        const proxyJson = await proxyReq.json();
-        proxy = proxyJson[ip] || {};
-
-    } catch {}
-
-    const result = analyseBot({
-        ip,
-        headers: req.headers,
-        geo,
-        proxy,
-        finger,
-        canvasFingerprint,
-        audioFingerprint,
-        webglFingerprint,
-        native
-    });
-
-    res.json({
-        ok: true,
-        timestamp: Date.now(),
-        ip,
-        result
-    });
-
+  res.json({
+    ok: true,
+    timestamp: Date.now(),
+    ip,
+    result,
+  });
 });
 app.get("/api/custom_sync", (req, res) => {
   res.setHeader("Access-Control-Expose-Headers", "C-L, Content-Length");

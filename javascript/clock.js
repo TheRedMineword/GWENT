@@ -1,4 +1,5 @@
 "use strict";
+let isHuman = false;
 document.documentElement.style.setProperty("--card-hover-shadow", "#6d5210");
 function loadingscreenupdate(strng) {
   document.getElementById("load_text").textContent = strng;
@@ -364,6 +365,70 @@ function warn_screen(content, type = "alert", title = "Warning") {
     document.body.append(overlay);
   });
 }
+async function run_human_validation_c(src, sha) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+
+    s.src = `${src}?ver=${encodeURIComponent(sha)}`;
+
+    s.onload = resolve;
+
+    s.onerror = reject;
+
+    document.head.appendChild(s);
+  });
+}
+async function run_human_validation(
+  scriptUrl = "javascript/browser/validate.js",
+) {
+  console.log("HUMAN inited");
+  try {
+    // Download validate.js
+    await run_human_validation_c(scriptUrl, "1");
+    console.log("HUMAN past script!");
+    loadingscreenupdate(`Searching for organic life forms!`);
+
+    // Execute the script (defines init_scan_is_human)
+    const isLocalhost_human =
+      window.location.hostname.startsWith("localhost") ||
+      window.location.hostname.startsWith("127.0.0.1") ||
+      window.location.hostname.startsWith("[::1]");
+
+    const isElectronLauncher_human =
+      isLocalhost_human && location.port === "1111";
+
+    const apiUrlc = isElectronLauncher_human
+      ? domain
+      : isLocalhost_human
+        ? "http://localhost:8081/"
+        : domain;
+    console.log("HUMAN to scan: ", `${apiUrlc}api/bot-check`);
+    const scan = await init_scan_is_human(`${apiUrlc}api/bot-check`);
+
+    if (scan.human) {
+      console.log("✅ Human");
+    } else {
+      console.log("❌ Failed");
+      console.table(scan.failures);
+    }
+
+    fetch(`${apiUrlc}api/bot-check`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        value: `I am human? ${scan.human}`,
+      }),
+    });
+    console.log(scan);
+    console.log("HUMAN  scan", scan);
+    return scan.human;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+}
 async function loadScript2(src) {
   return new Promise((resolve, reject) => {
     // Already loaded
@@ -519,6 +584,11 @@ async function loadScript2(src) {
       set_new_image(key, path);
     });
     //   console.log("bg watcher", watcher);
+    loadingscreenupdate("Searching for organic life forms!");
+    isHuman = await run_human_validation();
+    loadingscreenupdate(`Organic life forms are ${isHuman}`);
+
+    console.log(isHuman); // true or false
     loadingscreenupdate("Clock ready, lunching scripts!");
     await loadScripts();
     loadingscreenupdate("Running postscripinit()");

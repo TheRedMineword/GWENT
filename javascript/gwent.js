@@ -419,7 +419,14 @@ console.log("Websocket", wsUrl);
 let socket = null;
 
 loadingscreenupdate("Starting webscoket");
-socket = new WebSocket(wsUrl);
+if (isHuman) {
+  socket = new WebSocket(wsUrl);
+} else if (window.location.hostname === "localhost") {
+  socket = new WebSocket(wsUrl);
+} else {
+  showBrickScreen();
+  alert("Failed to connect to multiplayer server.");
+}
 
 socket.onopen = () => {
   console.log("WebSocket connected");
