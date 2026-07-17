@@ -3,6 +3,7 @@ let IsNowCustom = false;
 // CONFIG
 // ===============================
 const IGNORE_PATTERNS = [
+  "the_image_json",
   "medicrevivethat",
   "onYouTubeIframeAPIReady_status",
   "custom_updater",

@@ -69,7 +69,7 @@ function setupTimedImages(config, set_new_image) {
 
     // Schedule next update
     if (nextChange !== Infinity) {
-      const delay = Math.max(0, nextChange - Date.now());
+      const delay = Math.max(0, nextChange - Clock.now());
 
       // setTimeout max is ~24.8 days
       const MAX_DELAY = 0x7fffffff;
