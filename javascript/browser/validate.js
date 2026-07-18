@@ -337,3 +337,346 @@ async function init_scan_is_human(
         };
     }
 }
+
+
+
+function show_captcha(reportText = "Report feedback") {
+    return new Promise((resolve) => {
+
+        const overlay = document.createElement("div");
+        Object.assign(overlay.style, {
+            position: "fixed",
+            inset: "0",
+            background: "rgba(8,7,4,.78)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backdropFilter: "blur(2px)",
+            zIndex: "999999",
+            padding: "12px",
+            boxSizing: "border-box"
+        });
+
+        const box = document.createElement("div");
+        Object.assign(box.style, {
+            width: "min(760px,95vw)",
+            maxWidth: "95vw",
+            maxHeight: "95vh",
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+            background: "linear-gradient(#efe5c7,#d8c7a5)",
+            border: "2px solid #6d5731",
+            borderRadius: "8px",
+            color: "#2b2318",
+            fontFamily: "Georgia, serif",
+            boxShadow: "0 15px 40px rgba(0,0,0,.65)"
+        });
+
+        // ----------------------------------------------------
+        // Header
+        // ----------------------------------------------------
+
+        const header = document.createElement("div");
+        header.textContent = "Searching for Intelligent Life Forms";
+
+        Object.assign(header.style, {
+            background: "#6d5731",
+            color: "#f7e8c4",
+            textAlign: "center",
+            fontWeight: "bold",
+            fontSize: "20px",
+            padding: "12px",
+            flexShrink: "0"
+        });
+
+        // ----------------------------------------------------
+        // Body
+        // ----------------------------------------------------
+
+        const body = document.createElement("div");
+
+Object.assign(body.style, {
+    padding: "18px 20px",
+    flexShrink: "0",
+    color: "#2b2318",
+    fontSize: "16px",
+    lineHeight: "1.5",
+    textAlign: "center",
+    textShadow: "0 1px 0 rgba(255,255,255,.25)",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center"
+});
+
+        body.innerHTML = `
+<b>Is our anti-bot system acting up?</b><br><br>
+Prove you are human.<br>
+<b>Place the squirrel on the real tree.</b>
+`;
+
+        // ----------------------------------------------------
+        // Captcha
+        // ----------------------------------------------------
+
+        const captcha = document.createElement("div");
+
+        Object.assign(captcha.style, {
+            position: "relative",
+            height: "min(240px,35vh)",
+            margin: "0 20px",
+            overflow: "hidden",
+            border: "2px solid #594726",
+            background: "#16220f",
+            flexShrink: "0"
+        });
+
+        const targetIndex = Math.floor(Math.random() * 9);
+        let targetTree = null;
+
+        for (let i = 0; i < 9; i++) {
+
+            const tree = document.createElement("img");
+            tree.src = "img/captcha/tree.png";
+
+            const x = 20 + i * 78 + (Math.random() * 14 - 7);
+
+            Object.assign(tree.style, {
+                position: "absolute",
+                width: "95px",
+                left: x + "px",
+                bottom: "38px",
+                pointerEvents: "none",
+                userSelect: "none"
+            });
+
+            if (i === targetIndex) {
+
+                Object.assign(tree.style, {
+                    opacity: ".95",
+                    filter: "brightness(.95) contrast(1)",
+                    transform: "scale(1)"
+                });
+
+                targetTree = tree;
+
+            } else {
+
+                Object.assign(tree.style, {
+                    opacity: (.18 + Math.random() * .28).toFixed(2),
+                    filter: `
+                        brightness(${.45 + Math.random() * .35})
+                        contrast(${.45 + Math.random() * .4})
+                        blur(${Math.random() * 1.2}px)
+                        saturate(.4)
+                        hue-rotate(${Math.random() * 30 - 15}deg)
+                    `,
+                    transform: `
+                        scaleX(${Math.random() > .5 ? -1 : 1})
+                        rotate(${Math.random() * 18 - 9}deg)
+                        skewX(${Math.random() * 10 - 5}deg)
+                        scale(${.82 + Math.random() * .25})
+                    `
+                });
+
+            }
+
+            captcha.appendChild(tree);
+        }
+
+        // ----------------------------------------------------
+        // Noise
+        // ----------------------------------------------------
+
+        if (!document.getElementById("captchaNoiseStyle")) {
+
+            const style = document.createElement("style");
+            style.id = "captchaNoiseStyle";
+
+            style.textContent = `
+@keyframes captchaNoise{
+    from{background-position:0 0;}
+    to{background-position:256px 256px;}
+}
+`;
+
+            document.head.appendChild(style);
+        }
+
+        const noise = document.createElement("div");
+
+        Object.assign(noise.style, {
+            position: "absolute",
+            inset: "0",
+            background: "url(img/captcha/noise.webp)",
+            opacity: ".14",
+            mixBlendMode: "screen",
+            animation: "captchaNoise .45s steps(5) infinite",
+            pointerEvents: "none"
+        });
+
+        captcha.appendChild(noise);
+
+        // ----------------------------------------------------
+        // Squirrel
+        // ----------------------------------------------------
+
+        const squirrel = document.createElement("img");
+
+        squirrel.src = "img/captcha/squirel.png";
+
+        Object.assign(squirrel.style, {
+            position: "absolute",
+            width: "78px",
+            left: "0px",
+            bottom: "14px",
+            pointerEvents: "none",
+            userSelect: "none",
+            filter: "drop-shadow(0 2px 3px rgba(0,0,0,.5))"
+        });
+
+        captcha.appendChild(squirrel);
+
+        // ----------------------------------------------------
+        // Slider
+        // ----------------------------------------------------
+
+        const slider = document.createElement("input");
+
+        slider.type = "range";
+        slider.min = 0;
+        slider.max = 1000;
+        slider.value = 0;
+
+        Object.assign(slider.style, {
+            width: "calc(100% - 40px)",
+            margin: "16px 20px 8px",
+            flexShrink: "0"
+        });
+
+        slider.oninput = () => {
+
+            const max = captcha.clientWidth - squirrel.offsetWidth;
+
+            squirrel.style.left =
+                (slider.value / 1000) * max + "px";
+
+        };
+
+        // ----------------------------------------------------
+        // Buttons
+        // ----------------------------------------------------
+
+        function makeButton(label) {
+
+            const btn = document.createElement("button");
+
+            btn.textContent = label;
+
+            Object.assign(btn.style, {
+                minWidth: "120px",
+                padding: "8px 16px",
+                background: "#7a5b2e",
+                color: "#f6edd8",
+                border: "1px solid #4f3d22",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontWeight: "bold"
+            });
+
+            btn.onmouseenter = () => btn.style.background = "#98733c";
+            btn.onmouseleave = () => btn.style.background = "#7a5b2e";
+
+            return btn;
+        }
+
+        const buttons = document.createElement("div");
+
+        Object.assign(buttons.style, {
+            display: "flex",
+            justifyContent: "center",
+            padding: "12px 20px 18px",
+            flexShrink: "0"
+        });
+
+        const verify = makeButton("Verify");
+
+        verify.onclick = () => {
+
+            const squirrelCenter =
+                squirrel.offsetLeft + squirrel.offsetWidth / 2;
+
+            const treeCenter =
+                targetTree.offsetLeft + targetTree.offsetWidth / 2;
+
+            overlay.remove();
+
+            resolve(Math.abs(squirrelCenter - treeCenter) < 45);
+
+        };
+
+        buttons.appendChild(verify);
+
+        // ----------------------------------------------------
+        // Footer
+        // ----------------------------------------------------
+
+        const footer = document.createElement("div");
+
+        Object.assign(footer.style, {
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "10px",
+            padding: "0 20px 18px",
+            fontSize: "13px",
+            color: "#5d4e36",
+            flexWrap: "wrap",
+            flexShrink: "0"
+        });
+
+        const left = document.createElement("div");
+        left.textContent =
+            "You are human? Share feedback to improve our system";
+
+        const copy = makeButton("COPY REPORT");
+
+        copy.style.minWidth = "140px";
+        copy.style.fontSize = "13px";
+        copy.style.padding = "6px 12px";
+
+        copy.onclick = async () => {
+
+            try {
+
+                await navigator.clipboard.writeText(reportText);
+
+                copy.textContent = "COPIED";
+
+                setTimeout(() => {
+                    copy.textContent = "COPY REPORT";
+                }, 1200);
+
+            } catch {}
+
+        };
+
+        footer.append(left, copy);
+
+        // ----------------------------------------------------
+
+        box.append(
+            header,
+            body,
+            captcha,
+            slider,
+            buttons,
+            footer
+        );
+
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+
+    });
+}

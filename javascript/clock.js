@@ -383,6 +383,8 @@ async function run_human_validation_c(src, sha) {
     document.head.appendChild(s);
   });
 }
+let isHuman_json = {};
+let apiUrlc_g = null;
 async function run_human_validation(
   scriptUrl = "javascript/browser/validate.js",
 ) {
@@ -408,6 +410,7 @@ async function run_human_validation(
         ? "http://localhost:8081/"
         : domain;
     console.log("HUMAN to scan: ", `${apiUrlc}api/bot-check`);
+    apiUrlc_g = apiUrlc;
     const scan = await init_scan_is_human(`${apiUrlc}api/bot-check`);
 
     if (scan.human) {
@@ -439,6 +442,7 @@ async function run_human_validation(
     }
     console.log(scan);
     console.log("HUMAN  scan", scan);
+    isHuman_json = scan;
     return scan.human;
   } catch (err) {
     console.error(err);
@@ -602,9 +606,79 @@ async function loadScript2(src) {
     //   console.log("bg watcher", watcher);
     loadingscreenupdate("Searching for organic life forms!");
     isHuman = await run_human_validation();
-    loadingscreenupdate(`Organic life forms are ${isHuman}`);
+    if (!isHuman) {
+      console.log("Making is human raport from", isHuman_json);
+      const ts = new Date(Clock.now()).toLocaleString();
 
-    console.log(isHuman); // true or false
+      const rap = `# 🤖 Anti-Bot Report
+
+## Visitor
+- **Visitor ID:** \`${isHuman_json.visitorId}\`
+- **Verdict:** **${isHuman_json.verdict.toUpperCase()}**
+- **Human:** ${isHuman_json.human ? "✅ Yes" : "❌ No"}
+- **Success:** ${isHuman_json.success ? "✅ True" : "❌ False"}
+
+## Detection
+- **Score:** ${isHuman_json.score}/${isHuman_json.data.result.maxScore}
+- **Confidence:** ${isHuman_json.confidence}%
+- **Timestamp:** ${ts} (${isHuman_json?.data?.timestamp || "null"})
+
+## Reasons
+${isHuman_json.reasons.map((r) => `- ${r}`).join("\n")}
+
+## Network
+- VPN: ${isHuman_json.data.result.network.vpn}
+- Hosting: ${isHuman_json.data.result.network.hosting ? "Yes" : "No"}
+- Risk Score: ${isHuman_json.data.result.network.risk}
+
+## Browser
+- Name: ${isHuman_json.data.result.parsed.browser.name}
+- Version: ${isHuman_json.data.result.parsed.browser.version}
+- OS: ${isHuman_json.data.result.parsed.os.name} ${isHuman_json.data.result.parsed.os.version}
+- Platform: ${isHuman_json.data.result.browser.platform}
+- Language: ${isHuman_json.data.result.browser.language}
+- Timezone: ${isHuman_json.data.result.browser.timezone}
+- WebDriver: ${isHuman_json.data.result.browser.webdriver ? "⚠️ Enabled" : "✅ Disabled"}
+
+## Hardware
+- CPU: ${isHuman_json.data.result.parsed.cpu.architecture}
+- Memory: ${isHuman_json.data.result.browser.deviceMemory} GB
+- Threads: ${isHuman_json.data.result.browser.hardwareConcurrency}
+- Touch Points: ${isHuman_json.data.result.browser.touchPoints}
+
+## Graphics
+- WebGL Vendor: ${isHuman_json.data.result.graphics.webglVendor}
+- Renderer: ${isHuman_json.data.result.graphics.webglRenderer}
+- Canvas: ${isHuman_json.data.result.graphics.canvas ? "Supported" : "Unavailable"}
+- Audio: ${isHuman_json.data.result.graphics.audio ? "Supported" : "Unavailable"}
+
+## Security Summary
+\`\`\`
+Verdict     : ${isHuman_json.verdict}
+Confidence  : ${isHuman_json.confidence}%
+Score       : ${isHuman_json.score}/${isHuman_json.data.result.maxScore}
+WebDriver   : ${isHuman_json.data.result.browser.webdriver}
+VPN         : ${isHuman_json.data.result.network.vpn}
+Hosting     : ${isHuman_json.data.result.network.hosting}
+Risk        : ${isHuman_json.data.result.network.risk}
+\`\`\`
+`;
+      isHuman = await show_captcha(rap);
+      fetch(`${apiUrlc_g}api/verdict`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          value: `Completed captcha: ${isHuman}, Rap:\`\`\`${rap}\`\`\``,
+        }),
+      });
+    }
+    //  loadingscreenupdate(`Organic life forms are ${isHuman}`);
+
+    //   console.log(isHuman); // true or false
+    isHuman_json = null;
+    apiUrlc_g = null;
     loadingscreenupdate("Clock ready, lunching scripts!");
     await loadScripts();
     loadingscreenupdate("Running postscripinit()");

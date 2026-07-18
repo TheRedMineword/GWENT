@@ -165,16 +165,16 @@ module.exports = function analyseBot(data = {}) {
     // ------------------------------------------------
 
     if (!headers["accept-language"])
-        add("headers", 10, "Missing Accept-Language");
+        add("headers", 5, "Missing Accept-Language");
 
     if (!headers["sec-fetch-site"])
-        add("headers", 10, "Missing Sec-Fetch-Site");
+        add("headers", 5, "Missing Sec-Fetch-Site");
 
     if (!headers["sec-fetch-mode"])
-        add("headers", 10, "Missing Sec-Fetch-Mode");
+       add("headers", 5, "Missing Sec-Fetch-Mode");
 
     if (!headers["sec-ch-ua"])
-        add("headers", 15, "Missing Sec-CH-UA");
+        add("headers", 5, "Missing Sec-CH-UA");
 
     // ------------------------------------------------
     // Language
@@ -251,11 +251,11 @@ module.exports = function analyseBot(data = {}) {
         );
     }
 
-if (
-    browser.name === "Chrome" &&
-    finger.vendor !== "Google Inc."
-)
-    add("uaMismatch",20,"Chrome vendor mismatch");
+//if (
+//    browser.name === "Chrome" &&
+ //   finger.vendor !== "Google Inc."
+//)
+//    add("uaMismatch",20,"Chrome vendor mismatch");
     if (
     browser.name === "Firefox" &&
     headers["sec-ch-ua"]
@@ -277,16 +277,16 @@ if (
     // ------------------------------------------------
 
     if (!data.canvasFingerprint)
-        add("canvas", 10, "Canvas fingerprint missing");
+        add("canvas", 6, "Canvas fingerprint missing");
 
     if (!data.audioFingerprint)
-        add("audio", 10, "Audio fingerprint missing");
+        add("audio", 6, "Audio fingerprint missing");
 
     if (
         !data.webglFingerprint ||
         !data.webglFingerprint.renderer
     ) {
-        add("webgl", 20, "WebGL unavailable");
+        add("webgl", 10, "WebGL unavailable");
     }
 
     // ------------------------------------------------
