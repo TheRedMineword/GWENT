@@ -822,7 +822,9 @@ socket.onmessage = async (event) => {
     case "new_visual":
       try {
         if (data.key === "board") {
-          await setBackground(data.vid);
+          console.log("setBackground(", data.vid);
+          var res = await setBackground(data.vid);
+          console.log("setBackground(", data.vid, res);
         }
         set_new_image(data.key, data.path);
       } catch (e) {

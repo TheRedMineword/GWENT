@@ -98,36 +98,110 @@ function generateCSS(theme) {
 }
 `;
 }
-
 async function setBackground(source) {
+  console.log("[Background] Requested:", source);
+
   const main = document.querySelector("main");
+  if (!main) {
+    console.error("[Background] <main> not found");
+    return;
+  }
 
   let video = main.querySelector("video.background-video");
+  let media = main.querySelector("img.background-media");
 
-  function removeVideo() {
-    if (video) {
+  async function removeVideo() {
+    if (!video) return;
+
+    console.log("[Background] Removing video");
+
+    try {
       video.pause();
-      video.remove();
-      video = null;
+    } catch {}
+
+    if (video._hls) {
+      console.log("[Background] Destroying HLS");
+      video._hls.destroy();
+      video._hls = null;
     }
+
+    video.remove();
+    video = null;
   }
 
-  // image
+  async function removeMedia() {
+    if (!media) return;
+
+    console.log("[Background] Removing GIF");
+
+    media.remove();
+    media = null;
+  }
+
   if (!source) {
-    removeVideo();
+    console.log("[Background] Clearing background");
+
+    await removeVideo();
+    await removeMedia();
+
+    main.style.backgroundImage = "none";
     return;
   }
 
-  if (/\.(jpg|jpeg|png|webp|gif)$/i.test(source)) {
-    removeVideo();
+  const ext = source.split("?")[0].toLowerCase();
+
+  console.log("[Background] Extension:", ext);
+
+  //
+  // Static images
+  //
+  if (/\.(jpg|jpeg|png|webp)$/i.test(ext)) {
+    console.log("[Background] Static image");
+
+    await removeVideo();
+    await removeMedia();
+
     main.style.backgroundImage = `url("${source}")`;
+
     return;
   }
 
-  // video
+  //
+  // GIF
+  //
+  if (/\.gif$/i.test(ext)) {
+    console.log("[Background] Animated GIF");
+
+    await removeVideo();
+
+    main.style.backgroundImage = "none";
+
+    if (!media) {
+      media = document.createElement("img");
+      media.className = "background-media";
+      main.prepend(media);
+    }
+
+    if (media.src !== source) {
+      console.log("[Background] Loading GIF:", source);
+      media.src = source;
+    }
+
+    return;
+  }
+
+  //
+  // Video
+  //
+  console.log("[Background] Video");
+
+  await removeMedia();
+
   main.style.backgroundImage = "none";
 
   if (!video) {
+    console.log("[Background] Creating video");
+
     video = document.createElement("video");
     video.className = "background-video";
 
@@ -138,39 +212,65 @@ async function setBackground(source) {
       playsInline: true,
     });
 
-    video.setAttribute("muted", "");
     video.setAttribute("autoplay", "");
+    video.setAttribute("muted", "");
     video.setAttribute("loop", "");
     video.setAttribute("playsinline", "");
 
     main.prepend(video);
   }
 
-  // MP4/WebM/etc.
-  if (!source.endsWith(".m3u8")) {
+  //
+  // Normal video
+  //
+  if (!ext.endsWith(".m3u8")) {
+    console.log("[Background] Standard video");
+
     if (video.src !== source) {
+      console.log("[Background] Loading video:", source);
       video.src = source;
-      await video.play().catch(() => {});
     }
+
+    await video.play().catch((err) => {
+      console.warn("[Background] Video play failed:", err);
+    });
+
     return;
   }
 
-  // HLS
+  //
+  // Native HLS
+  //
   if (video.canPlayType("application/vnd.apple.mpegurl")) {
+    console.log("[Background] Native HLS");
+
     video.src = source;
-    await video.play().catch(() => {});
+
+    await video.play().catch((err) => {
+      console.warn("[Background] Native HLS play failed:", err);
+    });
+
     return;
   }
 
-  if (!window.Hls) throw new Error("Hls.js not loaded");
+  //
+  // Hls.js
+  //
+  if (!window.Hls) {
+    throw new Error("Hls.js not loaded");
+  }
 
-  if (video._hls) video._hls.destroy();
+  if (video._hls) {
+    console.log("[Background] Destroying previous HLS");
+    video._hls.destroy();
+  }
 
   const hls = new Hls();
-
   video._hls = hls;
 
-  await new Promise((resolve, reject) => {
+  console.log("[Background] Attaching HLS");
+
+  await new Promise((resolve) => {
     hls.once(Hls.Events.MEDIA_ATTACHED, resolve);
     hls.attachMedia(video);
   });
@@ -178,10 +278,17 @@ async function setBackground(source) {
   await new Promise((resolve, reject) => {
     hls.once(Hls.Events.MANIFEST_PARSED, resolve);
     hls.once(Hls.Events.ERROR, (_, data) => reject(data));
+
+    console.log("[Background] Loading HLS:", source);
+
     hls.loadSource(source);
   });
 
-  await video.play().catch(() => {});
+  await video.play().catch((err) => {
+    console.warn("[Background] HLS play failed:", err);
+  });
+
+  console.log("[Background] HLS playback started");
 }
 
 let the_image_json = {};
