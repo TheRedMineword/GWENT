@@ -18,6 +18,7 @@ https://pngtree.com/freebackground/vintage-crinkled-paper-texture-aged-brown-bac
 - Weather box texture: https://www.magnific.com/free-photo/abstract-fractal-geometric-figure-background-with-texture_20612729.htm
 - rain effect image: https://www.pngwing.com/en/free-png-zlhiu
 - Summer gwent board assets; Sand: https://www.vecteezy.com/photo/9333540-background-and-texture-photo-of-sand-on-the-beach Rock: https://www.pngwing.com/en/free-png-bzyrv
+- Gwent board "Darkfountain"; https://www.magnific.com/free-photo/black-brick-wall_932394.htm https://www.vecteezy.com/photo/11207625-black-brick-wall-of-dark-stone-texture-and-background-stone-floor-wide-picture https://usagif.com/gif/water-4
 - starting screen image: https://wall.alphacoders.com/big.php?i=1036489
 - Pass sound [pixabay.com](https://pixabay.com/sound-effects/film-special-effects-copyright-free-swoosh-487669/) by DRAGON-STUDIO
 - Game ends: draw - [TF2 Stealmate](https://www.youtube.com/watch?v=Gz7l7d7otIs)
