@@ -19,6 +19,18 @@ Patch Notes:
 </box.title>
 
 <box.text>
+# 17-18 July, 2026
+Gwent is now hosted also on [gwent.localplayer.dev](https://gwent.localplayer.dev/) and [dgwent.netlify.app](https://dgwent.netlify.app/) outside github pages!
+<fat1>
+This patch bring few balance changes and documenting undocummented chnages!
+```diff
++ Added more backgrounds to the Gwent !new!
+--- Fixed some bugs
+? Avenger cards can no longer be picked up after placing!
+? Added "DontPickMeUp" me up ability, replacing other hard coded abilities not allowing pick up ater placing !new!
++ Added Anti-Bot check + captcha in case of false positves
+```
+<fat3>
 # 16 July, 2026
 This update bring small improvements to the Gwent!
 ```diff

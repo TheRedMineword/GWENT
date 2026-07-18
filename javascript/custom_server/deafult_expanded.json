@@ -11,6 +11,13 @@
     },
     "OnGameStartDraw": 2,
     "medicsdraw": 1,
+    "ThatIsSpy": [
+      "spy",
+      "sabotage",
+      "axii2_desc_playable",
+      "dopler",
+      "yrden"
+    ],
     "ForGameStart": {
       "unitscards": 22,
       "special": 10,
@@ -345,7 +352,7 @@
         "deck": "neutral",
         "row": "ranged",
         "strength": "0",
-        "ability": "avenger",
+        "ability": "avenger DontPickMeUp",
         "filename": "cow",
         "count": "1"
       },
@@ -1828,7 +1835,7 @@
         "deck": "skellige",
         "row": "close",
         "strength": "0",
-        "ability": "avenger",
+        "ability": "avenger DontPickMeUp",
         "filename": "kambi",
         "count": "1"
       },
@@ -2138,7 +2145,7 @@
         "deck": "neutral",
         "row": "agile",
         "strength": "5",
-        "ability": "gryffinSchool",
+        "ability": "gryffinSchool DontPickMeUp",
         "filename": "GryffinWitcher",
         "count": "2"
       },
@@ -2148,7 +2155,7 @@
         "deck": "neutral",
         "row": "siege",
         "strength": "0",
-        "ability": "magicthegathering",
+        "ability": "magicthegathering DontPickMeUp",
         "filename": "cos",
         "count": "3"
       },
@@ -2230,7 +2237,7 @@
         "deck": "neutral",
         "row": "close",
         "strength": "0",
-        "ability": "wshield",
+        "ability": "wshield DontPickMeUp",
         "filename": "wshield",
         "count": "2"
       },
@@ -2240,7 +2247,7 @@
         "deck": "neutral",
         "row": "agile",
         "strength": "0",
-        "ability": "hero quen_desc wshield",
+        "ability": "hero quen_desc wshield DontPickMeUp",
         "filename": "quen",
         "count": "0",
         "witcher_sign": true
@@ -2592,7 +2599,7 @@
         "deck": "sky",
         "row": "siege",
         "strength": "0",
-        "ability": "tgc_portal",
+        "ability": "tgc_portal DontPickMeUp",
         "filename": "tgc20",
         "count": "2"
       },
@@ -2612,7 +2619,7 @@
         "deck": "sky",
         "row": "agile",
         "strength": "1",
-        "ability": "reinforce",
+        "ability": "reinforce DontPickMeUp",
         "filename": "colorguide",
         "count": "1"
       },
@@ -2687,7 +2694,7 @@
         "deck": "sky",
         "row": "agile",
         "strength": "1",
-        "ability": "reinforce",
+        "ability": "reinforce DontPickMeUp",
         "filename": "natureguide",
         "count": "1"
       },
@@ -2949,7 +2956,7 @@
         "deck": "neutral",
         "row": "agile",
         "strength": "0",
-        "ability": "reinforce",
+        "ability": "reinforce DontPickMeUp",
         "filename": "custom!sky_vincent_season",
         "count": "0",
         "count_monitor": {
@@ -3009,6 +3016,9 @@
       }
     },
     "ability_dict": {
+      "DontPickMeUp": {
+        "description": "Card cannot be picked up after being placed. "
+      },
       "clear": {
         "name": "Clear Weather",
         "description": "Removes all Weather Cards (Biting Frost, Impenetrable Fog and Torrential Rain) effects. "
@@ -3039,7 +3049,7 @@
       },
       "wshield": {
         "name": "Shield",
-        "description": "Partialy protects all cards in same row from weather card effects and axii, Commander's Horn will have no effect in that row. Cant be picked up after placing. "
+        "description": "Partialy protects all cards in same row from weather card effects and axii, Commander's Horn will have no effect in that row. "
       },
       "quen_desc": {
         "name": "Witcher Signs: Quen",
@@ -3150,7 +3160,7 @@
       },
       "reinforce": {
         "name": "Reinforce",
-        "description": "Summons additional cards to board, summoned cards dont need to be in hand or deck. Cant be pick up after being placed. "
+        "description": "Summons additional cards to board, summoned cards dont need to be in hand or deck. "
       },
       "medic": {
         "name": "medic",
@@ -3209,7 +3219,7 @@
         "description": "On use, if your hand has fewer than 3 cards, draw 1 cards from your deck, plus 1 additional card for each unit in your graveyard (up to 3 bonus cards). You start the game with 2 fewer cards in hand but you can on game start redraw extra 1 card(s)."
       },
       "temeria_call": {
-        "description": "Spawn Temeria Special Forcess attack in close combat row. Commander Horn in close combat row will lost its effect but close row will be partialy protected partialy from weather effects. After use makes you pass! Cant be used when opponent passed!"
+        "description": "Spawn Temeria Special Forcess attack in close combat row. Commander Horn in close combat row will lost its effect but close row will be partialy protected partialy from weather effects. After use makes you pass! Can't be used when opponent passed!"
       },
       "darkness_storm_leader": {
         "description": "Spawn Darkness Storm on both sides that destroys all non-hero cards in the close row"
@@ -3288,10 +3298,10 @@
         "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
       }
     },
-    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
+    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "8o-JI8VRyKo",
-    "tavern_yt_volume": 90
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }

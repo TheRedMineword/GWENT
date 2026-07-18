@@ -13,6 +13,7 @@ let showbankms = 9000;
 let gameended = false;
 const medicdrawextrasecondswait = 2.2; // extraJson hold // no longer used
 const medic_ability_revive_wait_a_second = 1.7 * 1000;
+let ThatIsSpy = ["spy", "sabotage", "axii2_desc_playable", "dopler", "yrden"];
 //host alone
 let players = {
   me: "You",
@@ -335,6 +336,7 @@ let ThisDef = {
     fullscreenConfig: { localhost: false, else: true },
     OnGameStartDraw: 2,
     medicsdraw: 1,
+    ThatIsSpy: deepClone(ThatIsSpy),
     ForGameStart: { unitscards: 22, special: 10, hero: 9 },
     killoverpowercard: 999,
     darknessstorm_await: false,

@@ -2825,12 +2825,7 @@ class Board {
   getRow(card, row_name, player) {
     player = player ? player : card ? card.holder : player_me;
     let isMe = player === player_me;
-    let isSpy =
-      card.abilities.includes("spy") ||
-      card.abilities.includes("sabotage") ||
-      card.abilities.includes("axii2_desc_playable") ||
-      card.abilities.includes("dopler") ||
-      card.abilities.includes("yrden");
+    let isSpy = card.abilities.some((ability) => ThatIsSpy.includes(ability));
     switch (row_name) {
       case "weather":
         return weather;

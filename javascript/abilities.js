@@ -35,11 +35,12 @@ if (mtg_conf.unstable_mode === "random") {
 }
 const NotPickUpAbilities = [
   "axii2_desc",
-  "gryffinSchool",
-  "magicthegathering",
-  "tgc_portal",
-  "reinforce",
-  "wshield",
+  // "gryffinSchool",
+  // "magicthegathering",
+  // "tgc_portal",
+  // "reinforce",
+  // "wshield",
+  "DontPickMeUp",
 ];
 
 function waitForMedicRevive() {
@@ -61,6 +62,9 @@ function waitForMedicRevive() {
 loadingscreenupdate(`Preparing ability_dict`);
 
 var ability_dict = {
+  DontPickMeUp: {
+    description: "Card cannot be picked up after being placed. ",
+  },
   clear: {
     name: "Clear Weather",
     description:
@@ -97,7 +101,7 @@ var ability_dict = {
   wshield: {
     name: "Shield",
     description:
-      "Partialy protects all cards in same row from weather card effects and axii, Commander's Horn will have no effect in that row. Cant be picked up after placing. ",
+      "Partialy protects all cards in same row from weather card effects and axii, Commander's Horn will have no effect in that row. ",
     placed: async (card) => await card.animate("wshield"),
   },
   quen_desc: {
@@ -1000,7 +1004,7 @@ var ability_dict = {
   reinforce: {
     name: "Reinforce",
     description:
-      "Summons additional cards to board, summoned cards dont need to be in hand or deck. Cant be pick up after being placed. ",
+      "Summons additional cards to board, summoned cards dont need to be in hand or deck. ",
 
     placed: async (card) => {
       var tasks = [];
@@ -1496,7 +1500,7 @@ var ability_dict = {
   },
   temeria_call: {
     description:
-      "Spawn Temeria Special Forcess attack in close combat row. Commander Horn in close combat row will lost its effect but close row will be partialy protected partialy from weather effects. After use makes you pass! Cant be used when opponent passed!",
+      "Spawn Temeria Special Forcess attack in close combat row. Commander Horn in close combat row will lost its effect but close row will be partialy protected partialy from weather effects. After use makes you pass! Can't be used when opponent passed!",
 
     activated: async (card) => {
       var is_allowed = false;
