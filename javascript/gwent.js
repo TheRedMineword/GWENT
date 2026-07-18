@@ -2397,8 +2397,9 @@ class Row extends CardContainer {
       this.elem_parent.parentElement.id === "field-op" ? player_op : player_me;
     player.updateTotal(total - this.total);
     this.total = total;
-    this.elem_parent.getElementsByClassName("row-score")[0].innerHTML =
-      this.total;
+    this.elem_parent.getElementsByClassName(
+      `row-score-${this._id.raw}`,
+    )[0].innerHTML = this.total;
   }
 
   // Calculates and set the card's current power

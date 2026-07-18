@@ -96,6 +96,7 @@ function generateCSS(theme) {
     .row-selectable {
 	background-color: ${hexWithAlpha(theme.rowselectable.hex, theme.rowselectable.alpha)};
 }
+  ${atob(theme.row_scores)}
 `;
 }
 async function setBackground(source) {

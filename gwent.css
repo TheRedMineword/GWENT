@@ -1596,17 +1596,6 @@ html {
 .field-row>div {
 	position: absolute;
 }
-
-.row-score {
-	width: 5.1%;
-	top: 7%;
-	height: 95%;
-	margin-bottom: -12.65%;
-	font-size: 1.8vw;
-	color: #000;
-	text-shadow: 0 0 5px #DDD;
-}
-
 .row-special {
 	position: absolute; /* or relative */
     top: 6%;
