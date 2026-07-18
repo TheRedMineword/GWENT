@@ -609,8 +609,8 @@ async function loadScript2(src) {
     if (!isHuman) {
       console.log("Making is human raport from", isHuman_json);
       const ts = new Date(Clock.now()).toLocaleString();
-
-      const rap = `# 🤖 Anti-Bot Report
+      try {
+        const rap = `# 🤖 Anti-Bot Report
 
 ## Visitor
 - **Visitor ID:** \`${isHuman_json.visitorId}\`
@@ -663,16 +663,19 @@ Hosting     : ${isHuman_json.data.result.network.hosting}
 Risk        : ${isHuman_json.data.result.network.risk}
 \`\`\`
 `;
-      isHuman = await show_captcha(rap);
-      fetch(`${apiUrlc_g}api/verdict`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          value: `Completed captcha: ${isHuman}, Rap:\`\`\`${rap}\`\`\``,
-        }),
-      });
+        isHuman = await show_captcha(rap);
+        fetch(`${apiUrlc_g}api/verdict`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            value: `Completed captcha: ${isHuman}, Rap:\`\`\`${rap}\`\`\``,
+          }),
+        });
+      } catch (e) {
+        isHuman = await show_captcha(`Failed to generate raport: ${e.message}`);
+      }
     }
     //  loadingscreenupdate(`Organic life forms are ${isHuman}`);
 
