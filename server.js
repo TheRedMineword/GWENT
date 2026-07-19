@@ -38,7 +38,6 @@ let databaseOriginal = "";
 let playerSockets = {};
 
 const CONFIG_URL = `${process.env.GWENT_URL_COIN || "https://theredmineword.github.io/GWENT/"}server-side/coin_config.json`;
-
 let random_coin = [
   {
     chance: 9,
@@ -576,8 +575,7 @@ app.get("/api/force_update_server", (req, res) => {
 
   if (key === process.env.ADMIN_ENDPOINT_LOGIN) {
     console.log("[ADMIN] Force update requested.");
-    await updateRandomCoin();
-await checkForUpdates();
+  checkForUpdates();
     return res.json({
       success: true,
     });
