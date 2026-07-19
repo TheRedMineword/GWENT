@@ -869,6 +869,7 @@ app.post("/api/github", async (req, res) => {
   console.log(
     `\`\`\`\n${message.replaceAll("\\", "\/\/").replaceAll("`", "/\\`")}\`\`\``,
   );
+  console.log(`Vars: \`\`\`json\n${JSON.stringify(vars)} \`\`\``)
 
   // Send to all clients
   packet = JSON.stringify({

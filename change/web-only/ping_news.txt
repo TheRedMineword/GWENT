@@ -1,5 +1,5 @@
 <small_text.text>
-TEST / TEST
+GWENT / UPDATED
 </small_text.text>
 
 <images.logo>
@@ -7,15 +7,15 @@ img/web/logo_round.png
 </images.logo>
 
 <images.banner>
-img/web/other/dearvangogh/bar.jpg
+img/web/bar.png
 </images.banner>
 
 <box.lines_outline_hex>
-#36427a
+#FF6666
 </box.lines_outline_hex>
 
 <box.title>
-Game Updated!
+New Version Available!
 </box.title>
 
 <box.text>
@@ -39,13 +39,16 @@ Game Updated!
 </box.text>
 
 <button.name>
-DISMISS
+RELOAD PAGE
 </button.name>
 
 <load.text>
-<l>INCOMING NEWS</l>
+<l>INCOMING UPDATES!</l>
 </load.text>
 
 <load.duration_ms>
 4000
 </load.duration_ms>
+<restart>
+true
+</restart>
