@@ -49,6 +49,88 @@ function drawCover(ctx, img, x, y, w, h) {
   ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
 }
 
+async function buildMoonImage(time = Clock.now()) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 309;
+  canvas.height = 444;
+
+  const ctx = canvas.getContext("2d");
+
+  // Background
+  const bg = await loadImage("img/sm/moonlight.jpg");
+  drawCover(ctx, bg, 0, 0, 309, 444);
+
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  const radius = 120;
+
+  // Moon glow
+  const glow = ctx.createRadialGradient(
+    cx,
+    cy,
+    radius * 0.8,
+    cx,
+    cy,
+    radius * 1.6,
+  );
+  glow.addColorStop(0, "rgba(255,255,220,0.18)");
+  glow.addColorStop(1, "rgba(255,255,220,0)");
+
+  ctx.fillStyle = glow;
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius * 1.6, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Moon disc
+  ctx.fillStyle = "#dddddd";
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Simple craters
+  ctx.fillStyle = "rgba(80,80,80,0.18)";
+  for (let i = 0; i < 60; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const d = Math.sqrt(Math.random()) * (radius - 8);
+
+    ctx.beginPath();
+    ctx.arc(
+      cx + Math.cos(a) * d,
+      cy + Math.sin(a) * d,
+      Math.random() * 5 + 2,
+      0,
+      Math.PI * 2,
+    );
+    ctx.fill();
+  }
+
+  // Moon phase
+  const synodicMonth = 29.530588853;
+  const knownNewMoon = Date.UTC(2000, 0, 6, 18, 14);
+
+  const age =
+    ((((time - knownNewMoon) / 86400000) % synodicMonth) + synodicMonth) %
+    synodicMonth;
+
+  const phase = age / synodicMonth;
+  const offset = Math.cos(phase * Math.PI * 2) * radius;
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.clip();
+
+  ctx.fillStyle = "#111";
+
+  ctx.beginPath();
+  ctx.arc(cx + offset, cy, radius, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
+
+  return await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+}
+
 async function buildTravelingSpiritSmall(filename, data) {
   const arrive = new Date(data.when.arrive).getTime(); // ms
   const duration = Number(data.when.duration) * 1000; // sec -> ms
@@ -862,6 +944,10 @@ async function rebuildCustomCardsMaps() {
         case "ts2":
           //  console.log("TS2", assets.sm.build, card.filename);
           await sky_spirit_sm_blob(assets.sm.build, card.filename);
+          break;
+        case "moon":
+          var moon_blob = URL.createObjectURL(await buildMoonImage());
+          sm_custom_cards_map[card.filename] = moon_blob;
           break;
       }
     }

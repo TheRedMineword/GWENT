@@ -831,6 +831,14 @@ socket.onmessage = async (event) => {
         console.error("apply new vars err", e);
       }
       break;
+    case "show_patchnotes":
+      if (data.content) {
+        console.log(
+          "Server asked to show patchnotes",
+          await showPatch(parsePatchNotes(data.content)),
+        );
+      }
+      break;
     case "authRequired":
       ip_data = data._ip;
       console.log("[IP PARSE]", data._ip);

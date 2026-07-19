@@ -2,6 +2,8 @@
 // (function () {
 
 let STORAGE_KEY = "patchnotes_shown_id";
+let STORAGE_KEY_B = "patchnotes_shown_id";
+let patchnotesWatcher = null;
 
 const DEFAULTS = {
   small_text: {
@@ -81,23 +83,73 @@ function parsePatchNotes(text) {
   return returnss;
 }
 
-function getActiveId(index) {
+function getActiveId(index, setupWatcher = true) {
   const now = Clock.now();
+
+  let active = {
+    a: index.default,
+    b: false,
+    c: index.default,
+  };
+
+  let nextChange = Infinity;
 
   if (Array.isArray(index.timed)) {
     for (let i = index.timed.length - 1; i >= 0; i--) {
       const timed = index.timed[i];
 
       const from = timed.from ? new Date(timed.from).getTime() : -Infinity;
-
       const until = timed.until ? new Date(timed.until).getTime() : Infinity;
 
-      if (now >= from && now <= until) return { a: timed.id, b: true };
+      // Active timed entry
+      if (now >= from && now <= until) {
+        active = {
+          a: timed.id,
+          b: true,
+          c: index.default,
+        };
+
+        // expiration is the next possible change
+        if (until !== Infinity && until > now) {
+          nextChange = Math.min(nextChange, until + 1);
+        }
+
+        break;
+      }
+
+      // Upcoming entry
+      if (from > now) {
+        nextChange = Math.min(nextChange, from);
+      }
     }
   }
 
-  return { a: index.default, b: false };
+  if (setupWatcher && nextChange !== Infinity) {
+    setupPatchnotesWatcher(index, nextChange);
+  }
+
+  return active;
 }
+
+function setupPatchnotesWatcher(index, timestamp) {
+  if (patchnotesWatcher) {
+    clearTimeout(patchnotesWatcher);
+  }
+
+  const delay = timestamp - Clock.now();
+
+  if (delay <= 0) return;
+
+  patchnotesWatcher = setTimeout(() => {
+    console.log("Patchnotes schedule changed, refreshing...");
+
+    run_patchnotes();
+
+    // setup the next watcher
+    getActiveId(index);
+  }, delay);
+}
+
 function escapeHtml(text) {
   return text
     .replace(/&/g, "&amp;")
@@ -731,14 +783,22 @@ async function run_patchnotes() {
 
     const index = await indexRes.json();
     var raw_ids = getActiveId(index);
-    const id = raw_ids.a;
+    let id = raw_ids.a;
     if (raw_ids.b) {
       STORAGE_KEY = `${STORAGE_KEY}_TIMEDEVENTS`;
     }
+    //    console.log("RAW IDS", raw_ids, localStorage[STORAGE_KEY]);
 
     if (!id) return;
 
-    const shown = localStorage.getItem(STORAGE_KEY);
+    var shown = localStorage.getItem(STORAGE_KEY);
+
+    if (raw_ids.b && shown !== id) {
+    } else {
+      STORAGE_KEY = STORAGE_KEY_B;
+      shown = localStorage.getItem(STORAGE_KEY);
+      id = raw_ids.c;
+    }
 
     if (shown === id) return;
 

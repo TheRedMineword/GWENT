@@ -425,17 +425,15 @@ app.get("/api/get-health", (req, res) => {
 
     uptime: {
       seconds: Math.floor(process.uptime()),
-      started: new Date(
-        Date.now() - process.uptime() * 1000
-      ).toISOString()
+      started: new Date(Date.now() - process.uptime() * 1000).toISOString(),
     },
 
     server: {
       node: process.version,
       environment: process.env.NODE_ENV || "production",
-      platform: process.platform
+      platform: process.platform,
     },
-    time: new Date().toISOString()
+    time: new Date().toISOString(),
   });
 });
 app.get("/api/custom_sync", (req, res) => {
@@ -770,7 +768,6 @@ app.post("/api/message", (req, res) => {
   }
 });
 
-
 app.post("/api/github", async (req, res) => {
   const payload = req.body;
 
@@ -789,38 +786,30 @@ app.post("/api/github", async (req, res) => {
 
   console.log("Pages deployed:", sha);
 
-
   // Fetch commit info
   const commitResponse = await fetch(
-    `https://api.github.com/repos/${repo.full_name}/commits/${sha}`
+    `https://api.github.com/repos/${repo.full_name}/commits/${sha}`,
   );
 
   const commit = await commitResponse.json();
-
 
   const commiter = commit.commit.author?.name ?? "Unknown";
   const commiterIcon = commit.author?.avatar_url ?? "";
   const commitMessage = commit.commit.message;
 
-  const files = commit.files
-    ? commit.files.map(x => x.filename)
-    : [];
-
+  const files = commit.files ? commit.files.map((x) => x.filename) : [];
 
   // Fetch template
   const ping = await fetch(
-    `https://theredmineword.github.io/GWENT/change/web-only/ping_news.txt?random=${repo.full_name}_${sha}`
+    `https://theredmineword.github.io/GWENT/change/web-only/ping_news.txt?random=${repo.full_name}_${sha}`,
   );
-
 
   if (!ping.ok) {
     console.log("No patchnote template");
     return res.sendStatus(200);
   }
 
-
   let message = await ping.text();
-
 
   // Variables available inside template
   const vars = {
@@ -832,39 +821,31 @@ app.post("/api/github", async (req, res) => {
 
     commits: commitMessage,
 
-    files: files
-      .map(f => `--- ${f}`)
-      .join("\n"),
+    files: files.map((f) => `--- ${f}`).join("\n"),
 
     repo: repo.name,
 
     branch: deployment.ref ?? "main",
 
-    compare:
-      `https://github.com/${repo.full_name}/compare/${sha}^...${sha}`,
+    compare: `https://github.com/${repo.full_name}/compare/${sha}^...${sha}`,
 
-    time: new Date().toISOString()
+    time: new Date().toISOString(),
   };
-
 
   // Replace {{variable}}
   for (const [key, value] of Object.entries(vars)) {
-    message = message.replaceAll(
-      `{{${key}}}`,
-      value
-    );
+    message = message.replaceAll(`{{${key}}}`, value);
   }
 
-
-  console.log(`\`\`\`\n${message.replaceAll("\\","\/\/").replaceAll("`","/\\`")}\`\`\``);
-
+  console.log(
+    `\`\`\`\n${message.replaceAll("\\", "\/\/").replaceAll("`", "/\\`")}\`\`\``,
+  );
 
   // Send to all clients
   broadcast({
     type: "show_patchnotes",
-    content: message
+    content: message,
   });
-
 
   res.sendStatus(200);
 });

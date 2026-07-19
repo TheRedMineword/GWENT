@@ -3108,6 +3108,56 @@ var card_dict_base = [
     filename: "hym",
     count: "2",
   },
+  {
+    name: "Moonlight",
+    id: "1039",
+    deck: "monsters",
+    row: "agile",
+    strength: "2",
+    ability: "morale",
+    filename: "custom!m_moonlight",
+    count: "2",
+    customassets: {
+      lg: {
+        hero: false,
+        ability: "morale",
+        name: "Moonlight",
+        desc: "What a beautiful phenomenon...\nAnd how deadly.",
+        txt_timed_a: false,
+      },
+      sm: {
+        type: "moon", // url/build/timed
+        build: [],
+        url: null,
+        timed: [],
+      },
+    },
+  },
+  {
+    name: "Night Over Novigrad",
+    id: "1039",
+    deck: "syndicate",
+    row: "siege",
+    strength: "3",
+    ability: "morale",
+    filename: "custom!s_moonlight",
+    count: "2",
+    customassets: {
+      lg: {
+        hero: false,
+        ability: "morale",
+        name: "Night Over Novigrad",
+        desc: "All manner of filth spills out onto the roads at night.",
+        txt_timed_a: false,
+      },
+      sm: {
+        type: "moon", // url/build/timed
+        build: [],
+        url: null,
+        timed: [],
+      },
+    },
+  },
 ];
 
 // temponary

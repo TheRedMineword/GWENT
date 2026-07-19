@@ -20,6 +20,8 @@ const IGNORE_PATTERNS = [
   "wsUrl",
   "socket",
   "STORAGE_KEY",
+  "STORAGE_KEY_B",
+  "patchnotesWatcher",
   "IGNORE_PATTERNS",
   "cachedWaitMusicBlobUrl",
   "waitMusicPlaying",
