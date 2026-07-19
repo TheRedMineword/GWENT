@@ -790,12 +790,13 @@ app.post("/api/github", async (req, res) => {
   const commitResponse = await fetch(
     `https://api.github.com/repos/${repo.full_name}/commits/${sha}`,
   );
+  console.log(`Get: https://api.github.com/repos/${repo.full_name}/commits/${sha}`);
 
   const commit = await commitResponse.json();
 
-  const commiter = commit.commit.author?.name ?? "Unknown";
-  const commiterIcon = commit.author?.avatar_url ?? "";
-  const commitMessage = commit.commit.message;
+  const commiter = commit?.commit?.author?.name ?? "Unknown";
+  const commiterIcon = commit?.author?.avatar_url ?? "";
+  const commitMessage = commit?.commit?.message ?? "Message Failed";
 
   const files = commit.files ? commit.files.map((x) => x.filename) : [];
 
