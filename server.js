@@ -787,15 +787,15 @@ app.post("/api/github", async (req, res) => {
   console.log("Pages deployed:", sha);
 
   // Fetch commit info
-  const commitResponse = await fetch(
-    `https://api.github.com/repos/${repo.full_name}/commits/${sha}`,
-  );
-  console.log(
-    `Get: https://api.github.com/repos/${repo.full_name}/commits/${sha}\n\`\`\`json\n${JSON.stringify(commitResponse)}\`\`\``,
-  );
+const commitResponse = await fetch(
+  `https://api.github.com/repos/${repo.full_name}/commits/${sha}`
+);
 
-  const commit = await commitResponse.json();
+console.log(commitResponse.status);
 
+const body = await commitResponse.text();
+  console.log(`\`${JSON.stringify(body)}\``);
+  const comit = body;
   const commiter = commit?.commit?.author?.name ?? "Unknown";
   const commiterIcon = commit?.author?.avatar_url ?? "";
   const commitMessage = commit?.commit?.message ?? "Message Failed";
