@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const { app } = require('electron');
+const { spawn } = require("child_process");
 
 console.log(
     "LOCALHOST SERVER ENV",
@@ -114,6 +115,52 @@ serverApp.use(express.static(APP_DIR));
             });
         }
     });
+    serverApp.post("/local-api/restart", async (req, res) => {
+    try {
+        const exePath = path.join(
+            path.dirname(process.execPath),
+            "GWENT.exe"
+        );
+
+        if (fs.existsSync(exePath)) {
+            try {
+                spawn(exePath, [], {
+                    detached: true,
+                    stdio: "ignore"
+                }).unref();
+
+                console.log("Started:", exePath);
+            } catch (e) {
+                console.error("Failed to start GWENT.exe:", e);
+            }
+        } else {
+            console.warn("GWENT.exe not found:", exePath);
+        }
+
+        res.json({
+            code: 1,
+            info: "Restart requested."
+        });
+
+        // Give the response a moment to be sent.
+        setTimeout(() => {
+            app.quit();
+        }, 100);
+
+    } catch (err) {
+        console.error(err);
+
+        res.json({
+            code: -1,
+            error: err.message
+        });
+
+        // Even on failure, close the current app.
+        setTimeout(() => {
+            app.quit();
+        }, 100);
+    }
+});
 
     return new Promise(resolve => {
 

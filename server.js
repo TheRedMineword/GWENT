@@ -22,6 +22,9 @@ const auth_needed = false;
 
 const ADMIN_ENDPOINT_LOGIN = process.env.ADMIN_ENDPOINT_LOGIN;
 
+const SERVER_URL = "https://theredmineword.github.io/GWENT/server.js";
+const LOCAL_FILE = __filename;
+
 let sessions = {};
 const joinIndex = {};
 let players = [];
@@ -33,6 +36,15 @@ let database = {
 
 let databaseOriginal = "";
 let playerSockets = {};
+
+const CONFIG_URL = `${process.env.GWENT_URL_COIN || "https://theredmineword.github.io/GWENT/"}server-side/coin_config.json`;
+
+let random_coin = [
+  {
+    chance: 9,
+    val: "_lambert",
+  },
+];
 
 console.warn("PROCCESS ENV", process.env, process.env.VERIF || false);
 
@@ -62,6 +74,91 @@ console.log = (message) => {
   });
 };
 
+async function checkForUpdates() {
+  console.log("[Updater] Checking for updates...");
+
+  try {
+    const response = await fetch(SERVER_URL);
+
+    if (!response.ok) {
+      console.log(`[Updater] Failed to fetch: ${response.status}`);
+      return;
+    }
+
+    const remoteCode = await response.text();
+    const localCode = fs.readFileSync(LOCAL_FILE, "utf8");
+
+    const remoteSha = crypto
+      .createHash("sha256")
+      .update(remoteCode)
+      .digest("hex");
+
+    const localSha = crypto
+      .createHash("sha256")
+      .update(localCode)
+      .digest("hex");
+
+    if (remoteSha === localSha) {
+      console.log("[Updater] No updates found.");
+      return;
+    }
+
+    console.log("[Updater] Update found.");
+
+    if (process.env.IGNORESELFUPDATE === "true") {
+      console.log("[Updater] IGNORESELFUPDATE=true, skipping update.");
+      return;
+    }
+
+    fs.writeFileSync(LOCAL_FILE, remoteCode, "utf8");
+
+    console.log("[Updater] Updated server.js. Restarting...");
+    process.exit(0);
+  } catch (err) {
+    console.error("[Updater]", err);
+  }
+}
+
+setInterval(
+  () => {
+    if (players.size === 0) {
+      // use players.length === 0 if players is an array
+      console.log("[Updater] No players online, checking for updates...");
+      checkForUpdates();
+    }
+  },
+  60 * 60 * 1000,
+);
+
+async function updateRandomCoin() {
+  try {
+    const response = await fetch(CONFIG_URL, {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      console.log(`[CoinWatcher] Failed to fetch config: ${response.status}`);
+      return;
+    }
+
+    const config = await response.json();
+
+    // Update the global variable
+    random_coin = config;
+
+    console.warn(
+      `[CoinWatcher] random_coin updated: \`${JSON.stringify(random_coin)}\` ${CONFIG_URL}`,
+    ); //,
+    // response, config, CONFIG_URL);
+  } catch (err) {
+    console.error("[CoinWatcher]", err);
+  }
+  console.log(`[CoinWatcher] now \`${JSON.stringify(random_coin)}\``);
+}
+
+updateRandomCoin();
+
+setInterval(updateRandomCoin, 35 * 60 * 1000);
 // db work
 function encryptPassword(password) {
   const salt = process.env.AUTH_HEX;
@@ -1249,8 +1346,14 @@ wss.on("connection", async (ws, req) => {
             session.players[Math.floor(Math.random() * session.players.length)]
               .playerId;
           sessions[ws.sessionId].firstPlayer = firstPlayer;
-          sessions[ws.sessionId].special =
-            Math.random() < 0.05 ? "_lambert" : "";
+          sessions[ws.sessionId].special = "";
+          //console.log(`Random coing ${JSON.stringify(random_coin)}`)
+          for (const special of random_coin) {
+            if (Math.random() * 100 < special.chance) {
+              sessions[ws.sessionId].special = special.val;
+              break; // Stop after the first matching special
+            }
+          }
           console.log(
             `First player (coinflip) ${JSON.stringify(firstPlayer)}${sessions[ws.sessionId].special || ""}`,
           );

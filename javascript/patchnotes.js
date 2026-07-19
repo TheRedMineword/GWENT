@@ -760,8 +760,29 @@ ${data.button.name}
     overlay.querySelector(".briefing-button").onclick = () => {
       overlay.remove();
 
-      requestAnimationFrame(() => {
-        location.reload();
+      requestAnimationFrame(async () => {
+        console.log(
+          location.hostname,
+          `${location.hostname === "localhost"}`,
+          location.port,
+          `${location.port === "8080"}`,
+        );
+        if (location.hostname === "localhost" && location.port === "1111") {
+          var doit = true;
+          try {
+            await fetch("http://localhost:1111/local-api/restart", {
+              method: "POST",
+            });
+
+            showBrickScreen();
+            doit = false;
+          } catch (err) {
+            console.warn("Local restart request failed:", err);
+          }
+        }
+        if (doit) {
+          location.reload();
+        }
       });
     };
   } else {
