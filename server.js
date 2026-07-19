@@ -112,15 +112,15 @@ async function checkForUpdates() {
 
     console.log("[Updater] Updated server.js. Starting new process...");
 
-const child = spawn(process.execPath, [LOCAL_FILE], {
-    detached: true,
-    stdio: "inherit"
-});
+    const child = spawn(process.execPath, [LOCAL_FILE], {
+      detached: true,
+      stdio: "inherit",
+    });
 
-child.unref();
+    child.unref();
 
-console.log("[Updater] New server started. Exiting old process...");
-process.exit(0);
+    console.log("[Updater] New server started. Exiting old process...");
+    process.exit(0);
   } catch (err) {
     console.error("[Updater]", err);
   }
@@ -575,7 +575,7 @@ app.get("/api/force_update_server", (req, res) => {
 
   if (key === process.env.ADMIN_ENDPOINT_LOGIN) {
     console.log("[ADMIN] Force update requested.");
-  checkForUpdates();
+    checkForUpdates();
     return res.json({
       success: true,
     });
