@@ -881,6 +881,12 @@ app.post("/api/message", (req, res) => {
 });
 
 app.post("/api/github", async (req, res) => {
+  const { key } = req.query;
+
+  if (key !== process.env.ADMIN_ENDPOINT_LOGIN) {
+    // console.log("[ADMIN] Force update requested.");
+    return res.sendStatus(401);
+  }
   const payload = req.body;
 
   // Only handle successful deployments
