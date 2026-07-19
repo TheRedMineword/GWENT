@@ -809,7 +809,7 @@ app.post("/api/github", async (req, res) => {
 
   // Fetch template
   const ping = await fetch(
-    "https://theredmineword.github.io/GWENT/change/web-only/ping_news.txt"
+    `https://theredmineword.github.io/GWENT/change/web-only/ping_news.txt?random=${repo.full_name}_${sha}`
   );
 
 
