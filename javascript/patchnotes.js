@@ -756,16 +756,16 @@ ${data.button.name}
 
 </div>
 `;
-  if (data?.restart ?? false){
+  if (data?.restart ?? false) {
     overlay.querySelector(".briefing-button").onclick = () => {
-  overlay.remove();
+      overlay.remove();
 
-  requestAnimationFrame(() => {
-    location.reload();
-  });
-};
+      requestAnimationFrame(() => {
+        location.reload();
+      });
+    };
   } else {
-  overlay.querySelector(".briefing-button").onclick = () => overlay.remove();
+    overlay.querySelector(".briefing-button").onclick = () => overlay.remove();
   }
   document.querySelectorAll("video[data-src]").forEach((video) => {
     const src = video.dataset.src;

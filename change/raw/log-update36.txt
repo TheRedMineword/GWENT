@@ -19,6 +19,12 @@ Patch Notes:
 </box.title>
 
 <box.text>
+# 19 July, 2026
+```diff
++ Added new moonlight cards for Monster & Syndicate faction !new!
+%%img src="img/web/other/card_builder_cards/m_moonlight.jpg" style="max-width:25%"%% %%img src="img/web/other/card_builder_cards/s_moonlight.jpg" style="max-width:25%"%%
+```
+<fat3>
 # 17-18 July, 2026
 Gwent is now hosted also on [gwent.localplayer.dev](https://gwent.localplayer.dev/) and [dgwent.netlify.app](https://dgwent.netlify.app/) outside github pages!
 <fat1>

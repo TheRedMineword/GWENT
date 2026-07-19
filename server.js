@@ -790,7 +790,9 @@ app.post("/api/github", async (req, res) => {
   const commitResponse = await fetch(
     `https://api.github.com/repos/${repo.full_name}/commits/${sha}`,
   );
-  console.log(`Get: https://api.github.com/repos/${repo.full_name}/commits/${sha}`);
+  console.log(
+    `Get: https://api.github.com/repos/${repo.full_name}/commits/${sha}\n\`\`\`json\n${JSON.stringify(commitResponse)}\`\`\``,
+  );
 
   const commit = await commitResponse.json();
 
@@ -813,33 +815,33 @@ app.post("/api/github", async (req, res) => {
   let message = await ping.text();
 
   const filesText = files
-  .map(file => {
-    let prefix = " ";
+    .map((file) => {
+      let prefix = " ";
 
-    switch (file.status) {
-      case "added":
-        prefix = "+";
-        break;
+      switch (file.status) {
+        case "added":
+          prefix = "+";
+          break;
 
-      case "removed":
-        prefix = "-";
-        break;
+        case "removed":
+          prefix = "-";
+          break;
 
-      case "modified":
-        prefix = "---";
-        break;
+        case "modified":
+          prefix = "---";
+          break;
 
-      case "renamed":
-        prefix = ">>>";
-        break;
+        case "renamed":
+          prefix = ">>>";
+          break;
 
-      default:
-        prefix = "?";
-    }
+        default:
+          prefix = "?";
+      }
 
-    return `${prefix} ${file.filename}`;
-  })
-  .join("\n");
+      return `${prefix} ${file.filename}`;
+    })
+    .join("\n");
   // Variables available inside template
   const vars = {
     commiter,
@@ -869,7 +871,7 @@ app.post("/api/github", async (req, res) => {
   console.log(
     `\`\`\`\n${message.replaceAll("\\", "\/\/").replaceAll("`", "/\\`")}\`\`\``,
   );
-  console.log(`Vars: \`\`\`json\n${JSON.stringify(vars)} \`\`\``)
+  console.log(`Vars: \`\`\`json\n${JSON.stringify(vars)} \`\`\``);
 
   // Send to all clients
   packet = JSON.stringify({
@@ -877,11 +879,11 @@ app.post("/api/github", async (req, res) => {
     content: message,
   });
   var sent = 0;
-        for (const ws of players) {
-        if (comp_and_send(ws, packet)) {
-          sent++;
-        }
-      }
+  for (const ws of players) {
+    if (comp_and_send(ws, packet)) {
+      sent++;
+    }
+  }
   console.log(`sended to: ${sent} players`);
 
   res.sendStatus(200);
