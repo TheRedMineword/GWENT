@@ -1,6 +1,89 @@
 "use strict";
+// GWENT INIT FILE
 let menubntconfig = { color: "", wasINIT: false };
 let isHuman = false;
+
+function openDiscordIframePage() {
+  const host = location.hostname;
+
+  const isLocalhost =
+    host === "localhost" || host === "127.0.0.1" || host === "[::1]";
+
+  const isDevLocal = isLocalhost || location.port === "1111";
+  const mode = isDevLocal
+    ? false //true
+    : false;
+  const url = isDevLocal
+    ? `${location.origin}/api/discord-iframe/page.html`
+    : `${domain}/discord-iframe/page.html`;
+
+  const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  if (isMobile) {
+    // mobile = full tab (safe + expected behavior)
+    window.location.href = url;
+    return;
+  }
+
+  // desktop popup
+  const width = 480;
+  const height = 700;
+
+  const left = screen.width / 2 - width / 2;
+  const top = screen.height / 2 - height / 2;
+  if (mode) {
+    window.electronAPI.openExternal(url);
+  } else {
+    window.open(
+      url,
+      "discordInviteWindow",
+      `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes`,
+    );
+  }
+}
+
+fetch("buttons.json")
+  .then((res) => res.json())
+  .then((buttons) => {
+    const style_buttons = document.createElement("style");
+
+    style_buttons.textContent = buttons.b;
+
+    document.head.appendChild(style_buttons);
+    const menu = document.getElementById("dc_menu");
+
+    buttons.a.forEach((button) => {
+      const el = document.createElement("div");
+      el.className = "dc-button";
+
+      el.innerHTML = `
+                <img src="${button.icon}" class="dc-icon" alt="">
+                <div class="dc-text">
+                    <div class="dc-title">${button.title}</div>
+                    <div class="dc-sub">${button.sub}</div>
+                </div>
+            `;
+
+      el.addEventListener("click", () => {
+        switch (button.action) {
+          case "openUrl":
+            window.open(button.url, "_blank");
+            break;
+
+          case "function":
+            if (typeof window[button.url] === "function") {
+              window[button.url]();
+            } else {
+              console.warn(`Function "${button.url}" does not exist.`);
+            }
+            break;
+        }
+      });
+
+      menu.appendChild(el);
+    });
+  });
+
 document.documentElement.style.setProperty("--card-hover-shadow", "#6d5210");
 function loadingscreenupdate(strng) {
   document.getElementById("load_text").textContent = strng;

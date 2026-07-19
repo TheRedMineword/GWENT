@@ -22,52 +22,6 @@
 
 </head>
 <style>
-	#dc_menu {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-.dc-button {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    padding: 14px 18px;
-    border-radius: 14px;
-
-    cursor: pointer;
-    user-select: none;
-
-    background: rgba(40, 40, 40, 0.8);
-    border: 1px solid rgba(255,255,255,0.08);
-
-    color: white;
-    transition: 0.2s;
-    min-width: 220px;
-}
-
-.dc-button:hover {
-    transform: translateY(-2px);
-    background: rgba(60, 60, 60, 0.9);
-}
-
-.dc-icon {
-    width: 42px;
-    height: 42px;
-}
-
-.dc-title {
-    font-weight: 700;
-    font-size: 16px;
-}
-
-.dc-sub {
-    font-size: 12px;
-    opacity: 0.7;
-}
-
   #yt-notice {
     position: fixed;
     top: 12px;
@@ -136,15 +90,7 @@
 			<br>
 			<button class = "start-game_class" id = "button_start" style = "display:none">Click here to begin</button>
 			<br><br>
-		<div id="dc_menu">
-    <div class="dc-button" id="dc_join">
-        <img src="img/icons/discord.png" class="dc-icon" alt="">
-        <div class="dc-text">
-            <div class="dc-title">Join Discord</div>
-            <div class="dc-sub">For suggestions and updates</div>
-        </div>
-    </div>
-</div>
+			<div id="dc_menu"></div>
 		</div>
 	</div>
 
@@ -482,49 +428,6 @@ function deepClone(value) {
     }
     return clone;
 }
-function openDiscordIframePage() {
-    const host = location.hostname;
-
-    const isLocalhost =
-        host === "localhost" ||
-        host === "127.0.0.1" ||
-        host === "[::1]";
-
-    const isDevLocal = isLocalhost || location.port === "1111";
-	const mode = isDevLocal
-        ? false //true
-        : false;
-    const url = isDevLocal
-        ? `${location.origin}/api/discord-iframe/page.html`
-        : `${domain}/discord-iframe/page.html`;
-
-    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-    if (isMobile) {
-        // mobile = full tab (safe + expected behavior)
-        window.location.href = url;
-        return;
-    }
-
-    // desktop popup
-    const width = 480;
-    const height = 700;
-
-    const left = (screen.width / 2) - (width / 2);
-    const top = (screen.height / 2) - (height / 2);
-	if(mode){
-		window.electronAPI.openExternal(url);
-	} else {
-    window.open(
-        url,
-        "discordInviteWindow",
-        `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes`
-    );
-	}
-}
-document.getElementById("dc_join").addEventListener("click", () => {
-    openDiscordIframePage();
-});
 </script>
 <script type="text/javascript" src="javascript/clock.js"></script>
 <script>
