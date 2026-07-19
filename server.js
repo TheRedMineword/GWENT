@@ -787,21 +787,23 @@ app.post("/api/github", async (req, res) => {
   console.log("Pages deployed:", sha);
 
   // Fetch commit info
-const commitResponse = await fetch(
-  `https://api.github.com/repos/${repo.full_name}/commits/${sha}`,
-  {
-    headers: {
-      Authorization: `Bearer ${process.env.PATCHES_GIT}`,
-      Accept: "application/vnd.github+json",
-      "User-Agent": "GWENT-Server"
-    }
-  }
-);
+  const commitResponse = await fetch(
+    `https://api.github.com/repos/${repo.full_name}/commits/${sha}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.PATCHES_GIT}`,
+        Accept: "application/vnd.github+json",
+        "User-Agent": "GWENT-Server",
+      },
+    },
+  );
 
-console.log(commitResponse.status);
+  console.log(commitResponse.status);
 
-const body = await commitResponse.text();
-  console.log(`<https://api.github.com/repos/${repo.full_name}/commits/${sha}>\n\`${JSON.stringify(body)}\``);
+  const body = await commitResponse.json();
+  console.log(
+    `<https://api.github.com/repos/${repo.full_name}/commits/${sha}>\n\`${JSON.stringify(body)}\``,
+  );
   const commit = body;
   const commiter = commit?.commit?.author?.name ?? "Unknown";
   const commiterIcon = commit?.author?.avatar_url ?? "";
