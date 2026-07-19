@@ -701,7 +701,75 @@ app.post("/api/message", (req, res) => {
       error: "Message must be text",
     });
   }
-const crypto = require("crypto");
+  // ---- RATE LIMIT (1 second) ----
+  const key = `${session_id}:${player_id}`;
+  const now = Date.now();
+
+  if (lastMessageTime[key] && now - lastMessageTime[key] < 1000) {
+    return res.status(429).json({
+      error: "You're sending messages too fast",
+    });
+  }
+
+  lastMessageTime[key] = now;
+
+  // Trim whitespace
+  let cleanMessage = message.trim();
+
+  // Remove control / weird invisible chars
+  cleanMessage = cleanMessage.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+
+  // Collapse excessive spaces
+  cleanMessage = cleanMessage.replace(/\s{2,}/g, " ");
+
+  // Limit message length
+  const MAX_MESSAGE_LENGTH = 400;
+
+  if (cleanMessage.length === 0) {
+    return res.status(400).json({
+      error: "Message cannot be empty",
+    });
+  }
+
+  if (cleanMessage.length > MAX_MESSAGE_LENGTH) {
+    return res.status(400).json({
+      error: `Message too long (max ${MAX_MESSAGE_LENGTH} characters)`,
+    });
+  }
+
+  // Optional: block suspicious unicode spam
+  // Allows normal unicode text/emojis while filtering odd chars
+  const suspiciousPattern = /[\u202E\u202D\u2066-\u2069]/g;
+
+  cleanMessage = cleanMessage.replace(suspiciousPattern, "");
+
+  const payload = {
+    type: "chat",
+    message: cleanMessage,
+    session_id,
+    player_id,
+  };
+  const payload_out = {
+    message: cleanMessage,
+  };
+
+  try {
+    targetPlayer.send(compressPayload(JSON.stringify(payload)));
+
+    // Return sent message too
+    return res.json({
+      ok: true,
+      sent: payload_out,
+    });
+  } catch (e) {
+    console.error(e);
+
+    return res.status(500).json({
+      error: "Failed to send message",
+    });
+  }
+});
+
 
 app.post("/api/github", async (req, res) => {
   const payload = req.body;
@@ -799,74 +867,6 @@ app.post("/api/github", async (req, res) => {
 
 
   res.sendStatus(200);
-});
-  // ---- RATE LIMIT (1 second) ----
-  const key = `${session_id}:${player_id}`;
-  const now = Date.now();
-
-  if (lastMessageTime[key] && now - lastMessageTime[key] < 1000) {
-    return res.status(429).json({
-      error: "You're sending messages too fast",
-    });
-  }
-
-  lastMessageTime[key] = now;
-
-  // Trim whitespace
-  let cleanMessage = message.trim();
-
-  // Remove control / weird invisible chars
-  cleanMessage = cleanMessage.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
-
-  // Collapse excessive spaces
-  cleanMessage = cleanMessage.replace(/\s{2,}/g, " ");
-
-  // Limit message length
-  const MAX_MESSAGE_LENGTH = 400;
-
-  if (cleanMessage.length === 0) {
-    return res.status(400).json({
-      error: "Message cannot be empty",
-    });
-  }
-
-  if (cleanMessage.length > MAX_MESSAGE_LENGTH) {
-    return res.status(400).json({
-      error: `Message too long (max ${MAX_MESSAGE_LENGTH} characters)`,
-    });
-  }
-
-  // Optional: block suspicious unicode spam
-  // Allows normal unicode text/emojis while filtering odd chars
-  const suspiciousPattern = /[\u202E\u202D\u2066-\u2069]/g;
-
-  cleanMessage = cleanMessage.replace(suspiciousPattern, "");
-
-  const payload = {
-    type: "chat",
-    message: cleanMessage,
-    session_id,
-    player_id,
-  };
-  const payload_out = {
-    message: cleanMessage,
-  };
-
-  try {
-    targetPlayer.send(compressPayload(JSON.stringify(payload)));
-
-    // Return sent message too
-    return res.json({
-      ok: true,
-      sent: payload_out,
-    });
-  } catch (e) {
-    console.error(e);
-
-    return res.status(500).json({
-      error: "Failed to send message",
-    });
-  }
 });
 function broadcastToSession(sessionId, payload) {
   console.log(`broadcastToSession() ${sessionId}, ${payload}`);
