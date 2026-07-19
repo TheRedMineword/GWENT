@@ -1553,7 +1553,7 @@ wss.on("connection", async (ws, req) => {
   await loadDatabase();
 
   server.listen(PORT, () => {
-    console.log(`>>> Server running ${PORT}`);
+    console.log(`>>> Server running \"${PORT}\"`);
     console.log(`ADDON SPECIAL: ${process.env.B}`);
     if (process.env.B === "YES") {
       console.log("TRY INIT ADDON");
