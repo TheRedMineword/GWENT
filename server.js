@@ -802,7 +802,7 @@ console.log(commitResponse.status);
 
 const body = await commitResponse.text();
   console.log(`<https://api.github.com/repos/${repo.full_name}/commits/${sha}>\n\`${JSON.stringify(body)}\``);
-  const comit = body;
+  const commit = body;
   const commiter = commit?.commit?.author?.name ?? "Unknown";
   const commiterIcon = commit?.author?.avatar_url ?? "";
   const commitMessage = commit?.commit?.message ?? "Message Failed";

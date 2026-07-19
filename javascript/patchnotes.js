@@ -756,7 +756,7 @@ ${data.button.name}
 
 </div>
 `;
-  if (data?.restart ?? false) {
+  if (`${data?.restart ?? false}` === "true") {
     overlay.querySelector(".briefing-button").onclick = () => {
       overlay.remove();
 
