@@ -8,6 +8,7 @@ const crypto = require("crypto");
 const zlib = require("zlib");
 const { json } = require("stream/consumers");
 const fs = require("fs");
+const { spawn } = require("child_process");
 const analyseBot = require("./server-side/botDetector.js");
 
 require("dotenv").config();
