@@ -73,7 +73,6 @@ console.log = (message) => {
     // fail silently
   });
 };
-
 async function checkForUpdates() {
   console.log("[Updater] Checking for updates...");
 
@@ -112,8 +111,17 @@ async function checkForUpdates() {
 
     fs.writeFileSync(LOCAL_FILE, remoteCode, "utf8");
 
-    console.log("[Updater] Updated server.js. Restarting...");
-    process.exit(0);
+    console.log("[Updater] Updated server.js. Starting new process...");
+
+const child = spawn(process.execPath, [LOCAL_FILE], {
+    detached: true,
+    stdio: "inherit"
+});
+
+child.unref();
+
+console.log("[Updater] New server started. Exiting old process...");
+process.exit(0);
   } catch (err) {
     console.error("[Updater]", err);
   }
@@ -486,7 +494,7 @@ app.post("/api/bot-check", async (req, res) => {
     geo = await geoReq.json();
 
     const proxyReq = await fetch(
-      `https://proxycheck.io/v2/${ip}?key=YOURKEY&vpn=3&risk=2&asn=1`,
+      `https://proxycheck.io/v2/${ip}?key=111111-222222-333333-44444&vpn=3&risk=2&asn=1`,
     );
 
     const proxyJson = await proxyReq.json();
@@ -568,6 +576,8 @@ app.get("/api/force_update_server", (req, res) => {
 
   if (key === process.env.ADMIN_ENDPOINT_LOGIN) {
     console.log("[ADMIN] Force update requested.");
+    await updateRandomCoin();
+await checkForUpdates();
     return res.json({
       success: true,
     });
