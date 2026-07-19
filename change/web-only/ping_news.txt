@@ -1,0 +1,50 @@
+<small_text.text>
+TEST / TEST
+</small_text.text>
+
+<images.logo>
+img/web/logo_round.png
+</images.logo>
+
+<images.banner>
+img/web/other/dearvangogh/bar.jpg
+</images.banner>
+
+<box.lines_outline_hex>
+#36427a
+</box.lines_outline_hex>
+
+<box.title>
+Game Updated!
+</box.title>
+
+<box.text>
+📦 Pushed to `{{repo}}:{{branch}}`
+
+**By:** {{commiter}}
+
+{{commiter.icon}}
+
+[View Changes]({{compare}})
+
+[`{{commit}}`]({{compare}})
+{{commits}}
+
+
+📄 File Changes:
+
+```diff
+{{files}}
+</box.text>
+
+<button.name>
+DISMISS
+</button.name>
+
+<load.text>
+<l>INCOMING NEWS</l>
+</load.text>
+
+<load.duration_ms>
+4000
+</load.duration_ms>
