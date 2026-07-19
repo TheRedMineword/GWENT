@@ -798,7 +798,7 @@ app.post("/api/github", async (req, res) => {
   const commiterIcon = commit?.author?.avatar_url ?? "";
   const commitMessage = commit?.commit?.message ?? "Message Failed";
 
-  const files = commit.files ? commit.files.map((x) => x.filename) : [];
+  const files = commit?.files ?? [];
 
   // Fetch template
   const ping = await fetch(
@@ -812,6 +812,34 @@ app.post("/api/github", async (req, res) => {
 
   let message = await ping.text();
 
+  const filesText = files
+  .map(file => {
+    let prefix = " ";
+
+    switch (file.status) {
+      case "added":
+        prefix = "+";
+        break;
+
+      case "removed":
+        prefix = "-";
+        break;
+
+      case "modified":
+        prefix = "---";
+        break;
+
+      case "renamed":
+        prefix = ">>>";
+        break;
+
+      default:
+        prefix = "?";
+    }
+
+    return `${prefix} ${file.filename}`;
+  })
+  .join("\n");
   // Variables available inside template
   const vars = {
     commiter,
@@ -822,7 +850,7 @@ app.post("/api/github", async (req, res) => {
 
     commits: commitMessage,
 
-    files: files.map((f) => `--- ${f}`).join("\n"),
+    files: filesText,
 
     repo: repo.name,
 
@@ -843,10 +871,17 @@ app.post("/api/github", async (req, res) => {
   );
 
   // Send to all clients
-  broadcast({
+  packet = JSON.stringify({
     type: "show_patchnotes",
     content: message,
   });
+  var sent = 0;
+        for (const ws of players) {
+        if (comp_and_send(ws, packet)) {
+          sent++;
+        }
+      }
+  console.log(`sended to: ${sent} players`);
 
   res.sendStatus(200);
 });
