@@ -563,6 +563,21 @@ app.get("/api/custom_sync", (req, res) => {
 
   return res.end(payload);
 });
+app.get("/api/force_update_server", (req, res) => {
+  const { key } = req.query;
+
+  if (key === process.env.ADMIN_ENDPOINT_LOGIN) {
+    console.log("[ADMIN] Force update requested.");
+    return res.json({
+      success: true,
+    });
+  }
+
+  return res.status(403).json({
+    success: false,
+    error: "Invalid key.",
+  });
+});
 app.get("*", (_, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
