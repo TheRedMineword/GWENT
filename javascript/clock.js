@@ -2,6 +2,19 @@
 // GWENT INIT FILE
 let menubntconfig = { color: "", wasINIT: false };
 let isHuman = false;
+const locationJson = {
+  href: window.location.href,
+  origin: window.location.origin,
+  protocol: window.location.protocol,
+  host: window.location.host,
+  hostname: window.location.hostname,
+  port: window.location.port,
+  pathname: window.location.pathname,
+  search: window.location.search,
+  hash: window.location.hash,
+};
+
+console.log("Website", locationJson);
 
 function openDiscordIframePage() {
   const host = location.hostname;
@@ -617,7 +630,7 @@ async function run_human_validation(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        value: `${scan.human}, Failures:\`\`\`${JSON.stringify(scan?.failures || null)}\`\`\``,
+        value: `${scan.human}, Failures:\`\`\`${JSON.stringify(scan?.failures || null)}\`\`\` \`\`\`${JSON.stringify(locationJson)}\`\`\``,
       }),
     });
     if (!scan.human) {
@@ -852,6 +865,7 @@ WebDriver   : ${isHuman_json.data.result.browser.webdriver}
 VPN         : ${isHuman_json.data.result.network.vpn}
 Hosting     : ${isHuman_json.data.result.network.hosting}
 Risk        : ${isHuman_json.data.result.network.risk}
+Location    : ${JSON.stringify(locationJson)}
 \`\`\`
 `;
         isHuman = await show_captcha(rap);
