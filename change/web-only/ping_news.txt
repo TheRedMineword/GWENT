@@ -3,7 +3,7 @@ GWENT / UPDATED
 </small_text.text>
 
 <images.logo>
-img/web/logo_round.png
+{{commiter.icon}}
 </images.logo>
 
 <images.banner>
@@ -19,23 +19,11 @@ New Version Available!
 </box.title>
 
 <box.text>
-📦 Pushed to `{{repo}}:{{branch}}`
-
-**By:** {{commiter}}
-
-{{commiter.icon}}
-
-[View Changes]({{compare}})
-
-[`{{commit}}`]({{compare}})
-{{commits}}
-
-
-📄 File Changes:
-
-```diff
-{{files}}
-```
+**{{commiter}}** just pushed some fresh changes to **{{repo}}:{{branch}}**!
+<fat1>
+Make sure to restart your game right now so you don't miss out on the fixes and new content!
+<fat1>
+Want to see what changed? Head over to our [Discord Server](api/discord-iframe/page) to chat with the team!
 </box.text>
 
 <button.name>
