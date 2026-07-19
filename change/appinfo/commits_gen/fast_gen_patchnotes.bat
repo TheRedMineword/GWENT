@@ -1,2 +1,0 @@
-node make_bin_batchnotes.js
-pause
