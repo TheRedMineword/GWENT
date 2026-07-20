@@ -96,8 +96,6 @@ async function updateRandomCoin() {
   console.log(`[CoinWatcher] now \`${JSON.stringify(random_coin)}\``);
 }
 
-updateRandomCoin();
-
 setInterval(updateRandomCoin, 35 * 60 * 1000);
 // db work
 function encryptPassword(password) {
@@ -1311,7 +1309,17 @@ wss.on("connection", async (ws, req) => {
           sessions[ws.sessionId].special = "";
           //console.log(`Random coing ${JSON.stringify(random_coin)}`)
           for (const special of random_coin) {
-            if (Math.random() * 100 < special.chance) {
+            var roll = Math.random() * 100;
+            if (process.env?.deep_log_coin ?? false) {
+              console.warn(
+                "Roll/chance",
+                roll,
+                special.chance,
+                "  ",
+                roll < special.chance,
+              );
+            }
+            if (roll < special.chance) {
               sessions[ws.sessionId].special = special.val;
               break; // Stop after the first matching special
             }
@@ -1483,7 +1491,6 @@ wss.on("connection", async (ws, req) => {
 
 (async () => {
   await loadDatabase();
-
   server.listen(PORT, () => {
     console.log(`>>> Server running \"${PORT}\"`);
     console.log(`ADDON SPECIAL: ${process.env.B}`);
@@ -1492,4 +1499,5 @@ wss.on("connection", async (ws, req) => {
       init_addon();
     }
   });
+  await updateRandomCoin();
 })();
