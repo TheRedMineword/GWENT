@@ -8,7 +8,6 @@ const crypto = require("crypto");
 const zlib = require("zlib");
 const { json } = require("stream/consumers");
 const fs = require("fs");
-const { spawn } = require("child_process");
 const analyseBot = require("./server-side/botDetector.js");
 
 require("dotenv").config();
@@ -23,8 +22,6 @@ const auth_needed = false;
 
 const ADMIN_ENDPOINT_LOGIN = process.env.ADMIN_ENDPOINT_LOGIN;
 
-const SERVER_URL = "https://theredmineword.github.io/GWENT/server.js";
-const LOCAL_FILE = __filename;
 
 let sessions = {};
 const joinIndex = {};
@@ -73,70 +70,6 @@ console.log = (message) => {
     // fail silently
   });
 };
-async function checkForUpdates() {
-  console.log("[Updater] Checking for updates...");
-
-  try {
-    const response = await fetch(SERVER_URL);
-
-    if (!response.ok) {
-      console.log(`[Updater] Failed to fetch: ${response.status}`);
-      return;
-    }
-
-    const remoteCode = await response.text();
-    const localCode = fs.readFileSync(LOCAL_FILE, "utf8");
-
-    const remoteSha = crypto
-      .createHash("sha256")
-      .update(remoteCode)
-      .digest("hex");
-
-    const localSha = crypto
-      .createHash("sha256")
-      .update(localCode)
-      .digest("hex");
-
-    if (remoteSha === localSha) {
-      console.log("[Updater] No updates found.");
-      return;
-    }
-
-    console.log("[Updater] Update found.");
-
-    if (process.env.IGNORESELFUPDATE === "true") {
-      console.log("[Updater] IGNORESELFUPDATE=true, skipping update.");
-      return;
-    }
-
-    fs.writeFileSync(LOCAL_FILE, remoteCode, "utf8");
-
-    console.log("[Updater] Updated server.js. Starting new process...");
-
-    const child = spawn(process.execPath, [LOCAL_FILE], {
-      detached: true,
-      stdio: "inherit",
-    });
-
-    child.unref();
-
-    console.log("[Updater] New server started. Exiting old process...");
-    process.exit(0);
-  } catch (err) {
-    console.error("[Updater]", err);
-  }
-}
-
-setInterval(
-  () => {
-    if (players.size === 0) {
-      // use players.length === 0 if players is an array
-      console.log("[Updater] No players online, checking for updates...");
-      checkForUpdates();
-    }
-  },
-  60 * 60 * 1000,
-);
 
 async function updateRandomCoin() {
   try {
@@ -576,7 +509,7 @@ app.get("/api/force_update_server", (req, res) => {
 
   if (key === process.env.ADMIN_ENDPOINT_LOGIN) {
     console.log("[ADMIN] Force update requested.");
-    checkForUpdates();
+   updateRandomCoin();
     return res.json({
       success: true,
     });
