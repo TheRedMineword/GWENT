@@ -765,15 +765,17 @@ ${data.button.name}
           location.hostname,
           `${location.hostname === "localhost"}`,
           location.port,
-          `${location.port === "8080"}`,
+          `${location.port === "1111"}`,
         );
+        var doit = true;
         if (location.hostname === "localhost" && location.port === "1111") {
-          var doit = true;
+          console.log(doit);
           try {
+            console.log("Post because 1111");
             await fetch("http://localhost:1111/local-api/restart", {
               method: "POST",
             });
-
+            console.log("Screen beacuse 1111");
             showBrickScreen();
             doit = false;
           } catch (err) {
@@ -781,6 +783,7 @@ ${data.button.name}
           }
         }
         if (doit) {
+          console.log("Reloading");
           location.reload();
         }
       });
