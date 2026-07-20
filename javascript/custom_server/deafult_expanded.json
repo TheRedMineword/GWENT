@@ -90,7 +90,7 @@
       "max_power": 13,
       "count_needed": 0,
       "shuffle_few_times": false,
-      "version": "9fab1a38ced21b1f047f5dc92ff88e60de73827a6663d4d3c0f1b2ca20ce9e68",
+      "version": "24ab1a38ced21b1f047f5dc92ff88e60de73827a6663d4d3c0f1b2ca20ce9e68",
       "daily_seed": true,
       "unstable_mode": "random"
     },
@@ -134,6 +134,8 @@
       "_op": "Opponent goes first",
       "_me_lambert": "Lambert lets you start the game",
       "_op_lambert": "Lambert says that you suck!\nThe opponent starts the game!",
+      "_me_ancient": "You go first",
+      "_op_ancient": "Opponent goes first",
       "cheater": "Scoia'tael rigged the coin"
     },
     "map_results_color": {
@@ -2951,6 +2953,56 @@
         "count": "2"
       },
       {
+        "name": "Moonlight",
+        "id": "1039",
+        "deck": "monsters",
+        "row": "agile",
+        "strength": "2",
+        "ability": "morale",
+        "filename": "custom!m_moonlight",
+        "count": "2",
+        "customassets": {
+          "lg": {
+            "hero": false,
+            "ability": "morale",
+            "name": "Moonlight",
+            "desc": "What a beautiful phenomenon...\nAnd how deadly.",
+            "txt_timed_a": false
+          },
+          "sm": {
+            "type": "moon",
+            "build": [],
+            "url": null,
+            "timed": []
+          }
+        }
+      },
+      {
+        "name": "Night Over Novigrad",
+        "id": "1039",
+        "deck": "syndicate",
+        "row": "siege",
+        "strength": "3",
+        "ability": "morale",
+        "filename": "custom!s_moonlight",
+        "count": "2",
+        "customassets": {
+          "lg": {
+            "hero": false,
+            "ability": "morale",
+            "name": "Night Over Novigrad",
+            "desc": "All manner of filth spills out onto the roads at night.",
+            "txt_timed_a": false
+          },
+          "sm": {
+            "type": "moon",
+            "build": [],
+            "url": null,
+            "timed": []
+          }
+        }
+      },
+      {
         "name": "Season of Dear Van Gogh",
         "id": "tempnary_card_001",
         "deck": "neutral",
@@ -3298,10 +3350,10 @@
         "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
       }
     },
-    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 30
+    "tavern_yt_vid": "8o-JI8VRyKo",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }
