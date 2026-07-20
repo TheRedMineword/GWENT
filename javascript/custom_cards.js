@@ -49,6 +49,78 @@ function drawCover(ctx, img, x, y, w, h) {
   ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
 }
 
+function drawMoonPhase(
+  ctx,
+  cx,
+  cy,
+  r,
+  phase,
+  litColor = "#dddddd",
+  shadowColor = "#1a1a1a",
+) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.clip();
+
+  // base: whole disc starts dark (fully opaque, so nothing can bleed through)
+  ctx.fillStyle = shadowColor;
+  ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+
+  const theta = phase * Math.PI * 2;
+  const k = Math.cos(theta);
+  const waxing = phase < 0.5;
+  const a = r * Math.abs(k);
+
+  const limbAnticlockwise = !waxing;
+  const ellipseAnticlockwise = waxing ? k > 0 : k < 0;
+
+  // build the lit-region path once, reuse it for both the fill and the crater clip
+  function buildLitPath() {
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, -Math.PI / 2, Math.PI / 2, limbAnticlockwise);
+    ctx.ellipse(
+      cx,
+      cy,
+      a,
+      r,
+      0,
+      Math.PI / 2,
+      -Math.PI / 2,
+      ellipseAnticlockwise,
+    );
+    ctx.closePath();
+  }
+
+  // fill the lit region
+  buildLitPath();
+  ctx.fillStyle = litColor;
+  ctx.fill();
+
+  // clip to the SAME lit region, then scatter craters — they physically cannot
+  // land on the dark side now, regardless of alpha
+  ctx.save();
+  buildLitPath();
+  ctx.clip();
+
+  ctx.fillStyle = "rgba(80,80,80,0.18)";
+  for (let i = 0; i < 60; i++) {
+    const ang = Math.random() * Math.PI * 2;
+    const d = Math.sqrt(Math.random()) * (r - 8);
+    ctx.beginPath();
+    ctx.arc(
+      cx + Math.cos(ang) * d,
+      cy + Math.sin(ang) * d,
+      Math.random() * 5 + 2,
+      0,
+      Math.PI * 2,
+    );
+    ctx.fill();
+  }
+  ctx.restore(); // remove crater clip
+
+  ctx.restore(); // remove disc clip
+}
 async function buildMoonImage(time = Clock.now()) {
   const canvas = document.createElement("canvas");
   canvas.width = 309;
@@ -105,28 +177,45 @@ async function buildMoonImage(time = Clock.now()) {
   }
 
   // Moon phase
+  // Moon phase
+  // Moon phase
   const synodicMonth = 29.530588853;
-  const knownNewMoon = Date.UTC(2000, 0, 6, 18, 14);
+  const knownNewMoon = 947182440000;
 
   const age =
     ((((time - knownNewMoon) / 86400000) % synodicMonth) + synodicMonth) %
     synodicMonth;
 
   const phase = age / synodicMonth;
-  const offset = Math.cos(phase * Math.PI * 2) * radius;
 
-  ctx.save();
-  ctx.beginPath();
-  ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-  ctx.clip();
+  let phaseName;
 
-  ctx.fillStyle = "#111";
+  if (phase < 0.03 || phase > 0.97) {
+    phaseName = "New Moon";
+  } else if (phase < 0.22) {
+    phaseName = "Waxing Crescent";
+  } else if (phase < 0.28) {
+    phaseName = "First Quarter";
+  } else if (phase < 0.47) {
+    phaseName = "Waxing Gibbous";
+  } else if (phase < 0.53) {
+    phaseName = "Full Moon";
+  } else if (phase < 0.72) {
+    phaseName = "Waning Gibbous";
+  } else if (phase < 0.78) {
+    phaseName = "Third Quarter";
+  } else {
+    phaseName = "Waning Crescent";
+  }
 
-  ctx.beginPath();
-  ctx.arc(cx + offset, cy, radius, 0, Math.PI * 2);
-  ctx.fill();
+  console.log({
+    date: new Date(time),
+    ageDays: age.toFixed(3),
+    phase: phase.toFixed(4),
+    phaseName,
+  });
 
-  ctx.restore();
+  drawMoonPhase(ctx, cx, cy, radius, phase, "#dddddd", "rgba(0,0,0,0.85)");
 
   return await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
 }
