@@ -315,6 +315,8 @@ let map_results_txt = {
   _op: "Opponent goes first",
   _me_lambert: "Lambert lets you start the game",
   _op_lambert: "Lambert says that you suck!\nThe opponent starts the game!",
+  _me_ancient: "You go first",
+  _op_ancient: "Opponent goes first",
   cheater: "Scoia'tael rigged the coin",
 };
 let map_results_color = {
@@ -420,22 +422,8 @@ let ThisDef = {
         name: "Sky Kingdom",
       },
     },
-    map_results_txt: {
-      _me: "You go first",
-      _op: "Opponent goes first",
-      _me_lambert: "Lambert lets you start the game",
-      _op_lambert: "Lambert says that you suck!\nThe opponent starts the game!",
-      cheater: "Scoia'tael rigged the coin",
-    },
-    map_results_color: {
-      realms: "#1E224F",
-      nilfgaard: "#ABAA27",
-      scoiatael: "#0E790F",
-      monsters: "#660101",
-      skellige: "#54016C",
-      sky: "#2D9DA0",
-      syndicate: "#804400",
-    },
+    map_results_txt: deepClone(map_results_txt),
+    map_results_color: deepClone(map_results_color),
   },
 };
 

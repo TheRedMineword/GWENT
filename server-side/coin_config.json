@@ -1,4 +1,10 @@
-[{
+[
+  {
     "chance": 9,
     "val": "_lambert"
-}]
+  },
+  {
+    "chance": 16,
+    "val": "_ancient"
+  }
+]
