@@ -7,7 +7,7 @@ GWENT / UPDATED
 </images.logo>
 
 <images.banner>
-img/web/bar.png
+img/web/bar_red.png
 </images.banner>
 
 <box.lines_outline_hex>
@@ -37,6 +37,7 @@ RELOAD PAGE
 <load.duration_ms>
 4000
 </load.duration_ms>
+
 <restart>
 true
 </restart>

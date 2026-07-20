@@ -22,7 +22,6 @@ const auth_needed = false;
 
 const ADMIN_ENDPOINT_LOGIN = process.env.ADMIN_ENDPOINT_LOGIN;
 
-
 let sessions = {};
 const joinIndex = {};
 let players = [];
@@ -509,7 +508,7 @@ app.get("/api/force_update_server", (req, res) => {
 
   if (key === process.env.ADMIN_ENDPOINT_LOGIN) {
     console.log("[ADMIN] Force update requested.");
-   updateRandomCoin();
+    updateRandomCoin();
     return res.json({
       success: true,
     });
