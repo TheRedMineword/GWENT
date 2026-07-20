@@ -421,7 +421,9 @@ async function buildSeasonCard(season, data) {
 
   ctx.drawImage(img, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
 
-  const dataUri = canvas.toDataURL("image/png");
+  const dataUri = URL.createObjectURL(
+    await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.95)),
+  );
 
   //console.log("SKY_SEASON", dataUri);
   // Clone template and replace values
@@ -883,6 +885,59 @@ async function rebuildCustomCardsMaps() {
   console.log("BUILD CARDS SKY SEASON", s_res);
 
   timed_count_change = [];
+  card_dict.forEach((card) => {
+    const current = card.count_monitor;
+
+    //  if (previous !== current) {
+
+    switch (current?.monitor) {
+      case "fullmoon":
+        var lifetime = 30;
+        var when_is = new Date(getNearestFullMoon(lifetime)).toISOString();
+        card.count_monitor = {
+          ...current,
+          duration: {
+            duration: Math.floor(lifetime * 60 * 60 * 2),
+            start: when_is,
+          },
+          base: 1,
+          monitor: "based",
+          id: "id.fullmoon",
+          msg: true,
+
+          msg_data: {
+            msg: `The light of the <color=#DDE8EB>Full Moon</color> illuminates the boards.\nUntil <color=#90D5FF><$enddatelocal></color>\n<color=#DDE8EB>Full Moon</color> happening at <color=#90D5FF>${formatLocalDate(getNearestFullMoon())}</color>`,
+            display: 13000,
+          },
+        };
+        console.log(`Its full moon ${JSON.stringify(card)} at ${when_is}`);
+        break;
+      case "newmoon":
+        var lifetime = 30;
+        var when_is = new Date(getNearestNewMoon(lifetime)).toISOString();
+        card.count_monitor = {
+          ...current,
+          duration: {
+            duration: Math.floor(lifetime * 60 * 60 * 2),
+            start: when_is,
+          },
+          base: 1,
+          monitor: "based",
+          id: "id.newmoon",
+          msg: true,
+
+          msg_data: {
+            msg: `The game board is shrouded in darkness; no <color=#DDE8EB>Moonlight</color> is comes from the sky.\nUntil <color=#90D5FF><$enddatelocal></color>\n<color=#DDE8EB>New Moon</color> happening at <color=#90D5FF>${formatLocalDate(getNearestNewMoon())}</color>`,
+            display: 13000,
+          },
+        };
+        console.log(`Its new moon ${JSON.stringify(card)} at ${when_is}`);
+        break;
+      default:
+        // Unknown monitor
+        break;
+    }
+  });
   card_dict.forEach((card) => {
     if (card.count_monitor) {
       loadingscreenupdate(

@@ -545,7 +545,7 @@ var ability_dict = {
     },
   },
   axii: {
-    name: "witcher Signs",
+    name: "Witcher Signs",
     description: `This card use Witchers tricks to cast into enemy fields Axii sign. ${axii.desc}. `,
     placed: async (card) => {
       try {
@@ -576,7 +576,7 @@ var ability_dict = {
     placed: async (card) => await card.animate("debuff"),
   },
   axii2_desc_playable: {
-    name: "witcher Signs: Axii",
+    name: "Witcher Signs: Axii",
     description: `${axii.desc} `,
     placed: async (card) => {
       await card.animate("debuff");

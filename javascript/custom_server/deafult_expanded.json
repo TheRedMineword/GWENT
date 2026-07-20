@@ -3003,6 +3003,74 @@
         }
       },
       {
+        "name": "Full Moon",
+        "id": "1040",
+        "deck": "neutral",
+        "row": "siege",
+        "strength": "3",
+        "ability": "morale",
+        "filename": "custom!deatheatersmoon",
+        "count": "0",
+        "count_monitor": {
+          "base": 1,
+          "monitor": "fullmoon",
+          "id": "id.foolmoon",
+          "duration": {
+            "start": "null",
+            "duration": "1"
+          }
+        },
+        "customassets": {
+          "lg": {
+            "hero": false,
+            "ability": "morale",
+            "name": "Full Moon",
+            "desc": "Blood-curdling screams\nCarried by the cool breath of the night wind",
+            "txt_timed_a": false
+          },
+          "sm": {
+            "type": "moon",
+            "build": [],
+            "url": null,
+            "timed": []
+          }
+        }
+      },
+      {
+        "name": "New Moon",
+        "id": "1041",
+        "deck": "neutral",
+        "row": "siege",
+        "strength": "3",
+        "ability": "morale",
+        "filename": "custom!noonwraithsmoon",
+        "count": "0",
+        "count_monitor": {
+          "base": 1,
+          "monitor": "newmoon",
+          "id": "id.newmoon",
+          "duration": {
+            "start": "null",
+            "duration": "1"
+          }
+        },
+        "customassets": {
+          "lg": {
+            "hero": false,
+            "ability": "morale",
+            "name": "New Moon",
+            "desc": "Empty Sky...\nMoonless Sky...",
+            "txt_timed_a": false
+          },
+          "sm": {
+            "type": "moon",
+            "build": [],
+            "url": null,
+            "timed": []
+          }
+        }
+      },
+      {
         "name": "Season of Dear Van Gogh",
         "id": "tempnary_card_001",
         "deck": "neutral",
@@ -3017,7 +3085,12 @@
           "id": "vincent_seaon_start_reinforce",
           "duration": {
             "start": "2026-07-17T07:00:00.000Z",
-            "duration": "345599"
+            "duration": "3455600"
+          },
+          "msg": true,
+          "msg_data": {
+            "msg": "\u003Ccolor=#00ff00\u003ESeason of Dear Van Gogh\u003C/color\u003E \u003Ccolor=#add8e6\u003ENeutral Card\u003C/color\u003E is now active until \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E",
+            "display": 13000
           }
         },
         "customassets": {
@@ -3183,7 +3256,7 @@
         "description": "Lets you and your opponent redraw 5 cards. "
       },
       "axii": {
-        "name": "witcher Signs",
+        "name": "Witcher Signs",
         "description": "This card use Witchers tricks to cast into enemy fields Axii sign. Each card in row under Axii effect that base power is less than 5 will lose 2 power. Debuffs dont stack. Dont affect hero cards. "
       },
       "axii2_desc": {
@@ -3191,7 +3264,7 @@
         "description": "Each card in row under Axii effect that base power is less than 5 will lose 2 power. Debuffs dont stack. Dont affect hero cards "
       },
       "axii2_desc_playable": {
-        "name": "witcher Signs: Axii",
+        "name": "Witcher Signs: Axii",
         "description": "Each card in row under Axii effect that base power is less than 5 will lose 2 power. Debuffs dont stack. Dont affect hero cards "
       },
       "gryffinSchool": {

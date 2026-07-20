@@ -1,5 +1,42 @@
 loadingscreenupdate(`Preparing card_dict`);
+let active_messages = [];
 let timed_count_change = [];
+const SYNODIC_MONTH = 29.530588853 * 86400000; // ms
+const KNOWN_NEW_MOON = 947182440000; // Date.UTC(2000, 0, 6, 18, 14, 0); // 2000-01-06 18:14 UTC
+function getNearestNewMoon(hoursBefore = 0) {
+  const now = Clock.now();
+
+  const cycles = Math.round((now - KNOWN_NEW_MOON) / SYNODIC_MONTH);
+
+  return KNOWN_NEW_MOON + cycles * SYNODIC_MONTH - hoursBefore * 3600000;
+}
+function getNextNewMoon(hoursBefore = 0) {
+  const now = Clock.now();
+
+  const cycles = Math.ceil((now - KNOWN_NEW_MOON) / SYNODIC_MONTH);
+
+  return KNOWN_NEW_MOON + cycles * SYNODIC_MONTH - hoursBefore * 3600000;
+}
+// past or future:
+function getNearestFullMoon(hoursBefore = 0) {
+  const now = Clock.now();
+
+  const fullBase = KNOWN_NEW_MOON + SYNODIC_MONTH / 2;
+
+  const cycles = Math.round((now - fullBase) / SYNODIC_MONTH);
+
+  return fullBase + cycles * SYNODIC_MONTH - hoursBefore * 3600000;
+}
+// only future:
+function getNextFullMoon(hoursBefore = 0) {
+  const now = Clock.now();
+
+  const fullBase = KNOWN_NEW_MOON + SYNODIC_MONTH / 2;
+
+  const cycles = Math.ceil((now - fullBase) / SYNODIC_MONTH);
+
+  return fullBase + cycles * SYNODIC_MONTH - hoursBefore * 3600000;
+}
 var card_dict_base = [
   {
     name: "Mysterious Elf",
@@ -3158,6 +3195,68 @@ var card_dict_base = [
       },
     },
   },
+  {
+    name: "Full Moon",
+    id: "1040",
+    deck: "neutral",
+    row: "siege",
+    strength: "3",
+    ability: "morale",
+    filename: "custom!deatheatersmoon",
+    count: "0",
+    count_monitor: {
+      base: 1, // not really doing anything, the base value
+      monitor: "fullmoon",
+      id: "id.foolmoon",
+      duration: { start: "null", duration: "1" },
+    },
+    customassets: {
+      lg: {
+        hero: false,
+        ability: "morale",
+        name: "Full Moon",
+        desc: "Blood-curdling screams\nCarried by the cool breath of the night wind",
+        txt_timed_a: false,
+      },
+      sm: {
+        type: "moon", // url/build/timed
+        build: [],
+        url: null,
+        timed: [],
+      },
+    },
+  },
+  {
+    name: "New Moon",
+    id: "1041",
+    deck: "neutral",
+    row: "siege",
+    strength: "3",
+    ability: "morale",
+    filename: "custom!noonwraithsmoon",
+    count: "0",
+    count_monitor: {
+      base: 1, // not really doing anything, the base value
+      monitor: "newmoon",
+      id: "id.newmoon",
+      duration: { start: "null", duration: "1" },
+    },
+    customassets: {
+      lg: {
+        hero: false,
+        ability: "morale",
+        name: "New Moon",
+        desc: "Empty Sky...\nMoonless Sky...",
+        txt_timed_a: false,
+      },
+      sm: {
+        type: "moon", // url/build/timed
+        build: [],
+        url: null,
+        timed: [],
+      },
+    },
+  },
 ];
 
 // temponary
@@ -3174,7 +3273,13 @@ card_dict_base.push({
     base: 1,
     monitor: "based",
     id: "vincent_seaon_start_reinforce",
-    duration: { start: "2026-07-17T07:00:00.000Z", duration: "345599" },
+    duration: { start: "2026-07-17T07:00:00.000Z", duration: "3455600" },
+    msg: true,
+
+    msg_data: {
+      msg: "<color=#00ff00>Season of Dear Van Gogh</color> <color=#add8e6>Neutral Card</color> is now active until <color=#90D5FF><$enddatelocal></color>",
+      display: 13000,
+    },
   },
   customassets: {
     lg: {
@@ -3194,6 +3299,7 @@ card_dict_base.push({
 });
 
 var card_dict = deepClone(card_dict_base);
+// Moonlight and etc card timer setup un custom_cards.js
 
 loadingscreenupdate(`Loaded ${card_dict.length} cards!`);
 
@@ -3217,11 +3323,113 @@ function setupSpiritTimer(card, data) {
       start: data.when.arrive,
       duration: Number(data.when.duration),
     },
+    msg: true,
+
+    msg_data: {
+      msg: `Traveling Spirit <color=#00ff00>${data.when.spirit_name}</color> now visits <color=#add8e6>Sky Kingdom</color>\nUntil: <color=#90D5FF><$enddatelocal></color>`,
+      display: 13000,
+    },
   };
 
   pushTimedCount(card);
 
   console.log("[SPIRIT TIMER SETUP]", card.name, card.count_monitor);
+}
+
+function pushMessage(msg, display = 5000) {
+  active_messages.push({
+    id: crypto.randomUUID(),
+    msg,
+    start: Clock.now(),
+    display,
+  });
+
+  updateMessageBox();
+}
+function scanMessages() {
+  if (active_messages.length === 0) {
+    return "OK";
+  }
+  let now = Clock.now();
+
+  active_messages = active_messages.filter((message) => {
+    return now < message.start + message.display;
+  });
+
+  updateMessageBox();
+}
+function formatMessage(template, card, timer) {
+  let end = timer.start + timer.duration;
+
+  let msg = escapeHtml(template);
+
+  // Restore placeholders
+  msg = msg.replaceAll("&lt;$card&gt;", escapeHtml(card.name));
+  msg = msg.replaceAll("&lt;$duration&gt;", formatDuration(timer.duration));
+  msg = msg.replaceAll("&lt;$enddatelocal&gt;", formatLocalDate(end));
+
+  // New lines
+  msg = msg.replaceAll("\n", "<br>");
+
+  // Restore <color=#xxxxxx>...</color>
+  msg = msg.replace(
+    /&lt;color=(#[0-9a-fA-F]{3,6})&gt;([\s\S]*?)&lt;\/color&gt;/g,
+    '<span style="color:$1">$2</span>',
+  );
+
+  return msg;
+}
+function formatDuration(ms) {
+  let total = Math.floor(ms / 1000);
+
+  let d = Math.floor(total / 86400);
+  total %= 86400;
+
+  let h = Math.floor(total / 3600);
+  total %= 3600;
+
+  let m = Math.floor(total / 60);
+
+  let parts = [];
+
+  if (d) parts.push(`${d}d`);
+  if (h) parts.push(`${h}h`);
+  if (m || parts.length === 0) parts.push(`${m}m`);
+
+  return parts.join(" ");
+}
+function formatLocalDate(timestamp) {
+  return new Date(timestamp).toLocaleString();
+}
+function updateMessageBox() {
+  //  console.log("updateMessageBox();")
+  let box = document.getElementById("message-box");
+  // console.log("updateMessageBox();", box)
+  if (!box) return;
+
+  box.innerHTML = "";
+
+  active_messages.forEach((message) => {
+    //  console.log("updateMessageBox();", message)
+    let remain = Math.max(
+      0,
+      (message.start + message.display - Clock.now()) / message.display,
+    );
+
+    let item = document.createElement("div");
+    item.className = "message-item";
+
+    item.innerHTML = `
+      <div class="message-text">${message.msg}</div>
+      <div class="message-progress">
+        <div class="message-progress-fill" style="width:${remain * 100}%"></div>
+      </div>
+    `;
+
+    box.appendChild(item);
+  });
+
+  box.style.display = active_messages.length ? "block" : "none";
 }
 
 function pushTimedCount(card) {
@@ -3244,7 +3452,6 @@ function pushTimedCount(card) {
 // Scan timers
 function scanTimedCountChange() {
   let now = Clock.now();
-
   timed_count_change.forEach((timer, index) => {
     let card = card_dict.find((c) => c.id === timer.card_id);
 
@@ -3252,28 +3459,45 @@ function scanTimedCountChange() {
       console.log("[ERROR] Card missing", timer.card_id);
       return;
     }
+    const end = timer.start + timer.duration;
 
     // Start time reached
-    if (!timer.activated && now >= timer.start) {
+    if (!timer.activated && now >= timer.start && now < end) {
       card.count = card.count_monitor.base;
 
       timer.activated = true;
+      console.log("Active", card, card.count_monitor.msg);
+      if (card.count_monitor.msg) {
+        pushMessage(
+          formatMessage(card.count_monitor.msg_data.msg, card, timer),
+          card.count_monitor.msg_data.display,
+        );
+      }
 
       console.log(
-        "[ACTIVATED]",
+        "[ACTIVATED] [TMR]",
         card.name,
         "count:",
         card.count,
         "monitor:",
         timer.monitor_id,
+        JSON.stringify(card),
+        card,
       );
     }
 
     // Duration finished
-    if (timer.activated && now >= timer.start + timer.duration) {
+    if (timer.activated && now >= end) {
       card.count = 0;
 
-      console.log("[EXPIRED]", card.name, "count reset to:", card.count);
+      console.log(
+        "[EXPIRED] [TMR]",
+        card.name,
+        "count reset to:",
+        card.count,
+        JSON.stringify(card),
+        card,
+      );
 
       // remove timer
       timed_count_change.splice(index, 1);
@@ -3283,3 +3507,4 @@ function scanTimedCountChange() {
 
 // Run every second
 setInterval(scanTimedCountChange, 1000);
+setInterval(scanMessages, 100);

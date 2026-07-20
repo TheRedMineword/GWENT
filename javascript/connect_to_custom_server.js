@@ -3,6 +3,7 @@ let IsNowCustom = false;
 // CONFIG
 // ===============================
 const IGNORE_PATTERNS = [
+  "active_messages",
   "menubntconfig.*",
   "the_image_json",
   "medicrevivethat",

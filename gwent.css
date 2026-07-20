@@ -70,6 +70,44 @@ transform-origin: left center;
     border-radius:6px;
 }
 
+#message-box {
+    z-index: 999999999999999999;
+    position: fixed;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 340px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    pointer-events: none;
+}
+
+.message-item {
+    background: rgba(20,20,20,.9);
+    border: 1px solid #666;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.message-text {
+    padding: 10px;
+    color: white;
+    font-size: 14px;
+}
+
+.message-progress {
+    height: 4px;
+    background: #333;
+}
+
+.message-progress-fill {
+    height: 100%;
+    background: #4CAF50;
+}
 
 
 /* Dark fullscreen backdrop */
