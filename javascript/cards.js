@@ -2,6 +2,23 @@ loadingscreenupdate(`Preparing card_dict`);
 let active_messages = [];
 let timed_count_change = [];
 let expireTimer = null;
+const activeBars = new Set();
+(function animate() {
+  const now = performance.now();
+
+  for (const bar of activeBars) {
+    const elapsed = now - bar.start;
+    const progress = Math.min(elapsed / bar.duration, 1);
+
+    bar.fill.style.width = `${100 - progress * 100}%`;
+
+    if (progress >= 1) {
+      activeBars.delete(bar);
+    }
+  }
+
+  requestAnimationFrame(animate);
+})();
 const SYNODIC_MONTH = 29.530588853 * 86400000; // ms
 const KNOWN_NEW_MOON = 947182440000; // Date.UTC(2000, 0, 6, 18, 14, 0); // 2000-01-06 18:14 UTC
 function getNearestNewMoon(hoursBefore = 0) {
@@ -3455,11 +3472,11 @@ function createMessageElement(message) {
   const fill = item.querySelector(".message-progress-fill");
 
   fill.style.width = "100%";
-  fill.style.transition = `width ${message.display}ms linear`;
 
-  // Start animation on next frame
-  requestAnimationFrame(() => {
-    fill.style.width = "0%";
+  activeBars.add({
+    fill,
+    start: performance.now(),
+    duration: message.display,
   });
 
   return item;

@@ -4,6 +4,7 @@ let IsNowCustom = false;
 // ===============================
 const IGNORE_PATTERNS = [
   "videoMapLyrics",
+  "activeBars",
   "_debug_volume",
   "expireTimer",
   "active_messages",
