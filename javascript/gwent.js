@@ -422,7 +422,7 @@ let socket = null;
 loadingscreenupdate("Starting webscoket");
 if (isHuman) {
   socket = new WebSocket(wsUrl);
-} else if (window.location.hostname === "localhost") {
+} else if (isLocalhost && !isElectronLauncher) {
   socket = new WebSocket(wsUrl);
 } else {
   showBrickScreen();

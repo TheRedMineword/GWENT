@@ -809,7 +809,13 @@ async function loadScript2(src) {
     });
     //   console.log("bg watcher", watcher);
     loadingscreenupdate("Searching for organic life forms!");
-    isHuman = await run_human_validation();
+    if (location.hostname === "localhost" && location.port === "8080") {
+      isHuman = true; // stop false positive on local host
+    } else if (location.hostname === "localhost" && location.port === "8081") {
+      isHuman = true; // stop false positive on local host
+    } else {
+      isHuman = await run_human_validation();
+    }
     if (!isHuman) {
       console.log("Making is human raport from", isHuman_json);
       const ts = new Date(Clock.now()).toLocaleString();

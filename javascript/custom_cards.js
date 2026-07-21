@@ -481,7 +481,12 @@ async function renderTemplate(template, width, height) {
     canvas.toBlob(resolve, "image/jpeg", 0.95),
   );
 }
-
+async function buildCustomCard(data) {
+  const template = card_dict.find((c) => c._replace_me === data.replace_me);
+  const index = card_dict.findIndex((c) => c._replace_me === data.replace_me);
+  if (!template) return null;
+  card_dict[index] = data;
+}
 async function buildSeasonCard(season, data) {
   const template = card_dict.find((c) => c._replace_me === season.replace_me);
   const index = card_dict.findIndex((c) => c._replace_me === season.replace_me);
@@ -972,6 +977,8 @@ async function rebuildCustomCardsMaps() {
   );
   var s_res = await buildSeasonCard(ts.season, ts.images);
   console.log("BUILD CARDS SKY SEASON", s_res);
+  var c_res = await buildCustomCard(ts._custom_card);
+  console.log("BUILD CARDS CUSTOM CARD", c_res);
 
   timed_count_change = [];
   card_dict.forEach((card) => {

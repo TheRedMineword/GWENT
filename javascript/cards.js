@@ -3001,6 +3001,7 @@ var card_dict_base = [
     },
   },
   { _replace_me: "sky_season" },
+  { _replace_me: "randomcards" },
   {
     name: "Vincent Van Gogh",
     id: "3035",
