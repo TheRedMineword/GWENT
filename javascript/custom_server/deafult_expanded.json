@@ -134,8 +134,8 @@
       "_op": "Opponent goes first",
       "_me_lambert": "Lambert lets you start the game",
       "_op_lambert": "Lambert says that you suck!\nThe opponent starts the game!",
-      "_me_ancient": "You go first",
-      "_op_ancient": "Opponent goes first",
+      "_me_ancient": "Thu",
+      "_op_ancient": "Morvud",
       "cheater": "Scoia'tael rigged the coin"
     },
     "map_results_color": {

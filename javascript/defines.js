@@ -315,8 +315,8 @@ let map_results_txt = {
   _op: "Opponent goes first",
   _me_lambert: "Lambert lets you start the game",
   _op_lambert: "Lambert says that you suck!\nThe opponent starts the game!",
-  _me_ancient: "You go first",
-  _op_ancient: "Opponent goes first",
+  _me_ancient: "Thu", // Thu = You // https://witcher.fandom.com/wiki/Elder_Speech
+  _op_ancient: "Morvud", // Morvud = Enemy // https://witcher.fandom.com/wiki/Elder_Speech
   cheater: "Scoia'tael rigged the coin",
 };
 let map_results_color = {
