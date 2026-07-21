@@ -3192,8 +3192,8 @@ var card_dict_base = [
     id: "1040",
     deck: "neutral",
     row: "siege",
-    strength: "3",
-    ability: "morale",
+    strength: "-1",
+    ability: "reinforce DontPickMeUp",
     filename: "custom!deatheatersmoon",
     count: "0",
     count_monitor: {
@@ -3205,7 +3205,7 @@ var card_dict_base = [
     customassets: {
       lg: {
         hero: false,
-        ability: "morale",
+        ability: "reinforce",
         name: "Full Moon",
         desc: "Blood-curdling screams\nCarried by the cool breath of the night wind",
         txt_timed_a: false,
@@ -3223,8 +3223,8 @@ var card_dict_base = [
     id: "1041",
     deck: "neutral",
     row: "siege",
-    strength: "3",
-    ability: "morale",
+    strength: "-1",
+    ability: "reinforce DontPickMeUp",
     filename: "custom!noonwraithsmoon",
     count: "0",
     count_monitor: {
@@ -3236,7 +3236,7 @@ var card_dict_base = [
     customassets: {
       lg: {
         hero: false,
-        ability: "morale",
+        ability: "reinforce",
         name: "New Moon",
         desc: "Empty Sky...\nMoonless Sky...",
         txt_timed_a: false,
@@ -3248,6 +3248,38 @@ var card_dict_base = [
         timed: [],
       },
     },
+  },
+  {
+    name: "Nightwraith",
+    id: "1042",
+    deck: "monsters",
+    row: "ranged",
+    strength: "4",
+    ability: "",
+    filename: "nightwraith",
+    count: "2",
+    reinforce: { owner_name: "New Moon", spawn_count: 2 },
+  },
+  {
+    name: "Noonwraith",
+    id: "1042",
+    deck: "monsters",
+    row: "ranged",
+    strength: "4",
+    ability: "",
+    filename: "noonwraith",
+    count: "2",
+  },
+  {
+    name: "Necrophages",
+    id: "1043",
+    deck: "monsters",
+    row: "close",
+    strength: "3",
+    ability: "",
+    filename: "deatheatr",
+    count: "0",
+    reinforce: { owner_name: "Full Moon", spawn_count: 3 },
   },
 ];
 

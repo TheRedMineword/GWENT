@@ -1799,6 +1799,7 @@ class Player {
               ),
             );
             if (med_draw === 1) {
+              await sleep(medic_ability_revive_wait_a_second);
               comp_and_send(
                 socket,
                 JSON.stringify({ type: "medicrevivedata", data: extraJSON }),
@@ -4786,6 +4787,7 @@ class UI {
       if (extraJSON.length > 0) {
         const total = extraJSON.length;
         if (med_draw === 1) {
+          await sleep(medic_ability_revive_wait_a_second);
           comp_and_send(
             socket,
             JSON.stringify({ type: "medicrevivedata", data: extraJSON }),
@@ -4881,6 +4883,7 @@ class UI {
     if (extraJSON.length > 0) {
       const total = extraJSON.length;
       if (med_draw === 1) {
+        await sleep(medic_ability_revive_wait_a_second);
         comp_and_send(
           socket,
           JSON.stringify({ type: "medicrevivedata", data: extraJSON }),
