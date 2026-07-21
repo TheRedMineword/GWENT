@@ -29,6 +29,7 @@ This patch brings moonlight with it!
 --- Optymalizated and updated  middle-right area of ​​the screen notyfication (Added yesterday in an undocumented change).
 --- Fixed one background config.
 + Around the time of the real-life Full Moon and New Moon, special moon cards will be available in the game! !new!
+(Next Full Moon card: !time:2026-07-28T07:23:45.061Z! - !time:2026-07-30T19:23:45.061Z!)
 <fat2>
 %%img src="img/lg/monsters_nightwraith.jpg" style="max-width:25%"%% %%img src="img/lg/monsters_noonwraith.jpg" style="max-width:25%"%% %%img src="img/lg/monsters_deatheatr.jpg" style="max-width:25%"%%
 ```
