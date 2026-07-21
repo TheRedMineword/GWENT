@@ -482,6 +482,7 @@ async function renderTemplate(template, width, height) {
   );
 }
 async function buildCustomCard(data) {
+  console.log("data buildCustomCard", data);
   const template = card_dict.find((c) => c._replace_me === data.replace_me);
   const index = card_dict.findIndex((c) => c._replace_me === data.replace_me);
   if (!template) return null;
@@ -977,7 +978,7 @@ async function rebuildCustomCardsMaps() {
   );
   var s_res = await buildSeasonCard(ts.season, ts.images);
   console.log("BUILD CARDS SKY SEASON", s_res);
-  var c_res = await buildCustomCard(ts._custom_card);
+  var c_res = await buildCustomCard(ts.custom_card);
   console.log("BUILD CARDS CUSTOM CARD", c_res);
 
   timed_count_change = [];
