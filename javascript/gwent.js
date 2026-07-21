@@ -308,8 +308,9 @@ function showTooltip(text, duratation = 3200) {
 }
 
 function cardredrawnotice(text) {
-  tooltipQueue.push(text);
-  processTooltipQueue();
+  // tooltipQueue.push(text);
+  // processTooltipQueue();
+  pushMessage(formatMessage2(text), 9000);
 }
 
 function processTooltipQueue() {
@@ -2170,7 +2171,7 @@ class Deck extends CardContainer {
       removedFromDeck?.name,
     );
     try {
-      var txt_draw = `You redrawed card \"${card?.name}\" for a \"${removedFromDeck?.name}\"`;
+      var txt_draw = `<color=#d5cfe3>You redrawed card</color> <color=#fa4441>${card?.name}</color> <color=#d5cfe3>for a</color> <color=#41fa66>${removedFromDeck?.name}</color>`;
       console.log(txt_draw);
       cardredrawnotice(txt_draw);
     } catch (e) {

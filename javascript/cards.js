@@ -3326,9 +3326,16 @@ function scheduleUpdate() {
 function removeExpiredMessages() {
   const now = Clock.now();
 
-  active_messages = active_messages.filter(
-    (msg) => now < msg.start + msg.display,
-  );
+  active_messages = active_messages.filter((message) => {
+    const expired = Clock.now() >= message.start + message.display;
+
+    if (expired && message.element) {
+      message.element.remove();
+      message.element = null;
+    }
+
+    return !expired;
+  });
 
   updateMessageBox();
   scheduleUpdate();
@@ -3366,6 +3373,19 @@ function formatMessage(template, card, timer) {
 
   return msg;
 }
+function formatMessage2(template) {
+  let msg = escapeHtml(template);
+  // New lines
+  msg = msg.replaceAll("\n", "<br>");
+
+  // Restore <color=#xxxxxx>...</color>
+  msg = msg.replace(
+    /&lt;color=(#[0-9a-fA-F]{3,6})&gt;([\s\S]*?)&lt;\/color&gt;/g,
+    '<span style="color:$1">$2</span>',
+  );
+
+  return msg;
+}
 function formatDuration(ms) {
   let total = Math.floor(ms / 1000);
 
@@ -3388,39 +3408,49 @@ function formatDuration(ms) {
 function formatLocalDate(timestamp) {
   return new Date(timestamp).toLocaleString();
 }
+function createMessageElement(message) {
+  const item = document.createElement("div");
+  item.className = "message-item";
+
+  item.innerHTML = `
+    <div class="message-text">${message.msg}</div>
+    <div class="message-progress">
+      <div class="message-progress-fill"></div>
+    </div>
+  `;
+
+  const fill = item.querySelector(".message-progress-fill");
+
+  fill.style.width = "100%";
+  fill.style.transition = `width ${message.display}ms linear`;
+
+  // Start animation on next frame
+  requestAnimationFrame(() => {
+    fill.style.width = "0%";
+  });
+
+  return item;
+}
 function updateMessageBox() {
   const box = document.getElementById("message-box");
   if (!box) return;
 
-  box.innerHTML = "";
+  // Remove DOM nodes that no longer belong
+  for (const child of [...box.children]) {
+    if (!active_messages.some((msg) => msg.element === child)) {
+      child.remove();
+    }
+  }
 
-  const now = Clock.now();
-
+  // Add any new ones
   for (const message of active_messages) {
-    const remain = Math.max(
-      0,
-      (message.start + message.display - now) / message.display,
-    );
+    if (!message.element) {
+      message.element = createMessageElement(message);
+    }
 
-    const item = document.createElement("div");
-    item.className = "message-item";
-
-    item.innerHTML = `
-      <div class="message-text">${message.msg}</div>
-      <div class="message-progress">
-        <div class="message-progress-fill" style="width:${remain * 100}%"></div>
-      </div>
-    `;
-
-    const fill = item.querySelector(".message-progress-fill");
-
-    fill.style.transitionDuration = `${message.display}ms`;
-    console.log(fill, "fill", message);
-    requestAnimationFrame(() => {
-      fill.style.width = "0%";
-    });
-
-    box.appendChild(item);
+    if (!message.element.parentNode) {
+      box.appendChild(message.element);
+    }
   }
 
   box.style.display = active_messages.length ? "block" : "none";
