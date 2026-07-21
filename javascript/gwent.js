@@ -841,12 +841,10 @@ socket.onmessage = async (event) => {
       }
       break;
     case "server_notif":
-    try {
+      try {
         pushMessage(formatMessage2(data.msg), data.duration);
-    } catch (e){
-
-    }
-    break;
+      } catch (e) {}
+      break;
     case "authRequired":
       ip_data = data._ip;
       console.log("[IP PARSE]", data._ip);
