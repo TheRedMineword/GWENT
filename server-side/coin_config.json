@@ -1,10 +1,10 @@
 [
   {
-    "chance": 9,
+    "chance": 10,
     "val": "_lambert"
   },
   {
-    "chance": 16,
+    "chance": 18,
     "val": "_ancient"
   }
 ]
