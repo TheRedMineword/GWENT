@@ -3,6 +3,7 @@ let IsNowCustom = false;
 // CONFIG
 // ===============================
 const IGNORE_PATTERNS = [
+  "expireTimer",
   "active_messages",
   "menubntconfig.*",
   "the_image_json",

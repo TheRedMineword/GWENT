@@ -1,6 +1,7 @@
 loadingscreenupdate(`Preparing card_dict`);
 let active_messages = [];
 let timed_count_change = [];
+let expireTimer = null;
 const SYNODIC_MONTH = 29.530588853 * 86400000; // ms
 const KNOWN_NEW_MOON = 947182440000; // Date.UTC(2000, 0, 6, 18, 14, 0); // 2000-01-06 18:14 UTC
 function getNearestNewMoon(hoursBefore = 0) {
@@ -3297,6 +3298,40 @@ function pushMessage(msg, display = 5000) {
   });
 
   updateMessageBox();
+  scheduleUpdate();
+}
+function scheduleUpdate() {
+  if (expireTimer) {
+    clearTimeout(expireTimer);
+    expireTimer = null;
+  }
+
+  if (active_messages.length === 0) {
+    updateMessageBox();
+    return;
+  }
+
+  const now = Clock.now();
+
+  // Find the soonest expiration
+  const nextExpire = Math.min(
+    ...active_messages.map((msg) => msg.start + msg.display),
+  );
+
+  const delay = Math.max(0, nextExpire - now);
+
+  expireTimer = setTimeout(removeExpiredMessages, delay);
+}
+
+function removeExpiredMessages() {
+  const now = Clock.now();
+
+  active_messages = active_messages.filter(
+    (msg) => now < msg.start + msg.display,
+  );
+
+  updateMessageBox();
+  scheduleUpdate();
 }
 function scanMessages() {
   if (active_messages.length === 0) {
@@ -3354,21 +3389,20 @@ function formatLocalDate(timestamp) {
   return new Date(timestamp).toLocaleString();
 }
 function updateMessageBox() {
-  //  console.log("updateMessageBox();")
-  let box = document.getElementById("message-box");
-  // console.log("updateMessageBox();", box)
+  const box = document.getElementById("message-box");
   if (!box) return;
 
   box.innerHTML = "";
 
-  active_messages.forEach((message) => {
-    //  console.log("updateMessageBox();", message)
-    let remain = Math.max(
+  const now = Clock.now();
+
+  for (const message of active_messages) {
+    const remain = Math.max(
       0,
-      (message.start + message.display - Clock.now()) / message.display,
+      (message.start + message.display - now) / message.display,
     );
 
-    let item = document.createElement("div");
+    const item = document.createElement("div");
     item.className = "message-item";
 
     item.innerHTML = `
@@ -3378,8 +3412,16 @@ function updateMessageBox() {
       </div>
     `;
 
+    const fill = item.querySelector(".message-progress-fill");
+
+    fill.style.transitionDuration = `${message.display}ms`;
+    console.log(fill, "fill", message);
+    requestAnimationFrame(() => {
+      fill.style.width = "0%";
+    });
+
     box.appendChild(item);
-  });
+  }
 
   box.style.display = active_messages.length ? "block" : "none";
 }
@@ -3459,4 +3501,4 @@ function scanTimedCountChange() {
 
 // Run every second
 setInterval(scanTimedCountChange, 1000);
-setInterval(scanMessages, 100);
+//setInterval(scanMessages, 100);
