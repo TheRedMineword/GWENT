@@ -1804,6 +1804,8 @@ class Player {
                 socket,
                 JSON.stringify({ type: "medicrevivedata", data: extraJSON }),
               );
+              med_draw = 0;
+              extraJSON.length = 0;
             } else {
               for (let i = 0; i < total; i++) {
                 const payload = extraJSON[i];
@@ -4792,6 +4794,8 @@ class UI {
             socket,
             JSON.stringify({ type: "medicrevivedata", data: extraJSON }),
           );
+          med_draw = 0;
+          extraJSON.length = 0;
         } else {
           for (let i = 0; i < total; i++) {
             const payload = extraJSON[i];
@@ -4888,6 +4892,8 @@ class UI {
           socket,
           JSON.stringify({ type: "medicrevivedata", data: extraJSON }),
         );
+        med_draw = 0;
+        extraJSON.length = 0;
       } else {
         for (let i = 0; i < total; i++) {
           const payload = extraJSON[i];

@@ -2818,16 +2818,7 @@
         "strength": "5",
         "ability": "hero reinforce",
         "filename": "custom!sky_vincent",
-        "count": "0",
-        "count_monitor": {
-          "base": 1,
-          "monitor": "based",
-          "id": "vincent_allowed",
-          "duration": {
-            "start": "2026-07-21T07:00:00.000Z",
-            "duration": "9999999999999999999999999"
-          }
-        },
+        "count": "1",
         "customassets": {
           "lg": {
             "hero": true,
@@ -3007,8 +2998,8 @@
         "id": "1040",
         "deck": "neutral",
         "row": "siege",
-        "strength": "3",
-        "ability": "morale",
+        "strength": "-1",
+        "ability": "reinforce DontPickMeUp",
         "filename": "custom!deatheatersmoon",
         "count": "0",
         "count_monitor": {
@@ -3023,7 +3014,7 @@
         "customassets": {
           "lg": {
             "hero": false,
-            "ability": "morale",
+            "ability": "reinforce",
             "name": "Full Moon",
             "desc": "Blood-curdling screams\nCarried by the cool breath of the night wind",
             "txt_timed_a": false
@@ -3041,8 +3032,8 @@
         "id": "1041",
         "deck": "neutral",
         "row": "siege",
-        "strength": "3",
-        "ability": "morale",
+        "strength": "-1",
+        "ability": "reinforce DontPickMeUp",
         "filename": "custom!noonwraithsmoon",
         "count": "0",
         "count_monitor": {
@@ -3057,7 +3048,7 @@
         "customassets": {
           "lg": {
             "hero": false,
-            "ability": "morale",
+            "ability": "reinforce",
             "name": "New Moon",
             "desc": "Empty Sky...\nMoonless Sky...",
             "txt_timed_a": false
@@ -3071,42 +3062,41 @@
         }
       },
       {
-        "name": "Season of Dear Van Gogh",
-        "id": "tempnary_card_001",
-        "deck": "neutral",
-        "row": "agile",
-        "strength": "0",
-        "ability": "reinforce DontPickMeUp",
-        "filename": "custom!sky_vincent_season",
+        "name": "Nightwraith",
+        "id": "1042",
+        "deck": "monsters",
+        "row": "ranged",
+        "strength": "4",
+        "ability": "",
+        "filename": "nightwraith",
+        "count": "2",
+        "reinforce": {
+          "owner_name": "New Moon",
+          "spawn_count": 2
+        }
+      },
+      {
+        "name": "Noonwraith",
+        "id": "1042",
+        "deck": "monsters",
+        "row": "ranged",
+        "strength": "4",
+        "ability": "",
+        "filename": "noonwraith",
+        "count": "2"
+      },
+      {
+        "name": "Necrophages",
+        "id": "1043",
+        "deck": "monsters",
+        "row": "close",
+        "strength": "3",
+        "ability": "",
+        "filename": "deatheatr",
         "count": "0",
-        "count_monitor": {
-          "base": 1,
-          "monitor": "based",
-          "id": "vincent_seaon_start_reinforce",
-          "duration": {
-            "start": "2026-07-17T07:00:00.000Z",
-            "duration": "3455600"
-          },
-          "msg": true,
-          "msg_data": {
-            "msg": "\u003Ccolor=#00ff00\u003ESeason of Dear Van Gogh\u003C/color\u003E \u003Ccolor=#add8e6\u003ENeutral Card\u003C/color\u003E is now active until \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E",
-            "display": 13000
-          }
-        },
-        "customassets": {
-          "lg": {
-            "hero": false,
-            "ability": "reinforce",
-            "name": "Season of Dear Van Gogh",
-            "desc": "The world knows the legend.\nFew know the full story.",
-            "txt_timed_a": false
-          },
-          "sm": {
-            "type": "url",
-            "build": [],
-            "url": "https://theredmineword.github.io/GWENT/img/sm/dear_van_gogh/web-only/seaonal_visitor.jpg",
-            "timed": []
-          }
+        "reinforce": {
+          "owner_name": "Full Moon",
+          "spawn_count": 3
         }
       }
     ],
@@ -3423,10 +3413,10 @@
         "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
       }
     },
-    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "8o-JI8VRyKo",
-    "tavern_yt_volume": 90
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }
