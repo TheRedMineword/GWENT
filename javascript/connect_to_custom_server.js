@@ -3,6 +3,8 @@ let IsNowCustom = false;
 // CONFIG
 // ===============================
 const IGNORE_PATTERNS = [
+  "videoMapLyrics",
+  "_debug_volume",
   "expireTimer",
   "active_messages",
   "menubntconfig.*",

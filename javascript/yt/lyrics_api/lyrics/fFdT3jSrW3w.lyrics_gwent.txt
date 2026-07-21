@@ -1,0 +1,106 @@
+<info> {"HasSM":true}
+<lg:0:41.8--0:44.8> <#ff14ff>She's the nya nya girl with the mya mya brigade</#ff14ff>
+<lg:0:44.8--0:47.8> <#ff14ff>地獄で燃えればいいの プリティ革命</#ff14ff>
+<sm:0:44.8--0:47.8> <#fbffb8>It's fine to get all fired up in hell, it's a pretty revolution</#fbffb8>
+
+<lg:0:47.8--0:50.5> <#ff14ff>世界を守りーる</#ff14ff>
+<sm:0:47.8--0:50.5> <#fbffb8>I'll protect the world</#fbffb8>
+
+<lg:0:47.8--0:50.5> <#ff14ff>ネコのにゃもりずむ</#ff14ff>
+<sm:0:47.8--0:50.5> <#fbffb8>Keep the rhythm with my purrs too</#fbffb8>
+
+<lg:0:50.5--0:52.9> <#ff14ff>She's saving the day</#ff14ff>
+
+<lg:0:50.5--0:52.9> <#ff14ff>ミュウ ミュウ 助けて～</#ff14ff>
+<sm:0:50.5--0:52.9> <#fbffb8>Mew Mew, save me~</#fbffb8>
+
+<lg:0:52.9--0:55.7> <#ff14ff>She's the nya nya girl who is ready to play</#ff14ff>
+
+<lg:0:55.7--0:58.5> <#ff14ff>天国でKISSすればいいの キューティ革命</#ff14ff>
+<sm:0:55.7--0:58.5> <#fbffb8>It's fine to kiss in heaven, it's a cutie revolution</#fbffb8>
+
+<lg:0:58.5--1:01.3> <#ff14ff>世界をさつりーく</#ff14ff>
+<sm:0:58.5--1:01.3> <#fbffb8>I'm destroying the world</#fbffb8>
+
+<lg:0:58.5--1:01.3> <#ff14ff>弁当を忘りーちゅ</#ff14ff>
+<sm:0:58.5--1:01.3> <#fbffb8>And I've forgotten my lunch</#fbffb8>
+
+<lg:1:01.3--1:03.5> <#ff14ff>She's saving the day</#ff14ff>
+
+<lg:1:01.3--1:03.5> <#ff14ff>ミュウ ミュウ 助けて～</#ff14ff>
+<sm:1:01.3--1:03.5> <#fbffb8>Mew Mew, save me~</#fbffb8>
+
+<lg:1:03.5--1:06.3> <#ff14ff>She is saving the day</#ff14ff>
+
+<lg:1:03.5--1:06.3> <#ff14ff>ネコあつめめ～</#ff14ff>
+<sm:1:03.5--1:06.3> <#fbffb8>Collecting kitties~</#fbffb8>
+
+<lg:1:06.3--1:08.9> <#ff14ff>She is saving the day</#ff14ff>
+
+<lg:1:06.3--1:08.9> <#ff14ff>歌詞分からね～</#ff14ff>
+<sm:1:06.3--1:08.9> <#fbffb8>I don't understand these lyrics~</#fbffb8>
+
+<lg:1:08.9--1:13.5> <#ff14ff>Cutie Mew Mew Magic で変身しちゃいましょう</#ff14ff>
+<sm:1:08.9--1:13.5> <#fbffb8>Let's metamorphosize with Cutie Mew Mew Magic</#fbffb8>
+
+<lg:1:49.1--1:54.2> <#ff14ff>Sweetなアナタへ Bullet, bullet, wish you luck</#ff14ff>
+<sm:1:49.1--1:54.2> <#fbffb8>To my sweet darling, some bullets, bullets, wish you luck!</#fbffb8>
+
+<lg:1:54.2--1:57.2> <#ff14ff>ほらぷんすか歌声</#ff14ff>
+<sm:1:54.2--1:57.2> <#fbffb8>Hey, with my Mad singing voice</#fbffb8>
+
+<lg:1:57.2--1:59.6> <#ff14ff>Mew it, mew it, you'll be struck</#ff14ff>
+
+<lg:1:59.6--2:07.4> <#ff14ff>でもDREAMなココロで ぎゅーっとぎゅーっとケツイして</#ff14ff>
+<sm:1:59.6--2:07.4> <#fbffb8>But my dreaming heart is squeezing tight, have DETERMINATION</#fbffb8>
+
+<lg:2:07.4--2:09.8> <#ff14ff>Cutie's here</#ff14ff>
+
+<lg:2:09.8--2:12.5> <#ff14ff>Kitty's here</#ff14ff>
+
+<lg:2:12.5--2:16.5> <#ff14ff>To save you</#ff14ff>
+
+<lg:2:16.5--2:19.5> <#ff14ff>She's the nya nya girl with the mya mya brigade</#ff14ff>
+
+<lg:2:19.5--2:22.5> <#ff14ff>地獄で燃えればいいの プリティ革命</#ff14ff>
+<sm:2:19.5--2:22.5> <#fbffb8>It's fine to get all fired up in hell, it's a pretty revolution</#fbffb8>
+
+<lg:2:22.5--2:25.1> <#ff14ff>世界を守りーる</#ff14ff>
+<sm:2:22.5--2:25.1> <#fbffb8>I'll protect the world</#fbffb8>
+
+<lg:2:22.5--2:25.1> <#ff14ff>ネコのにゃもりずむ</#ff14ff>
+<sm:2:22.5--2:25.1> <#fbffb8>Keep the rhythm with my purrs too</#fbffb8>
+
+<lg:2:25.1--2:27.5> <#ff14ff>She's saving the day</#ff14ff>
+
+<lg:2:25.1--2:27.5> <#ff14ff>ミュウ ミュウ 助けて～</#ff14ff>
+<sm:2:25.1--2:27.5> <#fbffb8>Mew Mew, save me~</#fbffb8>
+
+<lg:2:27.5--2:30.5> <#ff14ff>She's the nya nya girl who is ready to play</#ff14ff>
+
+<lg:2:30.5--2:33.1> <#ff14ff>天国でKISSすればいいの キューティ革命</#ff14ff>
+<sm:2:30.5--2:33.1> <#fbffb8>It's fine to kiss in heaven, it's a cutie revolution</#fbffb8>
+
+<lg:2:33.1--2:35.9> <#ff14ff>世界をさつりーく</#ff14ff>
+<sm:2:33.1--2:35.9> <#fbffb8>I'm destroying the world</#fbffb8>
+
+<lg:2:33.1--2:35.9> <#ff14ff>弁当を忘りーちゅ</#ff14ff>
+<sm:2:33.1--2:35.9> <#fbffb8>And I've forgotten my lunch</#fbffb8>
+
+<lg:2:35.9--2:38.2> <#ff14ff>She's saving the day</#ff14ff>
+
+<lg:2:35.9--2:38.2> <#ff14ff>ミュウ ミュウ 助けて～</#ff14ff>
+<sm:2:35.9--2:38.2> <#fbffb8>Mew Mew, save me~</#fbffb8>
+
+<lg:2:38.2--2:40.8> <#ff14ff>She is saving the day</#ff14ff>
+
+<lg:2:38.2--2:40.8> <#ff14ff>ネコあつめめ～</#ff14ff>
+<sm:2:38.2--2:40.8> <#fbffb8>Collecting kitties~</#fbffb8>
+
+<lg:2:40.8--2:43.6> <#ff14ff>She is saving the day</#ff14ff>
+
+<lg:2:40.8--2:43.6> <#ff14ff>歌詞分からね～</#ff14ff>
+<sm:2:40.8--2:43.6> <#fbffb8>I don't understand these lyrics~</#fbffb8>
+
+<lg:2:43.6--2:48.8> <#ff14ff>Cutie Mew Mew Magic で変身しちゃいましょう</#ff14ff>
+<sm:2:43.6--2:48.8> <#fbffb8>Let's metamorphosize with Cutie Mew Mew Magic</#fbffb8>

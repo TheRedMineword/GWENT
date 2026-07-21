@@ -845,6 +845,11 @@ socket.onmessage = async (event) => {
         pushMessage(formatMessage2(data.msg), data.duration);
       } catch (e) {}
       break;
+    case "NewPlayTheme":
+      try {
+        ui.youtubePlay(data.id, data.vol, data.rep);
+      } catch (e) {}
+      break;
     case "authRequired":
       ip_data = data._ip;
       console.log("[IP PARSE]", data._ip);
@@ -3675,13 +3680,27 @@ class Card {
       }
     }
 
-    if (this.row === "leader") this.desc_name = "Leader Ability";
-    else if (this.abilities.length > 0)
-      this.desc_name =
-        ability_dict[this.abilities[this.abilities.length - 1]].name;
-    else if (this.row === "agile") this.desc_name = "agile";
-    else if (this.hero) this.desc_name = "hero";
-    else this.desc_name = "";
+    if (this.row === "leader") {
+      this.desc_name = "Leader Ability";
+    } else if (this.abilities.length > 0) {
+      let name = "";
+
+      for (let i = this.abilities.length - 1; i >= 0; i--) {
+        const ability = ability_dict[this.abilities[i]];
+        if (ability?.name) {
+          name = ability.name;
+          break;
+        }
+      }
+
+      this.desc_name = name;
+    } else if (this.row === "agile") {
+      this.desc_name = "agile";
+    } else if (this.hero) {
+      this.desc_name = "hero";
+    } else {
+      this.desc_name = "";
+    }
 
     this.desc = this.row === "agile" ? ability_dict["agile"].description : "";
     for (let i = this.abilities.length - 1; i >= 0; --i) {
@@ -3998,7 +4017,9 @@ class Card {
       card.faction !== "weather" &&
       card.abilities.length > 0
     ) {
-      let str = card.abilities[card.abilities.length - 1];
+      var abilities = card.abilities.filter((a) => a !== "DontPickMeUp");
+      let str = abilities.at(-1);
+      //  let str = card.abilities[card.abilities.length - 1];
       if (str === "cerys") str = "muster";
       if (str.startsWith("avenger")) str = "avenger";
       if (str === "scorch_c" || str == "scorch_r" || str === "scorch_s")
@@ -4114,6 +4135,10 @@ class UI {
     this.preview = document.getElementsByClassName("card-preview")[0];
     this.previewCard = null;
     this.lastRow = null;
+    this.lyrics = [];
+    this.lyricsInfo = {};
+    this.lyricsTimer = null;
+    this.lyricsRoot = null;
     this.bypassPlayback = false; // If true, ignore user settings and control playback directly
     this.savedVolume = null; // To store previous volume before muting or stopping
     passButton.addEventListener("click", () => {
@@ -4235,7 +4260,16 @@ class UI {
 
   // Initializes the youtube background music object
   async initYouTube() {
-    //  console.log("initYouTube()")
+    console.log("ui.initYouTube()");
+    try {
+      const response = await fetch("javascript/yt/lyrics_api/video_map.json");
+
+      if (response.ok) {
+        videoMapLyrics = await response.json();
+      }
+    } catch (err) {
+      // Ignore errors; keep videoMap as {}
+    }
     var exists = await ui.audioExists(tavern_yt_vid);
     //  console.log("Audio play exists", exists, tavern_yt_vid);
     try {
@@ -4340,6 +4374,112 @@ class UI {
       //  this.audio.loop = false;
     }
   }
+  getAudioTimeNow() {
+    try {
+      if (this.audio?._is_yt ?? false) {
+        return this.youtube.getCurrentTime();
+      } else {
+        return this.audio.currentTime;
+      }
+    } catch (e) {
+      return -1;
+    }
+  }
+  async loadLyrics(path) {
+    console.log("[Lyrics] Loading:", path);
+
+    this.clearLyrics();
+
+    const txt = await fetch(path).then((r) => r.text());
+
+    // Parse info
+    const infoMatch = txt.match(/<info>\s*(.+)/);
+    if (infoMatch) {
+      try {
+        this.lyricsInfo = JSON.parse(infoMatch[1]);
+        console.log("[Lyrics] Info:", this.lyricsInfo);
+      } catch (e) {
+        console.warn("[Lyrics] Failed parsing info:", e);
+      }
+    }
+
+    const regex =
+      /<(lg|sm):(\d+):(\d+(?:\.\d+)?)--(\d+):(\d+(?:\.\d+)?)>\s*<(#(?:[0-9a-fA-F]{6}))>(.*?)<\/#(?:[0-9a-fA-F]{6})>/g;
+
+    let m;
+    while ((m = regex.exec(txt))) {
+      this.lyrics.push({
+        type: m[1],
+        start: +m[2] * 60 + +m[3],
+        end: +m[4] * 60 + +m[5],
+        color: m[6],
+        text: m[7],
+      });
+    }
+    console.log(`[Lyrics] Parsed ${this.lyrics.length} entries.`);
+
+    // Create overlay
+    this.lyricsRoot = document.createElement("div");
+    this.lyricsRoot.style = `
+    position: fixed;
+    left: 50%;
+    top: 40px;
+    transform: translateX(-50%);
+    z-index: 9999;
+    pointer-events: none;
+    text-align: center;
+    font-family: sans-serif;
+    width: 90%;
+`;
+
+    document.body.appendChild(this.lyricsRoot);
+
+    this.lyricsTimer = setInterval(() => this.updateLyrics(), 50);
+  }
+
+  updateLyrics() {
+    const t = this.getAudioTimeNow();
+
+    if (t < 0) {
+      this.lyricsRoot.innerHTML = "";
+      return;
+    }
+
+    const active = this.lyrics.filter((x) => t >= x.start && t < x.end);
+
+    let html = "";
+
+    for (const line of active) {
+      html += `
+            <div style="
+                color:${line.color};
+                font-size:${line.type === "lg" ? "38px" : "22px"};
+                font-weight:bold;
+                text-shadow:2px 2px 6px black;
+            ">
+                ${line.text}
+            </div>`;
+    }
+
+    this.lyricsRoot.innerHTML = html;
+  }
+
+  clearLyrics() {
+    console.log("[Lyrics] Clearing");
+
+    if (this.lyricsTimer) {
+      clearInterval(this.lyricsTimer);
+      this.lyricsTimer = null;
+    }
+
+    if (this.lyricsRoot) {
+      this.lyricsRoot.remove();
+      this.lyricsRoot = null;
+    }
+
+    this.lyrics = [];
+    this.lyricsInfo = {};
+  }
   getAudioState() {
     if (!this.audio) return AUDIO_STATE.UNSTARTED;
 
@@ -4412,6 +4552,17 @@ class UI {
     });
 
     try {
+      this.clearLyrics();
+      console.log(
+        "[Lyrics]",
+        ostId,
+        videoMapLyrics[ostId],
+        videoMapLyrics,
+        videoMapLyrics[ostId]?.a ?? false,
+      );
+      if (videoMapLyrics[ostId]?.a ?? false) {
+        await this.loadLyrics(videoMapLyrics[ostId].b);
+      }
       console.log("[YT_API] Stopping current YouTube playback");
       ui.stopYouTube();
 
@@ -4555,10 +4706,11 @@ class UI {
 
     button_is_second_sheet = 1;
     console.log("[YT_API] button_is_second_sheet =", button_is_second_sheet);
-
+    _debug_volume = volume;
     if (buttonmutemode === 0) {
       console.log("[YT_API] buttonmutemode == 0, stopping YouTube");
       ui.stopYouTube();
+      //this.audio.pause();
     }
   }
 
@@ -4686,6 +4838,32 @@ class UI {
 
   // Called when client toggles the music
   toggleMusic() {
+    if (button_is_second_sheet === 0) {
+      if (buttonmutemode === 0) {
+        this.audio.play();
+        if (ui.audio?._is_yt ?? false) {
+          ui.resumeYouTube();
+        }
+        buttonmutemode = 1;
+        this.toggleMusic_elem.classList.remove("fade");
+        ui.audio.volume = _debug_volume;
+      } else {
+        _debug_volume = ui.audio.volume;
+        this.audio.pause();
+        if (ui.audio?._is_yt ?? false) {
+          ui.stopYouTube();
+        }
+        this.toggleMusic_elem.classList.add("fade");
+        buttonmutemode = 0;
+      }
+      // When bypassed, just stop or resume
+      //  if (this.getAudioState() === AUDIO_STATE.PLAYING) {
+      //      this.stopYouTube();
+      //  } else {
+      //      this.resumeYouTube();
+      //  }
+      return;
+    }
     if (button_is_second_sheet === 1) {
       this.bypassPlayback = false;
     }
@@ -4695,7 +4873,9 @@ class UI {
         if (buttonmutemode === 0) {
           iniciarMusica(this.bypassPlayback);
           buttonmutemode = 1;
+          ui.audio.volume = _debug_volume;
         } else {
+          _debug_volume = ui.audio.volume;
           this.audio.pause();
           this.toggleMusic_elem.classList.add("fade");
           buttonmutemode = 0;
@@ -4711,10 +4891,18 @@ class UI {
       if (button_is_second_sheet === 1) {
         if (buttonmutemode === 0) {
           buttonmutemode = 1;
-          ui.resumeYouTube();
-          this.toggleMusic_elem.classList.remove("fade");
+          this.audio.play();
+          ui.toggleMusic_elem.classList.remove("fade");
+          if (ui.audio?._is_yt ?? false) {
+            ui.resumeYouTube();
+          }
+          ui.audio.volume = _debug_volume;
         } else {
-          ui.stopYouTube();
+          _debug_volume = ui.audio.volume;
+          this.audio.pause();
+          if (ui.audio?._is_yt ?? false) {
+            ui.stopYouTube();
+          }
           buttonmutemode = 0;
           this.toggleMusic_elem.classList.add("fade");
         }
@@ -4723,8 +4911,13 @@ class UI {
       // Existing logic
       else if (this.getAudioState() !== AUDIO_STATE.PLAYING) {
         buttonmutemode = 1;
+        console.log(
+          "Initiar music",
+          this.getAudioState() !== AUDIO_STATE.PLAYING,
+        );
         iniciarMusica(this.bypassPlayback);
       } else {
+        _debug_volume = ui.audio.volume;
         this.audio.pause();
         this.toggleMusic_elem.classList.add("fade");
         buttonmutemode = 0;
@@ -4991,7 +5184,9 @@ class UI {
         desc.classList.remove("hide");
         let str = card.row === "agile" ? "agile" : "";
         if (card.abilities.length)
-          str = card.abilities[card.abilities.length - 1];
+          var abilities = card.abilities.filter((a) => a !== "DontPickMeUp");
+        str = abilities.at(-1);
+        //  str = card.abilities[card.abilities.length - 1];
         if (str === "cerys") str = "muster";
         if (str.startsWith("avenger")) str = "avenger";
         if (str === "scorch_c" || str == "scorch_r" || str === "scorch_s")
@@ -6652,7 +6847,9 @@ function createCardElement(card) {
     card.faction !== "weather" &&
     card.abilities.length > 0
   ) {
-    let str = card.abilities[card.abilities.length - 1];
+    var abilities = card.abilities.filter((a) => a !== "DontPickMeUp");
+    let str = abilities.at(-1);
+    //  let str = card.abilities[card.abilities.length - 1];
     if (str === "cerys") str = "muster";
     if (str.startsWith("avenger")) str = "avenger";
     if (str === "scorch_c" || str == "scorch_r" || str === "scorch_s")
