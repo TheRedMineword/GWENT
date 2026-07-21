@@ -3008,16 +3008,7 @@ var card_dict_base = [
     strength: "5",
     ability: "hero reinforce",
     filename: "custom!sky_vincent",
-    count: "0",
-    count_monitor: {
-      base: 1,
-      monitor: "based",
-      id: "vincent_allowed",
-      duration: {
-        start: "2026-07-21T07:00:00.000Z",
-        duration: "9999999999999999999999999",
-      },
-    },
+    count: "1",
     customassets: {
       lg: {
         hero: true,
@@ -3258,45 +3249,6 @@ var card_dict_base = [
     },
   },
 ];
-
-// temponary
-card_dict_base.push({
-  name: "Season of Dear Van Gogh",
-  id: "tempnary_card_001",
-  deck: "neutral",
-  row: "agile",
-  strength: "0",
-  ability: "reinforce DontPickMeUp",
-  filename: "custom!sky_vincent_season",
-  count: "0",
-  count_monitor: {
-    base: 1,
-    monitor: "based",
-    id: "vincent_seaon_start_reinforce",
-    duration: { start: "2026-07-17T07:00:00.000Z", duration: "3455600" },
-    msg: true,
-
-    msg_data: {
-      msg: "<color=#00ff00>Season of Dear Van Gogh</color> <color=#add8e6>Neutral Card</color> is now active until <color=#90D5FF><$enddatelocal></color>",
-      display: 13000,
-    },
-  },
-  customassets: {
-    lg: {
-      hero: false,
-      ability: "reinforce",
-      name: "Season of Dear Van Gogh",
-      desc: "The world knows the legend.\nFew know the full story.",
-      txt_timed_a: false,
-    },
-    sm: {
-      type: "url", // url/build/timed
-      build: [],
-      url: "https://theredmineword.github.io/GWENT/img/sm/dear_van_gogh/web-only/seaonal_visitor.jpg",
-      timed: [],
-    },
-  },
-});
 
 var card_dict = deepClone(card_dict_base);
 // Moonlight and etc card timer setup un custom_cards.js

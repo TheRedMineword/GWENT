@@ -1,0 +1,72 @@
+{
+    "name": "Season of Dear Van Gogh",
+    "id": "tempnary_card_001",
+    "deck": "neutral",
+    "row": "agile",
+    "strength": "0",
+    "ability": "reinforce DontPickMeUp",
+    "filename": "custom!sky_vincent_season",
+    "count": "0",
+    "count_monitor": {
+        "base": 1,
+        "monitor": "based",
+        "id": "vincent_seaon_start_reinforce",
+        "duration": {
+            "start": "2026-07-17T07:00:00.000Z",
+            "duration": "345600"
+        },
+        "msg": true,
+        "msg_data": {
+            "msg": "<color=#00ff00>Season of Dear Van Gogh</color> <color=#add8e6>Neutral Card</color> is now active until <color=#90D5FF><$enddatelocal></color>",
+            "display": 13000
+        }
+    },
+    "customassets": {
+        "lg": {
+            "hero": false,
+            "ability": "reinforce",
+            "name": "Season of Dear Van Gogh",
+            "desc": "The world knows the legend.\nFew know the full story.",
+            "txt_timed_a": false
+        },
+        "sm": {
+            "type": "url",
+            "build": [],
+            "url": "https://theredmineword.github.io/GWENT/img/sm/dear_van_gogh/web-only/seaonal_visitor.jpg",
+            "timed": []
+        }
+    }
+}
+
+
+      "_dearvangogh": {
+        "_animate": "img/backgrounds/dear_van_gogh/animation/vid/StarryNightAnimated.m3u8",
+        "deck": "img/backgrounds/dear_van_gogh/deck.jpg",
+        "start": "img/backgrounds/dear_van_gogh/start.jpg",
+        "board": "img/backgrounds/dear_van_gogh/animation/board.png",
+        "_theme": {
+          "menu_color": "#808080",
+          "currentTurn": {
+            "color": "#FFD700",
+            "blur": "1.5vw",
+            "spread": "0.25vw",
+            "offsetX": "-3vw",
+            "offsetY": "0"
+          },
+          "rowHover": {
+            "color": "#a3075e",
+            "blur": "1.25vw"
+          },
+          "cardHover": {
+            "color": "goldenrod",
+            "borderWidth": ".12vw",
+            "borderRadius": ".3vw",
+            "marginBottom": "1vw"
+          },
+          "rowselectable": {
+            "hex": "#a3075e",
+            "alpha": 0.23
+          },
+          "row_scores": "LnJvdy1zY29yZS10YXJnZXQtc2llZ2UgewoJd2lkdGg6IDUuMSU7Cgl0b3A6IDUuNDUlOwoJaGVpZ2h0OiA5NSU7CgltYXJnaW4tYm90dG9tOiAtMTIuNjUlOwoJZm9udC1zaXplOiAxLjh2dzsKCWNvbG9yOiAjMDAwOwoJdGV4dC1zaGFkb3c6IDAgMCA1cHggI0RERDsKfQoKLnJvdy1zY29yZS10YXJnZXQtcmFuZ2VkIHsKCXdpZHRoOiA1LjElOwoJdG9wOiA0JTsKCWhlaWdodDogOTUlOwoJbWFyZ2luLWJvdHRvbTogLTEyLjY1JTsKCWZvbnQtc2l6ZTogMS44dnc7Cgljb2xvcjogIzAwMDsKCXRleHQtc2hhZG93OiAwIDAgNXB4ICNEREQ7Cn0KCi5yb3ctc2NvcmUtdGFyZ2V0LW1lbGVlIHsKCXdpZHRoOiA1LjElOwoJdG9wOiA3LjclOwoJaGVpZ2h0OiA5NSU7CgltYXJnaW4tYm90dG9tOiAtMTIuNjUlOwoJZm9udC1zaXplOiAxLjh2dzsKCWNvbG9yOiAjMDAwOwoJdGV4dC1zaGFkb3c6IDAgMCA1cHggI0RERDsKfQoKLnJvdy1zY29yZS1zZWxmLW1lbGVlIHsKCXdpZHRoOiA1LjElOwoJdG9wOiA2JTsKCWhlaWdodDogOTUlOwoJbWFyZ2luLWJvdHRvbTogLTEyLjY1JTsKCWZvbnQtc2l6ZTogMS44dnc7Cgljb2xvcjogIzAwMDsKCXRleHQtc2hhZG93OiAwIDAgNXB4ICNEREQ7Cn0KCi5yb3ctc2NvcmUtc2VsZi1yYW5nZWQgewoJd2lkdGg6IDUuMSU7Cgl0b3A6IDYlOwoJaGVpZ2h0OiA5NSU7CgltYXJnaW4tYm90dG9tOiAtMTIuNjUlOwoJZm9udC1zaXplOiAxLjh2dzsKCWNvbG9yOiAjMDAwOwoJdGV4dC1zaGFkb3c6IDAgMCA1cHggI0RERDsKfQoKLnJvdy1zY29yZS1zZWxmLXNpZWdlIHsKCXdpZHRoOiA1LjElOwoJdG9wOiA4LjcyJTsKCWhlaWdodDogOTUlOwoJbWFyZ2luLWJvdHRvbTogLTEyLjY1JTsKCWZvbnQtc2l6ZTogMS44dnc7Cgljb2xvcjogIzAwMDsKCXRleHQtc2hhZG93OiAwIDAgNXB4ICNEREQ7Cn0="
+        }
+      }
