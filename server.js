@@ -41,6 +41,15 @@ let random_coin = [
     val: "_lambert",
   },
 ];
+const TRAFFIC_CONFIG_URL = `${process.env.GWENT_URL_COIN || "https://theredmineword.github.io/GWENT/"}server-side/TraficMonitor.json`;
+
+const TRAFIC_BASE_URL = `${process.env.GWENT_URL_COIN2 || "https://drmineword-gwent.onrender.com/"}`;
+
+let trafficMonitor = {
+  askForPing: 30,
+  recive_window: 20,
+  firewsclose: true,
+};
 
 console.warn("PROCCESS ENV", process.env, process.env.VERIF || false);
 
@@ -69,6 +78,74 @@ console.log = (message) => {
     // fail silently
   });
 };
+
+const heartbeatWaiting = new Map();
+
+function generateHeartbeatId() {
+  return crypto.randomUUID();
+}
+async function updateTrafficMonitor() {
+  try {
+    const response = await fetch(TRAFFIC_CONFIG_URL, {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      console.log(`[TrafficMonitor] Failed: ${response.status}`);
+      return;
+    }
+
+    trafficMonitor = await response.json();
+
+    console.log(`[TrafficMonitor] Updated ${JSON.stringify(trafficMonitor)}`);
+  } catch (err) {
+    console.error("[TrafficMonitor]", err);
+  }
+}
+
+setInterval(updateTrafficMonitor, 60 * 1000);
+updateTrafficMonitor();
+
+function sendHeartbeat(ws, req) {
+  const id = generateHeartbeatId();
+
+  heartbeatWaiting.set(id, {
+    ws,
+    received: false,
+    created: Date.now(),
+  });
+
+  const serverUrl = `${TRAFIC_BASE_URL}`;
+
+  comp_and_send(ws, {
+    type: "hearthbeat",
+    data: `${serverUrl}api/recive-hearthbeat?db=${id}`,
+  });
+
+  setTimeout(
+    () => {
+      const hb = heartbeatWaiting.get(id);
+
+      if (!hb) return;
+
+      if (!hb.received) {
+        console.log(`[Heartbeat] Player ${ws.playerId} failed heartbeat`);
+
+        if (trafficMonitor.firewsclose) {
+          ws.terminate();
+        }
+      } else {
+        //      comp_and_send(ws, {
+        //      type: "hearthbeat_recived",
+        //      data: `${id}---BUMP`,
+        //   });
+      }
+
+      heartbeatWaiting.delete(id);
+    },
+    Number(trafficMonitor.recive_window) * 1000,
+  );
+}
 
 async function updateRandomCoin() {
   try {
@@ -363,6 +440,17 @@ function checkCors(req, res) {
   return false;
 }
 app.use(cors({ origin: "*" }));
+app.get("/api/recive-hearthbeat", (req, res) => {
+  const id = req.query.db;
+
+  if (!id || !heartbeatWaiting.has(id)) {
+    return res.sendStatus(404);
+  }
+
+  heartbeatWaiting.get(id).received = true;
+
+  res.sendStatus(204);
+});
 app.get(process.env.A, (req, res) => {
   if (!checkCors(req, res)) {
     return res.status(403).json({
@@ -988,6 +1076,15 @@ wss.on("connection", async (ws, req) => {
 
   playerSockets[ws.playerId] = ws;
 
+  ws.heartbeatInterval = setInterval(
+    () => {
+      if (ws.readyState !== WebSocket.OPEN) return;
+
+      sendHeartbeat(ws, req);
+    },
+    Number(trafficMonitor.askForPing) * 1000,
+  );
+
   const ip = getClientIp(req);
   const ip2 = crypto.createHash("sha256").update(ip).digest("hex");
   const ip_censor = ip.replace(
@@ -1376,6 +1473,7 @@ wss.on("connection", async (ws, req) => {
     }
   });
   ws.on("error", (err) => {
+    clearInterval(ws.heartbeatInterval);
     console.log(`Socket error ${ws.playerId}:`, err.code, err.message);
     try {
       console.log(`|| Player ${ws.playerId} disconnected`);
@@ -1435,6 +1533,7 @@ wss.on("connection", async (ws, req) => {
     }
   });
   ws.on("close", () => {
+    clearInterval(ws.heartbeatInterval);
     console.log(`|| Player ${ws.playerId} disconnected`);
     delete playerSockets[ws.playerId];
     // Check if the player has an active session

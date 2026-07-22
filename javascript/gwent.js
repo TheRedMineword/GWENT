@@ -811,6 +811,14 @@ socket.onmessage = async (event) => {
   const data = event_parsed; //.data;
   console.log("onmsg data:", data);
   switch (data.type) {
+    case "hearthbeat": //{"type":"hearthbeat","data":"http://localhost:8081/api/recive-hearthbeat?db=cdea635c-6a30-4778-96ed-1702d503ff6c"}
+      try {
+        console.log("[HEARTH BEAT!!", data, await fetch(data.data));
+      } catch (e) {
+        console.error("HeartBeat err", e);
+        warn_screen(`HearthBeat Failed!!\n\n${e.message}`);
+      }
+      break;
     case "new_css":
       try {
         document.getElementById("dynamic-css").textContent = generateCSS(
