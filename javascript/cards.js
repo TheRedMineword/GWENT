@@ -3330,7 +3330,7 @@ function setupSpiritTimer(card, data) {
     msg: true,
 
     msg_data: {
-      msg: `Traveling Spirit <color=#00ff00>${data.when.spirit_name}</color> now visits <color=#add8e6>Sky Kingdom</color>\nUntil: <color=#90D5FF><$enddatelocal></color>`,
+      msg: getTranslation("ui.notif_side.ts").replace("%s", data.when.spirit_name),
       display: 13000,
     },
   };

@@ -43,7 +43,7 @@ STRNG["pl"] = {
   },
 
   decoy: {
-    name: "Przynęta",
+    name: "Manekin do Ćwiczeń",
     description:
       "Zamienia się z kartą na polu bitwy, aby zwrócić ją do twojej ręki. "
   },
@@ -62,7 +62,7 @@ STRNG["pl"] = {
   yrden: {
     name: "Znaki Wiedźmińskie: Yrden",
     description:
-      "Magiczna pułapka wiedźmińska. Umieść ją w rzędzie dystansowym przeciwnika, aby każda jednostka otrzymała -1 do siły. Efekty się kumulują. Przynęta może zostać użyta do podniesienia tej karty. "
+      "Magiczna pułapka wiedźmińska. Umieść ją w rzędzie dystansowym przeciwnika, aby każda jednostka otrzymała -1 do siły. Efekty się kumulują. Manekin do Ćwiczeń może zostać użyta do podniesienia tej karty. "
   },
 
   horn: {
@@ -481,7 +481,7 @@ STRNG["pl"] = {
 },
   card: {
   mysterious_elf: "Tajemniczy Elf",
-  decoy: "Przynęta",
+  decoy: "Manekin do Ćwiczeń",
   frost: "Siarczysty Mróz",
   ciri: "Cirilla Fiona Elen Riannon",
   clear: "Czyste Niebo",
@@ -737,7 +737,7 @@ STRNG["pl"] = {
     "custom!vincent_painting_power": "Vincent Van Gogh: Painting",
     "custom!sky_vincent_guys": "Dear Van Gogh — Seasonal Spirits",
     "custom!sky_vincent_medic": "Dear Van Gogh — Seasonal Hearth",
-    hym: "Hym",
+    hym: "Him",
     "custom!m_moonlight": "Moonlight",
     "custom!s_moonlight": "Night Over Novigrad",
     "custom!deatheatersmoon": "Full Moon",
@@ -929,6 +929,34 @@ STRNG["pl"] = {
       "whiteflame2-me_nilfgaard": "You copied opponent leader ability!",
       "whiteflame2-me_syndicate": "You copied opponent leader ability!",
     },
+    notif_side: {
+      "ts": "Podróżująca Dusza \"<color=#00ff00>%s</color>\" odwiedza teraz <color=#add8e6>Królestwo Nieba</color>\nWyruszy spowrotem w drogę dnia <color=#90D5FF><$enddatelocal></color>",
+      "moon": {
+        "new": "Plansza jest spowita w ciemnościach!\nKsiężyc jest w <color=#DDE8EB>nowiu</color>!\nDo dnia <color=#90D5FF><$enddatelocal></color> przypada <color=#DDE8EB>nów</color>!\nKsiężyc zniknie <color=#90D5FF>%s</color>!",
+        "full": "Światło <color=#DDE8EB>Pełni</color> roświetla planszę!\nPełnia będzie na niebie aż do <color=#90D5FF><$enddatelocal></color>!\nKsiężyc będzie w <color=#DDE8EB>Pełni</color> dniat <color=#90D5FF>%s</color>!"
+      }
+    },
+    mmenu: {
+      "create-game": "Stwórz Grę",
+      joingame: "Dołącz do Gry",
+      "session-start-control_ready": "Gotów",
+      "session-start-control_unready": "Niegotowy",
+      "cancel": "Anuluj",
+      "copy": "Kupiuj Zaproszenie",
+      "music": "♫ Muzyka",
+      "no-op": "Brak Przeciwnika",
+      "hi": "Witaj Graczu",
+      "chat": "Czat",
+      "status": {
+        "ready": "Gotów:",
+        "gameinprogress": "Gra w Trakcie",
+      }
+    },
+  startwarnings: {
+    "a": "Twoja talia musi mieć conajmniej %s kart jednostek ",
+    "b": "Twoja talia nie może mieć więcej niż %s kart specjalnych. ",
+    "c": "Twoja talia nie może mieć więcej niż %s kart bohaterów. "
+  }
   },
   scolpick: {
     "me": "Rozpocznij Grę Pierwszy",

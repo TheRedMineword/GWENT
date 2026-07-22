@@ -846,6 +846,8 @@ async function loadScript2(src) {
     await loadScriptEval(`javascript/translations/strings/en.js?ver=${sha}`);
     await loadScriptEval(`javascript/translations/strings/pl.js?ver=${sha}`);
     await loadScriptEval(`javascript/translations/strings/END.js?ver=${sha}`);
+
+    translate_ui_hub();
     //   console.log("bg watcher", watcher);
     loadingscreenupdate("Searching for organic life forms!");
     if (location.hostname === "localhost" && location.port === "8080") {

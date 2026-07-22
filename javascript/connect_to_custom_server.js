@@ -608,6 +608,7 @@ async function connect_to_custom_server(URL) {
     factions = translatefactionsdict();
     ability_dict = translateabilitydict();
     translateDefinesJS();
+    translate_ui_hub();
     updateLoader("Almost there", 98, `Reloading UI!`);
     await reloadRuntimeConfigs();
     if (!waitMusicPlaying) {

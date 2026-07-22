@@ -762,6 +762,11 @@ STRNG["en"] = {
       me_unready: "You are now UnReady",
       redraw:
         "<color=#d5cfe3>You redrawed card</color> <color=#fa4441>%x</color> <color=#d5cfe3>for a</color> <color=#41fa66>%y</color>",
+      ordinal: {
+      "st": "st",
+      "nd": "nd",
+      "rd": "rd"
+    }
     },
     notif: {
       "nilfgaard-wins-draws": "Nilfgaard wins draws",
@@ -834,6 +839,34 @@ STRNG["en"] = {
       "whiteflame2-me_nilfgaard": "You copied opponent leader ability!",
       "whiteflame2-me_syndicate": "You copied opponent leader ability!",
     },
+    notif_side: {
+      "ts": "Traveling Spirit <color=#00ff00>%s</color> now visits <color=#add8e6>Sky Kingdom</color>\nUntil: <color=#90D5FF><$enddatelocal></color>",
+      "moon": {
+        "new": "The game board is shrouded in darkness; no <color=#DDE8EB>Moonlight</color> is comes from the sky.\nUntil <color=#90D5FF><$enddatelocal></color>\n<color=#DDE8EB>New Moon</color> happening at <color=#90D5FF>%s</color>",
+        "full": "The light of the <color=#DDE8EB>Full Moon</color> illuminates the boards.\nUntil <color=#90D5FF><$enddatelocal></color>\n<color=#DDE8EB>Full Moon</color> happening at <color=#90D5FF>%s</color>"
+      }
+    },
+    mmenu: {
+      "create-game": "Create Game",
+      joingame: "Join Game",
+      "session-start-control_ready": "Ready",
+      "session-start-control_unready": "UnReady",
+      "cancel": "Cancel",
+      "copy": "Copy Session",
+      "music": "♫ Music",
+      "no-op": "No Opponent",
+      "hi": "Hello PlayerID",
+      "chat": "Chat",
+      "status": {
+        "ready": "Ready:",
+        "gameinprogress": "Game In Progress",
+      }
+    },
+  startwarnings: {
+    "a": "Your deck must have at least %s unit cards. ",
+    "b": "Your deck must have no more than %s special cards. ",
+    "c": "Your deck must have no more than %s hero cards. "
+  }
   },
   scolpick: {
     me: "Go First",

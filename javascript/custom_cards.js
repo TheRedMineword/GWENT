@@ -1003,7 +1003,7 @@ async function rebuildCustomCardsMaps() {
           msg: true,
 
           msg_data: {
-            msg: `The light of the <color=#DDE8EB>Full Moon</color> illuminates the boards.\nUntil <color=#90D5FF><$enddatelocal></color>\n<color=#DDE8EB>Full Moon</color> happening at <color=#90D5FF>${formatLocalDate(getNearestFullMoon())}</color>`,
+            msg: getTranslation("ui.notif_side.moon.full").replace("%s", formatLocalDate(getNearestFullMoon())),
             display: 13000,
           },
         };
@@ -1024,7 +1024,7 @@ async function rebuildCustomCardsMaps() {
           msg: true,
 
           msg_data: {
-            msg: `The game board is shrouded in darkness; no <color=#DDE8EB>Moonlight</color> is comes from the sky.\nUntil <color=#90D5FF><$enddatelocal></color>\n<color=#DDE8EB>New Moon</color> happening at <color=#90D5FF>${formatLocalDate(getNearestNewMoon())}</color>`,
+            msg: getTranslation("ui.notif_side.moon.new").replace("%s", formatLocalDate(getNearestNewMoon())),
             display: 13000,
           },
         };

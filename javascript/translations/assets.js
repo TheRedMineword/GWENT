@@ -505,7 +505,16 @@ function getUiHtmlStrng_escapeHtml(str) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 }
-
+function translate_ui_hub(){
+  document.getElementById("create-game").textContent = getTranslation("ui.mmenu.create-game");//"Create Server";
+document.getElementById("join-game").textContent = getTranslation("ui.mmenu.joingame");//"Join Server";
+document.getElementById("session-start-control").textContent = getTranslation("ui.mmenu.session-start-control_ready");//"Ready";
+document.getElementById("cancel-game").textContent = getTranslation("ui.mmenu.cancel");//"Cancel";
+document.getElementById("copy-session").textContent = getTranslation("ui.mmenu.copy");//"Copy Session";
+document.getElementById("toggle-music").textContent = getTranslation("ui.mmenu.music");//"♫ Music";
+document.getElementById("opponent-name").textContent = getTranslation("ui.mmenu.no-op");//"No Opponent";
+document.getElementById("chat-toggle").textContent = getTranslation("ui.mmenu.chat");
+}
 function getUiHtmlStrng(key, linebreakertobr = false) {
   let html = getUiStrng(`html.${key}`);
 

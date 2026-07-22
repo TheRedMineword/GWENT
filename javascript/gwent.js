@@ -861,7 +861,7 @@ socket.onmessage = async (event) => {
         ` Country: ${country} || Risk: ${JSON.stringify(risk_is)}`,
       );
       console.log("Welcome, your id is " + playerId);
-      ep_id.textContent = `Hello PlayerID:\n${playerId}`;
+      ep_id.textContent = `${getTranslation("ui.mmenu.hi")}:\n${playerId}`;
       ep_id.style.color = "";
       //  menuBtn.style.transition = "color 2s ease";
       //  menuBtn.style.color = "lightgreen";
@@ -930,7 +930,7 @@ socket.onmessage = async (event) => {
       if (gameended === false) {
         showTooltip(getUiStrng("op_left"));
         var btn = document.getElementById("session-start-control");
-        btn.textContent = "Ready";
+        btn.textContent = getTranslation("ui.mmenu.session-start-control_ready");
         amReady = false;
         toggleReadyWaiting(amReady);
         //	btnCancelElem.classList.remove("hidden");
@@ -1007,7 +1007,7 @@ socket.onmessage = async (event) => {
       updateOpponentUI({
         name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]}`,
         state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
-        status: `Ready: ${opponentReady}`,
+        status: `${getTranslation("ui.mmenu.status.ready")} ${opponentReady}`,
       });
       player_op = new Player(
         1,
@@ -1036,7 +1036,7 @@ socket.onmessage = async (event) => {
         updateOpponentUI({
           name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]}`,
           state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
-          status: `Ready: ${opponentReady}`,
+          status: `${getTranslation("ui.mmenu.status.ready")} ${opponentReady}`,
         });
       }
       break;
@@ -1066,7 +1066,7 @@ socket.onmessage = async (event) => {
       updateOpponentUI({
         name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]?.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m])}`,
         state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
-        status: `Ready: ${opponentReady}`,
+        status: `${getTranslation("ui.mmenu.status.ready")} ${opponentReady}`,
       });
       // opponentReadyElem.querySelector("img").src = `img/icons/deck_shield_${data.faction}.png`
       break;
@@ -1088,7 +1088,7 @@ socket.onmessage = async (event) => {
       updateOpponentUI({
         name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]?.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m])}`,
         state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
-        status: `Ready: ${opponentReady}`,
+        status: `${getTranslation("ui.mmenu.status.ready")} ${opponentReady}`,
       });
       //	twoPlayersConnected = true;
       showTooltip(getUiStrng("op_unready"));
@@ -3045,7 +3045,7 @@ class Game {
     updateOpponentUI({
       name: " ",
       state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
-      status: `Game In Progress!`,
+      status: getTranslation("ui.mmenu.status.gameinprogress"),
     });
     await sleep(10);
     player_op.total = 0;
@@ -3146,7 +3146,7 @@ class Game {
             this.resetTurnUI("op");
             socket.removeEventListener("message", handleMessage);
             var btn4 = document.getElementById("session-start-control");
-            btn4.textContent = "Game In Progress";
+            btn4.textContent = getTranslation("ui.mmenu.status.gameinprogress");
             await scol_fake_coin();
             resolve(true);
           }
@@ -3170,7 +3170,7 @@ class Game {
       await this.initialRedraw();
     }
     var btn3 = document.getElementById("session-start-control");
-    btn3.textContent = "Game In Progress";
+    btn3.textContent = getTranslation("ui.mmenu.status.gameinprogress");
   }
 
   // Determines who starts first
@@ -3623,7 +3623,7 @@ class Game {
     player_me.reset();
     player_op.reset();
     var btn5 = document.getElementById("session-start-control");
-    btn5.textContent = "Ready";
+    btn5.textContent = getTranslation("ui.mmenu.session-start-control_ready");
     //	ui.toggleMusic_elem.classList.add("music-customization");
     this.endScreen.classList.add("hide");
     customizationElem.classList.remove("hide");
@@ -6498,7 +6498,7 @@ class DeckMaker {
       comp_and_send(socket, JSON.stringify({ type: "unReady" }));
       showTooltip(getUiStrng("me_unready"));
       var btn = document.getElementById("session-start-control");
-      btn.textContent = "Ready";
+      btn.textContent = getTranslation("ui.mmenu.session-start-control_ready");
       customizationElem.classList.remove("noclick");
       amReady = false;
       toggleReadyWaiting(amReady);
@@ -6510,11 +6510,11 @@ class DeckMaker {
     console.log("[Start] \\this.stats\\", this.stats);
     let warning = "";
     if (this.stats.units < ForGameStart.unitscards)
-      warning += `Your deck must have at least ${ForGameStart.unitscards} unit cards. \n`;
+      warning += `${getTranslation("ui.startwarnings.a").replace("%s", ForGameStart.unitscards)}\n`;
     if (this.stats.special > ForGameStart.special)
-      warning += `Your deck must have no more than ${ForGameStart.special} special cards. \n`;
+      warning += `${getTranslation("ui.startwarnings.b").replace("%s", ForGameStart.special)}\n`;
     if (this.stats.hero > ForGameStart.hero)
-      warning += `Your deck must have no more than ${ForGameStart.hero} hero cards. \n`;
+      warning += `${getTranslation("ui.startwarnings.c").replace("%s", ForGameStart.hero)}\n`;
 
     if (warning != "") return warn_screen(warning);
     else {
@@ -6555,7 +6555,7 @@ class DeckMaker {
       game.startGame();
     } else {
       var btn = document.getElementById("session-start-control");
-      btn.textContent = "UnReady";
+      btn.textContent = getTranslation("ui.mmenu.session-start-control_unready");
     }
   }
 }
