@@ -55,7 +55,7 @@ socket.onclose = () => {
   joinedSessionId = null;
   ThisSessionId = null;
   isconnectedtosession = false;
-  alert("Disconnected from the server");
+  warn_screen("Disconnected from the server");
   showBrickScreen();
 };
 
@@ -100,7 +100,7 @@ function askForSessionMode() {
     box.classList.add("allow-click");
 
     const header = document.createElement("div");
-    header.textContent = "Session";
+    header.textContent = getUiHtmlStrng("session_mode.header");
     Object.assign(header.style, {
       padding: "10px 16px",
       background: "#6f5830",
@@ -118,7 +118,7 @@ function askForSessionMode() {
     });
 
     const text = document.createElement("div");
-    text.textContent = "Choose session type";
+    text.textContent = getUiHtmlStrng("session_mode.text");
     Object.assign(text.style, {
       fontSize: "18px",
       marginBottom: "20px",
@@ -152,8 +152,8 @@ function askForSessionMode() {
       return btn;
     }
 
-    const create = makeButton("Create Server");
-    const custom = makeButton("Custom Server");
+    const create = makeButton(getUiHtmlStrng("session_mode.create"));
+    const custom = makeButton(getUiHtmlStrng("session_mode.custom"));
 
     create.onclick = () => cleanup({ type: "create" });
     custom.onclick = () => cleanup({ type: "custom" });
@@ -202,7 +202,7 @@ function askForCustomConfig() {
     box.classList.add("allow-click");
 
     const header = document.createElement("div");
-    header.textContent = "Custom Server";
+    header.textContent = getUiHtmlStrng("custom_server.header");
     Object.assign(header.style, {
       padding: "10px 16px",
       background: "#6f5830",
@@ -219,7 +219,7 @@ function askForCustomConfig() {
     });
 
     const input = document.createElement("textarea");
-    input.placeholder = "Enter JSON config...";
+    input.placeholder = getUiHtmlStrng("custom_server.placeholder");
     Object.assign(input.style, {
       width: "100%",
       height: "150px",
@@ -261,8 +261,8 @@ function askForCustomConfig() {
       return btn;
     }
 
-    const start = makeButton("Start");
-    const cancel = makeButton("Cancel");
+    const start = makeButton(getUiHtmlStrng("custom_server.start"));
+    const cancel = makeButton(getUiHtmlStrng("custom_server.cancel"));
 
     function cleanup(value) {
       document.body.removeChild(overlay);
@@ -273,7 +273,7 @@ function askForCustomConfig() {
       try {
         cleanup(JSON.parse(input.value || "{}"));
       } catch {
-        alert("Invalid JSON");
+        warn_screen(getUiHtmlStrng("custom_server.invalid_json"));
       }
     };
 
@@ -322,7 +322,7 @@ function askForPlayerName() {
     box.classList.add("allow-click");
 
     const header = document.createElement("div");
-    header.textContent = "Player Name";
+    header.textContent = getUiHtmlStrng("player_name.header");
     Object.assign(header.style, {
       padding: "10px 16px",
       background: "#6f5830",
@@ -340,7 +340,7 @@ function askForPlayerName() {
     });
 
     const label = document.createElement("div");
-    label.textContent = "Enter your name";
+    label.textContent = getUiHtmlStrng("player_name.label");
     Object.assign(label.style, {
       fontSize: "18px",
       marginBottom: "16px",
@@ -359,7 +359,7 @@ function askForPlayerName() {
     const input = document.createElement("input");
     input.type = "text";
     input.value = loginName;
-    input.placeholder = "Example: ThatCoolUsername";
+    input.placeholder = getUiHtmlStrng("player_name.placeholder");
 
     Object.assign(input.style, {
       width: "100%",
@@ -401,8 +401,8 @@ function askForPlayerName() {
       return btn;
     }
 
-    const ok = makeButton("OK");
-    const cancel = makeButton("Cancel");
+    const ok = makeButton(getUiHtmlStrng("player_name.ok"));
+    const cancel = makeButton(getUiHtmlStrng("player_name.cancel"));
 
     function cleanup(value) {
       document.body.removeChild(overlay);
@@ -412,7 +412,7 @@ function askForPlayerName() {
     ok.onclick = () => {
       const name = input.value.trim();
       if (!name) {
-        alert("Please enter a name");
+        warn_screen(getUiHtmlStrng("player_name.empty"));
         return;
       }
       cleanup(name);
@@ -526,7 +526,7 @@ function cancelSession() {
   joinedSessionId = null;
   reset_custom();
   updateOpponentUI({
-    name: "No Opponent",
+    name: getUiStrng("no_op_ui"),
     state:
       "img/icons/google_fonts__signal_disconnected_99dp_CCCCCC_FILL0_wght400_GRAD0_opsz48.png",
     status: "",
@@ -579,7 +579,7 @@ function silent_cancelSession() {
   joinedSessionId = null;
   reset_custom();
   updateOpponentUI({
-    name: "No Opponent",
+    name: getUiStrng("no_op_ui"),
     state:
       "img/icons/google_fonts__signal_disconnected_99dp_CCCCCC_FILL0_wght400_GRAD0_opsz48.png",
     status: "",
@@ -602,7 +602,7 @@ function reset_menu() {
   joinedSessionId = null;
   reset_custom();
   updateOpponentUI({
-    name: "No Opponent",
+    name: getUiStrng("no_op_ui"),
     state:
       "img/icons/google_fonts__signal_disconnected_99dp_CCCCCC_FILL0_wght400_GRAD0_opsz48.png",
     status: "",
@@ -643,7 +643,9 @@ socket.addEventListener("message", async (event) => {
       }
       var user_name = await askForPlayerName();
       if (user_name === "ThatCoolUsername") {
-        alert("That was an EXAMPLE username, and its not even that cool\n:(");
+        warn_screen(
+          "That was an EXAMPLE username, and its not even that cool\n:(",
+        );
       }
       console.log(user_name);
       if (!user_name) {
@@ -691,7 +693,9 @@ socket.addEventListener("message", async (event) => {
       console.log(`[SD] Session joined data raw: ${decodedsession}`);
       var user_name = await askForPlayerName();
       if (user_name === "ThatCoolUsername") {
-        alert("That was an EXAMPLE username, and its not even that cool\n:(");
+        warn_screen(
+          "That was an EXAMPLE username, and its not even that cool\n:(",
+        );
       }
       console.log(user_name);
       if (!user_name) {
@@ -808,7 +812,7 @@ function updateOpponentUI(data) {
 
   // NO DATA STATE
   if (!data) {
-    nameEl.textContent = "No Opponent";
+    nameEl.textContent = getUiStrng("no_op_ui");
     img.src =
       "img/icons/google_fonts__signal_disconnected_99dp_CCCCCC_FILL0_wght400_GRAD0_opsz48.png";
     statusEl.textContent = "";

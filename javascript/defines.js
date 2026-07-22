@@ -337,9 +337,9 @@ let ThisDef = {
 
   env_vars: {
     showbankms: deepClone(showbankms),
-    players: {
-      sys: deepClone(players.sys),
-    },
+
+    // players: {},
+
     fullscreenConfig: deepClone(fullscreenConfig),
 
     OnGameStartDraw: deepClone(OnGameStartDraw),
@@ -369,9 +369,23 @@ let ThisDef = {
 
     nilfard_drawmaster: deepClone(nilfard_drawmaster),
 
-    gryffinschool_conf: deepClone(gryffinschool_conf),
+    gryffinschool_conf: {
+      anim: deepClone(gryffinschool_conf.anim),
+      anim_hand: deepClone(gryffinschool_conf.anim_hand),
+    },
 
-    mtg_conf: deepClone(mtg_conf),
+    mtg_conf: {
+      anim: deepClone(mtg_conf.anim),
+      anim_hand: deepClone(mtg_conf.anim_hand),
+      random_max: deepClone(mtg_conf.random_max),
+      min_power: deepClone(mtg_conf.min_power),
+      max_power: deepClone(mtg_conf.max_power),
+      count_needed: deepClone(mtg_conf.count_needed),
+      shuffle_few_times: deepClone(mtg_conf.shuffle_few_times),
+      version: deepClone(mtg_conf.version),
+      daily_seed: deepClone(mtg_conf.daily_seed),
+      unstable_mode: deepClone(mtg_conf.unstable_mode),
+    },
 
     gaunter_lider: deepClone(gaunter_lider),
 
@@ -381,9 +395,6 @@ let ThisDef = {
 
     d20cloner: deepClone(d20cloner),
 
-    syndicate_faction_clone: deepClone(syndicate_faction_clone),
-
-    map_results_txt: deepClone(map_results_txt),
     map_results_color: deepClone(map_results_color),
   },
 };
@@ -438,3 +449,38 @@ let yt_repeat_launch = {
   id: 0,
   vol: 0,
 };
+function translateDefinesJS() {
+  // getUiStrngDefinesJS(key);
+
+  players.me = getUiStrngDefinesJS("players.me");
+  players.op = getUiStrngDefinesJS("players.op");
+  players.sys = getUiStrngDefinesJS("players.sys");
+
+  gryffinschool_conf.topic = getUiStrngDefinesJS("gryffinschool_conf.topic");
+  mtg_conf.topic = getUiStrngDefinesJS("mtg_conf.topic");
+
+  syndicate_faction_clone.nilfgaard.name =
+    getUiStrngDefinesJS("factions.nilfgaard");
+
+  syndicate_faction_clone.scoiatael.name =
+    getUiStrngDefinesJS("factions.scoiatael");
+
+  syndicate_faction_clone.skellige.name =
+    getUiStrngDefinesJS("factions.skellige");
+
+  syndicate_faction_clone.syndicate.name =
+    getUiStrngDefinesJS("factions.syndicate");
+
+  syndicate_faction_clone.sky.name = getUiStrngDefinesJS("factions.sky");
+
+  map_results_txt._me = getUiStrngDefinesJS("map_results._me");
+
+  map_results_txt._op = getUiStrngDefinesJS("map_results._op");
+
+  map_results_txt._me_lambert = getUiStrngDefinesJS("map_results._me_lambert");
+
+  map_results_txt._op_lambert = getUiStrngDefinesJS("map_results._op_lambert");
+
+  map_results_txt.cheater = getUiStrngDefinesJS("map_results.cheater");
+}
+translateDefinesJS();

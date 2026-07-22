@@ -3,6 +3,7 @@ let IsNowCustom = false;
 // CONFIG
 // ===============================
 const IGNORE_PATTERNS = [
+  "STRNG_base",
   "videoMapLyrics",
   "activeBars",
   "_debug_volume",
@@ -606,6 +607,7 @@ async function connect_to_custom_server(URL) {
     card_dict = translateCardDict();
     factions = translatefactionsdict();
     ability_dict = translateabilitydict();
+    translateDefinesJS();
     updateLoader("Almost there", 98, `Reloading UI!`);
     await reloadRuntimeConfigs();
     if (!waitMusicPlaying) {

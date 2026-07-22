@@ -159,7 +159,7 @@ function askForSessionId() {
 
     // Header
     const header = document.createElement("div");
-    header.textContent = "Join Session";
+    header.textContent = getUiHtmlStrng("askForSessionId.header");
     Object.assign(header.style, {
       padding: "10px 16px",
       background: "#6f5830",
@@ -178,7 +178,7 @@ function askForSessionId() {
     });
 
     const label = document.createElement("div");
-    label.textContent = "Enter Session ID";
+    label.textContent = getUiHtmlStrng("askForSessionId.enter");
     Object.assign(label.style, {
       fontSize: "18px",
       marginBottom: "16px",
@@ -187,7 +187,7 @@ function askForSessionId() {
     // Input
     const input = document.createElement("input");
     input.type = "text";
-    input.placeholder = "Session ID";
+    input.placeholder = getUiHtmlStrng("askForSessionId.input");
     Object.assign(input.style, {
       width: "100%",
       boxSizing: "border-box",
@@ -235,8 +235,8 @@ function askForSessionId() {
       return btn;
     }
 
-    const join = makeButton("Join");
-    const cancel = makeButton("Cancel");
+    const join = makeButton(getUiHtmlStrng("askForSessionId.ok"));
+    const cancel = makeButton(getUiHtmlStrng("askForSessionId.notOk"));
 
     function cleanup(value) {
       document.body.removeChild(overlay);
@@ -404,12 +404,8 @@ function showBrickScreen() {
     </style>
 
     <div class="box">
-      <h1>MULTIPLAYER FAILURE</h1>
-      <p>
-        Could not connect to multiplayer servers.<br>
-        The backend may still be sleeping or unavailable.<br><br>
-        Please refresh later.
-      </p>
+      <h1>${getUiHtmlStrng("brick.name")}</h1>
+      <p>${getUiHtmlStrng("brick.why", true)}</p>
     </div>
   `;
   fetch(wakeUrl);
@@ -426,7 +422,7 @@ if (isHuman) {
   socket = new WebSocket(wsUrl);
 } else {
   showBrickScreen();
-  alert(
+  warn_screen(
     "!!BOT DETECTED!!\nFailed to connect to multiplayer server.\n\nIf you are human report is as bug!\n\n!!BOT DETECTED!!",
   );
 }
@@ -439,7 +435,7 @@ socket.onopen = () => {
 socket.onerror = (err) => {
   console.error("WebSocket error", err);
   showBrickScreen();
-  alert("Failed to connect to multiplayer server.");
+  warn_screen("Failed to connect to multiplayer server.");
 };
 
 socket.onclose = (event) => {
@@ -448,7 +444,7 @@ socket.onclose = (event) => {
   // Optional: treat early close as failure
   if (!socket._connected) {
     showBrickScreen();
-    alert(
+    warn_screen(
       "Failed to start multiplayer, please refresh page!!!\n\nIf it dont work wait for a moment before trying again!",
     );
   }
@@ -563,7 +559,7 @@ setInterval(async () => {
     console.error(err);
     if (JSON.parse(jsonString).type === "ping") {
     } else {
-      alert("Socket send failed: " + err.message);
+      warn_screen("Socket send failed: " + err.message);
     }
   }
 }, SEND_INTERVAL_MS);
@@ -597,7 +593,7 @@ async function recv_and_decomp(event) {
     console.log("Received JSON:", json);
     return JSON.parse(json);
   } catch (err) {
-    alert("Socket receive failed: " + err.message);
+    warn_screen("Socket receive failed: " + err.message);
   }
 }
 
@@ -699,45 +695,26 @@ function showSurrenderVote() {
     `;
 
     box.innerHTML = `
-      <div style="
-        font-size:56px;
-        margin-bottom:12px;
-      ">
-        🗡️
-      </div>
+<div style="font-size:56px;margin-bottom:12px;">${getUiHtmlStrng("surrender_request.sword")}</div>
 
-      <div style="
-        font-size:28px;
-        letter-spacing:2px;
-        margin-bottom:18px;
-      ">
-        SURRENDER REQUEST
-      </div>
+<div style="font-size:28px;letter-spacing:2px;margin-bottom:18px;">
+    ${getUiHtmlStrng("surrender_request.title")}
+</div>
 
-      <div style="
-        font-size:19px;
-        color:#d9bf8a;
-        margin-bottom:30px;
-        line-height:1.5;
-      ">
-        Your opponent has cast down their sword<br>
-        and seeks an honorable defeat.
-      </div>
+<div style="font-size:19px;color:#d9bf8a;margin-bottom:30px;line-height:1.5;">
+    ${getUiHtmlStrng("surrender_request.description", true)}
+</div>
 
-      <div style="
-        display:flex;
-        justify-content:center;
-        gap:20px;
-      ">
-        <button id="surrender-accept-btn">
-          Grant Mercy
-        </button>
+<div style="display:flex;justify-content:center;gap:20px;">
+    <button id="surrender-accept-btn">
+        ${getUiHtmlStrng("surrender_request.accept")}
+    </button>
 
-        <button id="surrender-reject-btn">
-          Fight On
-        </button>
-      </div>
-    `;
+    <button id="surrender-reject-btn">
+        ${getUiHtmlStrng("surrender_request.reject")}
+    </button>
+</div>
+`;
     box.classList.add("allow-click");
 
     overlay.appendChild(box);
@@ -790,7 +767,7 @@ function askforsurrender() {
       type: "surrenderRequest",
     }),
   );
-  showSideTooltip("You asked to surrender!");
+  showSideTooltip(getUiHtmlStrng("surrender_request.ask"));
 }
 document
   .getElementById("surrender-button")
@@ -972,7 +949,7 @@ socket.onmessage = async (event) => {
       console.log("Opponent left the game");
       // isOpponentReadyElem.classList.add("hidden");
       updateOpponentUI({
-        name: "No Opponent",
+        name: getUiStrng("no_op_ui"),
         state:
           "img/icons/google_fonts__signal_disconnected_99dp_CCCCCC_FILL0_wght400_GRAD0_opsz48.png",
         status: "",
@@ -1217,7 +1194,7 @@ socket.onmessage = async (event) => {
           "card",
           card,
         );
-        alert(
+        warn_screen(
           "Failed to build opponent hand, check console for more!! \n\nReport is as bug!!!",
         );
       }
@@ -1279,7 +1256,7 @@ socket.onmessage = async (event) => {
           data,
           cards_to_find_post,
         );
-        alert(
+        warn_screen(
           "Failed sync op cars on end of execute path, check console for more \n\nReport it as bug!!!",
         );
       }
@@ -1317,12 +1294,12 @@ socket.onmessage = async (event) => {
     case "surrenderResponse":
       ui.enableSurrender(true);
       if (data.accepted) {
-        //  alert("accepted flag");
+        //  warn_screen("accepted flag");
         endGameBySurrender(player_op, player_me);
       } else {
-        //  alert("rejected surrender");
+        //  warn_screen("rejected surrender");
         tocar("tf2/Vote_no", false);
-        showSideTooltip("Your request to surrender has been denied.");
+        showSideTooltip(getUiHtmlStrng("surrender_request.ask"));
         ui.enablePlayer(true);
       }
       break;
@@ -1369,7 +1346,7 @@ socket.onmessage = async (event) => {
           data,
           cards_to_find_post,
         );
-        alert(
+        warn_screen(
           "Failed sync op cars on end of execute path, check console for more \n\nReport it as bug!!!",
         );
       }
@@ -1529,7 +1506,7 @@ function shuffleSeeded2(array, seed, debug = null) {
       ` error `,
       e,
     );
-    alert(
+    warn_screen(
       "GAME CRASH!\n\nFatal error at shuffleSeeded function, check console for more info\n\nReport is as bug!!",
     );
   }
@@ -3701,7 +3678,7 @@ class Card {
     }
 
     if (this.row === "leader") {
-      this.desc_name = "Leader Ability";
+      this.desc_name = getTranslation("ability.leader");
     } else if (this.abilities.length > 0) {
       let name = "";
 
@@ -7155,7 +7132,7 @@ async function postscripinit() {
     try {
       await custom_card_builder_init();
     } catch (e) {
-      alert(
+      warn_screen(
         "Fatal error at custom_card_builder_init()\n\nGame failed to lunch\n\nCheck console for more!",
       );
       console.error("FATAL", e);

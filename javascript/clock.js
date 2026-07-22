@@ -1,4 +1,5 @@
 "use strict";
+let STRNG_base = {};
 function utf8ToBase64(str) {
   const bytes = new TextEncoder().encode(str);
   let binary = "";
@@ -112,6 +113,23 @@ document.documentElement.style.setProperty("--card-hover-shadow", "#6d5210");
 function loadingscreenupdate(strng) {
   document.getElementById("load_text").textContent = strng;
   console.log(`[LOADING]: "${strng}"`);
+}
+async function initlng(sha) {
+  try {
+    return new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+
+      s.src = `javascript/translations/assets.js?ver=${encodeURIComponent(sha)}`;
+
+      s.onload = resolve;
+
+      s.onerror = reject;
+
+      document.head.appendChild(s);
+    });
+  } catch (err) {
+    console.error("Failed to load assets.js", err);
+  }
 }
 
 async function decompressBase64_init(base64) {
@@ -475,7 +493,11 @@ async function setupTimedImages(config, set_new_image) {
   };
 }
 
-function warn_screen(content, type = "alert", title = "Warning") {
+function warn_screen(
+  content,
+  type = "alert",
+  title = getUiHtmlStrng("warn_screen.titlefallback"),
+) {
   return new Promise((resolve) => {
     const overlay = document.createElement("div");
     Object.assign(overlay.style, {
@@ -563,8 +585,8 @@ function warn_screen(content, type = "alert", title = "Warning") {
     }
 
     if (type === "confirm") {
-      const yes = makeButton("Confirm");
-      const no = makeButton("Cancel");
+      const yes = makeButton(getUiHtmlStrng("warn_screen.confirm"));
+      const no = makeButton(getUiHtmlStrng("warn_screen.cancel"));
 
       yes.onclick = () => close(true);
       no.onclick = () => close(false);
@@ -572,7 +594,7 @@ function warn_screen(content, type = "alert", title = "Warning") {
       buttons.append(yes, no);
       yes.focus();
     } else {
-      const ok = makeButton("OK");
+      const ok = makeButton(getUiHtmlStrng("warn_screen.ok"));
 
       ok.onclick = () => close(true);
 
@@ -691,7 +713,7 @@ async function loadScript2(src) {
   let sha = "abcde";
 
   const scripts = [
-    "javascript/transclations/assets.js",
+    // "javascript/transclations/assets.js",
     "javascript/jszip.min.js",
     "javascript/defines.js",
     "javascript/cards.js",
@@ -819,6 +841,10 @@ async function loadScript2(src) {
     const watcher = setupTimedImages(the_image_json, (key, path) => {
       set_new_image(key, path);
     });
+    loadingscreenupdate("Loading languages...");
+    await initlng(sha);
+    await loadScriptEval(`javascript/translations/strings/pl.js?ver=${sha}`);
+    await loadScriptEval(`javascript/translations/strings/END.js?ver=${sha}`);
     //   console.log("bg watcher", watcher);
     loadingscreenupdate("Searching for organic life forms!");
     if (location.hostname === "localhost" && location.port === "8080") {

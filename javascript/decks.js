@@ -18,7 +18,11 @@ const MAX_SPECIAL = Math.floor(TARGET_TOTAL * TARGET_SPECIAL_RATIO);
 // ======================================================
 
 function STRNG_lowercase(value) {
-  return String(value ?? "").toLowerCase();
+  try {
+    return String(value ?? "").toLowerCase();
+  } catch (e) {
+    return value;
+  }
 }
 
 function string_pos(haystack, needle) {
@@ -54,63 +58,32 @@ function clamp(value, min, max) {
 // ======================================================
 // CARD LOOKUP
 // ======================================================
+// NOTE: the single source of truth for "which card is this" is now
+// card.filename (not card.name, which is just the display label).
+// Every lookup/tally below is keyed on filename for consistency.
 
 function getLeaderIndex(name) {
-  return card_dict.findIndex(
+  const index = card_dict.findIndex(
     (card) =>
       card.row === "leader" &&
-      STRNG_lowercase(card.name) === STRNG_lowercase(name),
-  );
-}
-
-function getCardIndex(name, requestedCount = 1) {
-  const cards = card_dict.filter(
-    (card) =>
-      card.row !== "leader" &&
-      STRNG_lowercase(card.name) === STRNG_lowercase(name),
+      STRNG_lowercase(card.filename) === STRNG_lowercase(name),
   );
 
-  if (!cards.length) {
-    console.warn("Card not found:", name);
-    return null;
-  }
-
-  const maxCount = cards.reduce(
-    (sum, card) => sum + Number(card.count || 0),
-    0,
-  );
-
-  const finalCount = Math.min(requestedCount, maxCount);
-
-  if (requestedCount > maxCount) {
+  if (index === -1) {
     console.warn(
-      `${name}: requested ${requestedCount}, max available ${maxCount}`,
+      `getLeaderIndex: no leader found for "${name}". ` +
+        `Check that this string matches a card.filename value in card_dict.`,
     );
   }
 
-  const index = card_dict.findIndex(
-    (card) =>
-      card.row !== "leader" &&
-      STRNG_lowercase(card.name) === STRNG_lowercase(name),
-  );
-
-  return [index, finalCount];
+  return index;
 }
 
-function STRNG_lowercase(name) {
-  //console.log("STRNGLOWER", name)
-  try {
-    return name.toLowerCase();
-  } catch (e) {
-    return name;
-  }
-}
 function getCardIndex(name, requestedCount = 1) {
-  //	console.log("getCardIndex", name, requestedCount)
   const cards = card_dict.filter(
     (card) =>
-      STRNG_lowercase(card.name) === STRNG_lowercase(name) &&
-      card.row !== "leader",
+      card.row !== "leader" &&
+      STRNG_lowercase(card.filename) === STRNG_lowercase(name),
   );
 
   if (!cards.length) {
@@ -119,9 +92,10 @@ function getCardIndex(name, requestedCount = 1) {
   }
 
   // max copies available in card database
-  const maxCount = cards.reduce((sum, card) => {
-    return sum + Number(card.count || 0);
-  }, 0);
+  const maxCount = cards.reduce(
+    (sum, card) => sum + Number(card.count || 0),
+    0,
+  );
 
   const finalCount = Math.min(requestedCount, maxCount);
 
@@ -134,8 +108,8 @@ function getCardIndex(name, requestedCount = 1) {
   // use first matching card index
   const index = card_dict.findIndex(
     (card) =>
-      STRNG_lowercase(card.name) === STRNG_lowercase(name) &&
-      card.row !== "leader",
+      card.row !== "leader" &&
+      STRNG_lowercase(card.filename) === STRNG_lowercase(name),
   );
 
   return [index, finalCount];
@@ -188,19 +162,14 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
   // =====================================================
 
   function getMaxCount(name) {
-    //	return card_dict
-    //		.filter(c =>
-    //			STRNG_lowercase(c.name) === STRNG_lowercase(name)
-    //		)
-    //		.reduce(
-    //			(sum, c) => sum + Number(c.count || 0),
-    //			0
-    //		);
-    var index_tmp = getCardIndex(name);
-    var maxCount = card_dict[index_tmp[0]].count;
-    var isMax = parseInt(maxCount);
-    //   console.log("isMax", isMax);
-    return isMax;
+    const found = getCardIndex(name);
+
+    if (!found) return 0;
+
+    const maxCount = card_dict[found[0]].count;
+    const isMax = parseInt(maxCount, 10);
+
+    return Number.isNaN(isMax) ? 0 : isMax;
   }
 
   function getCurrentCount(name) {
@@ -214,6 +183,8 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
   // =====================================================
   // ADD CARD
   // =====================================================
+  // `name` here is always a filename — every caller below has been
+  // updated to pass card.filename, not card.name.
 
   function addCard(name, count, sampleCard) {
     if (count <= 0) return false;
@@ -252,7 +223,7 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
 
       if (!filterFn(card)) return false;
 
-      if (!canAddCard(card.name)) return false;
+      if (!canAddCard(card.filename)) return false;
 
       return true;
     });
@@ -265,13 +236,14 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
 
     if (!card) return false;
 
-    const freeSlots = getMaxCount(card.name) - getCurrentCount(card.name);
+    const freeSlots =
+      getMaxCount(card.filename) - getCurrentCount(card.filename);
 
     if (freeSlots <= 0) return false;
 
     const addCount = Math.min(irandom_range(1, maxAdd), freeSlots);
 
-    return addCard(card.name, addCount, card);
+    return addCard(card.filename, addCount, card);
   }
 
   // =====================================================
@@ -282,13 +254,14 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
     const matchingCards = card_dict.filter(
       (card) =>
         card.row !== "leader" &&
-        STRNG_lowercase(card.name) === STRNG_lowercase(name),
+        STRNG_lowercase(card.filename) === STRNG_lowercase(name),
     );
 
     if (!matchingCards.length) {
       console.warn("Card not found:", name);
       continue;
     }
+
     var factionCards = null;
     if (faction === "syndicate") {
       factionCards = matchingCards.filter((card) =>
@@ -322,7 +295,7 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
 
   while (unitCount < minUnits) {
     let added = null;
-    var factionCards = null;
+
     if (faction === "syndicate") {
       added = tryAddRandom(
         getAvailableCards(
@@ -341,6 +314,7 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
         3,
       );
     }
+
     if (!added) {
       added = tryAddRandom(
         getAvailableCards((card) => card.deck === "neutral" && isUnit(card)),
@@ -378,22 +352,25 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
   if (faction === "syndicate") {
     times = 1.45;
   }
+
   while (totalCards < Math.floor(TARGET_TOTAL * times)) {
-    let heroLimit = ForGameStart.hero;
+    let heroLimit = typeof ForGameStart !== "undefined" ? ForGameStart.hero : 4;
     heroLimit = 4;
 
     const neutralLimit = Math.floor(TARGET_TOTAL * TARGET_NEUTRAL_RATIO);
 
     const currentNeutralCount = result.reduce((sum, [name, count]) => {
       const card = card_dict.find(
-        (c) => STRNG_lowercase(c.name) === STRNG_lowercase(name),
+        (c) => STRNG_lowercase(c.filename) === STRNG_lowercase(name),
       );
 
       if (card && card.deck === "neutral") return sum + count;
 
       return sum;
     }, 0);
+
     const candidatePools = [];
+
     if (faction === "syndicate") {
       candidatePools.push(
         getAvailableCards(
@@ -413,6 +390,7 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
           ),
         );
       }
+
       candidatePools.push(
         getAvailableCards((card) => card.deck === "neutral" && isHero(card)),
       );
@@ -421,23 +399,12 @@ function getCardsIndex_return_more(faction, cards, minUnits = MIN_UNITS) {
         getAvailableCards((card) => isUnit(card) && !isHero(card)),
       );
 
-      if (faction !== "syndicate") {
-        if (heroCount < heroLimit) {
-          candidatePools.push(
-            getAvailableCards((card) => card.deck === faction && isHero(card)),
-          );
-        }
-      } else {
-        if (heroCount < heroLimit) {
-          candidatePools.push(
-            getAvailableCards(
-              (card) =>
-                Object.keys(syndicate_faction_clone).includes(card.deck) &&
-                isHero(card),
-            ),
-          );
-        }
+      if (heroCount < heroLimit) {
+        candidatePools.push(
+          getAvailableCards((card) => card.deck === faction && isHero(card)),
+        );
       }
+
       candidatePools.push(
         getAvailableCards((card) => card.deck === "neutral" && isHero(card)),
       );
@@ -492,125 +459,85 @@ function gen_premade_decks() {
   return [
     {
       faction: "realms",
-      leader: getLeaderIndex("Foltest - Lord Commander of the North"),
+      leader: getLeaderIndex("foltest_gold"),
       cards: getCardsIndex("realms", [
-        ["Blue Stripes Commando", 3],
-        ["Catapult", 2],
-        ["Crinfrid Reavers Dragon Hunter", 3],
-        ["Poor Fucking Infantry", 4],
-        ["Sigismund Dijkstra", 1],
-        ["Thaler", 1],
-        ["Vernon Roche", 1],
-        ["John Natalis", 1],
-        ["Philippa Eilhart", 1],
-        ["Trebuchet", 2],
-        ["Kaedweni Siege Expert", 5], // capped automatically to 3
-        ["Decoy", 2],
-        ["Commander's Horn", 1],
-        ["Scorch", 1],
+        ["blue_stripes", 3],
+        ["catapult_1", 2],
+        ["crinfrid", 3],
+        ["poor_infantry", 4],
+        ["dijkstra", 1],
+        ["thaler", 1],
+        ["vernon", 1],
+        ["natalis", 1],
+        ["philippa", 1],
+        ["trebuchet_1", 2],
+        ["kaedwen_siege_1", 5],
+        ["decoy", 2],
+        ["horn", 1],
+        ["scorch", 1],
       ]),
     },
-
     {
       faction: "nilfgaard",
-      leader: getLeaderIndex("Emhyr var Emreis - the White Flame"),
+      leader: getLeaderIndex("emhyr_silver"),
       cards: getCardsIndex("nilfgaard", [
-        ["Impera Brigade Guard", 4],
-        ["Nausicaa Cavalry Rider", 3],
-        ["Young Emissary", 2],
-        ["Stefan Skellen", 1],
-        ["Shilard Fitz-Oesterlen", 1],
-        ["Menno Coehoorn", 1],
-        ["Letho of Gulet", 1],
-        ["Morvran Voorhis", 1],
-        ["Tibor Eggebracht", 1],
-        ["Siege Engineer", 1],
-        ["Heavy Zerrikanian Fire Scorpion", 1],
-        ["Decoy", 2],
-        ["Scorch", 1],
+        ["imperal_brigade", 4],
+        ["nauzicaa_2", 3],
+        ["young_emissary", 2],
+        ["stefan", 1],
+        ["shilard", 1],
+        ["menno", 1],
+        ["letho", 1],
+        ["moorvran", 1],
+        ["tibor", 1],
+        ["siege_engineer", 1],
+        ["heavy_zerri", 1],
+        ["decoy", 2],
+        ["scorch", 1],
       ]),
     },
 
     {
       faction: "monsters",
-      leader: getLeaderIndex("Eredin - Destroyer of Worlds"),
-      cards: getCardsIndex("monsters", [
-        ["Arachas ", 3],
-        ["Ghoul", 3],
-        ["Nekker", 3],
-        ["Crone - Brewess", 1],
-        ["Crone - Weavess", 1],
-        ["Crone - Whispess", 1],
-        ["Vampire - Bruxa", 1],
-        ["Vampire - Ekimmara", 1],
-        ["Vampire - Fleder", 1],
-        ["Vampire - Garkain", 1],
-        ["Kayran", 1],
-        ["Leshen", 1],
-        ["Imlerith", 1],
-        ["Draug", 1],
-        ["Scorch", 1],
-        ["Biting Frost", 2],
-      ]),
+      // TODO: verify this string matches a card.filename in card_dict —
+      // it currently looks like a display name, not a filename.
+      leader: getLeaderIndex("eredin_gold"),
+      cards: getCardsIndex("monsters", []),
     },
 
     {
       faction: "scoiatael",
-      leader: getLeaderIndex("Francesca Findabair - Hope of the Aen Seidhe"),
-      cards: getCardsIndex("scoiatael", [
-        ["Dol Blathanna Scout", 3],
-        ["Dwarven Skirmisher", 3],
-        ["Elven Skirmisher", 3],
-        ["Havekar Smuggler", 3],
-        ["Mahakaman Defender", 5],
-        ["Milva", 1],
-        ["Iorveth", 1],
-        ["Saesenthessis", 1],
-        ["Isengrim Faoiltiarna", 1],
-        ["Yaevinn", 1],
-        ["Ciaran aep Easnillien", 1],
-        ["Decoy", 2],
-        ["Commander's Horn", 1],
-      ]),
+      // TODO: verify this string matches a card.filename in card_dict.
+      leader: getLeaderIndex("francesca_hope_of_the_aen_seidhe"),
+      cards: getCardsIndex("scoiatael", []),
     },
 
     {
       faction: "skellige",
-      leader: getLeaderIndex("Eist Tuirseach — King Of Citra"),
-      cards: getCardsIndex("skellige", [
-        ["Clan an Craite Warrior", 3],
-        ["Young Berserker", 3],
-        ["Light Longship", 3],
-        ["War Longship", 2],
-        ["Cerys", 1],
-        ["Cerys - Clan Drummond Shield Maiden", 3],
-        ["Hjalmar", 1],
-        ["Ermion", 1],
-        ["Olaf", 1],
-        ["Kambi", 1],
-        ["Birna Bran", 1],
-        ["Draig Bon-Dhu", 1],
-        ["Mardroeme", 2],
-        ["Skellige Storm", 1],
-      ]),
+      // TODO: verify this string matches a card.filename in card_dict.
+      leader: getLeaderIndex("eist_tuirseach"),
+      cards: getCardsIndex("skellige", []),
     },
 
     // Work in progress
     {
       faction: "sky",
       leader: getLeaderIndex("darkness_storm_leader"),
-      cards: getCardsIndex("sky", [["Royal Guard", 3]]),
+      cards: getCardsIndex("sky", []),
     },
     {
       faction: "syndicate",
-      leader: getLeaderIndex("Sigi Reuven"), // change later when better leader
+      // TODO: change later when better leader; verify filename match.
+      leader: getLeaderIndex("sigi_reuven"),
       cards: getCardsIndex("syndicate", []),
     },
   ];
 }
+
 async function async_gen_premade_decks() {
   return gen_premade_decks();
 }
+
 let premade_deck = gen_premade_decks();
 
 console.log("PREMADE DECKS", premade_deck);

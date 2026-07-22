@@ -60,12 +60,12 @@ var factions = {
       game.gameStart.push(async () => {
         if (player === player_me) {
           await ui.popup(
-            "Go First",
+            getTranslation("scolpick.me"),
             () => (game.firstPlayer = player),
-            "Let Opponent Start",
+            getTranslation("scolpick.op"),
             () => (game.firstPlayer = player.opponent()),
-            "Would you like to go first?",
-            "The Scoia'tael faction perk allows you to decide who will get to go first.",
+            getTranslation("scolpick.huh"),
+            getTranslation("scolpick.huh2"),
           );
           comp_and_send(
             socket,
