@@ -811,7 +811,12 @@
             "no_op_start": "Cannot start game: waiting for second player.",
             "me_ready": "You are ready, please wait for opponent!",
             "me_unready": "You are now UnReady",
-            "redraw": "\u003Ccolor=#d5cfe3\u003EYou redrawed card\u003C/color\u003E \u003Ccolor=#fa4441\u003E%x\u003C/color\u003E \u003Ccolor=#d5cfe3\u003Efor a\u003C/color\u003E \u003Ccolor=#41fa66\u003E%y\u003C/color\u003E"
+            "redraw": "\u003Ccolor=#d5cfe3\u003EYou redrawed card\u003C/color\u003E \u003Ccolor=#fa4441\u003E%x\u003C/color\u003E \u003Ccolor=#d5cfe3\u003Efor a\u003C/color\u003E \u003Ccolor=#41fa66\u003E%y\u003C/color\u003E",
+            "ordinal": {
+              "st": "st",
+              "nd": "nd",
+              "rd": "rd"
+            }
           },
           "notif": {
             "nilfgaard-wins-draws": "Nilfgaard wins draws",
@@ -863,6 +868,34 @@
             "whiteflame2-op_syndicate": "Your opponent copied your leader ability",
             "whiteflame2-me_nilfgaard": "You copied opponent leader ability!",
             "whiteflame2-me_syndicate": "You copied opponent leader ability!"
+          },
+          "notif_side": {
+            "ts": "Traveling Spirit \u003Ccolor=#00ff00\u003E%s\u003C/color\u003E now visits \u003Ccolor=#add8e6\u003ESky Kingdom\u003C/color\u003E\nUntil: \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E",
+            "moon": {
+              "new": "The game board is shrouded in darkness; no \u003Ccolor=#DDE8EB\u003EMoonlight\u003C/color\u003E is comes from the sky.\nUntil \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E\n\u003Ccolor=#DDE8EB\u003ENew Moon\u003C/color\u003E happening at \u003Ccolor=#90D5FF\u003E%s\u003C/color\u003E",
+              "full": "The light of the \u003Ccolor=#DDE8EB\u003EFull Moon\u003C/color\u003E illuminates the boards.\nUntil \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E\n\u003Ccolor=#DDE8EB\u003EFull Moon\u003C/color\u003E happening at \u003Ccolor=#90D5FF\u003E%s\u003C/color\u003E"
+            }
+          },
+          "mmenu": {
+            "create-game": "Create Game",
+            "joingame": "Join Game",
+            "session-start-control_ready": "Ready",
+            "session-start-control_unready": "UnReady",
+            "cancel": "Cancel",
+            "copy": "Copy Session",
+            "music": "♫ Music",
+            "no-op": "No Opponent",
+            "hi": "Hello PlayerID",
+            "chat": "Chat",
+            "status": {
+              "ready": "Ready:",
+              "gameinprogress": "Game In Progress"
+            }
+          },
+          "startwarnings": {
+            "a": "Your deck must have at least %s unit cards. ",
+            "b": "Your deck must have no more than %s special cards. ",
+            "c": "Your deck must have no more than %s hero cards. "
           }
         },
         "scolpick": {
@@ -904,7 +937,7 @@
             "description": "Nie podlega działaniu kart Specjalnych ani innych umiejętności. "
           },
           "decoy": {
-            "name": "Przynęta",
+            "name": "Manekin do Ćwiczeń",
             "description": "Zamienia się z kartą na polu bitwy, aby zwrócić ją do twojej ręki. "
           },
           "wshield": {
@@ -917,7 +950,7 @@
           },
           "yrden": {
             "name": "Znaki Wiedźmińskie: Yrden",
-            "description": "Magiczna pułapka wiedźmińska. Umieść ją w rzędzie dystansowym przeciwnika, aby każda jednostka otrzymała -1 do siły. Efekty się kumulują. Przynęta może zostać użyta do podniesienia tej karty. "
+            "description": "Magiczna pułapka wiedźmińska. Umieść ją w rzędzie dystansowym przeciwnika, aby każda jednostka otrzymała -1 do siły. Efekty się kumulują. Manekin do Ćwiczeń może zostać użyta do podniesienia tej karty. "
           },
           "horn": {
             "name": "Róg Dowódcy",
@@ -1190,7 +1223,7 @@
         },
         "card": {
           "mysterious_elf": "Tajemniczy Elf",
-          "decoy": "Przynęta",
+          "decoy": "Manekin do Ćwiczeń",
           "frost": "Siarczysty Mróz",
           "ciri": "Cirilla Fiona Elen Riannon",
           "clear": "Czyste Niebo",
@@ -1445,7 +1478,7 @@
           "custom!vincent_painting_power": "Vincent Van Gogh: Painting",
           "custom!sky_vincent_guys": "Dear Van Gogh — Seasonal Spirits",
           "custom!sky_vincent_medic": "Dear Van Gogh — Seasonal Hearth",
-          "hym": "Hym",
+          "hym": "Him",
           "custom!m_moonlight": "Moonlight",
           "custom!s_moonlight": "Night Over Novigrad",
           "custom!deatheatersmoon": "Full Moon",
@@ -1554,7 +1587,12 @@
             "no_op_start": "Cannot start game: waiting for second player.",
             "me_ready": "You are ready, please wait for opponent!",
             "me_unready": "You are now UnReady",
-            "redraw": "\u003Ccolor=#d5cfe3\u003EYou redrawed card\u003C/color\u003E \u003Ccolor=#fa4441\u003E%x\u003C/color\u003E \u003Ccolor=#d5cfe3\u003Efor a\u003C/color\u003E \u003Ccolor=#41fa66\u003E%y\u003C/color\u003E"
+            "redraw": "\u003Ccolor=#d5cfe3\u003EYou redrawed card\u003C/color\u003E \u003Ccolor=#fa4441\u003E%x\u003C/color\u003E \u003Ccolor=#d5cfe3\u003Efor a\u003C/color\u003E \u003Ccolor=#41fa66\u003E%y\u003C/color\u003E",
+            "ordinal": {
+              "st": "",
+              "nd": "",
+              "rd": ""
+            }
           },
           "notif": {
             "nilfgaard-wins-draws": "Nilfgaard wins draws",
@@ -1595,22 +1633,50 @@
             "skellige-me": "Skellige Ability Triggered!",
             "witcher_universe": "Witcher Universe faction ability used:\nTurn skipped.",
             "toussaint": "Toussaint faction ability used:\nToussaint draws an additional card.",
-            "toussaint-decoy-cancelled": "Toussaint leader ability used:\nDecoy ability cancelled for the rest of the round.",
-            "lyria_rivia": "Lyria & Rivia faction ability used:\nMorale Boost effect applied to a row.",
-            "zerrikania": "Zerrikania faction ability used:\nUnit restored from the discard pile.",
-            "coin-false_player-me": "You skipped your turn",
-            "coin-true_player-me": "You skipped your turn\nBut your opponent received an additional card",
-            "coin-false_player-op": "Your opponent skipped their turn",
-            "coin-true_player-op": "Your opponent skipped their turn\nAnd you received an additional card",
-            "whiteflame2-op_nilfgaard": "Your opponent copied your leader ability",
-            "whiteflame2-op_syndicate": "Your opponent copied your leader ability",
-            "whiteflame2-me_nilfgaard": "You copied opponent leader ability!",
-            "whiteflame2-me_syndicate": "You copied opponent leader ability!"
+            "toussaint-decoy-cancelled": "Umiejętność lidera Toussaint użyta:\nUmiejętność wabik anulowana przez reszte rundy.",
+            "lyria_rivia": "Umiejętność frakcji Lyria & Rivia użyta:\nEfekt Wysokie Morale nałożony na cały rząd.",
+            "zerrikania": "Umiejętność frakcji Zerrikania użyta:\nJednostka została przywrócona ze sterty odrzuconych.",
+            "coin-false_player-me": "Pominąłeś swoją turę",
+            "coin-true_player-me": "Pominąłeś swoją turę\nAle twój przeciwnik otrzymał dodatkową kartę",
+            "coin-false_player-op": "Twój przeciwnik pominął swoją turę",
+            "coin-true_player-op": "Twój przeciwnik pominął swoją turę\nI otrzymujesz dodatkową kartę",
+            "whiteflame2-op_nilfgaard": "Przeciwnik skopiował umiejętność twojego lidera",
+            "whiteflame2-op_syndicate": "Przeciwnik skopiował umiejętność twojego lidera!",
+            "whiteflame2-me_nilfgaard": "Skopiowałeś umiejętność lidera przeciwnika!",
+            "whiteflame2-me_syndicate": "Skopiowałeś umiejętność lidera przeciwnika!"
+          },
+          "notif_side": {
+            "ts": "Podróżująca Dusza \"\u003Ccolor=#00ff00\u003E%s\u003C/color\u003E\" odwiedza teraz \u003Ccolor=#add8e6\u003EKrólestwo Nieba\u003C/color\u003E\nWyruszy spowrotem w drogę dnia \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E",
+            "moon": {
+              "new": "Plansza jest spowita w ciemnościach!\nKsiężyc jest w \u003Ccolor=#DDE8EB\u003Enowiu\u003C/color\u003E!\nDo dnia \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E przypada \u003Ccolor=#DDE8EB\u003Enów\u003C/color\u003E!\nKsiężyc zniknie \u003Ccolor=#90D5FF\u003E%s\u003C/color\u003E!",
+              "full": "Światło \u003Ccolor=#DDE8EB\u003EPełni\u003C/color\u003E roświetla planszę!\nPełnia będzie na niebie aż do \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E!\nKsiężyc będzie w \u003Ccolor=#DDE8EB\u003EPełni\u003C/color\u003E dniat \u003Ccolor=#90D5FF\u003E%s\u003C/color\u003E!"
+            }
+          },
+          "mmenu": {
+            "create-game": "Stwórz Grę",
+            "joingame": "Dołącz do Gry",
+            "session-start-control_ready": "Gotów",
+            "session-start-control_unready": "Niegotowy",
+            "cancel": "Anuluj",
+            "copy": "Kupiuj Zaproszenie",
+            "music": "♫ Muzyka",
+            "no-op": "Brak Przeciwnika",
+            "hi": "Witaj Graczu",
+            "chat": "Czat",
+            "status": {
+              "ready": "Gotów:",
+              "gameinprogress": "Gra w Trakcie"
+            }
+          },
+          "startwarnings": {
+            "a": "Twoja talia musi mieć conajmniej %s kart jednostek ",
+            "b": "Twoja talia nie może mieć więcej niż %s kart specjalnych. ",
+            "c": "Twoja talia nie może mieć więcej niż %s kart bohaterów. "
           }
         },
         "scolpick": {
-          "me": "Rozpocznij Grę Pierwszy",
-          "op": "Pozwól Przeciwnikowi Rozpocząć",
+          "me": "Rozpocznij Pierwszy",
+          "op": "Przeciwnik Rozpocznie",
           "huh": "Czy chcesz zacząć grę jako pierwszy?",
           "huh2": "Zdolność Scoia'tael pozwala ci wybrać kto zacznie grę."
         }

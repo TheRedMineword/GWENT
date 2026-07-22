@@ -930,7 +930,9 @@ socket.onmessage = async (event) => {
       if (gameended === false) {
         showTooltip(getUiStrng("op_left"));
         var btn = document.getElementById("session-start-control");
-        btn.textContent = getTranslation("ui.mmenu.session-start-control_ready");
+        btn.textContent = getTranslation(
+          "ui.mmenu.session-start-control_ready",
+        );
         amReady = false;
         toggleReadyWaiting(amReady);
         //	btnCancelElem.classList.remove("hidden");
@@ -6555,7 +6557,9 @@ class DeckMaker {
       game.startGame();
     } else {
       var btn = document.getElementById("session-start-control");
-      btn.textContent = getTranslation("ui.mmenu.session-start-control_unready");
+      btn.textContent = getTranslation(
+        "ui.mmenu.session-start-control_unready",
+      );
     }
   }
 }
@@ -7168,6 +7172,7 @@ async function lunch_gwent_ui() {
   console.log("YouTube API is ready!");
   loadingscreenupdate(`Running lunch_gwent_ui()...`);
 
+  await sleep(1300); // Tryin to fix double audio lunch
   document.getElementById("load_text").style.display = "none";
   document.getElementById("button_start").style.display = "inline-block";
   customizationElem.style.display = "";

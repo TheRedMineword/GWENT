@@ -3330,7 +3330,10 @@ function setupSpiritTimer(card, data) {
     msg: true,
 
     msg_data: {
-      msg: getTranslation("ui.notif_side.ts").replace("%s", data.when.spirit_name),
+      msg: getTranslation("ui.notif_side.ts").replace(
+        "%s",
+        data.when.spirit_name,
+      ),
       display: 13000,
     },
   };

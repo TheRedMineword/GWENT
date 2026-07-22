@@ -1003,7 +1003,10 @@ async function rebuildCustomCardsMaps() {
           msg: true,
 
           msg_data: {
-            msg: getTranslation("ui.notif_side.moon.full").replace("%s", formatLocalDate(getNearestFullMoon())),
+            msg: getTranslation("ui.notif_side.moon.full").replace(
+              "%s",
+              formatLocalDate(getNearestFullMoon()),
+            ),
             display: 13000,
           },
         };
@@ -1024,7 +1027,10 @@ async function rebuildCustomCardsMaps() {
           msg: true,
 
           msg_data: {
-            msg: getTranslation("ui.notif_side.moon.new").replace("%s", formatLocalDate(getNearestNewMoon())),
+            msg: getTranslation("ui.notif_side.moon.new").replace(
+              "%s",
+              formatLocalDate(getNearestNewMoon()),
+            ),
             display: 13000,
           },
         };

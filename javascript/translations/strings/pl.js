@@ -857,6 +857,11 @@ STRNG["pl"] = {
       me_unready: "You are now UnReady",
       redraw:
         "<color=#d5cfe3>You redrawed card</color> <color=#fa4441>%x</color> <color=#d5cfe3>for a</color> <color=#41fa66>%y</color>",
+        ordinal: {
+      "st": "",
+      "nd": "",
+      "rd": ""
+    }
     },
     notif: {
       "nilfgaard-wins-draws": "Nilfgaard wins draws",
@@ -913,21 +918,21 @@ STRNG["pl"] = {
       toussaint:
         "Toussaint faction ability used:\nToussaint draws an additional card.",
       "toussaint-decoy-cancelled":
-        "Toussaint leader ability used:\nDecoy ability cancelled for the rest of the round.",
+        "Umiejętność lidera Toussaint użyta:\nUmiejętność wabik anulowana przez reszte rundy.",
       lyria_rivia:
-        "Lyria & Rivia faction ability used:\nMorale Boost effect applied to a row.",
+        "Umiejętność frakcji Lyria & Rivia użyta:\nEfekt Wysokie Morale nałożony na cały rząd.",
       zerrikania:
-        "Zerrikania faction ability used:\nUnit restored from the discard pile.",
-      "coin-false_player-me": "You skipped your turn",
+        "Umiejętność frakcji Zerrikania użyta:\nJednostka została przywrócona ze sterty odrzuconych.",
+      "coin-false_player-me": "Pominąłeś swoją turę",
       "coin-true_player-me":
-        "You skipped your turn\nBut your opponent received an additional card",
-      "coin-false_player-op": "Your opponent skipped their turn",
+        "Pominąłeś swoją turę\nAle twój przeciwnik otrzymał dodatkową kartę",
+      "coin-false_player-op": "Twój przeciwnik pominął swoją turę",
       "coin-true_player-op":
-        "Your opponent skipped their turn\nAnd you received an additional card",
-      "whiteflame2-op_nilfgaard": "Your opponent copied your leader ability",
-      "whiteflame2-op_syndicate": "Your opponent copied your leader ability",
-      "whiteflame2-me_nilfgaard": "You copied opponent leader ability!",
-      "whiteflame2-me_syndicate": "You copied opponent leader ability!",
+        "Twój przeciwnik pominął swoją turę\nI otrzymujesz dodatkową kartę",
+      "whiteflame2-op_nilfgaard": "Przeciwnik skopiował umiejętność twojego lidera",
+      "whiteflame2-op_syndicate": "Przeciwnik skopiował umiejętność twojego lidera!",
+      "whiteflame2-me_nilfgaard": "Skopiowałeś umiejętność lidera przeciwnika!",
+      "whiteflame2-me_syndicate": "Skopiowałeś umiejętność lidera przeciwnika!",
     },
     notif_side: {
       "ts": "Podróżująca Dusza \"<color=#00ff00>%s</color>\" odwiedza teraz <color=#add8e6>Królestwo Nieba</color>\nWyruszy spowrotem w drogę dnia <color=#90D5FF><$enddatelocal></color>",
@@ -959,8 +964,8 @@ STRNG["pl"] = {
   }
   },
   scolpick: {
-    "me": "Rozpocznij Grę Pierwszy",
-    "op": "Pozwól Przeciwnikowi Rozpocząć",
+    "me": "Rozpocznij Pierwszy",
+    "op": "Przeciwnik Rozpocznie",
     "huh": "Czy chcesz zacząć grę jako pierwszy?",
     huh2: "Zdolność Scoia'tael pozwala ci wybrać kto zacznie grę."
   }
