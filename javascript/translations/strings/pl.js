@@ -490,7 +490,7 @@ STRNG["pl"] = {
   emiel: "Emiel Regis Rohellec Terzieff",
   geralt: "Geralt z Rivii",
   fog: "Gęsta Mgła",
-  scorch: "Pożoga",
+  scorch: "Piekielna Pożoga",
   rain: "Ulewny Deszcz",
   triss: "Triss Merigold",
   vesemir: "Vesemir",
