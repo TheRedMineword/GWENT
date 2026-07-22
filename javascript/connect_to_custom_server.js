@@ -96,6 +96,7 @@ async function reset_custom() {
   }
   IsNowCustom = false;
   var def = ThisDef;
+  def.env_vars.STRNG = STRNG_base;
   def.env_vars.card_dict = card_dict_base;
   def.env_vars.factions = factions_base;
   def.env_vars.ability_dict = ability_dict_base;
@@ -601,6 +602,10 @@ async function connect_to_custom_server(URL) {
     //    }
     //  });
     await sleep(350);
+    updateLoader("Almost there", 97, `Translating!`);
+    card_dict = translateCardDict();
+    factions = translatefactionsdict();
+    ability_dict = translateabilitydict();
     updateLoader("Almost there", 98, `Reloading UI!`);
     await reloadRuntimeConfigs();
     if (!waitMusicPlaying) {

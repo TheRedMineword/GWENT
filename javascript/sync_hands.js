@@ -137,7 +137,7 @@ async function init_sync_hands() {
         JSON.stringify({
           type: "ping",
           userid: playerId || "N/A User ID",
-          d: btoa(random_string_gen()),
+          d: utf8ToBase64(random_string_gen()),
         }),
       );
     } catch (e) {

@@ -2,7 +2,11 @@
 
 function findAvengerTarget(cardName) {
   console.log('findAvengerTarget("', cardName, '");');
-  return card_dict.find((c) => c.avenger === cardName);
+  var ret = card_dict.find((c) => c.avenger === cardName);
+  if (!ret) {
+    ret = card_dict.find((c) => c.avenger === "HiIamDopler");
+  }
+  return ret;
 }
 function findReinforceTargets(cardName) {
   console.log('findReinforceTargets("', cardName, '");');
@@ -23,7 +27,7 @@ function time_now_utc_to_b64() {
   const dateStr = `${year}-${month}-${day}`;
 
   // base64 encode
-  return btoa(dateStr);
+  return utf8ToBase64(dateStr);
 }
 let magicthegathering_stable = null;
 if (mtg_conf.unstable_mode === "random") {
@@ -63,76 +67,66 @@ loadingscreenupdate(`Preparing ability_dict`);
 
 var ability_dict = {
   DontPickMeUp: {
-    description: "Card cannot be picked up after being placed. ",
+    description: "",
   },
   clear: {
-    name: "Clear Weather",
-    description:
-      "Removes all Weather Cards (Biting Frost, Impenetrable Fog and Torrential Rain) effects. ",
+    name: "",
+    description: "",
   },
   frost: {
-    name: "Biting Frost",
-    description:
-      "Sets the strength of all Close Combat cards to 1 for both players. ",
+    name: "",
+    description: "",
   },
   fog: {
-    name: "Impenetrable Fog",
-    description:
-      "Sets the strength of all Ranged Combat cards to 1 for both players. ",
+    name: "",
+    description: "",
   },
   rain: {
-    name: "Torrential Rain",
-    description:
-      "Sets the strength of all Siege Combat cards to 1 for both players. ",
+    name: "",
+    description: "",
   },
   storm: {
-    name: "Skellige Storm",
-    description: "Reduces the Strength of all Range and Siege Units to 1. ",
+    name: "",
+    description: "",
   },
   hero: {
-    name: "Hero Card",
-    description: "Not affected by any Special Cards or abilities. ",
+    name: "",
+    description: "",
   },
   decoy: {
-    name: "Decoy",
-    description:
-      "Swap with a card on the battlefield to return it to your hand. ",
+    name: "",
+    description: "",
   },
   wshield: {
-    name: "Shield",
-    description:
-      "Partialy protects all cards in same row from weather card effects and axii, Commander's Horn will have no effect in that row. ",
+    name: "",
+    description: "",
     placed: async (card) => await card.animate("wshield"),
   },
   quen_desc: {
-    name: "Witcher Signs: Quen",
+    name: "",
     description: "",
   },
   yrden: {
-    name: "Witcher Signs: Yrden",
-    description:
-      "Witchers Magic Trap, place on enemy ranged row to aplly -1 to each unit card. Effects stacks. Decoy can be used to pick up the card! ",
+    name: "",
+    description: "",
     placed: async (card) => {
       card.holder = card.holder.opponent();
       await card.animate("debuff");
     },
   },
   horn: {
-    name: "Commander's Horn",
-    description:
-      "Doubles the strength of all unit cards in that row. Limited to 1 per row. ",
+    name: "",
+    description: "",
     placed: async (card) => await card.animate("horn"),
   },
   darkstormegen: {
-    name: "Darkness Storm",
-    description:
-      "Darkness rages around this card! All non-hero card around in same row will be destroyed!",
+    name: "",
+    description: "",
     placed: async (card) => await card.animate("darkstrom"),
   },
   mardroeme: {
-    name: "Mardroeme",
-    description:
-      "Triggers transformation of all Berserker cards on the same row. ",
+    name: "",
+    description: "",
     placed: async (card, row) => {
       let berserkers = row.findCards((c) => c.abilities.includes("berserker"));
       await Promise.all(
@@ -143,8 +137,8 @@ var ability_dict = {
     },
   },
   berserker: {
-    name: "Berserker",
-    description: "Transforms into a bear when a Mardroeme card is on its row.",
+    name: "",
+    description: "",
     placed: async (card, row) => {
       if (row.effects.mardroeme === 0) return;
 
@@ -173,9 +167,8 @@ var ability_dict = {
     },
   },
   scorch: {
-    name: "Scorch",
-    description:
-      "Discard after playing. Kills the strongest card(s) on the battlefield.",
+    name: "",
+    description: "",
 
     activated: async (card) => {
       await ability_dict["scorch"].placed(card);
@@ -211,9 +204,8 @@ var ability_dict = {
     },
   },
   scorch_c: {
-    name: "Scorch - Close Combat",
-    description:
-      "Destroy your enemy's strongest Close Combat unit(s) if the combined strength of all his or her Close Combat units is 10 or more.",
+    name: "",
+    description: "",
     placed: async (card) => {
       if (
         (card.holder?.leader?.abilities?.[0] === "scorchstopper" ||
@@ -237,9 +229,8 @@ var ability_dict = {
   },
 
   scorch_r: {
-    name: "Scorch - Ranged",
-    description:
-      "Destroy your enemy's strongest Ranged Combat unit(s) if the combined strength of all his or her Ranged Combat units is 10 or more.",
+    name: "",
+    description: "",
     placed: async (card) => {
       if (
         (card.holder?.leader?.abilities?.[0] === "scorchstopper" ||
@@ -263,9 +254,8 @@ var ability_dict = {
   },
 
   scorch_s: {
-    name: "Scorch - Siege",
-    description:
-      "Destroy your enemy's strongest Siege Combat unit(s) if the combined strength of all his or her Siege Combat units is 10 or more.",
+    name: "",
+    description: "",
     placed: async (card) => {
       if (
         (card.holder?.leader?.abilities?.[0] === "scorchstopper" ||
@@ -288,9 +278,8 @@ var ability_dict = {
     },
   },
   scorch_a: {
-    name: "Scorch - Agilie",
-    description:
-      "Destroy your enemy's strongest opposite row Combat unit(s) if the combined strength of all his or her opposite row Combat units is 10 or more.",
+    name: "",
+    description: "",
     placed: async (card, row) => {
       if (
         (card.holder?.leader?.abilities?.[0] === "scorchstopper" ||
@@ -323,17 +312,15 @@ var ability_dict = {
     },
   },
   scorchstopper: {
-    description: `Prevents Scorch effects by spending ${scorch_stopper.save_charge} Shield Charge${scorch_stopper.save_charge === 1 ? "" : "s"} per saved card. Starts with ${scorch_stopper.max} charge${scorch_stopper.max === 1 ? "" : "s"}, cannot be recharged${scorch_stopper.break_shield_if_you_use ? ", and breaks if you play any Scorch card." : "."}`,
+    description: ``,
   },
   agile: {
-    name: "agile",
-    description:
-      "Can be placed in either the Close Combat or the Ranged Combat row. Cannot be moved once placed. ",
+    name: "",
+    description: "",
   },
   muster: {
-    name: "muster",
-    description:
-      "Find any cards with the same name in your deck and play them instantly. ",
+    name: "",
+    description: "",
     placed: async (card) => {
       let i = card.name.indexOf("-");
       let cardName = i === -1 ? card.name : card.name.substring(0, i);
@@ -355,8 +342,8 @@ var ability_dict = {
     },
   },
   spy: {
-    name: "spy",
-    description: `Place on your opponent's battlefield (counts towards your opponent's total) and draw ${spy.spy} cards from your deck. `,
+    name: "",
+    description: ``,
     placed: async (card) => {
       await card.animate("spy");
       for (let i = 0; i < spy.spy; i++) {
@@ -367,8 +354,8 @@ var ability_dict = {
     },
   },
   sabotage: {
-    name: "sabotage",
-    description: `Send to enemy fields this cards to lower their score and draw extra ${spy.sabotage} card\(s\). `,
+    name: "",
+    description: ``,
     placed: async (card) => {
       await card.animate("sab");
       for (let i = 0; i < spy.sabotage; i++) {
@@ -380,8 +367,8 @@ var ability_dict = {
     },
   },
   resilience: {
-    name: "Resilience",
-    description: "Remains on the board for the following round. ",
+    name: "",
+    description: "",
     placed: async (card) => {
       game.roundEnd.push(async () => {
         card.noRemove = true;
@@ -395,9 +382,8 @@ var ability_dict = {
     },
   },
   resilience_igni: {
-    name: "Witcher Signs: Ignii",
-    description:
-      "Remains on the board for the following round. Adds +1 to all units in the row (excluding itself). Effects dont stacks",
+    name: "",
+    description: "",
     placed: async (card) => {
       card.noRemove = "0";
       game.roundEnd.push(async () => {
@@ -412,9 +398,8 @@ var ability_dict = {
     },
   },
   aard: {
-    name: "Witcher Signs: Aard",
-    description:
-      "Push all enemy units in the opposing row one row back toward Siege, ignoring shields. Playing this card will damage your total score! Hero and few other cards will ignore push (Internal Game Desing). ",
+    name: "",
+    description: "",
     placed: async (card, row) => {
       // Row this card was played on
       //	console.log("AARD PLAY", card, row)
@@ -492,8 +477,8 @@ var ability_dict = {
     },
   },
   aid: {
-    name: "Call to Arms",
-    description: `Lets you and your opponent redraw ${spy.aid} cards. `,
+    name: "",
+    description: ``,
     placed: async (card) => {
       await card.animate("aid");
       console.log(
@@ -545,8 +530,8 @@ var ability_dict = {
     },
   },
   axii: {
-    name: "Witcher Signs",
-    description: `This card use Witchers tricks to cast into enemy fields Axii sign. ${axii.desc}. `,
+    name: "",
+    description: ``,
     placed: async (card) => {
       try {
         // Find axii card data by filename
@@ -571,13 +556,13 @@ var ability_dict = {
     },
   },
   axii2_desc: {
-    name: "Axii",
-    description: `${axii.desc} `,
+    name: "",
+    description: ``,
     placed: async (card) => await card.animate("debuff"),
   },
   axii2_desc_playable: {
-    name: "Witcher Signs: Axii",
-    description: `${axii.desc} `,
+    name: "",
+    description: ``,
     placed: async (card) => {
       await card.animate("debuff");
       //for (let i=0;i< spy.spy ;i++) {
@@ -588,9 +573,8 @@ var ability_dict = {
     },
   },
   gryffinSchool: {
-    name: "Griffin School",
-    description:
-      "Choose one Witcher Sign card and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! ",
+    name: "",
+    description: "",
     placed: async (card) => {
       let wrapper = { card: null };
 
@@ -641,8 +625,8 @@ var ability_dict = {
     },
   },
   magicthegathering: {
-    name: "Conjunction of the Spheres",
-    description: `Choose one card out of ${mtg_conf.random_max} random and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! ${magicthegathering_stable}`,
+    name: "",
+    description: ``,
     placed: async (card) => {
       let wrapper = { card: null };
       // Get cards directly from card_dict
@@ -677,7 +661,7 @@ var ability_dict = {
             `Op cards for this GameID and turn to pick from: `,
             shuffleSeeded(
               filteredCards,
-              btoa(seed_is),
+              utf8ToBase64(seed_is),
               `MTG ABILITY Seeded from ${seed_is}`,
             ).array.slice(0, mtg_conf.random_max),
             `\nMTG ABILITY Seeded from ${seed_is}`,
@@ -701,7 +685,7 @@ var ability_dict = {
 
       var tmp_c = shuffleSeeded(
         filteredCards,
-        btoa(seed_is),
+        utf8ToBase64(seed_is),
         `MTG ABILITY Seeded from ${seed_is}`,
       );
       filteredCards = tmp_c.array;
@@ -747,8 +731,8 @@ var ability_dict = {
     },
   },
   tgc_portal: {
-    name: "That Game Company",
-    description: `Choose one card out of max ${mtg_conf.random_max} Sky Faction cards and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! ${magicthegathering_stable}`,
+    name: "",
+    description: ``,
     placed: async (card) => {
       let wrapper = { card: null };
       // Get cards directly from card_dict
@@ -784,7 +768,7 @@ var ability_dict = {
             `Op cards for this GameID and turn to pick from: `,
             shuffleSeeded(
               filteredCards,
-              btoa(seed_is),
+              utf8ToBase64(seed_is),
               `MTG ABILITY Seeded from ${seed_is}`,
             ).array.slice(0, mtg_conf.random_max),
             `\nMTG ABILITY Seeded from ${seed_is}`,
@@ -808,7 +792,7 @@ var ability_dict = {
 
       var tmp_c = shuffleSeeded(
         filteredCards,
-        btoa(seed_is),
+        utf8ToBase64(seed_is),
         `MTG ABILITY Seeded from ${seed_is}`,
       );
       filteredCards = tmp_c.array;
@@ -854,9 +838,8 @@ var ability_dict = {
     },
   },
   dopler: {
-    name: "Doppler",
-    description:
-      "Send a shapeshifter to enemy fields that will will disguise itself as a strong card from the opponent's faction, so next round they can find a knife in their back",
+    name: "",
+    description: "",
 
     placed: async (card, row) => {
       try {
@@ -938,7 +921,7 @@ var ability_dict = {
 
         let shuffled = shuffleSeeded(
           filteredCards,
-          btoa(seed_is),
+          utf8ToBase64(seed_is),
           `dopler seeded from ${seed_is}`,
         ).array;
 
@@ -1002,9 +985,8 @@ var ability_dict = {
     weight: () => 40,
   },
   reinforce: {
-    name: "Reinforce",
-    description:
-      "Summons additional cards to board, summoned cards dont need to be in hand or deck. ",
+    name: "",
+    description: "",
 
     placed: async (card) => {
       var tasks = [];
@@ -1012,7 +994,7 @@ var ability_dict = {
         card.animate("muster2");
         console.log("[REINFORCE] running for:", card.name);
 
-        const targets = findReinforceTargets(card.name);
+        const targets = findReinforceTargets(card.filename);
 
         if (!targets || targets.length === 0) {
           console.warn("[REINFORCE] No reinforce targets for:", card.name);
@@ -1046,9 +1028,8 @@ var ability_dict = {
     weight: () => 35,
   },
   medic: {
-    name: "medic",
-    description:
-      "Choose one card from your discard pile and play it instantly (no Heroes or Special Cards). ",
+    name: "",
+    description: "",
     placed: async (card) => {
       if (card.holder.id === player_me.id) {
         med_draw = 1;
@@ -1157,9 +1138,8 @@ var ability_dict = {
     },
   },
   medic_n: {
-    name: "necromancy",
-    description:
-      "Choose one card from your discard pile and play it instantly (no Heroes or Special Cards). ",
+    name: "",
+    description: "",
     placed: async (card) => {
       if (card.holder.id === player_me.id) {
         med_draw = 1;
@@ -1268,19 +1248,18 @@ var ability_dict = {
     },
   },
   morale: {
-    name: "Morale",
-    description: "Adds +1 to all units in the row (excluding itself). ",
+    name: "",
+    description: "",
     placed: async (card) => await card.animate("morale"),
   },
   powergain: {
-    name: "Power Gain",
-    description: powergain.desc,
+    name: "",
+    description: "", //powergain.desc,
     placed: async (card) => await card.animate("powergain"),
   },
   bond: {
-    name: "Tight Bond",
-    description:
-      "Place next to a card with the same name to double the strength of both cards. ",
+    name: "",
+    description: "",
     placed: async (card) => {
       let bonds = board
         .getRow(card, card.row, card.holder)
@@ -1290,14 +1269,13 @@ var ability_dict = {
     },
   },
   avenger: {
-    name: "Avenger",
-    description:
-      "When this card is removed from the battlefield, it summons a powerful new Unit Card to take its place. ",
+    name: "",
+    description: "",
     removed: async (card) => {
       try {
         console.log("Avenger script running");
 
-        const targetData = findAvengerTarget(card.name);
+        const targetData = findAvengerTarget(card.filename);
 
         if (!targetData) {
           console.warn("No avenger target found for:", card.name);
@@ -1320,14 +1298,13 @@ var ability_dict = {
     weight: () => 50,
   },
   dopavenger: {
-    name: "Doppler",
-    description:
-      "When this card is removed from the battlefield, it summons a powerful new Unit Card to take its place. ",
+    name: "",
+    description: "",
     removed: async (card) => {
       try {
         console.log("Avenger script running");
 
-        const targetData = findAvengerTarget(card.name);
+        const targetData = findAvengerTarget("card.filename");
 
         if (!targetData) {
           console.warn("No avenger target found for:", card.name);
@@ -1350,8 +1327,8 @@ var ability_dict = {
     weight: () => 50,
   },
   //	avenger_kambi: {
-  //		name: "Avenger",
-  //		description: "When this card is removed from the battlefield, it summons a powerful new Unit Card to take its place. ",
+  //		name: "",
+  //		description: "",
   //		removed: async card => {
   //			try {
   //			console.log("kambi")
@@ -1365,14 +1342,13 @@ var ability_dict = {
   //	weight: () => 50
   //},
   avenger_kambi: {
-    name: "Avenger",
-    description:
-      "When this card is removed from the battlefield, it summons a powerful new Unit Card to take its place.",
+    name: "",
+    description: "",
     removed: async (card) => {
       try {
         console.log("kambi");
 
-        const targetData = findAvengerTarget(card.name);
+        const targetData = findAvengerTarget(card.filename);
 
         if (!targetData) {
           console.warn("No avenger target found for:", card.name);
@@ -1393,8 +1369,7 @@ var ability_dict = {
     weight: () => 50,
   },
   foltest_king: {
-    description:
-      "Pick an Impenetrable Fog card from your deck and play it instantly.",
+    description: "",
     activated: async (card) => {
       let out = card.holder.deck.findCard((c) => c.name === "Impenetrable Fog");
       if (out) await out.autoplay(card.holder.deck);
@@ -1402,7 +1377,7 @@ var ability_dict = {
     weight: (card, ai) => ai.weightWeatherFromDeck(card, "fog"),
   },
   keadwen_weather: {
-    description: `Play an Impenetrable Fog from your deck. If none is found, still consume leader charge. Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need ${turn_skipper_conf.actiavate} charge to skip turn, you get ${Number((turn_skipper_conf.perTurn - 0.15).toFixed(2))} charges per your turn, up to ${Math.floor(turn_skipper_conf.chargeMax / 2)} max charge(s) stored!`,
+    description: ``,
 
     activated: async (card) => {
       const holder = card.holder;
@@ -1421,38 +1396,32 @@ var ability_dict = {
     weight: (card, ai) => ai.weightWeatherFromDeck(card, "fog"),
   },
   foltest_lord: {
-    description:
-      "Clear any weather effects (resulting from Biting Frost, Torrential Rain or Impenetrable Fog cards) in play.",
+    description: "",
     activated: async () => {
       tocar("clear", false);
       await weather.clearWeather();
     },
-    weight: (card, ai) =>
-      ai.weightCard({ row: "weather", name: "Clear Weather" }),
+    weight: (card, ai) => ai.weightCard({ row: "weather", name: "" }),
   },
   foltest_siegemaster: {
-    description:
-      "Doubles the strength of all your Siege units (unless a Commander's Horn is also present on that row).",
+    description: "",
     activated: async (card) =>
       await board.getRow(card, "siege", card.holder).leaderHorn(),
     weight: (card, ai) =>
       ai.weightHornRow(card, board.getRow(card, "siege", card.holder)),
   },
   foltest_steelforged: {
-    description:
-      "Destroy your enemy's strongest Siege unit(s) if the combined strength of all his or her Siege units is 10 or more.",
+    description: "",
     activated: async (card) => await ability_dict["scorch_s"].placed(card),
     weight: (card, ai, max) => ai.weightScorchRow(card, max, "siege"),
   },
   foltest_son: {
-    description:
-      "Destroy your enemy's strongest Ranged Combat unit(s) if the combined strength of all his or her Ranged Combat units is 10 or more.",
+    description: "",
     activated: async (card) => await ability_dict["scorch_r"].placed(card),
     weight: (card, ai, max) => ai.weightScorchRow(card, max, "ranged"),
   },
   emhyr_imperial: {
-    description:
-      "Pick a Torrential Rain card from your deck and play it instantly.",
+    description: "",
     activated: async (card) => {
       let out = card.holder.deck.findCard((c) => c.name === "Torrential Rain");
       if (out) await out.autoplay(card.holder.deck);
@@ -1460,7 +1429,7 @@ var ability_dict = {
     weight: (card, ai) => ai.weightWeatherFromDeck(card, "rain"),
   },
   nilf_drawmaster: {
-    description: `On use, if your hand has fewer than ${nilfard_drawmaster.handshort} cards, draw ${nilfard_drawmaster.drawalive} cards from your deck, plus 1 additional card for each unit in your graveyard (up to ${nilfard_drawmaster.drawdead} bonus cards). You start the game with ${nilfard_drawmaster.cardban} fewer cards in hand but you can on game start redraw extra ${nilfard_drawmaster.drawextra} card(s).`,
+    description: "",
     activated: async (card) => {
       console.log("nilf_drawmaster");
 
@@ -1499,9 +1468,7 @@ var ability_dict = {
     },
   },
   temeria_call: {
-    description:
-      "Spawn Temeria Special Forcess attack in close combat row. Commander Horn in close combat row will lost its effect but close row will be partialy protected partialy from weather effects. After use makes you pass! Can't be used when opponent passed!",
-
+    description: "",
     activated: async (card) => {
       var is_allowed = false;
       if (card.holder.tag === "me") {
@@ -1537,8 +1504,7 @@ var ability_dict = {
     },
   },
   darkness_storm_leader: {
-    description:
-      "Spawn Darkness Storm on both sides that destroys all non-hero cards in the close row",
+    description: "",
     activated: async (card) => {
       // Find the card data in card_dict
       const targetData = Object.values(card_dict).find(
@@ -1563,13 +1529,13 @@ var ability_dict = {
     },
   },
   turn_skiper: {
-    description: turn_skipper_conf.desc,
+    description: "", //turn_skipper_conf.desc,
   },
   d20cloner: {
-    description: d20cloner.desc,
+    description: "", //d20cloner.desc,
   },
   gaunter_neutral_leader: {
-    description: `On use both sides will gain an additional (${gaunter_lider.revive * 100}%+1)  of the number of cards in the thier grave as additional cards from deck and all players start the game with ${gaunter_lider.extra_cards * 100}% more cards in their hand (based on their starting number)`,
+    description: ``,
     activated: async (card) => {
       const me = player_me;
       const op = player_op;
@@ -1591,7 +1557,7 @@ var ability_dict = {
     },
   },
   emhyr_emperor: {
-    description: "Look at 3 random cards from your opponent's hand.",
+    description: "",
     activated: async (card) => {
       // Wait for the opponent to close the carousel
       if (card.holder.controller instanceof ControllerOpponent) {
@@ -1620,15 +1586,14 @@ var ability_dict = {
     },
   },
   emhyr_whiteflame: {
-    description: "Cancel your opponent's Leader Ability.",
+    description: "",
   },
   emhyr_whiteflame2: {
-    description:
-      "Copy opponents's leader card at start of the game, but your opponent will have addtional 2 initial redraws",
+    description: "",
     activated: async (card, deck) => {},
   },
   emhyr_relentless: {
-    description: "Draw a card from your opponent's discard pile.",
+    description: "",
     activated: async (card) => {
       let resp = null;
       let grave = board.getRow(card, "grave", card.holder.opponent());
@@ -1692,22 +1657,20 @@ var ability_dict = {
   },
   emhyr_invader: {
     // Edit by Rick: Modified to explain the altered effect that doesn't cause desyncs.
-    // OLD: description: "Medics cannot choose which card to revive and draw a random one from the graveyard (affects both players).",
-    description:
-      "Medics cannot choose which card to revive and draw the strongest one from the graveyard (affects both players).",
+    // OLD: description: "",
+    description: "",
     gameStart: () => (game.randomRespawn = true),
   },
   eredin_commander: {
-    description:
-      "Double the strength of all your Close Combat units (unless a Commander's horn is 	also present on that row).",
+    description: "",
     activated: async (card) =>
       await board.getRow(card, "close", card.holder).leaderHorn(),
     weight: (card, ai) =>
       ai.weightHornRow(card, board.getRow(card, "close", card.holder)),
   },
   eredin_bringer_of_death: {
-    name: "Eredin : Bringer of Death",
-    description: "Recive a copy of card from your discard pile to your hand.",
+    name: "",
+    description: "",
 
     activated: async (card) => {
       if (!card.holder.grave.cards.length) {
@@ -1758,15 +1721,14 @@ var ability_dict = {
     weight: (card, ai, max, data) => ai.weightMedic(data, 0, card.holder),
   },
   eredin_destroyer: {
-    description:
-      "Banish 2 cards from your hand and create a copy of a card from your deck.",
+    description: "",
 
     activated: async (card) => {
       let hand = board.getRow(card, "hand", card.holder);
       let deck = player_me.deck;
       deck.cards = shuffleSeeded(
         deck.cards,
-        btoa(`${Math.random().toString(36).substring(2, 10)}`),
+        utf8ToBase64(`${Math.random().toString(36).substring(2, 10)}`),
         false,
       ).array;
 
@@ -1919,7 +1881,7 @@ var ability_dict = {
     },
   },
   eredin_king: {
-    description: "Pick any weather card from your deck and play it instantly.",
+    description: "",
     activated: async (card) => {
       let deck = board.getRow(card, "deck", card.holder);
 
@@ -1992,26 +1954,23 @@ var ability_dict = {
     },
   },
   eredin_treacherous: {
-    description:
-      "Doubles the strength of all spy cards (affects both players).",
+    description: "",
     gameStart: () => (game.doubleSpyPower = true),
   },
   francesca_queen: {
-    description:
-      "Destroy your enemy's strongest Close Combat unit(s) if the combined strength of all his or her Close Combat units is 10 or more.",
+    description: "",
     activated: async (card) => await ability_dict["scorch_c"].placed(card),
     weight: (card, ai, max) => ai.weightScorchRow(card, max, "close"),
   },
   francesca_beautiful: {
-    description:
-      "Doubles the strength of all your Ranged Combat units (unless a Commander's Horn is also present on that row).",
+    description: "",
     activated: async (card) =>
       await board.getRow(card, "ranged", card.holder).leaderHorn(),
     weight: (card, ai) =>
       ai.weightHornRow(card, board.getRow(card, "ranged", card.holder)),
   },
   francesca_daisy: {
-    description: "Draw an extra card at the beginning of the battle.",
+    description: "",
     placed: (card) =>
       game.gameStart.push(() => {
         let draw = card.holder.deck.removeCard(0);
@@ -2020,8 +1979,7 @@ var ability_dict = {
       }),
   },
   francesca_pureblood: {
-    description:
-      "Pick a Biting Frost card from your deck and play it instantly.",
+    description: "",
     activated: async (card) => {
       let out = card.holder.deck.findCard((c) => c.name === "Biting Frost");
       if (out) await out.autoplay(card.holder.deck);
@@ -2029,8 +1987,7 @@ var ability_dict = {
     weight: (card, ai) => ai.weightWeatherFromDeck(card, "frost"),
   },
   francesca_hope: {
-    description:
-      "Move agile units to whichever valid row maximizes their strength (don't move units already in optimal row).",
+    description: "",
     activated: async (card) => {
       let close = board.getRow(card, "close");
       let ranged = board.getRow(card, "ranged");
@@ -2064,12 +2021,10 @@ var ability_dict = {
     },
   },
   mediclove: {
-    description:
-      "Both players can revive extra card when using medic card ability. ",
+    description: "",
   },
   crach_an_craite: {
-    description:
-      "Shuffle all cards from each player's graveyard back into their decks.",
+    description: "",
     activated: async (card) => {
       // Edit by Rick: Everything below is new.
       // Previous version let both clients individually add the cards back to the deck at random positions. Problematic as then the next deck draw (e.g. Spy cards) will draw a different card per client.
@@ -2156,12 +2111,10 @@ var ability_dict = {
     },
   },
   king_bran: {
-    description:
-      "Units only lose half their Strength in bad weather conditions.",
+    description: "",
   },
   eist_tuirseach: {
-    description:
-      "Pick a Skellige Storm card from your deck and play it instantly.",
+    description: "",
     activated: async (card) => {
       let out = card.holder.deck.findCard((c) => c.name === "Skellige Storm");
       if (out) await out.autoplay(card.holder.deck);
@@ -2169,7 +2122,7 @@ var ability_dict = {
     weight: (card, ai) => ai.weightWeatherFromDeck(card, "rain"),
   },
   skellige_berserk_reward: {
-    description: "Spawn a Mardroeme card in the row with the most Berserkers.",
+    description: "",
     activated: async (card) => {
       let rows = [
         board.getRow(card, "close", card.holder),
@@ -2213,7 +2166,7 @@ var ability_dict = {
     },
   },
   skellige_bond_summoner: {
-    description: `Banish a card with power greater than or equal to ${skellige_bond_conf.power}. Then create a Tight Bond card from your faction or Neutral and add it to your hand.`,
+    description: ``,
 
     activated: async (card) => {
       console.log("[SKELLIGE_BOND_SUMMONER]", player_me.id, card.holder.id);
@@ -2465,8 +2418,9 @@ ability_dict.resolveScorch = async (rows, require10 = true) => {
 
   await Promise.all(scorched.map(([row, unit]) => board.toGrave(unit, row)));
 };
-
 const ability_dict_base = deepClone(ability_dict);
+loadingscreenupdate(`Translating ability_dict`);
+ability_dict = translateabilitydict();
 loadingscreenupdate(
   `ability_dict lenght is ${Object.keys(ability_dict).length}!`,
 );

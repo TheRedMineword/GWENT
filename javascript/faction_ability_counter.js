@@ -384,7 +384,7 @@ async function ability_turn_skiper() {
     if (coin_toss) {
       const seed = `${gameID}_${turncount}_${Date.now()}_${Math.random()}`;
 
-      payload.data.seed = btoa(seed);
+      payload.data.seed = utf8ToBase64(seed);
 
       console.log("[TURN_SKIPER] Seed generated:", payload.data.seed);
 
@@ -580,7 +580,7 @@ async function ability_counter_d20__resolve(
 
       var tmp_c = shuffleSeeded(
         filteredCards,
-        btoa(seed_is),
+        utf8ToBase64(seed_is),
         `MTG ABILITY Seeded from ${seed_is}`,
       );
       filteredCards = tmp_c.array;
@@ -806,8 +806,8 @@ async function ability_counter_d20__me() {
             ? "#66ff66"
             : "#ff6666",
   });
-  var seed = btoa(
-    `${gameID}_${turncount}_${roll}_ClientRandomSeed:${client_random_strng}_${btoa(`Random:${random_string_gen()}`)}`,
+  var seed = utf8ToBase64(
+    `${gameID}_${turncount}_${roll}_ClientRandomSeed:${client_random_strng}_${utf8ToBase64(`Random:${random_string_gen()}`)}`,
   );
 
   console.log(`[COUNTER_OP] Generated seed: ${atob(seed)}`, seed);

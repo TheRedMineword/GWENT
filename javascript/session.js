@@ -625,7 +625,7 @@ socket.addEventListener("message", async (event) => {
   switch (data.type) {
     case "sessionCreated":
       createdSessionId = data.code;
-      showTooltip(`Created Session join code: ${createdSessionId}`);
+      showTooltip(getUiStrng("session_made").replace("%s", createdSessionId));
 
       //    sessionDisplay.classList.remove("hidden");
       // sessionCodeText.textContent = createdSessionId;
@@ -669,7 +669,7 @@ socket.addEventListener("message", async (event) => {
       joinedSessionId = data.code;
       ThisSessionId = data.id;
       isconnectedtosession = true;
-      showTooltip(`Joined session: ${data.id}`);
+      showTooltip(getUiStrng("session_joined").replace("%s", data.id));
       if (data.custom === true) {
         await connect_to_custom_server(
           `${custom_url}api/custom_sync?session=${encodeURIComponent(ThisSessionId)}`,

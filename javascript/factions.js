@@ -219,4 +219,6 @@ var factions = {
 };
 
 const factions_base = deepClone(factions);
+loadingscreenupdate(`Translating factions!`);
+factions = translatefactionsdict();
 loadingscreenupdate(`Loaded ${Object.keys(factions).length} factions!`);

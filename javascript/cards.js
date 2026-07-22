@@ -275,7 +275,7 @@ var card_dict_base = [
     ability: "",
     filename: "chort",
     count: "0",
-    avenger: "Cow",
+    avenger: "cow",
   },
   {
     name: "Foltest - King of Temeria",
@@ -1326,7 +1326,7 @@ var card_dict_base = [
     ability: "hero",
     filename: "leshen",
     count: "1",
-    avenger: "Eskel",
+    avenger: "eskel",
   },
   {
     name: "Nekker",
@@ -2027,7 +2027,7 @@ var card_dict_base = [
     ability: "hero",
     filename: "hemdall",
     count: "0",
-    avenger: "Kambi",
+    avenger: "kambi",
   },
   {
     name: "Hjalmar",
@@ -2463,7 +2463,7 @@ var card_dict_base = [
     ability: "hero",
     filename: "reveal_dopler",
     count: "0",
-    avenger: "Dopler",
+    avenger: "HiIamDopler",
   },
   {
     name: "Witcher - Quen",
@@ -2628,7 +2628,7 @@ var card_dict_base = [
     ability: "hero morale",
     filename: "temeriamoral",
     count: "0",
-    reinforce: { owner_name: "Temeria", spawn_count: 2 },
+    reinforce: { owner_name: "temeriacall", spawn_count: 2 },
   },
   {
     name: "Blue Stripe Commando — Soldier",
@@ -2639,7 +2639,7 @@ var card_dict_base = [
     ability: "bond",
     filename: "temeriabluestripe",
     count: "0",
-    reinforce: { owner_name: "Temeria", spawn_count: 1 },
+    reinforce: { owner_name: "temeriacall", spawn_count: 1 },
   },
   {
     name: "Blue Stripe Commando — Soldier",
@@ -2650,7 +2650,7 @@ var card_dict_base = [
     ability: "bond",
     filename: "temeriabluestripe_2",
     count: "0",
-    reinforce: { owner_name: "Temeria", spawn_count: 1 },
+    reinforce: { owner_name: "temeriacall", spawn_count: 1 },
   },
   {
     name: "Blue Stripe Commando — Quen",
@@ -2662,7 +2662,7 @@ var card_dict_base = [
     filename: "temeriamoral_1",
     count: "0",
     witcher_sign: false,
-    reinforce: { owner_name: "Temeria", spawn_count: 1 },
+    reinforce: { owner_name: "temeriacall", spawn_count: 1 },
   },
   {
     name: "Vernon Roche – Blue Stripes Commando Leader",
@@ -2855,7 +2855,7 @@ var card_dict_base = [
     ability: "hero",
     filename: "colorcollab",
     count: "0",
-    reinforce: { owner_name: "Days Of Color Guide", spawn_count: 2 },
+    reinforce: { owner_name: "colorguide", spawn_count: 2 },
   },
   {
     name: "Aviary Village Emotional Support",
@@ -2927,7 +2927,7 @@ var card_dict_base = [
     ability: "morale",
     filename: "naturecollab",
     count: "0",
-    reinforce: { owner_name: "Days Of Nature Guide", spawn_count: 1 },
+    reinforce: { owner_name: "natureguide", spawn_count: 1 },
   },
   {
     name: "Sky Anniversary",
@@ -3043,7 +3043,6 @@ var card_dict_base = [
         timed: [],
       },
     },
-    reinforce: { owner_name: "Season of Dear Van Gogh", spawn_count: 1 },
   },
   {
     name: "Vincent Van Gogh: Painting",
@@ -3084,7 +3083,7 @@ var card_dict_base = [
         ],
       },
     },
-    reinforce: { owner_name: "Vincent Van Gogh", spawn_count: 1 },
+    reinforce: { owner_name: "custom!sky_vincent", spawn_count: 1 },
   },
   {
     name: "Dear Van Gogh — Seasonal Spirits",
@@ -3276,7 +3275,7 @@ var card_dict_base = [
     ability: "",
     filename: "nightwraith",
     count: "2",
-    reinforce: { owner_name: "New Moon", spawn_count: 2 },
+    reinforce: { owner_name: "custom!nightwraithsmoon", spawn_count: 2 },
   },
   {
     name: "Noonwraith",
@@ -3297,11 +3296,13 @@ var card_dict_base = [
     ability: "",
     filename: "deatheatr",
     count: "0",
-    reinforce: { owner_name: "Full Moon", spawn_count: 3 },
+    reinforce: { owner_name: "custom!deatheatersmoon", spawn_count: 3 },
   },
 ];
 
 var card_dict = deepClone(card_dict_base);
+loadingscreenupdate(`Translating cards!`);
+card_dict = translateCardDict();
 // Moonlight and etc card timer setup un custom_cards.js
 
 loadingscreenupdate(`Loaded ${card_dict.length} cards!`);

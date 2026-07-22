@@ -333,97 +333,56 @@ let map_results_color = {
 turn_skipper_conf.desc = `Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need ${turn_skipper_conf.actiavate} charge to skip turn, you get ${turn_skipper_conf.perTurn} charges per your turn, up to ${turn_skipper_conf.chargeMax} max charge(s) stored!`;
 d20cloner.desc = `Let you roll D20 for chance to get additional card from board, but what card you can get depends on roll result. Success on even roll. You need ${d20cloner.actiavate} charge to roll dice, you get ${d20cloner.perTurn} charges per your turn, up to ${d20cloner.chargeMax} max charge(s) stored!`;
 let ThisDef = {
-  name: "Deafult Config",
+  name: "Default Config",
+
   env_vars: {
-    showbankms: 9000,
-    players: { sys: "Gwent Bot" },
-    fullscreenConfig: { localhost: false, else: true },
-    OnGameStartDraw: 2,
-    medicsdraw: 1,
+    showbankms: deepClone(showbankms),
+    players: {
+      sys: deepClone(players.sys),
+    },
+    fullscreenConfig: deepClone(fullscreenConfig),
+
+    OnGameStartDraw: deepClone(OnGameStartDraw),
+    medicsdraw: deepClone(medicsdraw),
     ThatIsSpy: deepClone(ThatIsSpy),
-    ForGameStart: { unitscards: 22, special: 10, hero: 9 },
-    killoverpowercard: 999,
-    darknessstorm_await: false,
-    thishandsize: 10,
-    herocardanim: true,
-    announce_turn_count: true,
-    SEND_INTERVAL_MS: 700,
-    ui_display_times: {
-      socketready: 3000,
-      hold_pause: { sleep: 78, needs: 6 },
-      queue: [],
-      is_running: false,
-      is_busy: false,
-      round_end_result: 2800,
-      notyfication: 2200,
-      fadeSpeed: 150,
-      checkDelay: 25,
-      pass: 1320,
-      turn: 1200,
-      round_start: 1200,
-      coin: 1200,
-      faction_ability: 2700,
-      show_me_that_card_you_have: 2900,
-      is_transitioning: false,
-    },
-    RegisterMovesHold: 7200,
-    resync_wait: 10,
-    spy: { spy: 2, aid: 5, sabotage: 1 },
-    powergain: {
-      ForEachCardGain: 1.11,
-      CountSelf: false,
-      WeatherDebuffPercent: 0.25,
-      Ceil: false,
-    },
-    axii: { IfBasePowerUnder: 5, TakeAway: 2, desc: null },
-    nilfard_drawmaster: {
-      handshort: 3,
-      drawdead: 3,
-      drawalive: 1,
-      drawiffail: 3,
-      cardban: 2,
-      drawextra: 1,
-    },
-    gryffinschool_conf: {
-      anim: "griffin",
-      anim_hand: "griffin_hand",
-      topic: "Choose a Witcher Sign",
-    },
+
+    ForGameStart: deepClone(ForGameStart),
+
+    killoverpowercard: deepClone(killoverpowercard),
+    darknessstorm_await: deepClone(darknessstorm_await),
+    thishandsize: deepClone(thishandsize),
+    herocardanim: deepClone(herocardanim),
+    announce_turn_count: deepClone(announce_turn_count),
+
+    SEND_INTERVAL_MS: deepClone(SEND_INTERVAL_MS),
+
+    ui_display_times: deepClone(ui_display_times),
+
+    RegisterMovesHold: deepClone(RegisterMovesHold),
+    resync_wait: deepClone(resync_wait),
+
+    spy: deepClone(spy),
+
+    powergain: deepClone(powergain),
+
+    axii: deepClone(axii),
+
+    nilfard_drawmaster: deepClone(nilfard_drawmaster),
+
+    gryffinschool_conf: deepClone(gryffinschool_conf),
+
     mtg_conf: deepClone(mtg_conf),
-    //   audio_yt_vid_soundtrack: "FTsuevfvQ9w",
-    //   audio_yt_vid_soundtrack_volume: 47,
-    //   tavern_yt_vid: "yu197hlNWK0",
-    //   tavern_yt_volume: 100,
-    gaunter_lider: { extra_cards: 0.5, revive: 0.6 },
-    skellige_bond_conf: { power: 4 },
-    turn_skipper_conf: {
-      perTurn: 0.25,
-      actiavate: 1,
-      chargeMax: 2,
-    },
-    d20cloner: {
-      perTurn: 0.16,
-      actiavate: 1,
-      chargeMax: 1,
-      desc: null,
-    },
-    syndicate_faction_clone: {
-      nilfgaard: {
-        name: "Nilfgaardian Empire",
-      },
-      scoiatael: {
-        name: "Scoia'tael",
-      },
-      skellige: {
-        name: "Skellige",
-      },
-      syndicate: {
-        name: "Syndicate",
-      },
-      sky: {
-        name: "Sky Kingdom",
-      },
-    },
+
+    gaunter_lider: deepClone(gaunter_lider),
+
+    skellige_bond_conf: deepClone(skellige_bond_conf),
+
+    turn_skipper_conf: deepClone(turn_skipper_conf),
+
+    d20cloner: deepClone(d20cloner),
+
+    syndicate_faction_clone: deepClone(syndicate_faction_clone),
+
     map_results_txt: deepClone(map_results_txt),
     map_results_color: deepClone(map_results_color),
   },

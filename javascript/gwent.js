@@ -657,7 +657,7 @@ document.getElementById("copy-session").onclick = () => {
 
   try {
     navigator.clipboard.writeText(joinedSessionId);
-    showTooltip(`Copied: ${joinedSessionId}`);
+    showTooltip(getUiStrng("session_copied").replace("%s", joinedSessionId));
   } catch (err) {
     console.error("Copy failed:", err);
   }
@@ -951,7 +951,7 @@ socket.onmessage = async (event) => {
       disableChat();
       //reset_custom();
       if (gameended === false) {
-        showTooltip("Opponent has left and the session is no longer ready");
+        showTooltip(getUiStrng("op_left"));
         var btn = document.getElementById("session-start-control");
         btn.textContent = "Ready";
         amReady = false;
@@ -1008,7 +1008,7 @@ socket.onmessage = async (event) => {
         }
       } else {
         console.log("Op left, but game ended is", gameended);
-        showTooltip("Opponent has left");
+        showTooltip(getUiStrng("op_left_short"));
       }
 
       clearUnread();
@@ -1025,9 +1025,7 @@ socket.onmessage = async (event) => {
 
     // Opponent is ready. If you are ready begin the game immediately
     case "ready":
-      showTooltip(
-        "Opponent is ready. If you are ready begin the game immediately",
-      );
+      showTooltip(getUiStrng("op_ready"));
       tocar("tf2/Vote_yes", false);
       updateOpponentUI({
         name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]}`,
@@ -1082,7 +1080,10 @@ socket.onmessage = async (event) => {
       }
       console.log("opponent has changed his faction");
       showTooltip(
-        `Opponent changed his faction to ${factions[data.faction]?.name || data.faction}`,
+        getUiStrng("op_faction").replace(
+          "%s",
+          factions[data.faction]?.name || data.faction,
+        ),
       );
       op_icon_faction = `img/icons/deck_shield_${data.faction}.png`;
       updateOpponentUI({
@@ -1113,7 +1114,7 @@ socket.onmessage = async (event) => {
         status: `Ready: ${opponentReady}`,
       });
       //	twoPlayersConnected = true;
-      showTooltip("Opponent is unReady.");
+      showTooltip(getUiStrng("op_unready"));
       // opponentReadyElem.classList.add("disabled");
       if (amReady) {
         document
@@ -1495,8 +1496,8 @@ function shuffleSeeded2(array, seed, debug = null) {
         console.log(
           "SHUFFLE ON SEED",
           seed,
-          `\nStarted: ${fasthash(btoa(JSON.stringify(array)))}`,
-          `\nOutput: ${fasthash(btoa(JSON.stringify(array)))}`,
+          `\nStarted: ${fasthash(utf8ToBase64(JSON.stringify(array)))}`,
+          `\nOutput: ${fasthash(utf8ToBase64(JSON.stringify(array)))}`,
           debug,
         );
       } catch (e) {}
@@ -1512,8 +1513,8 @@ function shuffleSeeded2(array, seed, debug = null) {
       console.log(
         "SHUFFLE ON SEED",
         seed,
-        `\nStarted: ${fasthash(btoa(JSON.stringify(array)))}`,
-        `\nOutput: ${fasthash(btoa(JSON.stringify(arr)))}`,
+        `\nStarted: ${fasthash(utf8ToBase64(JSON.stringify(array)))}`,
+        `\nOutput: ${fasthash(utf8ToBase64(JSON.stringify(arr)))}`,
         debug,
       );
     } catch (e) {}
@@ -1553,7 +1554,7 @@ class Player {
       id === 0 ? new Controller() : new ControllerOpponent(this);
     var tmp_cards = shuffleSeeded(
       deck.cards,
-      btoa(
+      utf8ToBase64(
         `${Math.random().toString(36).substring(2, 36)}${this.ThatPlayerId}`,
       ),
       debug,
@@ -1808,7 +1809,13 @@ class Player {
             const total = extraJSON.length;
             var opponent_see_card_delay = 2.5;
             showTooltip(
-              `Initiating sync, wait ${Math.floor((ui_display_times.faction_ability + 600) / opponent_see_card_delay) / 1000} seconds`,
+              getUiStrng("sync.init").replace(
+                "%s",
+                Math.floor(
+                  (ui_display_times.faction_ability + 600) /
+                    opponent_see_card_delay,
+                ) / 1000,
+              ),
             );
             await sleep(
               Math.floor(
@@ -1840,7 +1847,10 @@ class Player {
                 );
 
                 showTooltip(
-                  `The opponent synchronizes with the game (${i + 1}/${total}), wait ${delay / 1000}s`,
+                  getUiStrng("sync.hold_progress")
+                    .replace("%x", i + 1)
+                    .replace("%y", total)
+                    .replace("%s", delay / 1000),
                 );
 
                 await new Promise((resolve) => setTimeout(resolve, delay));
@@ -1854,11 +1864,11 @@ class Player {
           if (player_op.passed && !player_me.passed) {
             ui.enablePlayer(false);
             showTooltip(
-              `The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`,
+              getUiStrng("sync.sync").replace("%s", RegisterMovesHold / 1000),
             );
             ui.enablePlayer(false);
             await sleep(RegisterMovesHold);
-            showTooltip(`You can play now again`);
+            showTooltip(getUiStrng("sync.end"));
             ui.enablePlayer(true);
           }
           //	await init_sync_hands();
@@ -1875,11 +1885,11 @@ class Player {
       if (player_op.passed && !player_me.passed) {
         ui.enablePlayer(false);
         showTooltip(
-          `The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`,
+          getUiStrng("sync.sync").replace("%s", RegisterMovesHold / 1000),
         );
         ui.enablePlayer(false);
         await sleep(RegisterMovesHold);
-        showTooltip(`You can play now again`);
+        showTooltip(getUiStrng("sync.end"));
         ui.enablePlayer(true);
       }
       //console.log("LEADER END TURN");
@@ -2192,7 +2202,9 @@ class Deck extends CardContainer {
       removedFromDeck?.name,
     );
     try {
-      var txt_draw = `<color=#d5cfe3>You redrawed card</color> <color=#fa4441>${card?.name}</color> <color=#d5cfe3>for a</color> <color=#41fa66>${removedFromDeck?.name}</color>`;
+      var txt_draw = getUiStrng("redraw")
+        .replace("%x", card?.name || "")
+        .replace("%y", removedFromDeck?.name || "");
       console.log(txt_draw);
       cardredrawnotice(txt_draw);
     } catch (e) {
@@ -2528,7 +2540,7 @@ class Row extends CardContainer {
         total =
           shuffleSeeded(
             [-3, -4, -5, -6, -3, -4, -4, -3, -6, -7, -2, -2, -1, 0, 1],
-            btoa(
+            utf8ToBase64(
               `${mtg_conf.daily_seed ? `${time_now_utc_to_b64()}` : ""}${mtg_conf.version}${turncount}${gameID}${holder_is_the}`,
             ),
             `MTG POWER CHECK Seeded from ${mtg_conf.daily_seed ? `${time_now_utc_to_b64()}` : ""}${mtg_conf.version}${turncount}${gameID}${holder_is_the}`,
@@ -3361,7 +3373,7 @@ class Game {
       `TURN ENDED: Turn ${turncount - 1}\nNext turn will be: ${turncount}`,
     );
     if (announce_turn_count) {
-      showTooltip(`End of ${ordinal(turncount - 1)} turn`);
+      showTooltip(getUiStrng("end_turn").replace("%s", ordinal(turncount - 1)));
     }
     if (darknessstorm_await === true) {
       for (const row of board.row) {
@@ -4100,7 +4112,7 @@ function getSegmentCount(m3u8) {
     .split("\n")
     .filter((line) => /^segment_\d+\.m4s$/.test(line.trim())).length;
   try {
-    console.log("getSegmentCount(", btoa(m3u8), "\nOut: ", out);
+    console.log("getSegmentCount(", utf8ToBase64(m3u8), "\nOut: ", out);
   } catch (e) {}
   return out;
 }
@@ -5016,7 +5028,10 @@ class UI {
             );
 
             showTooltip(
-              `The opponent synchronizes with the game (${i + 1}/${total}), wait ${delay / 1000}s`,
+              getUiStrng("sync.hold_progress")
+                .replace("%x", i + 1)
+                .replace("%y", total)
+                .replace("%s", delay / 1000),
             );
 
             await new Promise((resolve) => setTimeout(resolve, delay));
@@ -5028,10 +5043,10 @@ class UI {
       }
       if (player_op.passed && !player_me.passed) {
         showTooltip(
-          `The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`,
+          getUiStrng("sync.sync").replace("%s", RegisterMovesHold / 1000),
         );
         await sleep(RegisterMovesHold);
-        showTooltip(`You can play now again`);
+        showTooltip(getUiStrng("sync.end"));
       }
       pCard.holder.endTurn();
       //	await init_sync_hands();
@@ -5111,7 +5126,10 @@ class UI {
           console.log(`Hold before send extraJSON ${i + 1}/${total}`, payload);
 
           showTooltip(
-            `The opponent synchronizes with the game (${i + 1}/${total}), wait ${delay / 1000}s`,
+            getUiStrng("sync.hold_progress")
+              .replace("%x", i + 1)
+              .replace("%y", total)
+              .replace("%s", delay / 1000),
           );
 
           await new Promise((resolve) => setTimeout(resolve, delay));
@@ -5123,10 +5141,10 @@ class UI {
     }
     if (player_op.passed && !player_me.passed) {
       showTooltip(
-        `The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`,
+        getUiStrng("sync.sync").replace("%s", RegisterMovesHold / 1000),
       );
       await sleep(RegisterMovesHold);
-      showTooltip(`You can play now again`);
+      showTooltip(getUiStrng("sync.end"));
     }
     holder.endTurn();
     // await init_sync_hands();
@@ -6436,7 +6454,7 @@ class DeckMaker {
         .filter(Boolean);
       var descString = descOutput.join("\n");
       var timeNow = Date.now().toString();
-      var shaSource = btoa(timeNow + descString);
+      var shaSource = utf8ToBase64(timeNow + descString);
       // console.log("\nAdds a card to container (Bank or deck)", abilities, descOutput, descString, shaSource);
       if (2 < descString.length) {
         console.log(
@@ -6490,12 +6508,12 @@ class DeckMaker {
   async startNewGame() {
     if (!twoPlayersConnected) {
       console.warn("Cannot start game: waiting for second player.");
-      showTooltip("Cannot start game: waiting for second player.");
+      showTooltip(getUiStrng("no_op_start"));
       return;
     }
     if (amReady) {
       comp_and_send(socket, JSON.stringify({ type: "unReady" }));
-      showTooltip(`You are now UnReady`);
+      showTooltip(getUiStrng("me_unready"));
       var btn = document.getElementById("session-start-control");
       btn.textContent = "Ready";
       customizationElem.classList.remove("noclick");
@@ -6547,7 +6565,7 @@ class DeckMaker {
     amReady = true;
     toggleReadyWaiting(amReady);
     customizationElem.classList.add("noclick");
-    showTooltip("You are ready, please wait for opponent!");
+    showTooltip(getUiStrng("me_ready"));
     if (opponentReady) {
       this.elem.classList.add("hide");
       //await sleep(100);
@@ -6947,16 +6965,16 @@ async function loadPackedSFX() {
 function tocar(arquivo, pararMusica) {
   if (arquivo.includes("card") || arquivo.includes("game_buy")) {
   } else {
-    if (playBlock[btoa(arquivo)]) {
-      if (playBlock[btoa(arquivo)] === 1) {
-        playBlock[btoa(arquivo)] = 2;
+    if (playBlock[utf8ToBase64(arquivo)]) {
+      if (playBlock[utf8ToBase64(arquivo)] === 1) {
+        playBlock[utf8ToBase64(arquivo)] = 2;
         //	console.log("TOCAR PLAY", playBlock, arquivo);
       } else {
         //			console.log("TOCAR BLOCK PLAY", playBlock, arquivo);
         return false;
       }
     } else {
-      playBlock[btoa(arquivo)] = 2;
+      playBlock[utf8ToBase64(arquivo)] = 2;
       //	console.log("TOCAR PLAY", playBlock, arquivo);
     }
   }
@@ -6989,15 +7007,15 @@ function tocar(arquivo, pararMusica) {
 
     s.play()
       .then(() => {
-        if (playBlock[btoa(arquivo)]) {
-          playBlock[btoa(arquivo)] = 1;
+        if (playBlock[utf8ToBase64(arquivo)]) {
+          playBlock[utf8ToBase64(arquivo)] = 1;
           //	console.log("TOCAR DEL NOW:", playBlock, arquivo);
         }
         //	console.log("[sfx] audio playback started successfully");
       })
       .catch((err) => {
-        if (playBlock[btoa(arquivo)]) {
-          playBlock[btoa(arquivo)] = 1;
+        if (playBlock[utf8ToBase64(arquivo)]) {
+          playBlock[utf8ToBase64(arquivo)] = 1;
           //	console.log("TOCAR DEL NOW:", playBlock, arquivo);
         }
         //	console.error("[sfx] audio playback failed:", err);

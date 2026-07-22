@@ -1,4 +1,15 @@
 "use strict";
+function utf8ToBase64(str) {
+  const bytes = new TextEncoder().encode(str);
+  let binary = "";
+
+  const chunkSize = 0x8000; // 32768 bytes
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+  }
+
+  return btoa(binary);
+}
 // GWENT INIT FILE
 let menubntconfig = { color: "", wasINIT: false };
 let isHuman = false;
@@ -680,6 +691,7 @@ async function loadScript2(src) {
   let sha = "abcde";
 
   const scripts = [
+    "javascript/transclations/assets.js",
     "javascript/jszip.min.js",
     "javascript/defines.js",
     "javascript/cards.js",
