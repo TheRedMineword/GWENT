@@ -90,38 +90,38 @@ STRNG["pl"] = {
   },
 
   scorch: {
-    name: "Spalenie",
+    name: "Piekielna Pożoga",
     description:
       "Po zagraniu zostaje odrzucona. Niszczy najsilniejszą kartę (lub karty) na polu bitwy. "
   },
 
   scorch_c: {
-    name: "Spalenie - Walka Wręcz",
+    name: "Pożoga — Walka Wręcz",
     description:
       "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika walczące wręcz, jeśli łączna siła jego jednostek w zwarciu wynosi 10 lub więcej. "
   },
 
   scorch_r: {
-    name: "Spalenie - Dystans",
+    name: "Pożoga — Dystans",
     description:
       "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika walczące na dystans, jeśli łączna siła jego jednostek dystansowych wynosi 10 lub więcej. "
   },
 
   scorch_s: {
-    name: "Spalenie - Oblężenie",
+    name: "Pożoga — Oblężenie",
     description:
       "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika w oblężeniu, jeśli łączna siła jego jednostek oblężniczych wynosi 10 lub więcej. "
   },
 
   scorch_a: {
-    name: "Spalenie - Przeciwległy rząd",
+    name: "Pożoga — Przeciwległy rząd",
     description:
       "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika w przeciwległym rzędzie, jeśli łączna siła tych jednostek wynosi 10 lub więcej. "
   },
 
   scorchstopper: {
     description:
-      "Chroni przed efektami Spalenia, zużywając 1 ładunek Tarczy za każdą uratowaną kartę. Rozpoczyna z 5 ładunkami, nie można ich odnowić. Traci działanie po zagraniu dowolnej karty Spalenia. "
+      "Chroni przed efektami Pożogi, zużywając 1 ładunek Tarczy za każdą uratowaną kartę. Rozpoczyna z 5 ładunkami, nie można ich odnowić. Traci działanie po zagraniu dowolnej karty Pożogi. "
   },
     agile: {
     name: "Zwinność",
@@ -204,7 +204,7 @@ STRNG["pl"] = {
   tgc_portal: {
     name: "That Game Company",
     description:
-      "Wybierz jedną kartę spośród maksymalnie 25 kart frakcji Sky i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Przynęty. Ta karta jest niestabilna — jej siła zmienia się co turę. "
+      "Wybierz jedną kartę spośród maksymalnie 25 kart frakcji Nieba i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Przynęty. Ta karta jest niestabilna — jej siła zmienia się co turę, najczęściej przyjmując wartości ujemne. "
   },
 
   dopler: {
@@ -490,7 +490,7 @@ STRNG["pl"] = {
   emiel: "Emiel Regis Rohellec Terzieff",
   geralt: "Geralt z Rivii",
   fog: "Gęsta Mgła",
-  scorch: "Spalenie",
+  scorch: "Pożoga",
   rain: "Ulewny Deszcz",
   triss: "Triss Merigold",
   vesemir: "Vesemir",
@@ -499,14 +499,14 @@ STRNG["pl"] = {
   zoltan: "Zoltan Chivay",
   olgierd: "Olgierd von Everec",
   gaunter_odimm: "Gaunter o'Dim",
-  gaunter_odimm_darkness: "Gaunter o'Dim - Ciemność",
+  gaunter_odimm_darkness: "Gaunter o'Dim — Ciemność",
   cow: "Krowa",
   chort: "Boviny Korpus Obrony",
-    foltest_silver: "Foltest - King of Temeria",
-    foltest_gold: "Foltest - Lord Commander of the North",
-    foltest_copper: "Foltest - The Siegemaster",
-    foltest_bronze: "Foltest - The Steel-Forged",
-    foltest_son_of_medell: "Foltest - Son of Medell",
+    foltest_silver: "Foltest — King of Temeria",
+    foltest_gold: "Foltest — Lord Commander of the North",
+    foltest_copper: "Foltest — The Siegemaster",
+    foltest_bronze: "Foltest — The Steel-Forged",
+    foltest_son_of_medell: "Foltest — Son of Medell",
     ballista: "Ballista",
     blue_stripes: "Blue Stripes Commando",
     catapult_1: "Catapult",
@@ -532,10 +532,10 @@ STRNG["pl"] = {
     ves: "Ves",
     yarpen: "Yarpen Zigrin",
     trebuchet_1: "Trebuchet",
-    emhyr_copper: "Emhyr var Emreis - His Imperial Majesty",
-    emhyr_silver: "Emhyr var Emreis - the White Flame",
-    emhyr_gold: "Emhyr var Emreis - The Relentless",
-    emhyr_invader_of_the_north: "Emhyr var Emreis - Invader of the North",
+    emhyr_copper: "Emhyr var Emreis — His Imperial Majesty",
+    emhyr_silver: "Emhyr var Emreis — the White Flame",
+    emhyr_gold: "Emhyr var Emreis — The Relentless",
+    emhyr_invader_of_the_north: "Emhyr var Emreis — Invader of the North",
     albrich: "Albrich",
     assire: "Assire var Anahid",
     black_archer_1: "Black Infantry Archer",
@@ -565,19 +565,19 @@ STRNG["pl"] = {
     vreemde: "Vreemde",
     young_emissary: "Young Emissary",
     zerri: "Zerrikanian Fire Scorpion",
-    eredin_bronze: "Eredin - Commander of the Red Riders",
-    eredin_silver: "Eredin - Bringer of Death",
-    eredin_gold: "Eredin - Destroyer of Worlds",
-    eredin_copper: "Eredin - King of the Wild Hunt",
-    eredin_the_treacherous: "Eredin Bréacc Glas - The Treacherous",
+    eredin_bronze: "Eredin — Commander of the Red Riders",
+    eredin_silver: "Eredin — Bringer of Death",
+    eredin_gold: "Eredin — Destroyer of Worlds",
+    eredin_copper: "Eredin — King of the Wild Hunt",
+    eredin_the_treacherous: "Eredin Bréacc Glas — The Treacherous",
     arachas_1: "Arachas ",
-    arachas_behemoth: "Arachas- Behemoth",
+    arachas_behemoth: "Arachas— Behemoth",
     poroniec: "Botchling",
     celaeno_harpy: "Celaeno Harpy",
     cockatrice: "Cockatrice",
-    witch_velen: "Crone - Brewess",
-    witch_velen_1: "Crone - Weavess",
-    witch_velen_2: "Crone - Whispess",
+    witch_velen: "Crone — Brewess",
+    witch_velen_1: "Crone — Weavess",
+    witch_velen_2: "Crone — Whispess",
     draug: "Draug",
     earth_elemental: "Earth Elemental",
     endrega: "Endrega",
@@ -597,20 +597,20 @@ STRNG["pl"] = {
     leshen: "Leshen",
     nekker: "Nekker",
     mighty_maiden: "Plague Maiden",
-    bruxa: "Vampire - Bruxa",
-    ekkima: "Vampire - Ekimmara",
-    fleder: "Vampire - Fleder",
-    garkain: "Vampire - Garkain",
-    katakan: "Vampire - Katakan",
+    bruxa: "Vampire — Bruxa",
+    ekkima: "Vampire — Ekimmara",
+    fleder: "Vampire — Fleder",
+    garkain: "Vampire — Garkain",
+    katakan: "Vampire — Katakan",
     werewolf: "Werewolf",
     wyvern: "Wyvern",
     toad: "Toad",
-    francesca_silver: "Francesca Findabair - Queen of Dol Blathanna",
-    francesca_gold: "Francesca Findabair - the Beautiful",
-    francesca_copper: "Francesca Findabair - Daisy of the Valley",
-    francesca_bronze: "Francesca Findabair - Pureblood Elf",
+    francesca_silver: "Francesca Findabair — Queen of Dol Blathanna",
+    francesca_gold: "Francesca Findabair — the Beautiful",
+    francesca_copper: "Francesca Findabair — Daisy of the Valley",
+    francesca_bronze: "Francesca Findabair — Pureblood Elf",
     francesca_hope_of_the_aen_seidhe:
-      "Francesca Findabair - Hope of the Aen Seidhe",
+      "Francesca Findabair — Hope of the Aen Seidhe",
     ciaran: "Ciaran aep Easnillien",
     barclay: "Barclay Els",
     dennis: "Dennis Cranmer",
@@ -639,7 +639,7 @@ STRNG["pl"] = {
     cerys: "Cerys",
     brokva_archer: "Clan Brokva Archer",
     dimun_pirate: "Clan Dimun Pirate",
-    shield_maiden_2: "Cerys - Clan Drummond Shield Maiden",
+    shield_maiden_2: "Cerys — Clan Drummond Shield Maiden",
     heymaey: "Clan Heymaey Skald",
     tordarroch: "Clan Tordarroch Armorsmith",
     craite_warrior: "Clan an Craite Warrior",
@@ -665,7 +665,7 @@ STRNG["pl"] = {
     king_bran: "King Bran",
     schirru: "Schirru",
     gerry: "Gerry from the River",
-    lethosabotage: "Letho - The Saboteur",
+    lethosabotage: "Letho — The Saboteur",
     aidhorn: "Horn of Support",
     Gaunter_Leader: "Gaunter o'Dim",
     Ida_Emean_d20: "Ida Emean — Elven Divination",
@@ -679,15 +679,15 @@ STRNG["pl"] = {
     axii_p: "witcher Signs: Axii",
     sab: "Vattier de Rideaux",
     scol_sab: "Iorveth",
-    bad_lady: "Birna Bran - Sabotage",
+    bad_lady: "Birna Bran — Sabotage",
     beast_of_tussant: "Beast Of Tussant",
     dopler: "Dopler",
     reveal_dopler: "Dopler Revealed",
-    wshield: "Witcher - Quen",
+    wshield: "Witcher — Quen",
     quen: "Witcher Signs: Quen",
     eist_tuirseach: "Eist Tuirseach — King Of Citra",
     svalblod: "Svalblod Cult",
-    svalblod_change: "Svalblod Cult - Transformation",
+    svalblod_change: "Svalblod Cult — Transformation",
     Arnjolf_the_Patricide: "Arnjolf the Patricide",
     aard: "Witcher Signs: Aard",
     yrden: "Witcher Signs: Yrden",
@@ -702,7 +702,7 @@ STRNG["pl"] = {
     temeriabluestripe: "Blue Stripe Commando — Soldier",
     temeriabluestripe_2: "Blue Stripe Commando — Soldier",
     temeriamoral_1: "Blue Stripe Commando — Quen",
-    vernontemeria_call: "Vernon Roche – Blue Stripes Commando Leader",
+    vernontemeria_call: "Vernon Roche — Blue Stripes Commando Leader",
     steward: "Hopeful Steward",
     guard: "Royal Guard",
     chibi_mask: "Chibi Mask",
@@ -711,7 +711,7 @@ STRNG["pl"] = {
     arcadaoffun: "Wandering Carnival",
     fortunedrum: "Fortune Drum",
     spirit: "Ascended Ancestor Spirit",
-    " Danielle": "Sky Kid -  Danielle",
+    danielle: "Sky Kid — Danielle",
     redcrab: "Red Crab",
     crabspy: "Spy Crab",
     darkstorm: "Darkness Storm",
@@ -747,6 +747,9 @@ STRNG["pl"] = {
     deatheatr: "Necrophages",
   },
   ui: {
+    "initial_redraw": {
+        "txt": "Wybierz do %s kart do wymiany."
+      },
     elem: {
       definesJS: {
         players: {

@@ -843,6 +843,7 @@ async function loadScript2(src) {
     });
     loadingscreenupdate("Loading languages...");
     await initlng(sha);
+    await loadScriptEval(`javascript/translations/strings/en.js?ver=${sha}`);
     await loadScriptEval(`javascript/translations/strings/pl.js?ver=${sha}`);
     await loadScriptEval(`javascript/translations/strings/END.js?ver=${sha}`);
     //   console.log("bg watcher", watcher);

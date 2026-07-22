@@ -3248,7 +3248,10 @@ class Game {
         (c) => true,
         true,
         true,
-        `Choose up to ${OnGameStartDraw2} cards to redraw.`,
+        getTranslation("ui.elem.initial_redraw.txt").replace(
+          "%s",
+          OnGameStartDraw2,
+        ),
       );
     else
       await ui.queueCarousel(
@@ -3258,7 +3261,10 @@ class Game {
         (c) => true,
         true,
         true,
-        `Choose up to ${OnGameStartDraw2} cards to redraw.`,
+        getTranslation("ui.elem.initial_redraw.txt").replace(
+          "%s",
+          OnGameStartDraw2,
+        ),
       );
     ui.enablePlayer(false);
 
