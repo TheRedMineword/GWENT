@@ -303,7 +303,7 @@ STRNG["pl"] = {
 
   nilf_drawmaster: {
     description:
-      "Po użyciu, jeśli masz mniej niż 3 karty w ręce, dobierz 1 kartę z talii oraz 1 dodatkową kartę za każdą jednostkę w twoim grobie (maksymalnie 3 dodatkowe karty). Rozpoczynasz grę z 2 kartami mniej w ręce, ale możesz wykonać dodatkowe przemielenie na początku gry."
+      "Po użyciu, jeśli masz mniej niż 3 karty w ręce, dobierz 1 kartę z talii oraz 1 dodatkową kartę za każdą jednostkę w twoim grobie (maksymalnie 3 dodatkowe karty). Rozpoczynasz grę z 2 kartami mniej w ręce, ale możesz wykonać dodatkowe przelosowania początku gry."
   },
 
   temeria_call: {
@@ -747,10 +747,10 @@ STRNG["pl"] = {
     deatheatr: "Necrophages",
   },
   ui: {
-    "initial_redraw": {
+    elem: {
+      initial_redraw: {
         "txt": "Wybierz do %s kart do wymiany."
       },
-    elem: {
       definesJS: {
         players: {
           me: "You",

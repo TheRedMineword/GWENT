@@ -2481,7 +2481,7 @@ var card_dict_base = [
     deck: "neutral",
     row: "agile",
     strength: "0",
-    ability: "hero quen_desc wshield DontPickMeUp",
+    ability: "hero wshield DontPickMeUp quen_desc",
     filename: "quen",
     count: "0",
     witcher_sign: true,

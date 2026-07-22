@@ -1076,7 +1076,7 @@
             "description": "Wybierz kartę Ulewny Deszcz ze swojej talii i natychmiast ją zagraj."
           },
           "nilf_drawmaster": {
-            "description": "Po użyciu, jeśli masz mniej niż 3 karty w ręce, dobierz 1 kartę z talii oraz 1 dodatkową kartę za każdą jednostkę w twoim grobie (maksymalnie 3 dodatkowe karty). Rozpoczynasz grę z 2 kartami mniej w ręce, ale możesz wykonać dodatkowe przemielenie na początku gry."
+            "description": "Po użyciu, jeśli masz mniej niż 3 karty w ręce, dobierz 1 kartę z talii oraz 1 dodatkową kartę za każdą jednostkę w twoim grobie (maksymalnie 3 dodatkowe karty). Rozpoczynasz grę z 2 kartami mniej w ręce, ale możesz wykonać dodatkowe przelosowania początku gry."
           },
           "temeria_call": {
             "description": "Przywołuje Oddział Specjalny Temerskiej Armii w rzędzie Walczących Wręcz. Róg Dowódcy w tym rzędzie traci działanie, ale rząd otrzymuje częściową ochronę przed efektami Pogody. Po użyciu wymusza spasowanie. Nie można użyć, gdy przeciwnik spasował."
@@ -1455,10 +1455,10 @@
           "deatheatr": "Necrophages"
         },
         "ui": {
-          "initial_redraw": {
-            "txt": "Wybierz do %s kart do wymiany."
-          },
           "elem": {
+            "initial_redraw": {
+              "txt": "Wybierz do %s kart do wymiany."
+            },
             "definesJS": {
               "players": {
                 "me": "You",
@@ -3718,7 +3718,7 @@
         "deck": "neutral",
         "row": "agile",
         "strength": "0",
-        "ability": "hero quen_desc wshield DontPickMeUp",
+        "ability": "hero wshield DontPickMeUp quen_desc",
         "filename": "quen",
         "count": "0",
         "witcher_sign": true
