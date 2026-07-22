@@ -103,7 +103,6 @@ async function updateTrafficMonitor() {
   }
 }
 
-setInterval(updateTrafficMonitor, 60 * 1000);
 updateTrafficMonitor();
 
 function sendHeartbeat(ws, req) {
@@ -174,6 +173,7 @@ async function updateRandomCoin() {
 }
 
 setInterval(updateRandomCoin, 35 * 60 * 1000);
+setInterval(updateTrafficMonitor, 35 * 60 * 1000);
 // db work
 function encryptPassword(password) {
   const salt = process.env.AUTH_HEX;
@@ -595,6 +595,7 @@ app.get("/api/force_update_server", (req, res) => {
   if (key === process.env.ADMIN_ENDPOINT_LOGIN) {
     console.log("[ADMIN] Force update requested.");
     updateRandomCoin();
+    updateTrafficMonitor();
     return res.json({
       success: true,
     });
