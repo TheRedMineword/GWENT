@@ -3037,7 +3037,7 @@
         "row": "siege",
         "strength": "-1",
         "ability": "reinforce DontPickMeUp",
-        "filename": "custom!noonwraithsmoon",
+        "filename": "custom!nightwraithsmoon",
         "count": "0",
         "count_monitor": {
           "base": 1,
@@ -3416,10 +3416,10 @@
         "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
       }
     },
-    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
+    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 30
+    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }

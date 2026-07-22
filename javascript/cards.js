@@ -3243,7 +3243,7 @@ var card_dict_base = [
     row: "siege",
     strength: "-1",
     ability: "reinforce DontPickMeUp",
-    filename: "custom!noonwraithsmoon",
+    filename: "custom!nightwraithsmoon",
     count: "0",
     count_monitor: {
       base: 1, // not really doing anything, the base value
