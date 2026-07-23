@@ -3676,6 +3676,8 @@ class Card {
     this.removed = [];
     this.activated = [];
     this.holder = player;
+    this.isSide = card_data?.isSide ?? false;
+    this.isDecoy = card_data?.isDecoy ?? false;
 
     this.hero = false;
     if (this.abilities.length > 0) {
@@ -3729,7 +3731,7 @@ class Card {
 
   // Sets and displays the current power of this card
   setPower(n) {
-    if (this.name === "Decoy") return;
+    if (this.isDecoy) return;
     let elem = this.elem.children[0].children[0];
     if (n !== this.power) {
       this.power = n;
@@ -3953,7 +3955,7 @@ class Card {
 
   // Returns true if card is sent to a Row's special slot
   isSpecial() {
-    return this.name === "Commander's Horn" || this.name === "Mardroeme";
+    return this?.isSide ?? false;
   }
 
   // Compares by type then power then name
@@ -4967,7 +4969,7 @@ class UI {
     if (pCard === null || card.holder.hand.cards.includes(card)) {
       this.setSelectable(null, false);
       this.showPreview(card);
-    } else if (pCard.name === "Decoy") {
+    } else if (pCard.isDecoy) {
       const nomeColuna = this.lastRow.elem_parent.id;
       const playedCard = removeCircularReferences(this.previewCard);
       const targetCard = removeCircularReferences(card);
@@ -5067,7 +5069,7 @@ class UI {
     );
 
     console.log("You played the card", this.previewCard);
-    if (this.previewCard.name === "Decoy") return;
+    if (this.previewCard.isDecoy) return;
 
     // comp_and_send(socket, JSON.stringify({ type: "play", player: playerId, card: playedCard, row: nomeColuna, isMeHand: handData}));
 
@@ -5078,7 +5080,7 @@ class UI {
     if (card.name === "Scorch") {
       this.hidePreview();
       await ability_dict["scorch"].activated(card);
-    } else if (card.name === "Decoy") {
+    } else if (card.isDecoy) {
       return;
     } else {
       await board.moveTo(card, row, card.holder.hand);
@@ -5517,7 +5519,7 @@ class UI {
 
     board.row.forEach((r) => r.elem_special.classList.add("noclick"));
 
-    if (card.name === "Decoy") {
+    if (card.isDecoy) {
       for (let i = 0; i < 6; ++i) {
         let r = board.row[i];
         let units = r.cards.filter((c) => c.isUnit());
@@ -7127,7 +7129,7 @@ if (debuglunchcustomcards) {
 function cartaNaLinha(id, carta) {
   if (id.charAt(0) == "f") {
     if (!carta.hero) {
-      if (carta.name != "Decoy") {
+      if (!card.isDecoy) {
         var linha = parseInt(id.charAt(1));
         if (linha == 1 || linha == 6) tocar("common3", false);
         else if (linha == 2 || linha == 5) tocar("common2", false);

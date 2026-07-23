@@ -75,6 +75,7 @@ var card_dict_base = [
     ability: "decoy",
     filename: "decoy",
     count: "3",
+    isDecoy: true,
   },
   {
     name: "Biting Frost",
@@ -115,6 +116,7 @@ var card_dict_base = [
     ability: "horn",
     filename: "horn",
     count: "3",
+    isSide: true,
   },
   {
     name: "Dandelion",
@@ -2088,6 +2090,7 @@ var card_dict_base = [
     ability: "mardroeme",
     filename: "mardroeme",
     count: "3",
+    isSide: true,
   },
   {
     name: "Olaf",

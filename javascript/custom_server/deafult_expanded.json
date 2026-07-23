@@ -1725,7 +1725,8 @@
         "strength": "",
         "ability": "decoy",
         "filename": "decoy",
-        "count": "3"
+        "count": "3",
+        "isDecoy": true
       },
       {
         "name": "Biting Frost",
@@ -1765,7 +1766,8 @@
         "strength": "",
         "ability": "horn",
         "filename": "horn",
-        "count": "3"
+        "count": "3",
+        "isSide": true
       },
       {
         "name": "Dandelion",
@@ -3428,7 +3430,8 @@
         "strength": "",
         "ability": "mardroeme",
         "filename": "mardroeme",
-        "count": "3"
+        "count": "3",
+        "isSide": true
       },
       {
         "name": "Olaf",
