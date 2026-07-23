@@ -388,19 +388,20 @@ function buildNotificationTranslations() {
 	content: "You copied opponent leader ability!";
 }`;
 
-  document.querySelectorAll("[id^='notif-']").forEach((el) => {
-    const key = el.id.substring(6); // remove "notif-"
+  css = css.replace(
+    /(#notif-[^{]+::after\s*\{[^}]*content:\s*)"([^"]*)"/g,
+    (match, prefix, original) => {
+      const selector = match.match(/#notif-([^{:]+)/)?.[1];
+      if (!selector) return match;
 
-    const text = getTranslation(`ui.notifs.${key}`);
-    if (!text) return;
+      var trns = getTranslation(`ui.notif.${selector}`);
+      // console.log(trns, "getTranslation(`ui.notif.${selector}`)", selector, JSON.stringify(STRNG));
+      const translated = getTranslation(`ui.notif.${selector}`);
+      if (!translated) return match;
 
-    css += `
-#${el.id}::after {
-    content: "${cssEscapeContent(text)}";
-}
-`;
-  });
-
+      return `${prefix}"${cssEscapeContent(translated)}"`;
+    },
+  );
   let style = document.getElementById("abilities_translation");
   if (!style) {
     style = document.createElement("style");
@@ -412,7 +413,6 @@ function buildNotificationTranslations() {
 
   console.log(style, css);
 }
-buildNotificationTranslations();
 function translateabilitydict() {
   return Object.fromEntries(
     Object.entries(ability_dict).map(([ability, data]) => [
@@ -524,6 +524,17 @@ function translate_ui_hub() {
     getTranslation("ui.mmenu.no-op"); //"No Opponent";
   document.getElementById("chat-toggle").textContent =
     getTranslation("ui.mmenu.chat");
+
+  document.querySelector("#deck-stats > p:nth-child(1)").textContent =
+    getTranslation("ui.mmenu.b.total"); // Total cards in deck
+  document.querySelector("#deck-stats > p:nth-child(3)").textContent =
+    getTranslation("ui.mmenu.b.totalunits"); // Number of Unit Cards
+  document.querySelector("#deck-stats > p:nth-child(5)").textContent =
+    getTranslation("ui.mmenu.b.special"); // Special Cards
+  document.querySelector("#deck-stats > p:nth-child(7)").textContent =
+    getTranslation("ui.mmenu.b.strenght"); // Total Unit Card Strength
+  document.querySelector("#deck-stats > p:nth-child(9)").textContent =
+    getTranslation("ui.mmenu.b.hero"); // Hero Cards
 }
 function getUiHtmlStrng(key, linebreakertobr = false) {
   let html = getUiStrng(`html.${key}`);

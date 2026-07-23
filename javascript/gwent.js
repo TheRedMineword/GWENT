@@ -7024,13 +7024,28 @@ function tocar(arquivo, pararMusica) {
 
 let youtubeInitializing = false;
 /*----------------------------------------------------*/
-function onYouTubeIframeAPIReady() {
+async function onYouTubeIframeAPIReady() {
   if (!onYouTubeIframeAPIReady_status) {
     onYouTubeIframeAPIReady_status = true;
     console.warn("YT IFRAME IS READY");
-    if (ui.getAudioState() !== 1 && !youtubeInitializing) {
+    console.warn(
+      "YT RACE allowed to run:",
+      ui.getAudioState() !== 1 &&
+        !youtubeInitializing &&
+        ui.getAudioState() !== 2,
+      " vars: ",
+      ui.getAudioState(),
+      youtubeInitializing,
+      "at BBB",
+    );
+    if (
+      ui.getAudioState() !== 1 &&
+      !youtubeInitializing &&
+      ui.getAudioState() !== 2
+    ) {
       youtubeInitializing = true;
-      ui.initYouTube();
+      await ui.initYouTube();
+      youtubeInitializing = false;
     }
   }
 }
@@ -7130,7 +7145,7 @@ async function postscripinit() {
         inicio();
         if (ui.getAudioState() !== 1 && !youtubeInitializing) {
           youtubeInitializing = true;
-          ui.initYouTube();
+          //  ui//.initYouTube();// unused
         }
         // cache audio:
         try {
@@ -7184,11 +7199,26 @@ async function lunch_gwent_ui() {
   document.getElementsByTagName("main")[0].style.display = "";
   document
     .getElementById("button_start")
-    .addEventListener("click", function () {
+    .addEventListener("click", async function () {
       inicio();
-      if (ui.getAudioState() !== 1 && !youtubeInitializing) {
+      console.warn(
+        "YT RACE allowed to run:",
+        ui.getAudioState() !== 1 &&
+          !youtubeInitializing &&
+          ui.getAudioState() !== 2,
+        " vars: ",
+        ui.getAudioState(),
+        youtubeInitializing,
+        "at AAA",
+      );
+      if (
+        ui.getAudioState() !== 1 &&
+        !youtubeInitializing &&
+        ui.getAudioState() !== 2
+      ) {
         youtubeInitializing = true;
-        ui.initYouTube();
+        await ui.initYouTube();
+        youtubeInitializing = false;
       }
       // cache audio:
       try {

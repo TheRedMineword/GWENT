@@ -860,7 +860,14 @@ STRNG["en"] = {
       "status": {
         "ready": "Ready:",
         "gameinprogress": "Game In Progress",
-      }
+      },
+      b: {
+  total: "Total cards in deck",
+  totalunits: "Number of Unit Cards",
+  special: "Special Cards",
+  strenght: "Total Unit Card Strength",
+  hero: "Hero Cards",
+}
     },
   startwarnings: {
     "a": "Your deck must have at least %s unit cards. ",

@@ -890,6 +890,13 @@
             "status": {
               "ready": "Ready:",
               "gameinprogress": "Game In Progress"
+            },
+            "b": {
+              "total": "Total cards in deck",
+              "totalunits": "Number of Unit Cards",
+              "special": "Special Cards",
+              "strenght": "Total Unit Card Strength",
+              "hero": "Hero Cards"
             }
           },
           "startwarnings": {
@@ -1232,7 +1239,7 @@
           "emiel": "Emiel Regis Rohellec Terzieff",
           "geralt": "Geralt z Rivii",
           "fog": "Gęsta Mgła",
-          "scorch": "Pożoga",
+          "scorch": "Piekielna Pożoga",
           "rain": "Ulewny Deszcz",
           "triss": "Triss Merigold",
           "vesemir": "Vesemir",
@@ -1666,6 +1673,13 @@
             "status": {
               "ready": "Gotów:",
               "gameinprogress": "Gra w Trakcie"
+            },
+            "b": {
+              "total": "Karty w Talii",
+              "totalunits": "Karty Jednostek",
+              "special": "Karty Specjalne",
+              "strenght": "Łączna Siła Kart",
+              "hero": "Karty Bohaterów"
             }
           },
           "startwarnings": {
@@ -4947,9 +4961,9 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
-    "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "yu197hlNWK0",
+    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
+    "audio_yt_vid_soundtrack_volume": 47,
+    "tavern_yt_vid": "8o-JI8VRyKo",
     "tavern_yt_volume": 90
   },
   "texture_pack_url": null

@@ -955,7 +955,14 @@ STRNG["pl"] = {
       "status": {
         "ready": "Gotów:",
         "gameinprogress": "Gra w Trakcie",
-      }
+      },
+      b: {
+  total: "Karty w Talii",
+  totalunits: "Karty Jednostek",
+  special: "Karty Specjalne",
+  strenght: "Łączna Siła Kart",
+  hero: "Karty Bohaterów",
+}
     },
   startwarnings: {
     "a": "Twoja talia musi mieć conajmniej %s kart jednostek ",
