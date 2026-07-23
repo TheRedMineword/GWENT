@@ -1,4 +1,4 @@
-const lang = navigator.language.split("-")[0];
+let lang = navigator.language.split("-")[0];
 console.log(`User Langue String: ${lang}`);
 async function loadScriptEval(url) {
   const code = await fetch(url).then((r) => r.text());
@@ -548,4 +548,17 @@ function getUiHtmlStrng(key, linebreakertobr = false) {
   }
 
   return html;
+}
+
+async function retranslategame(lng) {
+  lang = lng;
+  await sleep(250);
+  card_dict = translateCardDict();
+  factions = translatefactionsdict();
+  ability_dict = translateabilitydict();
+  translateDefinesJS();
+  translate_ui_hub();
+  buildNotificationTranslations();
+  await reloadRuntimeConfigs();
+  return "OK";
 }

@@ -418,7 +418,7 @@ function askForPlayerName() {
       cleanup(name);
     };
 
-    cancel.onclick = () => cleanup(null);
+    cancel.onclick = () => cleanup("$$valexample$$");
 
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") ok.click();
@@ -648,14 +648,17 @@ socket.addEventListener("message", async (event) => {
         );
       }
       console.log(user_name);
-      if (!user_name) {
+      if (!user_name && user_name !== "$$valexample$$") {
         console.log("No user name");
-        players.me = "You";
+        players.me = "$$valexample$$";
       } else {
         players.me = user_name;
         console.log("User name set", players);
       }
-      if (players.me !== "You") {
+      if (
+        players.me !== "$$valexample$$" &&
+        players.me !== getTranslation("ui.elem.definesJS.players.me")
+      ) {
         comp_and_send(
           socket,
           JSON.stringify({
@@ -698,14 +701,17 @@ socket.addEventListener("message", async (event) => {
         );
       }
       console.log(user_name);
-      if (!user_name) {
+      if (!user_name && user_name !== "$$valexample$$") {
         console.log("No user name");
-        players.me = "You";
+        players.me = "$$valexample$$";
       } else {
         players.me = user_name;
         console.log("User name set", players);
       }
-      if (players.me !== "You") {
+      if (
+        players.me !== "$$valexample$$" &&
+        players.me !== getTranslation("ui.elem.definesJS.players.me")
+      ) {
         comp_and_send(
           socket,
           JSON.stringify({
@@ -724,7 +730,9 @@ socket.addEventListener("message", async (event) => {
       break;
     case "MyName":
       console.log("Nice to meet you ", data.is);
-      players.op = data.is;
+      if (data.is !== "$$valexample$$") {
+        players.op = data.is;
+      }
       await sleep(1200);
       updateOpponentUI({
         name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]}`,

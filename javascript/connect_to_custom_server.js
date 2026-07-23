@@ -605,12 +605,7 @@ async function connect_to_custom_server(URL) {
     //  });
     await sleep(350);
     updateLoader("Almost there", 97, `Translating!`);
-    card_dict = translateCardDict();
-    factions = translatefactionsdict();
-    ability_dict = translateabilitydict();
-    translateDefinesJS();
-    translate_ui_hub();
-    buildNotificationTranslations();
+    await retranslategame(lang);
     updateLoader("Almost there", 98, `Reloading UI!`);
     await reloadRuntimeConfigs();
     if (!waitMusicPlaying) {
@@ -773,6 +768,11 @@ async function reloadRuntimeConfigs() {
 
     refreshAllCards();
 
+    await sleep(500);
+    premade_deck = await async_gen_premade_decks();
+    await sleep(2000);
+    console.log("[RELOAD] premade_deck", premade_deck);
+
     // =====================================================
     // REFRESH BOARD
     // =====================================================
@@ -837,7 +837,7 @@ async function reloadRuntimeConfigs() {
     console.log("[RUNTIME RELOAD DONE]");
     console.log("====================================");
 
-    showTooltip?.("Runtime configs reloaded");
+    showTooltip?.(getTranslation("reload.a"), 6400);
   } catch (err) {
     console.error("====================================");
     console.error("[RUNTIME RELOAD FAILED]");

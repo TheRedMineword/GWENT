@@ -716,7 +716,7 @@ STRNG["en"] = {
           askno: "Your request to surrender has been denied.",
         },
         session_mode: {
-          header: "Session",
+          header: "Create Game",
           text: "Choose session type",
           create: "Create Server",
           custom: "Custom Server",
@@ -881,4 +881,9 @@ STRNG["en"] = {
     huh: "Would you like to go first?",
     huh2: "The Scoia'tael faction perk allows you to decide who will get to go first.",
   },
+  "reload": {
+    "a": "Runtime configs reloaded.",
+    "b": "Refreshed!",
+    "c": "Reloaded!"
+  }
 };

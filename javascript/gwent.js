@@ -904,7 +904,10 @@ socket.onmessage = async (event) => {
           info: { me_id: playerId, me_flag: country },
         }),
       );
-      if (players.me !== "You") {
+      if (
+        players.me !== "$$valexample$$" &&
+        players.me !== getTranslation("ui.elem.definesJS.players.me")
+      ) {
         comp_and_send(
           socket,
           JSON.stringify({
@@ -919,7 +922,7 @@ socket.onmessage = async (event) => {
     // Opponent has left and the session is no longer ready
     case "sessionUnready":
       opponentReady = false;
-      players.op = "Opponent";
+      players.op = getTranslation("ui.elem.definesJS.players.op");
       // btnCancelElem.classList.remove("hidden");
       if (isconnectedtosession) {
         tocar("tf2/Vote_failure", false);
@@ -1518,6 +1521,9 @@ function shuffleSeeded2(array, seed, debug = null) {
 class Player {
   constructor(id, name, deck) {
     // console.log("PLAYER NEW", id, name, deck);
+    if (name === "$$valexample$$") {
+      name = getTranslation("ui.elem.definesJS.players.me");
+    }
     let debug = null;
     if (name === players.me) {
       this.ThatPlayerId = playerId;
@@ -1562,7 +1568,7 @@ class Player {
     this.name = name;
     document.getElementById("name-" + this.tag).innerHTML = name;
 
-    document.getElementById("deck-name-" + this.tag).innerHTML =
+    document.getElementById("deck-name-" + this.tag).textContent =
       factions[deck.faction].name;
     document
       .getElementById("stats-" + this.tag)
@@ -5213,8 +5219,8 @@ class UI {
           desc.children[0].style.backgroundImage = iconURL(
             "card_ability_" + str,
           );
-        desc.children[1].innerHTML = card.desc_name;
-        desc.children[2].innerHTML = card.desc;
+        desc.children[1].textContent = card.desc_name;
+        desc.children[2].textContent = card.desc;
       } else {
         desc.classList.add("hide");
       }
@@ -5595,6 +5601,8 @@ class Carousel {
     this.bExit = bExit;
     this.title = title;
     this.cancelled = false;
+    this.count_math = count;
+    this.maxCount = count;
 
     if (!Carousel.elem) {
       Carousel.elem = document.getElementById("carousel");
@@ -5630,7 +5638,13 @@ class Carousel {
     Carousel.setCurrent(this);
 
     if (this.title) {
-      this.title_elem.innerHTML = this.title;
+      //     console.log("Karuzela", this);
+      const current = this.maxCount - this.count;
+      if (this.count > 1) {
+        this.title_elem.textContent = `${this.title}  (${current + 1}/${this.maxCount})`;
+      } else {
+        this.title_elem.textContent = this.title;
+      }
       this.title_elem.classList.remove("hide");
     } else {
       this.title_elem.classList.add("hide");
@@ -5653,6 +5667,13 @@ class Carousel {
     //    console.log("SELECT EVENT DEBUG", event, " and this actionString", this.action.toString());
     (event || window.event).stopPropagation();
     --this.count;
+    //  console.log("Karuzela", this);
+    const current = this.maxCount - this.count;
+    if (this.maxCount > 1) {
+      this.title_elem.textContent = `${this.title}  (${current + 1}/${this.maxCount})`;
+    } else {
+      this.title_elem.textContent = this.title;
+    }
     if (this.isLastSelection()) this.elem.classList.add("hide");
     if (this.count <= 0) ui.enablePlayer(false);
 
@@ -5813,10 +5834,10 @@ class Popup {
 
     this.elem = document.getElementById("popup");
     let main = this.elem.children[0];
-    main.children[0].innerHTML = header ? header : "";
-    main.children[1].innerHTML = description ? description : "";
-    main.children[2].children[0].innerHTML = yesName ? yesName : "Yes";
-    main.children[2].children[1].innerHTML = noName ? noName : "No";
+    main.children[0].textContent = header ? header : "";
+    main.children[1].textContent = description ? description : "";
+    main.children[2].children[0].textContent = yesName ? yesName : "Yes";
+    main.children[2].children[1].textContent = noName ? noName : "No";
 
     this.elem.classList.remove("hide");
     Popup.setCurrent(this);
@@ -6108,7 +6129,10 @@ class DeckMaker {
           info: { me_id: playerId, me_flag: country },
         }),
       );
-      if (players.me !== "You") {
+      if (
+        players.me !== "$$valexample$$" &&
+        players.me !== getTranslation("ui.elem.definesJS.players.me")
+      ) {
         comp_and_send(
           socket,
           JSON.stringify({
@@ -6120,7 +6144,7 @@ class DeckMaker {
       sendChatMessageStrig(`play wich ${factions[faction_name].name} faction!`);
     }
 
-    this.elem.getElementsByTagName("h1")[0].innerHTML =
+    this.elem.getElementsByTagName("h1")[0].textContent =
       factions[faction_name].name;
     this.elem.getElementsByTagName("h1")[0].style.backgroundImage = iconURL(
       "deck_shield_" + faction_name,
@@ -6264,7 +6288,7 @@ class DeckMaker {
 
     let bankID = { index: index, count: num, elem: elem };
     let isBank = cards === this.bank;
-    count.innerHTML = bankID.count;
+    count.textContent = bankID.count;
     cards.push(bankID);
     let cardIndex = cards.length - 1;
     elem.addEventListener("click", () => this.select(cardIndex, isBank), false);
@@ -6428,7 +6452,7 @@ class DeckMaker {
   // Adds a card to container (Bank or deck)
   async add(index, cards) {
     let id = cards[index];
-    id.elem.children[0].innerHTML = ++id.count;
+    id.elem.children[0].textContent = ++id.count;
     try {
       // console.log("Adds a card to container (Bank or deck)", index, cards, id, this, "\n", this.stats, "\n\n", card_dict[id.index].ability);
       // abilities on the card, e.g. ["hero", "morale"]
@@ -6452,8 +6476,13 @@ class DeckMaker {
           showbankms / 1000,
         );
         displaynow = shaSource;
-        document.getElementById("cardstatsdisplay").innerHTML =
-          descString.replace(/\n/g, "<br>");
+        document.getElementById("cardstatsdisplay").innerHTML = descString
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;")
+          .replace(/\n/g, "<br>");
         await sleep(showbankms);
         if (shaSource === displaynow) {
           console.log(
@@ -6476,7 +6505,7 @@ class DeckMaker {
   // Removes a card from container (bank or deck)
   remove(index, cards) {
     let id = cards[index];
-    id.elem.children[0].innerHTML = --id.count;
+    id.elem.children[0].textContent = --id.count;
   }
 
   // Removes all elements in the bank and deck

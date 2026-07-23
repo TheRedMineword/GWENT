@@ -31,7 +31,7 @@ STRNG["pl"] = {
   },
 
   storm: {
-    name: "Burza na Skellige",
+    name: "Skeligijski Sztorm",
     description:
       "Zmniejsza siłę wszystkich jednostek dystansowych i oblężniczych do 1. "
   },
@@ -136,13 +136,13 @@ STRNG["pl"] = {
   },
 
   spy: {
-    name: "Szpieg",
+    name: "Szpiegostwo",
     description:
       "Umieść na polu przeciwnika (liczy się do jego wyniku) i dobierz 2 karty ze swojej talii. "
   },
 
   sabotage: {
-    name: "Sabotażysta",
+    name: "Sabotaż",
     description:
       "Umieść tę kartę na polu przeciwnika, aby obniżyć jego wynik i dobrać dodatkową kartę. "
   },
@@ -343,7 +343,7 @@ STRNG["pl"] = {
 
   emhyr_whiteflame2: {
     description:
-      "Kopiuje kartę Przywódcy przeciwnika na początku gry, ale przeciwnik otrzymuje dodatkowe 2 przemielenia."
+      "Kopiuje kartę Przywódcy przeciwnika na początku gry, ale przeciwnik otrzymuje dodatkowe 2 przetasowania."
   },
 
   emhyr_relentless: {
@@ -379,7 +379,7 @@ STRNG["pl"] = {
 
   eredin_treacherous: {
     description:
-      "Podwaja siłę wszystkich kart Szpiegów (dotyczy obu graczy)."
+      "Zwiększa siłe kart Szpiegostwa i Sabotażu (dotyczy obu graczy)."
   },
     francesca_queen: {
     description:
@@ -423,7 +423,7 @@ STRNG["pl"] = {
 
   eist_tuirseach: {
     description:
-      "Wybierz kartę Burza na Skellige ze swojej talii i natychmiast ją zagraj."
+      "Wybierz kartę Skeligijski Sztorm ze swojej talii i natychmiast ją zagraj."
   },
 
   skellige_berserk_reward: {
@@ -502,78 +502,78 @@ STRNG["pl"] = {
   gaunter_odimm_darkness: "Gaunter o'Dim — Ciemność",
   cow: "Krowa",
   chort: "Boviny Korpus Obrony",
-    foltest_silver: "Foltest — King of Temeria",
-    foltest_gold: "Foltest — Lord Commander of the North",
-    foltest_copper: "Foltest — The Siegemaster",
-    foltest_bronze: "Foltest — The Steel-Forged",
-    foltest_son_of_medell: "Foltest — Son of Medell",
-    ballista: "Ballista",
-    blue_stripes: "Blue Stripes Commando",
-    catapult_1: "Catapult",
-    crinfrid: "Crinfrid Reavers Dragon Hunter",
-    dethmold: "Dethmold",
-    banner_nurse: "Dun Banner Medic",
+   foltest_silver: "Foltest - Król Temerii",
+    foltest_gold: "Foltest - Dowódca Północy",
+    foltest_copper: "Foltest - Mistrz Oblężeń",
+    foltest_bronze: "Foltest - Żelazny Władca",
+    foltest_son_of_medell: "Foltest - Syn Medella",
+    ballista: "Balista",
+    blue_stripes: "Komando Niebieskich Pasów",
+    catapult_1: "Katapulta",
+    crinfrid: "Rębacze z Crinfrid",
+    dethmold: "Detmold",
+    banner_nurse: "Medyczka Burej Chorągwi",
     esterad: "Esterad Thyssen",
     natalis: "John Natalis",
-    kaedwen_siege_1: "Kaedweni Siege Expert",
+    kaedwen_siege_1: "Kaedweński Ekspert Oblężeń",
     keira: "Keira Metz",
     philippa: "Philippa Eilhart",
-    poor_infantry: "Poor Fucking Infantry",
-    stennis: "Prince Stennis",
-    redania_1: "Redanian Foot Soldier",
+    poor_infantry: "Biedna Pierdolona Piechota",
+    stennis: "Książę Stennis",
+    redania_1: "Redański Piechur",
     sheldon: "Sheldon Skaggs",
-    siege_tower: "Siege Tower",
-    siegfried: "Siegfried of Denesle",
+    siege_tower: "Wieża Oblężnicza",
+    siegfried: "Zykfryd z Denesle",
     dijkstra: "Sigismund Dijkstra",
-    sheala: "Síle de Tansarville",
-    thaler: "Thaler",
+    sheala: "Sheala de Tansarville",
+    thaler: "Talar",
     sabrina: "Sabrina Glevissig",
     vernon: "Vernon Roche",
     ves: "Ves",
     yarpen: "Yarpen Zigrin",
-    trebuchet_1: "Trebuchet",
-    emhyr_copper: "Emhyr var Emreis — His Imperial Majesty",
-    emhyr_silver: "Emhyr var Emreis — the White Flame",
-    emhyr_gold: "Emhyr var Emreis — The Relentless",
-    emhyr_invader_of_the_north: "Emhyr var Emreis — Invader of the North",
+    trebuchet_1: "Trebusz",
+    emhyr_copper: "Emhyr var Emreis - Jego Cesarska Mość",
+    emhyr_silver: "Emhyr var Emreis - Biały Płomień",
+    emhyr_gold: "Emhyr var Emreis - Nieustępliwy",
+    emhyr_invader_of_the_north: "Emhyr var Emreis - Najeźdźca Północy",
     albrich: "Albrich",
     assire: "Assire var Anahid",
-    black_archer_1: "Black Infantry Archer",
+    black_archer_1: "Łucznik Czarnej Piechoty",
     cahir: "Cahir Mawr Dyffryn aep Ceallach",
     cynthia: "Cynthia",
-    archer_support: "Etolian Auxiliary Archers",
+    archer_support: "Etolscy Łucznicy Wsparcia",
     fringilla: "Fringilla Vigo",
-    heavy_zerri: "Heavy Zerrikanian Fire Scorpion",
-    imperal_brigade: "Impera Brigade Guard",
-    letho: "Letho of Gulet",
+    heavy_zerri: "Ciężki Ognisty Skorpion",
+    imperal_brigade: "Brygada Impera",
+    letho: "Letho z Gulety",
     menno: "Menno Coehoorn",
     morteisen: "Morteisen",
     moorvran: "Morvran Voorhis",
-    nauzicaa_2: "Nausicaa Cavalry Rider",
+    nauzicaa_2: "Kawaleria Nauzicaa",
     puttkammer: "Puttkammer",
     rainfarn: "Rainfarn",
     renuald: "Renuald aep Matsen",
     rotten: "Rotten Mangonel",
     shilard: "Shilard Fitz-Oesterlen",
-    siege_engineer: "Siege Engineer",
-    siege_support: "Siege Technician",
+    siege_engineer: "Inżynier Oblężniczy",
+    siege_support: "Wsparcie Oblężnicze",
     stefan: "Stefan Skellen",
     sweers: "Sweers",
     tibor: "Tibor Eggebracht",
     vanhemar: "Vanhemar",
     vattier: "Vattier de Rideaux",
     vreemde: "Vreemde",
-    young_emissary: "Young Emissary",
-    zerri: "Zerrikanian Fire Scorpion",
-    eredin_bronze: "Eredin — Commander of the Red Riders",
-    eredin_silver: "Eredin — Bringer of Death",
-    eredin_gold: "Eredin — Destroyer of Worlds",
-    eredin_copper: "Eredin — King of the Wild Hunt",
-    eredin_the_treacherous: "Eredin Bréacc Glas — The Treacherous",
-    arachas_1: "Arachas ",
-    arachas_behemoth: "Arachas— Behemoth",
-    poroniec: "Botchling",
-    celaeno_harpy: "Celaeno Harpy",
+    young_emissary: "Młody Emisariusz",
+    zerri: "Zerrikański Ognisty Skorpion",
+    eredin_bronze: "Eredin - Dowódca Czerwonych Jeźdźców",
+    eredin_silver: "Eredin - Zwiastun Śmierci",
+    eredin_gold: "Eredin - Zabójca Królów",
+    eredin_copper: "Eredin - Król Dzikiego Gonu",
+    eredin_the_treacherous: "Eredin Bréacc Glas -Zdradziecki",
+    arachas_1: "Krabopająk ",
+    arachas_behemoth: "Krabopająk- Behemoth",
+    poroniec: "Poroniec",
+    celaeno_harpy: "Harpia Celaeno",
     cockatrice: "Cockatrice",
     witch_velen: "Crone — Brewess",
     witch_velen_1: "Crone — Weavess",
@@ -654,7 +654,7 @@ STRNG["pl"] = {
     madmad_lugos: "Madman Lugos",
     mardroeme: "Mardroeme",
     olaf: "Olaf",
-    storm: "Skellige Storm",
+    storm: "Skeligijski Sztorm",
     svanrige: "Svanrige",
     vildkaarl: "Transformed Vildkaarl",
     young_vildkaarl: "Transformed Young Vildkaarl",
@@ -738,32 +738,32 @@ STRNG["pl"] = {
     "custom!sky_vincent_guys": "Dear Van Gogh — Seasonal Spirits",
     "custom!sky_vincent_medic": "Dear Van Gogh — Seasonal Hearth",
     hym: "Him",
-    "custom!m_moonlight": "Moonlight",
-    "custom!s_moonlight": "Night Over Novigrad",
-    "custom!deatheatersmoon": "Full Moon",
-    "custom!nightwraithsmoon": "New Moon",
-    nightwraith: "Nightwraith",
-    noonwraith: "Noonwraith",
-    deatheatr: "Necrophages",
+    "custom!m_moonlight": "Światło Księżyca",
+    "custom!s_moonlight": "Księżyc nad Nowigradem",
+    "custom!deatheatersmoon": "Pełnia",
+    "custom!nightwraithsmoon": "Nów",
+    nightwraith: "Północnica",
+    noonwraith: "Południca",
+    deatheatr: "Trupojad",
   },
   ui: {
     elem: {
       initial_redraw: {
-        "txt": "Wybierz do %s kart do wymiany."
+        "txt": "Wybierz do %s kart do przetasowania."
       },
       definesJS: {
         players: {
-          me: "You",
-          op: "Opponent",
-          sys: "Gwent Bot",
+          me: "Ty",
+          op: "Przeciwnik",
+          sys: "Gwint Bot",
         },
 
         gryffinschool_conf: {
-          topic: "Choose a Witcher Sign",
+          topic: "Wybierz Wiedźmiński Znak",
         },
 
         mtg_conf: {
-          topic: "Pick a card to draw",
+          topic: "Wybierz kartę",
         },
 
         factions: {
@@ -785,82 +785,82 @@ STRNG["pl"] = {
       },
       html: {
         warn_screen: {
-          titlefallback: "Warning",
-          confirm: "Confirm",
-          cancel: "Cancel",
+          titlefallback: "Uwaga!",
+          confirm: "Potwierdź",
+          cancel: "Anuluj",
           ok: "OK",
         },
         askForSessionId: {
-          header: "Join Session",
-          enter: "Enter Session ID",
-          input: "Session ID",
-          ok: "Join",
-          notOk: "Cancel",
+          header: "Dołącz do Sesji",
+          enter: "Wpisz ID Sesji",
+          input: "ID Sesji",
+          ok: "Dołącz",
+          notOk: "Anuluj",
         },
         brick: {
-          name: "MULTIPLAYER FAILURE",
-          why: "Could not connect to multiplayer servers.\nThe backend may still be sleeping or unavailable.\n\nPlease refresh later.",
+          name: "Awaria Trybu Wieloosobowego",
+          why: "Nieudało się połączyć do serwerów!\nSerwer może być tymczasowo niedostępny.\n\nSpróbuj ponownie później!",
         },
         surrender_request: {
           sword: "🗡️",
-          title: "SURRENDER REQUEST",
-          description: `Your opponent has cast down their sword\nand seeks an honorable defeat.`,
-          accept: "Grant Mercy",
-          reject: "Fight On",
-          ask: "You asked to surrender!",
-          askno: "Your request to surrender has been denied.",
+          title: "PROŚBA O PODDANIE SIĘ",
+          description: `Twój przeciwnik złożył miecz.\nI szuka honorowej porażki`,
+          accept: "Okaż Litość",
+          reject: "Walcz dalej",
+          ask: "Poprosiłeś o poddanie się!",
+          askno: "Przeciwnik nie ukazał ci litości!",
         },
         session_mode: {
-          header: "Session",
-          text: "Choose session type",
-          create: "Create Server",
-          custom: "Custom Server",
+          header: "Stwórz Grę",
+          text: "Wybierz tryb Sesji",
+          create: "Gra",
+          custom: "Niestandardowa Gra",
         },
 
         custom_server: {
-          header: "Custom Server",
-          placeholder: "Enter JSON config...",
-          start: "Start",
-          cancel: "Cancel",
-          invalid_json: "Invalid JSON",
+          header: "Niestandardowa Gra",
+          placeholder: "Wpisz JSON ustawień...",
+          start: "Rozpocznij",
+          cancel: "Anuluj",
+          invalid_json: "Plik JSON jest nieprawidłowy!",
         },
 
         player_name: {
-          header: "Player Name",
-          label: "Enter your name",
-          placeholder: "Example: ThatCoolUsername",
-          ok: "OK",
-          cancel: "Cancel",
-          empty: "Please enter a name",
+          header: "Nazwa Gracza",
+          label: "Proszę podać swoją godność",
+          placeholder: "Przykład: ThatCoolUsername",
+          ok: "Potwierdź",
+          cancel: "Anuluj",
+          empty: "Proszę podać imię!",
         },
       },
-      no_op_ui: "No Opponent",
-      session_copied: "Copied: %s",
-      session_joined: "Joined session: %s",
-      session_made: "Created Session join code: %s",
-      op_left: "Opponent has left and the session is no longer ready",
-      op_left_short: "Opponent has left",
+      no_op_ui: "Brak Przeciwnika",
+      session_copied: "Skopiowano: %s",
+      session_joined: "Dołączono do sesji: %s",
+      session_made: "Stworzono sesję, ID Dołączenia: %s",
+      op_left: "Przeciwnik opuścił grę i sesja nie jest już ważna",
+      op_left_short: "Przeciwnik wyszedł",
       op_ready:
-        "Opponent is ready. If you are ready begin the game immediately",
-      op_faction: "Opponent changed his faction to %s",
-      op_unready: "Opponent is unReady.",
+        "Przeciwnik jest gotowy! Jeśli będziesz gotowy gra rozpocznie się natychmiastowo!",
+      op_faction: "Przeciwnik zmienił swoją frakcję na \"%s\"",
+      op_unready: "Przeciwnik jest niegotowy!",
       sync: {
-        init: "Initiating sync, wait %s seconds",
+        init: "Rozpoczynam synchronizację, odczekaj %s sekund",
         hold_progress:
-          "The opponent synchronizes with the game (%x/%y), wait %ss",
-        sync: "The opponent synchronizes with the game, wait %s seconds, and think about the next move",
-        end: "You can play now again",
+          "Przeciwnik synchronizuje się z grą %x na %y, odczekaj %s sekund",
+        sync: "Przeciwnik synchronizuje się z grą, odczekaj %s sekund, i pomyśl o następnym ruchu",
+        end: "Możesz znów grać!",
       },
-      end_turn: "End of %s turn",
-      no_op_start: "Cannot start game: waiting for second player.",
-      me_ready: "You are ready, please wait for opponent!",
-      me_unready: "You are now UnReady",
+      end_turn: "%s tura dobiegła końca",
+      no_op_start: "Nie można rozpocząć gry: Brak drugiego Gracza",
+      me_ready: "Jesteś gotowy, Poczekaj na drugiego gracza",
+      me_unready: "Jesteś teraz niegotowy",
       redraw:
-        "<color=#d5cfe3>You redrawed card</color> <color=#fa4441>%x</color> <color=#d5cfe3>for a</color> <color=#41fa66>%y</color>",
+        "<color=#d5cfe3>Przelosowałeś kartę</color> <color=#fa4441>%x</color> <color=#d5cfe3>na</color> <color=#41fa66>%y</color>",
         ordinal: {
-      "st": "",
-      "nd": "",
-      "rd": ""
+      "st": ".",
+      "nd": ".",
+      "rd": "."
     }
     },
     notif: {
@@ -975,5 +975,10 @@ STRNG["pl"] = {
     "op": "Przeciwnik Rozpocznie",
     "huh": "Czy chcesz zacząć grę jako pierwszy?",
     huh2: "Zdolność Scoia'tael pozwala ci wybrać kto zacznie grę."
+  },
+  "reload": {
+    "a": "Konfiguracja przeładowana!",
+    "b": "Odświeżono!",
+    "c": "Przeładowano!"
   }
 };
