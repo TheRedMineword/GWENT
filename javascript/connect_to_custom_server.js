@@ -3,6 +3,7 @@ let IsNowCustom = false;
 // CONFIG
 // ===============================
 const IGNORE_PATTERNS = [
+  "youtubeInitializing",
   "STRNG_base",
   "videoMapLyrics",
   "activeBars",

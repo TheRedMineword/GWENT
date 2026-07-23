@@ -4378,6 +4378,7 @@ class UI {
       //  this.audio.src = tavern_yt_vid;
       //  this.audio.loop = false;
     }
+    youtubeInitializing = false;
   }
   getAudioTimeNow() {
     try {
@@ -7021,12 +7022,14 @@ function tocar(arquivo, pararMusica) {
   }
 }
 
+let youtubeInitializing = false;
 /*----------------------------------------------------*/
 function onYouTubeIframeAPIReady() {
   if (!onYouTubeIframeAPIReady_status) {
     onYouTubeIframeAPIReady_status = true;
     console.warn("YT IFRAME IS READY");
-    if (ui.getAudioState() !== 1) {
+    if (ui.getAudioState() !== 1 && !youtubeInitializing) {
+      youtubeInitializing = true;
       ui.initYouTube();
     }
   }
@@ -7125,7 +7128,8 @@ async function postscripinit() {
       .getElementById("button_start")
       .addEventListener("click", function () {
         inicio();
-        if (ui.getAudioState() !== 1) {
+        if (ui.getAudioState() !== 1 && !youtubeInitializing) {
+          youtubeInitializing = true;
           ui.initYouTube();
         }
         // cache audio:
@@ -7172,7 +7176,7 @@ async function lunch_gwent_ui() {
   console.log("YouTube API is ready!");
   loadingscreenupdate(`Running lunch_gwent_ui()...`);
 
-  await sleep(1300); // Tryin to fix double audio lunch
+  // await sleep(1300); // Tryin to fix double audio lunch
   document.getElementById("load_text").style.display = "none";
   document.getElementById("button_start").style.display = "inline-block";
   customizationElem.style.display = "";
@@ -7182,7 +7186,8 @@ async function lunch_gwent_ui() {
     .getElementById("button_start")
     .addEventListener("click", function () {
       inicio();
-      if (ui.getAudioState() !== 1) {
+      if (ui.getAudioState() !== 1 && !youtubeInitializing) {
+        youtubeInitializing = true;
         ui.initYouTube();
       }
       // cache audio:
