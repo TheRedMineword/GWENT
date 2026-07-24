@@ -6041,6 +6041,7 @@ class DeckMaker {
     if (!silent && this.faction === faction_name) return false;
     if (!silent) {
       tocar("warning", false);
+      console.log("before res");
       var res = await new Promise((resolve) => {
         // Overlay
         const overlay = document.createElement("div");
@@ -6191,6 +6192,7 @@ class DeckMaker {
         );
       }
       sendChatMessageStrig(`play wich ${factions[faction_name].name} faction!`);
+      //  return true;
     }
 
     this.elem.getElementsByTagName("h1")[0].textContent =
@@ -6434,7 +6436,7 @@ class DeckMaker {
   }
 
   // Opens a Carousel to allow the client to select a faction for their deck
-  selectFaction() {
+  async selectFaction() {
     let container = new CardContainer();
     container.cards = Object.keys(factions).map((f) => {
       return {
@@ -6449,12 +6451,16 @@ class DeckMaker {
       (a, c, i) => (c.filename === this.faction ? i : a),
       0,
     );
+    var saved_index = index;
+    console.log("before", index);
     ui.queueCarousel(
       container,
       1,
-      (c, i) => {
+      async (c, i) => {
         const card_faction_name = c.cards[i].filename;
-        let change = this.setFaction(card_faction_name);
+        //   console.log("before");
+        let change = await this.setFaction(card_faction_name, false);
+        //    console.log("after");
         if (!change) return;
         const faction_premade_deck = premade_deck.find(
           (d) => d.faction === card_faction_name,
@@ -6477,7 +6483,9 @@ class DeckMaker {
       false,
       true,
     );
-    Carousel.curr.index = index;
+    // console.log("ater", index, saved_index)
+    // console.log("after 2");
+    Carousel.curr.index = index ?? saved_index;
     Carousel.curr.update();
   }
 
