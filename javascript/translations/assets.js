@@ -1,4 +1,10 @@
 let lang = navigator.language.split("-")[0];
+var lang_hash = new URLSearchParams(window.location.hash.slice(1)).get("lang");
+if (lang_hash) {
+  lang = lang_hash;
+} else {
+  window.location.hash = `lang=${lang}`;
+}
 console.log(`User Langue String: ${lang}`);
 async function loadScriptEval(url) {
   const code = await fetch(url).then((r) => r.text());
@@ -535,6 +541,17 @@ function translate_ui_hub() {
     getTranslation("ui.mmenu.b.strenght"); // Total Unit Card Strength
   document.querySelector("#deck-stats > p:nth-child(9)").textContent =
     getTranslation("ui.mmenu.b.hero"); // Hero Cards
+
+  document.querySelector("#card-bank-title").textContent =
+    getTranslation("ui.mmenu.d.card_a"); // Card Collection
+  document.querySelector("#card-deck-title").textContent =
+    getTranslation("ui.mmenu.d.card_b"); // Cards in Deck
+  document.querySelector("#upload-deck").lastChild.textContent =
+    getTranslation("ui.mmenu.d.load");
+  document.querySelector("#change-faction").textContent =
+    getTranslation("ui.mmenu.d.change"); // Change Faction
+  document.querySelector("#download-deck").textContent =
+    getTranslation("ui.mmenu.d.getfile"); // Download Deck
 }
 function getUiHtmlStrng(key, linebreakertobr = false) {
   let html = getUiStrng(`html.${key}`);

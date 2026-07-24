@@ -743,6 +743,7 @@ STRNG["en"] = {
       session_copied: "Copied: %s",
       session_joined: "Joined session: %s",
       session_made: "Created Session join code: %s",
+      session_bad: "Invalid Session ID",
       op_left: "Opponent has left and the session is no longer ready",
       op_left_short: "Opponent has left",
       op_ready:
@@ -867,6 +868,33 @@ STRNG["en"] = {
   special: "Special Cards",
   strenght: "Total Unit Card Strength",
   hero: "Hero Cards",
+},
+"vpn": "⚠ VPN detected.\nVPN usage is not recommended and server may not support it.\nUse it at your own risk!\n\nOpponent country display is disabled for fairness.",
+  c: {
+      "cl": "is cannot be used as a leader",
+      "leader": "Leader",
+      "wrongf": "doesn't match deck faction",
+      "id": "ID",
+      "cid": "does not correspond to a card.",
+      "wrongf2": "cannot be used in a deck of faction type",
+      "has": "Deck contains",
+      "exists": "available",
+      "cards": "cards",
+      "warn1": "Continue importing deck?",
+      "warn2": "Confirm",
+      "warn3": "Failed to parse deck!",
+      "warn4": "Uploaded deck is not formatted correctly!",
+      "warn5": "Change faction?\n\nThis will clear your current deck!",
+      "warn5_yes": "Yes",
+      "warn5_no": "No",
+      "warn5_title": "Confirm"
+  },
+  d: {
+  "card_a": "Card Collection",
+  "card_b": "Cards in Deck",
+  "load": "Load Deck",
+  "change": "Change Faction",
+  "getfile": "Download Deck"
 }
     },
   startwarnings: {
@@ -885,5 +913,41 @@ STRNG["en"] = {
     "a": "Runtime configs reloaded.",
     "b": "Refreshed!",
     "c": "Reloaded!"
+  },
+  "ability_counter": { // getTranslation("ability_counter.")
+    "howtouse": "Click counter to use leader ability!",
+    "manup": "Your ability bar has filled (%x/%y)",
+    "powerup": "You have (%x/%y) in your faction ability meter!",
+    "toolow": "You dont have enought energy to activate ability (%x/%y)",
+    "toolow_shield": "You have %x/%y of shield charges",
+    "ophas": "Opponent have %x/%y",
+  "mehas": "You have %x/%y",
+  "d20": {
+    "critfail": {
+      "me": "You rolled \"1\"\nOpponent draw an additional card!",
+      "op": "Opponent rolled \"1\"\nYou draw an additional card!"
+    },
+    "roll": {
+      "name": "Fate roll",
+      "name_sideB": "Opponent roll dice for addtional cards",
+      "res1": "Critical Failure",
+      "res2": "Natural 20!",
+      "res3": "Success",
+      "res4": "Failure",
+      "init": {
+        "a": "Yes",
+        "b": "No",
+        "c": "Roll the die to try and get another card?"
+      }
+    }
+  },
+  "turnskip": {
+    "popup": {
+      "a": "Yes",
+        "b": "No",
+        "c": "Skip your turn?",
+        "d": "Opponent will have 50/50 to copy card from board!"
+    }
+  }
   }
 };

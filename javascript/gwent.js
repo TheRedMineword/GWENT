@@ -621,8 +621,7 @@ function handleRiskMessage(message) {
 function showVpnWarning() {
   // Create popup
   const popup = document.createElement("div");
-  popup.innerText =
-    "⚠ VPN detected.\nVPN usage is not recommended and server may not support it.\nUse it at your own risk!\n\nOpponent country display is disabled for fairness.";
+  popup.innerText = getTranslation("ui.mmenu.vpn");
 
   popup.style.position = "fixed";
   popup.style.bottom = "20px";
@@ -1268,7 +1267,7 @@ socket.onmessage = async (event) => {
       break;
 
     case "sessionInvalid":
-      warn_screen("Invalid session ID");
+      warn_screen(getTranslation("ui.elem.session_bad"));
       break;
 
     case "surrenderRequest":
@@ -6034,7 +6033,7 @@ class DeckMaker {
 
         // Header
         const header = document.createElement("div");
-        header.textContent = "Confirm";
+        header.textContent = getTranslation("ui.mmenu.c.warn5_title");
         Object.assign(header.style, {
           padding: "10px 16px",
           background: "#6f5830",
@@ -6047,8 +6046,9 @@ class DeckMaker {
 
         // Message
         const text = document.createElement("div");
-        text.innerHTML =
-          "Change faction?<br><br>This will clear your current deck!";
+        text.innerHTML = getUiHtmlStrng_escapeHtml(
+          getTranslation("ui.mmenu.c.warn5"),
+        ).replace(/\r\n|\r|\n/g, "<br>");
         Object.assign(text.style, {
           padding: "24px",
           fontSize: "18px",
@@ -6092,8 +6092,16 @@ class DeckMaker {
           return btn;
         }
 
-        const yes = makeButton("Yes");
-        const no = makeButton("No");
+        const yes = makeButton(
+          getUiHtmlStrng_escapeHtml(
+            getTranslation("ui.mmenu.c.warn5_yes"),
+          ).replace(/\r\n|\r|\n/g, "<br>"),
+        );
+        const no = makeButton(
+          getUiHtmlStrng_escapeHtml(
+            getTranslation("ui.mmenu.c.warn5_no"),
+          ).replace(/\r\n|\r|\n/g, "<br>"),
+        );
 
         function cleanup(result) {
           document.body.removeChild(overlay);

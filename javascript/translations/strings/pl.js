@@ -838,6 +838,7 @@ STRNG["pl"] = {
       session_copied: "Skopiowano: %s",
       session_joined: "Dołączono do sesji: %s",
       session_made: "Stworzono sesję, ID Dołączenia: %s",
+      session_bad: "Nieprawidłowe ID Sesji",
       op_left: "Przeciwnik opuścił grę i sesja nie jest już ważna",
       op_left_short: "Przeciwnik wyszedł",
       op_ready:
@@ -962,6 +963,33 @@ STRNG["pl"] = {
   special: "Karty Specjalne",
   strenght: "Łączna Siła Kart",
   hero: "Karty Bohaterów",
+},
+"vpn": "⚠ VPN detected.\nVPN usage is not recommended and server may not support it.\nUse it at your own risk!\n\nOpponent country display is disabled for fairness.", // Pozostaw to w wersji angielskiej
+  c: {
+      "cl": "nie może zostać użyty jako dowódca",
+      "leader": "Dowódca",
+      "wrongf": "nie pasuje do frakcji tali",
+      "id": "ID",
+      "cid": "nie posiada odpowiadającej karty.",
+      "wrongf2": "nie może zostać użyty w tej frakcji tali",
+      "has": "Talia posiada",
+      "exists": "dostępnych",
+      "cards": "kart",
+      "warn1": "Kontyunować import tali?",
+      "warn2": "Potwierdź",
+      "warn3": "Nie udało się przetworzyć talii!",
+      "warn4": "Przesłana talia nie jest poprawnie sformatowana!",
+      "warn5": "Zmienić frakcję?\n\nTa akcja wyczyści twoją talię!",
+      "warn5_yes": "Tak",
+      "warn5_no": "Nie",
+      "warn5_title": "Potwierdź"
+  },
+  d: {
+  "card_a": "Kolekcja Kard",
+  "card_b": "Karty w Tali",
+  "load": "Wczytaj Talię",
+  "change": "Zmień Frakcję",
+  "getfile": "Pobierz Talię"
 }
     },
   startwarnings: {
@@ -980,5 +1008,41 @@ STRNG["pl"] = {
     "a": "Konfiguracja przeładowana!",
     "b": "Odświeżono!",
     "c": "Przeładowano!"
+  },
+  "ability_counter": { // getTranslation("ability_counter.")
+    "howtouse": "Kliknij licznik aby użyć zdolności Dowódcy!",
+    "manup": "Twój pasek zdolności się wypełnił (%x/%y)",
+    "powerup": "Masz teraz (%x/%y) w twoim pasku zdolności!",
+    "toolow": "Nie masz wystarczającej energi aby użyć tej zdolności (%x/%y)",
+    "toolow_shield": "Masz %x/%y ładunków tarczy",
+    "ophas": "przeciwnik ma %x/%y",
+  "mehas": "Ty masz %x/%y",
+  "d20": {
+    "critfail": {
+      "me": "Krytyczna porażka, wyrzucono \"1\"\nPrzeciwnik dobiera dodatkową kartę!",
+      "op": "Przeciwnik wyrzucił \"1\"\nDobierasz dodatkową kartę!"
+    },
+    "roll": {
+      "name": "Rzut Losu",
+      "name_sideB": "Przeciwnik rzucam kostką o dodatkowe karty",
+      "res1": "Krtytczna Porażka",
+      "res2": "Naturalna Dwudziestka!",
+      "res3": "Sukces",
+      "res4": "Porażka",
+      "init": {
+        "a": "Tak",
+        "b": "Nie",
+        "c": "Rzucić kostkę aby spróbować dostać dodatkową kartę?"
+      }
+    }
+  },
+  "turnskip": {
+    "popup": {
+      "a": "Tak",
+        "b": "Nie",
+        "c": "Pominąć Turę?",
+        "d": "Przeciwnik dostanie 50/50 na zdobycie kopi karty z planszy!"
+    }
+  }
   }
 };

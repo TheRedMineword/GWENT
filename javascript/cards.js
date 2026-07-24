@@ -321,7 +321,7 @@ var card_dict_base = [
   },
   {
     name: "Foltest - Son of Medell",
-    id: "",
+    id: "foltest_son_of_medell",
     deck: "realms",
     row: "leader",
     strength: "",
@@ -661,7 +661,7 @@ var card_dict_base = [
   },
   {
     name: "Emhyr var Emreis - Invader of the North",
-    id: "",
+    id: "emhyr_invader_of_the_north",
     deck: "nilfgaard",
     row: "leader",
     strength: "",
@@ -1031,7 +1031,7 @@ var card_dict_base = [
   },
   {
     name: "Eredin Bréacc Glas - The Treacherous",
-    id: "",
+    id: "eredin_the_treacherous",
     deck: "monsters",
     row: "leader",
     strength: "",
@@ -1492,7 +1492,7 @@ var card_dict_base = [
   },
   {
     name: "Francesca Findabair - Hope of the Aen Seidhe",
-    id: "",
+    id: "francesca_hope_of_the_aen_seidhe",
     deck: "scoiatael",
     row: "leader",
     strength: "",
@@ -2174,7 +2174,7 @@ var card_dict_base = [
   },
   {
     name: "Crach an Craite",
-    id: "",
+    id: "crach_an_craite",
     deck: "skellige",
     row: "leader",
     strength: "",
@@ -2184,7 +2184,7 @@ var card_dict_base = [
   },
   {
     name: "King Bran",
-    id: "",
+    id: "king_bran",
     deck: "skellige",
     row: "leader",
     strength: "",

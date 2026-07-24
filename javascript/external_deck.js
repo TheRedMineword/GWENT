@@ -19,12 +19,12 @@ class deck_importo_exporto1 {
         warning +=
           "'" +
           card_dict[deck.leader].name +
-          "' is cannot be used as a leader\n";
+          `' ${getTranslation("ui.mmenu.c.cl")}\n`;
       if (deck.faction != card_dict[deck.leader].deck)
         warning +=
-          "Leader '" +
+          `${getTranslation("ui.mmenu.c.leader")} '` +
           card_dict[deck.leader].name +
-          "' doesn't match deck faction '" +
+          `' ${getTranslation("ui.mmenu.c.wrongf")} '` +
           deck.faction +
           "'.\n";
 
@@ -32,7 +32,10 @@ class deck_importo_exporto1 {
         .filter((c) => {
           let card = card_dict[c[0]];
           if (!card) {
-            warning += "ID " + c[0] + " does not correspond to a card.\n";
+            warning +=
+              `${getTranslation("ui.mmenu.c.id")} ` +
+              c[0] +
+              ` ${getTranslation("ui.mmenu.c.wrongcid")}\n`;
             return false;
           }
           if (
@@ -42,7 +45,7 @@ class deck_importo_exporto1 {
               warning +=
                 "'" +
                 card.name +
-                "' cannot be used in a deck of faction type '" +
+                `' ${getTranslation("ui.mmenu.c.wrongf2")} '` +
                 deck.faction +
                 "'\n";
               return false;
@@ -52,13 +55,13 @@ class deck_importo_exporto1 {
           }
           if (card.count < c[1]) {
             warning +=
-              "Deck contains " +
+              `${getTranslation("ui.mmenu.c.has")} ` +
               c[1] +
               "/" +
               card.count +
-              " available " +
+              ` ${getTranslation("ui.mmenu.c.exists")} ` +
               card_dict[c[0]].name +
-              " cards\n";
+              ` ${getTranslation("ui.mmenu.c.cards")}\n`;
             return false;
           }
           return true;
@@ -71,8 +74,8 @@ class deck_importo_exporto1 {
       if (
         warning &&
         !(await warn_screen(
-          `${warning}\n\n\Continue importing deck?`,
-          "confirm",
+          `${warning}\n\n${getTranslation("ui.mmenu.c.warn1")}`,
+          getTranslation("ui.mmenu.c.warn2"),
         ))
       )
         return;
@@ -85,7 +88,10 @@ class deck_importo_exporto1 {
           info: { me_id: playerId, me_flag: country },
         }),
       );
-      if (players.me !== "You") {
+      if (
+        players.me !== "$$valexample$$" &&
+        players.me !== getTranslation("ui.elem.definesJS.players.me")
+      ) {
         comp_and_send(
           socket,
           JSON.stringify({
@@ -111,12 +117,12 @@ class deck_importo_exporto1 {
       dm.makeBank(deck.faction, cards);
       dm.update();
     } catch (e) {
-      warn_screen(`Failed to parse deck!\n${e.message}`);
+      warn_screen(`${getTranslation("ui.mmenu.c.warn3")}\n${e.message}`);
     }
   }
 
   deckToJSON() {
-    //console.log("cards leader", card_dict, dm.leader.card.index, dm.leader);
+    console.log("cards leader", card_dict, dm.leader.card.index, dm.leader);
 
     const obj = {
       version: 2,
@@ -225,7 +231,7 @@ class deck_importo_exporto1 {
         }
       } catch (err) {
         console.log("[DECK.U] err", err);
-        warn_screen("Uploaded deck is not formatted correctly!");
+        warn_screen(`${getTranslation("ui.mmenu.c.warn4")}`);
       }
     };
 

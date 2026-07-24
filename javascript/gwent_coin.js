@@ -1,4 +1,9 @@
 "use strict";
+function decodeAndStripHtml(str) {
+  const div = document.createElement("div");
+  div.innerHTML = str;
+  return div.textContent || "";
+}
 function getDarkerHex(hex, factor = 0.7) {
   // Remove '#' if present
   hex = hex.replace("#", "");
@@ -228,7 +233,7 @@ async function displayCoinToss(
     factionImg.src = `img/icons/deck_shield_${faction}.png`;
 
     const span = document.createElement("span");
-    span.textContent = name;
+    span.textContent = decodeAndStripHtml(name);
     span.style.color = textColor;
 
     // ✅ IMPORTANT: ordering fix

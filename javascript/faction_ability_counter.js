@@ -159,11 +159,13 @@ function ability_update(side, gain = false) {
       tocar("tf2/meter", false);
 
       showSideTooltip(
-        `Your ability bar has filled (${ability.current}/${ability.max}). \nClick counter to use leader ability!`,
+        `${getTranslation("ability_counter.manup").replace("%x", ability.current).replace("%y", ability.max)} \nClick counter to use leader ability!`,
       );
     } else {
       showSideTooltip(
-        `You have ${ability.current}/${ability.max} in your faction ability meter!`,
+        getTranslation("ability_counter.powerup")
+          .replace("%x", ability.current)
+          .replace("%y", ability.max),
       );
     }
   }
@@ -286,34 +288,40 @@ document
     ) {
       if (ability_data.me.current < turn_skipper_conf.actiavate) {
         showSideTooltip(
-          `You dont have enought energy to activate ability (${ability_data.me.current}/${ability_data.me.max})`,
+          getTranslation("ability_counter.toolow")
+            .replace("%x", ability.current)
+            .replace("%y", ability.max),
         );
       } else {
         await ui.popup(
-          "Yes",
+          getTranslation("ability_counter.turnskip.popup.a"),
           () => ability_turn_skiper(),
-          "No",
+          getTranslation("ability_counter.turnskip.popup.b"),
           () => ability_turn_skipper_no(),
-          "Skip your turn?",
-          "Opponent will have 50/50 to copy card from board!",
+          getTranslation("ability_counter.turnskip.popup.c"),
+          getTranslation("ability_counter.turnskip.popup.d"),
         );
       }
     } else if (ability_data.me.type === "scorchstopper") {
       showSideTooltip(
-        `You have ${ability_data.me.current}/${ability_data.me.max} of shield charges`,
+        getTranslation("ability_counter.toolow_shield")
+          .replace("%x", ability.current)
+          .replace("%y", ability.max),
       );
     } else if (ability_data.me.type === "d20cloner") {
       if (ability_data.me.current < d20cloner.actiavate) {
         showSideTooltip(
-          `You dont have enought energy to activate ability (${ability_data.me.current}/${ability_data.me.max})`,
+          getTranslation("ability_counter.toolow")
+            .replace("%x", ability.current)
+            .replace("%y", ability.max),
         );
       } else {
         await ui.popup(
-          "Yes",
+          getTranslation("ability_counter.d20.roll.init.a"),
           () => ability_counter_d20__me(),
-          "No",
+          getTranslation("ability_counter.d20.roll.init.b"),
           () => ability_turn_skipper_no(),
-          "Roll the die to try and get another card?",
+          getTranslation("ability_counter.d20.roll.init.c"),
           "",
         );
       }
@@ -326,7 +334,9 @@ document
     // logic below
     tocar("card", false);
     showSideTooltip(
-      `Opponent have ${ability_data.op.current}/${ability_data.op.max}`,
+      getTranslation("ability_counter.ophas")
+        .replace("%x", ability_data.op.current)
+        .replace("%y", ability_data.op.max),
     );
   });
 
@@ -492,7 +502,11 @@ async function ability_turn_skiper_op(payload) {
 async function ability_turn_skipper_no() {
   await sleep(600);
   ui.enablePlayer(true);
-  showSideTooltip(`You have ${ability_data.me.current}/${ability_data.me.max}`);
+  showSideTooltip(
+    getTranslation("ability_counter.ophas")
+      .replace("%x", ability_data.me.current)
+      .replace("%y", ability_data.me.max),
+  );
 }
 
 // D20 copy from board
@@ -518,7 +532,7 @@ async function ability_counter_d20__resolve(
       case "me":
         try {
           showSideTooltip(
-            'You rolled "1"\nOpponent draw an additional card!',
+            getTranslation("ability_counter.d20.critfail.me"),
             3000,
           );
           player_op.deck.draw(player_op.hand);
@@ -527,7 +541,7 @@ async function ability_counter_d20__resolve(
         break;
       case "op":
         try {
-          showSideTooltip('Opponent rolled "1"\nYou draw an additional card!');
+          showSideTooltip(getTranslation("ability_counter.d20.critfail.op"));
           player_me.deck.draw(player_me.hand);
         } catch (e) {}
         break;
@@ -786,16 +800,16 @@ async function ability_counter_d20__me() {
   //roll = 20;
 
   await displayD20Roll(roll, {
-    title: "Fate Roll",
+    title: getTranslation("ability_counter.d20.roll.name"),
     titleColor: "#ffcc33",
     message:
       roll === 1
-        ? "Critical Failure"
+        ? getTranslation("ability_counter.d20.roll.res1")
         : roll === 20
-          ? "Natural 20!"
+          ? getTranslation("ability_counter.d20.roll.res2")
           : roll % 2 === 0
-            ? "Success"
-            : "Failure",
+            ? getTranslation("ability_counter.d20.roll.res3")
+            : getTranslation("ability_counter.d20.roll.res4"),
 
     messageColor:
       roll === 1
@@ -850,16 +864,16 @@ async function ability_counter_d20__op(payload) {
   const roll = payload.data.roll;
 
   await displayD20Roll(roll, {
-    title: "Opponent roll dice for addtional cards",
+    title: getTranslation("ability_counter.d20.roll.name_sideB"),
     titleColor: "#ff3333",
     message:
       roll === 1
-        ? "Critical Failure"
+        ? getTranslation("ability_counter.d20.roll.res1")
         : roll === 20
-          ? "Natural 20!"
+          ? getTranslation("ability_counter.d20.roll.res2")
           : roll % 2 === 0
-            ? "Success"
-            : "Failure",
+            ? getTranslation("ability_counter.d20.roll.res3")
+            : getTranslation("ability_counter.d20.roll.res4"),
 
     messageColor:
       roll === 1

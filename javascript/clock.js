@@ -493,12 +493,12 @@ async function setupTimedImages(config, set_new_image) {
   };
 }
 
-function warn_screen(
-  content,
-  type = "alert",
-  title = getUiHtmlStrng("warn_screen.titlefallback"),
-) {
+function warn_screen(content, type = "alert", title) {
   return new Promise((resolve) => {
+    //console.log(content, type, title);
+    if (!title) {
+      title = getUiHtmlStrng("warn_screen.titlefallback");
+    }
     const overlay = document.createElement("div");
     Object.assign(overlay.style, {
       position: "fixed",
