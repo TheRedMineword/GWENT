@@ -41,7 +41,12 @@ STRNG["en"] = {
     decoy2: {
       name: "Diversion",
       description:
-        "Swap with a card on the battlefield to return it to your hand. ",
+        "Swap with a card on the battlefield to return it to your hand. Diversion card on board counts towards total. ",
+    },
+    all_rows: {
+      name: "Multidimensional Efficiency",
+      description:
+        "Can be placed in all yours board rows (Except for weather and special row). ",
     },
     wshield: {
       name: "Shield",

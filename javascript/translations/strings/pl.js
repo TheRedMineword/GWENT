@@ -50,8 +50,13 @@ STRNG["pl"] = {
   decoy2: {
     name: "Dywersja",
     description:
-      "Zamienia się z kartą na polu bitwy, aby zwrócić ją do twojej ręki. "
+      "Zamienia się z kartą na polu bitwy, aby zwrócić ją do twojej ręki. Karta Dywersji na polu bitwy liczy się do wyniku. "
   },
+    all_rows: {
+      name: "Efektywność Wielowymiarowa",
+      description:
+        "Można ją umieścić w dowolnym rzędzie na planszy (z wyjątkiem rzędu pogody i kart specjalnych). ",
+    },
   wshield: {
     name: "Tarcza",
     description:

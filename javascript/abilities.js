@@ -101,6 +101,10 @@ var ability_dict = {
     name: "",
     description: "",
   },
+  all_rows: {
+    name: "",
+    description: "",
+  },
   wshield: {
     name: "",
     description: "",
@@ -1053,7 +1057,9 @@ var ability_dict = {
       }
 
       for (let revive = 0; revive < reviveCount; revive++) {
-        let units = card.holder.grave.findCards((c) => c.isUnit());
+        let units = card.holder.grave
+          .findCards((c) => c.isUnit())
+          .filter((c) => c.row !== "NaR");
 
         if (units.length <= 0) break;
 
@@ -1163,7 +1169,9 @@ var ability_dict = {
       }
 
       for (let revive = 0; revive < reviveCount; revive++) {
-        let units = card.holder.grave.findCards((c) => c.isUnit());
+        let units = card.holder.grave
+          .findCards((c) => c.isUnit())
+          .filter((c) => c.row !== "NaR");
 
         if (units.length <= 0) break;
 
@@ -1729,7 +1737,10 @@ var ability_dict = {
 
     activated: async (card) => {
       let hand = board.getRow(card, "hand", card.holder);
-      let deck = player_me.deck;
+      let deck = {
+        ...player_me.deck,
+        cards: [...player_me.deck.cards],
+      };
       deck.cards = shuffleSeeded(
         deck.cards,
         utf8ToBase64(`${Math.random().toString(36).substring(2, 10)}`),

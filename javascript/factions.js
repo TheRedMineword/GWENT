@@ -27,19 +27,29 @@ var factions = {
       game.roundEnd.push(() => {
         let units = board.row
           .filter((r, i) => (player === player_me) ^ (i < 3))
-          .reduce((a, r) => r.cards.filter((c) => c.isUnit()).concat(a), []);
+          .flatMap((r) =>
+            r.cards.map((card, index) => ({
+              card,
+              row: r.id, // close/ranged/siege
+              index, // position in row
+            })),
+          )
+          .filter(({ card }) => card.isUnit());
 
-        if (units.length === 0) return;
-
-        // Edit by Rick: Previously this would pick a random unit but that'll differ per client.
-        // Easiest fix was to just have it always keep the strongest card (use filename in case of tie) instead of a random index.
-        // OLD: let card = units[randomInt(units.length)];
         units.sort((a, b) => {
-          const powerDiff = b.basePower - a.basePower;
-          if (powerDiff !== 0) return powerDiff;
-          return a.filename.localeCompare(b.filename); // Fallback, if points are tied then use filename as a tiebreaker.
+          const powerDiff = b.card.basePower - a.card.basePower;
+          if (powerDiff) return powerDiff;
+
+          const fileDiff = a.card.filename.localeCompare(b.card.filename);
+          if (fileDiff) return fileDiff;
+
+          const rowDiff = a.row.localeCompare(b.row);
+          if (rowDiff) return rowDiff;
+
+          return a.index - b.index;
         });
-        let card = units[0];
+
+        let card = units[0].card;
         card.animate("stay");
 
         card.noRemove = true;
@@ -188,19 +198,29 @@ var factions = {
       game.roundEnd.push(() => {
         let units = board.row
           .filter((r, i) => (player === player_me) ^ (i < 3))
-          .reduce((a, r) => r.cards.filter((c) => c.isUnit()).concat(a), []);
+          .flatMap((r) =>
+            r.cards.map((card, index) => ({
+              card,
+              row: r.id, // close/ranged/siege
+              index, // position in row
+            })),
+          )
+          .filter(({ card }) => card.isUnit());
 
-        if (units.length === 0) return;
-
-        // Edit by Rick: Previously this would pick a random unit but that'll differ per client.
-        // Easiest fix was to just have it always keep the strongest card (use filename in case of tie) instead of a random index.
-        // OLD: let card = units[randomInt(units.length)];
         units.sort((a, b) => {
-          const powerDiff = b.basePower - a.basePower;
-          if (powerDiff !== 0) return powerDiff;
-          return a.filename.localeCompare(b.filename); // Fallback, if points are tied then use filename as a tiebreaker.
+          const powerDiff = b.card.basePower - a.card.basePower;
+          if (powerDiff) return powerDiff;
+
+          const fileDiff = a.card.filename.localeCompare(b.card.filename);
+          if (fileDiff) return fileDiff;
+
+          const rowDiff = a.row.localeCompare(b.row);
+          if (rowDiff) return rowDiff;
+
+          return a.index - b.index;
         });
-        let card = units[0];
+
+        let card = units[0].card;
         card.animate("stay_sky");
 
         card.noRemove = true;

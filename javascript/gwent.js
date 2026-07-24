@@ -2821,7 +2821,12 @@ class Board {
 
   // Sends and translates a card from the source to the Deck of the card's combat row
   async toRow(card, source) {
-    let row = card.row === "agile" ? "close" : card.row ? card.row : "close";
+    let row =
+      card.row === "agile"
+        ? "close"
+        : card.row === "all"
+          ? "ranged"
+          : card.row || "close";
     await this.moveTo(card, row, source);
   }
 
@@ -3715,18 +3720,28 @@ class Card {
       this.desc_name = name;
     } else if (this.row === "agile") {
       this.desc_name = getTranslation("ability.agile.name");
+    } else if (this.row === "all") {
+      this.desc_name = getTranslation("ability.all_rows.name");
     } else if (this.hero) {
       this.desc_name = getTranslation("ability.hero.name");
     } else {
       this.desc_name = "";
     }
 
-    this.desc = this.row === "agile" ? ability_dict["agile"].description : "";
+    this.desc = "";
+
+    if (this.row === "agile") {
+      this.desc = ability_dict["agile"].description;
+    } else if (this.row === "all") {
+      this.desc = ability_dict["all_rows"].description;
+    } else if (this.hero) {
+      this.desc = ability_dict["hero"].description;
+    }
+
     for (let i = this.abilities.length - 1; i >= 0; --i) {
       this.desc += ability_dict[this.abilities[i]].description;
     }
-    if (this.hero) this.desc += ability_dict["hero"].description;
-
+    // console.log("constructor desc", this, this.desc, this.desc_name, )
     this.elem = this.createCardElem(this);
   }
 
@@ -3956,7 +3971,8 @@ class Card {
         this.row === "ranged" ||
         this.row === "siege" ||
         this.row === "agile" ||
-        this.row === "NaR")
+        this.row === "NaR" ||
+        this.row === "all")
     );
   }
 
@@ -4022,7 +4038,8 @@ class Card {
       card.row === "ranged" ||
       card.row === "siege" ||
       card.row === "agile" ||
-      card.row === "NaR"
+      card.row === "NaR" ||
+      card.row === "all"
     ) {
       //  if (card.row !== "NaR"){
       let num = document.createElement("div");
@@ -5188,7 +5205,7 @@ class UI {
 
     this.preview.getElementsByClassName("card-lg")[0].style.backgroundImage =
       largeURL(tmp);
-    let desc_elem = this.preview.getElementsByClassName("card-description")[0];
+    let desc_elem = this.preview.getElementsByClassName("card-description")[0]; //
     this.setDescription(card, desc_elem);
   }
 
@@ -5210,11 +5227,13 @@ class UI {
       if (
         card.hero ||
         card.row === "agile" ||
+        card.row === "all" ||
         card.abilities.length > 0 ||
         card.faction === "faction"
       ) {
         desc.classList.remove("hide");
-        let str = card.row === "agile" ? "agile" : "";
+        let str =
+          card.row === "agile" ? "agile" : card.row === "all" ? "all" : "";
         if (card.abilities.length)
           str = (card.abilities ?? [])
             .filter((a) => a !== "DontPickMeUp")
@@ -5561,7 +5580,13 @@ class UI {
             board.getRow(card, "close", card.holder),
             board.getRow(card, "ranged", card.holder),
           ]
-        : [board.getRow(card, card.row, card.holder)];
+        : card.row === "all"
+          ? [
+              board.getRow(card, "close", card.holder),
+              board.getRow(card, "ranged", card.holder),
+              board.getRow(card, "siege", card.holder),
+            ]
+          : [board.getRow(card, card.row, card.holder)];
     for (let i = 0; i < 6; i++) {
       let row = board.row[i];
       if (currRows.includes(row)) {
@@ -6483,6 +6508,15 @@ class DeckMaker {
       var abilities = (card_dict[id.index].ability || "")
         .split(" ")
         .filter(Boolean);
+
+      if (showagile_and_alldescindeckmaker) {
+        if (card_dict[id.index].row === "agile") {
+          abilities.unshift("agile");
+        } else if (card_dict[id.index].row === "all") {
+          abilities.unshift("all_rows"); // or "all_rows" if that's your ability_dict key
+        }
+      }
+
       var descOutput = abilities
         .map((abilityId) => ability_dict[abilityId]?.description || "")
         .filter(Boolean);
@@ -6899,7 +6933,8 @@ function createCardElement(card) {
     card.row === "ranged" ||
     card.row === "siege" ||
     card.row === "agile" ||
-    card.row === "NaR"
+    card.row === "NaR" ||
+    card.row === "all"
   ) {
     //if (card.row !== "NaR"){
     let num = document.createElement("div");

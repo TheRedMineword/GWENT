@@ -2,6 +2,7 @@
 loadingscreenupdate("Creating env vars!");
 const debuglunchcustomcards = false; // if false when ready use: lunch_gwent_ui
 let onYouTubeIframeAPIReady_status = false;
+const showagile_and_alldescindeckmaker = false;
 var init_button_show_patchnotes = true;
 let _debug_volume = 50;
 let videoMapLyrics = {};

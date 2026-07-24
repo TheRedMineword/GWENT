@@ -166,7 +166,11 @@
           },
           "decoy2": {
             "name": "Diversion",
-            "description": "Swap with a card on the battlefield to return it to your hand. "
+            "description": "Swap with a card on the battlefield to return it to your hand. Diversion card on board counts towards total. "
+          },
+          "all_rows": {
+            "name": "Multidimensional Efficiency",
+            "description": "Can be placed in all yours board rows (Except for weather and special row). "
           },
           "wshield": {
             "name": "Shield",
@@ -1023,7 +1027,11 @@
           },
           "decoy2": {
             "name": "Dywersja",
-            "description": "Zamienia się z kartą na polu bitwy, aby zwrócić ją do twojej ręki. "
+            "description": "Zamienia się z kartą na polu bitwy, aby zwrócić ją do twojej ręki. Karta Dywersji na polu bitwy liczy się do wyniku. "
+          },
+          "all_rows": {
+            "name": "Efektywność Wielowymiarowa",
+            "description": "Można ją umieścić w dowolnym rzędzie na planszy (z wyjątkiem rzędu pogody i kart specjalnych). "
           },
           "wshield": {
             "name": "Tarcza",
@@ -4891,6 +4899,10 @@
         "description": ""
       },
       "decoy2": {
+        "name": "",
+        "description": ""
+      },
+      "all_rows": {
         "name": "",
         "description": ""
       },
