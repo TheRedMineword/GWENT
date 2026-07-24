@@ -118,6 +118,7 @@ var card_dict_base = [
     filename: "horn",
     count: "3",
     isSide: true,
+    info: "Keep it at this index of array or game will break (Good Desing btw)",
   },
   {
     name: "Dandelion",

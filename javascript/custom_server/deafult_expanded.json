@@ -1741,7 +1741,7 @@
             "whiteflame2-me_syndicate": "Skopiowałeś umiejętność lidera przeciwnika!"
           },
           "notif_side": {
-            "ts": "Podróżująca Dusza \"\u003Ccolor=#00ff00\u003E%s\u003C/color\u003E\" odwiedza teraz \u003Ccolor=#add8e6\u003EKrólestwo Nieba\u003C/color\u003E\nWyruszy spowrotem w drogę dnia \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E",
+            "ts": "Podróżująca Dusza \"\u003Ccolor=#00ff00\u003E%s\u003C/color\u003E\" odwiedza teraz \u003Ccolor=#add8e6\u003EKrólestwo Nieba\u003C/color\u003E!\nWyruszy spowrotem w drogę dnia \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E",
             "moon": {
               "new": "Plansza jest spowita w ciemnościach!\nKsiężyc jest w \u003Ccolor=#DDE8EB\u003Enowiu\u003C/color\u003E!\nDo dnia \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E przypada \u003Ccolor=#DDE8EB\u003Enów\u003C/color\u003E!\nKsiężyc zniknie \u003Ccolor=#90D5FF\u003E%s\u003C/color\u003E!",
               "full": "Światło \u003Ccolor=#DDE8EB\u003EPełni\u003C/color\u003E roświetla planszę!\nPełnia będzie na niebie aż do \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E!\nKsiężyc będzie w \u003Ccolor=#DDE8EB\u003EPełni\u003C/color\u003E dniat \u003Ccolor=#90D5FF\u003E%s\u003C/color\u003E!"
@@ -1876,33 +1876,6 @@
         "isDecoyMath": true
       },
       {
-        "name": "Godling",
-        "id": "Decoy2",
-        "deck": "monsters",
-        "row": "NaR",
-        "strength": "10",
-        "ability": "hero decoy2",
-        "filename": "custom!Decoy2",
-        "customassets": {
-          "lg": {
-            "hero": true,
-            "ability": "decoy2",
-            "name": "Godling",
-            "desc": "Nobody expects an Godling here!",
-            "txt_timed_a": false
-          },
-          "sm": {
-            "type": "url",
-            "build": [],
-            "url": "img/sm/monsters_godling_decoy.jpg",
-            "timed": []
-          }
-        },
-        "count": "1",
-        "isDecoy": true,
-        "isDecoyMath": false
-      },
-      {
         "name": "Biting Frost",
         "id": "4",
         "deck": "weather",
@@ -1941,7 +1914,8 @@
         "ability": "horn",
         "filename": "horn",
         "count": "3",
-        "isSide": true
+        "isSide": true,
+        "info": "Keep it at this index of array or game will break (Good Desing btw)"
       },
       {
         "name": "Dandelion",
@@ -1962,6 +1936,33 @@
         "ability": "",
         "filename": "emiel",
         "count": "1"
+      },
+      {
+        "name": "Godling",
+        "id": "Decoy2",
+        "deck": "monsters",
+        "row": "NaR",
+        "strength": "10",
+        "ability": "hero decoy2",
+        "filename": "custom!Decoy2",
+        "customassets": {
+          "lg": {
+            "hero": true,
+            "ability": "decoy2",
+            "name": "Godling",
+            "desc": "Nobody expects an Godling here!",
+            "txt_timed_a": false
+          },
+          "sm": {
+            "type": "url",
+            "build": [],
+            "url": "img/sm/monsters_godling_decoy.jpg",
+            "timed": []
+          }
+        },
+        "count": "1",
+        "isDecoy": true,
+        "isDecoyMath": false
       },
       {
         "name": "Geralt of Rivia",
