@@ -3019,6 +3019,7 @@ var card_dict_base = [
     },
   },
   {
+    note: "this is  _replace_me like card, arrive.bin will update it, if you are doing custom server and dont want it, remove this card!",
     name: "Traveling Spirit",
     id: "3034",
     deck: "sky",

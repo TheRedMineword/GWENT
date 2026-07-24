@@ -741,7 +741,7 @@ STRNG["pl"] = {
     skyfest: "Sky Anniversary",
     magister: "Magister",
     "custom!power_place": "Circle of Elements",
-    "custom!traveling_spirit": "Traveling Spirit",
+    "custom!traveling_spirit": "Podróżująca Dusza",
     "custom!dearvangogh": "Dear Van Gogh",
     "custom!sky_vincent": "Vincent Van Gogh",
     "custom!vincent_painting_power": "Vincent Van Gogh: Painting",
@@ -867,7 +867,7 @@ STRNG["pl"] = {
       me_ready: "Jesteś gotowy, Poczekaj na drugiego gracza",
       me_unready: "Jesteś teraz niegotowy",
       redraw:
-        "<color=#d5cfe3>Przelosowałeś kartę</color> <color=#fa4441>%x</color> <color=#d5cfe3>na</color> <color=#41fa66>%y</color>",
+        "<color=#d5cfe3>Przelosowałeś kartę \"</color><color=#fa4441>%x</color><color=#d5cfe3>\" na \"</color><color=#41fa66>%y</color><color=#d5cfe3>\"</color>",
         ordinal: {
       "st": ".",
       "nd": ".",
@@ -946,7 +946,7 @@ STRNG["pl"] = {
       "whiteflame2-me_syndicate": "Skopiowałeś umiejętność lidera przeciwnika!",
     },
     notif_side: {
-      "ts": "Podróżująca Dusza \"<color=#00ff00>%s</color>\" odwiedza teraz <color=#add8e6>Królestwo Nieba</color>\nWyruszy spowrotem w drogę dnia <color=#90D5FF><$enddatelocal></color>",
+      "ts": "Podróżująca Dusza \"<color=#00ff00>%s</color>\" odwiedza teraz <color=#add8e6>Królestwo Nieba</color>!\nWyruszy spowrotem w drogę dnia <color=#90D5FF><$enddatelocal></color>",
       "moon": {
         "new": "Plansza jest spowita w ciemnościach!\nKsiężyc jest w <color=#DDE8EB>nowiu</color>!\nDo dnia <color=#90D5FF><$enddatelocal></color> przypada <color=#DDE8EB>nów</color>!\nKsiężyc zniknie <color=#90D5FF>%s</color>!",
         "full": "Światło <color=#DDE8EB>Pełni</color> roświetla planszę!\nPełnia będzie na niebie aż do <color=#90D5FF><$enddatelocal></color>!\nKsiężyc będzie w <color=#DDE8EB>Pełni</color> dniat <color=#90D5FF>%s</color>!"

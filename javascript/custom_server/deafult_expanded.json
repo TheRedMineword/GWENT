@@ -1566,7 +1566,7 @@
           "skyfest": "Sky Anniversary",
           "magister": "Magister",
           "custom!power_place": "Circle of Elements",
-          "custom!traveling_spirit": "Traveling Spirit",
+          "custom!traveling_spirit": "Podróżująca Dusza",
           "custom!dearvangogh": "Dear Van Gogh",
           "custom!sky_vincent": "Vincent Van Gogh",
           "custom!vincent_painting_power": "Vincent Van Gogh: Painting",
@@ -1682,7 +1682,7 @@
             "no_op_start": "Nie można rozpocząć gry: Brak drugiego Gracza",
             "me_ready": "Jesteś gotowy, Poczekaj na drugiego gracza",
             "me_unready": "Jesteś teraz niegotowy",
-            "redraw": "\u003Ccolor=#d5cfe3\u003EPrzelosowałeś kartę\u003C/color\u003E \u003Ccolor=#fa4441\u003E%x\u003C/color\u003E \u003Ccolor=#d5cfe3\u003Ena\u003C/color\u003E \u003Ccolor=#41fa66\u003E%y\u003C/color\u003E",
+            "redraw": "\u003Ccolor=#d5cfe3\u003EPrzelosowałeś kartę \"\u003C/color\u003E\u003Ccolor=#fa4441\u003E%x\u003C/color\u003E\u003Ccolor=#d5cfe3\u003E\" na \"\u003C/color\u003E\u003Ccolor=#41fa66\u003E%y\u003C/color\u003E\u003Ccolor=#d5cfe3\u003E\"\u003C/color\u003E",
             "ordinal": {
               "st": ".",
               "nd": ".",
@@ -4511,6 +4511,7 @@
         }
       },
       {
+        "note": "this is  _replace_me like card, arrive.bin will update it, if you are doing custom server and dont want it, remove this card!",
         "name": "Traveling Spirit",
         "id": "3034",
         "deck": "sky",

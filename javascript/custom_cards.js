@@ -966,6 +966,27 @@ async function rebuildCustomCardsMaps() {
   const ts = JSON.parse(text);
   console.log("CARD BUILDER arrive.json", ts);
 
+  var ts_index = card_dict.findIndex((c) => c.id === "3034");
+  var tmp_card = {};
+  if (ts_index) {
+    try {
+      tmp_card = card_dict[ts_index];
+      card_dict[ts_index].customassets = ts.when.card_dict.custom_assets;
+      card_dict[ts_index].strength = ts.when.card_dict.strenght;
+      card_dict[ts_index].row = ts.when.card_dict.row;
+      card_dict[ts_index].ability = ts.when.card_dict.ability;
+      card_dict[ts_index].deck = ts.when.card_dict.deck;
+      card_dict[ts_index].customassets.lg.name = ts.when.spirit_name;
+      console.log(
+        `TRAVELING SPIRIT ${ts.when.spirit_name} NOW`,
+        card_dict[ts_index],
+        ts_index,
+      );
+    } catch (e) {
+      console.error("Traveling Spirit err", e, ts, "\n\n", ts_index, tmp_card);
+    }
+  }
+
   console.log(ts.special_visitors, "visit");
   card_dict.push(...ts.special_visitors);
 
