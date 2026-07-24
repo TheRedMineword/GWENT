@@ -809,7 +809,7 @@ STRNG["pl"] = {
         },
         brick: {
           name: "Awaria Trybu Wieloosobowego",
-          why: "Nieudało się połączyć do serwerów!\nSerwer może być tymczasowo niedostępny.\n\nSpróbuj ponownie później!",
+          why: "Nieudało się połączyć do serwera!\nSerwer może być tymczasowo niedostępny.\n\nSpróbuj ponownie później!",
         },
         surrender_request: {
           sword: "🗡️",
