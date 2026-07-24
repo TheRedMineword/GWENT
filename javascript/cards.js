@@ -71,11 +71,39 @@ var card_dict_base = [
     id: "1",
     deck: "special",
     row: "",
-    strength: "",
+    strength: "0",
     ability: "decoy",
     filename: "decoy",
     count: "3",
     isDecoy: true,
+    isDecoyMath: true,
+  },
+  {
+    name: "Godling",
+    id: "Decoy2",
+    deck: "monsters",
+    row: "NaR",
+    strength: "10",
+    ability: "hero decoy2",
+    filename: "custom!Decoy2",
+    customassets: {
+      lg: {
+        hero: true,
+        ability: "decoy2",
+        name: "Godling",
+        desc: "Nobody expects an Godling here!",
+        txt_timed_a: false,
+      },
+      sm: {
+        type: "url", // url/build/timed
+        build: [],
+        url: "img/sm/monsters_godling_decoy.jpg",
+        timed: [],
+      },
+    },
+    count: "1",
+    isDecoy: true,
+    isDecoyMath: false,
   },
   {
     name: "Biting Frost",
@@ -167,6 +195,7 @@ var card_dict_base = [
     ability: "scorch",
     filename: "scorch",
     count: "3",
+    isScorch: true,
   },
   {
     name: "Torrential Rain",

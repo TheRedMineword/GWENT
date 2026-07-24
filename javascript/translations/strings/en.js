@@ -38,6 +38,11 @@ STRNG["en"] = {
       description:
         "Swap with a card on the battlefield to return it to your hand. ",
     },
+    decoy2: {
+      name: "Diversion",
+      description:
+        "Swap with a card on the battlefield to return it to your hand. ",
+    },
     wshield: {
       name: "Shield",
       description:
@@ -387,6 +392,7 @@ STRNG["en"] = {
   card: {
     mysterious_elf: "Mysterious Elf",
     decoy: "Decoy",
+    "custom!Decoy2": "Godling",
     frost: "Biting Frost",
     ciri: "Cirilla Fiona Elen Riannon",
     clear: "Clear Weather",

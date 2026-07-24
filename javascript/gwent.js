@@ -1215,7 +1215,7 @@ socket.onmessage = async (event) => {
         row = data.row;
       }
 
-      if (data.card.filename === "decoy") {
+      if (data.card.isDecoy) {
         const replacedCard = row.cards.find(
           (bc) => bc.filename === data.target.filename,
         );
@@ -1232,8 +1232,7 @@ socket.onmessage = async (event) => {
       }
 
       if (row === "weather") await player_op.playCard(card, row);
-      else if (data.card.filename === "scorch")
-        await player_op.playScorch(card);
+      else if (data.card.isScorch) await player_op.playScorch(card);
       else await player_op.playCardToRow(card, row);
 
       await sleep(500);
@@ -2447,7 +2446,7 @@ class Row extends CardContainer {
   }
   calcCardScore_work(card) {
     //  console.log("calcCardScore(card)", card, this); //this.cards[0].holder.leader.abilities to get card 0 leader abilities, could be usefull in future
-    if (card.name === "decoy") return 0;
+    if (card.isDecoyMath) return 0;
     let total = card.basePower;
     var row_name = this.id;
     var player = card.holder;
@@ -3677,6 +3676,14 @@ class Card {
     this.holder = player;
     this.isSide = card_data?.isSide ?? false;
     this.isDecoy = card_data?.isDecoy ?? false;
+    this.isScorch = card_data?.isScorch ?? false;
+    if (this.isDecoy) {
+      this.isDecoyMath = card_data?.isDecoyMath ?? true;
+    } else {
+      this.isDecoyMath = false;
+    }
+
+    this._raw = card_data;
 
     this.hero = false;
     if (this.abilities.length > 0) {
@@ -3707,9 +3714,9 @@ class Card {
 
       this.desc_name = name;
     } else if (this.row === "agile") {
-      this.desc_name = "agile";
+      this.desc_name = getTranslation("ability.agile.name");
     } else if (this.hero) {
-      this.desc_name = "hero";
+      this.desc_name = getTranslation("ability.hero.name");
     } else {
       this.desc_name = "";
     }
@@ -3730,7 +3737,7 @@ class Card {
 
   // Sets and displays the current power of this card
   setPower(n) {
-    if (this.isDecoy) return;
+    if (this.isDecoyMath) return;
     let elem = this.elem.children[0].children[0];
     if (n !== this.power) {
       this.power = n;
@@ -3948,7 +3955,8 @@ class Card {
       (this.row === "close" ||
         this.row === "ranged" ||
         this.row === "siege" ||
-        this.row === "agile")
+        this.row === "agile" ||
+        this.row === "NaR")
     );
   }
 
@@ -4013,13 +4021,16 @@ class Card {
       card.row === "close" ||
       card.row === "ranged" ||
       card.row === "siege" ||
-      card.row === "agile"
+      card.row === "agile" ||
+      card.row === "NaR"
     ) {
+      //  if (card.row !== "NaR"){
       let num = document.createElement("div");
       num.appendChild(document.createTextNode(card.basePower));
       num.classList.add("center");
       power.appendChild(num);
       row.style.backgroundImage = iconURL("card_row_" + card.row);
+      //  }
     }
 
     let abi = document.createElement("div");
@@ -4030,7 +4041,9 @@ class Card {
       card.abilities.length > 0
     ) {
       var abilities = card.abilities.filter((a) => a !== "DontPickMeUp");
-      let str = abilities.at(-1);
+      let str = (card.abilities ?? [])
+        .filter((a) => a !== "DontPickMeUp")
+        .at(-1);
       //  let str = card.abilities[card.abilities.length - 1];
       if (str === "cerys") str = "muster";
       if (str.startsWith("avenger")) str = "avenger";
@@ -5076,7 +5089,7 @@ class UI {
     let holder = card.holder;
     this.hidePreview();
     this.enablePlayer(false);
-    if (card.name === "Scorch") {
+    if (card.isScorch) {
       this.hidePreview();
       await ability_dict["scorch"].activated(card);
     } else if (card.isDecoy) {
@@ -5203,8 +5216,9 @@ class UI {
         desc.classList.remove("hide");
         let str = card.row === "agile" ? "agile" : "";
         if (card.abilities.length)
-          var abilities = card.abilities.filter((a) => a !== "DontPickMeUp");
-        str = abilities.at(-1);
+          str = (card.abilities ?? [])
+            .filter((a) => a !== "DontPickMeUp")
+            .at(-1);
         //  str = card.abilities[card.abilities.length - 1];
         if (str === "cerys") str = "muster";
         if (str.startsWith("avenger")) str = "avenger";
@@ -5496,7 +5510,7 @@ class UI {
 
     weather.elem.classList.add("noclick");
 
-    if (card.name === "Scorch") {
+    if (card.isScorch) {
       for (let r of board.row) {
         r.elem.classList.add("row-selectable");
         r.elem_special.classList.add("row-selectable");
@@ -6884,13 +6898,16 @@ function createCardElement(card) {
     card.row === "close" ||
     card.row === "ranged" ||
     card.row === "siege" ||
-    card.row === "agile"
+    card.row === "agile" ||
+    card.row === "NaR"
   ) {
+    //if (card.row !== "NaR"){
     let num = document.createElement("div");
     num.appendChild(document.createTextNode(card.basePower));
     num.classList.add("center");
     power.appendChild(num);
     row.style.backgroundImage = iconURL("card_row_" + card.row);
+    //}
   }
 
   let abi = document.createElement("div");
@@ -6900,8 +6917,7 @@ function createCardElement(card) {
     card.faction !== "weather" &&
     card.abilities.length > 0
   ) {
-    var abilities = card.abilities.filter((a) => a !== "DontPickMeUp");
-    let str = abilities.at(-1);
+    let str = (card.abilities ?? []).filter((a) => a !== "DontPickMeUp").at(-1);
     //  let str = card.abilities[card.abilities.length - 1];
     if (str === "cerys") str = "muster";
     if (str.startsWith("avenger")) str = "avenger";

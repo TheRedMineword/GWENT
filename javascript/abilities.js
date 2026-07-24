@@ -97,6 +97,10 @@ var ability_dict = {
     name: "",
     description: "",
   },
+  decoy2: {
+    name: "",
+    description: "",
+  },
   wshield: {
     name: "",
     description: "",
@@ -195,7 +199,7 @@ var ability_dict = {
         row.cards.splice(row.cards.indexOf(card), 1);
       }
 
-      await ability_dict.resolveScorch(board.row, false);
+      await ability_dict_resolveScorch(board.row, false);
 
       // Put it back
       if (row !== undefined) {
@@ -221,7 +225,7 @@ var ability_dict = {
         );
         ability_update(card.holder.tag);
       }
-      await ability_dict.resolveScorch(
+      await ability_dict_resolveScorch(
         [board.getRow(card, "close", card.holder.opponent())],
         true,
       );
@@ -246,7 +250,7 @@ var ability_dict = {
         );
         ability_update(card.holder.tag);
       }
-      await ability_dict.resolveScorch(
+      await ability_dict_resolveScorch(
         [board.getRow(card, "ranged", card.holder.opponent())],
         true,
       );
@@ -271,7 +275,7 @@ var ability_dict = {
         );
         ability_update(card.holder.tag);
       }
-      await ability_dict.resolveScorch(
+      await ability_dict_resolveScorch(
         [board.getRow(card, "siege", card.holder.opponent())],
         true,
       );
@@ -299,7 +303,7 @@ var ability_dict = {
         melee: "close",
         ranged: "ranged",
       };
-      await ability_dict.resolveScorch(
+      await ability_dict_resolveScorch(
         [
           board.getRow(
             card,
@@ -2316,7 +2320,7 @@ var ability_dict = {
   },
 };
 loadingscreenupdate(`Adding resolveScorch to ability_dict`);
-ability_dict.resolveScorch = async (rows, require10 = true) => {
+const ability_dict_resolveScorch = async (rows, require10 = true) => {
   let targets = [];
 
   if (!require10) {

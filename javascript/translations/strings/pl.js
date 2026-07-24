@@ -47,7 +47,11 @@ STRNG["pl"] = {
     description:
       "Zamienia się z kartą na polu bitwy, aby zwrócić ją do twojej ręki. "
   },
-
+  decoy2: {
+    name: "Dywersja",
+    description:
+      "Zamienia się z kartą na polu bitwy, aby zwrócić ją do twojej ręki. "
+  },
   wshield: {
     name: "Tarcza",
     description:
@@ -482,6 +486,7 @@ STRNG["pl"] = {
   card: {
   mysterious_elf: "Tajemniczy Elf",
   decoy: "Manekin do Ćwiczeń",
+  "custom!Decoy2": "Bożątko",
   frost: "Siarczysty Mróz",
   ciri: "Cirilla Fiona Elen Riannon",
   clear: "Czyste Niebo",

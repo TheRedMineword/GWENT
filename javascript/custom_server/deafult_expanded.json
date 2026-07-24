@@ -164,6 +164,10 @@
             "name": "Decoy",
             "description": "Swap with a card on the battlefield to return it to your hand. "
           },
+          "decoy2": {
+            "name": "Diversion",
+            "description": "Swap with a card on the battlefield to return it to your hand. "
+          },
           "wshield": {
             "name": "Shield",
             "description": "Partialy protects all cards in same row from weather card effects and axii, Commander's Horn will have no effect in that row. "
@@ -448,6 +452,7 @@
         "card": {
           "mysterious_elf": "Mysterious Elf",
           "decoy": "Decoy",
+          "custom!Decoy2": "Godling",
           "frost": "Biting Frost",
           "ciri": "Cirilla Fiona Elen Riannon",
           "clear": "Clear Weather",
@@ -1016,6 +1021,10 @@
             "name": "Manekin do Ćwiczeń",
             "description": "Zamienia się z kartą na polu bitwy, aby zwrócić ją do twojej ręki. "
           },
+          "decoy2": {
+            "name": "Dywersja",
+            "description": "Zamienia się z kartą na polu bitwy, aby zwrócić ją do twojej ręki. "
+          },
           "wshield": {
             "name": "Tarcza",
             "description": "Częściowo chroni wszystkie karty w tym samym rzędzie przed efektami Pogody i Znakiem Aksji. Róg Dowódcy nie działa w tym rzędzie. "
@@ -1300,6 +1309,7 @@
         "card": {
           "mysterious_elf": "Tajemniczy Elf",
           "decoy": "Manekin do Ćwiczeń",
+          "custom!Decoy2": "Bożątko",
           "frost": "Siarczysty Mróz",
           "ciri": "Cirilla Fiona Elen Riannon",
           "clear": "Czyste Niebo",
@@ -1850,11 +1860,39 @@
         "id": "1",
         "deck": "special",
         "row": "",
-        "strength": "",
+        "strength": "0",
         "ability": "decoy",
         "filename": "decoy",
         "count": "3",
-        "isDecoy": true
+        "isDecoy": true,
+        "isDecoyMath": true
+      },
+      {
+        "name": "Godling",
+        "id": "Decoy2",
+        "deck": "monsters",
+        "row": "NaR",
+        "strength": "10",
+        "ability": "hero decoy2",
+        "filename": "custom!Decoy2",
+        "customassets": {
+          "lg": {
+            "hero": true,
+            "ability": "decoy2",
+            "name": "Godling",
+            "desc": "Nobody expects an Godling here!",
+            "txt_timed_a": false
+          },
+          "sm": {
+            "type": "url",
+            "build": [],
+            "url": "img/sm/monsters_godling_decoy.jpg",
+            "timed": []
+          }
+        },
+        "count": "1",
+        "isDecoy": true,
+        "isDecoyMath": false
       },
       {
         "name": "Biting Frost",
@@ -1945,7 +1983,8 @@
         "strength": "",
         "ability": "scorch",
         "filename": "scorch",
-        "count": "3"
+        "count": "3",
+        "isScorch": true
       },
       {
         "name": "Torrential Rain",
@@ -4848,6 +4887,10 @@
         "description": ""
       },
       "decoy": {
+        "name": "",
+        "description": ""
+      },
+      "decoy2": {
         "name": "",
         "description": ""
       },
