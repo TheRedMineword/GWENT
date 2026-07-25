@@ -1,0 +1,12 @@
+<title>Known Issue</title>
+<desc>Time.now, The service used by Gwent for clock synchronization is unavailable, which may affect the gameplay experience and increase loading times.
+
+I have no control over third-party services, but I sincerely apologize for this incident.
+
+I have been aware of this for a few hours; I thought the problem would be resolved by now, but it hasn't been.
+
+I do not know when this will be fixed.
+
+~DrMineword</desc>
+<bottom_link>true</bottom_link>
+<bottom_link_value>Join Discord Server for updates!###https://theredmineword.github.io/GWENT/api/discord-iframe/page</bottom_link_value>
