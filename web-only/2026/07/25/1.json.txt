@@ -1,5 +1,5 @@
 <title>Known Issue</title>
-<desc>Time.now, The service used by Gwent for clock synchronization is unavailable, which may affect the gameplay experience and increase loading times.
+<desc>Time.now, the service used by Gwent for clock synchronization is unavailable, which may affect the gameplay experience and increase loading times.
 
 I have no control over third-party services, but I sincerely apologize for this incident.
 
