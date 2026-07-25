@@ -81,6 +81,20 @@ console.log = (message) => {
 
 const heartbeatWaiting = new Map();
 
+const recentPushes = new Map(); // key: sha -> { sha, before, files, commits, repo, ref, time }
+function isKnownIssuePath(filename = "") {
+  return (
+    /^web-only\/isissue\.txt$/i.test(filename) ||
+    /^web-only\/knownissues\.json$/i.test(filename) ||
+    /^web-only\/\d{4}\/\d{2}\/\d{2}\/[^/]+\.json\.txt$/i.test(filename) ||
+    /^web-only\/change\/web-only\/ping_news\.txt$/i.test(filename)
+  );
+}
+
+function isSilentKnownIssueUpdate(files = []) {
+  return files.length > 0 && files.every((f) => isKnownIssuePath(f.filename));
+}
+
 function generateHeartbeatId() {
   return crypto.randomUUID();
 }
@@ -913,14 +927,42 @@ app.post("/api/message", (req, res) => {
 
 app.post("/api/github", async (req, res) => {
   const { key } = req.query;
+  if (key !== process.env.ADMIN_ENDPOINT_LOGIN) return res.sendStatus(401);
 
-  if (key !== process.env.ADMIN_ENDPOINT_LOGIN) {
-    // console.log("[ADMIN] Force update requested.");
-    return res.sendStatus(401);
-  }
   const payload = req.body;
+  const repo = payload.repository;
+  const repoFull = repo?.full_name;
 
-  // Only handle successful deployments
+  if (!repoFull) return res.sendStatus(200);
+
+  // 1) Push webhook: store the push details
+  if (payload.ref && payload.after && Array.isArray(payload.commits)) {
+    const files = [];
+    for (const c of payload.commits) {
+      for (const f of [
+        ...(c.added || []),
+        ...(c.modified || []),
+        ...(c.removed || []),
+      ]) {
+        files.push({ filename: f });
+      }
+    }
+
+    recentPushes.set(payload.after, {
+      sha: payload.after,
+      before: payload.before,
+      files,
+      commits: payload.commits,
+      repo: repoFull,
+      ref: payload.ref,
+      time: Date.now(),
+    });
+
+    console.log("[PUSH] saved:", payload.after, "files:", files.length);
+    return res.sendStatus(200);
+  }
+
+  // 2) Deployment status webhook: only proceed on success
   if (
     !payload.deployment_status ||
     payload.deployment_status.state !== "success"
@@ -929,15 +971,70 @@ app.post("/api/github", async (req, res) => {
   }
 
   const deployment = payload.deployment;
-  const repo = payload.repository;
-
-  const sha = deployment.sha;
+  const sha = deployment?.sha;
+  if (!sha) return res.sendStatus(200);
 
   console.log("Pages deployed:", sha);
 
-  // Fetch commit info
+  // Try cached push first
+  const cachedPush = recentPushes.get(sha);
+
+  let files = cachedPush?.files || [];
+
+  // If not cached, fall back to GitHub compare API or commit API
+  if (!files.length) {
+    const base = deployment?.payload?.before || null;
+
+    if (base) {
+      const compareResponse = await fetch(
+        `https://api.github.com/repos/${repoFull}/compare/${base}...${sha}`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.PATCHES_GIT}`,
+            Accept: "application/vnd.github+json",
+            "User-Agent": "GWENT-Server",
+          },
+        },
+      );
+
+      const compareBody = await compareResponse.json();
+      files = (compareBody.files || []).map((f) => ({ filename: f.filename }));
+    } else {
+      const commitResponse = await fetch(
+        `https://api.github.com/repos/${repoFull}/commits/${sha}`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.PATCHES_GIT}`,
+            Accept: "application/vnd.github+json",
+            "User-Agent": "GWENT-Server",
+          },
+        },
+      );
+
+      const body = await commitResponse.json();
+      files = (body.files || []).map((f) => ({ filename: f.filename }));
+    }
+  }
+
+  const silentKnownIssueUpdate = isSilentKnownIssueUpdate(files);
+
+  // Save latest deploy info either way
+  console.log(
+    "[DEPLOY] sha:",
+    sha,
+    "silentKnownIssueUpdate:",
+    silentKnownIssueUpdate,
+  );
+
+  if (silentKnownIssueUpdate) {
+    // Update any internal state you need here, but do NOT broadcast to clients.
+    // This avoids pointless client restarts.
+    return res.sendStatus(200);
+  }
+
+  // Normal patchnotes broadcast path below
   const commitResponse = await fetch(
-    `https://api.github.com/repos/${repo.full_name}/commits/${sha}`,
+    `https://api.github.com/repos/${repoFull}/commits/${sha}`,
     {
       headers: {
         Authorization: `Bearer ${process.env.PATCHES_GIT}`,
@@ -947,22 +1044,13 @@ app.post("/api/github", async (req, res) => {
     },
   );
 
-  console.log(commitResponse.status);
-
-  const body = await commitResponse.json();
-  console.log(
-    `<https://api.github.com/repos/${repo.full_name}/commits/${sha}>\n\`${JSON.stringify(body)}\``,
-  );
-  const commit = body;
+  const commit = await commitResponse.json();
   const commiter = commit?.commit?.author?.name ?? "Unknown";
   const commiterIcon = commit?.author?.avatar_url ?? "";
   const commitMessage = commit?.commit?.message ?? "Message Failed";
 
-  const files = commit?.files ?? [];
-
-  // Fetch template
   const ping = await fetch(
-    `https://theredmineword.github.io/GWENT/change/web-only/ping_news.txt?random=${repo.full_name}_${sha}`,
+    `https://theredmineword.github.io/GWENT/change/web-only/ping_news.txt?random=${repoFull}_${sha}`,
   );
 
   if (!ping.ok) {
@@ -972,78 +1060,38 @@ app.post("/api/github", async (req, res) => {
 
   let message = await ping.text();
 
-  const filesText = files
-    .map((file) => {
-      let prefix = " ";
-
-      switch (file.status) {
-        case "added":
-          prefix = "+";
-          break;
-
-        case "removed":
-          prefix = "-";
-          break;
-
-        case "modified":
-          prefix = "---";
-          break;
-
-        case "renamed":
-          prefix = ">>>";
-          break;
-
-        default:
-          prefix = "?";
-      }
-
-      return `${prefix} ${file.filename}`;
-    })
+  const filesText = (files || [])
+    .map((file) => `• ${file.filename}`)
     .join("\n");
-  // Variables available inside template
+
   const vars = {
     commiter,
     "commiter.icon": commiterIcon,
-
     commit: sha.substring(0, 7),
     "commit.full": sha,
-
     commits: commitMessage,
-
     files: filesText,
-
     repo: repo.name,
-
     branch: deployment.ref ?? "main",
-
-    compare: `https://github.com/${repo.full_name}/compare/${sha}^...${sha}`,
-
+    compare: `https://github.com/${repoFull}/compare/${sha}^...${sha}`,
     time: new Date().toISOString(),
   };
 
-  // Replace {{variable}}
-  for (const [key, value] of Object.entries(vars)) {
-    message = message.replaceAll(`{{${key}}}`, value);
+  for (const [k, v] of Object.entries(vars)) {
+    message = message.replaceAll(`{{${k}}}`, String(v));
   }
 
-  console.log(
-    `\`\`\`\n${message.replaceAll("\\", "\/\/").replaceAll("`", "/\\`")}\`\`\``,
-  );
-  console.log(`Vars: \`\`\`json\n${JSON.stringify(vars)} \`\`\``);
-
-  // Send to all clients
-  packet = JSON.stringify({
+  const packet = JSON.stringify({
     type: "show_patchnotes",
     content: message,
   });
-  var sent = 0;
-  for (const ws of players) {
-    if (comp_and_send(ws, packet)) {
-      sent++;
-    }
-  }
-  console.log(`sended to: ${sent} players`);
 
+  let sent = 0;
+  for (const ws of players) {
+    if (comp_and_send(ws, packet)) sent++;
+  }
+
+  console.log(`sent to: ${sent} players`);
   res.sendStatus(200);
 });
 function broadcastToSession(sessionId, payload) {
