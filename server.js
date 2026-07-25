@@ -98,7 +98,9 @@ async function updateTrafficMonitor() {
     trafficMonitor = await response.json();
     auth_needed = trafficMonitor.needauth;
 
-    console.log(`[TrafficMonitor] Updated \`${JSON.stringify(trafficMonitor)}\` + auth \`${auth_needed}\``);
+    console.log(
+      `[TrafficMonitor] Updated \`${JSON.stringify(trafficMonitor)}\` + auth \`${auth_needed}\``,
+    );
   } catch (err) {
     console.error("[TrafficMonitor]", err);
   }
