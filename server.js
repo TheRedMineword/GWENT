@@ -18,7 +18,7 @@ const wss = new WebSocket.Server({ server });
 
 const PORT = process.env.PORT || 8081;
 
-const auth_needed = false;
+let auth_needed = true;
 
 const ADMIN_ENDPOINT_LOGIN = process.env.ADMIN_ENDPOINT_LOGIN;
 
@@ -96,8 +96,9 @@ async function updateTrafficMonitor() {
     }
 
     trafficMonitor = await response.json();
+    auth_needed = trafficMonitor.needauth;
 
-    console.log(`[TrafficMonitor] Updated ${JSON.stringify(trafficMonitor)}`);
+    console.log(`[TrafficMonitor] Updated \`${JSON.stringify(trafficMonitor)}\` + auth \`${auth_needed}\``);
   } catch (err) {
     console.error("[TrafficMonitor]", err);
   }
