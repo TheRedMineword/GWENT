@@ -799,35 +799,47 @@ async function loadScript2(src) {
       if (window.location.port !== "8080" && window.location.port !== "8081") {
         const start = performance.now();
 
-        const response = await fetch(
-          `https://time.now/developer/api/timezone/${encodeURIComponent(timezone)}`,
-          {
-            cache: "no-store",
-          },
-        );
+        try {
+          const response = await fetch(
+            `https://time.now/developer/api/timezone/${encodeURIComponent(timezone)}`,
+            {
+              cache: "no-store",
+            },
+          );
 
-        const midpoint = performance.now();
+          const midpoint = performance.now();
 
-        const body = await response.json();
+          const body = await response.json();
 
-        serverTimestamp = new Date(body.datetime).getTime();
+          serverTimestamp = new Date(body.datetime).getTime();
 
-        syncPerf = (start + midpoint) / 2;
+          syncPerf = (start + midpoint) / 2;
 
-        useSecureClock = true;
+          useSecureClock = true;
 
-        console.log(
-          "Secure clock synced",
-          new Date(serverTimestamp).toISOString(),
-        );
+          console.log(
+            "Secure clock synced",
+            new Date(serverTimestamp).toISOString(),
+          );
+        } catch (apiError) {
+          console.warn(
+            "Failed to fetch time from API, switching to local clock.",
+            apiError,
+          );
+          useSecureClock = false;
+          // Set serverTimestamp to local clock time
+          serverTimestamp = Date.now();
+          loadingscreenupdate("Using local clock due to API failure");
+        }
       } else {
         console.warn("Secure clock unavailable, using device clock.");
         useSecureClock = false;
+        serverTimestamp = Date.now(); // fallback to local clock
       }
     } catch (e) {
       console.warn("Secure clock unavailable, using device clock.", e);
-
       useSecureClock = false;
+      serverTimestamp = Date.now(); // fallback to local clock
       loadingscreenupdate(`Init failed! ${e.message}`);
       return false;
     }
