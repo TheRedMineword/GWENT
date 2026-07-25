@@ -158,6 +158,7 @@ function escapeHtml(text) {
 }
 
 function formatInline(text) {
+  console.log("text", text);
   text = text.replace(
     /\[([^\]]+)\]\(([^)\s]+)\)/g,
     '<a class="patch-link" href="$2" target="_blank" rel="noopener">$1</a>',
@@ -168,6 +169,12 @@ function formatInline(text) {
   text = text.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, "<em>$1</em>");
 
   text = text.replace(/_(.+?)_/g, "<em>$1</em>");
+
+  // <color=#hex>text</color>
+  text = text.replace(
+    /&lt;color=(#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}|#[0-9a-fA-F]{8})&gt;([\s\S]*?)&lt;\/color&gt;/g,
+    '<span style="color:$1 !important;"><span style="color:inherit !important;">$2</span></span>',
+  );
 
   return text;
 }
@@ -456,7 +463,7 @@ font-family:Arial,Helvetica,sans-serif;
 .briefing-overlay *{
 box-sizing:border-box;
 font-family:inherit;
-color:#fff;
+/* color:#fff; */
 }
 
 .briefing-loader{
@@ -703,6 +710,11 @@ white-space:pre-wrap;
 
 .patch-gap-3{
     height:20px;
+}
+
+.patch-color,
+.patch-color * {
+    color: inherit !important;
 }
 `;
 

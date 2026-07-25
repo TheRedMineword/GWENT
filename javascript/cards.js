@@ -145,7 +145,7 @@ var card_dict_base = [
     id: "Decoy2",
     deck: "monsters",
     row: "NaR",
-    strength: "10",
+    strength: "8",
     ability: "hero decoy2",
     filename: "custom!Decoy2",
     customassets: {
