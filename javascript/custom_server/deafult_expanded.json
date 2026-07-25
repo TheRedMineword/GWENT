@@ -718,7 +718,10 @@
           "custom!nightwraithsmoon": "New Moon",
           "nightwraith": "Nightwraith",
           "noonwraith": "Noonwraith",
-          "deatheatr": "Necrophages"
+          "deatheatr": "Necrophages",
+          "wardancer": "Wardancer",
+          "valley_twins": "Elders of the Valley",
+          "sunbather_pink": "Chill Sunbather with a bow in thier hair"
         },
         "ui": {
           "elem": {
@@ -1579,7 +1582,10 @@
           "custom!nightwraithsmoon": "Nów",
           "nightwraith": "Północnica",
           "noonwraith": "Południca",
-          "deatheatr": "Trupojad"
+          "deatheatr": "Trupojad",
+          "wardancer": "Tancerz Wojny",
+          "valley_twins": "Elders of the Valley",
+          "sunbather_pink": "Chill Sunbather z kokardą we włosach"
         },
         "ui": {
           "elem": {
@@ -4183,7 +4189,7 @@
         }
       },
       {
-        "name": "Vernon Roche – Blue Stripes Commando Leader",
+        "name": "Vernon Roche — Blue Stripes Commando Leader",
         "id": "1036",
         "deck": "realms",
         "row": "leader",
@@ -4260,7 +4266,7 @@
         "strength": "0",
         "ability": "hero morale",
         "filename": "fortunedrum",
-        "count": "2"
+        "count": "0"
       },
       {
         "name": "Ascended Ancestor Spirit",
@@ -4836,6 +4842,37 @@
           "owner_name": "custom!deatheatersmoon",
           "spawn_count": 3
         }
+      },
+      {
+        "name": "Wardancer",
+        "id": "1044",
+        "deck": "scoiatael",
+        "row": "all",
+        "strength": "4",
+        "ability": "",
+        "filename": "wardancer",
+        "count": "2"
+      },
+      {
+        "name": "Elders of the Valley",
+        "id": "3039",
+        "deck": "sky",
+        "row": "leader",
+        "strength": "",
+        "ability": "francesca_beautiful",
+        "filename": "valley_twins",
+        "count": "0"
+      },
+      {
+        "name": "Chill Sunbather with a bow in thier hair",
+        "id": "3039",
+        "deck": "sky",
+        "row": "agile",
+        "strength": "5",
+        "ability": "",
+        "filename": "sunbather_pink",
+        "count": "1",
+        "discord": "707982033208475759"
       }
     ],
     "factions": {
@@ -5159,10 +5196,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 30
+    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }

@@ -661,6 +661,9 @@ STRNG["en"] = {
     nightwraith: "Nightwraith",
     noonwraith: "Noonwraith",
     deatheatr: "Necrophages",
+    wardancer: "Wardancer",
+    valley_twins: "Elders of the Valley",
+    sunbather_pink: "Chill Sunbather with a bow in thier hair"
   },
   ui: {
     elem: {
