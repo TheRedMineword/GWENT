@@ -1,0 +1,10 @@
+<title>Preparing for the Update</title>
+<desc>Work on the new Gwent update has begun.
+
+When the update is released to the live version, all clients will be forced to restart.
+
+I apologize for any inconvenience this may cause.
+
+~DrMineword</desc>
+<bottom_link>true</bottom_link>
+<bottom_link_value>Join Discord Server for updates!###https://theredmineword.github.io/GWENT/api/discord-iframe/page</bottom_link_value>
