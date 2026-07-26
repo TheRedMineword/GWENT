@@ -49,6 +49,10 @@ var factions = {
           return a.index - b.index;
         });
 
+        if (units.length < 1) {
+          return "fail not enougth cards";
+        }
+
         let card = units[0].card;
         card.animate("stay");
 
@@ -220,6 +224,9 @@ var factions = {
           return a.index - b.index;
         });
 
+        if (units.length < 1) {
+          return "fail not enougth cards";
+        }
         let card = units[0].card;
         card.animate("stay_sky");
 
