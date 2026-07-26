@@ -4873,6 +4873,42 @@
         "filename": "sunbather_pink",
         "count": "1",
         "discord": "707982033208475759"
+      },
+      {
+        "name": "Blue Feather",
+        "id": "3040",
+        "deck": "sky",
+        "row": "siege",
+        "strength": "0",
+        "ability": "avenger",
+        "filename": "bluebird_a",
+        "count": "1",
+        "avenger": "bluebird_sad"
+      },
+      {
+        "name": "Blue Bird",
+        "id": "3041",
+        "deck": "sky",
+        "row": "ranged",
+        "strength": "7",
+        "ability": "hero reinforce",
+        "filename": "bluebird_b",
+        "count": "0",
+        "avenger": "bluebird_a"
+      },
+      {
+        "name": "Sad Child",
+        "id": "3042",
+        "deck": "sky",
+        "row": "siege",
+        "strength": "1",
+        "ability": "avenger",
+        "filename": "bluebird_sad",
+        "count": "0",
+        "reinforce": {
+          "owner_name": "bluebird_b",
+          "spawn_count": 1
+        }
       }
     ],
     "factions": {
@@ -5196,9 +5232,9 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
+    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_vid": "8o-JI8VRyKo",
     "tavern_yt_volume": 90
   },
   "texture_pack_url": null
