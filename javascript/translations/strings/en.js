@@ -1,5 +1,3 @@
-// NOTE FOR EDITORS
-// Muster cards like Vampires — Bruxa need exacly the "—" symbol to work, dont you even dare remove it
 STRNG["en"] = {
   TRANSLATED_BY: "N/A",
   ability: {

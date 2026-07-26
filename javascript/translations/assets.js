@@ -441,6 +441,7 @@ function translateCardDict() {
 
     return {
       ...card,
+      name_muster: card.name,
       ...(translation ? { name: translation } : {}),
     };
   });

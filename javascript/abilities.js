@@ -330,9 +330,10 @@ var ability_dict = {
     name: "",
     description: "",
     placed: async (card) => {
-      let i = card.name.indexOf("—");
-      let cardName = i === -1 ? card.name : card.name.substring(0, i);
-      let pred = (c) => c.name.startsWith(cardName);
+      let i = card.name_muster.indexOf("-");
+      let cardName =
+        i === -1 ? card.name_muster : card.name_muster.substring(0, i);
+      let pred = (c) => c.name_muster.startsWith(cardName);
       let units = card.holder.hand
         .getCards(pred)
         .map((x) => [card.holder.hand, x])
