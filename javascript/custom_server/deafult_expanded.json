@@ -721,7 +721,10 @@
           "deatheatr": "Necrophages",
           "wardancer": "Wardancer",
           "valley_twins": "Elders of the Valley",
-          "sunbather_pink": "Chill Sunbather with a bow in thier hair"
+          "sunbather_pink": "Chill Sunbather with a bow in thier hair",
+          "bluebird_a": "Blue Feather",
+          "bluebird_b": "Blue Bird",
+          "bluebird_sad": "Sad Child"
         },
         "ui": {
           "elem": {
@@ -828,7 +831,8 @@
             "ordinal": {
               "st": "st",
               "nd": "nd",
-              "rd": "rd"
+              "rd": "rd",
+              "th": "th"
             }
           },
           "notif": {
@@ -1585,7 +1589,10 @@
           "deatheatr": "Trupojad",
           "wardancer": "Tancerz Wojny",
           "valley_twins": "Elders of the Valley",
-          "sunbather_pink": "Chill Sunbather z kokardą we włosach"
+          "sunbather_pink": "Chill Sunbather z kokardą we włosach",
+          "bluebird_a": "Niebieskie Pióro",
+          "bluebird_b": "Niebieski Ptak",
+          "bluebird_sad": "Smutne Dziecko"
         },
         "ui": {
           "elem": {
@@ -1690,35 +1697,36 @@
             "me_unready": "Jesteś teraz niegotowy",
             "redraw": "\u003Ccolor=#d5cfe3\u003EPrzelosowałeś kartę \"\u003C/color\u003E\u003Ccolor=#fa4441\u003E%x\u003C/color\u003E\u003Ccolor=#d5cfe3\u003E\" na \"\u003C/color\u003E\u003Ccolor=#41fa66\u003E%y\u003C/color\u003E\u003Ccolor=#d5cfe3\u003E\"\u003C/color\u003E",
             "ordinal": {
-              "st": ".",
-              "nd": ".",
-              "rd": "."
+              "st": "",
+              "nd": "",
+              "rd": "",
+              "th": ""
             }
           },
           "notif": {
-            "nilfgaard-wins-draws": "Nilfgaard wins draws",
-            "me_win_via_nilfgaard": "Nilfgaard faction ability triggered:\nNilfgaard wins any round that ends in a draw.",
-            "op_win_via_nilfgaard": "Nilfgaard faction ability triggered:\nNilfgaard wins any round that ends in a draw.",
-            "op-leader": "Opponent uses leader",
+            "nilfgaard-wins-draws": "Nilfgaard wygrywa remisy",
+            "me_win_via_nilfgaard": "Zdolność Nilfgaardu aktywowana:\nNilfgaard wygrywa każdą turę zakończoną remisem.",
+            "op_win_via_nilfgaard": "Zdolność Nilfgaardu aktywowana:\nNilfgaard wygrywa każdą turę zakończoną remisem.",
+            "op-leader": "Przeciwnik używa zdolności Leadera",
             "op-white-flame": "The opponent's leader cancel\nyour opponent's Leader Ability",
             "meve_white_queen": "Lyria & Rivia leader allows both players to restore\n2 units when using the medic ability.",
-            "medicextra": "You and opponent can revive extra card from medic ability!",
-            "me-first": "You will go first",
-            "op-first": "Your opponent will go first",
+            "medicextra": "Ty i przeciwnik możecie wskrzesić medykami dodatkową kartę!",
+            "me-first": "Rozpoczniesz grę",
+            "op-first": "Przeciwnik rozpocznie grę",
             "me-coin": "You will go first",
             "me-coin-lambert": "Lambert lets you start the game",
             "op-coin": "Your opponent will go first",
             "op-coin-lambert": "Lambert says that you suck!\nThe opponent starts the game!",
-            "round-start": "Round Start",
-            "me-pass": "Round passed",
-            "op-pass": "Your opponent has passed",
-            "win-round": "You won the round!",
-            "win-opleft": "Your opponent left the game",
+            "round-start": "Początek Rundy",
+            "me-pass": "Spasowałeś",
+            "op-pass": "Przeciwnik spasował",
+            "win-round": "Wygrałeś rundę!",
+            "win-opleft": "Przeciwnik wyszedł z gry",
             "sv-err": "Lost connection to the server",
-            "lose-round": "Your opponent won the round",
-            "draw-round": "The round ended in a draw",
-            "me-turn": "Your turn!",
-            "op-turn": "Opponent's turn",
+            "lose-round": "Przeciwnik wygrał rundę",
+            "draw-round": "Runda zakończyła się remisem",
+            "me-turn": "Twoja tura!",
+            "op-turn": "Tura przeciwnika",
             "north": "Northern Realms faction ability triggered:\nNorth draws an additional card.",
             "north-scorch-cancelled": "Northern Realms leader ability used:\nScorch ability cancelled for the rest of the round.",
             "scol_secondchance": "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from grave.",

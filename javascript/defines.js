@@ -408,7 +408,7 @@ function ordinal(n) {
   if (j === 2 && k !== 12) return `${n}${getUiStrng("ordinal.nd")}`;
   if (j === 3 && k !== 13) return `${n}${getUiStrng("ordinal.rd")}`;
 
-  return `${n}th`;
+  return `${n}${getUiStrng("ordinal.th")}`;
 }
 
 let isconnectedtosession = false;

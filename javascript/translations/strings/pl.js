@@ -757,7 +757,10 @@ STRNG["pl"] = {
     deatheatr: "Trupojad",
     wardancer: "Tancerz Wojny",
     valley_twins: "Elders of the Valley",
-    sunbather_pink: "Chill Sunbather z kokardą we włosach"
+    sunbather_pink: "Chill Sunbather z kokardą we włosach",
+    bluebird_a: "Niebieskie Pióro",
+    bluebird_b: "Niebieski Ptak",
+    bluebird_sad: "Smutne Dziecko"
   },
   ui: {
     elem: {
@@ -872,40 +875,41 @@ STRNG["pl"] = {
       redraw:
         "<color=#d5cfe3>Przelosowałeś kartę \"</color><color=#fa4441>%x</color><color=#d5cfe3>\" na \"</color><color=#41fa66>%y</color><color=#d5cfe3>\"</color>",
         ordinal: {
-      "st": ".",
-      "nd": ".",
-      "rd": "."
+      "st": "",
+      "nd": "",
+      "rd": "",
+      "th": ""
     }
     },
     notif: {
-      "nilfgaard-wins-draws": "Nilfgaard wins draws",
+      "nilfgaard-wins-draws": "Nilfgaard wygrywa remisy",
       me_win_via_nilfgaard:
-        "Nilfgaard faction ability triggered:\nNilfgaard wins any round that ends in a draw.",
+        "Zdolność Nilfgaardu aktywowana:\nNilfgaard wygrywa każdą turę zakończoną remisem.",
       op_win_via_nilfgaard:
-        "Nilfgaard faction ability triggered:\nNilfgaard wins any round that ends in a draw.",
-      "op-leader": "Opponent uses leader",
+        "Zdolność Nilfgaardu aktywowana:\nNilfgaard wygrywa każdą turę zakończoną remisem.",
+      "op-leader": "Przeciwnik używa zdolności Leadera",
       "op-white-flame":
-        "The opponent's leader cancel\nyour opponent's Leader Ability",
+        "The opponent's leader cancel\nyour opponent's Leader Ability", //unused
       meve_white_queen:
-        "Lyria & Rivia leader allows both players to restore\n2 units when using the medic ability.",
-      medicextra: "You and opponent can revive extra card from medic ability!",
-      "me-first": "You will go first",
-      "op-first": "Your opponent will go first",
-      "me-coin": "You will go first",
-      "me-coin-lambert": "Lambert lets you start the game",
-      "op-coin": "Your opponent will go first",
+        "Lyria & Rivia leader allows both players to restore\n2 units when using the medic ability.", //unused
+      medicextra: "Ty i przeciwnik możecie wskrzesić medykami dodatkową kartę!",
+      "me-first": "Rozpoczniesz grę",
+      "op-first": "Przeciwnik rozpocznie grę",
+      "me-coin": "You will go first", //unused
+      "me-coin-lambert": "Lambert lets you start the game", //unused
+      "op-coin": "Your opponent will go first", //unused
       "op-coin-lambert":
-        "Lambert says that you suck!\nThe opponent starts the game!",
-      "round-start": "Round Start",
-      "me-pass": "Round passed",
-      "op-pass": "Your opponent has passed",
-      "win-round": "You won the round!",
-      "win-opleft": "Your opponent left the game",
-      "sv-err": "Lost connection to the server",
-      "lose-round": "Your opponent won the round",
-      "draw-round": "The round ended in a draw",
-      "me-turn": "Your turn!",
-      "op-turn": "Opponent's turn",
+        "Lambert says that you suck!\nThe opponent starts the game!", //unused
+      "round-start": "Początek Rundy",
+      "me-pass": "Spasowałeś",
+      "op-pass": "Przeciwnik spasował",
+      "win-round": "Wygrałeś rundę!",
+      "win-opleft": "Przeciwnik wyszedł z gry",
+      "sv-err": "Lost connection to the server", //unused
+      "lose-round": "Przeciwnik wygrał rundę",
+      "draw-round": "Runda zakończyła się remisem",
+      "me-turn": "Twoja tura!",
+      "op-turn": "Tura przeciwnika",
       north:
         "Northern Realms faction ability triggered:\nNorth draws an additional card.",
       "north-scorch-cancelled":

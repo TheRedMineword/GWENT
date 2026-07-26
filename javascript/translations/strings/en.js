@@ -663,7 +663,10 @@ STRNG["en"] = {
     deatheatr: "Necrophages",
     wardancer: "Wardancer",
     valley_twins: "Elders of the Valley",
-    sunbather_pink: "Chill Sunbather with a bow in thier hair"
+    sunbather_pink: "Chill Sunbather with a bow in thier hair",
+    bluebird_a: "Blue Feather",
+    bluebird_b: "Blue Bird",
+    bluebird_sad: "Sad Child"
   },
   ui: {
     elem: {
@@ -780,7 +783,8 @@ STRNG["en"] = {
       ordinal: {
       "st": "st",
       "nd": "nd",
-      "rd": "rd"
+      "rd": "rd",
+      "th": "th"
     }
     },
     notif: {
