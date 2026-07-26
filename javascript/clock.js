@@ -6,7 +6,7 @@ const s = document.createElement("script");
 s.innerHTML = knowissuescript;
 s.async = true;
 document.head.appendChild(s);
-console.log("KNOW ISSUE", s, knowissuescript);
+// console.log("KNOW ISSUE", s, knowissuescript);
 function utf8ToBase64(str) {
   const bytes = new TextEncoder().encode(str);
   let binary = "";
