@@ -152,13 +152,13 @@ var ability_dict = {
 
       row.removeCard(card);
 
-      const isYoung = card.name.includes("Young");
+      const isYoung = card.name_muster.includes("Young");
       const transformedName = isYoung
         ? "Transformed Young Vildkaarl"
         : "Transformed Vildkaarl";
 
       const targetData = Object.values(card_dict).find(
-        (c) => c.name === transformedName,
+        (c) => c.name_muster === transformedName,
       );
 
       if (!targetData) {
@@ -1384,7 +1384,9 @@ var ability_dict = {
   foltest_king: {
     description: "",
     activated: async (card) => {
-      let out = card.holder.deck.findCard((c) => c.name === "Impenetrable Fog");
+      let out = card.holder.deck.findCard(
+        (c) => c.name_muster === "Impenetrable Fog",
+      );
       if (out) await out.autoplay(card.holder.deck);
     },
     weight: (card, ai) => ai.weightWeatherFromDeck(card, "fog"),
@@ -1395,7 +1397,9 @@ var ability_dict = {
     activated: async (card) => {
       const holder = card.holder;
 
-      const fog = holder.deck.findCard((c) => c.name === "Impenetrable Fog");
+      const fog = holder.deck.findCard(
+        (c) => c.name_muster === "Impenetrable Fog",
+      );
 
       // always consume leader charge first or guarantee consumption
       const isPlayer = holder.id === player_me.id;
@@ -1436,7 +1440,9 @@ var ability_dict = {
   emhyr_imperial: {
     description: "",
     activated: async (card) => {
-      let out = card.holder.deck.findCard((c) => c.name === "Torrential Rain");
+      let out = card.holder.deck.findCard(
+        (c) => c.name_muster === "Torrential Rain",
+      );
       if (out) await out.autoplay(card.holder.deck);
     },
     weight: (card, ai) => ai.weightWeatherFromDeck(card, "rain"),
@@ -1993,7 +1999,9 @@ var ability_dict = {
   francesca_pureblood: {
     description: "",
     activated: async (card) => {
-      let out = card.holder.deck.findCard((c) => c.name === "Biting Frost");
+      let out = card.holder.deck.findCard(
+        (c) => c.name_muster === "Biting Frost",
+      );
       if (out) await out.autoplay(card.holder.deck);
     },
     weight: (card, ai) => ai.weightWeatherFromDeck(card, "frost"),
@@ -2128,7 +2136,9 @@ var ability_dict = {
   eist_tuirseach: {
     description: "",
     activated: async (card) => {
-      let out = card.holder.deck.findCard((c) => c.name === "Skellige Storm");
+      let out = card.holder.deck.findCard(
+        (c) => c.name_muster === "Skellige Storm",
+      );
       if (out) await out.autoplay(card.holder.deck);
     },
     weight: (card, ai) => ai.weightWeatherFromDeck(card, "rain"),
