@@ -330,7 +330,7 @@ var ability_dict = {
     name: "",
     description: "",
     placed: async (card) => {
-      let i = card.name.indexOf("-");
+      let i = card.name.indexOf("—");
       let cardName = i === -1 ? card.name : card.name.substring(0, i);
       let pred = (c) => c.name.startsWith(cardName);
       let units = card.holder.hand
@@ -1741,11 +1741,7 @@ var ability_dict = {
         ...player_me.deck,
         cards: [...player_me.deck.cards],
       };
-      deck.cards = shuffleSeeded(
-        deck.cards,
-        utf8ToBase64(`${Math.random().toString(36).substring(2, 10)}`),
-        false,
-      ).array;
+      deck.cards.sort((a, b) => a.name.localeCompare(b.name));
 
       console.log("[EREDIN_DESTROYER] Ability activated.", hand, deck);
 
