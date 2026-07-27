@@ -3,6 +3,8 @@ let IsNowCustom = false;
 // CONFIG
 // ===============================
 const IGNORE_PATTERNS = [
+  "resync_contnet",
+  "resync_now_apply",
   "knowissuescript",
   "youtubeInitializing",
   "STRNG_base",

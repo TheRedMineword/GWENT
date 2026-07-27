@@ -4888,7 +4888,7 @@
         "deck": "sky",
         "row": "siege",
         "strength": "0",
-        "ability": "avenger",
+        "ability": "avenger DontPickMeUp",
         "filename": "bluebird_a",
         "count": "1",
         "avenger": "bluebird_sad"
@@ -4910,7 +4910,7 @@
         "deck": "sky",
         "row": "siege",
         "strength": "1",
-        "ability": "avenger",
+        "ability": "avenger DontPickMeUp",
         "filename": "bluebird_sad",
         "count": "0",
         "reinforce": {
@@ -5238,12 +5238,15 @@
       },
       "skellige_bond_summoner": {
         "description": ""
+      },
+      "time_round_reverse": {
+        "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
-    "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "8o-JI8VRyKo",
-    "tavern_yt_volume": 90
+    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
+    "audio_yt_vid_soundtrack_volume": 47,
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }
