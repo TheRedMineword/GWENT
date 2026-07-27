@@ -2086,7 +2086,6 @@ var ability_dict = {
         deck.addCardElement();
         deck.resize();
       };
-
       // Move all my grave cards to bottom (deterministic order).
       for (const c of meGraveSorted) {
         await moveToDeckBottom(c, card.holder);
@@ -2334,6 +2333,109 @@ var ability_dict = {
       if (!valid.length) return 0;
 
       return 30;
+    },
+  },
+  time_round_reverse: {
+    description: ``,
+    activated: async (card) => {
+      const _game = game;
+
+      if (game.roundCount < 1) {
+        return false;
+      }
+      // Remove previous round from history
+      _game.roundHistory.pop();
+      _game.roundCount--;
+
+      // Refund one gem to each player
+      //    player_me.health = Math.min(player_me.health + 1, maxhealth);
+      //    player_op.health = Math.min(player_op.health + 1, maxhealth);
+
+      //    player_me.updateHealth?.();
+      //   player_op.updateHealth?.();
+      if (player_me.health < 2) {
+        document
+          .getElementById(`gem${player_me.health}-` + "me")
+          .classList.add("gem-on");
+        player_me.health += 1;
+        //   warn_screen("+1 life me");
+      }
+      if (player_op.health < 2) {
+        document
+          .getElementById(`gem${player_op.health}-` + "op")
+          .classList.add("gem-on");
+        player_op.health += 1;
+        // warn_screen("+1 life op");
+      }
+      const meGrave = [...player_me.grave.cards];
+      const opGrave = [...player_op.grave.cards];
+
+      // Pick resurrection targets BEFORE moving cards.
+      const meRes = meGrave.filter(() => Math.random() < 0.6);
+      const opRes = opGrave.filter(() => Math.random() < 0.6);
+      console.log("REVIVER", meRes);
+      // Return all cards to the bottom.
+      const moveToDeckBottom2 = async (c, holder) => {
+        const source = holder.grave;
+        const deck = holder.deck;
+
+        // Run the existing translateTo visual step (same as moveTo does).
+        // moveTo used 'await translateTo(...)' in gwent.js — translateTo is synchronous-ish but awaiting is harmless.
+        await translateTo(c, source, deck);
+
+        // Remove the card from the source container (updates arrays + DOM).
+        // This mirrors what moveTo did (source.removeCard(card)).
+        source.removeCard(c);
+
+        // Keep card metadata consistent.
+        c.holder = holder;
+
+        // Append to the bottom of the deck array deterministically.
+        deck.cards.push(c);
+
+        // Ensure visual representation matches the deck array (use existing deck helpers).
+        deck.addCardElement();
+        deck.resize();
+      };
+      for (const c of meGrave) await moveToDeckBottom2(c, player_me);
+
+      for (const c of opGrave) await moveToDeckBottom2(c, player_op);
+
+      // Shuffle afterwards.
+      //player_me.deck.shuffle();
+      //player_op.deck.shuffle();
+      player_me.deck.cards = shuffleSeeded(
+        player_me.deck.cards,
+        utf8ToBase64(random_string_gen()),
+        `Shuffle deck`,
+      ).array;
+
+      // Give the copied cards.
+      for (const cz of meRes) {
+        var cardData_c = Object.values(card_dict).find(
+          (c) => c.filename === cz.filename,
+        );
+        var cc = new Card(cardData_c, player_me);
+        player_me.hand.addCard(cc);
+        cc.animate("morale");
+      }
+
+      // Reserve the opponent's hand slot until the payload arrives.
+      for (const c of opRes) {
+        player_op.hand.cards.push({});
+        // Later:
+        // payload.cards.push(c);
+      }
+
+      if (card.holder.id === player_me.id) {
+        resync_now_apply = true;
+      }
+      await init_sync_hands();
+      if (!resync_now_apply) {
+        showSideTooltip("sync");
+        await sleep(3000);
+        await resycn_recive(resync_contnet);
+      }
     },
   },
 };

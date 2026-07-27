@@ -1123,26 +1123,11 @@ socket.onmessage = async (event) => {
       tocar("game_start", false);
       break;
 
-    case "resync_hands()##BLOCK##": //Resync function disabled, due to changes made in play
-      try {
-        console.log("[RESYNC]", "recived", data);
-        var rebuild = await deserializeCards(data.data, player_op);
-        console.log("[RESYNC]", "REBUILD", rebuild);
-        player_op.hand.cards = rebuild;
-        console.log("[RESYNC]", "op is", player_op.hand.cards);
-        try {
-          console.log(
-            "[RESYNC]",
-            "sync cards counter op",
-            player_op.hand.cards.length,
-          );
-          var op_counter = document.getElementById("hand-count-op");
-          op_counter.innerHTML = player_op.hand.cards.length;
-        } catch (e) {
-          console.log("[RESYNC]", "sync cards counter op", e);
-        }
-      } catch (e) {
-        console.log("[RESYNC]", " FAILED", " OUT", e);
+    case "resync_hands()": //Resync function disabled, due to changes made in play
+      resync_contnet = data;
+      if (resync_now_apply) {
+        resync_now_apply = false;
+        await resycn_recive(resync_contnet);
       }
       break;
     case "SpecialAbility":
@@ -1720,8 +1705,9 @@ class Player {
   endRound(win) {
     if (!win) {
       if (this.health < 1) return;
+      var idc = this.health === 2 ? 1 : 2;
       document
-        .getElementById("gem" + this.health + "-" + this.tag)
+        .getElementById("gem" + idc + "-" + this.tag)
         .classList.remove("gem-on");
       this.health--;
     }

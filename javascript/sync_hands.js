@@ -96,6 +96,31 @@ async function init_sync_hands() {
   return true;
 }
 
+async function resycn_recive(payload) {
+  try {
+    console.log("[RESYNC]", "recived", payload);
+    var rebuild = await deserializeCards(payload.data, player_op);
+    var rebuild2 = await deserializeCards(payload.deck, player_op);
+    console.log("[RESYNC]", "REBUILD", rebuild, rebuild2);
+    player_op.hand.cards = rebuild;
+    player_op.deck.cards = rebuild2;
+    console.log("[RESYNC]", "op is", player_op.hand.cards);
+    try {
+      console.log(
+        "[RESYNC]",
+        "sync cards counter op",
+        player_op.hand.cards.length,
+      );
+      var op_counter = document.getElementById("hand-count-op");
+      op_counter.innerHTML = player_op.hand.cards.length;
+    } catch (e) {
+      console.log("[RESYNC]", "sync cards counter op", e);
+    }
+  } catch (e) {
+    console.log("[RESYNC]", " FAILED", " OUT", e);
+  }
+}
+
 (() => {
   console.log("[WAKE] init");
   // Run only when NOT on localhost / local development
