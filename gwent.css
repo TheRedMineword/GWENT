@@ -70,6 +70,304 @@ transform-origin: left center;
     border-radius:6px;
 }
 
+/* =========================
+   CRYSTAL SHARDS
+========================= */
+
+.crystal-hex {
+    position: fixed;
+
+    width: 10px;
+    height: 12px;
+
+    clip-path: polygon(
+        50% 0%,
+        100% 25%,
+        100% 75%,
+        50% 100%,
+        0% 75%,
+        0% 25%
+    );
+
+    pointer-events: none;
+    z-index: 9999;
+}
+
+
+/* shards flying away */
+
+.hex-out {
+    animation: hexOut 800ms ease forwards;
+}
+
+
+/* shards returning */
+
+.hex-in {
+    animation: hexIn 800ms ease forwards;
+}
+
+
+
+@keyframes hexOut {
+
+    from {
+        transform:
+            translate(0,0)
+            scale(1);
+
+        opacity:1;
+    }
+
+
+    to {
+
+        transform:
+            translate(var(--x), var(--y))
+            scale(0);
+
+        opacity:0;
+    }
+}
+
+
+
+@keyframes hexIn {
+
+    from {
+
+        transform:
+            translate(var(--x), var(--y))
+            scale(1);
+
+        opacity:1;
+    }
+
+
+    to {
+
+        transform:
+            translate(0,0)
+            scale(0);
+
+        opacity:0;
+    }
+}
+
+
+
+/* =========================
+   CRYSTAL BODY ANIMATION
+========================= */
+
+
+.crystal-break {
+
+    animation:
+        crystalBreak 800ms ease forwards;
+
+}
+
+
+
+.crystal-restore {
+
+    animation:
+        crystalRestore 800ms ease forwards;
+
+}
+
+
+
+
+@keyframes crystalBreak {
+
+
+    0% {
+
+        transform:
+            scale(1)
+            rotate(0deg);
+
+        opacity:1;
+
+        filter:
+            brightness(1);
+    }
+
+
+    15% {
+
+        transform:
+            scale(1.15)
+            rotate(-5deg);
+
+        filter:
+            brightness(3);
+    }
+
+
+    35% {
+
+        transform:
+            scale(1.05)
+            rotate(8deg);
+
+        filter:
+            brightness(1.5);
+    }
+
+
+    100% {
+
+        transform:
+            scale(.85)
+            rotate(15deg);
+
+        opacity:.45;
+
+        filter:
+            brightness(.4);
+    }
+
+}
+
+
+
+
+@keyframes crystalRestore {
+
+
+    0% {
+
+        transform:
+            scale(.85)
+            rotate(15deg);
+
+        opacity:.45;
+
+        filter:
+            brightness(.4);
+    }
+
+
+    40% {
+
+        transform:
+            scale(1.12)
+            rotate(-8deg);
+
+        opacity:1;
+
+        filter:
+            brightness(3);
+    }
+
+
+    60% {
+
+        transform:
+            scale(1.05)
+            rotate(3deg);
+
+        filter:
+            brightness(1.8);
+    }
+
+
+    100% {
+
+        transform:
+            scale(1)
+            rotate(0deg);
+
+        opacity:1;
+
+        filter:
+            brightness(1);
+    }
+
+}
+
+
+
+
+/* =========================
+   FLASH / MAGIC PULSE
+========================= */
+
+
+.crystal-glow {
+
+    position: fixed;
+
+    width: 25px;
+    height: 25px;
+
+    transform:
+        translate(-50%, -50%);
+
+    border-radius:50%;
+
+    pointer-events:none;
+
+    opacity:0;
+
+    z-index:9998;
+
+    animation:
+        crystalGlow 350ms ease-out forwards;
+}
+
+
+
+@keyframes crystalGlow {
+
+    0% {
+
+        opacity:0;
+
+        transform:
+            translate(-50%, -50%)
+            scale(.3);
+
+        filter:
+            blur(2px);
+    }
+
+
+    30% {
+
+        opacity:.5;
+
+        transform:
+            translate(-50%, -50%)
+            scale(1.2);
+
+        filter:
+            blur(5px);
+    }
+
+
+    100% {
+
+        opacity:0;
+
+        transform:
+            translate(-50%, -50%)
+            scale(1.8);
+
+        filter:
+            blur(10px);
+    }
+}
+
+
+
+/* =========================
+   OPTIONAL GEM STATE
+========================= */
+
 #message-box {
     z-index: 999999999999999999;
     position: fixed;

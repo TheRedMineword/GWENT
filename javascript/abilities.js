@@ -2354,16 +2354,16 @@ var ability_dict = {
       //    player_me.updateHealth?.();
       //   player_op.updateHealth?.();
       if (player_me.health < 2) {
-        document
-          .getElementById(`gem${player_me.health}-` + "me")
-          .classList.add("gem-on");
+        var docid = document.getElementById(`gem${player_me.health}-` + "me");
+        //  .classList.add("gem-on");
+        animatePopFromObject(docid, "#C14842", "#953530", true);
         player_me.health += 1;
         //   warn_screen("+1 life me");
       }
       if (player_op.health < 2) {
-        document
-          .getElementById(`gem${player_op.health}-` + "op")
-          .classList.add("gem-on");
+        var docid2 = document.getElementById(`gem${player_op.health}-` + "op");
+        //  .classList.add("gem-on");
+        animatePopFromObject(docid2, "#C14842", "#953530", true);
         player_op.health += 1;
         // warn_screen("+1 life op");
       }

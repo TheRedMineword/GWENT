@@ -1706,9 +1706,10 @@ class Player {
     if (!win) {
       if (this.health < 1) return;
       var idc = this.health === 2 ? 1 : 2;
-      document
-        .getElementById("gem" + idc + "-" + this.tag)
-        .classList.remove("gem-on");
+      var docid = document.getElementById("gem" + idc + "-" + this.tag);
+      console.log("Break crystal", `${"gem" + idc + "-" + this.tag}`, docid);
+      animatePopFromObject(docid, "#C14842", "#953530", false);
+      //  docid.classList.remove("gem-on");
       this.health--;
     }
     this.setPassed(false);

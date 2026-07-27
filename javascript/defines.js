@@ -488,3 +488,81 @@ function translateDefinesJS() {
   map_results_txt.cheater = getUiStrngDefinesJS("map_results.cheater");
 }
 translateDefinesJS();
+
+async function animatePopFromObject(elem, colorhex, aftercolorhex, isrestored) {
+  return new Promise((resolve) => {
+    if (!elem) {
+      resolve();
+      return;
+    }
+
+    const duration = 800;
+    const rect = elem.getBoundingClientRect();
+
+    // invisible instant flash
+    const glow = document.createElement("div");
+    glow.className = "crystal-glow";
+    glow.style.backgroundColor = colorhex;
+
+    glow.style.left = rect.left + rect.width / 2 + "px";
+
+    glow.style.top = rect.top + rect.height / 2 + "px";
+
+    document.body.appendChild(glow);
+
+    const particles = [];
+
+    for (let i = 0; i < 8; i++) {
+      const hex = document.createElement("div");
+
+      hex.className = "crystal-hex";
+      hex.style.backgroundColor = colorhex;
+
+      hex.style.left = rect.left + rect.width / 2 + "px";
+
+      hex.style.top = rect.top + rect.height / 2 + "px";
+
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 50 + Math.random() * 60;
+
+      hex.style.setProperty("--x", Math.cos(angle) * distance + "px");
+
+      hex.style.setProperty("--y", Math.sin(angle) * distance + "px");
+
+      document.body.appendChild(hex);
+      particles.push(hex);
+
+      hex.classList.add(isrestored ? "hex-in" : "hex-out");
+    }
+
+    // crystal animation
+    elem.classList.remove("crystal-break", "crystal-restore");
+
+    // force restart animation
+    void elem.offsetWidth;
+
+    if (isrestored) {
+      elem.classList.add("crystal-restore");
+
+      setTimeout(() => {
+        elem.classList.add("gem-on");
+      }, 500);
+    } else {
+      elem.classList.add("crystal-break");
+
+      setTimeout(() => {
+        elem.classList.remove("gem-on");
+      }, 120);
+    }
+
+    setTimeout(() => {
+      elem.classList.remove("crystal-break", "crystal-restore");
+
+      glow.remove();
+
+      particles.forEach((p) => p.remove());
+
+      resolve();
+    }, duration);
+  });
+}
