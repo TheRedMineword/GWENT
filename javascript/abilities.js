@@ -372,7 +372,6 @@ var ability_dict = {
           await card.holder.deck.draw(card.holder.hand);
       }
       card.holder = card.holder.opponent();
-      //await resync_hands();
     },
   },
   resilience: {
@@ -534,8 +533,6 @@ var ability_dict = {
           console.log("Is empty deck? got error", e);
         }
       }
-      // card.holder = card.holder.opponent();
-      //await resync_hands();
     },
   },
   axii: {
