@@ -2583,10 +2583,13 @@ class Row extends CardContainer {
       } else {
         total = Math.min(1, total);
       }
-    if (game.doubleSpyPower && card.abilities.includes("spy")) total *= 2;
-    if (game.doubleSpyPower && card.abilities.includes("sabotage"))
+    if (game.doubleSpyPower && card.abilities.includes("spy")) {
+      total *= 2;
+    }
+    if (game.doubleSpyPower && card.abilities.includes("sabotage")) {
       //Double sabotage power
-      total = Math.ceil(total * 1.5);
+      total = Math.ceil(total * 2);
+    }
     let bond = this.effects.bond[card.id()];
     if (isNumber(bond) && bond > 1) total *= Number(bond);
     //	if (this?.effects.morale > 0) {
