@@ -20,6 +20,7 @@ https://pngtree.com/freebackground/vintage-crinkled-paper-texture-aged-brown-bac
 - Summer gwent board assets; Sand: https://www.vecteezy.com/photo/9333540-background-and-texture-photo-of-sand-on-the-beach Rock: https://www.pngwing.com/en/free-png-bzyrv
 - Gwent board "Darkfountain"; https://www.magnific.com/free-photo/black-brick-wall_932394.htm https://www.vecteezy.com/photo/11207625-black-brick-wall-of-dark-stone-texture-and-background-stone-floor-wide-picture https://usagif.com/gif/water-4
 - starting screen image (normal): https://wall.alphacoders.com/big.php?i=1036489
+- Gwent backgrounds Isle of Mists uses: https://www.magnific.com/free-photo/dark-wood-table-vertical_1000714.htm
 - Moonlight bacround: https://pixabay.com/photos/stars-milky-way-night-sky-blue-sky-1869692/
 - Pass sound [pixabay.com](https://pixabay.com/sound-effects/film-special-effects-copyright-free-swoosh-487669/) by DRAGON-STUDIO
 - Game ends: draw - [TF2 Stealmate](https://www.youtube.com/watch?v=Gz7l7d7otIs)

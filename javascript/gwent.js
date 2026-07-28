@@ -7322,6 +7322,9 @@ async function lunch_gwent_ui() {
   //  onYouTubeIframeAPIReady();
   dm = new DeckMaker();
   console.log("DM", dm);
+  if (wsUrl === "ws://localhost:8081") {
+    notifyLocalhost(timed_count_change);
+  }
 }
 
 let spacebarPressTimer;

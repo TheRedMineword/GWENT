@@ -442,6 +442,7 @@ function translateCardDict() {
     return {
       ...card,
       name_muster: card.name,
+      name_english: getTranslation_cards_eng(`card.${card.filename}`),
       ...(translation ? { name: translation } : {}),
     };
   });
@@ -485,6 +486,21 @@ function getTranslation(key) {
 
 function getTranslation_cards(key) {
   const langResult = getNested(STRNG[lang], key);
+
+  if (langResult !== undefined) {
+    return langResult;
+  }
+
+  const engResult = getNested(STRNG.en, key);
+
+  if (engResult !== undefined) {
+    return engResult;
+  }
+
+  return false;
+}
+function getTranslation_cards_eng(key) {
+  const langResult = getNested(STRNG["en"], key);
 
   if (langResult !== undefined) {
     return langResult;

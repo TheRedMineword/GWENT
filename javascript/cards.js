@@ -3618,6 +3618,7 @@ function pushTimedCount(card) {
     start: new Date(card.count_monitor.duration.start).getTime(),
     duration: Number(card.count_monitor.duration.duration) * 1000,
     activated: false,
+    _card: card,
   };
 
   timed_count_change.push(timer);
@@ -3684,3 +3685,27 @@ function scanTimedCountChange() {
 // Run every second
 setInterval(scanTimedCountChange, 1000);
 //setInterval(scanMessages, 100);
+
+async function notifyLocalhost(timedCount) {
+  const url = "http://localhost:8080/api/recivethat";
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        timed_count_change: timedCount,
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error(`${res.status} ${res.statusText}`);
+    }
+
+    console.log(`✓ Sent timed_count_change=${timedCount} to ${url}`);
+  } catch (err) {
+    console.log("Local API not available, skipping notification.");
+  }
+}
