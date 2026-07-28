@@ -2702,7 +2702,7 @@ class Weather extends CardContainer {
   async addCard(card) {
     super.addCard(card);
     card.elem.classList.add("noclick");
-    if (card.name === "Clear Weather") {
+    if (card.name_muster === "Clear Weather") {
       // TODO Sunlight animation
       sunlightEffect();
       // idk what it is
