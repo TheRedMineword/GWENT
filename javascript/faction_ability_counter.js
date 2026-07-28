@@ -441,7 +441,7 @@ async function ability_turn_skiper() {
     if (player_op.passed && !player_me.passed) {
       ui.enablePlayer(false);
       showTooltip(
-        `The opponent synchronizes with the game, wait ${RegisterMovesHold / 1000} seconds, and think about the next move`,
+        getUiStrng("sync.sync").replace("%s", RegisterMovesHold / 1000),
       );
       ui.enablePlayer(false);
       await sleep(RegisterMovesHold);
@@ -848,7 +848,7 @@ async function ability_counter_d20__me() {
   if (player_op.passed && !player_me.passed) {
     ui.enablePlayer(false);
     showTooltip(
-      `The opponent synchronizes with the game, wait ${(RegisterMovesHold * 1.3) / 1000} seconds, and think about the next move`,
+      getUiStrng("sync.sync").replace("%s", (RegisterMovesHold * 1.3) / 1000),
     );
     ui.enablePlayer(false);
     await sleep(RegisterMovesHold * 1.3);
