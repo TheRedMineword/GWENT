@@ -3999,6 +3999,9 @@ class Card {
     if (card.filename === "Gaunter_Leader") {
       tmp = "neutral_Gaunter_Leader";
     }
+    if (card.filename === "Gaunter_Leader2") {
+      tmp = "neutral_Gaunter_Leader2";
+    }
 
     elem.style.backgroundImage = smallURL(tmp);
     elem.classList.add("card");
@@ -5193,6 +5196,9 @@ class UI {
     if (card.filename === "Gaunter_Leader") {
       tmp = "neutral_Gaunter_Leader";
     }
+    if (card.filename === "Gaunter_Leader2") {
+      tmp = "neutral_Gaunter_Leader2";
+    }
 
     this.preview.getElementsByClassName("card-lg")[0].style.backgroundImage =
       largeURL(tmp);
@@ -5822,6 +5828,9 @@ class Carousel {
         if (card.filename === "Gaunter_Leader") {
           tmp = "neutral_Gaunter_Leader";
         }
+        if (card.filename === "Gaunter_Leader2") {
+          tmp = "neutral_Gaunter_Leader2";
+        }
 
         this.previews[i].style.backgroundImage = largeURL(tmp);
         this.previews[i].classList.remove("hide");
@@ -6209,6 +6218,9 @@ class DeckMaker {
       if (this.leader.card.filename === "Gaunter_Leader") {
         tmp = "neutral_Gaunter_Leader";
       }
+      if (this.leader.card.filename === "Gaunter_Leader2") {
+        tmp = "neutral_Gaunter_Leader2";
+      }
 
       this.leader_elem.children[1].style.backgroundImage = largeURL(tmp);
     }
@@ -6226,6 +6238,9 @@ class DeckMaker {
 
     if (this.leader.card.filename === "Gaunter_Leader") {
       tmp = "neutral_Gaunter_Leader";
+    }
+    if (this.leader.card.filename === "Gaunter_Leader2") {
+      tmp = "neutral_Gaunter_Leader2";
     }
 
     this.leader_elem.children[1].style.backgroundImage = largeURL(tmp);
@@ -6321,6 +6336,9 @@ class DeckMaker {
     if (card_data.filename === "Gaunter_Leader") {
       tmp = "neutral_Gaunter_Leader";
     }
+    if (card_data.filename === "Gaunter_Leader2") {
+      tmp = "neutral_Gaunter_Leader2";
+    }
 
     elem.style.backgroundImage = largeURL(tmp);
     elem.classList.add("card-lg");
@@ -6414,6 +6432,9 @@ class DeckMaker {
 
         if (data.card.filename === "Gaunter_Leader") {
           tmp = "neutral_Gaunter_Leader";
+        }
+        if (data.card.filename === "Gaunter_Leader2") {
+          tmp = "neutral_Gaunter_Leader2";
         }
 
         this.leader_elem.children[1].style.backgroundImage = largeURL(tmp);
@@ -6901,6 +6922,9 @@ function createCardElement(card) {
 
   if (card.filename === "Gaunter_Leader") {
     tmp = "neutral_Gaunter_Leader";
+  }
+  if (card.filename === "Gaunter_Leader2") {
+    tmp = "neutral_Gaunter_Leader2";
   }
 
   elem.style.backgroundImage = smallURL(tmp);

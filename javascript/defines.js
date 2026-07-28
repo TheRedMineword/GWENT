@@ -213,6 +213,9 @@ let gaunter_lider = {
   extra_cards: 0.5,
   revive: 0.6,
 };
+let gaunter_lider_bringer_from_death = {
+  revive: 0.6,
+};
 let waitMusicAudio = null;
 let waitMusicPlaying = false;
 let cachedWaitMusicBlobUrl = null;
@@ -392,6 +395,9 @@ let ThisDef = {
     },
 
     gaunter_lider: deepClone(gaunter_lider),
+    gaunter_lider_bringer_from_death: deepClone(
+      gaunter_lider_bringer_from_death,
+    ),
 
     skellige_bond_conf: deepClone(skellige_bond_conf),
 

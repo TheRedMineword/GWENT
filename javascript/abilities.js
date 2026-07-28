@@ -2338,6 +2338,7 @@ var ability_dict = {
       const _game = game;
 
       if (game.roundCount < 1) {
+        showSideTooltip("Gaunter failed to revert time!");
         return false;
       }
       // Remove previous round from history
@@ -2368,8 +2369,12 @@ var ability_dict = {
       const opGrave = [...player_op.grave.cards];
 
       // Pick resurrection targets BEFORE moving cards.
-      const meRes = meGrave.filter(() => Math.random() < 0.6);
-      const opRes = opGrave.filter(() => Math.random() < 0.6);
+      const meRes = meGrave.filter(
+        () => Math.random() < gaunter_lider_bringer_from_death.revive,
+      );
+      const opRes = opGrave.filter(
+        () => Math.random() < gaunter_lider_bringer_from_death.revive,
+      );
       console.log("REVIVER", meRes);
       // Return all cards to the bottom.
       const moveToDeckBottom2 = async (c, holder) => {
@@ -2414,7 +2419,7 @@ var ability_dict = {
         );
         var cc = new Card(cardData_c, player_me);
         player_me.hand.addCard(cc);
-        cc.animate("morale");
+        cc.animate("reinforce");
       }
 
       // Reserve the opponent's hand slot until the payload arrives.

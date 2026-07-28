@@ -360,6 +360,10 @@ STRNG["en"] = {
       description:
         "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand.",
     },
+    time_round_reverse: {
+      description:
+        "[BETA] Both players will regain up to one life and one recent round will be erased, 60% of the cards from their graveyards will be copied to their hands, and the graveyards will be moved into the decks and shuffled.",
+    },
   },
   factions: {
     realms: {
@@ -666,7 +670,8 @@ STRNG["en"] = {
     sunbather_pink: "Chill Sunbather with a bow in thier hair",
     bluebird_a: "Blue Feather",
     bluebird_b: "Blue Bird",
-    bluebird_sad: "Sad Child"
+    bluebird_sad: "Sad Child",
+    "Gaunter_Leader2": "Gaunter O'Dimm — Master of Time"
   },
   ui: {
     elem: {

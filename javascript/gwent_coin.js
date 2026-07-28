@@ -222,10 +222,14 @@ async function displayCoinToss(
     const leaderImg = document.createElement("img");
     leaderImg.className = "leader";
 
-    if (leader !== "Gaunter_Leader") {
+    if (leader !== "Gaunter_Leader" && leader !== "Gaunter_Leader2") {
       leaderImg.src = `img/sm/${faction}_${leader}.jpg`;
     } else {
-      leaderImg.src = `img/sm/neutral_Gaunter_Leader.jpg`;
+      if (leader === "Gaunter_Leader") {
+        leaderImg.src = `img/sm/neutral_Gaunter_Leader.jpg`;
+      } else {
+        leaderImg.src = `img/sm/neutral_Gaunter_Leader2.jpg`;
+      }
     }
 
     const factionImg = document.createElement("img");

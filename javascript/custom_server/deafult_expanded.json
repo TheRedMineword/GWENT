@@ -94,6 +94,9 @@
       "extra_cards": 0.5,
       "revive": 0.6
     },
+    "gaunter_lider_bringer_from_death": {
+      "revive": 0.6
+    },
     "skellige_bond_conf": {
       "power": 4
     },
@@ -421,6 +424,9 @@
           },
           "skellige_bond_summoner": {
             "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
+          },
+          "time_round_reverse": {
+            "description": "[BETA] Both players will regain up to one life and one recent round will be erased, 60% of the cards from their graveyards will be copied to their hands, and the graveyards will be moved into the decks and shuffled."
           }
         },
         "factions": {
@@ -724,7 +730,8 @@
           "sunbather_pink": "Chill Sunbather with a bow in thier hair",
           "bluebird_a": "Blue Feather",
           "bluebird_b": "Blue Bird",
-          "bluebird_sad": "Sad Child"
+          "bluebird_sad": "Sad Child",
+          "Gaunter_Leader2": "Gaunter O'Dimm — Master of Time"
         },
         "ui": {
           "elem": {
@@ -3834,6 +3841,76 @@
         "count": "1"
       },
       {
+        "name": "Gaunter O'Dimm — Master of Time",
+        "id": "1004-1-mon",
+        "deck": "monsters",
+        "row": "leader",
+        "strength": "0",
+        "ability": "time_round_reverse",
+        "filename": "Gaunter_Leader2",
+        "count": "1"
+      },
+      {
+        "name": "Gaunter O'Dimm — Master of Time",
+        "id": "1004-1-nilf",
+        "deck": "nilfgaard",
+        "row": "leader",
+        "strength": "0",
+        "ability": "time_round_reverse",
+        "filename": "Gaunter_Leader2",
+        "count": "1"
+      },
+      {
+        "name": "Gaunter O'Dimm — Master of Time",
+        "id": "1004-1-realms",
+        "deck": "realms",
+        "row": "leader",
+        "strength": "0",
+        "ability": "time_round_reverse",
+        "filename": "Gaunter_Leader2",
+        "count": "1"
+      },
+      {
+        "name": "Gaunter O'Dimm — Master of Time",
+        "id": "1004-1-scol",
+        "deck": "scoiatael",
+        "row": "leader",
+        "strength": "0",
+        "ability": "time_round_reverse",
+        "filename": "Gaunter_Leader2",
+        "count": "1"
+      },
+      {
+        "name": "Gaunter O'Dimm — Master of Time",
+        "id": "1004-1-skel",
+        "deck": "skellige",
+        "row": "leader",
+        "strength": "0",
+        "ability": "time_round_reverse",
+        "filename": "Gaunter_Leader2",
+        "count": "1"
+      },
+      {
+        "name": "Gaunter O'Dimm — Master of Time",
+        "id": "1004-1-sky",
+        "deck": "sky",
+        "row": "leader",
+        "strength": "0",
+        "ability": "time_round_reverse",
+        "filename": "Gaunter_Leader2",
+        "count": "1"
+      },
+      {
+        "name": "Gaunter O'Dimm — Master of Time",
+        "id": "1004-1-synd",
+        "deck": "syndicate",
+        "row": "leader",
+        "strength": "0",
+        "ability": "time_round_reverse",
+        "filename": "Gaunter_Leader2",
+        "count": "1"
+      },
+      {
         "name": "Ida Emean — Elven Divination",
         "id": "1003",
         "deck": "scoiatael",
@@ -5243,10 +5320,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 30
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack_volume": 90,
+    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }
