@@ -3660,6 +3660,7 @@ class Card {
     console.log("constructor card data", card_data, player);
     this.name = card_data.name;
     this.name_muster = card_data?.name_muster ?? card_data.name;
+    this.name_english = card_data?.name_english ?? card_data.name;
     this.basePower = this.power = Number(card_data.strength);
     this.faction = card_data.deck;
     this.abilities =
