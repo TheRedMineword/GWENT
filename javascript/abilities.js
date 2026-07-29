@@ -2336,8 +2336,14 @@ var ability_dict = {
     description: ``,
     activated: async (card) => {
       const _game = game;
+      console.log(
+        "TIME CHANGER",
+        _game,
+        game.roundHistory.length,
+        game.roundHistory.length === 0,
+      );
 
-      if (game.roundCount < 1) {
+      if (game.roundHistory.length === 0) {
         showSideTooltip("Gaunter failed to revert time!");
         return false;
       }
@@ -2375,7 +2381,7 @@ var ability_dict = {
       const opRes = opGrave.filter(
         () => Math.random() < gaunter_lider_bringer_from_death.revive,
       );
-      console.log("REVIVER", meRes);
+      console.log("TIME CHANGER: REVIVER", meRes);
       // Return all cards to the bottom.
       const moveToDeckBottom2 = async (c, holder) => {
         const source = holder.grave;
@@ -2434,7 +2440,7 @@ var ability_dict = {
       }
       await init_sync_hands();
       if (!resync_now_apply) {
-        showSideTooltip("sync");
+        //  showSideTooltip("sync");
         await sleep(3000);
         await resycn_recive(resync_contnet);
       }
