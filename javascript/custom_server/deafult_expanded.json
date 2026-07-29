@@ -1765,7 +1765,7 @@
             "ts": "Podróżująca Dusza \"\u003Ccolor=#00ff00\u003E%s\u003C/color\u003E\" odwiedza teraz \u003Ccolor=#add8e6\u003EKrólestwo Nieba\u003C/color\u003E!\nWyruszy spowrotem w drogę dnia \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E",
             "moon": {
               "new": "Plansza jest spowita w ciemnościach!\nKsiężyc jest w \u003Ccolor=#DDE8EB\u003Enowiu\u003C/color\u003E!\nDo dnia \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E przypada \u003Ccolor=#DDE8EB\u003Enów\u003C/color\u003E!\nKsiężyc zniknie \u003Ccolor=#90D5FF\u003E%s\u003C/color\u003E!",
-              "full": "Światło \u003Ccolor=#DDE8EB\u003EPełni\u003C/color\u003E roświetla planszę!\nPełnia będzie na niebie aż do \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E!\nKsiężyc będzie w \u003Ccolor=#DDE8EB\u003EPełni\u003C/color\u003E dniat \u003Ccolor=#90D5FF\u003E%s\u003C/color\u003E!"
+              "full": "Światło \u003Ccolor=#DDE8EB\u003EPełni\u003C/color\u003E roświetla planszę!\nPełnia będzie na niebie aż do \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E!\nKsiężyc będzie w \u003Ccolor=#DDE8EB\u003EPełni\u003C/color\u003E dnia \u003Ccolor=#90D5FF\u003E%s\u003C/color\u003E!"
             }
           },
           "mmenu": {
@@ -4987,7 +4987,7 @@
         "deck": "sky",
         "row": "siege",
         "strength": "1",
-        "ability": "avenger DontPickMeUp",
+        "ability": "",
         "filename": "bluebird_sad",
         "count": "0",
         "reinforce": {
@@ -5320,9 +5320,9 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_vid": "8o-JI8VRyKo",
     "tavern_yt_volume": 90
   },
   "texture_pack_url": null

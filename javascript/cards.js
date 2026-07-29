@@ -3461,7 +3461,7 @@ var card_dict_base = [
     deck: "sky",
     row: "siege",
     strength: "1",
-    ability: "avenger DontPickMeUp",
+    ability: "",
     filename: "bluebird_sad",
     count: "0",
     reinforce: { owner_name: "bluebird_b", spawn_count: 1 },

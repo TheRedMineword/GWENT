@@ -956,7 +956,7 @@ STRNG["pl"] = {
       "ts": "Podróżująca Dusza \"<color=#00ff00>%s</color>\" odwiedza teraz <color=#add8e6>Królestwo Nieba</color>!\nWyruszy spowrotem w drogę dnia <color=#90D5FF><$enddatelocal></color>",
       "moon": {
         "new": "Plansza jest spowita w ciemnościach!\nKsiężyc jest w <color=#DDE8EB>nowiu</color>!\nDo dnia <color=#90D5FF><$enddatelocal></color> przypada <color=#DDE8EB>nów</color>!\nKsiężyc zniknie <color=#90D5FF>%s</color>!",
-        "full": "Światło <color=#DDE8EB>Pełni</color> roświetla planszę!\nPełnia będzie na niebie aż do <color=#90D5FF><$enddatelocal></color>!\nKsiężyc będzie w <color=#DDE8EB>Pełni</color> dniat <color=#90D5FF>%s</color>!"
+        "full": "Światło <color=#DDE8EB>Pełni</color> roświetla planszę!\nPełnia będzie na niebie aż do <color=#90D5FF><$enddatelocal></color>!\nKsiężyc będzie w <color=#DDE8EB>Pełni</color> dnia <color=#90D5FF>%s</color>!"
       }
     },
     mmenu: {
