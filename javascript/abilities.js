@@ -2349,6 +2349,11 @@ var ability_dict = {
       }
       // Remove previous round from history
       _game.roundHistory.pop();
+      game.roundHistoryResults[game.roundHistoryResults.length - 1] = {
+        ...game.roundHistoryResults[game.roundHistoryResults.length - 1],
+        wasWiped: true,
+        wipedreason: "gaunter_revert",
+      };
       _game.roundCount--;
 
       // Refund one gem to each player

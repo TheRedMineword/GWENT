@@ -2881,6 +2881,39 @@ class Board {
   }
 }
 
+function decodeHtml(str) {
+  const txt = document.createElement("textarea");
+  txt.innerHTML = str;
+  return txt.value;
+}
+
+function buildRoundHistoryText(roundHistoryResults) {
+  return roundHistoryResults
+    .map((round, index) => {
+      const myName = decodeHtml(player_me.name);
+      const opName = decodeHtml(player_op.name);
+
+      const winnerTag =
+        round.winner === player_me
+          ? "me"
+          : round.winner === player_op
+            ? "op"
+            : "draw";
+
+      let text =
+        `Round ${index + 1} | ` +
+        `Winner ${winnerTag} | ` +
+        `${myName} ${round.score_me} - ${round.score_op} ${opName}`;
+
+      if (round.wasWiped) {
+        text += ` | Wiped (${round.wipedreason})`;
+      }
+
+      return text;
+    })
+    .join("\n");
+}
+
 class Game {
   constructor() {
     this.endScreen = document.getElementById("end-screen");
@@ -2908,6 +2941,7 @@ class Game {
 
     this.roundCount = 0;
     this.roundHistory = [];
+    this.roundHistoryResults = [];
 
     this.randomRespawn = false;
     this.doubleSpyPower = false;
@@ -3449,7 +3483,15 @@ class Game {
       score_me: player_me.total,
       score_op: player_op.total,
     };
+    let verdict2 = {
+      winner: winner,
+      score_me: player_me.total,
+      score_op: player_op.total,
+      wasWiped: false,
+      wipedreason: null,
+    };
     this.roundHistory.push(verdict);
+    this.roundHistoryResults.push(verdict2);
 
     await this.runEffects(this.roundEnd);
 
@@ -3488,20 +3530,18 @@ class Game {
   async endGame() {
     document.getElementById("session-start-control").classList.remove("ready");
     let endScreen = document.getElementById("end-screen");
-    let rows = endScreen.getElementsByTagName("tr");
-    rows[1].children[0].innerHTML = player_me.name;
-    rows[2].children[0].innerHTML = player_op.name;
+    const endText = document.getElementById("end-text");
+    document.getElementById("end-text").innerHTML = buildRoundHistoryText(
+      game.roundHistoryResults,
+    )
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;")
+      .replace(/\n/g, "<br>");
+    endText.classList.remove("hide");
 
-    for (let i = 1; i < 4; ++i) {
-      let round = this.roundHistory[i - 1];
-      rows[1].children[i].innerHTML = round ? round.score_me : 0;
-      rows[1].children[i].style.color =
-        round && round.winner === player_me ? "goldenrod" : "";
-
-      rows[2].children[i].innerHTML = round ? round.score_op : 0;
-      rows[2].children[i].style.color =
-        round && round.winner === player_op ? "goldenrod" : "";
-    }
     const subtitle = endScreen.querySelector("p");
     if (subtitle) {
       subtitle.classList.add("hide");
@@ -3552,27 +3592,24 @@ class Game {
     //    .classList.remove("ready");
 
     const endScreen = document.getElementById("end-screen");
-    const rows = endScreen.getElementsByTagName("tr");
 
-    rows[1].children[0].innerHTML = player_me.name;
-    rows[2].children[0].innerHTML = player_op.name;
-
-    // Fill rounds exactly like normal game
-    for (let i = 1; i < 4; ++i) {
-      const round = this.roundHistory[i - 1];
-
-      rows[1].children[i].innerHTML = round ? round.score_me : 0;
-
-      rows[2].children[i].innerHTML = round ? round.score_op : 0;
-
-      rows[1].children[i].style.color =
-        round && round.winner === player_me ? "goldenrod" : "";
-
-      rows[2].children[i].style.color =
-        round && round.winner === player_op ? "goldenrod" : "";
+    const endText = document.getElementById("end-text");
+    var a = "";
+    if (winner === player_me) {
+      a = "Your opponent has surrendered.";
+    } else {
+      a = "You gave up.";
     }
+    document.getElementById("end-text").innerHTML =
+      `${buildRoundHistoryText(game.roundHistoryResults)}\n\n${a}`
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;")
+        .replace(/\n/g, "<br>");
 
-    endScreen.children[0].className = "";
+    endText.classList.remove("hide");
 
     gameended = true;
     ui.enablePlayer(false);
@@ -3585,22 +3622,12 @@ class Game {
       tocar("game_win", true);
 
       endScreen.children[0].classList.add("end-win");
-
-      if (subtitle) {
-        subtitle.classList.remove("hide");
-        subtitle.innerHTML = "Your opponent has surrendered.";
-      }
     } else {
       console.log("Game over || Defeat by surrender");
 
       tocar("game_lose", true);
 
       endScreen.children[0].classList.add("end-lose");
-
-      if (subtitle) {
-        subtitle.classList.remove("hide");
-        subtitle.innerHTML = "You have surrendered.";
-      }
     }
 
     fadeIn(endScreen, 300);
