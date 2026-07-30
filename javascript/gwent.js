@@ -3544,8 +3544,8 @@ class Game {
 
     const subtitle = endScreen.querySelector("p");
     if (subtitle) {
-      subtitle.classList.add("hide");
-      subtitle.innerHTML = "";
+      //    subtitle.classList.add("hide");
+      //    subtitle.innerHTML = "";
     }
     endScreen.children[0].className = "";
     console.log("---------------------");
@@ -3614,7 +3614,7 @@ class Game {
     gameended = true;
     ui.enablePlayer(false);
 
-    const subtitle = endScreen.querySelector("p");
+    /// const subtitle = endScreen.querySelector("p");
 
     if (winner === player_me) {
       console.log("Game over || Victory by surrender");
