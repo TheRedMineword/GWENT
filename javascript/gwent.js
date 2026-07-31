@@ -7271,6 +7271,30 @@ async function inicio() {
   if (ui.getAudioState() !== 1) {
     await ui.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);
   }
+  var joinCode = new URLSearchParams(window.location.hash.slice(1)).get(
+    "joingame",
+  );
+  if (joinCode) {
+    JoinMatch(joinCode);
+  } else {
+    if (!getTranslation("_info.translated")) {
+      {
+        var transwarnshow = localStorage.getItem(
+          btoa(`${getTranslation("_info.id")}_is_translated_warning`),
+        );
+        if (!transwarnshow) {
+          transwarnshow = 0;
+        }
+        if (Clock.now() > transwarnshow) {
+          show_translation_warn();
+          localStorage.setItem(
+            btoa(`${getTranslation("_info.id")}_is_translated_warning`),
+            Clock.now() + 1000 * 60 * 60 * 24 * 27,
+          );
+        }
+      }
+    }
+  }
 }
 
 var iniciou = false,

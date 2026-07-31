@@ -853,3 +853,35 @@ function updateOpponentUI(data) {
     img.src = state2 || "";
   }
 }
+
+async function JoinMatch(id) {
+  window.location.hash = `lang=${lang}`;
+  var res = await warn_screen(`Join Game ${id}?`, "confirm"); // chnage later
+
+  if (!getTranslation("_info.translated")) {
+    {
+      var transwarnshow = localStorage.getItem(
+        btoa(`${getTranslation("_info.id")}_is_translated_warning`),
+      );
+      if (!transwarnshow) {
+        transwarnshow = 0;
+      }
+      if (Clock.now() > transwarnshow) {
+        show_translation_warn();
+        localStorage.setItem(
+          btoa(`${getTranslation("_info.id")}_is_translated_warning`),
+          Clock.now() + 1000 * 60 * 60 * 24 * 27,
+        );
+      }
+    }
+  }
+  if (res) {
+    comp_and_send(
+      socket,
+      JSON.stringify({
+        type: "joinSession",
+        sessionId: id,
+      }),
+    );
+  }
+}

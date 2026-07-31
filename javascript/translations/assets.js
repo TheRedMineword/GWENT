@@ -3,7 +3,14 @@ var lang_hash = new URLSearchParams(window.location.hash.slice(1)).get("lang");
 if (lang_hash) {
   lang = lang_hash;
 } else {
-  window.location.hash = `lang=${lang}`;
+  var joinCode = new URLSearchParams(window.location.hash.slice(1)).get(
+    "joingame",
+  );
+  if (joinCode) {
+    window.location.hash = `lang=${lang}&joingame=${joinCode}`;
+  } else {
+    window.location.hash = `lang=${lang}`;
+  }
 }
 console.log(`User Langue String: ${lang}`);
 async function loadScriptEval(url) {
