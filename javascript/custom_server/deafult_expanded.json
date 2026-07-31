@@ -9,6 +9,7 @@
     "OnGameStartDraw": 2,
     "medicsdraw": 1,
     "ThatIsSpy": [
+      "axii2_desc:",
       "spy",
       "sabotage",
       "axii2_desc_playable",
@@ -134,6 +135,12 @@
       },
       "en": {
         "TRANSLATED_BY": "N/A",
+        "_info": {
+          "id": "English",
+          "translated": true,
+          "msg": "\"%s\"",
+          "tit": ""
+        },
         "ability": {
           "leader": "Leader Ability",
           "DontPickMeUp": {
@@ -279,7 +286,7 @@
             "description": "Choose one card out of 25 random and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! This card is unstable, each turn it power will change in most of the time negative numbers (On averge power will be -3.27) "
           },
           "tgc_portal": {
-            "name": "That Game Company",
+            "name": "ThatGameCompany",
             "description": "Choose one card out of max 25 Sky Faction cards and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! This card is unstable, each turn it power will change in most of the time negative numbers (On averge power will be -3.27) "
           },
           "dopler": {
@@ -697,7 +704,7 @@
           "darkstorm": "Darkness Storm",
           "darkness_storm_leader": "darkness_storm_leader",
           "ranger": "Reassuring Ranger",
-          "tgc20": "20 Years Of That Game Comapny",
+          "tgc20": "20 Years Of ThatGameComapny",
           "elder_wasteland": "wasteland Elder",
           "colorguide": "Days Of Color Guide",
           "colorcollab": "Trevor Project",
@@ -1002,10 +1009,38 @@
               "d": "Opponent will have 50/50 to copy card from board!"
             }
           }
+        },
+        "game_end": {
+          "winners": {
+            "me": "You",
+            "op": "Opponent",
+            "draw": "Noone"
+          },
+          "texts": {
+            "round": "Round: ",
+            "win": "Winner: "
+          },
+          "wiped": {
+            "wiped": "Wiped!",
+            "res": {
+              "gaunter_revert": "Gaunter O'dim reverted time"
+            }
+          },
+          "sep": "|",
+          "sur": {
+            "me": "You gave up.",
+            "op": "Your opponent has surrendered."
+          }
         }
       },
       "pl": {
-        "TRANSLATED_BY": "DrMineword",
+        "TRANSLATED_BY": "DrMineword, Lambert, GamerMateusz",
+        "_info": {
+          "id": "Polski",
+          "translated": false,
+          "msg": "Język Polski nie został jescze w pełni przetlumaczony!\n\nProsimy o cierpliwość\nNasi tłumacze: \"%s\"",
+          "tit": "Spolszczanie w trakcie!"
+        },
         "ability": {
           "leader": "Zdolność Dowódcy",
           "DontPickMeUp": {
@@ -1151,7 +1186,7 @@
             "description": "Wybierz jedną kartę spośród 25 losowych kart i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Przynęty. Ta karta jest niestabilna — jej siła zmienia się co turę, najczęściej przyjmując wartości ujemne. "
           },
           "tgc_portal": {
-            "name": "That Game Company",
+            "name": "ThatGameCompany",
             "description": "Wybierz jedną kartę spośród maksymalnie 25 kart frakcji Nieba i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Przynęty. Ta karta jest niestabilna — jej siła zmienia się co turę, najczęściej przyjmując wartości ujemne. "
           },
           "dopler": {
@@ -1566,11 +1601,11 @@
           "darkstorm": "Darkness Storm",
           "darkness_storm_leader": "darkness_storm_leader",
           "ranger": "Reassuring Ranger",
-          "tgc20": "20 Years Of That Game Comapny",
+          "tgc20": "20 Lat ThatGameComapny",
           "elder_wasteland": "wasteland Elder",
           "colorguide": "Days Of Color Guide",
           "colorcollab": "Trevor Project",
-          "aviary_medic": "Aviary Village Emotional Support",
+          "aviary_medic": "Aviarskie Wsparcie Emocjonalne",
           "vault_elder_s2e": "Elder of the Vault — Two Embers",
           "fisstech": "Fisstech",
           "sigi_reuven": "Sigi Reuven",
@@ -1869,6 +1904,28 @@
               "c": "Pominąć Turę?",
               "d": "Przeciwnik dostanie 50/50 na zdobycie kopi karty z planszy!"
             }
+          }
+        },
+        "game_end": {
+          "winners": {
+            "me": "Ty",
+            "op": "Przeciwnik",
+            "draw": "Nikt"
+          },
+          "texts": {
+            "round": "Runda: ",
+            "win": "Zwycięsca: "
+          },
+          "wiped": {
+            "wiped": "Wymazano!",
+            "res": {
+              "gaunter_revert": "Gaunter O'dim cofął czas"
+            }
+          },
+          "sep": "|",
+          "sur": {
+            "me": "Poddałeś się!",
+            "op": "Przeciwnik poddał się!"
           }
         }
       }
@@ -5320,9 +5377,9 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
-    "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "8o-JI8VRyKo",
+    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
+    "audio_yt_vid_soundtrack_volume": 47,
+    "tavern_yt_vid": "yu197hlNWK0",
     "tavern_yt_volume": 90
   },
   "texture_pack_url": null

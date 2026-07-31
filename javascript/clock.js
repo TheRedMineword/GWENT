@@ -550,10 +550,12 @@ function warn_screen(content, type = "alert", title) {
       textAlign: "left",
       fontSize: "17px",
       lineHeight: "1.5",
+      justifyContent: "center",
       whiteSpace: "pre-line", // <-- supports \n
       maxHeight: "300px", // <-- scroll area
       overflowY: "auto", // <-- enables scrolling
     });
+    body.style.textAlign = "center";
     body.textContent = content;
 
     const buttons = document.createElement("div");
