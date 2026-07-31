@@ -821,6 +821,23 @@ ${data.button.name}
 }
 
 async function run_patchnotes() {
+  if (!getTranslation("_info.translated")) {
+    {
+      var transwarnshow = localStorage.getItem(
+        btoa(`${getTranslation("_info.id")}_is_translated_warning`),
+      );
+      if (!transwarnshow) {
+        transwarnshow = 0;
+      }
+      if (Clock.now() > transwarnshow) {
+        show_translation_warn();
+        localStorage.setItem(
+          btoa(`${getTranslation("_info.id")}_is_translated_warning`),
+          Clock.now() + 1000 * 60 * 60 * 24 * 27,
+        );
+      }
+    }
+  }
   try {
     const indexRes = await fetch(`change/index.json?v=${cacheBust()}`);
 

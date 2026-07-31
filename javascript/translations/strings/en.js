@@ -1,5 +1,9 @@
 STRNG["en"] = {
   TRANSLATED_BY: "N/A",
+    "_info": {
+      "id": "English",
+      "translated": true, "msg": "\"%s\"", tit: ""
+    },
   ability: {
     leader: "Leader Ability",
     DontPickMeUp: {
@@ -175,7 +179,7 @@ STRNG["en"] = {
         "Choose one card out of 25 random and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! This card is unstable, each turn it power will change in most of the time negative numbers (On averge power will be -3.27) ",
     },
     tgc_portal: {
-      name: "That Game Company",
+      name: "ThatGameCompany",
       description:
         "Choose one card out of max 25 Sky Faction cards and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! This card is unstable, each turn it power will change in most of the time negative numbers (On averge power will be -3.27) ",
     },
@@ -637,7 +641,7 @@ STRNG["en"] = {
     darkstorm: "Darkness Storm",
     darkness_storm_leader: "darkness_storm_leader",
     ranger: "Reassuring Ranger",
-    tgc20: "20 Years Of That Game Comapny",
+    tgc20: "20 Years Of ThatGameComapny",
     elder_wasteland: "wasteland Elder",
     colorguide: "Days Of Color Guide",
     colorcollab: "Trevor Project",
@@ -972,5 +976,27 @@ STRNG["en"] = {
         "d": "Opponent will have 50/50 to copy card from board!"
     }
   }
+  },
+  game_end: {
+    "winners": {
+      "me": "You",
+      "op": "Opponent",
+      "draw": "Noone",
+    },
+    "texts": {
+      "round": "Round: ",
+      "win": "Winner: "
+    },
+    "wiped": {
+      "wiped": "Wiped!",
+      "res": {
+        "gaunter_revert": "Gaunter O'dim reverted time"
+      }
+    },
+    "sep": "|",
+    "sur": {
+      "me": "You gave up.",
+      "op": "Your opponent has surrendered."
+    }
   }
 };

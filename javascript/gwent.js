@@ -2893,20 +2893,23 @@ function buildRoundHistoryText(roundHistoryResults) {
       const myName = decodeHtml(player_me.name);
       const opName = decodeHtml(player_op.name);
 
-      const winnerTag =
-        round.winner === player_me
-          ? "me"
-          : round.winner === player_op
-            ? "op"
-            : "draw";
+      const winnerTag = getTranslation(
+        `game_end.winners.${
+          round.winner === player_me
+            ? "me"
+            : round.winner === player_op
+              ? "op"
+              : "draw"
+        }`,
+      );
 
       let text =
-        `Round ${index + 1} | ` +
-        `Winner ${winnerTag} | ` +
+        `${getTranslation("game_end.texts.round")}${index + 1} ${getTranslation("game_end.sep")} ` +
+        `${getTranslation("game_end.texts.win")}${winnerTag} ${getTranslation("game_end.sep")} ` +
         `${myName} ${round.score_me} - ${round.score_op} ${opName}`;
 
       if (round.wasWiped) {
-        text += ` | Wiped (${round.wipedreason})`;
+        text += ` ${getTranslation("game_end.sep")} ${getTranslation("game_end.wiped.wiped")} ( ${getTranslation(`game_end.wiped.res.${round.wipedreason}`)})`;
       }
 
       return text;
@@ -3596,9 +3599,9 @@ class Game {
     const endText = document.getElementById("end-text");
     var a = "";
     if (winner === player_me) {
-      a = "Your opponent has surrendered.";
+      a = getTranslation("game_end.sur.op");
     } else {
-      a = "You gave up.";
+      a = getTranslation("game_end.sur.me");
     }
     document.getElementById("end-text").innerHTML =
       `${buildRoundHistoryText(game.roundHistoryResults)}\n\n${a}`

@@ -218,6 +218,14 @@ function buildNotificationTranslations() {
 	background-image: url(img/icons/icon_card_count.png);
 }
 
+#notif-gaunter2::after {
+	content: "";
+}
+
+#notif-gaunter2 {
+	background-image: url(img/icons/icon_card_count.png);
+}
+
 #notif-scol_secondchance_necro2::after {
 	content: "Gaunter o'Dim Ability Used \A Both sides recived additional card!";
 }

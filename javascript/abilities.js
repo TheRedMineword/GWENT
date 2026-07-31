@@ -556,6 +556,7 @@ var ability_dict = {
 
         // Add to opponent close row
         await board.addCardToRow(spawned, "close", opponent);
+        //  card.holder = card.holder.opponent();
       } catch (e) {
         console.log("Axii ability error:", e);
       }
@@ -564,7 +565,10 @@ var ability_dict = {
   axii2_desc: {
     name: "",
     description: ``,
-    placed: async (card) => await card.animate("debuff"),
+    placed: async (card) => {
+      await card.animate("debuff");
+      card.holder = card.holder.opponent();
+    },
   },
   axii2_desc_playable: {
     name: "",
@@ -2347,6 +2351,7 @@ var ability_dict = {
         showSideTooltip("Gaunter failed to revert time!");
         return false;
       }
+      await ui.notification("gaunter2", ui_display_times.faction_ability);
       // Remove previous round from history
       _game.roundHistory.pop();
       game.roundHistoryResults[game.roundHistoryResults.length - 1] = {
@@ -2388,31 +2393,26 @@ var ability_dict = {
       );
       console.log("TIME CHANGER: REVIVER", meRes);
       // Return all cards to the bottom.
-      const moveToDeckBottom2 = async (c, holder) => {
-        const source = holder.grave;
-        const deck = holder.deck;
+      const moveToDeckBottom = async (card, holder) => {
+        const { grave: source, deck } = holder;
 
-        // Run the existing translateTo visual step (same as moveTo does).
-        // moveTo used 'await translateTo(...)' in gwent.js — translateTo is synchronous-ish but awaiting is harmless.
-        await translateTo(c, source, deck);
+        await translateTo(card, source, deck);
 
-        // Remove the card from the source container (updates arrays + DOM).
-        // This mirrors what moveTo did (source.removeCard(card)).
-        source.removeCard(c);
+        source.removeCard(card);
+        card.holder = holder;
 
-        // Keep card metadata consistent.
-        c.holder = holder;
-
-        // Append to the bottom of the deck array deterministically.
-        deck.cards.push(c);
-
-        // Ensure visual representation matches the deck array (use existing deck helpers).
+        deck.cards.push(card);
         deck.addCardElement();
-        deck.resize();
       };
-      for (const c of meGrave) await moveToDeckBottom2(c, player_me);
 
-      for (const c of opGrave) await moveToDeckBottom2(c, player_op);
+      await Promise.all([
+        ...meGrave.map((card) => moveToDeckBottom(card, player_me)),
+        ...opGrave.map((card) => moveToDeckBottom(card, player_op)),
+      ]);
+
+      // Resize once per deck instead of once per card.
+      player_me.deck.resize();
+      player_op.deck.resize();
 
       // Shuffle afterwards.
       //player_me.deck.shuffle();
@@ -2449,6 +2449,8 @@ var ability_dict = {
         await sleep(3000);
         await resycn_recive(resync_contnet);
       }
+      console.log("Rever time done");
+      return true;
     },
   },
 };

@@ -1,5 +1,9 @@
 STRNG["pl"] = {
-    "TRANSLATED_BY": "DrMineword",
+    "TRANSLATED_BY": "DrMineword, Lambert, GamerMateusz",
+    "_info": {
+      "id": "Polski",
+      "translated": false, "msg": "Język Polski nie został jescze w pełni przetlumaczony!\n\nProsimy o cierpliwość\nNasi tłumacze: \"%s\"", tit: "Spolszczanie w trakcie!"
+    },
   ability: {
     leader: "Zdolność Dowódcy",
   DontPickMeUp: {
@@ -211,7 +215,7 @@ STRNG["pl"] = {
   },
 
   tgc_portal: {
-    name: "That Game Company",
+    name: "ThatGameCompany",
     description:
       "Wybierz jedną kartę spośród maksymalnie 25 kart frakcji Nieba i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Przynęty. Ta karta jest niestabilna — jej siła zmienia się co turę, najczęściej przyjmując wartości ujemne. "
   },
@@ -727,11 +731,11 @@ STRNG["pl"] = {
     darkstorm: "Darkness Storm",
     darkness_storm_leader: "darkness_storm_leader",
     ranger: "Reassuring Ranger",
-    tgc20: "20 Years Of That Game Comapny",
+    tgc20: "20 Lat ThatGameComapny",
     elder_wasteland: "wasteland Elder",
     colorguide: "Days Of Color Guide",
     colorcollab: "Trevor Project",
-    aviary_medic: "Aviary Village Emotional Support",
+    aviary_medic: "Aviarskie Wsparcie Emocjonalne",
     vault_elder_s2e: "Elder of the Vault — Two Embers",
     fisstech: "Fisstech",
     sigi_reuven: "Sigi Reuven",
@@ -1061,5 +1065,27 @@ STRNG["pl"] = {
         "d": "Przeciwnik dostanie 50/50 na zdobycie kopi karty z planszy!"
     }
   }
+  },
+  game_end: {
+    "winners": {
+      "me": "Ty",
+      "op": "Przeciwnik",
+      "draw": "Nikt",
+    },
+    "texts": {
+      "round": "Runda: ",
+      "win": "Zwycięsca: "
+    },
+    "wiped": {
+      "wiped": "Wymazano!",
+      "res": {
+        "gaunter_revert": "Gaunter O'dim cofął czas"
+      }
+    },
+    "sep": "|",
+    "sur": {
+      "me": "Poddałeś się!",
+      "op": "Przeciwnik poddał się!"
+    }
   }
 };

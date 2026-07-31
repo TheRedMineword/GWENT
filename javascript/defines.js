@@ -16,7 +16,14 @@ let showbankms = 9000;
 let gameended = false;
 const medicdrawextrasecondswait = 2.2; // extraJson hold // no longer used
 const medic_ability_revive_wait_a_second = 1.7 * 1000;
-let ThatIsSpy = ["spy", "sabotage", "axii2_desc_playable", "dopler", "yrden"];
+let ThatIsSpy = [
+  "axii2_desc:",
+  "spy",
+  "sabotage",
+  "axii2_desc_playable",
+  "dopler",
+  "yrden",
+];
 //host alone
 let players = {
   me: "You",
