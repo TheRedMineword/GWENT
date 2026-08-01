@@ -99,12 +99,12 @@
       "revive": 0.6
     },
     "WEAR_TEXTURE_CONFIG": {
-      "use": false,
+      "use": true,
       "sm": {
         "use": true,
-        "width": 512,
-        "height": 512,
-        "viewBox": "2 2 508 508",
+        "width": 411,
+        "height": 596,
+        "viewBox": "2 2 411 596",
         "scratches": 40,
         "spots": 80,
         "scratchGridX": 8,

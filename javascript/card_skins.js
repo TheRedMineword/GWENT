@@ -29,7 +29,7 @@ function wearTexture(seed, size = "sm") {
         y2="${y1 + Math.sin(angle) * len}"
         stroke="white"
         stroke-width="${jitter(cfg.scratchWidth)}"
-        stroke-opacity="${0.45 + rand() * 0.25}"
+        stroke-opacity="${0.28 + rand() * 0.1}"
         stroke-linecap="round"
       />
     `;
@@ -47,7 +47,7 @@ function wearTexture(seed, size = "sm") {
         cy="${cy}"
         r="${jitter(cfg.spotRadius)}"
         fill="white"
-        opacity="${0.14 + rand() * 0.16}"
+        opacity="${0.04 + rand() * 0.06}"
       />
     `;
   }
