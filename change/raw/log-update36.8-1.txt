@@ -19,6 +19,15 @@ Patch Notes:
 </box.title>
 
 <box.text>
+# 1 August, 2026
+Netlify app host of Gwent was discontinued for technical reasons, Gwent is still hosted on [gwent.localplayer.dev](https://gwent.localplayer.dev/) and github pages!
+```diff
++ Added "The Devil" card! !new!
+Discard after playing. Lets you pick and draw to hand 1 out of 3 random picked cards from deck. Tricks opponent into thinking you played that card!
+%%img src="img/lg/neutral_thedevil.jpg" style="max-width:25%"%%
+<fat2>
+```
+<fat3>
 # 31 July, 2026
 This update brings bug fixes to new beta test <color=#56D1B7>**Gaunter O'Dimm – Master of Time**</color> ability!
 Axii casted by Lambert cloned by Gaunter should be now placeable on opponet side of board!
@@ -110,7 +119,7 @@ This patch brings moonlight with it!
 ```
 <fat3>
 # 17-18 July, 2026
-Gwent is now hosted also on [gwent.localplayer.dev](https://gwent.localplayer.dev/) and [dgwent.netlify.app](https://dgwent.netlify.app/) outside github pages!
+Gwent is now hosted also on [gwent.localplayer.dev](https://gwent.localplayer.dev/) and **[REMOVED]** outside github pages!
 <fat1>
 This patch bring few balance changes and documenting undocummented chnages!
 ```diff

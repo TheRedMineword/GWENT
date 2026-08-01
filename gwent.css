@@ -729,6 +729,23 @@ html {
 	position: absolute;
 }
 
+#fake-hand-op {
+    position: absolute;
+    height: 6.35vw;
+    width: 4.45vw;
+
+    top: -99vw;
+    left: 33vw;
+
+    opacity: 0;
+    pointer-events: none;
+    overflow: visible;
+}
+
+#fake-hand-op .card {
+    position: absolute;
+}
+
 #youtube {
 	position: fixed;
 	height: 10px;
@@ -2577,15 +2594,22 @@ html {
 }
 
 .card {
-	height: 6.35vw;
-	width: 4.45vw;
-	background-size: contain;
-	background-repeat: no-repeat;
-	box-shadow: -.1vw -.1vw .5vw rgba(20, 20, 20, .5);
-	display: inline-block;
-	position: relative;
-	transition: margin-bottom 0.05s, margin-left .25s, margin-right .25s, transform 0.5s;
-	z-index=1;
+    height: 6.35vw;
+    width: 4.45vw;
+
+    background-position: center;
+    background-size: contain, contain;
+    background-repeat: no-repeat, no-repeat;
+
+    overflow: hidden;
+    clip-path: inset(0 round 0.2vw);
+
+    box-shadow: -.1vw -.1vw .5vw rgba(20, 20, 20, .5);
+
+    display: inline-block;
+    position: relative;
+    transition: margin-bottom 0.05s, margin-left .25s, margin-right .25s, transform 0.5s;
+    z-index: 1;
 }
 
 .deck-card .card {

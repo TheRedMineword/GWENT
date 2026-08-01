@@ -2453,6 +2453,50 @@ var ability_dict = {
       return true;
     },
   },
+  thedevil: {
+    name: ``,
+    description: ``,
+    placed: async (card, row) => {
+      let wrapper = { card: null };
+
+      let preview = [...card.holder.deck.cards]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3);
+
+      if (preview.length === 0) return;
+
+      // Show selection
+      await ui.queueCarousel(
+        { cards: preview },
+        1,
+        (c, i) => (wrapper.card = c.cards[i]),
+        () => true,
+        true,
+        false,
+        "Choose a card to draw",
+      );
+
+      let picked = wrapper.card;
+      if (!picked) return;
+
+      // Save filename globally if needed
+      // lastChosenDeckCard = picked.filename;
+      pickedfakecard = { a: true, b: picked.filename };
+
+      // Find the real card in the deck
+      let realCard = card.holder.deck.cards.find(
+        (c) => c.filename === picked.filename,
+      );
+
+      if (!realCard) return;
+
+      // Draw it
+      card.holder.deck.removeCard(realCard);
+      card.holder.hand.addCard(realCard);
+      realCard.animate("reinforce");
+      row.removeCard(card);
+    },
+  },
 };
 loadingscreenupdate(`Adding resolveScorch to ability_dict`);
 const ability_dict_resolveScorch = async (rows, require10 = true) => {
@@ -2557,6 +2601,110 @@ const ability_dict_resolveScorch = async (rows, require10 = true) => {
 
   await Promise.all(scorched.map(([row, unit]) => board.toGrave(unit, row)));
 };
+
+async function playFakeCard(filename) {
+  console.log("========== playFakeCard ==========");
+
+  // Find card
+  var cardData = card_dict.find((c) => c.filename === filename);
+  if (!cardData) {
+    console.error("[FAKE] Card not found:", filename);
+    return;
+  }
+  var place_me = deepClone(cardData);
+  place_me.strength = 0;
+  place_me.ability = ""; //hero";
+  place_me.row = "close";
+  //place_me.deck = "neutral"
+  place_me.isDecoy = false;
+  place_me.isDecoyMath = false;
+  place_me.isSide = false;
+  place_me.hero = false;
+
+  // Create fake card
+  const fakeCard = new Card(cardData, player_op);
+  const fakeCard2 = new Card(place_me, player_op);
+
+  console.log("[FAKE] Card created:", fakeCard, fakeCard2);
+
+  //
+  player_op.hand.addCard(fakeCard2);
+
+  console.log("[FAKE] Added to temporary hand.");
+
+  // Preview
+  try {
+    console.log("[FAKE] Preview...");
+    ui.showPreviewVisuals(fakeCard);
+
+    await wait(ui_display_times.show_me_that_card_you_have || 1000);
+
+    ui.hidePreview(fakeCard);
+  } catch (e) {
+    console.warn("[FAKE] Preview failed:", e);
+  }
+
+  // Target row
+  const row = board.row[2];
+
+  if (!row) {
+    console.error("[FAKE] Target row not found.");
+    return;
+  }
+
+  //handElem.appendChild(fakeCard2.elem);
+
+  // Force browser layout
+  //fakeCard2.elem.getBoundingClientRect();
+  //await wait(0);
+  console.log("[FAKE] Moving to board...");
+  await board.moveTo(fakeCard2, row, player_op.hand);
+
+  console.log("[FAKE] Card on board.");
+
+  // Wait before devil appears
+  await wait(1000);
+
+  console.log("[FAKE] Playing Devil animation...");
+
+  try {
+    fakeCard2.devilAnimate();
+  } catch (e) {
+    console.warn("[FAKE] devil animate failed:", e);
+  }
+
+  // Wait for animation
+  await wait(1000);
+
+  console.log("[FAKE] Removing fake card...");
+
+  try {
+    row.removeCard(fakeCard2);
+  } catch (e) {
+    console.error("[FAKE] row.removeCard failed:", e);
+
+    try {
+      board.removeCard(fakeCard2);
+    } catch (e2) {
+      console.error("[FAKE] board.removeCard failed:", e2);
+    }
+  }
+  try {
+    let realCard = player_op.deck.cards.find((c) => c.filename === filename);
+
+    //if (!realCard) return;
+
+    // Draw it
+    player_op.deck.removeCard(realCard);
+    player_op.hand.addCard(realCard);
+  } catch (e) {
+    console.error("[FAKE] hando deck", e);
+  }
+  console.log("[FAKE] Done.");
+  console.log("========== END playFakeCard ==========");
+  //fakeHand.elem.remove();
+}
+
 const ability_dict_base = deepClone(ability_dict);
 loadingscreenupdate(`Translating ability_dict`);
 ability_dict = translateabilitydict();

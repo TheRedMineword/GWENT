@@ -368,7 +368,11 @@ STRNG["en"] = {
       description:
         "[BETA] Both players will regain up to one life and one recent round will be erased, 60% of the cards from their graveyards will be copied to their hands, and the graveyards will be moved into the decks and shuffled.",
     },
-  },
+    thedevil: {
+    name: "The Devil",
+    description: "Discard after playing. Lets you pick and draw to hand 1 out of 3 random picked cards from deck. Tricks opponent into thinking you played that card! "
+  }
+},
   factions: {
     realms: {
       name: "Northern Realms",
@@ -675,7 +679,8 @@ STRNG["en"] = {
     bluebird_a: "Blue Feather",
     bluebird_b: "Blue Bird",
     bluebird_sad: "Sad Child",
-    "Gaunter_Leader2": "Gaunter O'Dimm — Master of Time"
+    "Gaunter_Leader2": "Gaunter O'Dimm — Master of Time",
+    thedevil: "The Devil"
   },
   ui: {
     elem: {

@@ -3466,7 +3466,18 @@ var card_dict_base = [
     count: "0",
     reinforce: { owner_name: "bluebird_b", spawn_count: 1 },
   },
+  {
+    name: "The Devil",
+    id: "1045",
+    deck: "neutral",
+    row: "siege",
+    strength: "0",
+    ability: "thedevil",
+    filename: "thedevil",
+    count: "3",
+  },
 ];
+let pickedfakecard = { a: false, b: null };
 
 var card_dict = deepClone(card_dict_base);
 loadingscreenupdate(`Translating cards!`);

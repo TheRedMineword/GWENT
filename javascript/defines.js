@@ -234,6 +234,67 @@ const AUDIO_STATE = {
   PAUSED: 2,
 };
 
+let WEAR_TEXTURE_CONFIG = {
+  use: false,
+  sm: {
+    use: true,
+    width: 512,
+    height: 512,
+    viewBox: "2 2 508 508",
+
+    scratches: 40,
+    spots: 80,
+
+    scratchGridX: 8,
+    scratchGridY: 5,
+    scratchStepX: 64,
+    scratchStepY: 96,
+    scratchOffsetX: 32,
+    scratchOffsetY: 48,
+
+    spotGridX: 10,
+    spotStepX: 52,
+    spotStepY: 64,
+    spotOffsetX: 26,
+    spotOffsetY: 32,
+
+    scratchLength: 50,
+    scratchWidth: 2.2,
+    spotRadius: 4.8,
+
+    variation: 0.2,
+  },
+
+  lg: {
+    use: false,
+    width: 410,
+    height: 775,
+    viewBox: "0 0 410 775",
+
+    scratches: 140,
+    spots: 240,
+
+    scratchGridX: 6,
+    scratchStepX: 68,
+    scratchStepY: 38,
+    scratchOffsetX: 34,
+    scratchOffsetY: 20,
+
+    spotGridX: 8,
+    spotStepX: 51,
+    spotStepY: 34,
+    spotOffsetX: 25,
+    spotOffsetY: 18,
+
+    // noticeably smaller
+    scratchLength: 20,
+    scratchWidth: 1.1,
+    spotRadius: 1.3,
+
+    variation: 0.1,
+  },
+};
+
 async function cacheWaitMusic() {
   // Load the Blob (assuming you fetch it from server or have it)
   let response = await fetch("sfx/oldgwent/Inline.ogg");
@@ -405,6 +466,8 @@ let ThisDef = {
     gaunter_lider_bringer_from_death: deepClone(
       gaunter_lider_bringer_from_death,
     ),
+
+    WEAR_TEXTURE_CONFIG: deepClone(WEAR_TEXTURE_CONFIG),
 
     skellige_bond_conf: deepClone(skellige_bond_conf),
 

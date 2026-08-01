@@ -725,6 +725,7 @@ async function loadScript2(src) {
     // "javascript/transclations/assets.js",
     "javascript/jszip.min.js",
     "javascript/defines.js",
+    "javascript/card_skins.js",
     "javascript/cards.js",
     "javascript/custom_cards.js",
     "javascript/decks.js",

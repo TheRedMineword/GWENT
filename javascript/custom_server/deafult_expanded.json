@@ -98,6 +98,54 @@
     "gaunter_lider_bringer_from_death": {
       "revive": 0.6
     },
+    "WEAR_TEXTURE_CONFIG": {
+      "use": false,
+      "sm": {
+        "use": true,
+        "width": 512,
+        "height": 512,
+        "viewBox": "2 2 508 508",
+        "scratches": 40,
+        "spots": 80,
+        "scratchGridX": 8,
+        "scratchGridY": 5,
+        "scratchStepX": 64,
+        "scratchStepY": 96,
+        "scratchOffsetX": 32,
+        "scratchOffsetY": 48,
+        "spotGridX": 10,
+        "spotStepX": 52,
+        "spotStepY": 64,
+        "spotOffsetX": 26,
+        "spotOffsetY": 32,
+        "scratchLength": 50,
+        "scratchWidth": 2.2,
+        "spotRadius": 4.8,
+        "variation": 0.2
+      },
+      "lg": {
+        "use": false,
+        "width": 410,
+        "height": 775,
+        "viewBox": "0 0 410 775",
+        "scratches": 140,
+        "spots": 240,
+        "scratchGridX": 6,
+        "scratchStepX": 68,
+        "scratchStepY": 38,
+        "scratchOffsetX": 34,
+        "scratchOffsetY": 20,
+        "spotGridX": 8,
+        "spotStepX": 51,
+        "spotStepY": 34,
+        "spotOffsetX": 25,
+        "spotOffsetY": 18,
+        "scratchLength": 20,
+        "scratchWidth": 1.1,
+        "spotRadius": 1.3,
+        "variation": 0.1
+      }
+    },
     "skellige_bond_conf": {
       "power": 4
     },
@@ -434,6 +482,10 @@
           },
           "time_round_reverse": {
             "description": "[BETA] Both players will regain up to one life and one recent round will be erased, 60% of the cards from their graveyards will be copied to their hands, and the graveyards will be moved into the decks and shuffled."
+          },
+          "thedevil": {
+            "name": "The Devil",
+            "description": "Discard after playing. Lets you pick and draw to hand 1 out of 3 random picked cards from deck. Tricks opponent into thinking you played that card! "
           }
         },
         "factions": {
@@ -738,7 +790,8 @@
           "bluebird_a": "Blue Feather",
           "bluebird_b": "Blue Bird",
           "bluebird_sad": "Sad Child",
-          "Gaunter_Leader2": "Gaunter O'Dimm — Master of Time"
+          "Gaunter_Leader2": "Gaunter O'Dimm — Master of Time",
+          "thedevil": "The Devil"
         },
         "ui": {
           "elem": {
@@ -5051,6 +5104,16 @@
           "owner_name": "bluebird_b",
           "spawn_count": 1
         }
+      },
+      {
+        "name": "The Devil",
+        "id": "1045",
+        "deck": "neutral",
+        "row": "siege",
+        "strength": "0",
+        "ability": "thedevil",
+        "filename": "thedevil",
+        "count": "3"
       }
     ],
     "factions": {
@@ -5375,11 +5438,15 @@
       },
       "time_round_reverse": {
         "description": ""
+      },
+      "thedevil": {
+        "name": "",
+        "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
-    "tavern_yt_vid": "yu197hlNWK0",
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack_volume": 90,
+    "tavern_yt_vid": "8o-JI8VRyKo",
     "tavern_yt_volume": 90
   },
   "texture_pack_url": null

@@ -1189,38 +1189,45 @@ socket.onmessage = async (event) => {
       }
       console.log("[OPHAND]", "OP", "PLAY", card, cards_to_find, data);
 
-      const splitRowName = data.row.split("-");
-      let row;
-      if (splitRowName.length > 1) {
-        const targetRow = splitRowName[0] === "self" ? "target" : "self";
-        row = board.row.find(
-          (r) => r.elem_parent.id === `${targetRow}-${splitRowName[1]}`,
-        );
-      } else {
-        row = data.row;
-      }
-
-      if (data.card.isDecoy) {
-        const replacedCard = row.cards.find(
-          (bc) => bc.filename === data.target.filename,
-        );
-        if (!replacedCard) return;
-        try {
-          replacedCard.animate2("decoy"); //placeholder
-          await sleep(
-            Math.floor(ui_display_times.show_me_that_card_you_have * (1 - 0.6)),
+      if (!data.target_fake.a) {
+        const splitRowName = data.row.split("-");
+        let row;
+        if (splitRowName.length > 1) {
+          const targetRow = splitRowName[0] === "self" ? "target" : "self";
+          row = board.row.find(
+            (r) => r.elem_parent.id === `${targetRow}-${splitRowName[1]}`,
           );
-        } catch (e) {
-          console.log("Decoy target", e);
+        } else {
+          row = data.row;
         }
-        board.moveTo(replacedCard, player_op.hand, row);
+
+        if (data.card.isDecoy) {
+          const replacedCard = row.cards.find(
+            (bc) => bc.filename === data.target.filename,
+          );
+          if (!replacedCard) return;
+          try {
+            replacedCard.animate2("decoy"); //placeholder
+            await sleep(
+              Math.floor(
+                ui_display_times.show_me_that_card_you_have * (1 - 0.6),
+              ),
+            );
+          } catch (e) {
+            console.log("Decoy target", e);
+          }
+          board.moveTo(replacedCard, player_op.hand, row);
+        }
+
+        if (row === "weather") await player_op.playCard(card, row);
+        else if (data.card.isScorch) await player_op.playScorch(card);
+        else await player_op.playCardToRow(card, row);
+
+        await sleep(500);
+      } else {
+        await playFakeCard(data.target_fake.b);
+        player_op.endTurn();
       }
-
-      if (row === "weather") await player_op.playCard(card, row);
-      else if (data.card.isScorch) await player_op.playScorch(card);
-      else await player_op.playCardToRow(card, row);
-
-      await sleep(500);
       console.log("[OPHAND]", "PLAY EXCUTE DONE, SYNC2");
       try {
         console.log(
@@ -2822,6 +2829,7 @@ class Board {
 
   // Sends and translates a card from the source to a specified row name or CardContainer
   async moveTo(card, dest, source) {
+    // console.log("MOVE TO", card, dest, source);
     if (isString(dest)) dest = this.getRow(card, dest);
 
     try {
@@ -3792,6 +3800,63 @@ class Card {
   // Automatically sends and translates this card to its apropriate row from the passed source
   async autoplay(source) {
     await board.toRow(this, source);
+  }
+
+  async devilAnimate(duration = 1400) {
+    tocar("hero_anim", false);
+    tocar("thedevil", false);
+
+    const overlay = document.createElement("div");
+
+    Object.assign(overlay.style, {
+      position: "fixed",
+      inset: "0",
+      zIndex: "999999999999",
+      pointerEvents: "none",
+
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+
+      background: "rgba(0,0,0,0.45)",
+
+      opacity: "0",
+      transition: "opacity 300ms ease",
+    });
+
+    const img = document.createElement("img");
+    img.src = "img/lg/neutral_thedevil.jpg";
+
+    Object.assign(img.style, {
+      maxWidth: "85vw",
+      maxHeight: "85vh",
+
+      transform: "scale(0.85)",
+      opacity: "0",
+
+      transition: "transform 450ms ease, opacity 450ms ease",
+
+      filter: "drop-shadow(0 0 40px rgba(255,120,0,.6))",
+    });
+
+    overlay.appendChild(img);
+    document.body.appendChild(overlay);
+
+    await sleep(20);
+
+    overlay.style.opacity = "1";
+    img.style.opacity = "1";
+    img.style.transform = "scale(1)";
+
+    await sleep(duration);
+
+    overlay.style.opacity = "0";
+    img.style.opacity = "0";
+    img.style.transform = "scale(1.08)";
+
+    await sleep(350);
+
+    overlay.remove();
   }
 
   // Animates an ability effect
@@ -5047,10 +5112,12 @@ class UI {
           card: playedCard,
           row: nomeColuna,
           target: targetCard,
+          target_fake: pickedfakecard,
           isMeHand: handData,
           HandMePost: handData_after,
         }),
       );
+      pickedfakecard = { a: false, b: null };
       console.log("extraJSON vibe check:", extraJSON.length, extraJSON);
       if (extraJSON.length > 0) {
         const total = extraJSON.length;
@@ -5148,10 +5215,12 @@ class UI {
         player: playerId,
         card: playedCard,
         row: nomeColuna,
+        target_fake: pickedfakecard,
         isMeHand: handData,
         HandMePost: handData_after,
       }),
     );
+    pickedfakecard = { a: false, b: null };
     console.log("extraJSON vibe check:", extraJSON.length, extraJSON);
     if (extraJSON.length > 0) {
       const total = extraJSON.length;
@@ -6426,8 +6495,9 @@ class DeckMaker {
     let stats = document.getElementById("deck-stats");
     stats.children[1].innerHTML = this.stats.total;
     stats.children[3].innerHTML =
-      this.stats.units +
-      (this.stats.units < ForGameStart.unitscards
+      this.stats.units -
+      this.stats.hero +
+      (this.stats.units - this.stats.hero < ForGameStart.unitscards
         ? "/" + ForGameStart.unitscards
         : "");
     stats.children[5].innerHTML =
@@ -6650,7 +6720,7 @@ class DeckMaker {
     }
     console.log("[Start] \\this.stats\\", this.stats);
     let warning = "";
-    if (this.stats.units < ForGameStart.unitscards)
+    if (this.stats.units - this.stats.hero < ForGameStart.unitscards)
       warning += `${getTranslation("ui.startwarnings.a").replace("%s", ForGameStart.unitscards)}\n`;
     if (this.stats.special > ForGameStart.special)
       warning += `${getTranslation("ui.startwarnings.b").replace("%s", ForGameStart.special)}\n`;
@@ -6857,32 +6927,40 @@ function iconURL(name, ext = "png") {
   return imgURL("icons/" + name, ext);
 }
 function largeURL(name, ext = "jpg") {
+  var a = "";
+  if (WEAR_TEXTURE_CONFIG.use && WEAR_TEXTURE_CONFIG.lg.use) {
+    a = `${wearTexture(name, "lg")}, `;
+  }
   const blobUrl = getTexturePackBlob("lg/" + name, ext);
   if (blobUrl) {
-    return `url('${blobUrl}')`;
+    return `${a}url('${blobUrl}')`;
   }
   const bloburl_custom = getCustomCardBlob(
     "lg",
     name.substring(name.indexOf("_") + 1),
   );
   if (bloburl_custom) {
-    return `url('${bloburl_custom}')`;
+    return `${a}url('${bloburl_custom}')`;
   }
-  return imgURL("lg/" + name, ext);
+  return `${a}${imgURL("lg/" + name, ext)}`;
 }
 function smallURL(name, ext = "jpg") {
+  var a = "";
+  if (WEAR_TEXTURE_CONFIG.use && WEAR_TEXTURE_CONFIG.sm.use) {
+    a = `${wearTexture(name)}, `;
+  }
   const blobUrl = getTexturePackBlob("sm/" + name, ext);
   if (blobUrl) {
-    return `url('${blobUrl}')`;
+    return `${a}url('${blobUrl}')`;
   }
   const bloburl_custom = getCustomCardBlob(
     "sm",
     name.substring(name.indexOf("_") + 1),
   );
   if (bloburl_custom) {
-    return `url('${bloburl_custom}')`;
+    return `${a}url('${bloburl_custom}')`;
   }
-  return imgURL("sm/" + name, ext);
+  return `${a}${imgURL("sm/" + name, ext)}`;
 }
 function imgURL(path, ext) {
   const blobUrl = getTexturePackBlob("img/" + path + "." + ext + "");
