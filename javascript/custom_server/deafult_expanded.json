@@ -930,6 +930,7 @@
             "north-scorch-cancelled": "Northern Realms leader ability used:\nScorch ability cancelled for the rest of the round.",
             "scol_secondchance": "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from grave.",
             "gaunter": "Gaunter o'Dim Ability Used\nBoth sides recived additional card!",
+            "gaunter2": "Gaunter o'Dim Ability Used\nThe last round has been wiped; all players regain one life!",
             "scol_secondchance_necro2": "Gaunter o'Dim Ability Used\nBoth sides recived additional card!",
             "monsters": "Monsters faction ability triggered:\none Monster Unit Card stays on the board",
             "draw_end": "Gwent game can't end in a draw!\nFace opponent again till winner is picked!",
@@ -5444,10 +5445,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "8o-JI8VRyKo",
-    "tavern_yt_volume": 90
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }

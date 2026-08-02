@@ -8,6 +8,17 @@ function findAvengerTarget(cardName) {
   }
   return ret;
 }
+function pickPercentage(cards, percentage) {
+  const shuffled = [...cards];
+
+  // Fisher-Yates shuffle
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  return shuffled.slice(0, Math.round(shuffled.length * percentage));
+}
 function findReinforceTargets(cardName) {
   console.log('findReinforceTargets("', cardName, '");');
 
@@ -2385,11 +2396,14 @@ var ability_dict = {
       const opGrave = [...player_op.grave.cards];
 
       // Pick resurrection targets BEFORE moving cards.
-      const meRes = meGrave.filter(
-        () => Math.random() < gaunter_lider_bringer_from_death.revive,
+      const meRes = pickPercentage(
+        meGrave,
+        gaunter_lider_bringer_from_death.revive,
       );
-      const opRes = opGrave.filter(
-        () => Math.random() < gaunter_lider_bringer_from_death.revive,
+
+      const opRes = pickPercentage(
+        opGrave,
+        gaunter_lider_bringer_from_death.revive,
       );
       console.log("TIME CHANGER: REVIVER", meRes);
       // Return all cards to the bottom.

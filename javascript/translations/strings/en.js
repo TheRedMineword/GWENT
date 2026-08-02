@@ -838,6 +838,8 @@ STRNG["en"] = {
         "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from grave.",
       gaunter:
         "Gaunter o'Dim Ability Used\nBoth sides recived additional card!",
+      gaunter2:
+        "Gaunter o'Dim Ability Used\nThe last round has been wiped; all players regain one life!",
       scol_secondchance_necro2:
         "Gaunter o'Dim Ability Used\nBoth sides recived additional card!",
       monsters:
