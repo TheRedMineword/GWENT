@@ -3533,6 +3533,9 @@ function pushMessage(msg, display = 5000) {
   updateMessageBox();
   scheduleUpdate();
 }
+function showsync(duration) {
+  pushMessage("SYNC", duration);
+}
 function scheduleUpdate() {
   if (expireTimer) {
     clearTimeout(expireTimer);

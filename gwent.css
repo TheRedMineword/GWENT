@@ -1608,6 +1608,7 @@ html {
 }
 
 .row-weather {
+	z-index: 2;
 	position: absolute;
 	top: 5%;
 	left: 5.75%;

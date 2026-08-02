@@ -444,6 +444,8 @@ async function ability_turn_skiper() {
         getUiStrng("sync.sync").replace("%s", RegisterMovesHold / 1000),
       );
       ui.enablePlayer(false);
+      // showsyn(RegisterMovesHold);
+      showsync(RegisterMovesHold);
       await sleep(RegisterMovesHold);
       showTooltip(`You can play now again`);
       ui.enablePlayer(true);
@@ -851,6 +853,7 @@ async function ability_counter_d20__me() {
       getUiStrng("sync.sync").replace("%s", (RegisterMovesHold * 1.3) / 1000),
     );
     ui.enablePlayer(false);
+    showsync(RegisterMovesHold * 1.3);
     await sleep(RegisterMovesHold * 1.3);
     showTooltip(`You can play now again`);
     ui.enablePlayer(true);

@@ -1794,12 +1794,19 @@ class Player {
                 ) / 1000,
               ),
             );
+            showsync(
+              Math.floor(
+                (ui_display_times.faction_ability + 600) /
+                  opponent_see_card_delay,
+              ),
+            );
             await sleep(
               Math.floor(
                 (ui_display_times.faction_ability + 600) /
                   opponent_see_card_delay,
               ),
             );
+            var wait_extra = 0;
             if (med_draw === 1) {
               await sleep(medic_ability_revive_wait_a_second);
               comp_and_send(
@@ -1807,6 +1814,7 @@ class Player {
                 JSON.stringify({ type: "medicrevivedata", data: extraJSON }),
               );
               med_draw = 0;
+              wait_extra = extraJSON.length;
               extraJSON.length = 0;
             } else {
               for (let i = 0; i < total; i++) {
@@ -1829,7 +1837,7 @@ class Player {
                     .replace("%y", total)
                     .replace("%s", delay / 1000),
                 );
-
+                showsync(delay);
                 await new Promise((resolve) => setTimeout(resolve, delay));
 
                 comp_and_send(socket, payload);
@@ -1839,12 +1847,12 @@ class Player {
             extraJSON = [];
           }
           if (player_op.passed && !player_me.passed) {
+            var wait = RegisterMovesHold * (wait_extra * 850);
             ui.enablePlayer(false);
-            showTooltip(
-              getUiStrng("sync.sync").replace("%s", RegisterMovesHold / 1000),
-            );
+            showTooltip(getUiStrng("sync.sync").replace("%s", wait / 1000));
             ui.enablePlayer(false);
-            await sleep(RegisterMovesHold);
+            showsync(wait);
+            await sleep(wait);
             showTooltip(getUiStrng("sync.end"));
             ui.enablePlayer(true);
           }
@@ -1865,6 +1873,7 @@ class Player {
           getUiStrng("sync.sync").replace("%s", RegisterMovesHold / 1000),
         );
         ui.enablePlayer(false);
+        showsync(RegisterMovesHold);
         await sleep(RegisterMovesHold);
         showTooltip(getUiStrng("sync.end"));
         ui.enablePlayer(true);
@@ -5119,6 +5128,7 @@ class UI {
       );
       pickedfakecard = { a: false, b: null };
       console.log("extraJSON vibe check:", extraJSON.length, extraJSON);
+      var wait_extra = 0;
       if (extraJSON.length > 0) {
         const total = extraJSON.length;
         if (med_draw === 1) {
@@ -5128,6 +5138,7 @@ class UI {
             JSON.stringify({ type: "medicrevivedata", data: extraJSON }),
           );
           med_draw = 0;
+          wait_extra = extraJSON.length;
           extraJSON.length = 0;
         } else {
           for (let i = 0; i < total; i++) {
@@ -5148,7 +5159,7 @@ class UI {
                 .replace("%y", total)
                 .replace("%s", delay / 1000),
             );
-
+            showsync(delay);
             await new Promise((resolve) => setTimeout(resolve, delay));
 
             comp_and_send(socket, payload);
@@ -5157,10 +5168,10 @@ class UI {
         extraJSON = [];
       }
       if (player_op.passed && !player_me.passed) {
-        showTooltip(
-          getUiStrng("sync.sync").replace("%s", RegisterMovesHold / 1000),
-        );
-        await sleep(RegisterMovesHold);
+        var wait = wait_extra * 850 + RegisterMovesHold;
+        showTooltip(getUiStrng("sync.sync").replace("%s", wait / 1000));
+        showsync(wait);
+        await sleep(wait);
         showTooltip(getUiStrng("sync.end"));
       }
       pCard.holder.endTurn();
@@ -5248,7 +5259,7 @@ class UI {
               .replace("%y", total)
               .replace("%s", delay / 1000),
           );
-
+          showsync(delay);
           await new Promise((resolve) => setTimeout(resolve, delay));
 
           comp_and_send(socket, payload);
@@ -5260,6 +5271,7 @@ class UI {
       showTooltip(
         getUiStrng("sync.sync").replace("%s", RegisterMovesHold / 1000),
       );
+      showsync(RegisterMovesHold);
       await sleep(RegisterMovesHold);
       showTooltip(getUiStrng("sync.end"));
     }
