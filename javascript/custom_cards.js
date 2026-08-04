@@ -488,6 +488,35 @@ async function buildCustomCard(data) {
   if (!template) return null;
   card_dict[index] = data;
 }
+
+async function buildSeasonCard_raw(data) {
+  const bg = await loadImage(`${data[0].back}`);
+
+  const img = await loadImage(`${data[1].face}`);
+
+  const canvas = document.createElement("canvas");
+  canvas.width = 309;
+  canvas.height = 444;
+
+  const ctx = canvas.getContext("2d");
+
+  // Draw background (cropped to square)
+  drawCover(ctx, bg, 0, 0, 309, 444);
+
+  // Draw foreground
+  const scale = parseFloat(data[2].resize || "100") / 100;
+
+  const w = img.width * scale;
+  const h = img.height * scale;
+
+  ctx.drawImage(img, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
+
+  const dataUri = URL.createObjectURL(
+    await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.95)),
+  );
+  return dataUri;
+}
+
 async function buildSeasonCard(season, data) {
   const template = card_dict.find((c) => c._replace_me === season.replace_me);
   const index = card_dict.findIndex((c) => c._replace_me === season.replace_me);
@@ -1123,6 +1152,11 @@ async function rebuildCustomCardsMaps() {
         case "ts2":
           //  console.log("TS2", assets.sm.build, card.filename);
           await sky_spirit_sm_blob(assets.sm.build, card.filename);
+          break;
+        case "ts3":
+          sm_custom_cards_map[card.filename] = await buildSeasonCard_raw(
+            card.customassets.sm.build,
+          );
           break;
         case "moon":
           var moon_blob = URL.createObjectURL(await buildMoonImage());

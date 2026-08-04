@@ -2378,8 +2378,9 @@ class Row extends CardContainer {
           this.effects[x] += activate ? 1 : -1;
           break;
         case "bond":
-          if (!this.effects.bond[card.id()]) this.effects.bond[card.id()] = 0;
-          this.effects.bond[card.id()] += activate ? 1 : -1;
+          if (!this.effects.bond[card.id_bond()])
+            this.effects.bond[card.id_bond()] = 0;
+          this.effects.bond[card.id_bond()] += activate ? 1 : -1;
           break;
       }
     }
@@ -2593,7 +2594,7 @@ class Row extends CardContainer {
       //Double sabotage power
       total = Math.ceil(total * 2);
     }
-    let bond = this.effects.bond[card.id()];
+    let bond = this.effects.bond[card.id_bond()];
     if (isNumber(bond) && bond > 1) total *= Number(bond);
     //	if (this?.effects.morale > 0) {
     //	card.animate("powergain");
@@ -3787,6 +3788,10 @@ class Card {
   // Returns the identifier for this type of card
   id() {
     return this.name;
+  }
+
+  id_bond() {
+    return this.name_muster;
   }
 
   // Sets and displays the current power of this card

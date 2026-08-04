@@ -1288,7 +1288,7 @@ var ability_dict = {
     placed: async (card) => {
       let bonds = board
         .getRow(card, card.row, card.holder)
-        .findCards((c) => c.name === card.name);
+        .findCards((c) => c.name_muster === card.name_muster);
       if (bonds.length > 1)
         await Promise.all(bonds.map((c) => c.animate("bond")));
     },
