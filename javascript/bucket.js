@@ -62,6 +62,7 @@ const banned_bucket_abilities = [
   "axii",
   "avenger",
   "berserker",
+  "horn",
 ];
 
 function getRandomAllowedCardIndex(card_dict) {
