@@ -27,7 +27,7 @@ async function bucket_add_card_by_index(index) {
   if (game.usebucket) {
     var card = await new Card(card_dict[index], player_board);
     await Bucket.addCard(card);
-    await card.animate("decoy");
+    await card.animate("reinforce");
     console.log("Added card", card, " to bucket player:", player_board);
     return {
       ok: true,
@@ -63,26 +63,31 @@ const banned_bucket_abilities = [
   "avenger",
   "berserker",
   "horn",
+  "dopler",
+  "mardroeme",
 ];
 
 function getRandomAllowedCardIndex(card_dict) {
   const validIndexes = [];
-
+  const _validIndexes = [];
   for (let i = 0; i < card_dict.length; i++) {
     const card = card_dict[i];
 
     if (
       Number(card.count) > 0 &&
-      !banned_bucket_abilities.includes(card.ability) &&
+      !card.ability
+        .split(" ")
+        .some((a) => banned_bucket_abilities.includes(a)) &&
       card.row !== "leader" &&
       card.deck !== "weather"
     ) {
       validIndexes.push(i);
+      _validIndexes.push(card_dict[i]);
     }
   }
 
   if (validIndexes.length === 0) return -1;
-
+  console.log("Valid buckets", _validIndexes);
   return validIndexes[Math.floor(Math.random() * validIndexes.length)];
 }
 
@@ -130,6 +135,18 @@ function parse_action_ping() {
   }
   if (tag === "op") {
     return player_op;
+  }
+  return null;
+}
+function parse_action_ping_loser() {
+  var c = game.roundHistory[game.roundHistory.length - 1];
+  var tag = c.winner?.tag ?? "n/a";
+
+  if (tag === "me") {
+    return player_op;
+  }
+  if (tag === "op") {
+    return player_me;
   }
   return null;
 }
@@ -181,6 +198,7 @@ async function END_TURN_SHARE_CARDS() {
       try {
         const clone = new Card(card._raw, parse_action_ping());
         winnerHand.addCard(clone);
+        clone.animate("reinforce");
       } catch (e) {
         console.error("Failed to clone card:", e);
       }
@@ -189,12 +207,12 @@ async function END_TURN_SHARE_CARDS() {
 
   // Calculate stars
   const totalStrength = cards.reduce(
-    (sum, card) => sum + Number(card.power ?? 0),
+    (sum, card) => sum + Math.abs(Number(card.power ?? 0)),
     0,
   );
-
+  const total_cards = Bucket.cards.length;
   const starsCount = Math.max(1, totalStrength);
-
+  const draws = Math.floor(starsCount / bucket_op_draw_per_power);
   console.log("Spawning", starsCount, "stars");
 
   // Clear bucket immediately (effects won't be affected)
@@ -203,61 +221,95 @@ async function END_TURN_SHARE_CARDS() {
   } else {
     Bucket.cards = [];
   }
+  if (parse_action() !== "give!burn") {
+    // Spawn stars from bucket center
+    const startX = bucketRect.left + bucketRect.width / 2;
+    const startY = bucketRect.top + bucketRect.height / 2;
 
-  // Spawn stars from bucket center
-  const startX = bucketRect.left + bucketRect.width / 2;
-  const startY = bucketRect.top + bucketRect.height / 2;
+    for (let i = 0; i < starsCount; i++) {
+      const star = document.createElement("div");
 
-  for (let i = 0; i < starsCount; i++) {
-    const star = document.createElement("div");
+      star.textContent = "⭐";
 
-    star.textContent = "⭐";
+      Object.assign(star.style, {
+        position: "fixed",
+        left: `${startX}px`,
+        top: `${startY}px`,
+        fontSize: "24px",
+        transform: "translate(-50%, -50%)",
+        pointerEvents: "none",
+        zIndex: "999999999",
+        willChange: "transform, opacity",
+      });
 
-    Object.assign(star.style, {
-      position: "fixed",
-      left: `${startX}px`,
-      top: `${startY}px`,
-      fontSize: "24px",
-      transform: "translate(-50%, -50%)",
-      pointerEvents: "none",
-      zIndex: "999999999",
-      willChange: "transform, opacity",
-    });
+      fxLayer.appendChild(star);
 
-    fxLayer.appendChild(star);
+      // Random spread
+      const dx = (Math.random() - 0.5) * 250;
 
-    // Random spread
-    const dx = (Math.random() - 0.5) * 250;
+      const dy =
+        winnerTag === "me"
+          ? -(180 + Math.random() * 120)
+          : 180 + Math.random() * 120;
 
-    const dy =
-      winnerTag === "me"
-        ? -(180 + Math.random() * 120)
-        : 180 + Math.random() * 120;
+      const rot = (Math.random() - 0.5) * 720;
 
-    const rot = (Math.random() - 0.5) * 720;
+      const scale = 0.6 + Math.random() * 0.8;
 
-    const scale = 0.6 + Math.random() * 0.8;
-
-    star.animate(
-      [
+      star.animate(
+        [
+          {
+            transform: "translate(-50%, -50%) scale(1) rotate(0deg)",
+            opacity: 1,
+          },
+          {
+            transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(${scale}) rotate(${rot}deg)`,
+            opacity: 0,
+          },
+        ],
         {
-          transform: "translate(-50%, -50%) scale(1) rotate(0deg)",
-          opacity: 1,
+          duration: 1200 + Math.random() * 600,
+          easing: "ease-out",
+          fill: "forwards",
         },
-        {
-          transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(${scale}) rotate(${rot}deg)`,
-          opacity: 0,
-        },
-      ],
-      {
-        duration: 1200 + Math.random() * 600,
-        easing: "ease-out",
-        fill: "forwards",
-      },
-    ).onfinish = () => {
-      star.remove();
-    };
+      ).onfinish = () => {
+        star.remove();
+      };
+    }
+    for (let i = 0; i < draws; i++) {
+      await parse_action_ping_loser().deck.draw(parse_action_ping_loser().hand);
+    }
   }
-
   console.log("Done.");
+}
+
+function is_bucket_vibecheck_name(vara) {
+  var map = {
+    bucket: true,
+  };
+
+  return map[vara] ?? false;
+}
+
+function BUCKET_summon_random_allowed() {
+  var rounds = bucket_spawn_base;
+  var led = 0;
+  if (is_bucket_vibecheck_name(player_me.leader.abilities[0])) {
+    rounds = rounds - bucket_spawn_per_lider_minus;
+    led++;
+  }
+  if (is_bucket_vibecheck_name(player_op.leader.abilities[0])) {
+    rounds = rounds - bucket_spawn_per_lider_minus;
+    led++;
+  }
+  var is = (turncount - 1) % rounds === 0;
+  var a = {
+    res: is,
+    led: led,
+    turn: turncount - 1,
+    every: rounds,
+    is: `((${turncount} - 1) % ${rounds} === 0)`,
+  };
+  console.log("IS BUCKET ALLOWED TO SUMMON?", a);
+  return a;
 }

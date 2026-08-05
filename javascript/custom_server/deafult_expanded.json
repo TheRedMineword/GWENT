@@ -16,6 +16,10 @@
       "dopler",
       "yrden"
     ],
+    "bucket_max": 7,
+    "bucket_spawn_base": 6,
+    "bucket_spawn_per_lider_minus": 2,
+    "bucket_op_draw_per_power": 10,
     "ForGameStart": {
       "unitscards": 22,
       "special": 10,
@@ -5337,6 +5341,9 @@
       "foltest_king": {
         "description": ""
       },
+      "bucket": {
+        "description": ""
+      },
       "keadwen_weather": {
         "description": ""
       },
@@ -5445,7 +5452,7 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
     "audio_yt_vid_soundtrack_volume": 90,
     "tavern_yt_vid": "6U9gVpMHhiA",
     "tavern_yt_volume": 30

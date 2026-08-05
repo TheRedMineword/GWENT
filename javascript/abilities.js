@@ -1403,6 +1403,9 @@ var ability_dict = {
     },
     weight: (card, ai) => ai.weightWeatherFromDeck(card, "fog"),
   },
+  bucket: {
+    description: ``,
+  },
   keadwen_weather: {
     description: ``,
 

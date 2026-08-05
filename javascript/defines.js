@@ -25,6 +25,9 @@ let ThatIsSpy = [
   "yrden",
 ];
 let bucket_max = 7;
+let bucket_spawn_base = 6;
+let bucket_spawn_per_lider_minus = 2;
+let bucket_op_draw_per_power = 10;
 //host alone
 let players = {
   me: "You",
@@ -422,6 +425,9 @@ let ThisDef = {
     medicsdraw: deepClone(medicsdraw),
     ThatIsSpy: deepClone(ThatIsSpy),
     bucket_max: deepClone(bucket_max),
+    bucket_spawn_base: deepClone(bucket_spawn_base),
+    bucket_spawn_per_lider_minus: deepClone(bucket_spawn_per_lider_minus),
+    bucket_op_draw_per_power: deepClone(bucket_op_draw_per_power),
 
     ForGameStart: deepClone(ForGameStart),
 

@@ -1580,7 +1580,7 @@ html {
 	height: 13%;
 }
 .red {
-	background-color:  red;
+	/* background-color:  red; */
 }
 .field-row {
 	height: 32%;
@@ -1607,10 +1607,33 @@ html {
 
 	z-index: 1 !important;
 }
+.field-row-sub::before {
+	content: "";
+	position: absolute;
+
+	/* Make it extend beyond the element */
+	top: -4px;
+	left: -4px;
+	right: -4px;
+	bottom: -4px;
+
+	background: url("img/texture.png") center/cover no-repeat;
+
+	z-index: -1;
+}
 #bucket .card > div,
 #bucket .card > div > div {
     position: absolute !important;
 	/*background-color: blue; */
+}
+
+#bucket > .row-score-target-melee_bucket,
+#bucket > .row-special {
+    width: 1px !important;
+    height: 1px !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
 }
 
 .field-row>div {

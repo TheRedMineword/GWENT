@@ -2986,6 +2986,7 @@ class Game {
 
     weather.reset();
     await board.row.forEach((r) => r.reset());
+    Bucket.reset();
     player_me.total = 0;
     player_op.total = 0;
     player_me.winning = false;
@@ -3107,8 +3108,8 @@ class Game {
       await ui.notification("medicextra", ui_display_times.faction_ability);
     }
     if (
-      player_me.leader?.abilities?.[0] === "bucket" ||
-      player_op.leader?.abilities?.[0] === "bucket"
+      is_bucket_vibecheck_name(player_me.leader?.abilities?.[0]) ||
+      is_bucket_vibecheck_name(player_op.leader?.abilities?.[0])
     ) {
       this.usebucket = true;
       // await ui.notification("medicextra", ui_display_times.faction_ability);
@@ -3361,6 +3362,15 @@ class Game {
 
   // Initiates a new round of the game
   async startRound() {
+    console.log(
+      this.usebucket && this.roundCount > 0,
+      "SHARE BUCKET",
+      this.usebucket,
+      this.roundCount,
+    );
+    if (this.usebucket && this.roundCount > 0) {
+      await END_TURN_SHARE_CARDS();
+    }
     this.roundCount++;
     this.currPlayer =
       this.roundCount % 2 === 0
@@ -3459,6 +3469,13 @@ class Game {
             }),
         ),
       );
+      if (this.usebucket) {
+        if (BUCKET_summon_random_allowed()?.res ?? false) {
+          if (game.firstPlayer === player_me) {
+            random_to_bucket();
+          }
+        }
+      }
     }
     if (this.currPlayer === player_me) ui.enablePlayer(false);
     await this.runEffects(this.turnEnd);
@@ -3566,6 +3583,7 @@ class Game {
       );
 
       if (player_me.health === 0 || player_op.health === 0) {
+        Bucket.reset();
         this.endGame();
       } else {
         this.startRound();
@@ -3633,6 +3651,7 @@ class Game {
     }
   }
   async surrenderEnd(winner) {
+    Bucket.reset();
     //  document
     //    .getElementById("session-start-control")
     //    .classList.remove("ready");

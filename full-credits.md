@@ -44,6 +44,7 @@ https://pngtree.com/freebackground/vintage-crinkled-paper-texture-aged-brown-bac
 - Coin Scoiatael icon: https://gwent.one/image/icon/faction/hc/Scoiatael.png
 - Necormancy revive ability sfx/animation: https://pixabay.com/sound-effects/horror-dark-ghost-voice-horror-vocal-sound-561339/ / https://github.com/camerensmith/gwent-electron/blob/06f5a0af3d579af6969be22e109bdbc9ea4a3b60/images/icons/anim_necromancy.png
 - The Devil card: https://www.freeiconspng.com/img/44668, https://pixabay.com/sound-effects/people-possessed-laugh-94851/
+- "Bucket" row: https://www.magnific.com/free-photo/natural-woven-rattan-texture-detail_426434067.htm
 > Some card/mechanics/assets are used from other project like this (For example: RandomPianist/gwent-classic-v3.1, other similar project are mentioned at start of this copyright notice)
 
 
