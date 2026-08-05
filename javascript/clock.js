@@ -727,6 +727,7 @@ async function loadScript2(src) {
     "javascript/defines.js",
     "javascript/card_skins.js",
     "javascript/cards.js",
+    "javascript/bucket.js",
     "javascript/custom_cards.js",
     "javascript/decks.js",
     "javascript/abilities.js",

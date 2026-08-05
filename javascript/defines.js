@@ -24,6 +24,7 @@ let ThatIsSpy = [
   "dopler",
   "yrden",
 ];
+let bucket_max = 7;
 //host alone
 let players = {
   me: "You",
@@ -420,6 +421,7 @@ let ThisDef = {
     OnGameStartDraw: deepClone(OnGameStartDraw),
     medicsdraw: deepClone(medicsdraw),
     ThatIsSpy: deepClone(ThatIsSpy),
+    bucket_max: deepClone(bucket_max),
 
     ForGameStart: deepClone(ForGameStart),
 

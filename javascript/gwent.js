@@ -1151,6 +1151,11 @@ socket.onmessage = async (event) => {
       console.log("Medic revive recived:", data);
       break;
     // Game - Opponent plays card
+    case "bucket_this":
+      try {
+        bucket_add_card_by_index(data.index);
+      } catch (e) {}
+      break;
     case "play":
       console.log(
         "[OPHAND]",
@@ -1515,7 +1520,10 @@ class Player {
       name = getTranslation("ui.elem.definesJS.players.me");
     }
     let debug = null;
-    if (name === players.me) {
+    if (name === "BoardBot") {
+      this.ThatPlayerId = "SystemId";
+      debug = "THAT_IS_OP__RETURN_THIS";
+    } else if (name === players.me) {
       this.ThatPlayerId = playerId;
       debug = "ME";
     } else {
@@ -1937,7 +1945,8 @@ class CardContainer {
   addCard(card, index) {
     this.cards.push(card);
     this.addCardElement(card, index ? index : 0);
-    this.resize();
+    console.log("added card to this", this);
+    this.resize((this?._id?.raw ?? "no") === "bucket");
   }
 
   // Removes a card from the container along with its associated HTML element.
@@ -1950,7 +1959,7 @@ class CardContainer {
       1,
     )[0];
     this.removeCardElement(card, index ? index : 0);
-    this.resize();
+    this.resize((this?._id?.raw ?? "no") === "bucket");
     return card;
   }
 
@@ -2135,14 +2144,14 @@ class Deck extends CardContainer {
       this.addCardRandom(card);
       this.addCardElement();
     }
-    this.resize();
+    this.resize((this?._id?.raw ?? "no") === "bucket");
   }
 
   // Override
   addCard(card) {
     this.addCardRandom(card);
     this.addCardElement();
-    this.resize();
+    this.resize((this?._id?.raw ?? "no") === "bucket");
   }
 
   // Sends the top card from the Deck to the Hand
@@ -2254,7 +2263,7 @@ class Hand extends CardContainer {
   addCard(card) {
     let i = this.addCardSorted(card);
     this.addCardElement(card, i);
-    this.resize();
+    this.resize((this?._id?.raw ?? "no") === "bucket");
   }
 
   // Override
@@ -2331,7 +2340,7 @@ class Row extends CardContainer {
     } else {
       let index = this.addCardSorted(card);
       this.addCardElement(card, index);
-      this.resize();
+      this.resize((this?._id?.raw ?? "no") === "bucket");
     }
     this.updateState(card, true);
     for (let x of card.placed) await x(card, this);
@@ -2412,12 +2421,20 @@ class Row extends CardContainer {
   }
 
   // Override
-  resize() {
+  resize(bucket = false) {
+    console.log("Resize() is it a bucket", bucket, this?._id ?? {});
+    if (bucket) {
+      bucket_size();
+      return true;
+    }
     this.resizeCardContainer(10, 0.075, 0.00325);
   }
 
   // Updates the row's score by summing the current power of its cards
   updateScore() {
+    if (this._id.raw === "bucket") {
+      return false;
+    }
     let total = 0;
     for (let card of this.cards) {
       total += this.cardScore(card);
@@ -2785,7 +2802,6 @@ class Weather extends CardContainer {
     Object.keys(this.types).map((t) => (this.types[t].count = 0));
   }
 }
-
 //
 class Board {
   constructor() {
@@ -2966,6 +2982,7 @@ class Game {
 
     this.randomRespawn = false;
     this.doubleSpyPower = false;
+    this.usebucket = false;
 
     weather.reset();
     await board.row.forEach((r) => r.reset());
@@ -3089,6 +3106,14 @@ class Game {
     ) {
       await ui.notification("medicextra", ui_display_times.faction_ability);
     }
+    if (
+      player_me.leader?.abilities?.[0] === "bucket" ||
+      player_op.leader?.abilities?.[0] === "bucket"
+    ) {
+      this.usebucket = true;
+      // await ui.notification("medicextra", ui_display_times.faction_ability);
+    }
+    reload_bucket_visual();
     // End of white falme
     // Cleared i hope
     await sleep(20);
@@ -7449,6 +7474,8 @@ async function loadYTByEval() {
 }
 
 async function lunch_gwent_ui() {
+  loadingscreenupdate(`I am a bucket...`);
+  init_bucket();
   loadingscreenupdate(`Loading music...`);
   await loadYTByEval();
   console.log("YouTube API is ready!");

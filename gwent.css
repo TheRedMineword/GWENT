@@ -1579,12 +1579,38 @@ html {
 	width: 100%;
 	height: 13%;
 }
-
+.red {
+	background-color:  red;
+}
 .field-row {
 	height: 32%;
 	top: 4%;
 	display: flex;
 	z-index: 1;
+}
+
+.hidden-row {
+    display: none !important;
+}
+
+.field-row-sub {
+	height: 13% !important;
+	width: 12% !important;
+	top: 33.1% !important;
+	right: 7% !important;
+
+	margin-left: auto !important;
+
+	display: flex !important;
+	justify-content: center !important;
+	align-items: center !important;
+
+	z-index: 1 !important;
+}
+#bucket .card > div,
+#bucket .card > div > div {
+    position: absolute !important;
+	/*background-color: blue; */
 }
 
 .field-row>div {
