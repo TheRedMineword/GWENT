@@ -1654,8 +1654,9 @@ wss.on("connection", async (ws, req) => {
     players = players.filter((player) => player !== ws);
   });
 });
-
+console.log("start lesser log");
 (async () => {
+  console.log("start higher log");
   await loadDatabase();
   await updateRandomCoin();
   console.log(`## SERVER AWAKE\n-# Date: ${new Date()}`);
