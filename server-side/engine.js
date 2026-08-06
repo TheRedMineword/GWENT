@@ -1279,7 +1279,7 @@ const connectionHandler = async (ws, req) => {
       2,
     ),
   );
-  let sessiondigitLength = 7;
+  let sessiondigitLength = 6;
   let custom_server_prefix = "!CUSTOM%s!";
   console.warn(`Session digits code ${sessiondigitLength}`);
   function sessionIdToJoinCode(sessionId, digitLength = sessiondigitLength) {

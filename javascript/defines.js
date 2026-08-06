@@ -27,7 +27,7 @@ let ThatIsSpy = [
 let bucket_max = 7;
 let bucket_spawn_base = 6;
 let bucket_spawn_per_lider_minus = 2;
-let bucket_op_draw_per_power = 10;
+let bucket_op_draw_per_power = 4.5;
 //host alone
 let players = {
   me: "You",

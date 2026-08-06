@@ -3476,6 +3476,16 @@ var card_dict_base = [
     filename: "thedevil",
     count: "3",
   },
+  {
+    name: "Eredin — The Elder Blood Pursuer",
+    id: "1046",
+    deck: "monsters",
+    row: "leader",
+    strength: "",
+    ability: "bucket",
+    filename: "eredin_bucket",
+    count: "0",
+  },
 ];
 let pickedfakecard = { a: false, b: null };
 
