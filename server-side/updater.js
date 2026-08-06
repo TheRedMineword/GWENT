@@ -32,7 +32,11 @@ function hash(s) {
 }
 
 async function checkUpdate() {
-    var url = URLS[process.env.updatermode ?? 1];
+    var url = URLS[0];
+    if ((process.env?.updatermode ?? 1) === 1 ){
+        url = URLS[1];
+    }
+    console.log(`update checker url ${url}`, URLS)
     const text = await (await fetch(url + "?t=" + Date.now())).text();
     const newHash = hash(text);
     console.warn("CHECK HASH", newHash === lastHash, newHash, lastHash);
