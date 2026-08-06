@@ -13,6 +13,7 @@ exports.stop = ({ app, server, wss }) => {
 
     listeners.length = 0;
 };
+
 exports.start = ({ app, server, wss }) => {
 
 const { forceUpdate } = require("./updater");
