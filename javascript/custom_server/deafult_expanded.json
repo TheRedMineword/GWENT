@@ -19,7 +19,7 @@
     "bucket_max": 7,
     "bucket_spawn_base": 6,
     "bucket_spawn_per_lider_minus": 2,
-    "bucket_op_draw_per_power": 10,
+    "bucket_op_draw_per_power": 4.5,
     "ForGameStart": {
       "unitscards": 22,
       "special": 10,
@@ -485,11 +485,14 @@
             "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
           },
           "time_round_reverse": {
-            "description": "[BETA] Both players will regain up to one life and one recent round will be erased, 60% of the cards from their graveyards will be copied to their hands, and the graveyards will be moved into the decks and shuffled."
+            "description": "Both players will regain up to one life and one recent round will be erased, 60% of the cards from their graveyards will be copied to their hands, and the graveyards will be moved into the decks and shuffled."
           },
           "thedevil": {
             "name": "The Devil",
             "description": "Discard after playing. Lets you pick and draw to hand 1 out of 3 random picked cards from deck. Tricks opponent into thinking you played that card! "
+          },
+          "bucket": {
+            "description": "Random cards will appear in the \"bucket\" every few turns; the frequency of their appearance depends on the number of commanders with this ability currently in play. The winner of the round takes the pot, the loser turns some of the released power into cards draw."
           }
         },
         "factions": {
@@ -795,7 +798,8 @@
           "bluebird_b": "Blue Bird",
           "bluebird_sad": "Sad Child",
           "Gaunter_Leader2": "Gaunter O'Dimm — Master of Time",
-          "thedevil": "The Devil"
+          "thedevil": "The Devil",
+          "eredin_bucket": "Eredin — The Elder Blood Pursuer"
         },
         "ui": {
           "elem": {
@@ -933,13 +937,13 @@
             "north": "Northern Realms faction ability triggered:\nNorth draws an additional card.",
             "north-scorch-cancelled": "Northern Realms leader ability used:\nScorch ability cancelled for the rest of the round.",
             "scol_secondchance": "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from grave.",
-            "gaunter": "Gaunter o'Dim Ability Used\nBoth sides recived additional card!",
-            "gaunter2": "Gaunter o'Dim Ability Used\nThe last round has been wiped; all players regain one life!",
-            "scol_secondchance_necro2": "Gaunter o'Dim Ability Used\nBoth sides recived additional card!",
-            "monsters": "Monsters faction ability triggered:\none Monster Unit Card stays on the board",
+            "gaunter": "Gaunter o'Dim Ability Used:\nBoth sides recived additional card!",
+            "gaunter2": "Gaunter o'Dim Ability Used:\nThe last round has been wiped; all players regain one life!",
+            "scol_secondchance_necro2": "Gaunter o'Dim Ability Used:\nBoth sides recived additional card!",
+            "monsters": "Monsters faction ability triggered:\nOne Monster Unit Card stays on the board.",
             "draw_end": "Gwent game can't end in a draw!\nFace opponent again till winner is picked!",
             "scol_pick": "Opponent used Scoia'tael faction ability to pick who play first!",
-            "sky": "Sky Kindom faction ability triggered:\nOne Sky Kindom Unit Card stays on the board",
+            "sky": "Sky Kindom faction ability triggered:\nOne Sky Kindom Unit Card stays on the board.",
             "darkstorm": "Darkness is here...\nDarkness bring destruction to the close combat row!",
             "scoiatael": "Opponent used the Scoia'tael faction perk to go first.",
             "skellige-op": "Opponent Skellige Ability Triggered!",
@@ -1389,6 +1393,16 @@
           },
           "skellige_bond_summoner": {
             "description": "Wygnaj kartę o sile większej lub równej 4. Następnie stwórz kartę Więzi ze swojej frakcji lub kart neutralnych i dodaj ją do swojej ręki."
+          },
+          "time_round_reverse": {
+            "description": "Obaj gracze odzyskają do jednego punktu życia, ostatnia runda zostanie wymaza, 60% kart z ich puli kart odrzuconych zostanie skopiowanych do ich rąk, a sama pula zostaną przeniesione do talii i przetasowana."
+          },
+          "thedevil": {
+            "name": "Diabeł",
+            "description": "Karta zostaja odrzucona po zagraniu. Pozwala ci dobrać 1 z 3 losowych kart z talii. Oszukuje przeciwnika jakgby ta karta była zagrana! "
+          },
+          "bucket": {
+            "description": "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawaiania zależy od liderów z tą zdolnością w grze. Zwycięzca tury przejmuje pulę, przegrany zamienia cześć uwolnionej mocy w dobrnia kart. "
           }
         },
         "factions": {
@@ -1692,7 +1706,10 @@
           "sunbather_pink": "Chill Sunbather z kokardą we włosach",
           "bluebird_a": "Niebieskie Pióro",
           "bluebird_b": "Niebieski Ptak",
-          "bluebird_sad": "Smutne Dziecko"
+          "bluebird_sad": "Smutne Dziecko",
+          "Gaunter_Leader2": "Gaunter O'Dimm — Mistrz Czasu",
+          "thedevil": "Diabeł",
+          "eredin_bucket": "Eredin — W Pogoni Za Starszą Krwią"
         },
         "ui": {
           "elem": {
@@ -1827,19 +1844,19 @@
             "draw-round": "Runda zakończyła się remisem",
             "me-turn": "Twoja tura!",
             "op-turn": "Tura przeciwnika",
-            "north": "Northern Realms faction ability triggered:\nNorth draws an additional card.",
+            "north": "Zdolność Królest Połnocy została aktywyowana:\nPółnoc dobiera dodatkową kartę.",
             "north-scorch-cancelled": "Northern Realms leader ability used:\nScorch ability cancelled for the rest of the round.",
             "scol_secondchance": "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from grave.",
-            "gaunter": "Gaunter o'Dim Ability Used\nBoth sides recived additional card!",
-            "scol_secondchance_necro2": "Gaunter o'Dim Ability Used\nBoth sides recived additional card!",
-            "monsters": "Monsters faction ability triggered:\none Monster Unit Card stays on the board",
-            "draw_end": "Gwent game can't end in a draw!\nFace opponent again till winner is picked!",
-            "scol_pick": "Opponent used Scoia'tael faction ability to pick who play first!",
-            "sky": "Sky Kindom faction ability triggered:\nOne Sky Kindom Unit Card stays on the board",
-            "darkstorm": "Darkness is here...\nDarkness bring destruction to the close combat row!",
+            "gaunter": "Zdolność Gauntera O'Dima użyta:\nObie strony dostają dodatkowe karty!",
+            "scol_secondchance_necro2": "Zdolność Gauntera O'Dima użyta:\nObie strony dostają dodatkowe karty!",
+            "monsters": "Zdolność frakcji Potworów aktywowana:\nJedna karta Potworów zostaje na planszy.",
+            "draw_end": "Gra w Gwinta nie może zakończyć się remisem!\nStaw czoła przeciwnikowi po raz kolejny aż zwycięsca zostanie wybrany!",
+            "scol_pick": "Zdolność Scoia'taela pozwala przeciwnikowi wybrać kto zacznie grę!",
+            "sky": "Zdolność Królestwa Nieba aktywowana:\nJedna karta Królestwa Nieba zostaje na planszy.",
+            "darkstorm": "Ciemność nadeszła...\nCiemność przynosi destrukcję dla walczących wręcz!",
             "scoiatael": "Opponent used the Scoia'tael faction perk to go first.",
-            "skellige-op": "Opponent Skellige Ability Triggered!",
-            "skellige-me": "Skellige Ability Triggered!",
+            "skellige-op": "Zdolność Skellige aktywowana:\nSkellige przenosi dwie karty z grobów na planszę!",
+            "skellige-me": "Zdolność Skellige aktywowana:\nSkellige przenosi dwie karty z grobów na planszę!",
             "witcher_universe": "Witcher Universe faction ability used:\nTurn skipped.",
             "toussaint": "Toussaint faction ability used:\nToussaint draws an additional card.",
             "toussaint-decoy-cancelled": "Umiejętność lidera Toussaint użyta:\nUmiejętność wabik anulowana przez reszte rundy.",
@@ -5119,6 +5136,16 @@
         "ability": "thedevil",
         "filename": "thedevil",
         "count": "3"
+      },
+      {
+        "name": "Eredin — The Elder Blood Pursuer",
+        "id": "1046",
+        "deck": "monsters",
+        "row": "leader",
+        "strength": "",
+        "ability": "bucket",
+        "filename": "eredin_bucket",
+        "count": "0"
       }
     ],
     "factions": {
@@ -5452,10 +5479,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 30
+    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }

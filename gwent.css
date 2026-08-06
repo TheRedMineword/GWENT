@@ -1617,7 +1617,7 @@ html {
 	right: -4px;
 	bottom: -4px;
 
-	background: url("img/texture.png") center/cover no-repeat;
+	background: url("img/icons/bucket.png") center/cover no-repeat;
 
 	z-index: -1;
 }

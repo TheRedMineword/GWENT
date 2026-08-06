@@ -447,6 +447,17 @@ STRNG["pl"] = {
   skellige_bond_summoner: {
     description:
       "Wygnaj kartę o sile większej lub równej 4. Następnie stwórz kartę Więzi ze swojej frakcji lub kart neutralnych i dodaj ją do swojej ręki."
+  },
+    time_round_reverse: {
+      description:
+        "Obaj gracze odzyskają do jednego punktu życia, ostatnia runda zostanie wymaza, 60% kart z ich puli kart odrzuconych zostanie skopiowanych do ich rąk, a sama pula zostaną przeniesione do talii i przetasowana.",
+    },
+    thedevil: {
+    name: "Diabeł",
+    description: "Karta zostaja odrzucona po zagraniu. Pozwala ci dobrać 1 z 3 losowych kart z talii. Oszukuje przeciwnika jakgby ta karta była zagrana! "
+  },
+    bucket: {
+    description: "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawaiania zależy od liderów z tą zdolnością w grze. Zwycięzca tury przejmuje pulę, przegrany zamienia cześć uwolnionej mocy w dobrnia kart. "
   }
 },
     factions: {
@@ -764,7 +775,10 @@ STRNG["pl"] = {
     sunbather_pink: "Chill Sunbather z kokardą we włosach",
     bluebird_a: "Niebieskie Pióro",
     bluebird_b: "Niebieski Ptak",
-    bluebird_sad: "Smutne Dziecko"
+    bluebird_sad: "Smutne Dziecko",
+    "Gaunter_Leader2": "Gaunter O'Dimm — Mistrz Czasu",
+    thedevil: "Diabeł",
+    eredin_bucket: "Eredin — W Pogoni Za Starszą Krwią"
   },
   ui: {
     elem: {
@@ -915,36 +929,36 @@ STRNG["pl"] = {
       "me-turn": "Twoja tura!",
       "op-turn": "Tura przeciwnika",
       north:
-        "Northern Realms faction ability triggered:\nNorth draws an additional card.",
+        "Zdolność Królest Połnocy została aktywyowana:\nPółnoc dobiera dodatkową kartę.",
       "north-scorch-cancelled":
-        "Northern Realms leader ability used:\nScorch ability cancelled for the rest of the round.",
+        "Northern Realms leader ability used:\nScorch ability cancelled for the rest of the round.", // dont thin its used
       scol_secondchance:
-        "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from grave.",
+        "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from grave.", // dont thin its used
       gaunter:
-        "Gaunter o'Dim Ability Used\nBoth sides recived additional card!",
+        "Zdolność Gauntera O'Dima użyta:\nObie strony dostają dodatkowe karty!",
       scol_secondchance_necro2:
-        "Gaunter o'Dim Ability Used\nBoth sides recived additional card!",
+        "Zdolność Gauntera O'Dima użyta:\nObie strony dostają dodatkowe karty!",
       monsters:
-        "Monsters faction ability triggered:\none Monster Unit Card stays on the board",
+        "Zdolność frakcji Potworów aktywowana:\nJedna karta Potworów zostaje na planszy.",
       draw_end:
-        "Gwent game can't end in a draw!\nFace opponent again till winner is picked!",
+        "Gra w Gwinta nie może zakończyć się remisem!\nStaw czoła przeciwnikowi po raz kolejny aż zwycięsca zostanie wybrany!",
       scol_pick:
-        "Opponent used Scoia'tael faction ability to pick who play first!",
-      sky: "Sky Kindom faction ability triggered:\nOne Sky Kindom Unit Card stays on the board",
+        "Zdolność Scoia'taela pozwala przeciwnikowi wybrać kto zacznie grę!",
+      sky: "Zdolność Królestwa Nieba aktywowana:\nJedna karta Królestwa Nieba zostaje na planszy.",
       darkstorm:
-        "Darkness is here...\nDarkness bring destruction to the close combat row!",
-      scoiatael: "Opponent used the Scoia'tael faction perk to go first.",
-      "skellige-op": "Opponent Skellige Ability Triggered!",
-      "skellige-me": "Skellige Ability Triggered!",
-      witcher_universe: "Witcher Universe faction ability used:\nTurn skipped.",
+        "Ciemność nadeszła...\nCiemność przynosi destrukcję dla walczących wręcz!",
+      scoiatael: "Opponent used the Scoia'tael faction perk to go first.", //seems to not be used!
+      "skellige-op": "Zdolność Skellige aktywowana:\nSkellige przenosi dwie karty z grobów na planszę!",
+      "skellige-me": "Zdolność Skellige aktywowana:\nSkellige przenosi dwie karty z grobów na planszę!",
+      witcher_universe: "Witcher Universe faction ability used:\nTurn skipped.", 
       toussaint:
-        "Toussaint faction ability used:\nToussaint draws an additional card.",
+        "Toussaint faction ability used:\nToussaint draws an additional card.", // Wrong Gwent not used
       "toussaint-decoy-cancelled":
-        "Umiejętność lidera Toussaint użyta:\nUmiejętność wabik anulowana przez reszte rundy.",
+        "Umiejętność lidera Toussaint użyta:\nUmiejętność wabik anulowana przez reszte rundy.", // Wrong Gwent not used
       lyria_rivia:
-        "Umiejętność frakcji Lyria & Rivia użyta:\nEfekt Wysokie Morale nałożony na cały rząd.",
+        "Umiejętność frakcji Lyria & Rivia użyta:\nEfekt Wysokie Morale nałożony na cały rząd.", // Wrong Gwent not used
       zerrikania:
-        "Umiejętność frakcji Zerrikania użyta:\nJednostka została przywrócona ze sterty odrzuconych.",
+        "Umiejętność frakcji Zerrikania użyta:\nJednostka została przywrócona ze sterty odrzuconych.", // Wrong Gwent not used
       "coin-false_player-me": "Pominąłeś swoją turę",
       "coin-true_player-me":
         "Pominąłeś swoją turę\nAle twój przeciwnik otrzymał dodatkową kartę",

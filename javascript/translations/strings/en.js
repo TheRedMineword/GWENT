@@ -366,11 +366,14 @@ STRNG["en"] = {
     },
     time_round_reverse: {
       description:
-        "[BETA] Both players will regain up to one life and one recent round will be erased, 60% of the cards from their graveyards will be copied to their hands, and the graveyards will be moved into the decks and shuffled.",
+        "Both players will regain up to one life and one recent round will be erased, 60% of the cards from their graveyards will be copied to their hands, and the graveyards will be moved into the decks and shuffled.",
     },
     thedevil: {
     name: "The Devil",
     description: "Discard after playing. Lets you pick and draw to hand 1 out of 3 random picked cards from deck. Tricks opponent into thinking you played that card! "
+  },
+    bucket: {
+    description: "Random cards will appear in the \"bucket\" every few turns; the frequency of their appearance depends on the number of commanders with this ability currently in play. The winner of the round takes the pot, the loser turns some of the released power into cards draw."
   }
 },
   factions: {
@@ -680,7 +683,8 @@ STRNG["en"] = {
     bluebird_b: "Blue Bird",
     bluebird_sad: "Sad Child",
     "Gaunter_Leader2": "Gaunter O'Dimm — Master of Time",
-    thedevil: "The Devil"
+    thedevil: "The Devil",
+    eredin_bucket: "Eredin — The Elder Blood Pursuer"
   },
   ui: {
     elem: {
@@ -837,18 +841,18 @@ STRNG["en"] = {
       scol_secondchance:
         "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from grave.",
       gaunter:
-        "Gaunter o'Dim Ability Used\nBoth sides recived additional card!",
+        "Gaunter o'Dim Ability Used:\nBoth sides recived additional card!",
       gaunter2:
-        "Gaunter o'Dim Ability Used\nThe last round has been wiped; all players regain one life!",
+        "Gaunter o'Dim Ability Used:\nThe last round has been wiped; all players regain one life!",
       scol_secondchance_necro2:
-        "Gaunter o'Dim Ability Used\nBoth sides recived additional card!",
+        "Gaunter o'Dim Ability Used:\nBoth sides recived additional card!",
       monsters:
-        "Monsters faction ability triggered:\none Monster Unit Card stays on the board",
+        "Monsters faction ability triggered:\nOne Monster Unit Card stays on the board.",
       draw_end:
         "Gwent game can't end in a draw!\nFace opponent again till winner is picked!",
       scol_pick:
         "Opponent used Scoia'tael faction ability to pick who play first!",
-      sky: "Sky Kindom faction ability triggered:\nOne Sky Kindom Unit Card stays on the board",
+      sky: "Sky Kindom faction ability triggered:\nOne Sky Kindom Unit Card stays on the board.",
       darkstorm:
         "Darkness is here...\nDarkness bring destruction to the close combat row!",
       scoiatael: "Opponent used the Scoia'tael faction perk to go first.",
