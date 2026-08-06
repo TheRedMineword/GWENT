@@ -13,10 +13,22 @@ exports.stop = ({ app, server, wss }) => {
         wss.off("connection", fn);
 
     listeners.length = 0;
+
+    // The listeners above only stops NEW connections from hitting the old
+    // handler. Sockets that are already open were opened under the old
+    // closure (old sessions/database/random_coin/etc) and will keep running
+    // against stale state forever unless we force them shut here.
+    for (const client of wss.clients) {
+        try {
+            clearInterval(client.heartbeatInterval);
+            client.terminate();
+        } catch (e) {
+            console.log("Error terminating client on stop", e);
+        }
+    }
 };
 
 exports.start = ({ app, server, wss }) => {
-
 const { forceUpdate } = require("./updater");
 const express = require("express");
 const vm = require("vm");
@@ -203,8 +215,8 @@ async function updateRandomCoin() {
   console.log(`[CoinWatcher] now \`${JSON.stringify(random_coin)}\``);
 }
 
-setInterval(updateRandomCoin, 35 * 60 * 1000);
-setInterval(updateTrafficMonitor, 35 * 60 * 1000);
+intervals.push(setInterval(updateRandomCoin, 35 * 60 * 1000));
+intervals.push(setInterval(updateTrafficMonitor, 35 * 60 * 1000));
 // db work
 function encryptPassword(password) {
   const salt = process.env.AUTH_HEX;
@@ -1136,7 +1148,7 @@ function broadcastToSession(sessionId, payload) {
   return true;
 }
 riskinfo = "{}";
-wss.on("connection", async (ws, req) => {
+const connectionHandler = async (ws, req) => {
   ws.authenticated = false;
   ws.user = null;
   ws.playerId = await generatePlayerId(req);
@@ -1255,8 +1267,9 @@ wss.on("connection", async (ws, req) => {
       2,
     ),
   );
-  let sessiondigitLength = 4;
-  function sessionIdToJoinCode(sessionId, digitLength = 4) {
+  let sessiondigitLength = 5;
+  console.warn(`Session digits code ${sessiondigitLength}`);
+  function sessionIdToJoinCode(sessionId, digitLength = sessiondigitLength) {
     // Hash session ID
     const hash = crypto.createHash("sha256").update(sessionId).digest();
 
@@ -1653,7 +1666,11 @@ wss.on("connection", async (ws, req) => {
     // Remove the player from the players list
     players = players.filter((player) => player !== ws);
   });
-});
+};
+
+wss.on("connection", connectionHandler);
+listeners.push(connectionHandler);
+
 console.log("start lesser log");
 (async () => {
   console.log("start higher log");

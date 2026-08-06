@@ -30,7 +30,13 @@ let lastHash = null;
 function hash(s) {
     return crypto.createHash("sha256").update(s).digest("hex");
 }
-
+    if (lastHash === null) {
+        lastHash = hash(fs.readFileSync(
+  path.join(__dirname, "engine.js"),
+  "utf8"
+))
+    }
+    console.warn(lastHash);
 async function checkUpdate() {
     var url = URLS[0];
     if ((process.env?.updatermode ?? 1) === 1 ){
