@@ -504,7 +504,7 @@ app.get(process.env.A, (req, res) => {
   res.sendFile(filePath);
 });
 // app.use(cors({ origin: "*" }));
-app.use(express.static(__dirname));
+app.use(express.static(path.resolve(__dirname, "..")));
 app.use(
   express.json({
     limit: "700mb",
@@ -637,7 +637,7 @@ app.get("/api/force_update_server", async (req, res) => {
   });
 });
 app.get("*", (_, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+  res.sendFile(path.join(__dirname, "../index.html"));
 });
 app.post(
   "/api/admin/broadcast",
