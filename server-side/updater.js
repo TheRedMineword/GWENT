@@ -4,7 +4,7 @@ const crypto = require("crypto");
 
 const URLS = [
     "http://localhost:8080/server-side/engine.js",
-    "https://theredmineword.github.io/server-side/engine.js"
+    "https://theredmineword.github.io/GWENT/server-side/engine.js"
 ];
 
 let engine;
