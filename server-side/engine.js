@@ -1,6 +1,14 @@
 console.log("ITS ME AN ENGINE!");
 let intervals = [];
 let listeners = [];
+let mountedRouter = null;
+
+function unmountRouter(app, router) {
+    if (!router || !app?._router?.stack) return;
+    app._router.stack = app._router.stack.filter(
+        (layer) => layer.handle !== router,
+    );
+}
 
 exports.stop = ({ app, server, wss }) => {
     console.log("KILL SERVER");
@@ -13,11 +21,6 @@ exports.stop = ({ app, server, wss }) => {
         wss.off("connection", fn);
 
     listeners.length = 0;
-
-    // The listeners above only stops NEW connections from hitting the old
-    // handler. Sockets that are already open were opened under the old
-    // closure (old sessions/database/random_coin/etc) and will keep running
-    // against stale state forever unless we force them shut here.
     for (const client of wss.clients) {
         try {
             clearInterval(client.heartbeatInterval);
@@ -26,6 +29,9 @@ exports.stop = ({ app, server, wss }) => {
             console.log("Error terminating client on stop", e);
         }
     }
+
+    unmountRouter(app, mountedRouter);
+    mountedRouter = null;
 };
 
 exports.start = ({ app, server, wss }) => {
@@ -43,6 +49,12 @@ const fs = require("fs");
 const analyseBot = require("./botDetector.js");
 
 require("dotenv").config();
+
+// All routes/middleware for this run live on their own Router so stop()
+// can unmount the whole batch in one shot instead of leaking onto `app`.
+const router = express.Router();
+app.use(router);
+mountedRouter = router;
 
 let auth_needed = true;
 
@@ -482,8 +494,8 @@ function checkCors(req, res) {
 
   return false;
 }
-app.use(cors({ origin: "*" }));
-app.get("/api/recive-hearthbeat", (req, res) => {
+router.use(cors({ origin: "*" }));
+router.get("/api/recive-hearthbeat", (req, res) => {
   const id = req.query.db;
 
   if (!id || !heartbeatWaiting.has(id)) {
@@ -494,7 +506,7 @@ app.get("/api/recive-hearthbeat", (req, res) => {
 
   res.sendStatus(204);
 });
-app.get(process.env.A, (req, res) => {
+router.get(process.env.A, (req, res) => {
   if (!checkCors(req, res)) {
     return res.status(403).json({
       error: "CORS denied",
@@ -517,17 +529,17 @@ app.get(process.env.A, (req, res) => {
 
   res.sendFile(filePath);
 });
-// app.use(cors({ origin: "*" }));
-app.use(express.static(path.resolve(__dirname, "..")));
-app.use(
+// router.use(cors({ origin: "*" }));
+router.use(express.static(path.resolve(__dirname, "..")));
+router.use(
   express.json({
     limit: "700mb",
   }),
 );
-app.get("/wake", (req, res) => {
+router.get("/wake", (req, res) => {
   res.json({ ok: "ok" });
 });
-app.post("/api/verdict", (req, res) => {
+router.post("/api/verdict", (req, res) => {
   const { value } = req.body;
 
   console.log(`Client verdict: ${JSON.stringify(value)}`);
@@ -536,7 +548,7 @@ app.post("/api/verdict", (req, res) => {
     ok: true,
   });
 });
-app.post("/api/bot-check", async (req, res) => {
+router.post("/api/bot-check", async (req, res) => {
   const ip = getClientIp(req);
 
   const {
@@ -581,7 +593,7 @@ app.post("/api/bot-check", async (req, res) => {
     result,
   });
 });
-app.get("/api/get-health", (req, res) => {
+router.get("/api/get-health", (req, res) => {
   const mem = process.memoryUsage();
 
   res.json({
@@ -602,7 +614,7 @@ app.get("/api/get-health", (req, res) => {
     time: new Date().toISOString(),
   });
 });
-app.get("/api/custom_sync", (req, res) => {
+router.get("/api/custom_sync", (req, res) => {
   res.setHeader("Access-Control-Expose-Headers", "C-L, Content-Length");
 
   res.setHeader("DrMinewordGwentServer", "yes");
@@ -632,7 +644,7 @@ app.get("/api/custom_sync", (req, res) => {
 
   return res.end(payload);
 });
-app.get("/api/force_update_server", async (req, res) => {
+router.get("/api/force_update_server", async (req, res) => {
   const { key } = req.query;
 
   if (key === process.env.ADMIN_ENDPOINT_LOGIN) {
@@ -650,10 +662,10 @@ app.get("/api/force_update_server", async (req, res) => {
     error: "Invalid key.",
   });
 });
-app.get("*", (_, res) => {
+router.get("*", (_, res) => {
   res.sendFile(path.join(__dirname, "../index.html"));
 });
-app.post(
+router.post(
   "/api/admin/broadcast",
   express.json({ limit: "900mb" }),
   async (req, res) => {
@@ -702,7 +714,7 @@ app.post(
     });
   },
 );
-app.post("/api/register", async (req, res) => {
+router.post("/api/register", async (req, res) => {
   try {
     const { playerId, login, password } = req.body;
 
@@ -773,7 +785,7 @@ app.post("/api/register", async (req, res) => {
     });
   }
 });
-app.post("/api/login", async (req, res) => {
+router.post("/api/login", async (req, res) => {
   try {
     const { playerId, login, password } = req.body;
 
@@ -843,7 +855,7 @@ app.post("/api/login", async (req, res) => {
     });
   }
 });
-app.post("/api/message", (req, res) => {
+router.post("/api/message", (req, res) => {
   const { session_id, player_id, message, type } = req.body;
 
   // Basic validation
@@ -952,7 +964,7 @@ app.post("/api/message", (req, res) => {
   }
 });
 
-app.post("/api/github", async (req, res) => {
+router.post("/api/github", async (req, res) => {
   const { key } = req.query;
   if (key !== process.env.ADMIN_ENDPOINT_LOGIN) return res.sendStatus(401);
 
@@ -1267,7 +1279,8 @@ const connectionHandler = async (ws, req) => {
       2,
     ),
   );
-  let sessiondigitLength = 5;
+  let sessiondigitLength = 7;
+  let custom_server_prefix = "!CUSTOM%s!";
   console.warn(`Session digits code ${sessiondigitLength}`);
   function sessionIdToJoinCode(sessionId, digitLength = sessiondigitLength) {
     // Hash session ID
@@ -1317,7 +1330,8 @@ const connectionHandler = async (ws, req) => {
         `Ip:${ip_censor}-PlayerId:${ws.playerId}(${country_code})-Risk:${riskinfo}-IsCustom:${!!conf}\nRandomstring:${generateCode()}`,
       ).toString("base64");
 
-      const joinCode = `${!!conf ? `!Custom!-` : ""}${sessionIdToJoinCode(sessionId, sessiondigitLength)}`;
+      var a = sessionIdToJoinCode(sessionId, sessiondigitLength);
+      const joinCode = `${!!conf ? custom_server_prefix.replace("%s", a) : a}`;
 
       sessions[sessionId] = {
         id: sessionId,
