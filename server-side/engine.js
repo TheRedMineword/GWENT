@@ -1656,6 +1656,6 @@ wss.on("connection", async (ws, req) => {
 (async () => {
   await loadDatabase();
   await updateRandomCoin();
-  console.log("## SERVER AWAKE");
+  console.log(`## SERVER AWAKE\n-# Date: ${new Date()}`);
 })();
 };
