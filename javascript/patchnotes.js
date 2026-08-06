@@ -159,16 +159,15 @@ function escapeHtml(text) {
 
 function formatInline(text) {
   console.log("text", text);
+  text = text.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  text = text.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, "<em>$1</em>");
+  text = text.replace(/_(.+?)_/g, "<em>$1</em>");
+
   text = text.replace(
     /\[([^\]]+)\]\(([^)\s]+)\)/g,
-    '<a class="patch-link" href="$2" target="_blank" rel="noopener">$1</a>',
+    (_, label, href) =>
+      `<a class="patch-link" href="${href}" target="_blank" rel="noopener">${label}</a>`,
   );
-
-  text = text.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-
-  text = text.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, "<em>$1</em>");
-
-  text = text.replace(/_(.+?)_/g, "<em>$1</em>");
 
   // <color=#hex>text</color>
   text = text.replace(
