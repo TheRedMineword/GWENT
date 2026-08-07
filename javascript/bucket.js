@@ -79,7 +79,9 @@ function getRandomAllowedCardIndex(card_dict) {
         .split(" ")
         .some((a) => banned_bucket_abilities.includes(a)) &&
       card.row !== "leader" &&
-      card.deck !== "weather"
+      card.deck !== "weather" &&
+      card.strength > bucket_cards_strenght.bigger &&
+      card.strength < bucket_cards_strenght.smaller
     ) {
       validIndexes.push(i);
       _validIndexes.push(card_dict[i]);

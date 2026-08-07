@@ -19,7 +19,11 @@
     "bucket_max": 7,
     "bucket_spawn_base": 6,
     "bucket_spawn_per_lider_minus": 2,
-    "bucket_op_draw_per_power": 4.5,
+    "bucket_op_draw_per_power": 4.65,
+    "bucket_cards_strenght": {
+      "bigger": 3,
+      "smaller": 12
+    },
     "ForGameStart": {
       "unitscards": 22,
       "special": 10,

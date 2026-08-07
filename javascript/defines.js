@@ -27,7 +27,11 @@ let ThatIsSpy = [
 let bucket_max = 7;
 let bucket_spawn_base = 6;
 let bucket_spawn_per_lider_minus = 2;
-let bucket_op_draw_per_power = 4.5;
+let bucket_op_draw_per_power = 4.65;
+let bucket_cards_strenght = {
+  bigger: 3,
+  smaller: 12,
+};
 //host alone
 let players = {
   me: "You",
@@ -428,6 +432,7 @@ let ThisDef = {
     bucket_spawn_base: deepClone(bucket_spawn_base),
     bucket_spawn_per_lider_minus: deepClone(bucket_spawn_per_lider_minus),
     bucket_op_draw_per_power: deepClone(bucket_op_draw_per_power),
+    bucket_cards_strenght: deepClone(bucket_cards_strenght),
 
     ForGameStart: deepClone(ForGameStart),
 
