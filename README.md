@@ -19,7 +19,7 @@ You can select a faction to play as at the top of the screen and then add and re
 
 # Credits
 Full credit and thanks go to CD Projekt Red for creating The Witcher 3, [asundr for the base browser recreation of Gwent](https://github.com/asundr/gwent-classic) and [Leo-Felde for the base multiplayer fork](https://github.com/Leo-Felde/gwent-multiplayer). I only added some fixes. And started modify base verison
-
+Latest patchnotes raw files can be found in [./change/raw]( https://github.com/TheRedMineword/GWENT/tree/main/change/raw )
 
 # Copyrights
 `This project is an unofficial and non commercial fan project and is not affiliated with,
