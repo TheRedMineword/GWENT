@@ -1,5 +1,5 @@
 This is copied and modified version of [Rickvs64 gwent multiplayer](https://github.com/Rickvs64/gwent-multiplayer)
-An exe app (BETA) was added: [Dowland](https://theredmineword.github.io/GWENT/exe/dowland/init)
+An exe app was added: [Dowland](https://theredmineword.github.io/GWENT/exe/dowland/init)
 
 ## Rules
 The game is played in the same way as the original. The player aims to win two of three rounds, where victory within a given round is determined by whoever scores the most points. 
