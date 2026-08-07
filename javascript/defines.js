@@ -484,6 +484,7 @@ let ThisDef = {
     d20cloner: deepClone(d20cloner),
 
     map_results_color: deepClone(map_results_color),
+    clock_config: deepClone(clock_config),
   },
 };
 

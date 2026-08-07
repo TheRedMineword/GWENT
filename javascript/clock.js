@@ -723,6 +723,7 @@ async function loadScript2(src) {
 
   const scripts = [
     // "javascript/transclations/assets.js",
+    "javascript/clock_ui.js",
     "javascript/jszip.min.js",
     "javascript/defines.js",
     "javascript/card_skins.js",
