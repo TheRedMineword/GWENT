@@ -1774,6 +1774,7 @@ class Player {
     if (this.id === 0 && this.leader.activated.length > 0) {
       this.elem_leader.addEventListener("click", async () => {
         await ui.viewCard(this.leader, async () => {
+          var now = Date.now();
           var handData = await serializeCards(player_me.hand.cards);
           console.log("HandData", handData);
           await this.activateLeader();
@@ -1789,81 +1790,9 @@ class Player {
             }),
           );
           await sleep(100);
-          console.log("extraJSON vibe check:", extraJSON.length, extraJSON);
-          if (extraJSON.length > 0) {
-            const total = extraJSON.length;
-            var opponent_see_card_delay = 2.5;
-            showTooltip(
-              getUiStrng("sync.init").replace(
-                "%s",
-                Math.floor(
-                  (ui_display_times.faction_ability + 600) /
-                    opponent_see_card_delay,
-                ) / 1000,
-              ),
-            );
-            showsync(
-              Math.floor(
-                (ui_display_times.faction_ability + 600) /
-                  opponent_see_card_delay,
-              ),
-            );
-            await sleep(
-              Math.floor(
-                (ui_display_times.faction_ability + 600) /
-                  opponent_see_card_delay,
-              ),
-            );
-            var wait_extra = 0;
-            if (med_draw === 1) {
-              await sleep(medic_ability_revive_wait_a_second);
-              comp_and_send(
-                socket,
-                JSON.stringify({ type: "medicrevivedata", data: extraJSON }),
-              );
-              med_draw = 0;
-              wait_extra = extraJSON.length;
-              extraJSON.length = 0;
-            } else {
-              for (let i = 0; i < total; i++) {
-                const payload = extraJSON[i];
-
-                // base hold + extra 500ms for each next packet
-                const delay =
-                  RegisterMovesHold +
-                  i * 500 +
-                  medicdrawextrasecondswait * 1000;
-
-                console.log(
-                  `Hold before send extraJSON ${i + 1}/${total}`,
-                  payload,
-                );
-
-                showTooltip(
-                  getUiStrng("sync.hold_progress")
-                    .replace("%x", i + 1)
-                    .replace("%y", total)
-                    .replace("%s", delay / 1000),
-                );
-                showsync(delay);
-                await new Promise((resolve) => setTimeout(resolve, delay));
-
-                comp_and_send(socket, payload);
-              }
-            }
-
-            extraJSON = [];
-          }
-          if (player_op.passed && !player_me.passed) {
-            var wait = RegisterMovesHold * (wait_extra * 850);
-            ui.enablePlayer(false);
-            showTooltip(getUiStrng("sync.sync").replace("%s", wait / 1000));
-            ui.enablePlayer(false);
-            showsync(wait);
-            await sleep(wait);
-            showTooltip(getUiStrng("sync.end"));
-            ui.enablePlayer(true);
-          }
+          await resolve_extrajson_procces();
+          await resolve_pass_post_extrajson(Date.now() - now);
+          now = 0;
           //	await init_sync_hands();
           //console.log("LEADER END TURN");
           await player_me.endTurn();
@@ -5157,6 +5086,7 @@ class UI {
 
       this.hidePreview(card);
       this.enablePlayer(false);
+      var now = Date.now();
       board.toHand(card, row);
       await board.moveTo(pCard, row, pCard.holder.hand);
       var handData_after = await serializeCards(player_me.hand.cards);
@@ -5176,53 +5106,9 @@ class UI {
         }),
       );
       pickedfakecard = { a: false, b: null };
-      console.log("extraJSON vibe check:", extraJSON.length, extraJSON);
-      var wait_extra = 0;
-      if (extraJSON.length > 0) {
-        const total = extraJSON.length;
-        if (med_draw === 1) {
-          await sleep(medic_ability_revive_wait_a_second);
-          comp_and_send(
-            socket,
-            JSON.stringify({ type: "medicrevivedata", data: extraJSON }),
-          );
-          med_draw = 0;
-          wait_extra = extraJSON.length;
-          extraJSON.length = 0;
-        } else {
-          for (let i = 0; i < total; i++) {
-            const payload = extraJSON[i];
-
-            // base hold + extra 500ms for each next packet
-            const delay =
-              RegisterMovesHold + i * 500 + medicdrawextrasecondswait * 1000;
-
-            console.log(
-              `Hold before send extraJSON ${i + 1}/${total}`,
-              payload,
-            );
-
-            showTooltip(
-              getUiStrng("sync.hold_progress")
-                .replace("%x", i + 1)
-                .replace("%y", total)
-                .replace("%s", delay / 1000),
-            );
-            showsync(delay);
-            await new Promise((resolve) => setTimeout(resolve, delay));
-
-            comp_and_send(socket, payload);
-          }
-        }
-        extraJSON = [];
-      }
-      if (player_op.passed && !player_me.passed) {
-        var wait = wait_extra * 850 + RegisterMovesHold;
-        showTooltip(getUiStrng("sync.sync").replace("%s", wait / 1000));
-        showsync(wait);
-        await sleep(wait);
-        showTooltip(getUiStrng("sync.end"));
-      }
+      await resolve_extrajson_procces();
+      await resolve_pass_post_extrajson(Date.now() - now);
+      now = 0;
       pCard.holder.endTurn();
       //	await init_sync_hands();
     }
@@ -5258,6 +5144,7 @@ class UI {
     let holder = card.holder;
     this.hidePreview();
     this.enablePlayer(false);
+    var now = Date.now();
     if (card.isScorch) {
       this.hidePreview();
       await ability_dict["scorch"].activated(card);
@@ -5281,49 +5168,9 @@ class UI {
       }),
     );
     pickedfakecard = { a: false, b: null };
-    console.log("extraJSON vibe check:", extraJSON.length, extraJSON);
-    if (extraJSON.length > 0) {
-      const total = extraJSON.length;
-      if (med_draw === 1) {
-        await sleep(medic_ability_revive_wait_a_second);
-        comp_and_send(
-          socket,
-          JSON.stringify({ type: "medicrevivedata", data: extraJSON }),
-        );
-        med_draw = 0;
-        extraJSON.length = 0;
-      } else {
-        for (let i = 0; i < total; i++) {
-          const payload = extraJSON[i];
-
-          // base hold + extra 500ms for each next packet
-          const delay =
-            RegisterMovesHold + i * 500 + medicdrawextrasecondswait * 1000;
-
-          console.log(`Hold before send extraJSON ${i + 1}/${total}`, payload);
-
-          showTooltip(
-            getUiStrng("sync.hold_progress")
-              .replace("%x", i + 1)
-              .replace("%y", total)
-              .replace("%s", delay / 1000),
-          );
-          showsync(delay);
-          await new Promise((resolve) => setTimeout(resolve, delay));
-
-          comp_and_send(socket, payload);
-        }
-      }
-      extraJSON = [];
-    }
-    if (player_op.passed && !player_me.passed) {
-      showTooltip(
-        getUiStrng("sync.sync").replace("%s", RegisterMovesHold / 1000),
-      );
-      showsync(RegisterMovesHold);
-      await sleep(RegisterMovesHold);
-      showTooltip(getUiStrng("sync.end"));
-    }
+    await resolve_extrajson_procces();
+    await resolve_pass_post_extrajson(Date.now() - now);
+    now = 0;
     holder.endTurn();
     // await init_sync_hands();
   }

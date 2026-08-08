@@ -605,6 +605,7 @@ var ability_dict = {
         console.log("Opponent played Gryffin School, waiting for sync.");
         return;
       }
+      ignore_usage_duration_of_card_if_pass = true;
 
       if (!witcher_signs || witcher_signs.length <= 0) return;
 
@@ -690,6 +691,7 @@ var ability_dict = {
         }
         return;
       }
+      ignore_usage_duration_of_card_if_pass = true;
 
       // Shuffle multiple times
       if (mtg_conf.shuffle_few_times) {
@@ -791,12 +793,13 @@ var ability_dict = {
               filteredCards,
               utf8ToBase64(seed_is),
               `MTG ABILITY Seeded from ${seed_is}`,
-            ).array.slice(0, mtg_conf.random_max),
+            ).array.slice(0, Math.floor(mtg_conf.random_max / 4.2)),
             `\nMTG ABILITY Seeded from ${seed_is}`,
           );
         }
         return;
       }
+      ignore_usage_duration_of_card_if_pass = true;
 
       // Shuffle multiple times
       if (mtg_conf.shuffle_few_times) {
@@ -808,7 +811,7 @@ var ability_dict = {
         "MTG CARDS ",
         filteredCards,
         " OR ",
-        filteredCards.slice(0, mtg_conf.random_max),
+        filteredCards.slice(0, Math.floor(mtg_conf.random_max / 4.2)),
       );
 
       var tmp_c = shuffleSeeded(
@@ -818,7 +821,10 @@ var ability_dict = {
       );
       filteredCards = tmp_c.array;
       tmp_c = null;
-      filteredCards = filteredCards.slice(0, mtg_conf.random_max);
+      filteredCards = filteredCards.slice(
+        0,
+        Math.floor(mtg_conf.random_max / 4.2),
+      );
       if (filteredCards.length <= 0) return;
 
       // Create TEMP cards for preview carousel
@@ -1054,6 +1060,7 @@ var ability_dict = {
     placed: async (card) => {
       if (card.holder.id === player_me.id) {
         med_draw = 1;
+        ignore_usage_duration_of_card_if_pass = true;
         await sleep(200);
       }
 
@@ -1166,6 +1173,7 @@ var ability_dict = {
     placed: async (card) => {
       if (card.holder.id === player_me.id) {
         med_draw = 1;
+        ignore_usage_duration_of_card_if_pass = true;
         await sleep(200);
       }
 
@@ -1774,6 +1782,7 @@ var ability_dict = {
         );
         return;
       }
+      ignore_usage_duration_of_card_if_pass = true;
 
       if (hand.cards.length < 2) {
         console.log("FAILED NOT ENOUGHT CARDS");
@@ -2208,6 +2217,8 @@ var ability_dict = {
       console.log("[SKELLIGE_BOND_SUMMONER]", player_me.id, card.holder.id);
 
       if (player_me.id !== card.holder.id) return;
+
+      ignore_usage_duration_of_card_if_pass = true;
 
       let hand = card.holder.hand;
 

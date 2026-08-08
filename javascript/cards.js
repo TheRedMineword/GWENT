@@ -3544,7 +3544,10 @@ function pushMessage(msg, display = 5000) {
   scheduleUpdate();
 }
 function showsync(duration) {
-  pushMessage("SYNC", duration);
+  pushMessage(
+    formatMessage2(getUiStrng("sync.sidenotif").replace("%s", duration / 1000)),
+    duration,
+  );
 }
 function scheduleUpdate() {
   if (expireTimer) {

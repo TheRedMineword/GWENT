@@ -217,7 +217,7 @@ STRNG["pl"] = {
   tgc_portal: {
     name: "ThatGameCompany",
     description:
-      "Wybierz jedną kartę spośród maksymalnie 25 kart frakcji Nieba i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Przynęty. Ta karta jest niestabilna — jej siła zmienia się co turę, najczęściej przyjmując wartości ujemne. "
+      "Wybierz jedną kartę spośród paru kart frakcji Nieba i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Przynęty. Ta karta jest niestabilna — jej siła zmienia się co turę, najczęściej przyjmując wartości ujemne. "
   },
 
   dopler: {
@@ -639,9 +639,9 @@ STRNG["pl"] = {
     ciaran: "Ciaran aep Easnillien",
     barclay: "Barclay Els",
     dennis: "Dennis Cranmer",
-    dol_archer: "Dol Blathanna Archer",
-    dol_infantry_2: "Dol Blathanna Scout",
-    dwarf: "Dwarven Skirmisher",
+    dol_archer: "Strzelec z Dol Blathanna",
+    dol_infantry_2: "Zwiadowca z Dol Blathanna",
+    dwarf: "Krasnoludzki Harcownik",
     eithne: "Eithné",
     elf_skirmisher_1: "Elven Skirmisher",
     filavandrel: "Filavandrel aen Fidhail",
@@ -885,6 +885,7 @@ STRNG["pl"] = {
           "Przeciwnik synchronizuje się z grą %x na %y, odczekaj %s sekund",
         sync: "Przeciwnik synchronizuje się z grą, odczekaj %s sekund, i pomyśl o następnym ruchu",
         end: "Możesz znów grać!",
+        sidenotif: "<color=#41FA66>Synchronizacja</color><color=#d5cfe3>!</color>\n<color=#41FA66>%s</color> <color=#d5cfe3>sekund!</color>"
       },
       end_turn: "%s tura dobiegła końca",
       no_op_start: "Nie można rozpocząć gry: Brak drugiego Gracza",

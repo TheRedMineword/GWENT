@@ -427,7 +427,7 @@
           },
           "tgc_portal": {
             "name": "ThatGameCompany",
-            "description": "Choose one card out of max 25 Sky Faction cards and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! This card is unstable, each turn it power will change in most of the time negative numbers (On averge power will be -3.27) "
+            "description": "Choose one card out of few Sky Faction cards and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! This card is unstable, each turn it power will change in most of the time negative numbers (On averge power will be -3.27) "
           },
           "dopler": {
             "name": "Doppler",
@@ -984,7 +984,8 @@
               "init": "Initiating sync, wait %s seconds",
               "hold_progress": "The opponent synchronizes with the game (%x/%y), wait %ss",
               "sync": "The opponent synchronizes with the game, wait %s seconds, and think about the next move",
-              "end": "You can play now again"
+              "end": "You can play now again",
+              "sidenotif": "\u003Ccolor=#41FA66\u003ESynchronization\u003C/color\u003E\u003Ccolor=#d5cfe3\u003E!\u003C/color\u003E\n\u003Ccolor=#41FA66\u003E%s\u003C/color\u003E \u003Ccolor=#d5cfe3\u003Eseconds!\u003C/color\u003E"
             },
             "end_turn": "End of %s turn",
             "no_op_start": "Cannot start game: waiting for second player.",
@@ -1337,7 +1338,7 @@
           },
           "tgc_portal": {
             "name": "ThatGameCompany",
-            "description": "Wybierz jedną kartę spośród maksymalnie 25 kart frakcji Nieba i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Przynęty. Ta karta jest niestabilna — jej siła zmienia się co turę, najczęściej przyjmując wartości ujemne. "
+            "description": "Wybierz jedną kartę spośród paru kart frakcji Nieba i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Przynęty. Ta karta jest niestabilna — jej siła zmienia się co turę, najczęściej przyjmując wartości ujemne. "
           },
           "dopler": {
             "name": "Doppler",
@@ -1658,9 +1659,9 @@
           "ciaran": "Ciaran aep Easnillien",
           "barclay": "Barclay Els",
           "dennis": "Dennis Cranmer",
-          "dol_archer": "Dol Blathanna Archer",
-          "dol_infantry_2": "Dol Blathanna Scout",
-          "dwarf": "Dwarven Skirmisher",
+          "dol_archer": "Strzelec z Dol Blathanna",
+          "dol_infantry_2": "Zwiadowca z Dol Blathanna",
+          "dwarf": "Krasnoludzki Harcownik",
           "eithne": "Eithné",
           "elf_skirmisher_1": "Elven Skirmisher",
           "filavandrel": "Filavandrel aen Fidhail",
@@ -1894,7 +1895,8 @@
               "init": "Rozpoczynam synchronizację, odczekaj %s sekund",
               "hold_progress": "Przeciwnik synchronizuje się z grą %x na %y, odczekaj %s sekund",
               "sync": "Przeciwnik synchronizuje się z grą, odczekaj %s sekund, i pomyśl o następnym ruchu",
-              "end": "Możesz znów grać!"
+              "end": "Możesz znów grać!",
+              "sidenotif": "\u003Ccolor=#41FA66\u003ESynchronizacja\u003C/color\u003E\u003Ccolor=#d5cfe3\u003E!\u003C/color\u003E\n\u003Ccolor=#41FA66\u003E%s\u003C/color\u003E \u003Ccolor=#d5cfe3\u003Esekund!\u003C/color\u003E"
             },
             "end_turn": "%s tura dobiegła końca",
             "no_op_start": "Nie można rozpocząć gry: Brak drugiego Gracza",
@@ -5567,10 +5569,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
-    "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "8o-JI8VRyKo",
-    "tavern_yt_volume": 90
+    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
+    "audio_yt_vid_soundtrack_volume": 47,
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }

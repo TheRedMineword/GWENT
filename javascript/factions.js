@@ -130,6 +130,8 @@ var factions = {
           "axii",
           "axii2_desc",
           "axii2_desc_playable",
+          "powergain",
+          "aid",
         ]);
 
         const chosen = units.slice(0, 2);

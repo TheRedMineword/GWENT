@@ -19,6 +19,13 @@ Patch Notes:
 </box.title>
 
 <box.text>
+# 7 August, 2026
+```diff
+? tgc\_portal lowered card to choose from! From 25 to 5
+? Pass sync duration is now dynamic!
+--- Updated bucket texture (Lower quality and size)
+```
+<fat3>
 # 6 August, 2026
 The process of translating Gwent into Polish is almost complete!
 <fat1>

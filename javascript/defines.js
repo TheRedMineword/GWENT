@@ -14,6 +14,7 @@ let extraJSON = [];
 let displaynow = null;
 let showbankms = 9000;
 let gameended = false;
+const passmedicpercard = 1500;
 const medicdrawextrasecondswait = 2.2; // extraJson hold // no longer used
 const medic_ability_revive_wait_a_second = 1.7 * 1000;
 let ThatIsSpy = [
@@ -655,4 +656,91 @@ async function animatePopFromObject(elem, colorhex, aftercolorhex, isrestored) {
       resolve();
     }, duration);
   });
+}
+
+let wait_extra = 0;
+async function resolve_extrajson_procces() {
+  console.log("extraJSON vibe check:", extraJSON.length, extraJSON, {
+    medicrevive: med_draw === 1,
+    extrajson: extraJSON.length > 0,
+  });
+  wait_extra = 0;
+  if (extraJSON.length > 0) {
+    const total = extraJSON.length;
+    if (med_draw === 1) {
+      wait_extra = extraJSON.length;
+      console.log("extraJson medic wait pass", passmedicpercard, wait_extra, {
+        type: "medicrevivedata",
+        data: extraJSON,
+      });
+      await resolve_pass_at_extrajson(medic_ability_revive_wait_a_second);
+      comp_and_send(
+        socket,
+        JSON.stringify({ type: "medicrevivedata", data: extraJSON }),
+      );
+      med_draw = 0;
+      extraJSON.length = 0;
+    } else {
+      for (let i = 0; i < total; i++) {
+        const payload = extraJSON[i];
+
+        // base hold + extra 500ms for each next packet
+        const delay =
+          RegisterMovesHold + i * 500 + medicdrawextrasecondswait * 1000;
+
+        console.log(`Hold before send extraJSON ${i + 1}/${total}`, payload);
+
+        showTooltip(
+          getUiStrng("sync.hold_progress")
+            .replace("%x", i + 1)
+            .replace("%y", total)
+            .replace("%s", delay / 1000),
+        );
+        showsync(delay);
+        await new Promise((resolve) => setTimeout(resolve, delay));
+
+        comp_and_send(socket, payload);
+      }
+    }
+    extraJSON = [];
+  }
+  return true;
+}
+let ignore_usage_duration_of_card_if_pass = false;
+async function resolve_pass_post_extrajson(leaderextar = 0) {
+  console.log(
+    "resolve_pass_post_extrajson",
+    leaderextar,
+    "do it?",
+    player_op.passed && !player_me.passed,
+  );
+  if (player_op.passed && !player_me.passed) {
+    var wait = RegisterMovesHold;
+    if (leaderextar > 0) {
+      if (!ignore_usage_duration_of_card_if_pass) {
+        wait = leaderextar + wait + 1000;
+      } else {
+        ignore_usage_duration_of_card_if_pass = false;
+      }
+    }
+    wait = wait + wait_extra * passmedicpercard;
+    console.log("resolve_pass_post_extrajson is", wait, leaderextar);
+    ui.enablePlayer(false);
+    showTooltip(getUiStrng("sync.sync").replace("%s", wait / 1000));
+    ui.enablePlayer(false);
+    showsync(wait);
+    await sleep(wait);
+    showTooltip(getUiStrng("sync.end"));
+    ui.enablePlayer(true);
+  }
+  wait_extra = 0;
+  return true;
+}
+async function resolve_pass_at_extrajson(ms) {
+  var wait2 = ms;
+  showTooltip(getUiStrng("sync.sync").replace("%s", wait2 / 1000));
+  showsync(wait2);
+  await sleep(wait2);
+  //showTooltip(getUiStrng("sync.end"));
+  return true;
 }

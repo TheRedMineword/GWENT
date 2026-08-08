@@ -181,7 +181,7 @@ STRNG["en"] = {
     tgc_portal: {
       name: "ThatGameCompany",
       description:
-        "Choose one card out of max 25 Sky Faction cards and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! This card is unstable, each turn it power will change in most of the time negative numbers (On averge power will be -3.27) ",
+        "Choose one card out of few Sky Faction cards and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! This card is unstable, each turn it power will change in most of the time negative numbers (On averge power will be -3.27) ",
     },
     dopler: {
       name: "Doppler",
@@ -791,6 +791,7 @@ STRNG["en"] = {
           "The opponent synchronizes with the game (%x/%y), wait %ss",
         sync: "The opponent synchronizes with the game, wait %s seconds, and think about the next move",
         end: "You can play now again",
+        sidenotif: "<color=#41FA66>Synchronization</color><color=#d5cfe3>!</color>\n<color=#41FA66>%s</color> <color=#d5cfe3>seconds!</color>"
       },
       end_turn: "End of %s turn",
       no_op_start: "Cannot start game: waiting for second player.",
