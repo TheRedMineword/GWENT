@@ -1,5 +1,5 @@
 This is copied and modified version of [Rickvs64 gwent multiplayer](https://github.com/Rickvs64/gwent-multiplayer)
-An exe app was added: [Dowland](https://theredmineword.github.io/GWENT/exe/dowland/init)
+An exe app was added: [Dowland](https://theredmineword.github.io/GWENT/exe/dowland/init) (exe app is just localhost of game html and images, so you have it saved on PC and not each time you visit website to load them again)
 
 ## Rules
 The game is played in the same way as the original. The player aims to win two of three rounds, where victory within a given round is determined by whoever scores the most points. 
@@ -29,8 +29,4 @@ endorsed by, or sponsored by CD PROJEKT RED.`
 ```
 You are free to copy, distribute or use this project for your purposes under the conditions of preserving information about the original creators and copyrights of the resources used, you may not use it in any other ways than non commercial fan project!
 Before copying my work leave me a message, I am willing to give you open files used for special/own/custom/edited assets
-```
-```
-If I ever end my ongoing support for this project, I will not be able to continue my work or it will become impossible for some reason. 
-I will publicly share raw files for the resources used, as well as other data or information needed to create a working copy of this project
 ```

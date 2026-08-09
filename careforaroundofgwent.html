@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Care For a Round Of Gwent?</title>
+    <title>Care for a Round of Gwent?</title>
 	<link rel="icon" href="https://theredmineword.github.io/GWENT/favicon.ico">
 	<meta charset="utf-8" />
 	<meta name="author" content="Arun Sundaram, Leo-Felde, DrMineword" />
@@ -22,159 +22,109 @@ With new cards and factions!" />
 </head>
 <style>
     :root {
-        color-scheme: dark;
-        --ink: #f4ead8;
+        --bg: #120b08;
+        --card: #21130d;
+        --text: #f4ead8;
         --muted: #c7b9a3;
         --gold: #d9ad55;
-        --gold-soft: #f0cf82;
-        --brown: #2b170e;
-        --brown-2: #160b07;
-        --panel: rgba(27, 14, 9, .82);
-        --line: rgba(217, 173, 85, .34);
     }
 
-    * { box-sizing: border-box; }
-
-    html, body {
-        min-height: 100%;
-        margin: 0;
+    * {
+        box-sizing: border-box;
     }
 
     body {
+        margin: 0;
         min-height: 100vh;
         display: grid;
         place-items: center;
-        overflow: hidden;
-        padding: 24px;
-        color: var(--ink);
+        padding: 20px;
+        background: var(--bg);
+        color: var(--text);
         font-family: Georgia, "Times New Roman", serif;
-        background:
-            radial-gradient(circle at 50% 35%, rgba(126, 78, 29, .28), transparent 38%),
-            linear-gradient(145deg, #120905 0%, var(--brown) 48%, #0c0604 100%);
-        position: relative;
-    }
-
-    body::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        opacity: .16;
-        background-image:
-            repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0 1px, transparent 1px 4px),
-            repeating-linear-gradient(90deg, rgba(0,0,0,.08) 0 1px, transparent 1px 5px);
-        mix-blend-mode: overlay;
     }
 
     .gwent-card {
-        width: min(680px, 100%);
-        position: relative;
-        padding: clamp(34px, 7vw, 64px) clamp(26px, 7vw, 72px);
+        width: min(600px, 100%);
+        padding: 48px 32px;
         text-align: center;
-        background:
-            linear-gradient(180deg, rgba(62, 33, 18, .88), var(--panel)),
-            var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 18px;
-        box-shadow:
-            0 28px 80px rgba(0,0,0,.62),
-            inset 0 1px 0 rgba(255,255,255,.08),
-            inset 0 0 0 1px rgba(0,0,0,.45);
-        backdrop-filter: blur(8px);
+        background: var(--card);
+        border: 1px solid rgba(217, 173, 85, .4);
+        border-radius: 12px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, .5);
     }
-
-    .gwent-card::before,
-    .gwent-card::after {
-        content: "✦";
-        position: absolute;
-        top: 18px;
-        color: var(--gold);
-        opacity: .75;
-        font-size: 15px;
-    }
-
-    .gwent-card::before { left: 22px; }
-    .gwent-card::after { right: 22px; }
 
     .crest {
-        width: 72px;
-        height: 72px;
-        margin: 0 auto 22px;
-        display: grid;
-        place-items: center;
-        border: 1px solid rgba(217,173,85,.55);
-        border-radius: 50%;
-        color: var(--gold-soft);
-        font-size: 32px;
-        background: radial-gradient(circle, rgba(217,173,85,.16), rgba(0,0,0,.2));
-        box-shadow: 0 0 28px rgba(217,173,85,.12);
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        display: block;
+        object-fit: contain;
     }
 
     h1 {
         margin: 0;
-        font-size: clamp(30px, 6vw, 48px);
-        line-height: 1.05;
-        letter-spacing: .025em;
-        font-weight: 700;
-        text-shadow: 0 3px 18px rgba(0,0,0,.55);
+        font-size: clamp(28px, 6vw, 44px);
+        line-height: 1.1;
     }
 
     .rule {
-        width: 110px;
+        width: 90px;
         height: 1px;
-        margin: 22px auto;
-        background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    }
-
-    p {
-        margin: 0;
-        color: var(--muted);
-        font-size: 17px;
-        line-height: 1.7;
+        margin: 20px auto;
+        background: var(--gold);
     }
 
     .status {
         display: inline-flex;
         align-items: center;
-        gap: 10px;
-        margin-top: 28px;
-        padding: 11px 18px;
-        border: 1px solid rgba(217,173,85,.25);
-        border-radius: 999px;
-        background: rgba(0,0,0,.2);
-        color: #e8dcc9;
-        font-size: 14px;
-        letter-spacing: .06em;
+        gap: 8px;
+        margin-top: 24px;
+        padding: 10px 16px;
+        border: 1px solid rgba(217, 173, 85, .3);
+        border-radius: 20px;
+        color: var(--muted);
+        font-size: 13px;
         text-transform: uppercase;
+        letter-spacing: .05em;
     }
 
     .dot {
-        width: 8px;
-        height: 8px;
+        width: 7px;
+        height: 7px;
         border-radius: 50%;
-        background: var(--gold-soft);
-        box-shadow: 0 0 12px rgba(240,207,130,.75);
+        background: var(--gold);
         animation: pulse 1.5s ease-in-out infinite;
     }
 
     @keyframes pulse {
-        0%, 100% { opacity: .45; transform: scale(.85); }
-        50% { opacity: 1; transform: scale(1); }
+        50% {
+            opacity: .4;
+        }
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .dot { animation: none; }
+        .dot {
+            animation: none;
+        }
     }
 </style>
 
 <body>
     <main class="gwent-card" aria-live="polite">
-        <div class="crest" aria-hidden="true">♠</div>
+        <img
+            class="crest"
+            src="https://theredmineword.github.io/GWENT/img/web/logo_round.png"
+            alt="Gwent"
+        >
+
         <h1>Care for a Round of Gwent?</h1>
+
         <div class="rule"></div>
+
         <div class="status">
             <span class="dot" aria-hidden="true"></span>
-            Redirecting to Gwent, Please wait
+            Redirecting to Gwent, please wait
         </div>
     </main>
     <img src="https://theredmineword.github.io/GWENT/web-only/images/care.png" alt="" width="1" height="1" style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
