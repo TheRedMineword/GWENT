@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Care For A Round Of Gwent?</title>
+    <title>Care For a Round Of Gwent?</title>
 	<link rel="icon" href="https://theredmineword.github.io/GWENT/favicon.ico">
 	<meta charset="utf-8" />
 	<meta name="author" content="Arun Sundaram, Leo-Felde, DrMineword" />
@@ -18,9 +18,165 @@ With new cards and factions!" />
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="keywords" content="DrMineword, programmer, gwent, tw3, witcher, card, game, gamedev, play, multiplayer, gwent multiplayer, browser, gwint" />
-    <script>!async function(){const e="https://drmineword-gwent.onrender.com/";let n=!1,a=!1,t={},o=null;var r="";"theredmineword.github.io"===location.host&&(r="/GWENT/");const s=`${location.origin}${r}`,i=new URLSearchParams(window.location.search);let c=s;if(i.has("joingame")){const e=i.get("joingame");c+="#joingame="+encodeURIComponent(e)}await async function(){if(n="localhost"===location.hostname&&"8080"===location.port||"localhost"===location.hostname&&"8081"===location.port||await async function(n="javascript/browser/validate.js"){console.log("HUMAN inited");try{await async function(e){return new Promise((n,a)=>{const t=document.createElement("script");t.src=`${e}?ver=${encodeURIComponent("1")}`,t.onload=n,t.onerror=a,document.head.appendChild(t)})}(n),console.log("HUMAN past script!");const a=window.location.hostname.startsWith("localhost")||window.location.hostname.startsWith("127.0.0.1")||window.location.hostname.startsWith("[::1]"),r=a&&"1111"===location.port?e:a?"http://localhost:8081/":e;console.log("HUMAN to scan: ",`${r}api/bot-check`),o=r;const s=await init_scan_is_human(`${r}api/bot-check`);return s.human?console.log("✅ Human"):(console.log("❌ Failed"),console.table(s.failures)),fetch(`${r}api/verdict`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({value:`**${location.pathname}**\n${s.human}, Failures:\`\`\`${JSON.stringify(s?.failures||null)}\`\`\` \`\`\`${JSON.stringify(locationJson)}\`\`\``})}),s.human||fetch(`${r}api/verdict`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({value:s})}),console.log(s),console.log("HUMAN  scan",s),t=s,s.human}catch(e){return console.error(e),!1}}(),!n){console.log("Making is human raport from",t);const e=new Date(Date.now()).toLocaleString();try{const a=`# 🤖 Anti-Bot Report\n\n## Visitor\n- **Visitor ID:** \`${t.visitorId}\`\n- **Verdict:** **${t.verdict.toUpperCase()}**\n- **Human:** ${t.human?"✅ Yes":"❌ No"}\n- **Success:** ${t.success?"✅ True":"❌ False"}\n\n## Detection\n- **Score:** ${t.score}/${t.data.result.maxScore}\n- **Confidence:** ${t.confidence}%\n- **Timestamp:** ${e} (${t?.data?.timestamp||"null"})\n\n## Reasons\n${t.reasons.map(e=>`- ${e}`).join("\n")}\n\n## Network\n- VPN: ${t.data.result.network.vpn}\n- Hosting: ${t.data.result.network.hosting?"Yes":"No"}\n- Risk Score: ${t.data.result.network.risk}\n\n## Browser\n- Name: ${t.data.result.parsed.browser.name}\n- Version: ${t.data.result.parsed.browser.version}\n- OS: ${t.data.result.parsed.os.name} ${t.data.result.parsed.os.version}\n- Platform: ${t.data.result.browser.platform}\n- Language: ${t.data.result.browser.language}\n- Timezone: ${t.data.result.browser.timezone}\n- WebDriver: ${t.data.result.browser.webdriver?"⚠️ Enabled":"✅ Disabled"}\n\n## Hardware\n- CPU: ${t.data.result.parsed.cpu.architecture}\n- Memory: ${t.data.result.browser.deviceMemory} GB\n- Threads: ${t.data.result.browser.hardwareConcurrency}\n- Touch Points: ${t.data.result.browser.touchPoints}\n\n## Graphics\n- WebGL Vendor: ${t.data.result.graphics.webglVendor}\n- Renderer: ${t.data.result.graphics.webglRenderer}\n- Canvas: ${t.data.result.graphics.canvas?"Supported":"Unavailable"}\n- Audio: ${t.data.result.graphics.audio?"Supported":"Unavailable"}\n\n## Security Summary\n\`\`\`\nVerdict     : ${t.verdict}\nConfidence  : ${t.confidence}%\nScore       : ${t.score}/${t.data.result.maxScore}\nWebDriver   : ${t.data.result.browser.webdriver}\nVPN         : ${t.data.result.network.vpn}\nHosting     : ${t.data.result.network.hosting}\nRisk        : ${t.data.result.network.risk}\nLocation    : ${JSON.stringify(locationJson)}\n\`\`\`\n`;n=await show_captcha(a),fetch(`${o}api/verdict`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({value:`Completed captcha: ${n}, Rap:\`\`\`${a}\`\`\``})})}catch(e){n=await show_captcha(`Failed to generate raport: ${e.message}`)}}return o=null,a=!0,!0}()&&window.location.replace(c)}();</script>
+    <script>!async function(){const o={href:window.location.href,origin:window.location.origin,protocol:window.location.protocol,host:window.location.host,hostname:window.location.hostname,port:window.location.port,pathname:window.location.pathname,search:window.location.search,hash:window.location.hash};console.log("Website",o);const n="https://drmineword-gwent.onrender.com/";let e=!1,t=!1,a={},r=null;var s="";"theredmineword.github.io"===location.host&&(s="/GWENT/");const i=`${location.origin}${s}`,c=new URLSearchParams(window.location.search);let l=i;if(c.has("joingame")){const o=c.get("joingame");l+="#joingame="+encodeURIComponent(o)}await async function(){if(e="localhost"===location.hostname&&"8080"===location.port||"localhost"===location.hostname&&"8081"===location.port||await async function(e="javascript/browser/validate.js"){console.log("HUMAN inited");try{await async function(o){return new Promise((n,e)=>{const t=document.createElement("script");t.src=`${o}?ver=${encodeURIComponent("1")}`,t.onload=n,t.onerror=e,document.head.appendChild(t)})}(e),console.log("HUMAN past script!");const t=window.location.hostname.startsWith("localhost")||window.location.hostname.startsWith("127.0.0.1")||window.location.hostname.startsWith("[::1]"),s=t&&"1111"===location.port?n:t?"http://localhost:8081/":n;console.log("HUMAN to scan: ",`${s}api/bot-check`),r=s;const i=await init_scan_is_human(`${s}api/bot-check`);return i.human?console.log("✅ Human"):(console.log("❌ Failed"),console.table(i.failures)),fetch(`${s}api/verdict`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({value:`**${location.pathname}**\n${i.human}, Failures:\`\`\`${JSON.stringify(i?.failures||null)}\`\`\` \`\`\`${JSON.stringify(o)}\`\`\``})}),i.human||fetch(`${s}api/verdict`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({value:i})}),console.log(i),console.log("HUMAN  scan",i),a=i,i.human}catch(o){return console.error(o),!1}}(),!e){console.log("Making is human raport from",a);const n=new Date(Date.now()).toLocaleString();try{const t=`# 🤖 Anti-Bot Report\n\n## Visitor\n- **Visitor ID:** \`${a.visitorId}\`\n- **Verdict:** **${a.verdict.toUpperCase()}**\n- **Human:** ${a.human?"✅ Yes":"❌ No"}\n- **Success:** ${a.success?"✅ True":"❌ False"}\n\n## Detection\n- **Score:** ${a.score}/${a.data.result.maxScore}\n- **Confidence:** ${a.confidence}%\n- **Timestamp:** ${n} (${a?.data?.timestamp||"null"})\n\n## Reasons\n${a.reasons.map(o=>`- ${o}`).join("\n")}\n\n## Network\n- VPN: ${a.data.result.network.vpn}\n- Hosting: ${a.data.result.network.hosting?"Yes":"No"}\n- Risk Score: ${a.data.result.network.risk}\n\n## Browser\n- Name: ${a.data.result.parsed.browser.name}\n- Version: ${a.data.result.parsed.browser.version}\n- OS: ${a.data.result.parsed.os.name} ${a.data.result.parsed.os.version}\n- Platform: ${a.data.result.browser.platform}\n- Language: ${a.data.result.browser.language}\n- Timezone: ${a.data.result.browser.timezone}\n- WebDriver: ${a.data.result.browser.webdriver?"⚠️ Enabled":"✅ Disabled"}\n\n## Hardware\n- CPU: ${a.data.result.parsed.cpu.architecture}\n- Memory: ${a.data.result.browser.deviceMemory} GB\n- Threads: ${a.data.result.browser.hardwareConcurrency}\n- Touch Points: ${a.data.result.browser.touchPoints}\n\n## Graphics\n- WebGL Vendor: ${a.data.result.graphics.webglVendor}\n- Renderer: ${a.data.result.graphics.webglRenderer}\n- Canvas: ${a.data.result.graphics.canvas?"Supported":"Unavailable"}\n- Audio: ${a.data.result.graphics.audio?"Supported":"Unavailable"}\n\n## Security Summary\n\`\`\`\nVerdict     : ${a.verdict}\nConfidence  : ${a.confidence}%\nScore       : ${a.score}/${a.data.result.maxScore}\nWebDriver   : ${a.data.result.browser.webdriver}\nVPN         : ${a.data.result.network.vpn}\nHosting     : ${a.data.result.network.hosting}\nRisk        : ${a.data.result.network.risk}\nLocation    : ${JSON.stringify(o)}\n\`\`\`\n`;e=await show_captcha(t),fetch(`${r}api/verdict`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({value:`Completed captcha: ${e}, Rap:\`\`\`${t}\`\`\``})})}catch(o){e=await show_captcha(`Failed to generate raport: ${o.message}`)}}return r=null,t=!0,!0}()&&window.location.replace(l)}();</script>
 </head>
+<style>
+    :root {
+        color-scheme: dark;
+        --ink: #f4ead8;
+        --muted: #c7b9a3;
+        --gold: #d9ad55;
+        --gold-soft: #f0cf82;
+        --brown: #2b170e;
+        --brown-2: #160b07;
+        --panel: rgba(27, 14, 9, .82);
+        --line: rgba(217, 173, 85, .34);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+        min-height: 100%;
+        margin: 0;
+    }
+
+    body {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        padding: 24px;
+        color: var(--ink);
+        font-family: Georgia, "Times New Roman", serif;
+        background:
+            radial-gradient(circle at 50% 35%, rgba(126, 78, 29, .28), transparent 38%),
+            linear-gradient(145deg, #120905 0%, var(--brown) 48%, #0c0604 100%);
+        position: relative;
+    }
+
+    body::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: .16;
+        background-image:
+            repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0 1px, transparent 1px 4px),
+            repeating-linear-gradient(90deg, rgba(0,0,0,.08) 0 1px, transparent 1px 5px);
+        mix-blend-mode: overlay;
+    }
+
+    .gwent-card {
+        width: min(680px, 100%);
+        position: relative;
+        padding: clamp(34px, 7vw, 64px) clamp(26px, 7vw, 72px);
+        text-align: center;
+        background:
+            linear-gradient(180deg, rgba(62, 33, 18, .88), var(--panel)),
+            var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow:
+            0 28px 80px rgba(0,0,0,.62),
+            inset 0 1px 0 rgba(255,255,255,.08),
+            inset 0 0 0 1px rgba(0,0,0,.45);
+        backdrop-filter: blur(8px);
+    }
+
+    .gwent-card::before,
+    .gwent-card::after {
+        content: "✦";
+        position: absolute;
+        top: 18px;
+        color: var(--gold);
+        opacity: .75;
+        font-size: 15px;
+    }
+
+    .gwent-card::before { left: 22px; }
+    .gwent-card::after { right: 22px; }
+
+    .crest {
+        width: 72px;
+        height: 72px;
+        margin: 0 auto 22px;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(217,173,85,.55);
+        border-radius: 50%;
+        color: var(--gold-soft);
+        font-size: 32px;
+        background: radial-gradient(circle, rgba(217,173,85,.16), rgba(0,0,0,.2));
+        box-shadow: 0 0 28px rgba(217,173,85,.12);
+    }
+
+    h1 {
+        margin: 0;
+        font-size: clamp(30px, 6vw, 48px);
+        line-height: 1.05;
+        letter-spacing: .025em;
+        font-weight: 700;
+        text-shadow: 0 3px 18px rgba(0,0,0,.55);
+    }
+
+    .rule {
+        width: 110px;
+        height: 1px;
+        margin: 22px auto;
+        background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.7;
+    }
+
+    .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 28px;
+        padding: 11px 18px;
+        border: 1px solid rgba(217,173,85,.25);
+        border-radius: 999px;
+        background: rgba(0,0,0,.2);
+        color: #e8dcc9;
+        font-size: 14px;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+    }
+
+    .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--gold-soft);
+        box-shadow: 0 0 12px rgba(240,207,130,.75);
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: .45; transform: scale(.85); }
+        50% { opacity: 1; transform: scale(1); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .dot { animation: none; }
+    }
+</style>
+
 <body>
-    <p>Redirecting...</p>
+    <main class="gwent-card" aria-live="polite">
+        <div class="crest" aria-hidden="true">♠</div>
+        <h1>Care for a Round of Gwent?</h1>
+        <div class="rule"></div>
+        <div class="status">
+            <span class="dot" aria-hidden="true"></span>
+            Redirecting to Gwent, Please wait
+        </div>
+    </main>
+    <img src="https://theredmineword.github.io/GWENT/web-only/images/care.png" alt="" width="1" height="1" style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
 </body>
 </html>
