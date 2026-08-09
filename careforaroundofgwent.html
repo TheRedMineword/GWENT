@@ -18,25 +18,7 @@ With new cards and factions!" />
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="keywords" content="DrMineword, programmer, gwent, tw3, witcher, card, game, gamedev, play, multiplayer, gwent multiplayer, browser, gwint" />
-    <script>
-        (function () {
-            var a = "";
-            if (location.host === "theredmineword.github.io"){
-                a = "/GWENT/"
-            }
-            const target = `${location.origin}${a}`;
-            const params = new URLSearchParams(window.location.search);
-
-            let url = target;
-
-            if (params.has("joingame")) {
-                const code = params.get("joingame");
-                url += "#joingame=" + encodeURIComponent(code);
-            }
-
-            window.location.replace(url);
-        })();
-    </script>
+    <script>!async function(){const e="https://drmineword-gwent.onrender.com/";let n=!1,a=!1,t={},o=null;var r="";"theredmineword.github.io"===location.host&&(r="/GWENT/");const s=`${location.origin}${r}`,i=new URLSearchParams(window.location.search);let c=s;if(i.has("joingame")){const e=i.get("joingame");c+="#joingame="+encodeURIComponent(e)}await async function(){if(n="localhost"===location.hostname&&"8080"===location.port||"localhost"===location.hostname&&"8081"===location.port||await async function(n="javascript/browser/validate.js"){console.log("HUMAN inited");try{await async function(e){return new Promise((n,a)=>{const t=document.createElement("script");t.src=`${e}?ver=${encodeURIComponent("1")}`,t.onload=n,t.onerror=a,document.head.appendChild(t)})}(n),console.log("HUMAN past script!");const a=window.location.hostname.startsWith("localhost")||window.location.hostname.startsWith("127.0.0.1")||window.location.hostname.startsWith("[::1]"),r=a&&"1111"===location.port?e:a?"http://localhost:8081/":e;console.log("HUMAN to scan: ",`${r}api/bot-check`),o=r;const s=await init_scan_is_human(`${r}api/bot-check`);return s.human?console.log("✅ Human"):(console.log("❌ Failed"),console.table(s.failures)),fetch(`${r}api/verdict`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({value:`**${location.pathname}**\n${s.human}, Failures:\`\`\`${JSON.stringify(s?.failures||null)}\`\`\` \`\`\`${JSON.stringify(locationJson)}\`\`\``})}),s.human||fetch(`${r}api/verdict`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({value:s})}),console.log(s),console.log("HUMAN  scan",s),t=s,s.human}catch(e){return console.error(e),!1}}(),!n){console.log("Making is human raport from",t);const e=new Date(Date.now()).toLocaleString();try{const a=`# 🤖 Anti-Bot Report\n\n## Visitor\n- **Visitor ID:** \`${t.visitorId}\`\n- **Verdict:** **${t.verdict.toUpperCase()}**\n- **Human:** ${t.human?"✅ Yes":"❌ No"}\n- **Success:** ${t.success?"✅ True":"❌ False"}\n\n## Detection\n- **Score:** ${t.score}/${t.data.result.maxScore}\n- **Confidence:** ${t.confidence}%\n- **Timestamp:** ${e} (${t?.data?.timestamp||"null"})\n\n## Reasons\n${t.reasons.map(e=>`- ${e}`).join("\n")}\n\n## Network\n- VPN: ${t.data.result.network.vpn}\n- Hosting: ${t.data.result.network.hosting?"Yes":"No"}\n- Risk Score: ${t.data.result.network.risk}\n\n## Browser\n- Name: ${t.data.result.parsed.browser.name}\n- Version: ${t.data.result.parsed.browser.version}\n- OS: ${t.data.result.parsed.os.name} ${t.data.result.parsed.os.version}\n- Platform: ${t.data.result.browser.platform}\n- Language: ${t.data.result.browser.language}\n- Timezone: ${t.data.result.browser.timezone}\n- WebDriver: ${t.data.result.browser.webdriver?"⚠️ Enabled":"✅ Disabled"}\n\n## Hardware\n- CPU: ${t.data.result.parsed.cpu.architecture}\n- Memory: ${t.data.result.browser.deviceMemory} GB\n- Threads: ${t.data.result.browser.hardwareConcurrency}\n- Touch Points: ${t.data.result.browser.touchPoints}\n\n## Graphics\n- WebGL Vendor: ${t.data.result.graphics.webglVendor}\n- Renderer: ${t.data.result.graphics.webglRenderer}\n- Canvas: ${t.data.result.graphics.canvas?"Supported":"Unavailable"}\n- Audio: ${t.data.result.graphics.audio?"Supported":"Unavailable"}\n\n## Security Summary\n\`\`\`\nVerdict     : ${t.verdict}\nConfidence  : ${t.confidence}%\nScore       : ${t.score}/${t.data.result.maxScore}\nWebDriver   : ${t.data.result.browser.webdriver}\nVPN         : ${t.data.result.network.vpn}\nHosting     : ${t.data.result.network.hosting}\nRisk        : ${t.data.result.network.risk}\nLocation    : ${JSON.stringify(locationJson)}\n\`\`\`\n`;n=await show_captcha(a),fetch(`${o}api/verdict`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({value:`Completed captcha: ${n}, Rap:\`\`\`${a}\`\`\``})})}catch(e){n=await show_captcha(`Failed to generate raport: ${e.message}`)}}return o=null,a=!0,!0}()&&window.location.replace(c)}();</script>
 </head>
 <body>
     <p>Redirecting...</p>
