@@ -278,8 +278,8 @@
         "_info": {
           "id": "English",
           "translated": true,
-          "msg": "\"%s\"",
-          "tit": ""
+          "msg": "REPLACE THIS BY WARNING SCREEN MESSAGE ABOUT TRANSLATION IN PROCCES \"%s\"",
+          "tit": "TRANSLATION IN PROGRESS ETC ITS NAME OF AN ALERT"
         },
         "ability": {
           "leader": "Leader Ability",
@@ -1938,6 +1938,7 @@
             "north-scorch-cancelled": "Northern Realms leader ability used:\nScorch ability cancelled for the rest of the round.",
             "scol_secondchance": "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from grave.",
             "gaunter": "Zdolność Gauntera O'Dima użyta:\nObie strony dostają dodatkowe karty!",
+            "gaunter2": "Zdolność Gauntera O'Dima użyta:\nOstatnia runda została wymazana; Wszyscy gracze odzyskują jedno życie!",
             "scol_secondchance_necro2": "Zdolność Gauntera O'Dima użyta:\nObie strony dostają dodatkowe karty!",
             "monsters": "Zdolność frakcji Potworów aktywowana:\nJedna karta Potworów zostaje na planszy.",
             "draw_end": "Gra w Gwinta nie może zakończyć się remisem!\nStaw czoła przeciwnikowi po raz kolejny aż zwycięsca zostanie wybrany!",
@@ -5569,10 +5570,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 30
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack_volume": 90,
+    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }

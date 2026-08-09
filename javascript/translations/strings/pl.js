@@ -937,6 +937,8 @@ STRNG["pl"] = {
         "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from grave.", // dont thin its used
       gaunter:
         "Zdolność Gauntera O'Dima użyta:\nObie strony dostają dodatkowe karty!",
+      gaunter2:
+        "Zdolność Gauntera O'Dima użyta:\nOstatnia runda została wymazana; Wszyscy gracze odzyskują jedno życie!",
       scol_secondchance_necro2:
         "Zdolność Gauntera O'Dima użyta:\nObie strony dostają dodatkowe karty!",
       monsters:

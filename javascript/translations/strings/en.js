@@ -2,7 +2,7 @@ STRNG["en"] = {
   TRANSLATED_BY: "N/A",
     "_info": {
       "id": "English",
-      "translated": true, "msg": "\"%s\"", tit: ""
+      "translated": true, "msg": "REPLACE THIS BY WARNING SCREEN MESSAGE ABOUT TRANSLATION IN PROCCES \"%s\"", tit: "TRANSLATION IN PROGRESS ETC ITS NAME OF AN ALERT"
     },
   ability: {
     leader: "Leader Ability",
@@ -814,17 +814,17 @@ STRNG["en"] = {
         "Nilfgaard faction ability triggered:\nNilfgaard wins any round that ends in a draw.",
       "op-leader": "Opponent uses leader",
       "op-white-flame":
-        "The opponent's leader cancel\nyour opponent's Leader Ability",
+        "The opponent's leader cancel\nyour opponent's Leader Ability", //unused
       meve_white_queen:
-        "Lyria & Rivia leader allows both players to restore\n2 units when using the medic ability.",
+        "Lyria & Rivia leader allows both players to restore\n2 units when using the medic ability.", //unused
       medicextra: "You and opponent can revive extra card from medic ability!",
-      "me-first": "You will go first",
-      "op-first": "Your opponent will go first",
-      "me-coin": "You will go first",
-      "me-coin-lambert": "Lambert lets you start the game",
-      "op-coin": "Your opponent will go first",
+      "me-first": "You will go first", //unused
+      "op-first": "Your opponent will go first", //unused
+      "me-coin": "You will go first", //unused
+      "me-coin-lambert": "Lambert lets you start the game", //unused
+      "op-coin": "Your opponent will go first", //unused
       "op-coin-lambert":
-        "Lambert says that you suck!\nThe opponent starts the game!",
+        "Lambert says that you suck!\nThe opponent starts the game!", //unused 
       "round-start": "Round Start",
       "me-pass": "Round passed",
       "op-pass": "Your opponent has passed",
@@ -840,7 +840,7 @@ STRNG["en"] = {
       "north-scorch-cancelled":
         "Northern Realms leader ability used:\nScorch ability cancelled for the rest of the round.",
       scol_secondchance:
-        "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from grave.",
+        "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from grave.", //unused
       gaunter:
         "Gaunter o'Dim Ability Used:\nBoth sides recived additional card!",
       gaunter2:
@@ -861,13 +861,13 @@ STRNG["en"] = {
       "skellige-me": "Skellige Ability Triggered!",
       witcher_universe: "Witcher Universe faction ability used:\nTurn skipped.",
       toussaint:
-        "Toussaint faction ability used:\nToussaint draws an additional card.",
+        "Toussaint faction ability used:\nToussaint draws an additional card.", //unused
       "toussaint-decoy-cancelled":
-        "Toussaint leader ability used:\nDecoy ability cancelled for the rest of the round.",
+        "Toussaint leader ability used:\nDecoy ability cancelled for the rest of the round.", //unused
       lyria_rivia:
-        "Lyria & Rivia faction ability used:\nMorale Boost effect applied to a row.",
+        "Lyria & Rivia faction ability used:\nMorale Boost effect applied to a row.", //unused
       zerrikania:
-        "Zerrikania faction ability used:\nUnit restored from the discard pile.",
+        "Zerrikania faction ability used:\nUnit restored from the discard pile.", //unused
       "coin-false_player-me": "You skipped your turn",
       "coin-true_player-me":
         "You skipped your turn\nBut your opponent received an additional card",
