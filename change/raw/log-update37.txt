@@ -20,9 +20,8 @@ Patch Notes:
 
 <box.text>
 # 10 August, 2026
-```diff
-<fat2>
 ## <color=#C5E0DF>New Moon is coming!</color>
+```diff
 <fat1>
 <color=#C5E0DF>_It will begin on **!time:2026-08-12T01:45:46.499Z!**; the moon will vanish from the sky, darkness will fall, and the long-dead will rise from their graves!_</color>
 <color=#C5E0DF>_The </color><color=#A6ABAB>**New Moon** </color><color=#C5E0DF>card will summon </color><color=#2A7B40>**Nightraiths**</color> <color=#C5E0DF>to the board._</color>
