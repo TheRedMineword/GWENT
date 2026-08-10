@@ -316,7 +316,7 @@ async function init_scan_is_human(
 
         return {
             success: true,
-            human: failures.length === 0,
+            human: failures.length < 2, // So for some time we will let 1 failure go past bot check
             verdict: result.verdict,
             score: result.score,
             confidence: result.confidence,

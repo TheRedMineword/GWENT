@@ -173,8 +173,8 @@ module.exports = function analyseBot(data = {}) {
     if (!headers["sec-fetch-mode"])
        add("headers", 5, "Missing Sec-Fetch-Mode");
 
-    if (!headers["sec-ch-ua"])
-        add("headers", 5, "Missing Sec-CH-UA");
+ //   if (!headers["sec-ch-ua"])
+ //       add("headers", 5, "Missing Sec-CH-UA"); // Not really that usefull, will temponary disable
 
     // ------------------------------------------------
     // Language
