@@ -1667,7 +1667,7 @@ var ability_dict = {
         board.toHand(newCard, grave);
         return;
       }
-
+      ignore_usage_duration_of_card_if_pass = true;
       Carousel.curr.cancel();
       await ui.queueCarousel(
         grave,
@@ -1747,7 +1747,7 @@ var ability_dict = {
       }
 
       Carousel.curr.exit();
-
+      ignore_usage_duration_of_card_if_pass = true;
       await ui.queueCarousel(
         card.holder.grave,
         1,
@@ -1817,7 +1817,7 @@ var ability_dict = {
         () => true,
         false,
         false,
-        "Choose card to banish (1/2)",
+        getUiStrng("queueCarousel_other.eredin1"),
       );
 
       await new Promise((r) => setTimeout(r, 300));
@@ -1848,7 +1848,7 @@ var ability_dict = {
         () => true,
         false,
         false,
-        "Choose card to banish (2/2)",
+        getUiStrng("queueCarousel_other.eredin2"),
       );
 
       await new Promise((r) => setTimeout(r, 300));
@@ -1876,7 +1876,7 @@ var ability_dict = {
         () => true,
         true,
         false,
-        "Choose a card to create a copy of",
+        getUiStrng("queueCarousel_other.eredin_ok"),
       );
 
       if (!wrapper.card) {
@@ -2260,7 +2260,7 @@ var ability_dict = {
         (candidate) => candidate.basePower >= skellige_bond_conf.power,
         false,
         false,
-        "Choose card to banish",
+        getUiStrng("queueCarousel_other.skellige_mad_man"),
       );
 
       if (!banished) return;
@@ -2316,7 +2316,7 @@ var ability_dict = {
         () => true,
         true,
         false,
-        "Choose Tight Bond card",
+        getUiStrng("queueCarousel_other.skellige_mad_man_ok"),
       );
 
       if (!wrapper.card) return;
@@ -2373,7 +2373,8 @@ var ability_dict = {
       );
 
       if (game.roundHistory.length === 0) {
-        showSideTooltip("Gaunter failed to revert time!");
+        //  showSideTooltip("Gaunter failed to revert time!");
+        console.warn("Gaunter failed to revert time!");
         return false;
       }
       await ui.notification("gaunter2", ui_display_times.faction_ability);
@@ -2501,7 +2502,7 @@ var ability_dict = {
         () => true,
         true,
         false,
-        "Choose a card to draw",
+        getUiStrng("queueCarousel_other.devildeal"),
       );
 
       let picked = wrapper.card;

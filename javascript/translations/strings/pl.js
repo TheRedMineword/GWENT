@@ -887,12 +887,21 @@ STRNG["pl"] = {
         end: "Możesz znów grać!",
         sidenotif: "<color=#41FA66>Synchronizacja</color><color=#d5cfe3>!</color>\n<color=#41FA66>%s</color> <color=#d5cfe3>sekund!</color>"
       },
-      end_turn: "%s tura dobiegła końca",
+      end_turn: "<color=#abebe2>%s</color><color=#32a852> tura dobiegła końca!</color>",
       no_op_start: "Nie można rozpocząć gry: Brak drugiego Gracza",
       me_ready: "Jesteś gotowy, Poczekaj na drugiego gracza",
       me_unready: "Jesteś teraz niegotowy",
       redraw:
         "<color=#d5cfe3>Przelosowałeś kartę \"</color><color=#fa4441>%x</color><color=#d5cfe3>\" na \"</color><color=#41fa66>%y</color><color=#d5cfe3>\"</color>",
+      bucket: "<color=#d5cfe3>Nowa karta wpadła do wiadra:</color> <color=#41fa66>%s</color>",
+      queueCarousel_other: {
+        eredin1: "Wybierz kartę do wygnania (1/2)",
+        eredin2: "Wybierz kartę do wygnania (2/2)",
+        eredin_ok: "Wybierz kartę do skopiowania",
+        skellige_mad_man: "Wybierz kartę do wygnania",
+        skellige_mad_man_ok: "Choose Tight Bond card",
+        devildeal: "Wybierz kartę do dobrania"
+      },
         ordinal: {
       "st": "",
       "nd": "",

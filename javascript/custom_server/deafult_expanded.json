@@ -987,11 +987,20 @@
               "end": "You can play now again",
               "sidenotif": "\u003Ccolor=#41FA66\u003ESynchronization\u003C/color\u003E\u003Ccolor=#d5cfe3\u003E!\u003C/color\u003E\n\u003Ccolor=#41FA66\u003E%s\u003C/color\u003E \u003Ccolor=#d5cfe3\u003Eseconds!\u003C/color\u003E"
             },
-            "end_turn": "End of %s turn",
+            "end_turn": "\u003Ccolor=#32a852\u003EEnd of \u003C/color\u003E\u003Ccolor=#abebe2\u003E%s\u003C/color\u003E\u003Ccolor=#32a852\u003E turn\u003C/color\u003E",
             "no_op_start": "Cannot start game: waiting for second player.",
             "me_ready": "You are ready, please wait for opponent!",
             "me_unready": "You are now UnReady",
             "redraw": "\u003Ccolor=#d5cfe3\u003EYou redrawed card\u003C/color\u003E \u003Ccolor=#fa4441\u003E%x\u003C/color\u003E \u003Ccolor=#d5cfe3\u003Efor a\u003C/color\u003E \u003Ccolor=#41fa66\u003E%y\u003C/color\u003E",
+            "bucket": "\u003Ccolor=#d5cfe3\u003EA new card has been added to the bucket:\u003C/color\u003E \u003Ccolor=#41fa66\u003E%s\u003C/color\u003E",
+            "queueCarousel_other": {
+              "eredin1": "Choose card to banish (1/2)",
+              "eredin2": "Choose card to banish (2/2)",
+              "eredin_ok": "Choose a card to create a copy of",
+              "skellige_mad_man": "Choose card to banish",
+              "skellige_mad_man_ok": "Choose Tight Bond card",
+              "devildeal": "Choose a card to draw"
+            },
             "ordinal": {
               "st": "st",
               "nd": "nd",
@@ -1898,11 +1907,20 @@
               "end": "Możesz znów grać!",
               "sidenotif": "\u003Ccolor=#41FA66\u003ESynchronizacja\u003C/color\u003E\u003Ccolor=#d5cfe3\u003E!\u003C/color\u003E\n\u003Ccolor=#41FA66\u003E%s\u003C/color\u003E \u003Ccolor=#d5cfe3\u003Esekund!\u003C/color\u003E"
             },
-            "end_turn": "%s tura dobiegła końca",
+            "end_turn": "\u003Ccolor=#abebe2\u003E%s\u003C/color\u003E\u003Ccolor=#32a852\u003E tura dobiegła końca!\u003C/color\u003E",
             "no_op_start": "Nie można rozpocząć gry: Brak drugiego Gracza",
             "me_ready": "Jesteś gotowy, Poczekaj na drugiego gracza",
             "me_unready": "Jesteś teraz niegotowy",
             "redraw": "\u003Ccolor=#d5cfe3\u003EPrzelosowałeś kartę \"\u003C/color\u003E\u003Ccolor=#fa4441\u003E%x\u003C/color\u003E\u003Ccolor=#d5cfe3\u003E\" na \"\u003C/color\u003E\u003Ccolor=#41fa66\u003E%y\u003C/color\u003E\u003Ccolor=#d5cfe3\u003E\"\u003C/color\u003E",
+            "bucket": "\u003Ccolor=#d5cfe3\u003ENowa karta wpadła do wiadra:\u003C/color\u003E \u003Ccolor=#41fa66\u003E%s\u003C/color\u003E",
+            "queueCarousel_other": {
+              "eredin1": "Wybierz kartę do wygnania (1/2)",
+              "eredin2": "Wybierz kartę do wygnania (2/2)",
+              "eredin_ok": "Wybierz kartę do skopiowania",
+              "skellige_mad_man": "Wybierz kartę do wygnania",
+              "skellige_mad_man_ok": "Choose Tight Bond card",
+              "devildeal": "Wybierz kartę do dobrania"
+            },
             "ordinal": {
               "st": "",
               "nd": "",
@@ -5570,9 +5588,9 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_vid": "8o-JI8VRyKo",
     "tavern_yt_volume": 90
   },
   "texture_pack_url": null

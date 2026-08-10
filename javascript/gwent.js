@@ -3376,7 +3376,7 @@ class Game {
       `TURN ENDED: Turn ${turncount - 1}\nNext turn will be: ${turncount}`,
     );
     if (announce_turn_count) {
-      showTooltip(getUiStrng("end_turn").replace("%s", ordinal(turncount - 1)));
+      show_end_turn_notif();
     }
     if (darknessstorm_await === true) {
       for (const row of board.row) {

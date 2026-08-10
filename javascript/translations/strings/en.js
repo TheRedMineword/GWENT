@@ -793,12 +793,21 @@ STRNG["en"] = {
         end: "You can play now again",
         sidenotif: "<color=#41FA66>Synchronization</color><color=#d5cfe3>!</color>\n<color=#41FA66>%s</color> <color=#d5cfe3>seconds!</color>"
       },
-      end_turn: "End of %s turn",
+      end_turn: "<color=#32a852>End of </color><color=#abebe2>%s</color><color=#32a852> turn</color>",
       no_op_start: "Cannot start game: waiting for second player.",
       me_ready: "You are ready, please wait for opponent!",
       me_unready: "You are now UnReady",
       redraw:
         "<color=#d5cfe3>You redrawed card</color> <color=#fa4441>%x</color> <color=#d5cfe3>for a</color> <color=#41fa66>%y</color>",
+      bucket: "<color=#d5cfe3>A new card has been added to the bucket:</color> <color=#41fa66>%s</color>",
+      queueCarousel_other: {
+        eredin1: "Choose card to banish (1/2)",
+        eredin2: "Choose card to banish (2/2)",
+        eredin_ok: "Choose a card to create a copy of",
+        skellige_mad_man: "Choose card to banish",
+        skellige_mad_man_ok: "Choose Tight Bond card",
+        devildeal: "Choose a card to draw"
+      },
       ordinal: {
       "st": "st",
       "nd": "nd",

@@ -27,6 +27,12 @@ async function bucket_add_card_by_index(index) {
   if (game.usebucket) {
     var card = await new Card(card_dict[index], player_board);
     await Bucket.addCard(card);
+    var txt_draw = getUiStrng("bucket").replace(
+      "%s",
+      card_dict[index]?.name || "",
+    );
+    console.log(txt_draw);
+    cardredrawnotice(txt_draw);
     await card.animate("reinforce");
     console.log("Added card", card, " to bucket player:", player_board);
     return {

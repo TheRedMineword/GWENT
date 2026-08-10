@@ -504,6 +504,15 @@ function ordinal(n) {
 
   return `${n}${getUiStrng("ordinal.th")}`;
 }
+function show_end_turn_notif() {
+  //  showTooltip(getUiStrng("end_turn").replace("%s", ordinal(turncount - 1)));
+  pushMessage(
+    formatMessage2(
+      getUiStrng("end_turn").replace("%s", ordinal(turncount - 1)),
+    ),
+    2560,
+  );
+}
 
 let isconnectedtosession = false;
 const texturePackBlobCache = new Map();
