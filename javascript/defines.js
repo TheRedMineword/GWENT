@@ -140,7 +140,7 @@ let card_of_the_day = {
   run: false,
   reset: {
     zone: "UTC",
-    at: "07:00",
+    at: 7,
   },
   card: {
     range: "0 < x < 14",

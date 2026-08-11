@@ -20,7 +20,7 @@
       "run": false,
       "reset": {
         "zone": "UTC",
-        "at": "07:00"
+        "at": 7
       },
       "card": {
         "range": "0 \u003C x \u003C 14",

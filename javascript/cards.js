@@ -3965,7 +3965,16 @@ function pickDailyCards(config = card_of_the_day) {
     );
   }
 
-  const today = new Date(Clock.now()).toISOString().slice(0, 10);
+  const now = new Date(Clock.now());
+
+  const resetHour = card_of_the_day.reset.at;
+  const cardDay = new Date(now);
+
+  if (now.getUTCHours() < resetHour) {
+    cardDay.setUTCDate(cardDay.getUTCDate() - 1);
+  }
+
+  const today = cardDay.toISOString().slice(0, 10);
   const seed = hashString(`${today}${card_of_the_day.seed}`);
 
   daily_cards = seededShuffle(candidates, seed).slice(0, amount);
