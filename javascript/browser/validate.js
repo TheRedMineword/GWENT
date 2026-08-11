@@ -31,23 +31,117 @@ async function loadLibraries() {
         LIBRARIES.map(lib => loadLIBRARIESsrc(lib.url))
     );
 }
-async function nativecheck(){
+
+async function nativecheck() {
+    const nav = globalThis.navigator ?? {};
+    const win = globalThis;
+
+    // Safely query an API/property without throwing.
+    const has = (name) => {
+        try {
+            return name in nav && !!nav[name];
+        } catch {
+            return false;
+        }
+    };
+
+    // Notification is a global, not navigator.Notification.
+    let notifications = "unsupported";
+    try {
+        if ("Notification" in win && win.Notification) {
+            notifications = win.Notification.permission ?? "unknown";
+        }
+    } catch {
+        notifications = "unavailable";
+    }
+
+    // Storage estimate can fail or be unavailable.
+    let storageEstimate = null;
+    try {
+        if (nav.storage?.estimate) {
+            storageEstimate = await nav.storage.estimate();
+        }
+    } catch {
+        storageEstimate = null;
+    }
+
+    // Battery API is optional and can reject.
+    let battery = null;
+    try {
+        if (typeof nav.getBattery === "function") {
+            const b = await nav.getBattery();
+
+            battery = {
+                charging: b?.charging ?? null,
+                chargingTime: b?.chargingTime ?? null,
+                dischargingTime: b?.dischargingTime ?? null,
+                level: b?.level ?? null
+            };
+        }
+    } catch {
+        battery = null;
+    }
+
+    // Optional API support/capability information.
+    let permissions = false;
+    try {
+        permissions = !!nav.permissions;
+    } catch {}
+
+    let webgl = false;
+    try {
+        const canvas = document.createElement("canvas");
+        webgl =
+            !!canvas.getContext("webgl") ||
+            !!canvas.getContext("experimental-webgl");
+    } catch {}
+
+    let mediaDevices = false;
+    let mediaDevicesEnumerate = false;
+
+    try {
+        mediaDevices = !!nav.mediaDevices;
+        mediaDevicesEnumerate =
+            typeof nav.mediaDevices?.enumerateDevices === "function";
+    } catch {}
+
     return {
-    webdriver: navigator.webdriver,
-    pdfViewer: navigator.pdfViewerEnabled,
-    bluetooth: !!navigator.bluetooth,
-    usb: !!navigator.usb,
-    serial: !!navigator.serial,
-    hid: !!navigator.hid,
-    gpu: !!navigator.gpu,
-    serviceWorker: !!navigator.serviceWorker,
-    credentials: !!navigator.credentials,
-    clipboard: !!navigator.clipboard,
-    mediaDevices: !!navigator.mediaDevices,
-    notifications: Notification.permission,
-    storageEstimate: await navigator.storage?.estimate?.(),
-    battery: navigator.getBattery ? await navigator.getBattery() : null
-}
+        // Core automation signal
+        webdriver: !!nav.webdriver,
+
+        // Browser capabilities
+        pdfViewer: !!nav.pdfViewerEnabled,
+        bluetooth: has("bluetooth"),
+        usb: has("usb"),
+        serial: has("serial"),
+        hid: has("hid"),
+        gpu: has("gpu"),
+
+        // Platform APIs
+        serviceWorker: has("serviceWorker"),
+        credentials: has("credentials"),
+        clipboard: has("clipboard"),
+
+        // Media
+        mediaDevices,
+        mediaDevicesEnumerate,
+
+        // Notifications:
+        // "unsupported" is NOT a bot signal.
+        notifications,
+
+        // Permissions API availability
+        permissions,
+
+        // Storage
+        storageEstimate,
+
+        // Battery
+        battery,
+
+        // Additional capability
+        webgl
+    };
 }
 
 async function collectFingerprint() {
