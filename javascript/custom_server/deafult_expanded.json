@@ -16,6 +16,29 @@
       "dopler",
       "yrden"
     ],
+    "card_of_the_day": {
+      "run": false,
+      "reset": {
+        "zone": "UTC",
+        "at": "07:00"
+      },
+      "card": {
+        "range": "0 \u003C x \u003C 14",
+        "banned_abilities": [
+          "hero"
+        ],
+        "banned_deck": [
+          "weather"
+        ],
+        "banned_rows": [
+          "leader"
+        ],
+        "add_extra": 1,
+        "countover": 0
+      },
+      "pick": 4,
+      "seed": "swfjlmdsfgthkdsi"
+    },
     "bucket_max": 7,
     "bucket_spawn_base": 6,
     "bucket_spawn_per_lider_minus": 2,
@@ -1120,7 +1143,8 @@
           "startwarnings": {
             "a": "Your deck must have at least %s unit cards. ",
             "b": "Your deck must have no more than %s special cards. ",
-            "c": "Your deck must have no more than %s hero cards. "
+            "c": "Your deck must have no more than %s hero cards. ",
+            "d": "You have in hand too many of \"%s\" card copies (%z/%y)! "
           }
         },
         "scolpick": {
@@ -1191,6 +1215,11 @@
             "me": "You gave up.",
             "op": "Your opponent has surrendered."
           }
+        },
+        "cardsoftheday": {
+          "topic": "\u003Ccolor=#96FF03\u003EToday daily boosted cards!\u003C/color\u003E",
+          "for_each_card_line": "\u003Ccolor=#96FF03\u003E• \u003C/color\u003E\u003Ccolor=#94AB6F\u003E\"\u003C/color\u003E\u003Ccolor=#D7FAE9\u003E%s\u003C/color\u003E\u003Ccolor=#94AB6F\u003E\"\u003C/color\u003E",
+          "bottom": "\u003Ccolor=#96FF03\u003EEach card on this list recive addtional \u003C/color\u003E\u003Ccolor=#D7FAE9\u003E%s\u003C/color\u003E\u003Ccolor=#96FF03\u003E amount!\u003C/color\u003E"
         }
       },
       "pl": {
@@ -2040,7 +2069,8 @@
           "startwarnings": {
             "a": "Twoja talia musi mieć conajmniej %s kart jednostek ",
             "b": "Twoja talia nie może mieć więcej niż %s kart specjalnych. ",
-            "c": "Twoja talia nie może mieć więcej niż %s kart bohaterów. "
+            "c": "Twoja talia nie może mieć więcej niż %s kart bohaterów. ",
+            "d": "Masz w talii za dużo kopii \"%s\" (%z/%y)! "
           }
         },
         "scolpick": {
@@ -2111,6 +2141,11 @@
             "me": "Poddałeś się!",
             "op": "Przeciwnik poddał się!"
           }
+        },
+        "cardsoftheday": {
+          "topic": "\u003Ccolor=#96FF03\u003EDzisiejsze karty dnia!\u003C/color\u003E",
+          "for_each_card_line": "\u003Ccolor=#96FF03\u003E• \u003C/color\u003E\u003Ccolor=#94AB6F\u003E\"\u003C/color\u003E\u003Ccolor=#D7FAE9\u003E%s\u003C/color\u003E\u003Ccolor=#94AB6F\u003E\"\u003C/color\u003E",
+          "bottom": "\u003Ccolor=#96FF03\u003EWszystkie karty na tej liście zyskały dodatkową \u003C/color\u003E\u003Ccolor=#D7FAE9\u003E%s\u003C/color\u003E\u003Ccolor=#96FF03\u003E kopię do dobrania do talii!\u003C/color\u003E"
         }
       }
     },
@@ -5065,6 +5100,7 @@
       },
       {
         "name": "Full Moon",
+        "ignoredaily": true,
         "id": "1040",
         "deck": "neutral",
         "row": "siege",
@@ -5100,6 +5136,7 @@
       {
         "name": "New Moon",
         "id": "1041",
+        "ignoredaily": true,
         "deck": "neutral",
         "row": "siege",
         "strength": "-1",
@@ -5588,10 +5625,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
+    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "8o-JI8VRyKo",
-    "tavern_yt_volume": 90
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }

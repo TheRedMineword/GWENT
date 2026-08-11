@@ -136,6 +136,24 @@ axii.desc = `Each card in row under Axii effect that base power is less than ${a
 
 console.log("Spy draw:", spy, "\nPowergain:", powergain, "\nAxii:", axii);
 
+let card_of_the_day = {
+  run: false,
+  reset: {
+    zone: "UTC",
+    at: "07:00",
+  },
+  card: {
+    range: "0 < x < 14",
+    banned_abilities: ["hero"],
+    banned_deck: ["weather"],
+    banned_rows: ["leader"],
+    add_extra: 1,
+    countover: 0,
+  },
+  pick: 4,
+  seed: "swfjlmdsfgthkdsi",
+};
+
 let nilfard_drawmaster = {
   // Minimum hand size check:
   // Effect only triggers if player has LESS than this many cards in hand
@@ -429,6 +447,7 @@ let ThisDef = {
     OnGameStartDraw: deepClone(OnGameStartDraw),
     medicsdraw: deepClone(medicsdraw),
     ThatIsSpy: deepClone(ThatIsSpy),
+    card_of_the_day: deepClone(card_of_the_day),
     bucket_max: deepClone(bucket_max),
     bucket_spawn_base: deepClone(bucket_spawn_base),
     bucket_spawn_per_lider_minus: deepClone(bucket_spawn_per_lider_minus),

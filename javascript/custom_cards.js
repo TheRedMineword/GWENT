@@ -556,6 +556,7 @@ async function buildSeasonCard(season, data) {
   if (season._name_start_wich_season_of) {
     name = `Season of ${name}`;
   }
+  card.ignoredaily = true;
   card.name = name;
   card.deck = season.faction;
   card.row = season.row;
@@ -1000,6 +1001,7 @@ async function rebuildCustomCardsMaps() {
   if (ts_index) {
     try {
       tmp_card = card_dict[ts_index];
+      card_dict[ts_index].ignoredaily = true;
       card_dict[ts_index].customassets = ts.when.card_dict.custom_assets;
       card_dict[ts_index].strength = ts.when.card_dict.strenght;
       card_dict[ts_index].row = ts.when.card_dict.row;

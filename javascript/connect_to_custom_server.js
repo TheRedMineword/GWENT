@@ -96,30 +96,54 @@ function customSwitch() {
 }
 async function reset_custom() {
   console.log("CUSTOM POWER DOWN", IsNowCustom);
+
   if (!IsNowCustom) {
     return;
   }
+
   IsNowCustom = false;
+
   var def = ThisDef;
+
   def.env_vars.STRNG = STRNG_base;
   def.env_vars.card_dict = card_dict_base;
   def.env_vars.factions = factions_base;
   def.env_vars.ability_dict = ability_dict_base;
+
   def.texture_pack_url = null;
+
   def.env_vars.audio_yt_vid_soundtrack = ArrayPickObjectForDay(
     pick_array.game,
   ).id;
+
   def.env_vars.audio_yt_vid_soundtrack_volume = ArrayPickObjectForDay(
     pick_array.game,
   ).vol;
+
   def.env_vars.tavern_yt_vid = ArrayPickObjectForDay(pick_array.lobby).id;
+
   def.env_vars.tavern_yt_volume = ArrayPickObjectForDay(pick_array.lobby).vol;
+
   resetTexturePack();
+
   console.log("CUSTOM POWERING DOWN DEF", def);
-  await connect_to_custom_server(
-    `data:application/json;base64,${btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify(def))))}`,
-  );
+
+  const json = JSON.stringify(def);
+  const bytes = new TextEncoder().encode(json);
+
+  let binary = "";
+  const chunkSize = 0x8000;
+
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+  }
+
+  const base64 = btoa(binary);
+
+  await connect_to_custom_server(`data:application/json;base64,${base64}`);
+
   await sleep(300);
+
   IsNowCustom = false;
 }
 function createLoaderOverlay() {
@@ -598,6 +622,7 @@ async function connect_to_custom_server(URL) {
     custom_updater = true;
     await sleep(300);
     await custom_card_builder_init();
+    await rerunDailyCardPickSafe();
     custom_updater = false;
     //    updateLoader("Almost there", 99, `Updating cards!`);
     // timed_count_change = [];

@@ -6635,6 +6635,17 @@ class DeckMaker {
     if (this.stats.hero > ForGameStart.hero)
       warning += `${getTranslation("ui.startwarnings.c").replace("%s", ForGameStart.hero)}\n`;
 
+    //console.log("THIS CHECK", this);
+
+    this.deck.forEach(({ index, count }) => {
+      if (card_dict[index].count < count) {
+        warning += `${getTranslation("ui.startwarnings.d")
+          .replace("%y", card_dict[index].count)
+          .replace("%z", count)
+          .replace("%s", card_dict[index].name)}\n`;
+      }
+    });
+
     if (warning != "") return warn_screen(warning);
     else {
       document.getElementById("session-start-control").classList.add("ready");

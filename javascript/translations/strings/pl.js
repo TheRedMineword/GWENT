@@ -1042,7 +1042,8 @@ STRNG["pl"] = {
   startwarnings: {
     "a": "Twoja talia musi mieć conajmniej %s kart jednostek ",
     "b": "Twoja talia nie może mieć więcej niż %s kart specjalnych. ",
-    "c": "Twoja talia nie może mieć więcej niż %s kart bohaterów. "
+    "c": "Twoja talia nie może mieć więcej niż %s kart bohaterów. ",
+    "d": "Masz w talii za dużo kopii \"%s\" (%z/%y)! "
   }
   },
   scolpick: {
@@ -1113,5 +1114,10 @@ STRNG["pl"] = {
       "me": "Poddałeś się!",
       "op": "Przeciwnik poddał się!"
     }
+  },
+  cardsoftheday: {
+    topic: "<color=#96FF03>Dzisiejsze karty dnia!</color>",
+    for_each_card_line: "<color=#96FF03>• </color><color=#94AB6F>\"</color><color=#D7FAE9>%s</color><color=#94AB6F>\"</color>",
+    bottom: "<color=#96FF03>Wszystkie karty na tej liście zyskały dodatkową </color><color=#D7FAE9>%s</color><color=#96FF03> kopię do dobrania do talii!</color>"
   }
 };

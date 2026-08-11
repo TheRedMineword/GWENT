@@ -3092,6 +3092,7 @@ var card_dict_base = [
   {
     note: "this is  _replace_me like card, arrive.bin will update it, if you are doing custom server and dont want it, remove this card!",
     name: "Traveling Spirit",
+    ignoredaily: true,
     id: "3034",
     deck: "sky",
     row: "agile",
@@ -3310,6 +3311,7 @@ var card_dict_base = [
   },
   {
     name: "Full Moon",
+    ignoredaily: true,
     id: "1040",
     deck: "neutral",
     row: "siege",
@@ -3342,6 +3344,7 @@ var card_dict_base = [
   {
     name: "New Moon",
     id: "1041",
+    ignoredaily: true,
     deck: "neutral",
     row: "siege",
     strength: "-1",
@@ -3507,6 +3510,13 @@ const witcher_signs = Object.entries(card_dict)
 loadingscreenupdate(`Loaded ${witcher_signs.length} witcher signs!`);
 console.log("Cards array", card_dict, witcher_signs);
 
+function escapeHtml_cards(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 function setupSpiritTimer(card, data) {
   card.count_monitor = {
     base: data.when.card_count,
@@ -3604,10 +3614,10 @@ function scanMessages() {
 function formatMessage(template, card, timer) {
   let end = timer.start + timer.duration;
 
-  let msg = escapeHtml(template);
+  let msg = escapeHtml_cards(template);
 
   // Restore placeholders
-  msg = msg.replaceAll("&lt;$card&gt;", escapeHtml(card.name));
+  msg = msg.replaceAll("&lt;$card&gt;", escapeHtml_cards(card.name));
   msg = msg.replaceAll("&lt;$duration&gt;", formatDuration(timer.duration));
   msg = msg.replaceAll("&lt;$enddatelocal&gt;", formatLocalDate(end));
 
@@ -3623,7 +3633,7 @@ function formatMessage(template, card, timer) {
   return msg;
 }
 function formatMessage2(template) {
-  let msg = escapeHtml(template);
+  let msg = escapeHtml_cards(template);
   // New lines
   msg = msg.replaceAll("\n", "<br>");
 
@@ -3778,6 +3788,341 @@ function scanTimedCountChange() {
     }
   });
 }
+
+let daily_cards = [];
+
+function parseCardRange(range) {
+  if (!range) return null;
+
+  // Supports:
+  // "0 < x < 14"
+  // "0 <= x <= 14"
+  // "0 < x <= 14"
+  // "0 <= x < 14"
+
+  const match = String(range).match(
+    /^\s*(-?\d+(?:\.\d+)?)\s*(<=|<)\s*x\s*(<=|<)\s*(-?\d+(?:\.\d+)?)\s*$/,
+  );
+
+  if (!match) {
+    console.warn("[DAILY CARDS] Invalid range:", range);
+    return null;
+  }
+
+  return {
+    min: Number(match[1]),
+    minInclusive: match[2] === "<=",
+    max: Number(match[4]),
+    maxInclusive: match[3] === "<=",
+  };
+}
+
+function cardStrengthInRange(card, range) {
+  if (!range) return true;
+
+  const strength = Number(card.strength);
+
+  if (!Number.isFinite(strength)) return false;
+
+  const minOK = range.minInclusive
+    ? strength >= range.min
+    : strength > range.min;
+
+  const maxOK = range.maxInclusive
+    ? strength <= range.max
+    : strength < range.max;
+
+  return minOK && maxOK;
+}
+
+function cardHasBannedAbility(card, bannedAbilities) {
+  if (!Array.isArray(bannedAbilities) || !bannedAbilities.length) {
+    return false;
+  }
+
+  const ability = String(card.ability || "");
+
+  return bannedAbilities.some((banned) => {
+    // "hero spy" matches "hero"
+    return ability.split(/\s+/).filter(Boolean).includes(String(banned));
+  });
+}
+
+function shuffleArray(array) {
+  const result = [...array];
+
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+
+  return result;
+}
+function getDailyCardCandidates(config = card_of_the_day) {
+  if (!Array.isArray(card_dict)) {
+    console.error("[DAILY CARDS] card_dict is not available.");
+    return [];
+  }
+
+  const rules = config.card || {};
+  const range = parseCardRange(rules.range);
+
+  const bannedAbilities = rules.banned_abilities || [];
+  const bannedDecks = rules.banned_deck || [];
+  const bannedRows = rules.banned_rows || [];
+
+  const countover = Number(rules.countover ?? 0);
+
+  return card_dict.filter((card) => {
+    // Must have a usable card ID.
+    if (!card || card.id === undefined || card.id === null) {
+      return false;
+    }
+
+    if (card.ignoredaily === true) {
+      return false;
+    }
+
+    const count = Number(card.count);
+
+    if (!Number.isFinite(count) || count <= 0) {
+      return false;
+    }
+
+    if (count <= countover) {
+      return false;
+    }
+
+    if (!cardStrengthInRange(card, range)) {
+      return false;
+    }
+
+    if (cardHasBannedAbility(card, bannedAbilities)) {
+      return false;
+    }
+
+    if (bannedDecks.includes(card.deck)) {
+      return false;
+    }
+
+    if (bannedRows.includes(card.row)) {
+      return false;
+    }
+
+    return true;
+  });
+}
+
+function hashString(str) {
+  let hash = 0;
+
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
+  }
+
+  return Math.abs(hash);
+}
+
+function seededShuffle(array, seed) {
+  const result = [...array];
+  let random = seed;
+
+  function seededRandom() {
+    random = (random * 1664525 + 1013904223) % 4294967296;
+    return random / 4294967296;
+  }
+
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(seededRandom() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+
+  return result;
+}
+
+function pickDailyCards(config = card_of_the_day) {
+  if (!config?.run) {
+    daily_cards = [];
+    console.log("[DAILY CARDS] Disabled.");
+    return [];
+  }
+
+  const amount = Math.max(0, Number(config.pick) || 0);
+
+  if (amount === 0) {
+    daily_cards = [];
+    return [];
+  }
+
+  const candidates = getDailyCardCandidates(config);
+
+  if (candidates.length < amount) {
+    console.warn(
+      `[DAILY CARDS] Only ${candidates.length} cards available, ` +
+        `but ${amount} were requested.`,
+    );
+  }
+
+  const today = new Date(Clock.now()).toISOString().slice(0, 10);
+  const seed = hashString(`${today}${card_of_the_day.seed}`);
+
+  daily_cards = seededShuffle(candidates, seed).slice(0, amount);
+
+  const addExtra = Number(config.card?.add_extra ?? 0);
+
+  for (const card of daily_cards) {
+    const oldCount = Number(card.count) || 0;
+
+    card.count = String(oldCount + addExtra);
+
+    console.log(`[DAILY CARDS] ${card.name}: ${oldCount} -> ${card.count}`);
+  }
+
+  console.log(
+    "[DAILY CARDS] Picked:",
+    daily_cards.map((card) => card.name),
+  );
+
+  var t = getTranslation("cardsoftheday");
+
+  var dailyCardsNotification = [
+    t.topic,
+    ...daily_cards.map((card) => t.for_each_card_line.replace("%s", card.name)),
+    t.bottom.replace("%s", String(config.card?.add_extra ?? 0)),
+  ].join("\n");
+  pushMessage(formatMessage2(dailyCardsNotification), 9000);
+  console.log("[DAILY CARDS]", dailyCardsNotification);
+
+  return daily_cards;
+}
+
+function getDailyCards() {
+  return daily_cards;
+}
+
+function rerunDailyCardPick(config = card_of_the_day) {
+  console.log("[DAILY CARDS] Re-running daily card pick...");
+  daily_cards = [];
+  return pickDailyCards(config);
+}
+
+let daily_cards_previous = [];
+
+function rerunDailyCardPickSafe(config = card_of_the_day) {
+  const addExtra = Number(config.card?.add_extra ?? 0);
+
+  for (const card of daily_cards_previous) {
+    const current = Number(card.count) || 0;
+
+    card.count = String(Math.max(0, current - addExtra));
+  }
+
+  daily_cards_previous = [];
+  daily_cards = [];
+  const picked = pickDailyCards(config);
+  daily_cards_previous = [...picked];
+
+  return picked;
+}
+
+function getNextDailyReset(config = card_of_the_day) {
+  const reset = config.reset || {};
+
+  const zone = reset.zone || "UTC";
+  const at = reset.at || "07:00";
+
+  const [hours, minutes] = at.split(":").map(Number);
+
+  if (!Number.isFinite(hours) || !Number.isFinite(minutes)) {
+    throw new Error(`[DAILY CARDS] Invalid reset time: ${at}`);
+  }
+
+  if (typeof Temporal !== "undefined") {
+    const now = Temporal.Now.instant();
+
+    const current = now.toZonedDateTimeISO(zone);
+
+    let next = current.with({
+      hour: hours,
+      minute: minutes,
+      second: 0,
+      millisecond: 0,
+      microsecond: 0,
+      nanosecond: 0,
+    });
+
+    if (Temporal.Instant.compare(next.toInstant(), now) <= 0) {
+      next = next.add({ days: 1 });
+    }
+
+    return next.toInstant().epochMilliseconds;
+  }
+
+  const now = new Date(Clock.now());
+
+  const next = new Date(
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+      hours,
+      minutes,
+      0,
+      0,
+    ),
+  );
+
+  if (next.getTime() <= now.getTime()) {
+    next.setUTCDate(next.getUTCDate() + 1);
+  }
+
+  return next.getTime();
+}
+
+let dailyCardResetTimer = null;
+
+function scheduleDailyCardReset(config = card_of_the_day) {
+  if (dailyCardResetTimer) {
+    clearTimeout(dailyCardResetTimer);
+    dailyCardResetTimer = null;
+  }
+
+  if (!config?.run) {
+    return;
+  }
+
+  const nextReset = getNextDailyReset(config);
+  const delay = Math.max(0, nextReset - Date.now());
+
+  console.log("[DAILY CARDS] Next reset:", new Date(nextReset).toISOString());
+
+  dailyCardResetTimer = setTimeout(() => {
+    pickDailyCards(config);
+
+    // Schedule tomorrow.
+    scheduleDailyCardReset(config);
+  }, delay);
+}
+
+// ------------------------------------------------------------
+// Initial startup
+// ------------------------------------------------------------
+
+function setupDailyCards(config = card_of_the_day) {
+  if (!config?.run) {
+    daily_cards = [];
+    return [];
+  }
+
+  const picked = pickDailyCards(config);
+
+  scheduleDailyCardReset(config);
+
+  return picked;
+}
+setupDailyCards(card_of_the_day);
 
 // Run every second
 setInterval(scanTimedCountChange, 1000);

@@ -948,7 +948,8 @@ STRNG["en"] = {
   startwarnings: {
     "a": "Your deck must have at least %s unit cards. ",
     "b": "Your deck must have no more than %s special cards. ",
-    "c": "Your deck must have no more than %s hero cards. "
+    "c": "Your deck must have no more than %s hero cards. ",
+    "d": "You have in hand too many of \"%s\" card copies (%z/%y)! "
   }
   },
   scolpick: {
@@ -1019,5 +1020,10 @@ STRNG["en"] = {
       "me": "You gave up.",
       "op": "Your opponent has surrendered."
     }
+  },
+  cardsoftheday: {
+    topic: "<color=#96FF03>Today daily boosted cards!</color>",
+    for_each_card_line: "<color=#96FF03>• </color><color=#94AB6F>\"</color><color=#D7FAE9>%s</color><color=#94AB6F>\"</color>",
+    bottom: "<color=#96FF03>Each card on this list recive addtional </color><color=#D7FAE9>%s</color><color=#96FF03> amount!</color>"
   }
 };
