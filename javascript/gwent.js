@@ -915,7 +915,7 @@ socket.onmessage = async (event) => {
           }),
         );
       }
-      sendChatMessageStrig(`play wich ${factions[faction_name].name} faction!`);
+      //  sendChatMessageStrig(`play wich ${factions[faction_name].name} faction!`);
       break;
 
     // Opponent has left and the session is no longer ready
@@ -6199,7 +6199,7 @@ class DeckMaker {
           }),
         );
       }
-      sendChatMessageStrig(`play wich ${factions[faction_name].name} faction!`);
+      //  sendChatMessageStrig(`play wich ${factions[faction_name].name} faction!`);
       //  return true;
     }
 
