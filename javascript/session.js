@@ -611,6 +611,41 @@ function reset_menu() {
 // --------------------
 // SOCKET MESSAGE HANDLING
 // --------------------
+function YourNameNOW() {
+  try {
+    updateOpponentUI({
+      name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]}`,
+      state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
+      status: `${getTranslation("ui.mmenu.status.ready")} ${opponentReady}`,
+    });
+  } catch (e) {}
+  comp_and_send(
+    socket,
+    JSON.stringify({
+      type: "YourNamePls",
+    }),
+  );
+  if (
+    players.me !== "$$valexample$$" &&
+    players.me !== getTranslation("ui.elem.definesJS.players.me")
+  ) {
+    comp_and_send(
+      socket,
+      JSON.stringify({
+        type: "MyName",
+        is: players.me,
+      }),
+    );
+  } else {
+    comp_and_send(
+      socket,
+      JSON.stringify({
+        type: "MyName",
+        a: false,
+      }),
+    );
+  }
+}
 socket.addEventListener("message", async (event) => {
   const data_dec = null;
   try {
@@ -642,6 +677,7 @@ socket.addEventListener("message", async (event) => {
         );
       }
       var user_name = await askForPlayerName();
+      YourNameNOW();
       if (user_name === "ThatCoolUsername") {
         warn_screen(
           "That was an EXAMPLE username, and its not even that cool\n:(",
@@ -675,6 +711,7 @@ socket.addEventListener("message", async (event) => {
       ThisSessionId = data.id;
       isconnectedtosession = true;
       showTooltip(getUiStrng("session_joined").replace("%s", data.id));
+      YourNameNOW();
       if (data.custom === true) {
         await connect_to_custom_server(
           `${custom_url}api/custom_sync?session=${encodeURIComponent(ThisSessionId)}`,
@@ -695,6 +732,7 @@ socket.addEventListener("message", async (event) => {
       var decodedsession = await decompressBase64(data.id);
       console.log(`[SD] Session joined data raw: ${decodedsession}`);
       var user_name = await askForPlayerName();
+      YourNameNOW();
       if (user_name === "ThatCoolUsername") {
         warn_screen(
           "That was an EXAMPLE username, and its not even that cool\n:(",
@@ -729,16 +767,25 @@ socket.addEventListener("message", async (event) => {
       addMessage("system", data.message);
       break;
     case "MyName":
-      console.log("Nice to meet you ", data.is);
-      if (data.is !== "$$valexample$$") {
-        players.op = data.is;
+      if (data?.a ?? true) {
+        console.log("Nice to meet you ", data.is);
+        if (data.is !== "$$valexample$$") {
+          players.op = data.is;
+        }
+        await sleep(1200);
+        updateOpponentUI({
+          name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]}`,
+          state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
+          status: `${getTranslation("ui.mmenu.status.ready")} ${opponentReady}`,
+        });
+      } else {
+        await sleep(1200);
+        updateOpponentUI({
+          name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]}`,
+          state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
+          status: `${getTranslation("ui.mmenu.status.ready")} ${opponentReady}`,
+        });
       }
-      await sleep(1200);
-      updateOpponentUI({
-        name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]}`,
-        state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
-        status: `${getTranslation("ui.mmenu.status.ready")} ${opponentReady}`,
-      });
       break;
     case "leaveSession":
       cancelSession();

@@ -875,6 +875,28 @@ socket.onmessage = async (event) => {
       break;
 
     // Opponent has joined and the session is ready
+    case "YourNamePls":
+      if (
+        players.me !== "$$valexample$$" &&
+        players.me !== getTranslation("ui.elem.definesJS.players.me")
+      ) {
+        comp_and_send(
+          socket,
+          JSON.stringify({
+            type: "MyName",
+            is: players.me,
+          }),
+        );
+      } else {
+        comp_and_send(
+          socket,
+          JSON.stringify({
+            type: "MyName",
+            a: false,
+          }),
+        );
+      }
+      break;
     case "sessionCreated":
       console.log("Parsing vars for session join", data);
       joinedSessionId = data.code;
