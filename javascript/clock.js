@@ -424,82 +424,6 @@ async function setBackground(source) {
   console.log("[Background] HLS playback started");
 }
 
-let the_image_json = {};
-async function setupTimedImages(config, set_new_image) {
-  let timer = null;
-  let currentContent = null;
-
-  async function apply() {
-    if (timer) {
-      clearTimeout(timer);
-      timer = null;
-    }
-
-    const now = Clock.now();
-
-    let active = null;
-    let nextChange = Infinity;
-
-    for (const item of config.timed) {
-      const start = Date.parse(item.start);
-      const end = Date.parse(item.end);
-
-      if (now >= start && now < end) {
-        active = item;
-
-        if (end < nextChange) {
-          nextChange = end;
-        }
-      } else if (now < start) {
-        if (start < nextChange) {
-          nextChange = start;
-        }
-      }
-    }
-
-    const images = active ? config.images[active.content] : config.fallback;
-
-    const contentKey = active ? active.content : "__fallback__";
-
-    // Only update if something actually changed
-    if (contentKey !== currentContent) {
-      currentContent = contentKey;
-
-      for (const [key, path] of Object.entries(images)) {
-        if (key !== "_animate" && key !== "_theme") {
-          if (key === "board") {
-            await setBackground(images._animate);
-          }
-          set_new_image(key, path);
-        } else if (key === "_theme") {
-          document.getElementById("dynamic-css").textContent = generateCSS(
-            images._theme,
-          );
-        }
-      }
-    }
-
-    // Schedule next update
-    if (nextChange !== Infinity) {
-      const delay = Math.max(0, nextChange - Clock.now());
-
-      // setTimeout max is ~24.8 days
-      const MAX_DELAY = 0x7fffffff;
-
-      timer = setTimeout(apply, Math.min(delay, MAX_DELAY));
-    }
-  }
-
-  apply();
-
-  return {
-    refresh: apply, // if config changes later
-    destroy() {
-      if (timer) clearTimeout(timer);
-    },
-  };
-}
-
 function warn_screen(content, type = "alert", title) {
   return new Promise((resolve) => {
     //console.log(content, type, title);
@@ -713,6 +637,7 @@ async function loadScript2(src) {
     document.head.appendChild(script);
   });
 }
+let the_image_json = {};
 (() => {
   loadingscreenupdate("Starting clock synchronization");
   let useSecureClock = false;
@@ -862,9 +787,21 @@ async function loadScript2(src) {
       const hls = new Hls();
     }
     loadingscreenupdate("Loading deck visual! 2/2");
-    const watcher = setupTimedImages(the_image_json, (key, path) => {
-      set_new_image(key, path);
-    });
+    // Script below was compressed and set as variable not function, you can find them in raw form at .fullscripts.js in javascrips directory in github repo!
+    // https://github.com/TheRedMineword/GWENT/blob/main/javascript/.fullscripts.js
+    const code_setupTimedImages =
+      'window.setupTimedImages=async function(e,n,t=!1){t&&console.log("[TimedImages] setupTimedImages() START",{config:e,set_new_image:n,timedCount:e?.timed?.length,moonConfig:e?.moon}),t&&console.log("[TimedImages] Evaluating moon script...");try{window.getMoonBoardTheme=function(e=Date.now(),n=30){const t=864e5,o=Math.PI/180,a=e=>Math.sin(e*o),l=e=>(e%360+360)%360;function i(e,n){const o=e/1236.85,i=o*o,s=i*o,m=s*o;let r=2451550.09765+29.530588853*e+1337e-7*i-15e-8*s+7.3e-10*m;const g=l(2.5534+29.1053567*e-14e-7*i-11e-8*s),c=l(201.5643+385.81693528*e+.0107582*i+1238e-8*s-58e-9*m),d=l(160.7108+390.67050284*e-.0016118*i-227e-8*s+11e-9*m),u=l(124.7746-1.5637558*e+.0020672*i+215e-8*s),I=1-.002516*o-74e-7*i;r+=n?-.40614*a(c)+.17302*I*a(g)+.01614*a(2*c)+.01043*a(2*d)+.00734*I*a(c-g)-.00515*I*a(c+g)+.00209*I*I*a(2*g)-.00111*a(c-2*d)-57e-5*a(c+2*d)+56e-5*I*a(2*c+g)-42e-5*a(3*c)+42e-5*I*a(g+2*d)+38e-5*I*a(g-2*d)-24e-5*I*a(2*c-g)-17e-5*a(u)-7e-5*a(c+2*g)+4e-5*a(2*c-2*d)+4e-5*a(3*g)+3e-5*a(c+g-2*d)+3e-5*a(c+g+2*d)-3e-5*a(c-g+2*d)-2e-5*a(c-g-2*d)-2e-5*a(3*c+g)+2e-5*a(4*c):-.4072*a(c)+.17241*I*a(g)+.01608*a(2*c)+.01039*a(2*d)+.00739*I*a(c-g)-.00514*I*a(c+g)+.00208*I*I*a(2*g)-.00111*a(c-2*d)-57e-5*a(c+2*d)+56e-5*I*a(2*c+g)-42e-5*a(3*c)+42e-5*I*a(g+2*d)+38e-5*I*a(g-2*d)-24e-5*I*a(2*c-g)-17e-5*a(u)-7e-5*a(c+2*g)+4e-5*a(2*c-2*d)+4e-5*a(3*g)+3e-5*a(c+g-2*d)+3e-5*a(2*c+2*d)-3e-5*a(c+g+2*d)+3e-5*a(c-g+2*d)-2e-5*a(c-g-2*d)-2e-5*a(3*c+g)+2e-5*a(4*c);const T=[[299.77,.107408,-325e-6],[251.88,.016321,0],[251.83,26.651886,0],[349.42,36.412478,0],[84.66,18.206239,0],[141.74,53.303771,0],[207.14,2.453732,0],[154.84,7.30686,0],[34.52,27.261239,0],[207.19,.121824,0],[291.34,1.844379,0],[161.72,24.198154,0],[239.56,25.513099,0],[331.55,3.592518,0]],x=[325e-6,165e-6,164e-6,126e-6,11e-5,62e-6,6e-5,56e-6,47e-6,42e-6,4e-5,37e-6,35e-6,23e-6];for(let n=0;n<T.length;n++)r+=x[n]*a(T[n][0]+T[n][1]*e+T[n][2]*i);return(r-2440587.5)*t}const s=e/t+2440587.5,m=Math.round((s-2451550.09765)/29.530588853),r=36e5*n,g=[{type:"new",time:i(m,!1)},{type:"new",time:i(m+1,!1)},{type:"full",time:i(m-.5,!0)},{type:"full",time:i(m+.5,!0)}].map(e=>{const n=e.time-r,t=e.time+r;return{...e,start:n,end:t}}).sort((e,n)=>e.start-n.start),c=g.find(n=>e>=n.start&&e<=n.end),d=g.find(n=>n.start>e);return c?{active:!0,type:c.type,event:new Date(c.time).toISOString(),start:new Date(c.start).toISOString(),end:new Date(c.end).toISOString(),eventUnix:Math.round(c.time),startUnix:Math.round(c.start),endUnix:Math.round(c.end),nextType:d?d.type:null,nextEvent:d?new Date(d.time).toISOString():null,nextStart:d?new Date(d.start).toISOString():null,nextEnd:d?new Date(d.end).toISOString():null,nextEventUnix:d?Math.round(d.time):null,nextStartUnix:d?Math.round(d.start):null,nextEndUnix:d?Math.round(d.end):null}:{active:!1,type:null,event:null,start:null,end:null,eventUnix:null,startUnix:null,endUnix:null,nextType:d?d.type:null,nextEvent:d?new Date(d.time).toISOString():null,nextStart:d?new Date(d.start).toISOString():null,nextEnd:d?new Date(d.end).toISOString():null,nextEventUnix:d?Math.round(d.time):null,nextStartUnix:d?Math.round(d.start):null,nextEndUnix:d?Math.round(d.end):null}},t&&console.log("[TimedImages] Moon script evaluated successfully")}catch(e){throw t&&console.error("[TimedImages] Moon script evaluation FAILED",e),e}let o={active:!1,type:null,event:null,start:null,end:null,eventUnix:null,startUnix:null,endUnix:null,nextType:null,nextEvent:null,nextStart:null,nextEnd:null},a=null;try{const n=Clock.now();t&&console.log("[TimedImages] Initial getMoonBoardTheme()",{now:n,runbefore:e.moon.runbefore}),o=window.getMoonBoardTheme(n,e.moon.runbefore),t&&console.log("[TimedImages] Initial moon result",o)}catch(e){a=e,t&&console.error("[TimedImages] Initial getMoonBoardTheme() FAILED",e)}t&&console.log("[TimedImages] INIT Board themes: setupTimedImages",{config:e,set_new_image:n,moon:o,evalError:a});let l=null,i=null;async function s(t=!1){t&&console.group("[TimedImages] apply()");try{l&&(t&&console.log("[TimedImages] Clearing existing timer",l),clearTimeout(l),l=null);const a=Clock.now();t&&console.log("[TimedImages] Current time",{now:a,date:new Date(a).toISOString(),currentContent:i});let m=null,r=1/0;t&&console.group("[TimedImages] Checking timed items");for(const[n,o]of e.timed.entries()){const e=Date.parse(o.start),l=Date.parse(o.end),i=a>=e&&a<l,s=a<e;t&&console.log(`[TimedImages] Item #${n}`,{item:o,start:e,startDate:isNaN(e)?"INVALID DATE":new Date(e).toISOString(),end:l,endDate:isNaN(l)?"INVALID DATE":new Date(l).toISOString(),isActive:i,isFuture:s}),i?(m=o,t&&console.log(`[TimedImages] Item #${n} is ACTIVE`,{content:o.content,end:l}),l<r&&(r=l,t&&console.log("[TimedImages] nextChange updated from active item",{nextChange:r,nextChangeDate:new Date(r).toISOString()}))):s&&e<r&&(r=e,t&&console.log("[TimedImages] nextChange updated from future item",{nextChange:r,nextChangeDate:new Date(r).toISOString()}))}t&&console.groupEnd(),t&&console.log("[TimedImages] Timed item selection complete",{active:m,nextChange:r,nextChangeDate:r!==1/0?new Date(r).toISOString():null}),t&&console.group("[TimedImages] Moon calculation"),t&&console.log("[TimedImages] Calling getMoonBoardTheme()",{now:a,runbefore:e.moon.runbefore});try{o=window.getMoonBoardTheme(a,e.moon.runbefore),t&&console.log("[TimedImages] Moon result",o)}catch(e){t&&console.error("[TimedImages] getMoonBoardTheme() FAILED",e),o={active:!1,type:null,event:null,start:null,end:null,eventUnix:null,startUnix:null,endUnix:null,nextType:null,nextEvent:null,nextStart:null,nextEnd:null}}let g=!1;if(o.active&&o.type){g=!0;const n=e.moon[o.type];t&&console.log("[TimedImages] Moon is ACTIVE",{type:o.type,event:o.event,start:o.start,end:o.end,eventUnix:o.eventUnix,startUnix:o.startUnix,endUnix:o.endUnix,moonContent:n}),n?(m={content:n,__moon:!0},t&&console.log("[TimedImages] Moon content selected",{type:o.type,content:n})):t&&console.warn("[TimedImages] Moon is active but no content exists",{type:o.type,availableMoonKeys:Object.keys(e.moon)}),null!=o.endUnix&&o.endUnix<r&&(r=o.endUnix,t&&console.log("[TimedImages] nextChange updated from moon end",{nextChange:r,nextChangeDate:new Date(r).toISOString()}))}else if(o.nextStart){const e=Date.parse(o.nextStart);t&&console.log("[TimedImages] Moon inactive",{nextStart:o.nextStart,nextStartUnix:e,nextStartDate:isNaN(e)?"INVALID DATE":new Date(e).toISOString()}),!isNaN(e)&&e<r&&(r=e,console.log("[TimedImages] nextChange updated from next moon start",{nextChange:r,nextChangeDate:new Date(r).toISOString()}))}else t&&console.log("[TimedImages] Moon inactive and has no nextStart");t&&console.groupEnd();const c=m?e.images[m.content]:e.fallback,d=g?"__moon_"+o.type:m?m.content:"__fallback__";if(t&&console.log("[TimedImages] Content selection",{active:m,moonActive:g,moonType:o.type,contentKey:d,previousContent:i,changed:d!==i,images:c}),c||t&&console.error("[TimedImages] NO IMAGES FOUND FOR CONTENT",{contentKey:d,active:m,moonActive:g,moonType:o.type,availableImageKeys:Object.keys(e.images||{})}),c&&d!==i){t&&console.log("[TimedImages] Content CHANGED - applying images",{from:i,to:d}),i=d;for(const[e,o]of Object.entries(c))if(t&&console.log("[TimedImages] Processing image entry",{key:e,path:o}),"_animate"!==e&&"_theme"!==e){if("board"===e){t&&console.log("[TimedImages] Updating board background",{animation:c._animate});try{await setBackground(c._animate),t&&console.log("[TimedImages] setBackground() completed")}catch(e){t&&console.error("[TimedImages] setBackground() FAILED",e)}}t&&console.log("[TimedImages] Calling set_new_image()",{key:e,path:o});try{n(e,o),t&&console.log("[TimedImages] set_new_image() completed",{key:e})}catch(n){t&&console.error("[TimedImages] set_new_image() FAILED",{key:e,path:o,error:n})}}else if("_theme"===e){t&&console.log("[TimedImages] Applying dynamic CSS",{theme:c._theme});const e=generateCSS(c._theme),n=document.getElementById("dynamic-css");n?(n.textContent=e,t&&console.log("[TimedImages] Dynamic CSS applied",{cssLength:e?.length})):t&&console.error("[TimedImages] #dynamic-css element NOT FOUND")}}else c?t&&console.log("[TimedImages] Content unchanged - no image update",{contentKey:d,currentContent:i}):t&&console.warn("[TimedImages] Skipping image application because images is missing");if(r!==1/0){const e=Clock.now(),n=Math.max(0,r-e),o=2147483647,a=Math.min(n,o);t&&console.log("[TimedImages] Scheduling next apply()",{nextChange:r,nextChangeDate:new Date(r).toISOString(),clockNow:e,clockNowDate:new Date(e).toISOString(),delay:n,actualDelay:a,delayMinutes:a/1e3/60}),l=setTimeout(s,a),t&&console.log("[TimedImages] Timer scheduled",{timer:l})}else t&&console.log("[TimedImages] No next change - no timer scheduled")}catch(e){t&&console.error("[TimedImages] apply() UNHANDLED ERROR",e)}finally{t&&console.log("[TimedImages] apply() END",{currentContent:i,timer:l}),t&&console.groupEnd()}}return t&&console.log("[TimedImages] Calling initial apply()"),await s(t),t&&console.log("[TimedImages] setupTimedImages() READY",{currentContent:i,timer:l}),{refresh:s(t),destroy(){t&&console.log("[TimedImages] destroy()",{timer:l,currentContent:i}),l&&(clearTimeout(l),l=null,t&&console.log("[TimedImages] Timer cleared"))}}};';
+    console.warn(`code_setupTimedImages === \"${code_setupTimedImages}\"`);
+    new Function(code_setupTimedImages)();
+    //window.setupTimedImages();
+
+    const watcher = window.setupTimedImages(
+      the_image_json,
+      (key, path) => {
+        set_new_image(key, path);
+      },
+      the_image_json.debug,
+    );
     loadingscreenupdate("Loading languages...");
     await initlng(sha);
     await loadScriptEval(`javascript/translations/strings/en.js?ver=${sha}`);
