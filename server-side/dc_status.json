@@ -1,1 +1,1 @@
-["Shuffling decks", "Care for a round of Gwent?", "Ciri? What Ciri?", "Gwent 3: Wild Hunt"]
+[{ "name": "Shuffling decks", "type": "COMPETING" }, { "name": "Care for a round of Gwent?", "type": "PLAYING" }, { "name": "Ciri? What Ciri?", "type": "WATCHING" }, { "name": "Gwent 3: Wild Hunt", "type": "PLAYING" }]

@@ -86,7 +86,19 @@ const lastDmRequestAt = new Map();
 const DM_REQUEST_COOLDOWN_MS = 5000;
 
 function log(...args) {
+  var log = "[dcbot]: "
+  args.forEach((arg, i) => {
+    try {
+      log += JSON.stringify(arg);
+    } catch {
+      log += String(arg);
+    }
+  });
+    try {
+  console.log(log);
+} catch (e){
   console.log("[dcbot]", ...args);
+}
 }
 
 // ---------- UnbelievaBoat helpers ----------
@@ -642,8 +654,8 @@ exports.init = async function init({ sessions, playerSockets, sendToClient }) {
   if (STATUS_URL) {
     await refreshStatusList();
     applyRandomStatus();
-    intervals.push(setInterval(refreshStatusList, 30 * 60 * 1000)); // re-download list every 30 min
-    intervals.push(setInterval(applyRandomStatus, 3 * 60 * 1000)); // rotate status every 3 min
+    intervals.push(setInterval(refreshStatusList, 25 * 60 * 1000));
+    intervals.push(setInterval(applyRandomStatus, 1.25 * 60 * 1000));
   }
 };
 

@@ -3717,7 +3717,10 @@ class Game {
     } else if (player_op.health === 0) {
       comp_and_send(
         socket,
-        JSON.stringify({ type: "matchResult", winner_id: player_me.id }),
+        JSON.stringify({
+          type: "matchResult",
+          winner_id: player_me.ThatPlayerId,
+        }),
       );
       var end_screen = true;
       tocar("game_win", true);
@@ -3727,7 +3730,10 @@ class Game {
     } else {
       comp_and_send(
         socket,
-        JSON.stringify({ type: "matchResult", winner_id: player_op.id }),
+        JSON.stringify({
+          type: "matchResult",
+          winner_id: player_op.ThatPlayerId,
+        }),
       );
       var end_screen = true;
       tocar("game_lose", true);
@@ -3784,7 +3790,7 @@ class Game {
     if (winner === player_me) {
       comp_and_send(
         socket,
-        JSON.stringify({ type: "matchResult", winner_id: winner.id }),
+        JSON.stringify({ type: "matchResult", winner_id: winner.ThatPlayerId }),
       );
       console.log("Game over || Victory by surrender");
 
@@ -3794,7 +3800,10 @@ class Game {
     } else {
       comp_and_send(
         socket,
-        JSON.stringify({ type: "matchResult", winner_id: player_op.id }),
+        JSON.stringify({
+          type: "matchResult",
+          winner_id: player_op.ThatPlayerId,
+        }),
       );
       console.log("Game over || Defeat by surrender");
 
