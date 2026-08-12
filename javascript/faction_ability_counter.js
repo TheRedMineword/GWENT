@@ -289,8 +289,8 @@ document
       if (ability_data.me.current < turn_skipper_conf.actiavate) {
         showSideTooltip(
           getTranslation("ability_counter.toolow")
-            .replace("%x", ability.current)
-            .replace("%y", ability.max),
+            .replace("%x", ability_data.me.current)
+            .replace("%y", ability_data.me.max),
         );
       } else {
         await ui.popup(
@@ -305,15 +305,15 @@ document
     } else if (ability_data.me.type === "scorchstopper") {
       showSideTooltip(
         getTranslation("ability_counter.toolow_shield")
-          .replace("%x", ability.current)
-          .replace("%y", ability.max),
+          .replace("%x", ability_data.me.ability.current)
+          .replace("%y", ability_data.me.ability.max),
       );
     } else if (ability_data.me.type === "d20cloner") {
       if (ability_data.me.current < d20cloner.actiavate) {
         showSideTooltip(
           getTranslation("ability_counter.toolow")
-            .replace("%x", ability.current)
-            .replace("%y", ability.max),
+            .replace("%x", ability_data.me.ability.current)
+            .replace("%y", ability_data.me.ability.max),
         );
       } else {
         await ui.popup(
