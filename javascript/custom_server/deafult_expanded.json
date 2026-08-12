@@ -1220,6 +1220,19 @@
           "topic": "\u003Ccolor=#96FF03\u003EToday daily boosted cards!\u003C/color\u003E",
           "for_each_card_line": "\u003Ccolor=#96FF03\u003E• \u003C/color\u003E\u003Ccolor=#94AB6F\u003E\"\u003C/color\u003E\u003Ccolor=#D7FAE9\u003E%s\u003C/color\u003E\u003Ccolor=#94AB6F\u003E\"\u003C/color\u003E",
           "bottom": "\u003Ccolor=#96FF03\u003EEach card on this list recive addtional \u003C/color\u003E\u003Ccolor=#D7FAE9\u003E%s\u003C/color\u003E\u003Ccolor=#96FF03\u003E amount!\u003C/color\u003E"
+        },
+        "discord": {
+          "op": "Your opponent",
+          "discord_registered": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Registered client session to: \u003Ccolor=#AAAAFF\u003E%s\u003C/color\u003E",
+          "discord_unregistered": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Client unregistered from Discord.",
+          "discord_bet_placed_me": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: You bet \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E. Pot so far: \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E",
+          "discord_bet_placed_op": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: %s bet \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E. Pot so far: \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E",
+          "discord_both_bet": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Both players have bet! Pot: \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E",
+          "discord_payout_win": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: You won the bet! \u003Ccolor=#55FF55\u003E+%s\u003C/color\u003E credited.",
+          "discord_payout_lose": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: You lost the bet. \u003Ccolor=#FF5555\u003E-%s\u003C/color\u003E deducted.",
+          "discord_refund": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Bet refunded: \u003Ccolor=#AAAAAA\u003E%s\u003C/color\u003E.",
+          "discord_error_not_registered": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: You need to \u003Ccolor=#FFAA00\u003E!registerclient\u003C/color\u003E on Discord first.",
+          "discord_error_generic": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Something went wrong \u003Ccolor=#FF5555\u003E(%s)\u003C/color\u003E."
         }
       },
       "pl": {
@@ -2146,6 +2159,19 @@
           "topic": "\u003Ccolor=#96FF03\u003EDzisiejsze karty dnia!\u003C/color\u003E",
           "for_each_card_line": "\u003Ccolor=#96FF03\u003E• \u003C/color\u003E\u003Ccolor=#94AB6F\u003E\"\u003C/color\u003E\u003Ccolor=#D7FAE9\u003E%s\u003C/color\u003E\u003Ccolor=#94AB6F\u003E\"\u003C/color\u003E",
           "bottom": "\u003Ccolor=#96FF03\u003EWszystkie karty na tej liście zyskały dodatkową \u003C/color\u003E\u003Ccolor=#D7FAE9\u003E%s\u003C/color\u003E\u003Ccolor=#96FF03\u003E kopię do dobrania do talii!\u003C/color\u003E"
+        },
+        "discord": {
+          "op": "Twój przeciwnik",
+          "discord_registered": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Zarejestrowano sesję klienta: \u003Ccolor=#AAAAFF\u003E%s\u003C/color\u003E",
+          "discord_unregistered": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Wyrejestrowano klienta z Discorda.",
+          "discord_bet_placed_me": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Obstawiasz \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E. Pula: \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E",
+          "discord_bet_placed_op": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: %s obstawił \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E. Pula: \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E",
+          "discord_both_bet": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Obaj gracze obstawili! Pula: \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E",
+          "discord_payout_win": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Wygrałeś zakład! \u003Ccolor=#55FF55\u003E+%s\u003C/color\u003E zostało dodane.",
+          "discord_payout_lose": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Przegrałeś zakład. \u003Ccolor=#FF5555\u003E-%s\u003C/color\u003E zostało odjęte.",
+          "discord_refund": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Zakład zwrócony: \u003Ccolor=#AAAAAA\u003E%s\u003C/color\u003E.",
+          "discord_error_not_registered": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Najpierw musisz użyć \u003Ccolor=#FFAA00\u003E!registerclient\u003C/color\u003E na Discordzie.",
+          "discord_error_generic": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Coś poszło nie tak \u003Ccolor=#FF5555\u003E(%s)\u003C/color\u003E."
         }
       }
     },
@@ -4881,6 +4907,7 @@
       {
         "note": "this is  _replace_me like card, arrive.bin will update it, if you are doing custom server and dont want it, remove this card!",
         "name": "Traveling Spirit",
+        "ignoredaily": true,
         "id": "3034",
         "deck": "sky",
         "row": "agile",
@@ -5625,10 +5652,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
-    "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 30
+    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
+    "audio_yt_vid_soundtrack_volume": 47,
+    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }

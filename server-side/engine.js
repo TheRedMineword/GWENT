@@ -12,6 +12,9 @@ function unmountRouter(app, router) {
 
 exports.stop = ({ app, server, wss }) => {
     console.log("KILL SERVER");
+    try {
+        require("./dcbot").stop();
+    } catch (e) {}
     for (const id of intervals)
         clearInterval(id);
 
@@ -50,6 +53,11 @@ const analyseBot = require("./botDetector.js");
 
 require("dotenv").config();
 
+// Discord bot / betting integration (optional, gated by env)
+const dcBotEnabled =
+  String(process.env.dc_bot_integration_use).toLowerCase() === "true";
+const dcbot = dcBotEnabled ? require("./dcbot") : null;
+
 // All routes/middleware for this run live on their own Router so stop()
 // can unmount the whole batch in one shot instead of leaking onto `app`.
 const router = express.Router();
@@ -71,6 +79,13 @@ let database = {
 
 let databaseOriginal = "";
 let playerSockets = {};
+
+if (dcbot) {
+  dcbot
+    .init({ sessions, playerSockets, sendToClient: comp_and_send })
+    .then(() => console.log("[dcbot] Discord bet integration ready"))
+    .catch((e) => console.error("[dcbot] init failed", e));
+}
 
 const CONFIG_URL = `${process.env.GWENT_URL_COIN || "https://theredmineword.github.io/GWENT/"}server-side/coin_config.json`;
 let random_coin = [
@@ -1384,6 +1399,11 @@ const connectionHandler = async (ws, req) => {
       });
 
       console.log(`|| Player ${ws.playerId} cancelled Session ${sessionId}`);
+      if (dcbot) {
+        dcbot
+          .onPlayerLeftSession(ws, sessionId)
+          .catch((e) => console.error("[dcbot] onPlayerLeftSession error", e));
+      }
       try {
         delete joinIndex[sessions[ws.sessionId].joinCode];
       } catch (e) {}
@@ -1395,6 +1415,11 @@ const connectionHandler = async (ws, req) => {
       if (!sessions[sessionId]) return;
 
       console.log(`|| Player ${ws.playerId} left Session ${sessionId}`);
+      if (dcbot) {
+        dcbot
+          .onPlayerLeftSession(ws, sessionId)
+          .catch((e) => console.error("[dcbot] onPlayerLeftSession error", e));
+      }
       sessions[sessionId].players = sessions[sessionId].players.filter(
         (player) => player !== ws,
       );
@@ -1556,6 +1581,25 @@ const connectionHandler = async (ws, req) => {
       }
     }
 
+    // Client reports who won a match (used for bet payouts). Both players'
+    // clients must send this and agree before any money moves.
+    if (data.type === "matchResult" && dcbot) {
+      dcbot
+        .onMatchResult(ws, data)
+        .catch((e) => console.error("[dcbot] onMatchResult error", e));
+    }
+
+    // Client asks the server to DM its linked Discord user. Private to the
+    // sender, so don't fall through to the opponent relay below.
+    if (data.type === "discord_dm_me") {
+      if (dcbot) {
+        dcbot
+          .onDmRequest(ws, data)
+          .catch((e) => console.error("[dcbot] onDmRequest error", e));
+      }
+      return;
+    }
+
     // Relay messages to the other player in the same session
     if (ws.sessionId) {
       const sessionPlayers = sessions[ws.sessionId]?.players || [];
@@ -1569,6 +1613,11 @@ const connectionHandler = async (ws, req) => {
   ws.on("error", (err) => {
     clearInterval(ws.heartbeatInterval);
     console.log(`Socket error ${ws.playerId}:`, err.code, err.message);
+    if (dcbot) {
+      dcbot
+        .onDisconnect(ws)
+        .catch((e) => console.error("[dcbot] onDisconnect error", e));
+    }
     try {
       console.log(`|| Player ${ws.playerId} disconnected`);
       delete playerSockets[ws.playerId];
@@ -1628,6 +1677,11 @@ const connectionHandler = async (ws, req) => {
   });
   ws.on("close", () => {
     clearInterval(ws.heartbeatInterval);
+    if (dcbot) {
+      dcbot
+        .onDisconnect(ws)
+        .catch((e) => console.error("[dcbot] onDisconnect error", e));
+    }
     console.log(`|| Player ${ws.playerId} disconnected`);
     delete playerSockets[ws.playerId];
     // Check if the player has an active session

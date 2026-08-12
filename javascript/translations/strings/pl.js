@@ -1119,5 +1119,38 @@ STRNG["pl"] = {
     topic: "<color=#96FF03>Dzisiejsze karty dnia!</color>",
     for_each_card_line: "<color=#96FF03>• </color><color=#94AB6F>\"</color><color=#D7FAE9>%s</color><color=#94AB6F>\"</color>",
     bottom: "<color=#96FF03>Wszystkie karty na tej liście zyskały dodatkową </color><color=#D7FAE9>%s</color><color=#96FF03> kopię do dobrania do talii!</color>"
-  }
+  },
+  discord: {
+  op: "Twój przeciwnik",
+
+  discord_registered:
+    "<color=#2121DB>DISCORD</color>: Zarejestrowano sesję klienta: <color=#AAAAFF>%s</color>",
+
+  discord_unregistered:
+    "<color=#2121DB>DISCORD</color>: Wyrejestrowano klienta z Discorda.",
+
+  discord_bet_placed_me:
+    "<color=#2121DB>DISCORD</color>: Obstawiasz <color=#FFD700>%s</color>. Pula: <color=#FFD700>%s</color>",
+
+  discord_bet_placed_op:
+    "<color=#2121DB>DISCORD</color>: %s obstawił <color=#FFD700>%s</color>. Pula: <color=#FFD700>%s</color>",
+
+  discord_both_bet:
+    "<color=#2121DB>DISCORD</color>: Obaj gracze obstawili! Pula: <color=#FFD700>%s</color>",
+
+  discord_payout_win:
+    "<color=#2121DB>DISCORD</color>: Wygrałeś zakład! <color=#55FF55>+%s</color> zostało dodane.",
+
+  discord_payout_lose:
+    "<color=#2121DB>DISCORD</color>: Przegrałeś zakład. <color=#FF5555>-%s</color> zostało odjęte.",
+
+  discord_refund:
+    "<color=#2121DB>DISCORD</color>: Zakład zwrócony: <color=#AAAAAA>%s</color>.",
+
+  discord_error_not_registered:
+    "<color=#2121DB>DISCORD</color>: Najpierw musisz użyć <color=#FFAA00>!registerclient</color> na Discordzie.",
+
+  discord_error_generic:
+    "<color=#2121DB>DISCORD</color>: Coś poszło nie tak <color=#FF5555>(%s)</color>.",
+}
 };

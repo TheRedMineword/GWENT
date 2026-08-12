@@ -1025,5 +1025,38 @@ STRNG["en"] = {
     topic: "<color=#96FF03>Today daily boosted cards!</color>",
     for_each_card_line: "<color=#96FF03>• </color><color=#94AB6F>\"</color><color=#D7FAE9>%s</color><color=#94AB6F>\"</color>",
     bottom: "<color=#96FF03>Each card on this list recive addtional </color><color=#D7FAE9>%s</color><color=#96FF03> amount!</color>"
-  }
+  },
+discord: {
+  op: "Your opponent",
+
+  discord_registered:
+    "<color=#2121DB>DISCORD</color>: Registered client session to: <color=#AAAAFF>%s</color>",
+
+  discord_unregistered:
+    "<color=#2121DB>DISCORD</color>: Client unregistered from Discord.",
+
+  discord_bet_placed_me:
+    "<color=#2121DB>DISCORD</color>: You bet <color=#FFD700>%s</color>. Pot so far: <color=#FFD700>%s</color>",
+
+  discord_bet_placed_op:
+    "<color=#2121DB>DISCORD</color>: %s bet <color=#FFD700>%s</color>. Pot so far: <color=#FFD700>%s</color>",
+
+  discord_both_bet:
+    "<color=#2121DB>DISCORD</color>: Both players have bet! Pot: <color=#FFD700>%s</color>",
+
+  discord_payout_win:
+    "<color=#2121DB>DISCORD</color>: You won the bet! <color=#55FF55>+%s</color> credited.",
+
+  discord_payout_lose:
+    "<color=#2121DB>DISCORD</color>: You lost the bet. <color=#FF5555>-%s</color> deducted.",
+
+  discord_refund:
+    "<color=#2121DB>DISCORD</color>: Bet refunded: <color=#AAAAAA>%s</color>.",
+
+  discord_error_not_registered:
+    "<color=#2121DB>DISCORD</color>: You need to <color=#FFAA00>!registerclient</color> on Discord first.",
+
+  discord_error_generic:
+    "<color=#2121DB>DISCORD</color>: Something went wrong <color=#FF5555>(%s)</color>.",
+}
 };
