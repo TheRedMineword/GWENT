@@ -13,7 +13,9 @@
 //   !gwentunregister        Manually clear your registration.
 //   !gwentbet <amount>      Escrow <amount> cash from your UnbelievaBoat
 //                          balance as your stake for the match your
-//                          registered client is currently in.
+//                          registered client is currently in. Can be called
+//                          again to add more to an existing bet on the same
+//                          match.
 //   !gwentstatus             Show your current registration/bet state.
 //
 // Game-client -> server websocket messages this module reacts to (handled in
@@ -489,14 +491,12 @@ async function handleBet(message, args) {
   }
 
   const sessionBets = bets.get(sessionId) || {};
-  if (sessionBets[playerId]) {
-    return message.reply(`You already have **${sessionBets[playerId].amount}** on this match.`);
-  }
+  const existingBet = sessionBets[playerId];
 
   try {
     const balance = await unbGetBalance(message.author.id);
     if ((balance.cash ?? 0) < amount) {
-      return message.reply(`You only have **${balance.cash}** cash, which isn't enough to bet **${amount}**.`);
+      return message.reply(`You only have **${balance.cash}** cash, which isn't enough to add **${amount}** to your bet.`);
     }
 
     await unbAdjustBalance(message.author.id, -amount, "Gwent bet");
@@ -505,10 +505,20 @@ async function handleBet(message, args) {
     return message.reply("Couldn't reach the economy bot to place your bet. Try again shortly.");
   }
 
-  sessionBets[playerId] = { discordId: message.author.id, amount };
+  if (existingBet) {
+    existingBet.amount += amount;
+  } else {
+    sessionBets[playerId] = { discordId: message.author.id, amount };
+  }
   bets.set(sessionId, sessionBets);
 
-  await message.reply(`\uD83D\uDCB0 Bet placed: **${amount}** locked in.`);
+  const totalBet = sessionBets[playerId].amount;
+
+  await message.reply(
+    existingBet
+      ? `\uD83D\uDCB0 Added **${amount}** to your bet. Total now: **${totalBet}**.`
+      : `\uD83D\uDCB0 Bet placed: **${amount}** locked in.`,
+  );
 
   const opponentPlayerId = sessionPlayerIds(sessionId).find((pid) => pid !== playerId);
   const opponentBet = opponentPlayerId && sessionBets[opponentPlayerId];
@@ -516,7 +526,7 @@ async function handleBet(message, args) {
   await broadcastSessionState(sessionId, "bet_placed", amount, message.author.id);
 
   if (opponentBet) {
-    const pot = amount + opponentBet.amount;
+    const pot = totalBet + opponentBet.amount;
     await broadcastSessionState(sessionId, "both_bet", pot, null);
     await dm(message.author.id, `Both players have bet. Pot: **${pot}**. Good luck!`);
     await dm(opponentBet.discordId, `Both players have bet. Pot: **${pot}**. Good luck!`);
