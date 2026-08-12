@@ -19,41 +19,221 @@ const activeBars = new Set();
 
   requestAnimationFrame(animate);
 })();
-const SYNODIC_MONTH = 29.530588853 * 86400000; // ms
-const KNOWN_NEW_MOON = 947182440000; // Date.UTC(2000, 0, 6, 18, 14, 0); // 2000-01-06 18:14 UTC
+const DEG = Math.PI / 180;
+const DAY_MS = 86400000;
+
+function sinDeg(x) {
+  return Math.sin(x * DEG);
+}
+
+function normDeg(x) {
+  x %= 360;
+  return x < 0 ? x + 360 : x;
+}
+
+function lunarPhaseFromK(k, phase = 0) {
+  const K = k + phase;
+  const T = K / 1236.85;
+  const T2 = T * T;
+  const T3 = T2 * T;
+  const T4 = T3 * T;
+
+  // Mean phase time, Julian Ephemeris Day
+  let jde =
+    2451550.09765 +
+    29.530588853 * K +
+    0.0001337 * T2 -
+    0.00000015 * T3 +
+    0.00000000073 * T4;
+
+  // Solar anomaly
+  const M = normDeg(2.5534 + 29.1053567 * K - 0.0000014 * T2 - 0.00000011 * T3);
+
+  // Lunar anomaly
+  const Mp = normDeg(
+    201.5643 +
+      385.81693528 * K +
+      0.0107582 * T2 +
+      0.00001238 * T3 -
+      0.000000058 * T4,
+  );
+
+  // Moon's argument of latitude
+  const F = normDeg(
+    160.7108 +
+      390.67050284 * K -
+      0.0016118 * T2 -
+      0.00000227 * T3 +
+      0.000000011 * T4,
+  );
+
+  // Longitude of ascending node
+  const Omega = normDeg(
+    124.7746 - 1.5637558 * K + 0.0020672 * T2 + 0.00000215 * T3,
+  );
+
+  // Earth's orbital eccentricity
+  const E = 1 - 0.002516 * T - 0.0000074 * T2;
+
+  if (phase === 0) {
+    // -------------------------
+    // NEW MOON
+    // -------------------------
+
+    const correction =
+      -0.4072 * sinDeg(Mp) +
+      0.17241 * E * sinDeg(M) +
+      0.01608 * sinDeg(2 * Mp) +
+      0.01039 * sinDeg(2 * F) +
+      0.00739 * E * sinDeg(Mp - M) -
+      0.00514 * E * sinDeg(Mp + M) +
+      0.00208 * E * E * sinDeg(2 * M) -
+      0.00111 * sinDeg(Mp - 2 * F) -
+      0.00057 * sinDeg(Mp + 2 * F) +
+      0.00056 * E * sinDeg(2 * Mp + M) -
+      0.00042 * sinDeg(3 * Mp) +
+      0.00042 * E * sinDeg(M + 2 * F) +
+      0.00038 * E * sinDeg(M - 2 * F) -
+      0.00024 * E * sinDeg(2 * Mp - M) -
+      0.00017 * sinDeg(Omega) -
+      0.00007 * sinDeg(Mp + 2 * M) +
+      0.00004 * sinDeg(2 * Mp - 2 * F) +
+      0.00004 * sinDeg(3 * M) +
+      0.00003 * sinDeg(Mp + M - 2 * F) +
+      0.00003 * sinDeg(2 * Mp + 2 * F) -
+      0.00003 * sinDeg(Mp + M + 2 * F) +
+      0.00003 * sinDeg(Mp - M + 2 * F) -
+      0.00002 * sinDeg(Mp - M - 2 * F) -
+      0.00002 * sinDeg(3 * Mp + M) +
+      0.00002 * sinDeg(4 * Mp);
+
+    jde += correction;
+  } else {
+    // -------------------------
+    // FULL MOON
+    // -------------------------
+
+    const correction =
+      -0.40614 * sinDeg(Mp) +
+      0.17302 * E * sinDeg(M) +
+      0.01614 * sinDeg(2 * Mp) +
+      0.01043 * sinDeg(2 * F) +
+      0.00734 * E * sinDeg(Mp - M) -
+      0.00515 * E * sinDeg(Mp + M) +
+      0.00209 * E * E * sinDeg(2 * M) -
+      0.00111 * sinDeg(Mp - 2 * F) -
+      0.00057 * sinDeg(Mp + 2 * F) +
+      0.00056 * E * sinDeg(2 * Mp + M) -
+      0.00042 * sinDeg(3 * Mp) +
+      0.00042 * E * sinDeg(M + 2 * F) +
+      0.00038 * E * sinDeg(M - 2 * F) -
+      0.00024 * E * sinDeg(2 * Mp - M) -
+      0.00017 * sinDeg(Omega) -
+      0.00007 * sinDeg(Mp + 2 * M) +
+      0.00004 * sinDeg(2 * Mp - 2 * F) +
+      0.00004 * sinDeg(3 * M) +
+      0.00003 * sinDeg(Mp + M - 2 * F) +
+      0.00003 * sinDeg(Mp + M + 2 * F) -
+      0.00003 * sinDeg(Mp - M + 2 * F) -
+      0.00002 * sinDeg(Mp - M - 2 * F) -
+      0.00002 * sinDeg(3 * Mp + M) +
+      0.00002 * sinDeg(4 * Mp);
+
+    jde += correction;
+  }
+
+  // Additional planetary corrections
+  const A1 = 299.77 + 0.107408 * K - 0.000325 * T2;
+  const A2 = 251.88 + 0.016321 * K;
+  const A3 = 251.83 + 26.651886 * K;
+  const A4 = 349.42 + 36.412478 * K;
+  const A5 = 84.66 + 18.206239 * K;
+  const A6 = 141.74 + 53.303771 * K;
+  const A7 = 207.14 + 2.453732 * K;
+  const A8 = 154.84 + 7.30686 * K;
+  const A9 = 34.52 + 27.261239 * K;
+  const A10 = 207.19 + 0.121824 * K;
+  const A11 = 291.34 + 1.844379 * K;
+  const A12 = 161.72 + 24.198154 * K;
+  const A13 = 239.56 + 25.513099 * K;
+  const A14 = 331.55 + 3.592518 * K;
+
+  jde +=
+    0.000325 * sinDeg(A1) +
+    0.000165 * sinDeg(A2) +
+    0.000164 * sinDeg(A3) +
+    0.000126 * sinDeg(A4) +
+    0.00011 * sinDeg(A5) +
+    0.000062 * sinDeg(A6) +
+    0.00006 * sinDeg(A7) +
+    0.000056 * sinDeg(A8) +
+    0.000047 * sinDeg(A9) +
+    0.000042 * sinDeg(A10) +
+    0.00004 * sinDeg(A11) +
+    0.000037 * sinDeg(A12) +
+    0.000035 * sinDeg(A13) +
+    0.000023 * sinDeg(A14);
+
+  // Julian Day -> Unix milliseconds
+  return (jde - 2440587.5) * DAY_MS;
+}
+
+function getLunation(timestamp) {
+  const jd = timestamp / DAY_MS + 2440587.5;
+
+  return Math.round((jd - 2451550.09765) / 29.530588853);
+}
+
+function getNearestMoon(phase, timestamp) {
+  const k = getLunation(timestamp);
+
+  const candidates = [
+    lunarPhaseFromK(k - 1, phase),
+    lunarPhaseFromK(k, phase),
+    lunarPhaseFromK(k + 1, phase),
+  ];
+
+  return candidates.reduce((nearest, value) => {
+    return Math.abs(value - timestamp) < Math.abs(nearest - timestamp)
+      ? value
+      : nearest;
+  });
+}
+
+function getNextMoon(phase, timestamp) {
+  const k = getLunation(timestamp);
+
+  let result = lunarPhaseFromK(k, phase);
+
+  if (result <= timestamp) {
+    result = lunarPhaseFromK(k + 1, phase);
+  }
+
+  return result;
+}
+
 function getNearestNewMoon(hoursBefore = 0) {
   const now = Clock.now();
 
-  const cycles = Math.round((now - KNOWN_NEW_MOON) / SYNODIC_MONTH);
-
-  return KNOWN_NEW_MOON + cycles * SYNODIC_MONTH - hoursBefore * 3600000;
+  return getNearestMoon(0, now) - hoursBefore * 3600000;
 }
+
 function getNextNewMoon(hoursBefore = 0) {
   const now = Clock.now();
 
-  const cycles = Math.ceil((now - KNOWN_NEW_MOON) / SYNODIC_MONTH);
-
-  return KNOWN_NEW_MOON + cycles * SYNODIC_MONTH - hoursBefore * 3600000;
+  return getNextMoon(0, now) - hoursBefore * 3600000;
 }
-// past or future:
+
 function getNearestFullMoon(hoursBefore = 0) {
   const now = Clock.now();
 
-  const fullBase = KNOWN_NEW_MOON + SYNODIC_MONTH / 2;
-
-  const cycles = Math.round((now - fullBase) / SYNODIC_MONTH);
-
-  return fullBase + cycles * SYNODIC_MONTH - hoursBefore * 3600000;
+  return getNearestMoon(0.5, now) - hoursBefore * 3600000;
 }
-// only future:
+
 function getNextFullMoon(hoursBefore = 0) {
   const now = Clock.now();
 
-  const fullBase = KNOWN_NEW_MOON + SYNODIC_MONTH / 2;
-
-  const cycles = Math.ceil((now - fullBase) / SYNODIC_MONTH);
-
-  return fullBase + cycles * SYNODIC_MONTH - hoursBefore * 3600000;
+  return getNextMoon(0.5, now) - hoursBefore * 3600000;
 }
 var card_dict_base = [
   {

@@ -176,46 +176,78 @@ async function buildMoonImage(time = Clock.now()) {
     ctx.fill();
   }
 
-  // Moon phase
-  // Moon phase
-  // Moon phase
-  const synodicMonth = 29.530588853;
-  const knownNewMoon = 947182440000;
+  const DAY_MS = 86400000;
 
-  const age =
-    ((((time - knownNewMoon) / 86400000) % synodicMonth) + synodicMonth) %
-    synodicMonth;
+  function getMoonPhase(time) {
+    const jd = time / DAY_MS + 2440587.5;
 
-  const phase = age / synodicMonth;
+    let k = Math.round((jd - 2451550.09765) / 29.530588853);
 
-  let phaseName;
+    let previousNewMoon = lunarPhaseFromK(k, 0);
+    let nextNewMoon = lunarPhaseFromK(k + 1, 0);
 
-  if (phase < 0.03 || phase > 0.97) {
-    phaseName = "New Moon";
-  } else if (phase < 0.22) {
-    phaseName = "Waxing Crescent";
-  } else if (phase < 0.28) {
-    phaseName = "First Quarter";
-  } else if (phase < 0.47) {
-    phaseName = "Waxing Gibbous";
-  } else if (phase < 0.53) {
-    phaseName = "Full Moon";
-  } else if (phase < 0.72) {
-    phaseName = "Waning Gibbous";
-  } else if (phase < 0.78) {
-    phaseName = "Third Quarter";
-  } else {
-    phaseName = "Waning Crescent";
+    // Make sure time is actually between the two new moons.
+    if (time < previousNewMoon) {
+      k--;
+      previousNewMoon = lunarPhaseFromK(k, 0);
+      nextNewMoon = lunarPhaseFromK(k + 1, 0);
+    } else if (time >= nextNewMoon) {
+      k++;
+      previousNewMoon = nextNewMoon;
+      nextNewMoon = lunarPhaseFromK(k + 1, 0);
+    }
+
+    /*
+     * 0.0 = New Moon
+     * 0.25 = First Quarter
+     * 0.5 = Full Moon
+     * 0.75 = Third Quarter
+     */
+    const phase = (time - previousNewMoon) / (nextNewMoon - previousNewMoon);
+
+    const ageDays = (time - previousNewMoon) / DAY_MS;
+
+    let phaseName;
+
+    if (phase < 0.03 || phase > 0.97) {
+      phaseName = "New Moon";
+    } else if (phase < 0.22) {
+      phaseName = "Waxing Crescent";
+    } else if (phase < 0.28) {
+      phaseName = "First Quarter";
+    } else if (phase < 0.47) {
+      phaseName = "Waxing Gibbous";
+    } else if (phase < 0.53) {
+      phaseName = "Full Moon";
+    } else if (phase < 0.72) {
+      phaseName = "Waning Gibbous";
+    } else if (phase < 0.78) {
+      phaseName = "Third Quarter";
+    } else {
+      phaseName = "Waning Crescent";
+    }
+
+    return {
+      phase,
+      ageDays,
+      phaseName,
+      previousNewMoon,
+      nextNewMoon,
+    };
   }
+
+  const moon = getMoonPhase(time);
 
   console.log({
     date: new Date(time),
-    ageDays: age.toFixed(3),
-    phase: phase.toFixed(4),
-    phaseName,
+    ageDays: moon.ageDays.toFixed(3),
+    phase: moon.phase.toFixed(4),
+    phaseName: moon.phaseName,
+    previousNewMoon: new Date(moon.previousNewMoon).toISOString(),
+    nextNewMoon: new Date(moon.nextNewMoon).toISOString(),
   });
 
-  drawMoonPhase(ctx, cx, cy, radius, phase, "#dddddd", "rgba(0,0,0,0.85)");
+  drawMoonPhase(ctx, cx, cy, radius, moon.phase, "#dddddd", "rgba(0,0,0,0.85)");
 
   return await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
 }
