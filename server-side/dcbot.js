@@ -800,10 +800,11 @@ function applyRandomStatus() {
   if (!ready || statusList.length === 0) return;
   const entry = statusList[Math.floor(Math.random() * statusList.length)];
   try {
+    //log("Set bot status, entry)
     client.user.setPresence({
       activities: [
         {
-          name: entry.name,
+          name: resolveStatusPlaceholders(entry.name),
           type: ACTIVITY_TYPE_MAP[String(entry.type || "PLAYING").toUpperCase()] ?? 0,
           url: entry.url,
         },
@@ -847,7 +848,7 @@ exports.init = async function init({ sessions, playerSockets, sendToClient }) {
     await refreshStatusList();
     applyRandomStatus();
     intervals.push(setInterval(refreshStatusList, 25 * 60 * 1000));
-    intervals.push(setInterval(applyRandomStatus, 1.25 * 60 * 1000));
+    intervals.push(setInterval(applyRandomStatus, 1 * 60 * 1000));
   }
 };
 
