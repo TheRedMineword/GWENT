@@ -1,0 +1,12 @@
+<title>Known Issue | Remote Work</title>
+<desc>Hello everyone!
+
+It's possible that I'll start working on Gwent remotely.
+In this case it will not be possible for me to create manifest.json
+This wont affect browser version, but exe version updater can fail to update, making it impossible to lunch Gwent
+
+I apologize for any inconvenience this may cause.
+
+~DrMineword</desc>
+<bottom_link>true</bottom_link>
+<bottom_link_value>Join Discord Server for updates!###https://theredmineword.github.io/GWENT/api/discord-iframe/page</bottom_link_value>
