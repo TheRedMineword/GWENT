@@ -707,7 +707,7 @@ async function onMessageCreate(message) {
 
   const [cmdRaw, ...args] = message.content.slice(1).trim().split(/\s+/);
   const cmd = cmdRaw.toLowerCase();
-  log(`Command "${cmd}" from ${message.author.id} in guild ${message.guildId}`);
+  //log(`Command "${cmd}" from ${message.author.id} in guild ${message.guildId}`);
 
   try {
     if (cmd === "registerclient") return void (await handleRegisterClient(message, args));
