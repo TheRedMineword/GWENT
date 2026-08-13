@@ -1,1 +1,31 @@
-[{ "name": "Shuffling decks", "type": "COMPETING" }, { "name": "Care for a round of Gwent?", "type": "PLAYING" }, { "name": "Ciri? What Ciri?", "type": "WATCHING" }, { "name": "Gwent 3: Wild Hunt", "type": "PLAYING" },{"type":"STREAMING","name":"{sessions} gwent games & {registered}/{players} players!"},{"type":"STREAMING","name":"{uptime} of pure Gwent!"}]
+[
+  {
+    "name": "Shuffling decks",
+    "type": "COMPETING",
+    "status": "idle"
+  },
+  {
+    "name": "Care for a round of Gwent?",
+    "status": "idle",
+    "type": "PLAYING"
+  },
+  {
+    "name": "Ciri? What Ciri?",
+    "type": "WATCHING",
+    "status": "idle"
+  },
+  {
+    "name": "Gwent 3: Wild Hunt",
+    "type": "PLAYING"
+  },
+  {
+    "type": "STREAMING",
+    "name": "{sessions} gwent games & {registered}/{players} players!",
+    "status": "idle"
+  },
+  {
+    "type": "STREAMING",
+    "name": "{uptime} of pure Gwent!",
+    "status": "idle"
+  }
+]
