@@ -3,7 +3,7 @@
 
 It's possible that I'll start working on Gwent remotely.
 In this case it will not be possible for me to create manifest.json
-This wont affect browser version, but exe version updater can fail to update, making it impossible to lunch Gwent
+This can affect browser version, but exe version updater will fail to update, making it impossible to lunch Gwent
 
 I apologize for any inconvenience this may cause.
 
