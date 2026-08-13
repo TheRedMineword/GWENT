@@ -1,11 +1,11 @@
 This is copied and modified version of [Rickvs64 gwent multiplayer](https://github.com/Rickvs64/gwent-multiplayer)
-An exe app was added: [Dowland](https://theredmineword.github.io/GWENT/exe/dowland/init) (exe app is just localhost of game html and images, so you have it saved on PC and not each time you visit website to load them again)
+An exe app was added: [Dowland](https://theredmineword.github.io/GWENT/exe/dowland/init) (exe app is just localhost of game web page html and images, so you have it saved on PC and not each time you visit website to load them again, downloaded compressed archive, contain only luncher, all required resources and updates are downloaded on startup)
 
 ## Rules
 The game is played in the same way as the original. The player aims to win two of three rounds, where victory within a given round is determined by whoever scores the most points. 
 
 #### Cards and Points
-Points are obtained by placing down unit cards, each with their corresponding values. Some unit cards have special effects as denoted by a symbol on their left side. The cards and their effects can be examined by selecting them or the row they have been palced on. The game also includes a nubmer of special cards that apply effects like negative weather conditions or bosting card points when played.
+Points are obtained by placing down unit cards, each with their corresponding values. Some unit cards have special effects as denoted by a symbol on their left side. The cards and their effects can be examined by selecting them or the row they have been palced on. The game also includes a number of special cards that apply effects like negative weather conditions or bosting card points when played.
 
 #### Turns
 A turn consists of playing a single card. Your opponent then does the same until either one of you passes. At this point the remaining player can continue to place cards until they decide to pass. When both players have passed the round is ended. In addition of placing cards, they player may also activate their leader ability by clicking on their leader if it is available to them.
