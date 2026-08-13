@@ -858,118 +858,124 @@ socket.onmessage = async (event) => {
         NoAuthNeeded();
       }
       break;
-
+    case "discordinventory":
+      // TO-DO
+      //{"type":"discordinventory","items":[{"requirements":[],"actions":[],"item_id":"1537477130651306060","name":"Poor Fucking Infantry","description":"Gives you a copy of a useless card in Gwent if you register discord session\nThe number of cards received is 1:1 with the amount of this item\n\nCards available in the Northern Kingdoms Faction, it has 1 strenght and no abilities!","is_usable":false,"is_sellable":true,"quantity":"5","emoji_unicode":"","emoji_id":"1523730085625069708","is_listed":true}],"page":1,"totalPages":1}
+      break;
     case "discordintegration":
-      var recived = data;
-      console.log("DISCORD DATA TO SWITCH", data);
+      if (allowdiscordintegration) {
+        var recived = data;
+        console.log("DISCORD DATA TO SWITCH", data);
 
-      var showduration = 11000;
-      var translation_string = getTranslation("discord");
+        var showduration = 11000;
+        var translation_string = getTranslation("discord");
 
-      var opName = recived.op?.username || translation_string.op;
-      var actorIsMe = recived.by && recived.me && recived.by === recived.me.id;
+        var opName = recived.op?.username || translation_string.op;
+        var actorIsMe =
+          recived.by && recived.me && recived.by === recived.me.id;
 
-      switch (recived.actiontype) {
-        case "registered":
-          pushMessage(
-            formatMessage2(
-              translation_string.discord_registered.replace(
-                "%s",
-                recived.me.username,
-              ),
-            ),
-            showduration,
-          );
-          break;
-
-        case "unregistered":
-          pushMessage(
-            formatMessage2(translation_string.discord_unregistered),
-            showduration,
-          );
-          break;
-
-        case "bet_placed": {
-          var msg = actorIsMe
-            ? translation_string.discord_bet_placed_me
-                .replace("%s", recived.actionvalue)
-                .replace("%s", recived.betpool)
-            : translation_string.discord_bet_placed_op
-                .replace("%s", opName)
-                .replace("%s", recived.actionvalue)
-                .replace("%s", recived.betpool);
-          pushMessage(formatMessage2(msg), showduration);
-          break;
-        }
-
-        case "both_bet":
-          pushMessage(
-            formatMessage2(
-              translation_string.discord_both_bet.replace(
-                "%s",
-                recived.betpool,
-              ),
-            ),
-            showduration,
-          );
-          break;
-
-        case "payout":
-          if (recived.actionvalue > 0) {
+        switch (recived.actiontype) {
+          case "registered":
             pushMessage(
               formatMessage2(
-                translation_string.discord_payout_win.replace(
+                translation_string.discord_registered.replace(
+                  "%s",
+                  recived.me.username,
+                ),
+              ),
+              showduration,
+            );
+            break;
+
+          case "unregistered":
+            pushMessage(
+              formatMessage2(translation_string.discord_unregistered),
+              showduration,
+            );
+            break;
+
+          case "bet_placed": {
+            var msg = actorIsMe
+              ? translation_string.discord_bet_placed_me
+                  .replace("%s", recived.actionvalue)
+                  .replace("%s", recived.betpool)
+              : translation_string.discord_bet_placed_op
+                  .replace("%s", opName)
+                  .replace("%s", recived.actionvalue)
+                  .replace("%s", recived.betpool);
+            pushMessage(formatMessage2(msg), showduration);
+            break;
+          }
+
+          case "both_bet":
+            pushMessage(
+              formatMessage2(
+                translation_string.discord_both_bet.replace(
+                  "%s",
+                  recived.betpool,
+                ),
+              ),
+              showduration,
+            );
+            break;
+
+          case "payout":
+            if (recived.actionvalue > 0) {
+              pushMessage(
+                formatMessage2(
+                  translation_string.discord_payout_win.replace(
+                    "%s",
+                    recived.actionvalue,
+                  ),
+                ),
+                showduration,
+              );
+            } else {
+              pushMessage(
+                formatMessage2(
+                  translation_string.discord_payout_lose.replace(
+                    "%s",
+                    Math.abs(recived.actionvalue),
+                  ),
+                ),
+                showduration,
+              );
+            }
+            break;
+
+          case "refund":
+            pushMessage(
+              formatMessage2(
+                translation_string.discord_refund.replace(
                   "%s",
                   recived.actionvalue,
                 ),
               ),
               showduration,
             );
-          } else {
-            pushMessage(
-              formatMessage2(
-                translation_string.discord_payout_lose.replace(
-                  "%s",
-                  Math.abs(recived.actionvalue),
-                ),
-              ),
-              showduration,
+            break;
+
+          case "error": {
+            if (recived.actionvalue !== "not_registered") {
+              var msg =
+                recived.actionvalue === "not_registered"
+                  ? translation_string.discord_error_not_registered
+                  : translation_string.discord_error_generic.replace(
+                      "%s",
+                      recived.actionvalue,
+                    );
+              pushMessage(formatMessage2(msg), showduration);
+            }
+            break;
+          }
+
+          default:
+            console.log(
+              "Unhandled discordintegration actiontype:",
+              recived.actiontype,
             );
-          }
-          break;
-
-        case "refund":
-          pushMessage(
-            formatMessage2(
-              translation_string.discord_refund.replace(
-                "%s",
-                recived.actionvalue,
-              ),
-            ),
-            showduration,
-          );
-          break;
-
-        case "error": {
-          if (recived.actionvalue !== "not_registered") {
-            var msg =
-              recived.actionvalue === "not_registered"
-                ? translation_string.discord_error_not_registered
-                : translation_string.discord_error_generic.replace(
-                    "%s",
-                    recived.actionvalue,
-                  );
-            pushMessage(formatMessage2(msg), showduration);
-          }
-          break;
+            break;
         }
-
-        default:
-          console.log(
-            "Unhandled discordintegration actiontype:",
-            recived.actiontype,
-          );
-          break;
       }
       break;
     case "welcome":
@@ -3676,14 +3682,15 @@ class Game {
       .replace(/'/g, "&#39;")
       .replace(/\n/g, "<br>");
     endText.classList.remove("hide");
-    comp_and_send(
-      socket,
-      JSON.stringify({
-        type: "discord_dm_me",
-        message: `\`\`\`${buildRoundHistoryText(game.roundHistoryResults)}\`\`\``,
-      }),
-    );
-
+    if (allowdiscordintegration) {
+      comp_and_send(
+        socket,
+        JSON.stringify({
+          type: "discord_dm_me",
+          message: `\`\`\`${buildRoundHistoryText(game.roundHistoryResults)}\`\`\``,
+        }),
+      );
+    }
     const subtitle = endScreen.querySelector("p");
     if (subtitle) {
       //    subtitle.classList.add("hide");
@@ -3707,6 +3714,7 @@ class Game {
           JSON.stringify({
             type: "matchResult",
             winner_id: `RANDOM#${random_string_gen()}`,
+            score: getAverageScore(game.roundHistoryResults),
           }),
         );
         var end_screen = true;
@@ -3720,6 +3728,7 @@ class Game {
         JSON.stringify({
           type: "matchResult",
           winner_id: player_me.ThatPlayerId,
+          score: getAverageScore(game.roundHistoryResults),
         }),
       );
       var end_screen = true;
@@ -3733,6 +3742,7 @@ class Game {
         JSON.stringify({
           type: "matchResult",
           winner_id: player_op.ThatPlayerId,
+          score: getAverageScore(game.roundHistoryResults),
         }),
       );
       var end_screen = true;
@@ -3774,14 +3784,15 @@ class Game {
         .replace(/\n/g, "<br>");
 
     endText.classList.remove("hide");
-    comp_and_send(
-      socket,
-      JSON.stringify({
-        type: "discord_dm_me",
-        message: `\`\`\`${buildRoundHistoryText(game.roundHistoryResults)}\n\n${a}\`\`\``,
-      }),
-    );
-
+    if (allowdiscordintegration) {
+      comp_and_send(
+        socket,
+        JSON.stringify({
+          type: "discord_dm_me",
+          message: `\`\`\`${buildRoundHistoryText(game.roundHistoryResults)}\n\n${a}\`\`\``,
+        }),
+      );
+    }
     gameended = true;
     ui.enablePlayer(false);
 
@@ -3790,7 +3801,11 @@ class Game {
     if (winner === player_me) {
       comp_and_send(
         socket,
-        JSON.stringify({ type: "matchResult", winner_id: winner.ThatPlayerId }),
+        JSON.stringify({
+          type: "matchResult",
+          winner_id: winner.ThatPlayerId,
+          score: getAverageScore(game.roundHistoryResults),
+        }),
       );
       console.log("Game over || Victory by surrender");
 
@@ -3803,6 +3818,7 @@ class Game {
         JSON.stringify({
           type: "matchResult",
           winner_id: player_op.ThatPlayerId,
+          score: getAverageScore(game.roundHistoryResults),
         }),
       );
       console.log("Game over || Defeat by surrender");

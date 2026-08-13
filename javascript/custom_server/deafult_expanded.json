@@ -1,6 +1,7 @@
 {
   "name": "Default Config",
   "env_vars": {
+    "allowdiscordintegration": true,
     "showbankms": 9000,
     "fullscreenConfig": {
       "localhost": false,
@@ -5391,6 +5392,10 @@
         "name": "",
         "description": ""
       },
+      "discord": {
+        "name": "",
+        "description": ""
+      },
       "wshield": {
         "name": "",
         "description": ""
@@ -5652,9 +5657,9 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
-    "tavern_yt_vid": "yu197hlNWK0",
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack_volume": 90,
+    "tavern_yt_vid": "8o-JI8VRyKo",
     "tavern_yt_volume": 90
   },
   "texture_pack_url": null

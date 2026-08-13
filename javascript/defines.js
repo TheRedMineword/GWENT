@@ -1,5 +1,6 @@
 "use strict";
 loadingscreenupdate("Creating env vars!");
+let allowdiscordintegration = true;
 const debuglunchcustomcards = false; // if false when ready use: lunch_gwent_ui
 let onYouTubeIframeAPIReady_status = false;
 const showagile_and_alldescindeckmaker = false;
@@ -438,6 +439,7 @@ let ThisDef = {
   name: "Default Config",
 
   env_vars: {
+    allowdiscordintegration: deepClone(allowdiscordintegration),
     showbankms: deepClone(showbankms),
 
     // players: {},
@@ -771,4 +773,14 @@ async function resolve_pass_at_extrajson(ms) {
   await sleep(wait2);
   //showTooltip(getUiStrng("sync.end"));
   return true;
+}
+function getAverageScore(roundHistoryResults) {
+  if (!roundHistoryResults?.length) return 0;
+
+  const total = roundHistoryResults.reduce(
+    (sum, round) => sum + round.score_me + round.score_op,
+    0,
+  );
+
+  return total / (roundHistoryResults.length * 2);
 }

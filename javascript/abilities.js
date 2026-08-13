@@ -116,6 +116,10 @@ var ability_dict = {
     name: "",
     description: "",
   },
+  discord: {
+    name: "",
+    description: "",
+  },
   wshield: {
     name: "",
     description: "",
