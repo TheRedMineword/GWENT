@@ -17,18 +17,25 @@
 //                          again to add more to an existing bet on the same
 //                          match.
 //   !gwentstatus             Show your current registration/bet state.
+//   !gwentinventory          Show your UnbelievaBoat inventory items.
+//   !gwentleaderboard [n]    Show the top n (default 5, max 15) cash balances.
+//   !gwenthelp               List all of the above.
 //
 // Game-client -> server websocket messages this module reacts to (handled in
 // engine.js, which forwards them here):
-//   { type: "matchResult", winner_id: "<playerId>" }
+//   { type: "matchResult", winner_id: "<playerId>", score: <number> }
 //     Sent when a match ends. BOTH clients in the session need to send this
 //     and agree on the winner before any payout happens - if they disagree
 //     (or only one ever reports), bets are refunded instead of paid out.
+//     `score` is an optional 0-15 performance number the reporting client
+//     supplies for itself (score_p1 / score_p2, one per player). The LOWER
+//     of the two players' scores is used as a payout bonus percentage
+//     (capped at 15%) credited to the winner on top of the pot.
 //   { type: "discord_dm_me", message: "<text>" }
 //     Client asks the server to DM its registered Discord user the given
 //     text. No-op if that client isn't registered.
 //
-// Server -> game-client websocket message this module sends:
+// Server -> game-client websocket messages this module sends:
 //   { type: "discordintegration", actiontype, actionvalue, betpool, by, me, op }
 //     Pushed to a connected client whenever something bet/registration
 //     related happens in their session, so the client UI can react.
@@ -36,10 +43,17 @@
 //                   "both_bet" | "payout" | "refund" | "error"
 //     - actionvalue: whatever number/string is relevant to actiontype
 //                    (bet amount, payout amount, error code, etc.)
+//     - bonusPercent: only present on "payout" - the score-based bonus
+//                     percentage (0-15) applied on top of the pot
 //     - betpool: current total pot for the session (0 once resolved)
 //     - by: the Discord id of whoever triggered the action, or null
 //     - me / op: { id, username, bet } for this client / their opponent,
 //                or null if that side isn't registered
+//   { type: "discordinventory", items, page, totalPages, error? }
+//     Pushed right after a successful !registerclient (a *second* message,
+//     right after the "registered" discordintegration push above),
+//     containing the linked Discord user's UnbelievaBoat inventory as
+//     returned by GET /guilds/{guild}/users/{user}/inventory.
 //
 // State (registrations, pending bets, match reports) is kept in memory only,
 // mirroring how engine.js keeps `sessions`/`players` in memory. It is NOT
@@ -83,6 +97,10 @@ const registerByPlayer = new Map();
 const bets = new Map();
 // sessionId -> { [playerId]: reportedWinnerPlayerId }
 const matchReports = new Map();
+// sessionId -> { [playerId]: reportedScore } - performance score each client
+// self-reported alongside its matchResult; used for the payout bonus.
+const matchScores = new Map();
+const MAX_BONUS_PERCENT = 15;
 // playerId -> last discord_dm_me timestamp (basic anti-spam)
 const lastDmRequestAt = new Map();
 const DM_REQUEST_COOLDOWN_MS = 5000;
@@ -130,6 +148,30 @@ async function unbAdjustBalance(userId, cashDelta, reason) {
   return res.json();
 }
 
+// GET /guilds/{guild}/users/{user}/inventory -> { page, totalPages, items: InventoryItem[] }
+async function unbGetInventory(userId, { limit = 100, offset = 0 } = {}) {
+  const qs = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+  const res = await fetch(`${UNB_BASE}/guilds/${GUILD_ID}/users/${userId}/inventory?${qs}`, {
+    headers: { Authorization: ECONOMY_TOKEN },
+  });
+  if (!res.ok) {
+    throw new Error(`UnbelievaBoat GET inventory ${res.status}: ${await res.text()}`);
+  }
+  return res.json();
+}
+
+// GET /guilds/{guild}/users -> guild balance leaderboard
+async function unbGetLeaderboard({ limit = 10, sort = "cash" } = {}) {
+  const qs = new URLSearchParams({ limit: String(limit), sort });
+  const res = await fetch(`${UNB_BASE}/guilds/${GUILD_ID}/users?${qs}`, {
+    headers: { Authorization: ECONOMY_TOKEN },
+  });
+  if (!res.ok) {
+    throw new Error(`UnbelievaBoat GET leaderboard ${res.status}: ${await res.text()}`);
+  }
+  return res.json();
+}
+
 // ---------- Discord helpers ----------
 
 async function dm(discordId, text) {
@@ -169,6 +211,30 @@ function pushIntegration(playerId, payload) {
   const ws = deps.playerSockets[playerId];
   if (!ws || typeof deps.sendToClient !== "function") return;
   deps.sendToClient(ws, { type: "discordintegration", ...payload });
+}
+
+// Second ws message sent right after a successful registration: the linked
+// Discord user's UnbelievaBoat inventory, so the client can render it
+// without an extra round trip.
+async function pushInventorySnapshot(playerId, discordId) {
+  const ws = deps.playerSockets[playerId];
+  if (!ws || typeof deps.sendToClient !== "function") return;
+  if (!discordId) return;
+
+  try {
+    const inv = await unbGetInventory(discordId);
+    const items = inv.items || [];
+    deps.sendToClient(ws, {
+      type: "discordinventory",
+      items,
+      page: inv.page ?? 1,
+      totalPages: inv.totalPages ?? 1,
+    });
+    log(`Sent inventory snapshot to client ${playerId} (${discordId}): ${items.length} item(s)`);
+  } catch (e) {
+    log(`Inventory fetch failed for ${discordId}:`, e.message);
+    deps.sendToClient(ws, { type: "discordinventory", items: [], page: 1, totalPages: 1, error: "fetch_failed" });
+  }
 }
 
 // Sends both players in a session their own me/op view of the same event.
@@ -239,6 +305,7 @@ async function refundSessionBets(sessionId, reasonText) {
 
   bets.delete(sessionId);
   matchReports.delete(sessionId);
+  matchScores.delete(sessionId);
 }
 
 function clearRegistrationForPlayer(playerId, { notify = true } = {}) {
@@ -318,22 +385,31 @@ async function onMatchResult(ws, data) {
   reports[ws.playerId] = winnerId;
   matchReports.set(sessionId, reports);
 
+  const reportedScore = Number(data?.score);
+  const scores = matchScores.get(sessionId) || {};
+  scores[ws.playerId] = Number.isFinite(reportedScore) ? reportedScore : 0;
+  matchScores.set(sessionId, scores);
+  log(`matchResult from ${ws.playerId} in session ${sessionId}: winner=${winnerId} score=${scores[ws.playerId]}`);
+
   const playerIds = sessionPlayerIds(sessionId);
   if (playerIds.length < 2) return; // no opponent to reconcile with yet
   if (!playerIds.every((pid) => reports[pid])) return; // still waiting on the other report
 
   const [reportA, reportB] = playerIds.map((pid) => reports[pid]);
   const sessionBets = bets.get(sessionId);
+  const sessionScores = matchScores.get(sessionId) || {};
 
   if (reportA !== reportB || !playerIds.includes(reportA)) {
     log(`Match result mismatch in session ${sessionId}: ${reportA} vs ${reportB}`);
     await refundSessionBets(sessionId, "The two clients disagreed on the winner, so bets were refunded.");
     matchReports.delete(sessionId);
+    matchScores.delete(sessionId);
     return;
   }
 
   const winnerPlayerId = reportA;
   matchReports.delete(sessionId);
+  matchScores.delete(sessionId);
 
   if (!sessionBets) return; // nobody bet on this match
 
@@ -371,18 +447,36 @@ async function onMatchResult(ws, data) {
 
   const pot = winnerBet.amount + loserBet.amount;
 
+  // Score-based bonus: the LOWER of the two self-reported scores becomes a
+  // payout percentage on top of the pot, capped at MAX_BONUS_PERCENT so a
+  // bogus/huge score can't blow the payout up.
+  const scoreValues = playerIds.map((pid) => sessionScores[pid] || 0);
+  const lowestScore = Math.min(...scoreValues);
+  const bonusPercent = Math.max(0, Math.min(MAX_BONUS_PERCENT, Math.floor(lowestScore)));
+  const payout = Math.ceil(pot * (1 + bonusPercent / 100));
+  const bonusAmount = payout - pot;
+  const reason = bonusPercent > 0 ? `Gwent bet payout (+${bonusPercent}% score bonus)` : "Gwent bet payout";
+
+  log(`Payout for session ${sessionId}: pot=${pot} lowestScore=${lowestScore} bonus=${bonusPercent}% -> payout=${payout}`);
+
   try {
-    await unbAdjustBalance(winnerBet.discordId, pot, "Gwent bet payout");
-    await dm(winnerBet.discordId, `\uD83C\uDFC6 You won the Gwent match! **+${pot}** credited (your ${winnerBet.amount} stake + your opponent's ${loserBet.amount}).`);
+    await unbAdjustBalance(winnerBet.discordId, payout, reason);
+    await dm(
+      winnerBet.discordId,
+      `\uD83C\uDFC6 You won the Gwent match! **+${payout}** credited (${pot} pot${
+        bonusAmount > 0 ? ` + ${bonusPercent}% score bonus, ${bonusAmount} extra` : ""
+      }).`,
+    );
     await dm(loserBet.discordId, `\uD83D\uDC94 You lost the Gwent match and your **${loserBet.amount}** stake.`);
   } catch (e) {
     log(`Payout failed for session ${sessionId}:`, e.message);
-    await dm(winnerBet.discordId, `\u26A0\uFE0F You won, but crediting your **${pot}** payout failed. Please contact an admin.`);
+    await dm(winnerBet.discordId, `\u26A0\uFE0F You won, but crediting your **${payout}** payout failed. Please contact an admin.`);
   }
 
   pushIntegration(winnerPlayerId, {
     actiontype: "payout",
-    actionvalue: pot,
+    actionvalue: payout,
+    bonusPercent,
     by: winnerBet.discordId,
     betpool: 0,
     me: await buildSnapshot(winnerBet.discordId, 0),
@@ -432,6 +526,7 @@ async function handleRegisterClient(message, args) {
   ws.dcUserId = message.author.id;
 
   await message.reply(`\u2705 Linked to client \`${playerId}\`. You can now use \`!gwentbet <amount>\` once you're in a match.`);
+  log(`Registered client ${playerId} <-> discord ${message.author.id}`);
 
   if (ws.sessionId) {
     await broadcastSessionState(ws.sessionId, "registered", null, message.author.id);
@@ -445,6 +540,10 @@ async function handleRegisterClient(message, args) {
       op: null,
     });
   }
+
+  // Second ws message: push the linked Discord user's UnbelievaBoat
+  // inventory right after the "registered" event above.
+  await pushInventorySnapshot(playerId, message.author.id);
 }
 
 async function handleUnregister(message) {
@@ -551,6 +650,56 @@ async function handleStatus(message) {
   );
 }
 
+async function handleInventory(message) {
+  try {
+    const inv = await unbGetInventory(message.author.id);
+    const items = inv.items || [];
+    log(`Inventory command for ${message.author.id}: ${items.length} item(s)`);
+    if (!items.length) return message.reply("Your inventory is empty.");
+
+    const shown = items.slice(0, 15);
+    const lines = shown.map((it) => `\u2022 ${it.name} x${it.quantity ?? 1}`);
+    const more = items.length > shown.length ? `\n…and ${items.length - shown.length} more.` : "";
+    return message.reply(`**Your inventory:**\n${lines.join("\n")}${more}`);
+  } catch (e) {
+    log("Inventory command failed:", e.message);
+    return message.reply("Couldn't reach the economy bot to fetch your inventory.");
+  }
+}
+
+async function handleLeaderboard(message, args) {
+  const limit = Math.min(Math.max(Number.parseInt(args[0], 10) || 5, 1), 15);
+  try {
+    const data = await unbGetLeaderboard({ limit });
+    const users = data.users || data || [];
+    log(`Leaderboard command for ${message.author.id}: ${users.length} row(s)`);
+    if (!users.length) return message.reply("Leaderboard is empty.");
+
+    const lines = users
+      .slice(0, limit)
+      .map((u, i) => `${i + 1}. <@${u.user_id}> - **${u.cash ?? u.total ?? 0}**`);
+    return message.reply(`**Top ${lines.length} cash balances:**\n${lines.join("\n")}`);
+  } catch (e) {
+    log("Leaderboard command failed:", e.message);
+    return message.reply("Couldn't reach the economy bot to fetch the leaderboard.");
+  }
+}
+
+function handleHelp(message) {
+  return message.reply(
+    [
+      "**Gwent Discord commands**",
+      `\`${usage("registerclient")}\` - link your Discord account to a connected game client`,
+      "`!gwentunregister` - clear your registration",
+      `\`${usage("gwentbet")}\` - escrow cash as your match stake`,
+      "`!gwentstatus` - show your registration/bet state",
+     // "`!gwentinventory` - show your UnbelievaBoat inventory",
+    //  "`!gwentleaderboard [count]` - show the top cash balances (default 5, max 15)",
+      "`!gwenthelp` - show this message",
+    ].join("\n"),
+  );
+}
+
 async function onMessageCreate(message) {
   if (message.author.bot) return;
   if (message.guildId !== GUILD_ID) return;
@@ -558,12 +707,16 @@ async function onMessageCreate(message) {
 
   const [cmdRaw, ...args] = message.content.slice(1).trim().split(/\s+/);
   const cmd = cmdRaw.toLowerCase();
+  log(`Command "${cmd}" from ${message.author.id} in guild ${message.guildId}`);
 
   try {
     if (cmd === "registerclient") return void (await handleRegisterClient(message, args));
     if (cmd === "gwentunregister") return void (await handleUnregister(message));
     if (cmd === "gwentbet") return void (await handleBet(message, args));
     if (cmd === "gwentstatus") return void (await handleStatus(message));
+   // disabled if (cmd === "gwentinventory") return void (await handleInventory(message));
+  //  if (cmd === "gwentleaderboard") return void (await handleLeaderboard(message, args));
+    if (cmd === "gwenthelp") return void handleHelp(message);
   } catch (e) {
     log(`Command "${cmd}" threw:`, e);
     try {
@@ -573,11 +726,21 @@ async function onMessageCreate(message) {
 }
 
 // ---------- Rotating bot status ----------
-// dc_bot_status points at a JSON file that's a plain array of strings, e.g.
-//   ["Gwent Ranked", "shuffling decks"]
-// or an array of objects for more control, e.g.
+// dc_bot_status points at a JSON file that's an array of status objects,
+// e.g.
 //   [{"name":"Gwent Ranked","type":"WATCHING"}, {"name":"with cards","type":"PLAYING"}]
-// Either shape works; strings are treated as { name, type: "PLAYING" }.
+// Plain string entries (e.g. "Gwent Ranked") are no longer accepted - every
+// entry must be an object with at least a "name" so type/url/status can be
+// controlled per-entry.
+//
+// `name` may contain placeholders that get filled in at status-apply time:
+//   {guild}       guild name
+//   {members}     guild member count
+//   {players}     currently connected game clients
+//   {sessions}    currently active game sessions
+//   {registered}  clients with a linked Discord user
+//   {uptime}      bot uptime, e.g. "42m"
+// e.g. {"name":"Gwent with {players} players","type":"WATCHING"}
 
 let statusList = [];
 
@@ -594,9 +757,28 @@ const ACTIVITY_TYPE_MAP = ActivityType
 
 function normalizeStatusList(json) {
   const arr = Array.isArray(json) ? json : Object.values(json || {});
-  return arr
-    .map((entry) => (typeof entry === "string" ? { name: entry, type: "PLAYING" } : entry))
-    .filter((entry) => entry && entry.name);
+  // Object entries only - plain strings ("Gwent Ranked") are no longer
+  // accepted, every entry must be an object so type/url/status are explicit.
+  return arr.filter(
+    (entry) => entry && typeof entry === "object" && !Array.isArray(entry) && typeof entry.name === "string" && entry.name.trim(),
+  );
+}
+
+// Fills {placeholder} tokens in a status name with live bot/game stats.
+function resolveStatusPlaceholders(text) {
+  if (!text) return text;
+  const guild = ready && GUILD_ID ? client.guilds.cache.get(GUILD_ID) : null;
+  const playerCount = Object.keys(deps.playerSockets || {}).length;
+  const sessionCount = Object.keys(deps.sessions || {}).length;
+  const uptimeMinutes = client?.uptime ? Math.floor(client.uptime / 60000) : 0;
+
+  return text
+    .replace(/\{guild\}/g, guild?.name || "the server")
+    .replace(/\{members\}/g, guild ? String(guild.memberCount) : "0")
+    .replace(/\{players\}/g, String(playerCount))
+    .replace(/\{sessions\}/g, String(sessionCount))
+    .replace(/\{registered\}/g, String(registerByPlayer.size))
+    .replace(/\{uptime\}/g, `${uptimeMinutes}m`);
 }
 
 async function refreshStatusList() {
