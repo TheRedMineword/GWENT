@@ -3,6 +3,8 @@ let IsNowCustom = false;
 // CONFIG
 // ===============================
 const IGNORE_PATTERNS = [
+  "discord_cards",
+  "discord_cards_array",
   "resync_contnet",
   "resync_now_apply",
   "knowissuescript",
@@ -622,7 +624,7 @@ async function connect_to_custom_server(URL) {
     custom_updater = true;
     await sleep(300);
     await custom_card_builder_init();
-    await rerunDailyCardPickSafe();
+    await setDiscordCards(allowdiscordintegration, discord_cards_array);
     custom_updater = false;
     //    updateLoader("Almost there", 99, `Updating cards!`);
     // timed_count_change = [];
@@ -634,6 +636,8 @@ async function connect_to_custom_server(URL) {
     await sleep(350);
     updateLoader("Almost there", 97, `Translating!`);
     await retranslategame(lang);
+    await sleep(50);
+    await rerunDailyCardPickSafe();
     updateLoader("Almost there", 98, `Reloading UI!`);
     await reloadRuntimeConfigs();
     if (!waitMusicPlaying) {

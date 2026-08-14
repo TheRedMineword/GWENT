@@ -374,6 +374,10 @@ STRNG["en"] = {
   },
     bucket: {
     description: "Random cards will appear in the \"bucket\" every few turns; the frequency of their appearance depends on the number of commanders with this ability currently in play. The winner of the round takes the pot, the loser turns some of the released power into cards draw."
+  },
+    discord: {
+    name: "Discord Community",
+    description: "This card comes from our Discord community server! "
   }
 },
   factions: {
@@ -684,7 +688,8 @@ STRNG["en"] = {
     bluebird_sad: "Sad Child",
     "Gaunter_Leader2": "Gaunter O'Dimm — Master of Time",
     thedevil: "The Devil",
-    eredin_bucket: "Eredin — The Elder Blood Pursuer"
+    eredin_bucket: "Eredin — The Elder Blood Pursuer",
+    discord_poor_infantry: "Poor Fucking Infantry"
   },
   ui: {
     elem: {
@@ -1058,5 +1063,6 @@ discord: {
 
   discord_error_generic:
     "<color=#2121DB>DISCORD</color>: Something went wrong <color=#FF5555>(%s)</color>.",
+  discord_card_recived: "<color=#2121DB>DISCORD</color>: Recived inventory from <color=#2121DB>discord</color>!\nSynced <color=#FFD700>%s</color> cards!\n<color=#AAAAFF>If you dont see these cards, please refresh current faction deck builder via changing faction!</color>"
 }
 };

@@ -605,6 +605,10 @@
           },
           "bucket": {
             "description": "Random cards will appear in the \"bucket\" every few turns; the frequency of their appearance depends on the number of commanders with this ability currently in play. The winner of the round takes the pot, the loser turns some of the released power into cards draw."
+          },
+          "discord": {
+            "name": "Discord Community",
+            "description": "This card comes from our Discord community server! "
           }
         },
         "factions": {
@@ -911,7 +915,8 @@
           "bluebird_sad": "Sad Child",
           "Gaunter_Leader2": "Gaunter O'Dimm — Master of Time",
           "thedevil": "The Devil",
-          "eredin_bucket": "Eredin — The Elder Blood Pursuer"
+          "eredin_bucket": "Eredin — The Elder Blood Pursuer",
+          "discord_poor_infantry": "Poor Fucking Infantry"
         },
         "ui": {
           "elem": {
@@ -1233,7 +1238,8 @@
           "discord_payout_lose": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: You lost the bet. \u003Ccolor=#FF5555\u003E-%s\u003C/color\u003E deducted.",
           "discord_refund": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Bet refunded: \u003Ccolor=#AAAAAA\u003E%s\u003C/color\u003E.",
           "discord_error_not_registered": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: You need to \u003Ccolor=#FFAA00\u003E!registerclient\u003C/color\u003E on Discord first.",
-          "discord_error_generic": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Something went wrong \u003Ccolor=#FF5555\u003E(%s)\u003C/color\u003E."
+          "discord_error_generic": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Something went wrong \u003Ccolor=#FF5555\u003E(%s)\u003C/color\u003E.",
+          "discord_card_recived": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Recived inventory from \u003Ccolor=#2121DB\u003Ediscord\u003C/color\u003E!\nSynced \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E cards!\n\u003Ccolor=#AAAAFF\u003EIf you dont see these cards, please refresh current faction deck builder via changing faction!\u003C/color\u003E"
         }
       },
       "pl": {
@@ -1544,6 +1550,10 @@
           },
           "bucket": {
             "description": "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawaiania zależy od liderów z tą zdolnością w grze. Zwycięzca tury przejmuje pulę, przegrany zamienia cześć uwolnionej mocy w dobrnia kart. "
+          },
+          "discord": {
+            "name": "Społeczność Discord",
+            "description": "Ta karta pochodzi z naszego serwera społeczności Discord! "
           }
         },
         "factions": {
@@ -1850,7 +1860,8 @@
           "bluebird_sad": "Smutne Dziecko",
           "Gaunter_Leader2": "Gaunter O'Dimm — Mistrz Czasu",
           "thedevil": "Diabeł",
-          "eredin_bucket": "Eredin — W Pogoni Za Starszą Krwią"
+          "eredin_bucket": "Eredin — W Pogoni Za Starszą Krwią",
+          "discord_poor_infantry": "Biedna Pierdolona Piechota"
         },
         "ui": {
           "elem": {
@@ -2172,7 +2183,8 @@
           "discord_payout_lose": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Przegrałeś zakład. \u003Ccolor=#FF5555\u003E-%s\u003C/color\u003E zostało odjęte.",
           "discord_refund": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Zakład zwrócony: \u003Ccolor=#AAAAAA\u003E%s\u003C/color\u003E.",
           "discord_error_not_registered": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Najpierw musisz użyć \u003Ccolor=#FFAA00\u003E!registerclient\u003C/color\u003E na Discordzie.",
-          "discord_error_generic": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Coś poszło nie tak \u003Ccolor=#FF5555\u003E(%s)\u003C/color\u003E."
+          "discord_error_generic": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Coś poszło nie tak \u003Ccolor=#FF5555\u003E(%s)\u003C/color\u003E.",
+          "discord_card_recived": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Otrzymano ekwipunek z \u003Ccolor=#2121DB\u003Ediscorda\u003C/color\u003E!\nZsynchronizowano \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E kart!\n\u003Ccolor=#AAAAFF\u003EJeśli nei widzisz tych kart odśwież kontruktor talii poprzez zmianę frakcji!\u003C/color\u003E"
         }
       }
     },
@@ -5320,6 +5332,17 @@
         "ability": "bucket",
         "filename": "eredin_bucket",
         "count": "0"
+      },
+      {
+        "name": "Poor Fucking Infantry",
+        "id": "1047",
+        "deck": "realms",
+        "row": "close",
+        "strength": "1",
+        "ability": "discord",
+        "filename": "discord_poor_infantry",
+        "note": "This is card from discord server integration!",
+        "count": "0"
       }
     ],
     "factions": {
@@ -5657,10 +5680,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "8o-JI8VRyKo",
-    "tavern_yt_volume": 90
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }

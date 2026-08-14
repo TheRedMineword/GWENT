@@ -458,6 +458,10 @@ STRNG["pl"] = {
   },
     bucket: {
     description: "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawaiania zależy od liderów z tą zdolnością w grze. Zwycięzca tury przejmuje pulę, przegrany zamienia cześć uwolnionej mocy w dobrnia kart. "
+  },
+    discord: {
+    name: "Społeczność Discord",
+    description: "Ta karta pochodzi z naszego serwera społeczności Discord! "
   }
 },
     factions: {
@@ -778,7 +782,8 @@ STRNG["pl"] = {
     bluebird_sad: "Smutne Dziecko",
     "Gaunter_Leader2": "Gaunter O'Dimm — Mistrz Czasu",
     thedevil: "Diabeł",
-    eredin_bucket: "Eredin — W Pogoni Za Starszą Krwią"
+    eredin_bucket: "Eredin — W Pogoni Za Starszą Krwią",
+    discord_poor_infantry: "Biedna Pierdolona Piechota"
   },
   ui: {
     elem: {
@@ -1152,5 +1157,6 @@ STRNG["pl"] = {
 
   discord_error_generic:
     "<color=#2121DB>DISCORD</color>: Coś poszło nie tak <color=#FF5555>(%s)</color>.",
+  discord_card_recived: "<color=#2121DB>DISCORD</color>: Otrzymano ekwipunek z <color=#2121DB>discorda</color>!\nZsynchronizowano <color=#FFD700>%s</color> kart!\n<color=#AAAAFF>Jeśli nei widzisz tych kart odśwież kontruktor talii poprzez zmianę frakcji!</color>"
 }
 };

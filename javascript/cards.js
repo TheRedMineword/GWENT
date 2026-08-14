@@ -3669,6 +3669,17 @@ var card_dict_base = [
     filename: "eredin_bucket",
     count: "0",
   },
+  {
+    name: "Poor Fucking Infantry",
+    id: "1047",
+    deck: "realms",
+    row: "close",
+    strength: "1",
+    ability: "discord",
+    filename: "discord_poor_infantry",
+    note: "This is card from discord server integration!",
+    count: "0",
+  },
 ];
 let pickedfakecard = { a: false, b: null };
 
@@ -4316,6 +4327,77 @@ setupDailyCards(card_of_the_day);
 // Run every second
 setInterval(scanTimedCountChange, 1000);
 //setInterval(scanMessages, 100);
+
+function setDiscordCards(apply = false, items = []) {
+  var showduration = 11000;
+  if (!Array.isArray(items)) {
+    items = [];
+  }
+
+  const discordFilenames = new Set(Object.values(discord_cards));
+
+  for (const card of card_dict) {
+    if (discordFilenames.has(card.filename)) {
+      card.count = "0";
+    }
+  }
+
+  if (apply !== true) {
+    console.log("[DISCORD CARDS] Disabled. All Discord cards reset to 0.");
+    return [];
+  }
+
+  const changed = [];
+
+  for (const item of items) {
+    if (!item || !item.name) {
+      continue;
+    }
+
+    const filename = discord_cards[item.name];
+
+    if (!filename) {
+      continue;
+    }
+
+    const quantity = Math.max(0, Number(item.quantity) || 0);
+
+    const card = card_dict.find((card) => card.filename === filename);
+
+    if (!card) {
+      console.warn(
+        `[DISCORD CARDS] Card not found for "${item.name}" -> "${filename}"`,
+      );
+      continue;
+    }
+
+    const current = Number(card.count) || 0;
+    card.count = String(current + quantity);
+
+    changed.push({
+      name: item.name,
+      filename,
+      quantity,
+      count: Number(card.count),
+    });
+  }
+
+  console.log("[DISCORD CARDS] Applied:", changed);
+
+  if (changed.length > 0) {
+    pushMessage(
+      formatMessage2(
+        getTranslation("discord.discord_card_recived").replace(
+          "%s",
+          changed.length,
+        ),
+      ),
+      showduration,
+    );
+  }
+
+  return changed;
+}
 
 async function notifyLocalhost(timedCount) {
   const url = "http://localhost:8080/api/recivethat";

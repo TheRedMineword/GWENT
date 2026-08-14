@@ -859,12 +859,13 @@ socket.onmessage = async (event) => {
       }
       break;
     case "discordinventory":
-      // TO-DO
-      //{"type":"discordinventory","items":[{"requirements":[],"actions":[],"item_id":"1537477130651306060","name":"Poor Fucking Infantry","description":"Gives you a copy of a useless card in Gwent if you register discord session\nThe number of cards received is 1:1 with the amount of this item\n\nCards available in the Northern Kingdoms Faction, it has 1 strenght and no abilities!","is_usable":false,"is_sellable":true,"quantity":"5","emoji_unicode":"","emoji_id":"1523730085625069708","is_listed":true}],"page":1,"totalPages":1}
+      discord_cards_array = data.items;
+      setDiscordCards(allowdiscordintegration, data.items);
+      //alert(JSON.stringify(data.items));
       break;
     case "discordintegration":
+      var recived = data;
       if (allowdiscordintegration) {
-        var recived = data;
         console.log("DISCORD DATA TO SWITCH", data);
 
         var showduration = 11000;
@@ -888,6 +889,8 @@ socket.onmessage = async (event) => {
             break;
 
           case "unregistered":
+            discord_cards_array = [];
+            setDiscordCards(allowdiscordintegration, []);
             pushMessage(
               formatMessage2(translation_string.discord_unregistered),
               showduration,
@@ -976,6 +979,9 @@ socket.onmessage = async (event) => {
             );
             break;
         }
+      } else if (recived.actiontype === "unregistered") {
+        discord_cards_array = [];
+        setDiscordCards(allowdiscordintegration, []);
       }
       break;
     case "welcome":

@@ -1,6 +1,10 @@
 "use strict";
 loadingscreenupdate("Creating env vars!");
 let allowdiscordintegration = true;
+const discord_cards = {
+  "Poor Fucking Infantry": "discord_poor_infantry",
+};
+let discord_cards_array = [];
 const debuglunchcustomcards = false; // if false when ready use: lunch_gwent_ui
 let onYouTubeIframeAPIReady_status = false;
 const showagile_and_alldescindeckmaker = false;
