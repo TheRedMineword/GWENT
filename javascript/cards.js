@@ -1206,7 +1206,7 @@ var card_dict_base = [
     row: "leader",
     strength: "",
     ability: "eredin_commander",
-    filename: "eredin_copper",
+    filename: "eredin_rider",
     count: "1",
   },
   {
@@ -1236,7 +1236,7 @@ var card_dict_base = [
     row: "leader",
     strength: "",
     ability: "eredin_king",
-    filename: "eredin_bronze",
+    filename: "eredin_king",
     count: "1",
   },
   {

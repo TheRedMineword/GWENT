@@ -651,10 +651,10 @@
           "emhyr_silver": "Emhyr var Emreis — the White Flame",
           "emhyr_gold": "Emhyr var Emreis — The Relentless",
           "emhyr_invader_of_the_north": "Emhyr var Emreis — Invader of the North",
-          "eredin_bronze": "Eredin — Commander of the Red Riders",
+          "eredin_rider": "Eredin — Commander of the Red Riders",
           "eredin_silver": "Eredin — Bringer of Death",
           "eredin_gold": "Eredin — Destroyer of Worlds",
-          "eredin_copper": "Eredin — King of the Wild Hunt",
+          "eredin_king": "Eredin — King of the Wild Hunt",
           "eredin_the_treacherous": "Eredin Bréacc Glas — The Treacherous",
           "mysterious_elf": "Mysterious Elf",
           "decoy": "Decoy",
@@ -1612,10 +1612,10 @@
           "emhyr_silver": "Emhyr var Emreis — Biały Płomień",
           "emhyr_gold": "Emhyr var Emreis — Nieustępliwy",
           "emhyr_invader_of_the_north": "Emhyr var Emreis — Najeźdźca Północy",
-          "eredin_bronze": "Eredin — Dowódca Czerwonych Jeźdźców",
+          "eredin_rider": "Eredin — Dowódca Czerwonych Jeźdźców",
           "eredin_silver": "Eredin — Zwiastun Śmierci",
           "eredin_gold": "Eredin — Niszczyciel Światów",
-          "eredin_copper": "Eredin — Król Dzikiego Gonu",
+          "eredin_king": "Eredin — Król Dzikiego Gonu",
           "eredin_the_treacherous": "Eredin Bréacc Glas — Zdradziecki",
           "mysterious_elf": "Tajemniczy Elf",
           "decoy": "Manekin do Ćwiczeń",
@@ -3111,7 +3111,7 @@
         "row": "leader",
         "strength": "",
         "ability": "eredin_commander",
-        "filename": "eredin_copper",
+        "filename": "eredin_rider",
         "count": "1"
       },
       {
@@ -3141,7 +3141,7 @@
         "row": "leader",
         "strength": "",
         "ability": "eredin_king",
-        "filename": "eredin_bronze",
+        "filename": "eredin_king",
         "count": "1"
       },
       {
