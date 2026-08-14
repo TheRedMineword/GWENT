@@ -1079,6 +1079,6 @@ card_info: {
   unit: "Unit",
   hero: "Hero",
   factionIs: "%s Faction",
-  factionNone: ""
+  factionNone: "Neutral"
 }
 };
