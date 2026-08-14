@@ -2,8 +2,19 @@
 //
 // Optional Discord integration for the Gwent server. Gated by:
 //   dc_bot_integration_use=true
-//   dc_bot={"token":"...","id":"...","economybot":"...","guild_id":"..."}
+//   dc_bot={"token":"...","id":"...","economybot":"...","guild_id":"...","free_money_channel":"..."}
 //   dc_bot_status=<url to a JSON array/object of bot statuses>   (optional)
+//   dc_free_money_channel=<channel id>   (optional, alternative to cfg.free_money_channel)
+//
+// FREE_MONEY_ON_SOLO_LOSS (see const below, default true):
+//   If only one side of a match ever placed a bet, and that lone
+//   bettor goes on to LOSE, their stake is normally just refunded
+//   (nobody to pay it out from). When this flag is on and a free
+//   money channel is configured, the stake (plus the usual score
+//   bonus) is instead posted there as a "givemecash:<amount>" button
+//   claim - first click gets it, and the message is edited in place
+//   to show who claimed it. Falls back to a refund if disabled, not
+//   configured, or if posting the message fails for any reason.
 //
 
 // Discord commands (must be typed in the configured guild):
@@ -73,10 +84,10 @@
 // the right tool here. If you need bets to survive a server restart, swap
 // the Maps below for reads/writes to your `database`/Xano layer.
 
-let Client, GatewayIntentBits, ActivityType;
+let Client, GatewayIntentBits, ActivityType, ActionRowBuilder, ButtonBuilder, ButtonStyle;
 
 try {
-  ({ Client, GatewayIntentBits, ActivityType } = require("discord.js"));
+  ({ Client, GatewayIntentBits, ActivityType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js"));
 } catch (e) {
   // discord.js not installed - init() will log a clear error instead of crashing.
 }
@@ -95,6 +106,25 @@ const BOT_TOKEN = cfg.token;
 const ECONOMY_TOKEN = cfg.economybot;
 const GUILD_ID = cfg.guild_id;
 const STATUS_URL = process.env.dc_bot_status;
+
+/*
+ * When true (the default): if a bet session only ever had ONE side
+ * place a bet (the opponent never bet) AND that lone bettor goes on
+ * to LOSE the match, their stake is NOT refunded. Instead it (plus
+ * the usual score-based bonus) is posted as a first-come-first-served
+ * claim to the free money channel below.
+ *
+ * When false, or when the channel isn't configured, or when posting
+ * to the channel fails for any reason, this always falls back to the
+ * old behavior: the lone bettor's stake is simply refunded.
+ */
+const FREE_MONEY_ON_SOLO_LOSS = true;
+
+// Channel ID for the "free money" claim posts. Configure via either
+// the dc_bot JSON blob (cfg.free_money_channel) or a plain env var.
+const FREE_MONEY_CHANNEL_ID =
+  cfg.free_money_channel ||
+  process.env.dc_free_money_channel;
 
 let client = null;
 let ready = false;
@@ -157,6 +187,14 @@ const DM_REQUEST_COOLDOWN_MS = 5000;
  * Any later event for the same sessionId is ignored.
  */
 const resolvingSessions = new Set();
+
+/*
+ * Claim lock for free-money button messages (customId
+ * "givemecash:<amount>"), same pattern as resolvingSessions above:
+ * we add the message id to this Set BEFORE any await, so two people
+ * clicking the button at the same instant can't both get paid.
+ */
+const claimedFreeMoneyMessages = new Set();
 
 function log(...args) {
   var log = "[dcbot]: ";
@@ -505,75 +543,91 @@ async function refundSessionBets(
   resolvingSessions.add(sessionId);
 
   /*
-   * Remove the session from the active money state immediately.
+   * IMPORTANT:
    *
-   * We intentionally keep the local `sessionBets` variable because
-   * the refund operation still needs the bet information.
+   * Everything below is wrapped in try/finally so resolvingSessions
+   * is ALWAYS released once this function is done with the session -
+   * on the normal path, and also if an unexpected error is thrown
+   * partway through (e.g. a buildSnapshot()/pushIntegration() call
+   * failing). Without this, a single error mid-refund would leave
+   * the session permanently locked and every later refund/payout
+   * attempt for it would just log "Skipping duplicate refund/payout"
+   * forever.
    */
-  bets.delete(sessionId);
+  try {
+    /*
+     * Remove the session from the active money state immediately.
+     *
+     * We intentionally keep the local `sessionBets` variable because
+     * the refund operation still needs the bet information.
+     */
+    bets.delete(sessionId);
 
-  const ids = Object.keys(sessionBets);
+    const ids = Object.keys(sessionBets);
 
-  for (const [playerId, bet] of Object.entries(sessionBets)) {
-    const opponentId = ids.find(
-      (id) => id !== playerId
-    );
-
-    const opponentDiscordId = opponentId
-      ? sessionBets[opponentId].discordId
-      : null;
-
-    try {
-      await unbAdjustBalance(
-        bet.discordId,
-        bet.amount,
-        "Gwent bet refund"
+    for (const [playerId, bet] of Object.entries(sessionBets)) {
+      const opponentId = ids.find(
+        (id) => id !== playerId
       );
 
-      await dm(
-        bet.discordId,
-        `\uD83D\uDD01 Your Gwent bet of **${bet.amount}** was refunded. ${
-          reasonText || ""
-        }`
-      );
-    } catch (e) {
-      log(
-        `Refund failed for ${bet.discordId} (session ${sessionId}):`,
-        e.message
-      );
+      const opponentDiscordId = opponentId
+        ? sessionBets[opponentId].discordId
+        : null;
 
-      await dm(
-        bet.discordId,
-        `\u26A0\uFE0F Your Gwent bet of **${bet.amount}** should have been refunded but the economy API call failed. Please contact an admin.`
-      );
+      try {
+        await unbAdjustBalance(
+          bet.discordId,
+          bet.amount,
+          "Gwent bet refund"
+        );
+
+        await dm(
+          bet.discordId,
+          `\uD83D\uDD01 Your Gwent bet of **${bet.amount}** was refunded. ${
+            reasonText || ""
+          }`
+        );
+      } catch (e) {
+        log(
+          `Refund failed for ${bet.discordId} (session ${sessionId}):`,
+          e.message
+        );
+
+        await dm(
+          bet.discordId,
+          `\u26A0\uFE0F Your Gwent bet of **${bet.amount}** should have been refunded but the economy API call failed. Please contact an admin.`
+        );
+      }
+
+      pushIntegration(playerId, {
+        actiontype: "refund",
+        actionvalue: bet.amount,
+        by: null,
+        betpool: 0,
+
+        me: await buildSnapshot(
+          bet.discordId,
+          0
+        ),
+
+        op: opponentDiscordId
+          ? await buildSnapshot(
+              opponentDiscordId,
+              0
+            )
+          : null,
+      });
     }
 
-    pushIntegration(playerId, {
-      actiontype: "refund",
-      actionvalue: bet.amount,
-      by: null,
-      betpool: 0,
+    matchReports.delete(sessionId);
+    matchScores.delete(sessionId);
 
-      me: await buildSnapshot(
-        bet.discordId,
-        0
-      ),
-
-      op: opponentDiscordId
-        ? await buildSnapshot(
-            opponentDiscordId,
-            0
-          )
-        : null,
-    });
+    log(
+      `Refund settlement completed for session ${sessionId}`
+    );
+  } finally {
+    resolvingSessions.delete(sessionId);
   }
-
-  matchReports.delete(sessionId);
-  matchScores.delete(sessionId);
-
-  log(
-    `Refund settlement completed for session ${sessionId}`
-  );
 }
 // ---------- Registration / disconnect helpers ----------
 
@@ -709,6 +763,168 @@ async function onDmRequest(ws, data) {
     discordId,
     text
   );
+}
+
+
+// ---------- Free money channel ----------
+
+/*
+ * Posts a claimable "free money" message with a button to the
+ * configured channel. The button's customId is "givemecash:<amount>"
+ * so the interactionCreate handler (see handleFreeMoneyClaim below)
+ * can read the amount straight off the button without any extra
+ * lookup table. Returns true if the message was posted, false if it
+ * wasn't (channel not configured, fetch/send error, client not
+ * ready, etc.) so callers can fall back to a plain refund instead.
+ */
+async function postFreeMoneyMessage(
+  amount,
+  sessionId
+) {
+  if (
+    !ready ||
+    !client ||
+    !ButtonBuilder
+  ) {
+    log(
+      "Cannot post free money message - Discord client not ready."
+    );
+
+    return false;
+  }
+
+  if (!FREE_MONEY_CHANNEL_ID) {
+    log(
+      "dc_free_money channel is not configured (set cfg.free_money_channel or dc_free_money_channel) - skipping free money post."
+    );
+
+    return false;
+  }
+
+  try {
+    const channel =
+      await client.channels.fetch(
+        FREE_MONEY_CHANNEL_ID
+      );
+
+    const row =
+      new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
+          .setCustomId(
+            `givemecash:${amount}`
+          )
+          .setLabel(
+            `Claim ${amount}`
+          )
+          .setStyle(
+            ButtonStyle.Success
+          )
+      );
+
+    await channel.send({
+      content: `\uD83D\uDCB0 A Gwent bet went unmatched and the loser's stake is up for grabs: **${amount}** cash, bonus included. First to click claims it!`,
+      components: [row],
+    });
+
+    return true;
+  } catch (e) {
+    log(
+      `Failed to post free money message for session ${sessionId}:`,
+      e.message
+    );
+
+    return false;
+  }
+}
+
+/*
+ * Handles clicks on "givemecash:<amount>" buttons.
+ *
+ * Claims the message id BEFORE any await (same reasoning as
+ * resolvingSessions - two clicks arriving back-to-back must not both
+ * pass the check), pays out the amount encoded in the button itself,
+ * then edits the message so it visibly shows who claimed it and
+ * removes the button so nobody else can try.
+ */
+async function handleFreeMoneyClaim(
+  interaction
+) {
+  const amount = Number(
+    interaction.customId.split(
+      ":"
+    )[1]
+  );
+
+  if (
+    !Number.isFinite(amount) ||
+    amount <= 0
+  ) {
+    await interaction
+      .reply({
+        content:
+          "\u26A0\uFE0F That claim button looks broken (bad amount).",
+        ephemeral: true,
+      })
+      .catch(() => {});
+
+    return;
+  }
+
+  const messageId =
+    interaction.message.id;
+
+  if (
+    claimedFreeMoneyMessages.has(
+      messageId
+    )
+  ) {
+    await interaction
+      .reply({
+        content:
+          "\u274C Someone already claimed this.",
+        ephemeral: true,
+      })
+      .catch(() => {});
+
+    return;
+  }
+
+  // Claim synchronously before any await below.
+  claimedFreeMoneyMessages.add(
+    messageId
+  );
+
+  try {
+    await unbAdjustBalance(
+      interaction.user.id,
+      amount,
+      "Gwent free money claim (unmatched bet, solo loss)"
+    );
+
+    await interaction.update({
+      content: `\u2705 **${amount}** claimed by <@${interaction.user.id}>!`,
+      components: [],
+    });
+  } catch (e) {
+    // Payout failed - release the claim so someone else (or the
+    // same person) can try again instead of the money vanishing.
+    claimedFreeMoneyMessages.delete(
+      messageId
+    );
+
+    log(
+      "Free money claim failed:",
+      e.message
+    );
+
+    await interaction
+      .reply({
+        content:
+          "\u26A0\uFE0F Something went wrong crediting that. Try again, or contact an admin.",
+        ephemeral: true,
+      })
+      .catch(() => {});
+  }
 }
 
 
@@ -860,6 +1076,18 @@ async function onMatchResult(
   );
 
   /*
+   * Everything from here to the end of this function runs inside
+   * try/finally so resolvingSessions.delete(sessionId) always fires -
+   * on every return path below (missing bets, incomplete bookkeeping,
+   * solo-side forfeit/refund, or a normal payout) and even if
+   * something throws unexpectedly. Previously two of these paths
+   * called a nonexistent `.remove()` on the Set (a TypeError) and two
+   * others didn't release the lock at all, so a session could get
+   * stuck "resolving" forever after its first settlement attempt.
+   */
+  try {
+
+  /*
    * Take the bets out of active state immediately.
    *
    * This prevents another event from seeing the same active bets
@@ -889,7 +1117,6 @@ async function onMatchResult(
     log(
       `No bets found for settled session ${sessionId}`
     );
-
     return;
   }
 
@@ -906,6 +1133,97 @@ async function onMatchResult(
   if (entries.length === 1) {
     const [playerId, bet] =
       entries[0];
+
+    const soloBettorWon =
+      playerId === winnerPlayerId;
+
+    /*
+     * The lone bettor placed a bet, had no opponent bet to match
+     * against, and LOST the match anyway.
+     *
+     * Normally (and still, when soloBettorWon, or when the feature
+     * below is disabled/misconfigured) we just refund their stake -
+     * there's no opponent bet to pay out from, so a wash is the
+     * fairest default.
+     *
+     * When FREE_MONEY_ON_SOLO_LOSS is on, we instead forfeit that
+     * stake (with the same score bonus a normal payout would get)
+     * into the configured free-money channel as a first-come-first-
+     * served claim, rather than refunding it.
+     */
+    if (
+      !soloBettorWon &&
+      FREE_MONEY_ON_SOLO_LOSS
+    ) {
+      const scoreValues =
+        playerIds.map(
+          (pid) =>
+            sessionScores[pid] || 0
+        );
+
+      const lowestScore =
+        Math.min(...scoreValues);
+
+      const bonusPercent =
+        Math.max(
+          0,
+          Math.min(
+            MAX_BONUS_PERCENT,
+            Math.floor(lowestScore)
+          )
+        );
+
+      const freeMoneyAmount =
+        Math.ceil(
+          bet.amount *
+            (1 + bonusPercent / 100)
+        );
+
+      const posted =
+        await postFreeMoneyMessage(
+          freeMoneyAmount,
+          sessionId
+        );
+
+      if (posted) {
+        await dm(
+          bet.discordId,
+          `\uD83D\uDCB0 Your opponent never placed a bet, and you lost the match, so your **${bet.amount}** stake was **not** refunded - it's now up for grabs (bonus included: **${freeMoneyAmount}**) in the free money channel.`
+        );
+
+        pushIntegration(
+          playerId,
+          {
+            actiontype: "solo_loss_forfeit",
+            actionvalue: bet.amount,
+            by: null,
+            betpool: 0,
+
+            me: await buildSnapshot(
+              bet.discordId,
+              0
+            ),
+
+            op: null,
+          }
+        );
+
+        log(
+          `Solo-loss stake of ${bet.amount} (bonus: ${freeMoneyAmount}) forfeited to the free money channel for session ${sessionId}`
+        );
+
+        return;
+      }
+
+      /*
+       * Posting to the free money channel failed (channel not
+       * configured, fetch/send error, etc.) - fall through to the
+       * normal refund below instead of silently eating the stake.
+       */
+      log(
+        `Falling back to refund for session ${sessionId} because the free money post failed`
+      );
+    }
 
     try {
       await unbAdjustBalance(
@@ -1013,7 +1331,6 @@ async function onMatchResult(
         );
       }
     }
-
     return;
   }
 
@@ -1147,6 +1464,9 @@ async function onMatchResult(
   log(
     `Payout settlement completed for session ${sessionId}`
   );
+  } finally {
+    resolvingSessions.delete(sessionId);
+  }
 }
 
 
@@ -2059,6 +2379,29 @@ exports.init =
     client.on(
       "messageCreate",
       onMessageCreate
+    );
+
+    client.on(
+      "interactionCreate",
+      (interaction) => {
+        if (
+          !interaction.isButton?.() ||
+          !interaction.customId?.startsWith(
+            "givemecash:"
+          )
+        ) {
+          return;
+        }
+
+        handleFreeMoneyClaim(
+          interaction
+        ).catch((e) =>
+          log(
+            "Unhandled error in handleFreeMoneyClaim:",
+            e.message
+          )
+        );
+      }
     );
 
     client.on(
