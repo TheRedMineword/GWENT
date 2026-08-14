@@ -496,7 +496,7 @@ var card_dict_base = [
     row: "leader",
     strength: "",
     ability: "foltest_king",
-    filename: "foltest_silver",
+    filename: "foltest_copper",
     count: "1",
   },
   {
@@ -506,7 +506,7 @@ var card_dict_base = [
     row: "leader",
     strength: "",
     ability: "foltest_lord",
-    filename: "foltest_gold",
+    filename: "foltest_bronze",
     count: "1",
   },
   {
@@ -516,7 +516,7 @@ var card_dict_base = [
     row: "leader",
     strength: "",
     ability: "foltest_siegemaster",
-    filename: "foltest_copper",
+    filename: "foltest_silver",
     count: "1",
   },
   {
@@ -526,7 +526,7 @@ var card_dict_base = [
     row: "leader",
     strength: "",
     ability: "foltest_steelforged",
-    filename: "foltest_bronze",
+    filename: "foltest_gold",
     count: "1",
   },
   {
@@ -1206,7 +1206,7 @@ var card_dict_base = [
     row: "leader",
     strength: "",
     ability: "eredin_commander",
-    filename: "eredin_bronze",
+    filename: "eredin_copper",
     count: "1",
   },
   {
@@ -1235,8 +1235,8 @@ var card_dict_base = [
     deck: "monsters",
     row: "leader",
     strength: "",
-    ability: "eredin_king", // SEEMS TO BE BROKEN IN ASYNC EVENT, AS IT DONT DEFINE CARD (DAMM IT)
-    filename: "eredin_copper",
+    ability: "eredin_king",
+    filename: "eredin_bronze",
     count: "1",
   },
   {

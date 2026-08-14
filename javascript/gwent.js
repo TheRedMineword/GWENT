@@ -1975,6 +1975,194 @@ class Player {
   }
 }
 
+function card_name_info(card) {
+  console.log("card_name_info", card);
+  if ((card?.faction ?? "N/A") === "faction") {
+    return false;
+  }
+  var strings = getTranslation("card_info.strings");
+  var unit = getTranslation("card_info.unit");
+  if (card.hero) {
+    unit = getTranslation("card_info.hero");
+  }
+  var faction = getTranslation("card_info.factionIs").replace(
+    "%s",
+    getTranslation(`factions.${card.faction}.name`),
+  );
+  if (card.faction === "neutral") {
+    faction = getTranslation("card_info.factionNone");
+  }
+  try {
+    return strings[card.row]
+      .replace("{name}", card.name)
+      .replace("{faction}", faction)
+      .replace("{unit}", unit);
+  } catch (e) {
+    return false;
+  }
+}
+const GwentOverlayTypes = {
+  top: {
+    top: "5%",
+    left: "0%",
+    width: "100%",
+    height: "6.5%",
+  },
+  top1: {
+    top: "13%",
+    left: "0%",
+    width: "100%",
+    height: "6.5%",
+  },
+  preview: {
+    top: "14%",
+    left: "68%",
+    width: "29%",
+    height: "6%",
+  },
+};
+
+const BASE_FONT_SIZE = "1vw";
+
+const GwentOverlay = (() => {
+  const STYLE_ID = "gwent-overlay-style";
+  const ROOT_ID = "gwent-overlay-root";
+  let rootEl = null;
+  let boxEl = null;
+
+  function baseCss() {
+    return `
+      #${ROOT_ID} {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: calc(100vw * 1080 / 1920);
+        z-index: 1000000;
+        pointer-events: none;
+        overflow: hidden; 
+      }
+
+      .gwent-overlay-box {
+        position: absolute;
+        display: none;
+        box-sizing: border-box;
+        pointer-events: auto;
+
+        background-color: rgba(20, 20, 20, .95);
+        color: tan;
+        text-align: center;
+        border: .1vw solid #DDDfff57;
+        border-width: .1vw 0;
+
+        overflow: hidden; 
+        padding: .5vw;
+        font-family: Arial Narrow, sans-serif;
+        font-size: ${BASE_FONT_SIZE};
+      }
+      .gwent-overlay-box.gwent-show { display: block; }
+      .gwent-overlay-box .gwent-small { font-size: 0.7em; opacity: 0.75; }
+      .gwent-overlay-box strong { color: goldenrod; }
+    `;
+  }
+
+  function typeCss() {
+    let css = "";
+    for (const [type, cfg] of Object.entries(GwentOverlayTypes)) {
+      const decls = [];
+      if (cfg.top !== undefined) decls.push(`top: ${cfg.top};`);
+      if (cfg.left !== undefined) decls.push(`left: ${cfg.left};`);
+      if (cfg.right !== undefined) decls.push(`right: ${cfg.right};`);
+      if (cfg.bottom !== undefined) decls.push(`bottom: ${cfg.bottom};`);
+      if (cfg.width !== undefined) decls.push(`width: ${cfg.width};`);
+      if (cfg.height !== undefined) decls.push(`height: ${cfg.height};`);
+      if (cfg.size !== undefined) decls.push(`font-size: ${cfg.size};`);
+      css += `.gwent-overlay-box[data-type="${type}"] { ${decls.join(" ")} }\n`;
+    }
+    return css;
+  }
+
+  function ensureStyle() {
+    let style = document.getElementById(STYLE_ID);
+    if (!style) {
+      style = document.createElement("style");
+      style.id = STYLE_ID;
+      document.head.appendChild(style);
+    }
+    style.textContent = baseCss() + typeCss();
+  }
+
+  function ensureRoot() {
+    if (rootEl) return rootEl;
+    rootEl = document.createElement("div");
+    rootEl.id = ROOT_ID;
+    document.body.appendChild(rootEl);
+    return rootEl;
+  }
+
+  function ensureBox() {
+    if (boxEl) return boxEl;
+    boxEl = document.createElement("div");
+    boxEl.id = "gwent-overlay-box";
+    boxEl.className = "gwent-overlay-box";
+    ensureRoot().appendChild(boxEl);
+    return boxEl;
+  }
+
+  function renderMiniMarkdown(text) {
+    const escapeHtml = (s) =>
+      s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+    return String(text)
+      .split("\n")
+      .map((line) => {
+        let small = false;
+        if (line.startsWith("-# ")) {
+          small = true;
+          line = line.slice(3);
+        }
+        let html = escapeHtml(line);
+        html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+        html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
+        return small
+          ? `<div class="gwent-small">${html}</div>`
+          : `<div>${html}</div>`;
+      })
+      .join("");
+  }
+
+  function show(type, text) {
+    if (text === false) {
+      return false;
+    }
+    const cfg = GwentOverlayTypes[type];
+    if (!cfg) {
+      console.warn(
+        `[GwentOverlay] Unknown type "${type}". Known types:`,
+        Object.keys(GwentOverlayTypes),
+      );
+      return;
+    }
+    ensureStyle();
+    const box = ensureBox();
+    box.dataset.type = type;
+    box.innerHTML = renderMiniMarkdown(text);
+    box.classList.add("gwent-show");
+  }
+
+  function hide() {
+    if (boxEl) boxEl.classList.remove("gwent-show");
+  }
+
+  return {
+    show,
+    hide,
+    get element() {
+      return ensureBox();
+    },
+  };
+})();
+
 // Handles the adding, removing and formatting of cards in a container
 class CardContainer {
   constructor(elem) {
@@ -5422,10 +5610,13 @@ class UI {
       largeURL(tmp);
     let desc_elem = this.preview.getElementsByClassName("card-description")[0]; //
     this.setDescription(card, desc_elem);
+
+    GwentOverlay.show("preview", card_name_info(card));
   }
 
   // Hides the card preview then disables and removes highlighting from card destinations
   hidePreview() {
+    GwentOverlay.hide();
     document.getElementById("click-background").classList.add("noclick");
     player_me.hand.cards.forEach((c) => c.elem.classList.remove("noclick"));
 
@@ -5908,6 +6099,13 @@ class Carousel {
     this.elem.classList.remove("hide");
     ui.enablePlayer(true);
     tocar("explaining", false);
+    const currentCard = this.container.cards[this.indices[this.index]];
+
+    if (this.title) {
+      GwentOverlay.show("top", card_name_info(currentCard));
+    } else {
+      GwentOverlay.show("top1", card_name_info(currentCard));
+    }
   }
 
   // Called by the client to cycle cards displayed by n
@@ -6063,12 +6261,21 @@ class Carousel {
       this.container.cards[this.indices[this.index]],
       this.desc,
     );
+    const currentCard = this.container.cards[this.indices[this.index]];
+
+    if (currentCard) {
+      GwentOverlay.show(
+        this.title ? "top" : "top1",
+        card_name_info(currentCard),
+      );
+    }
   }
 
   // Clears and quits the current carousel
   exit() {
     for (let x of this.previews) x.style.backgroundImage = "";
     this.elem.classList.add("hide");
+    GwentOverlay.hide();
     Carousel.clearCurrent();
     ui.quitCarousel();
   }

@@ -642,6 +642,20 @@
           }
         },
         "card": {
+          "foltest_copper": "Foltest — King of Temeria",
+          "foltest_bronze": "Foltest — Lord Commander of the North",
+          "foltest_silver": "Foltest — The Siegemaster",
+          "foltest_gold": "Foltest — The Steel-Forged",
+          "foltest_son_of_medell": "Foltest — Son of Medell",
+          "emhyr_copper": "Emhyr var Emreis — His Imperial Majesty",
+          "emhyr_silver": "Emhyr var Emreis — the White Flame",
+          "emhyr_gold": "Emhyr var Emreis — The Relentless",
+          "emhyr_invader_of_the_north": "Emhyr var Emreis — Invader of the North",
+          "eredin_bronze": "Eredin — Commander of the Red Riders",
+          "eredin_silver": "Eredin — Bringer of Death",
+          "eredin_gold": "Eredin — Destroyer of Worlds",
+          "eredin_copper": "Eredin — King of the Wild Hunt",
+          "eredin_the_treacherous": "Eredin Bréacc Glas — The Treacherous",
           "mysterious_elf": "Mysterious Elf",
           "decoy": "Decoy",
           "custom!Decoy2": "Godling",
@@ -665,11 +679,6 @@
           "gaunter_odimm_darkness": "Gaunter O'Dimm — Darkness",
           "cow": "Cow",
           "chort": "Bovine Defense Force",
-          "foltest_silver": "Foltest — King of Temeria",
-          "foltest_gold": "Foltest — Lord Commander of the North",
-          "foltest_copper": "Foltest — The Siegemaster",
-          "foltest_bronze": "Foltest — The Steel-Forged",
-          "foltest_son_of_medell": "Foltest — Son of Medell",
           "ballista": "Ballista",
           "blue_stripes": "Blue Stripes Commando",
           "catapult_1": "Catapult",
@@ -695,10 +704,6 @@
           "ves": "Ves",
           "yarpen": "Yarpen Zigrin",
           "trebuchet_1": "Trebuchet",
-          "emhyr_copper": "Emhyr var Emreis — His Imperial Majesty",
-          "emhyr_silver": "Emhyr var Emreis — the White Flame",
-          "emhyr_gold": "Emhyr var Emreis — The Relentless",
-          "emhyr_invader_of_the_north": "Emhyr var Emreis — Invader of the North",
           "albrich": "Albrich",
           "assire": "Assire var Anahid",
           "black_archer_1": "Black Infantry Archer",
@@ -728,11 +733,6 @@
           "vreemde": "Vreemde",
           "young_emissary": "Young Emissary",
           "zerri": "Zerrikanian Fire Scorpion",
-          "eredin_bronze": "Eredin — Commander of the Red Riders",
-          "eredin_silver": "Eredin — Bringer of Death",
-          "eredin_gold": "Eredin — Destroyer of Worlds",
-          "eredin_copper": "Eredin — King of the Wild Hunt",
-          "eredin_the_treacherous": "Eredin Bréacc Glas — The Treacherous",
           "arachas_1": "Arachas ",
           "arachas_behemoth": "Arachas— Behemoth",
           "poroniec": "Botchling",
@@ -1240,6 +1240,22 @@
           "discord_error_not_registered": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: You need to \u003Ccolor=#FFAA00\u003E!registerclient\u003C/color\u003E on Discord first.",
           "discord_error_generic": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Something went wrong \u003Ccolor=#FF5555\u003E(%s)\u003C/color\u003E.",
           "discord_card_recived": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Recived inventory from \u003Ccolor=#2121DB\u003Ediscord\u003C/color\u003E!\nSynced \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E cards!\n\u003Ccolor=#AAAAFF\u003EIf you dont see these cards, please refresh current faction deck builder via changing faction!\u003C/color\u003E"
+        },
+        "card_info": {
+          "strings": {
+            "": "**{name}**\nSpecial Card",
+            "leader": "**{name}**\nLeader Card",
+            "weather": "**{name}**\nWeather Card",
+            "siege": "**{name}**\n{faction} {unit} Siege Card",
+            "ranged": "**{name}**\n{faction} {unit} Ranged Card",
+            "close": "**{name}**\n{faction} {unit} Melee Card",
+            "agile": "**{name}**\n{faction} {unit} Agile Card",
+            "all": "**{name}**\n{faction} {unit} Very Agile Card"
+          },
+          "unit": "Unit",
+          "hero": "Hero",
+          "factionIs": "%s Faction;",
+          "factionNone": "Neutral;"
         }
       },
       "pl": {
@@ -1587,6 +1603,20 @@
           }
         },
         "card": {
+          "foltest_copper": "Foltest — Król Temerii",
+          "foltest_bronze": "Foltest — Lord Dowódca Północy",
+          "foltest_silver": "Foltest — Mistrz Oblężenia",
+          "foltest_gold": "Foltest — Żelazny Władca",
+          "foltest_son_of_medell": "Foltest — Syn Medella",
+          "emhyr_copper": "Emhyr var Emreis — Jego Cesarska Mość",
+          "emhyr_silver": "Emhyr var Emreis — Biały Płomień",
+          "emhyr_gold": "Emhyr var Emreis — Nieustępliwy",
+          "emhyr_invader_of_the_north": "Emhyr var Emreis — Najeźdźca Północy",
+          "eredin_bronze": "Eredin — Dowódca Czerwonych Jeźdźców",
+          "eredin_silver": "Eredin — Zwiastun Śmierci",
+          "eredin_gold": "Eredin — Niszczyciel Światów",
+          "eredin_copper": "Eredin — Król Dzikiego Gonu",
+          "eredin_the_treacherous": "Eredin Bréacc Glas — Zdradziecki",
           "mysterious_elf": "Tajemniczy Elf",
           "decoy": "Manekin do Ćwiczeń",
           "custom!Decoy2": "Bożątko",
@@ -1610,11 +1640,6 @@
           "gaunter_odimm_darkness": "Gaunter o'Dim — Ciemność",
           "cow": "Krowa",
           "chort": "Boviny Korpus Obrony",
-          "foltest_silver": "Foltest - Król Temerii",
-          "foltest_gold": "Foltest - Dowódca Północy",
-          "foltest_copper": "Foltest - Mistrz Oblężeń",
-          "foltest_bronze": "Foltest - Żelazny Władca",
-          "foltest_son_of_medell": "Foltest - Syn Medella",
           "ballista": "Balista",
           "blue_stripes": "Komando Niebieskich Pasów",
           "catapult_1": "Katapulta",
@@ -1640,10 +1665,6 @@
           "ves": "Ves",
           "yarpen": "Yarpen Zigrin",
           "trebuchet_1": "Trebusz",
-          "emhyr_copper": "Emhyr var Emreis - Jego Cesarska Mość",
-          "emhyr_silver": "Emhyr var Emreis - Biały Płomień",
-          "emhyr_gold": "Emhyr var Emreis - Nieustępliwy",
-          "emhyr_invader_of_the_north": "Emhyr var Emreis - Najeźdźca Północy",
           "albrich": "Albrich",
           "assire": "Assire var Anahid",
           "black_archer_1": "Łucznik Czarnej Piechoty",
@@ -1673,11 +1694,6 @@
           "vreemde": "Vreemde",
           "young_emissary": "Młody Emisariusz",
           "zerri": "Zerrikański Ognisty Skorpion",
-          "eredin_bronze": "Eredin - Dowódca Czerwonych Jeźdźców",
-          "eredin_silver": "Eredin - Zwiastun Śmierci",
-          "eredin_gold": "Eredin - Zabójca Królów",
-          "eredin_copper": "Eredin - Król Dzikiego Gonu",
-          "eredin_the_treacherous": "Eredin Bréacc Glas -Zdradziecki",
           "arachas_1": "Krabopająk",
           "arachas_behemoth": "Krabopająk — Ogromny",
           "poroniec": "Poroniec",
@@ -2185,6 +2201,22 @@
           "discord_error_not_registered": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Najpierw musisz użyć \u003Ccolor=#FFAA00\u003E!registerclient\u003C/color\u003E na Discordzie.",
           "discord_error_generic": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Coś poszło nie tak \u003Ccolor=#FF5555\u003E(%s)\u003C/color\u003E.",
           "discord_card_recived": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Otrzymano ekwipunek z \u003Ccolor=#2121DB\u003Ediscorda\u003C/color\u003E!\nZsynchronizowano \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E kart!\n\u003Ccolor=#AAAAFF\u003EJeśli nei widzisz tych kart odśwież kontruktor talii poprzez zmianę frakcji!\u003C/color\u003E"
+        },
+        "card_info": {
+          "strings": {
+            "": "**{name}**\nKarta Specjalna",
+            "leader": "**{name}**\nKarta Dowódcy",
+            "weather": "**{name}**\nKarta Pogody",
+            "siege": "**{name}**\n{faction} Karta {unit} Oblężniczych",
+            "ranged": "**{name}**\n{faction} Karta {unit} Dalekiego Starcia",
+            "close": "**{name}**\n{faction} Karta {unit} Bliskiego Starcia",
+            "agile": "**{name}**\n{faction} Karta {unit} Zwinnego Starcia",
+            "all": "**{name}**\n{faction} Karta {unit} Zwinnego Starcia"
+          },
+          "unit": "Jednostek",
+          "hero": "Bohatera",
+          "factionIs": "Frakcji %s;",
+          "factionNone": "Neutralna;"
         }
       }
     },
@@ -2449,7 +2481,7 @@
         "row": "leader",
         "strength": "",
         "ability": "foltest_king",
-        "filename": "foltest_silver",
+        "filename": "foltest_copper",
         "count": "1"
       },
       {
@@ -2459,7 +2491,7 @@
         "row": "leader",
         "strength": "",
         "ability": "foltest_lord",
-        "filename": "foltest_gold",
+        "filename": "foltest_bronze",
         "count": "1"
       },
       {
@@ -2469,7 +2501,7 @@
         "row": "leader",
         "strength": "",
         "ability": "foltest_siegemaster",
-        "filename": "foltest_copper",
+        "filename": "foltest_silver",
         "count": "1"
       },
       {
@@ -2479,7 +2511,7 @@
         "row": "leader",
         "strength": "",
         "ability": "foltest_steelforged",
-        "filename": "foltest_bronze",
+        "filename": "foltest_gold",
         "count": "1"
       },
       {
@@ -3079,7 +3111,7 @@
         "row": "leader",
         "strength": "",
         "ability": "eredin_commander",
-        "filename": "eredin_bronze",
+        "filename": "eredin_copper",
         "count": "1"
       },
       {
@@ -3109,7 +3141,7 @@
         "row": "leader",
         "strength": "",
         "ability": "eredin_king",
-        "filename": "eredin_copper",
+        "filename": "eredin_bronze",
         "count": "1"
       },
       {
