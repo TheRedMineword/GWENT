@@ -355,7 +355,7 @@ function getTurnSkiperCandidates() {
         c.hero === false && !c.abilities?.includes("aid"),
     );
 
-  candidates.sort((a, b) => b.name.localeCompare(a.name));
+  candidates.sort((a, b) => b.name_muster.localeCompare(a.name_muster));
 
   console.log(
     "[TURN_SKIPER] Candidates:",
