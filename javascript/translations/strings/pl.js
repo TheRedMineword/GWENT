@@ -744,7 +744,7 @@ STRNG["pl"] = {
     redcrab: "Red Crab",
     crabspy: "Spy Crab",
     darkstorm: "Darkness Storm",
-    darkness_storm_leader: "darkness_storm_leader",
+    darkness_storm_leader: "Król Edenu",
     ranger: "Reassuring Ranger",
     tgc20: "20 Lat ThatGameComapny",
     elder_wasteland: "Wasteland Elder",
@@ -1162,17 +1162,17 @@ STRNG["pl"] = {
 card_info: {
   strings: {
     "": "**{name}**\nKarta Specjalna",
-    "leader": "**{name}**\nKarta Dowódcy",
+    "leader": "**{name}**\n{faction}Karta Dowódcy",
     "weather": "**{name}**\nKarta Pogody",
-    "siege": "**{name}**\n{faction} Karta {unit} Oblężniczych",
-    "ranged": "**{name}**\n{faction} Karta {unit} Dalekiego Starcia",
-    "close": "**{name}**\n{faction} Karta {unit} Bliskiego Starcia",
-    "agile": "**{name}**\n{faction} Karta {unit} Zwinnego Starcia",
-    "all": "**{name}**\n{faction} Karta {unit} Zwinnego Starcia"
+    "siege": "**{name}**\n{faction}Karta {unit} Oblężniczych",
+    "ranged": "**{name}**\n{faction}Karta {unit} Dalekiego Starcia",
+    "close": "**{name}**\n{faction}Karta {unit} Bliskiego Starcia",
+    "agile": "**{name}**\n{faction}Karta {unit} Zwinnego Starcia",
+    "all": "**{name}**\n{faction}Karta {unit} Zwinnego Starcia"
   },
   unit: "Jednostek",
   hero: "Bohatera",
-  factionIs: "Frakcji %s;",
-  factionNone: "Neutralna;"
+  factionIs: "%s; ",
+  factionNone: ""
 }
 };

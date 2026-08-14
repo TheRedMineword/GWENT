@@ -650,7 +650,7 @@ STRNG["en"] = {
     redcrab: "Red Crab",
     crabspy: "Spy Crab",
     darkstorm: "Darkness Storm",
-    darkness_storm_leader: "darkness_storm_leader",
+    darkness_storm_leader: "Eden King",
     ranger: "Reassuring Ranger",
     tgc20: "20 Years Of ThatGameComapny",
     elder_wasteland: "Wasteland Elder",
@@ -1068,17 +1068,17 @@ discord: {
 card_info: {
   strings: {
     "": "**{name}**\nSpecial Card",
-    "leader": "**{name}**\nLeader Card",
+    "leader": "**{name}**\n{faction}; Leader Card",
     "weather": "**{name}**\nWeather Card",
-    "siege": "**{name}**\n{faction} {unit} Siege Card",
-    "ranged": "**{name}**\n{faction} {unit} Ranged Card",
-    "close": "**{name}**\n{faction} {unit} Melee Card",
-    "agile": "**{name}**\n{faction} {unit} Agile Card",
-    "all": "**{name}**\n{faction} {unit} Very Agile Card"
+    "siege": "**{name}**\n{faction}; {unit} Siege Card",
+    "ranged": "**{name}**\n{faction}; {unit} Ranged Card",
+    "close": "**{name}**\n{faction}; {unit} Melee Card",
+    "agile": "**{name}**\n{faction}; {unit} Agile Card",
+    "all": "**{name}**\n{faction}; {unit} Very Agile Card"
   },
   unit: "Unit",
   hero: "Hero",
-  factionIs: "%s Faction;",
-  factionNone: "Neutral;"
+  factionIs: "%s Faction",
+  factionNone: ""
 }
 };

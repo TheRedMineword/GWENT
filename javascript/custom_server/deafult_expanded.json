@@ -877,7 +877,7 @@
           "redcrab": "Red Crab",
           "crabspy": "Spy Crab",
           "darkstorm": "Darkness Storm",
-          "darkness_storm_leader": "darkness_storm_leader",
+          "darkness_storm_leader": "Eden King",
           "ranger": "Reassuring Ranger",
           "tgc20": "20 Years Of ThatGameComapny",
           "elder_wasteland": "Wasteland Elder",
@@ -1244,18 +1244,18 @@
         "card_info": {
           "strings": {
             "": "**{name}**\nSpecial Card",
-            "leader": "**{name}**\nLeader Card",
+            "leader": "**{name}**\n{faction}; Leader Card",
             "weather": "**{name}**\nWeather Card",
-            "siege": "**{name}**\n{faction} {unit} Siege Card",
-            "ranged": "**{name}**\n{faction} {unit} Ranged Card",
-            "close": "**{name}**\n{faction} {unit} Melee Card",
-            "agile": "**{name}**\n{faction} {unit} Agile Card",
-            "all": "**{name}**\n{faction} {unit} Very Agile Card"
+            "siege": "**{name}**\n{faction}; {unit} Siege Card",
+            "ranged": "**{name}**\n{faction}; {unit} Ranged Card",
+            "close": "**{name}**\n{faction}; {unit} Melee Card",
+            "agile": "**{name}**\n{faction}; {unit} Agile Card",
+            "all": "**{name}**\n{faction}; {unit} Very Agile Card"
           },
           "unit": "Unit",
           "hero": "Hero",
-          "factionIs": "%s Faction;",
-          "factionNone": "Neutral;"
+          "factionIs": "%s Faction",
+          "factionNone": ""
         }
       },
       "pl": {
@@ -1838,7 +1838,7 @@
           "redcrab": "Red Crab",
           "crabspy": "Spy Crab",
           "darkstorm": "Darkness Storm",
-          "darkness_storm_leader": "darkness_storm_leader",
+          "darkness_storm_leader": "Król Edenu",
           "ranger": "Reassuring Ranger",
           "tgc20": "20 Lat ThatGameComapny",
           "elder_wasteland": "Wasteland Elder",
@@ -2205,18 +2205,18 @@
         "card_info": {
           "strings": {
             "": "**{name}**\nKarta Specjalna",
-            "leader": "**{name}**\nKarta Dowódcy",
+            "leader": "**{name}**\n{faction}Karta Dowódcy",
             "weather": "**{name}**\nKarta Pogody",
-            "siege": "**{name}**\n{faction} Karta {unit} Oblężniczych",
-            "ranged": "**{name}**\n{faction} Karta {unit} Dalekiego Starcia",
-            "close": "**{name}**\n{faction} Karta {unit} Bliskiego Starcia",
-            "agile": "**{name}**\n{faction} Karta {unit} Zwinnego Starcia",
-            "all": "**{name}**\n{faction} Karta {unit} Zwinnego Starcia"
+            "siege": "**{name}**\n{faction}Karta {unit} Oblężniczych",
+            "ranged": "**{name}**\n{faction}Karta {unit} Dalekiego Starcia",
+            "close": "**{name}**\n{faction}Karta {unit} Bliskiego Starcia",
+            "agile": "**{name}**\n{faction}Karta {unit} Zwinnego Starcia",
+            "all": "**{name}**\n{faction}Karta {unit} Zwinnego Starcia"
           },
           "unit": "Jednostek",
           "hero": "Bohatera",
-          "factionIs": "Frakcji %s;",
-          "factionNone": "Neutralna;"
+          "factionIs": "%s; ",
+          "factionNone": ""
         }
       }
     },
