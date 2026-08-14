@@ -6,8 +6,8 @@
   },
   {
     "name": "Care for a round of Gwent?",
+    "type": "PLAYING",
     "status": "idle",
-    "type": "PLAYING"
   },
   {
     "name": "Ciri? What Ciri?",
@@ -16,7 +16,8 @@
   },
   {
     "name": "Gwent 3: Wild Hunt",
-    "type": "PLAYING"
+    "type": "PLAYING",
+    "status": "idle",
   },
   {
     "type": "STREAMING",
