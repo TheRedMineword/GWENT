@@ -1082,6 +1082,7 @@ card_info: {
   factionIs: "%s Faction",
   factionNone: "Neutral",
   "classes": {
+    undefined: "Unparalleled",
     none: "Unparalleled",
   royal: "Royal",
   commander: "Commander",

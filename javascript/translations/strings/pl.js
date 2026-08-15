@@ -1179,7 +1179,8 @@ card_info: {
   factionNone: "",
 
   "classes": {
-    none: "Niespotykana",
+    undefined: "Niespotykanego",
+    none: "Niespotykanego",
     royal: "Królewska",
     commander: "Dowódcy",
     soldier: "Żołnierza",
