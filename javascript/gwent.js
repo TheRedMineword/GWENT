@@ -1996,7 +1996,13 @@ function card_name_info(card) {
     return strings[card.row]
       .replace("{name}", card.name)
       .replace("{faction}", faction)
-      .replace("{unit}", unit);
+      .replace("{unit}", unit)
+      .replace(
+        "{class}",
+        getTranslation(
+          `card_info.classes.${card?.filename ? card_name_class[card.filename] : "none"}`,
+        ),
+      );
   } catch (e) {
     return false;
   }
