@@ -259,7 +259,7 @@ STRNG["pl"] = {
   bond: {
     name: "Braterska Więź",
     description:
-      "Umieść obok karty o tej samej nazwie, aby podwoić siłę obu kart. "
+      "Umieść obok karty o tej samej nazwie, aby znacznie zwiększyć siłę obu kart do pewnog stopnia. "
   },
 
   avenger: {
@@ -1198,14 +1198,14 @@ card_info: {
   event: "Wydarzeniowa",
   hebitch: "Zwykłego Skurwysyna",
   banner: "Sztandaru",
-  spicetrader: "Kupiec Korzenny",
+  spicetrader: "Kupieca Korzennego",
   cow: "Krowa",
-  sky_spirit: "Dusza",
-  guard: "Strażnik",
-  sky_guide_e: "Przewodnika Wydarzenia",
-  sky_guide_s: "Przewodnika Sezonowego",
+  sky_spirit: "Dusz",
+  guard: "Strażników",
+  sky_guide_e: "Przewodników Wydarzeń",
+  sky_guide_s: "Przewodników Sezonowych",
   sky_skykid: "Dzieciucha",
-  sky_item: "Przedmiotu"
+  sky_item: "Przedmiotów"
 }
 }
 };

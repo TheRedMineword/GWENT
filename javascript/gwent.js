@@ -2889,7 +2889,48 @@ class Row extends CardContainer {
       total = Math.ceil(total * 2);
     }
     let bond = this.effects.bond[card.id_bond()];
-    if (isNumber(bond) && bond > 1) total *= Number(bond);
+
+    if (isNumber(bond) && bond > 1 && !this.effects.weather) {
+      if (!bond_config.use) {
+        total *= Number(bond);
+      } else {
+        let strength = Number(card._raw.strength);
+
+        // Weak cards get full bond value up to bond_start.
+        // Strong cards start decaying immediately.
+        let decay_start =
+          strength > bond_config.power_threshold ? 1 : bond_config.bond_start;
+
+        let decay = bond_config.decay;
+
+        // Stronger cards decay faster.
+        if (strength > bond_config.power_threshold) {
+          let extra_power = strength - bond_config.power_threshold;
+
+          decay -= extra_power * 0.03;
+          decay = Math.max(0.05, decay);
+        }
+
+        let multiplier = Math.min(bond, decay_start);
+
+        // Everything after decay_start gets diminishing value.
+        for (let i = decay_start; i < bond; i++) {
+          multiplier += Math.pow(decay, i - decay_start + 1);
+        }
+
+        total *= multiplier;
+
+        // Optional total/base-power safety cap.
+        if (bond_config.power_cap) {
+          let base_power = Number(card._raw.strength);
+          let max_total = base_power * bond_config.max_ratio;
+
+          total = Math.min(total, max_total);
+        }
+
+        total = Math.floor(total);
+      }
+    }
     //	if (this?.effects.morale > 0) {
     //	card.animate("powergain");
     //	}

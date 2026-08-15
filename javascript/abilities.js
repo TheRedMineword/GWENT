@@ -2489,44 +2489,63 @@ var ability_dict = {
   thedevil: {
     name: ``,
     description: ``,
+
     placed: async (card, row) => {
       let wrapper = { card: null };
 
-      let preview = [...card.holder.deck.cards]
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 3);
+      let deck = card.holder.deck.cards;
 
-      if (preview.length === 0) return;
+      // No cards left: just place the Devil
+      if (!deck || deck.length === 0) {
+        row.removeCard(card);
+        return;
+      }
 
-      // Show selection
-      await ui.queueCarousel(
-        { cards: preview },
-        1,
-        (c, i) => (wrapper.card = c.cards[i]),
-        () => true,
-        true,
-        false,
-        getUiStrng("queueCarousel_other.devildeal"),
-      );
+      // Pick up to 3 random cards
+      let preview = [...deck].sort(() => Math.random() - 0.5).slice(0, 3);
+
+      // If there is only one card, take it automatically
+      if (preview.length === 1) {
+        wrapper.card = preview[0];
+      } else {
+        // Show 2 or 3 card selection
+        await ui.queueCarousel(
+          { cards: preview },
+          1,
+          (c, i) => (wrapper.card = c.cards[i]),
+          () => true,
+          true,
+          false,
+          getUiStrng("queueCarousel_other.devildeal"),
+        );
+      }
 
       let picked = wrapper.card;
-      if (!picked) return;
 
-      // Save filename globally if needed
-      // lastChosenDeckCard = picked.filename;
+      // Nothing selected / carousel cancelled
+      if (!picked) {
+        row.removeCard(card);
+        return;
+      }
+
       pickedfakecard = { a: true, b: picked.filename };
 
-      // Find the real card in the deck
-      let realCard = card.holder.deck.cards.find(
-        (c) => c.filename === picked.filename,
-      );
+      // Find the actual card in the deck
+      let realCard = deck.find((c) => c.filename === picked.filename);
 
-      if (!realCard) return;
+      // Card disappeared from deck somehow
+      if (!realCard) {
+        row.removeCard(card);
+        return;
+      }
 
       // Draw it
       card.holder.deck.removeCard(realCard);
       card.holder.hand.addCard(realCard);
+
       realCard.animate("reinforce");
+
+      // Place Devil
       row.removeCard(card);
     },
   },

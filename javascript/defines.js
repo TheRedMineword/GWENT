@@ -38,6 +38,22 @@ let bucket_cards_strenght = {
   bigger: 3,
   smaller: 12,
 };
+let bond_config = {
+  use: true,
+
+  // Decay starts after this many bonds for every card
+  bond_start: 3,
+
+  // How quickly additional bonds lose value
+  decay: 0.4,
+
+  // Stronger cards decay even faster
+  power_threshold: 5,
+
+  // Optional total/base-strength safety cap
+  power_cap: true,
+  max_ratio: 2.4,
+};
 //host alone
 let players = {
   me: "You",
@@ -747,6 +763,7 @@ let ThisDef = {
     bucket_spawn_per_lider_minus: deepClone(bucket_spawn_per_lider_minus),
     bucket_op_draw_per_power: deepClone(bucket_op_draw_per_power),
     bucket_cards_strenght: deepClone(bucket_cards_strenght),
+    bond_config: deepClone(bond_config),
 
     ForGameStart: deepClone(ForGameStart),
 

@@ -48,6 +48,14 @@
       "bigger": 3,
       "smaller": 12
     },
+    "bond_config": {
+      "use": true,
+      "bond_start": 3,
+      "decay": 0.4,
+      "power_threshold": 5,
+      "power_cap": true,
+      "max_ratio": 2.4
+    },
     "ForGameStart": {
       "unitscards": 22,
       "special": 10,
@@ -756,7 +764,7 @@
           },
           "bond": {
             "name": "Tight Bond",
-            "description": "Place next to a card with the same name to double the strength of both cards. "
+            "description": "Place it next to a card with the same name to significantly boost the strength of both cards to a certain extent. "
           },
           "avenger": {
             "name": "Avenger",
@@ -1750,7 +1758,7 @@
           },
           "bond": {
             "name": "Braterska Więź",
-            "description": "Umieść obok karty o tej samej nazwie, aby podwoić siłę obu kart. "
+            "description": "Umieść obok karty o tej samej nazwie, aby znacznie zwiększyć siłę obu kart do pewnog stopnia. "
           },
           "avenger": {
             "name": "Mściciel",
@@ -2551,14 +2559,14 @@
             "event": "Wydarzeniowa",
             "hebitch": "Zwykłego Skurwysyna",
             "banner": "Sztandaru",
-            "spicetrader": "Kupiec Korzenny",
+            "spicetrader": "Kupieca Korzennego",
             "cow": "Krowa",
-            "sky_spirit": "Dusza",
-            "guard": "Strażnik",
-            "sky_guide_e": "Przewodnika Wydarzenia",
-            "sky_guide_s": "Przewodnika Sezonowego",
+            "sky_spirit": "Dusz",
+            "guard": "Strażników",
+            "sky_guide_e": "Przewodników Wydarzeń",
+            "sky_guide_s": "Przewodników Sezonowych",
             "sky_skykid": "Dzieciucha",
-            "sky_item": "Przedmiotu"
+            "sky_item": "Przedmiotów"
           }
         }
       }

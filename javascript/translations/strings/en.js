@@ -215,7 +215,7 @@ STRNG["en"] = {
     bond: {
       name: "Tight Bond",
       description:
-        "Place next to a card with the same name to double the strength of both cards. ",
+        "Place it next to a card with the same name to significantly boost the strength of both cards to a certain extent. ",
     },
     avenger: {
       name: "Avenger",
