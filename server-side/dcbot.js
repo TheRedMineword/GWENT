@@ -16,6 +16,14 @@
 //   to show who claimed it. Falls back to a refund if disabled, not
 //   configured, or if posting the message fails for any reason.
 //
+//   The same flag also covers the WIN side of a solo bet: if the lone
+//   bettor wins instead, there's no opponent stake to fund a normal
+//   pot-based payout from, but with this flag on they still get the
+//   usual score-based bonus credited on top of their own stake
+//   (house-funded, same math as a normal payout) rather than a flat
+//   break-even refund. With the flag off, a solo bet - win or lose -
+//   is always just a flat refund of the stake.
+//
 
 // Discord commands (must be typed in the configured guild):
 //   !registerclient <id>   Link your Discord account to a currently-connected
@@ -779,7 +787,10 @@ async function onDmRequest(ws, data) {
  */
 async function postFreeMoneyMessage(
   amount,
-  sessionId
+  sessionId,
+  baseAmount,
+  bonusPercent,
+  bonusAmount
 ) {
   if (
     !ready ||
@@ -821,8 +832,13 @@ async function postFreeMoneyMessage(
           )
       );
 
+    const bonusText =
+      bonusAmount > 0
+        ? ` (stake **${baseAmount}** + ${bonusPercent}% score bonus, **${bonusAmount}** extra)`
+        : "";
+
     await channel.send({
-      content: `\uD83D\uDCB0 A Gwent bet went unmatched and the loser's stake is up for grabs: **${amount}** cash, bonus included. First to click claims it!`,
+      content: `\uD83D\uDCB0 A Gwent bet went unmatched and the loser's stake is up for grabs: **${amount}** cash total${bonusText}. First to click claims it!`,
       components: [row],
     });
 
@@ -1139,6 +1155,106 @@ async function onMatchResult(
 
     /*
      * The lone bettor placed a bet, had no opponent bet to match
+     * against, and WON anyway.
+     *
+     * There's no opponent stake to fund a normal pot-based payout
+     * from, so historically this just fell through to the same flat
+     * refund as every other solo-bet case below - meaning a solo win
+     * was worth exactly as much as a solo loss (or no match at all).
+     *
+     * When FREE_MONEY_ON_SOLO_LOSS is on, we instead credit the usual
+     * score-based bonus on top of their own stake (house-funded, same
+     * math as a normal payout / the solo-loss forfeit below) so a
+     * solo win is actually rewarded instead of falling back to a
+     * break-even refund.
+     */
+    if (
+      soloBettorWon &&
+      FREE_MONEY_ON_SOLO_LOSS
+    ) {
+      const scoreValues =
+        playerIds.map(
+          (pid) =>
+            sessionScores[pid] || 0
+        );
+
+      const lowestScore =
+        Math.min(...scoreValues);
+
+      const bonusPercent =
+        Math.max(
+          0,
+          Math.min(
+            MAX_BONUS_PERCENT,
+            Math.floor(lowestScore)
+          )
+        );
+
+      const winAmount =
+        Math.ceil(
+          bet.amount *
+            (1 + bonusPercent / 100)
+        );
+
+      const bonusAmount =
+        winAmount - bet.amount;
+
+      try {
+        await unbAdjustBalance(
+          bet.discordId,
+          winAmount,
+          bonusPercent > 0
+            ? `Gwent bet payout (opponent never bet, +${bonusPercent}% score bonus)`
+            : "Gwent bet payout (opponent never bet)"
+        );
+
+        await dm(
+          bet.discordId,
+          `\uD83C\uDFC6 Your opponent never placed a bet, but you won the match, so your **${bet.amount}** stake was returned${
+            bonusAmount > 0
+              ? ` plus a ${bonusPercent}% score bonus, **+${bonusAmount}** extra (**${winAmount}** total)`
+              : ""
+          }.`
+        );
+      } catch (e) {
+        log(
+          "Single-side win payout failed:",
+          e.message
+        );
+
+        await dm(
+          bet.discordId,
+          `\u26A0\uFE0F You won, but crediting your **${winAmount}** stake + bonus failed. Please contact an admin.`
+        );
+      }
+
+      pushIntegration(
+        playerId,
+        {
+          actiontype: "payout",
+          actionvalue: winAmount,
+          bonusPercent,
+          by: bet.discordId,
+          betpool: 0,
+
+          me: await buildSnapshot(
+            bet.discordId,
+            0
+          ),
+
+          op: null,
+        }
+      );
+
+      log(
+        `Single-side win payout for session ${sessionId}: stake=${bet.amount} bonus=${bonusPercent}% (+${bonusAmount}) -> ${winAmount}`
+      );
+
+      return;
+    }
+
+    /*
+     * The lone bettor placed a bet, had no opponent bet to match
      * against, and LOST the match anyway.
      *
      * Normally (and still, when soloBettorWon, or when the feature
@@ -1179,16 +1295,26 @@ async function onMatchResult(
             (1 + bonusPercent / 100)
         );
 
+      const bonusAmount =
+        freeMoneyAmount - bet.amount;
+
       const posted =
         await postFreeMoneyMessage(
           freeMoneyAmount,
-          sessionId
+          sessionId,
+          bet.amount,
+          bonusPercent,
+          bonusAmount
         );
 
       if (posted) {
         await dm(
           bet.discordId,
-          `\uD83D\uDCB0 Your opponent never placed a bet, and you lost the match, so your **${bet.amount}** stake was **not** refunded - it's now up for grabs (bonus included: **${freeMoneyAmount}**) in the free money channel.`
+          `\uD83D\uDCB0 Your opponent never placed a bet, and you lost the match, so your **${bet.amount}** stake was **not** refunded - it's now up for grabs in the free money channel (stake **${bet.amount}**${
+            bonusAmount > 0
+              ? ` + ${bonusPercent}% score bonus, **${bonusAmount}** extra`
+              : ""
+          }, **${freeMoneyAmount}** total).`
         );
 
         pushIntegration(
@@ -1196,6 +1322,7 @@ async function onMatchResult(
           {
             actiontype: "solo_loss_forfeit",
             actionvalue: bet.amount,
+            bonusPercent,
             by: null,
             betpool: 0,
 
@@ -1209,7 +1336,7 @@ async function onMatchResult(
         );
 
         log(
-          `Solo-loss stake of ${bet.amount} (bonus: ${freeMoneyAmount}) forfeited to the free money channel for session ${sessionId}`
+          `Solo-loss stake of ${bet.amount} + ${bonusPercent}% bonus (${bonusAmount}) = ${freeMoneyAmount} forfeited to the free money channel for session ${sessionId}`
         );
 
         return;
@@ -2474,4 +2601,3 @@ exports.stop =
       client = null;
     }
   };
-  
