@@ -159,7 +159,7 @@ function parse_action_ping_loser() {
   return null;
 }
 
-async function END_TURN_SHARE_CARDS() {
+async function END_TURN_SHARE_CARDS(player) {
   console.log("===== END_TURN_SHARE_CARDS =====");
 
   const cards = [...(Bucket.cards || [])];
@@ -286,6 +286,9 @@ async function END_TURN_SHARE_CARDS() {
     }
     for (let i = 0; i < draws; i++) {
       await parse_action_ping_loser().deck.draw(parse_action_ping_loser().hand);
+    }
+    if (player.ThatPlayerId === player_me.ThatPlayerId) {
+      await resolve_pass_at_extrajson(draws * 455.5);
     }
   }
   console.log("Done.");

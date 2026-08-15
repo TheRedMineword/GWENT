@@ -3686,9 +3686,6 @@ class Game {
       this.usebucket,
       this.roundCount,
     );
-    if (this.usebucket && this.roundCount > 0) {
-      await END_TURN_SHARE_CARDS();
-    }
     this.roundCount++;
     this.currPlayer =
       this.roundCount % 2 === 0
@@ -3704,6 +3701,10 @@ class Game {
     if (player_op.passed && player_me.passed) return this.endRound();
 
     if (this.currPlayer.passed) this.currPlayer = this.currPlayer.opponent();
+
+    if (this.usebucket && this.roundCount > 0) {
+      await END_TURN_SHARE_CARDS(this.currPlayer);
+    }
 
     await ui.notification("round-start", ui_display_times.round_start);
     if (this.currPlayer.opponent().passed)
