@@ -2491,6 +2491,10 @@ var ability_dict = {
     description: ``,
 
     placed: async (card, row) => {
+      if (card.holder.ThatPlayerId !== player_me.ThatPlayerId) {
+        row.removeCard(card);
+        return false;
+      }
       let wrapper = { card: null };
 
       let deck = card.holder.deck.cards;
@@ -2501,8 +2505,21 @@ var ability_dict = {
         return;
       }
 
-      // Pick up to 3 random cards
-      let preview = [...deck].sort(() => Math.random() - 0.5).slice(0, 3);
+      // Pick up to 3 random cards from a cloned deck
+      let preview = [...deck].filter(
+        (card) =>
+          card.faction !== "weather" &&
+          card.deck !== "weather" &&
+          card.filename !== "thedevil" &&
+          !card.isSide &&
+          !card.isDecoy,
+      );
+
+      if (!preview || preview.length === 0) {
+        row.removeCard(card);
+        return;
+      }
+      preview = [...preview].sort(() => Math.random() - 0.5).slice(0, 3);
 
       // If there is only one card, take it automatically
       if (preview.length === 1) {

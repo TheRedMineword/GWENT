@@ -887,7 +887,7 @@
           },
           "thedevil": {
             "name": "The Devil",
-            "description": "Discard after playing. Lets you pick and draw to hand 1 out of 3 random picked cards from deck. Tricks opponent into thinking you played that card! "
+            "description": "Discard after playing. Lets you pick and draw to hand 1 out of 3 random picked cards from deck. Tricks opponent into thinking you played that card! Cant draw special cards! "
           },
           "bucket": {
             "description": "Random cards will appear in the \"bucket\" every few turns; the frequency of their appearance depends on the number of commanders with this ability currently in play. The winner of the round takes the pot, the loser turns some of the released power into cards draw."
@@ -1882,7 +1882,7 @@
           },
           "thedevil": {
             "name": "Diabeł",
-            "description": "Karta zostaja odrzucona po zagraniu. Pozwala ci dobrać 1 z 3 losowych kart z talii. Oszukuje przeciwnika jakgby ta karta była zagrana! "
+            "description": "Karta zostaja odrzucona po zagraniu. Pozwala ci dobrać 1 z 3 losowych kart z talii. Oszukuje przeciwnika jakgby ta karta była zagrana! Nie może dobrać kart specjalnych! "
           },
           "bucket": {
             "description": "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawaiania zależy od liderów z tą zdolnością w grze. Zwycięzca tury przejmuje pulę, przegrany zamienia cześć uwolnionej mocy w dobrnia kart. "

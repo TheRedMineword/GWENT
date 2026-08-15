@@ -454,7 +454,7 @@ STRNG["pl"] = {
     },
     thedevil: {
     name: "Diabeł",
-    description: "Karta zostaja odrzucona po zagraniu. Pozwala ci dobrać 1 z 3 losowych kart z talii. Oszukuje przeciwnika jakgby ta karta była zagrana! "
+    description: "Karta zostaja odrzucona po zagraniu. Pozwala ci dobrać 1 z 3 losowych kart z talii. Oszukuje przeciwnika jakgby ta karta była zagrana! Nie może dobrać kart specjalnych! "
   },
     bucket: {
     description: "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawaiania zależy od liderów z tą zdolnością w grze. Zwycięzca tury przejmuje pulę, przegrany zamienia cześć uwolnionej mocy w dobrnia kart. "

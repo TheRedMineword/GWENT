@@ -370,7 +370,7 @@ STRNG["en"] = {
     },
     thedevil: {
     name: "The Devil",
-    description: "Discard after playing. Lets you pick and draw to hand 1 out of 3 random picked cards from deck. Tricks opponent into thinking you played that card! "
+    description: "Discard after playing. Lets you pick and draw to hand 1 out of 3 random picked cards from deck. Tricks opponent into thinking you played that card! Cant draw special cards! "
   },
     bucket: {
     description: "Random cards will appear in the \"bucket\" every few turns; the frequency of their appearance depends on the number of commanders with this ability currently in play. The winner of the round takes the pot, the loser turns some of the released power into cards draw."
