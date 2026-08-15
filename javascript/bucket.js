@@ -285,7 +285,11 @@ async function END_TURN_SHARE_CARDS(player) {
       };
     }
     for (let i = 0; i < draws; i++) {
-      await parse_action_ping_loser().deck.draw(parse_action_ping_loser().hand);
+      try {
+        await parse_action_ping_loser().deck.draw(
+          parse_action_ping_loser().hand,
+        );
+      } catch (e) {}
     }
     if (player.ThatPlayerId === player_me.ThatPlayerId) {
       await resolve_pass_at_extrajson(draws * 455.5);
