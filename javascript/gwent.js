@@ -1975,7 +1975,7 @@ class Player {
   }
 }
 
-function card_name_info(card, overflow = 74) {
+function card_name_info(card, overflow = 60) {
   console.log("card_name_info", card);
   if ((card?.faction ?? "N/A") === "faction") {
     return false;
@@ -2003,10 +2003,16 @@ function card_name_info(card, overflow = 74) {
           `card_info.classes.${card?.filename ? card_name_class[card.filename] : "none"}`,
         ),
       );
-    if (a.length > overflow) {
+    if (a.split("\n")[1].length > overflow) {
       a = a.replace("\n", "\n-# ");
     }
-    console.log("card_name_info", a, a.length, overflow, a.length > overflow);
+    console.log(
+      "card_name_info",
+      a,
+      a.split("\n")[1].length,
+      overflow,
+      a.split("\n")[1].length > overflow,
+    );
     return a;
   } catch (e) {
     return false;
