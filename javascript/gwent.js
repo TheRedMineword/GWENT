@@ -1975,7 +1975,7 @@ class Player {
   }
 }
 
-function card_name_info(card) {
+function card_name_info(card, overflow = 74) {
   console.log("card_name_info", card);
   if ((card?.faction ?? "N/A") === "faction") {
     return false;
@@ -1993,7 +1993,7 @@ function card_name_info(card) {
     faction = getTranslation("card_info.factionNone");
   }
   try {
-    return strings[card.row]
+    var a = strings[card.row]
       .replace("{name}", card.name)
       .replace("{faction}", faction)
       .replace("{unit}", unit)
@@ -2003,6 +2003,11 @@ function card_name_info(card) {
           `card_info.classes.${card?.filename ? card_name_class[card.filename] : "none"}`,
         ),
       );
+    if (a.length > overflow) {
+      a = a.replace("\n", "\n-# ");
+    }
+    console.log("card_name_info", a, a.length, overflow, a.length > overflow);
+    return a;
   } catch (e) {
     return false;
   }
