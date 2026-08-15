@@ -1198,7 +1198,7 @@ card_info: {
   special: "Specjalna",
   event: "Wydarzeniowa",
   hebitch: "Zwykłego Skurwysyna",
-  banner: "Sztandaru",
+  banner: "Sztandarów",
   spicetrader: "Kupieca Korzennego",
   cow: "Krowa",
   sky_spirit: "Dusz",
