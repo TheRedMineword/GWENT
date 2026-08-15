@@ -1975,7 +1975,7 @@ class Player {
   }
 }
 
-function card_name_info(card, overflow = 60) {
+function card_name_info(card, overflow = 65) {
   console.log("card_name_info", card);
   if ((card?.faction ?? "N/A") === "faction") {
     return false;
@@ -3714,7 +3714,7 @@ class Game {
     if (this.currPlayer.passed) this.currPlayer = this.currPlayer.opponent();
 
     if (this.usebucket && this.roundCount > 0) {
-      await END_TURN_SHARE_CARDS(this.currPlayer);
+      await END_TURN_SHARE_CARDS(this.currPlayer.tag);
     }
 
     await ui.notification("round-start", ui_display_times.round_start);
@@ -6161,9 +6161,9 @@ class Carousel {
     const currentCard = this.container.cards[this.indices[this.index]];
 
     if (this.title) {
-      GwentOverlay.show("top", card_name_info(currentCard));
+      GwentOverlay.show("top", card_name_info(currentCard, 9999));
     } else {
-      GwentOverlay.show("top1", card_name_info(currentCard));
+      GwentOverlay.show("top1", card_name_info(currentCard, 9999));
     }
   }
 
@@ -6325,7 +6325,7 @@ class Carousel {
     if (currentCard) {
       GwentOverlay.show(
         this.title ? "top" : "top1",
-        card_name_info(currentCard),
+        card_name_info(currentCard, 9999),
       );
     }
   }

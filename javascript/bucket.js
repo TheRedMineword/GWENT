@@ -160,6 +160,9 @@ function parse_action_ping_loser() {
 }
 
 async function END_TURN_SHARE_CARDS(player) {
+  if (game.roundHistoryResults.length === 0) {
+    return false;
+  }
   console.log("===== END_TURN_SHARE_CARDS =====");
 
   const cards = [...(Bucket.cards || [])];
@@ -291,9 +294,10 @@ async function END_TURN_SHARE_CARDS(player) {
         );
       } catch (e) {}
     }
-    if (player.ThatPlayerId === player_me.ThatPlayerId) {
-      await resolve_pass_at_extrajson(draws * 455.5);
-    }
+    console.log("END TURN SHARE CARDS WHO STARTS", player, game);
+    //  if (player === "op") {
+    await resolve_pass_at_extrajson(draws * 900.5);
+    //  }
   }
   console.log("Done.");
 }
