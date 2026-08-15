@@ -3712,9 +3712,12 @@ class Game {
     if (player_op.passed && player_me.passed) return this.endRound();
 
     if (this.currPlayer.passed) this.currPlayer = this.currPlayer.opponent();
-
+    var hold = { a: false };
     if (this.usebucket && this.roundCount > 0) {
-      await END_TURN_SHARE_CARDS(this.currPlayer.tag);
+      var tmp = await END_TURN_SHARE_CARDS(this.currPlayer.tag);
+      if (tmp?.a ?? false) {
+        hold = tmp;
+      }
     }
 
     await ui.notification("round-start", ui_display_times.round_start);
@@ -3724,11 +3727,11 @@ class Game {
         ui_display_times.turn,
       );
 
-    this.startTurn();
+    this.startTurn(hold);
   }
 
   // Starts a new turn. Enables client interraction in client's turn.
-  async startTurn() {
+  async startTurn(data = { a: false }) {
     //console.log("startTurn()", player_me, player_op);
 
     await this.runEffects(this.turnStart);
@@ -3737,6 +3740,15 @@ class Game {
       ui.notification(this.currPlayer.tag + "-turn", ui_display_times.turn);
     }
     if (this.currPlayer === player_me) {
+      if (data.a) {
+        if (data?.bucket ?? false) {
+          if (data.c.ThatPlayerId !== player_me.ThatPlayerId) {
+            await resolve_pass_at_extrajson(data.hold);
+          }
+        } else {
+          await resolve_pass_at_extrajson(data.hold);
+        }
+      }
       passButton.classList.remove("hidden");
       ui.showSurrender(true);
       //     document.addEventListener("keydown", handleKeyDown);

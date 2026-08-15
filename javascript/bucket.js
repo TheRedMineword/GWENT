@@ -296,10 +296,11 @@ async function END_TURN_SHARE_CARDS(player) {
     }
     console.log("END TURN SHARE CARDS WHO STARTS", player, game);
     //  if (player === "op") {
-    await resolve_pass_at_extrajson(draws * 900.5);
+    var hold = draws * 900.5;
     //  }
   }
   console.log("Done.");
+  return { a: true, wait: hold, bucket: true, c: parse_action_ping_loser() };
 }
 
 function is_bucket_vibecheck_name(vara) {
