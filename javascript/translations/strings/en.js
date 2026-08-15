@@ -689,7 +689,8 @@ STRNG["en"] = {
     "Gaunter_Leader2": "Gaunter O'Dimm — Master of Time",
     thedevil: "The Devil",
     eredin_bucket: "Eredin — The Elder Blood Pursuer",
-    discord_poor_infantry: "Poor Fucking Infantry"
+    discord_poor_infantry: "Poor Fucking Infantry",
+    striga: "Striga"
   },
   ui: {
     elem: {

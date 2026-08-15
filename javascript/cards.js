@@ -3680,6 +3680,16 @@ var card_dict_base = [
     note: "This is card from discord server integration!",
     count: "0",
   },
+  {
+    name: "Striga",
+    id: "1048",
+    deck: "monsters",
+    row: "ranged",
+    strength: "5",
+    ability: "bond",
+    filename: "striga",
+    count: "3",
+  },
 ];
 let pickedfakecard = { a: false, b: null };
 

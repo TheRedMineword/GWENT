@@ -742,6 +742,7 @@ let card_name_class = {
   bluebird_a: "sky_item",
   bluebird_b: "warrior",
   bluebird_sad: "sky_spirit",
+  striga: "monster",
 };
 let ThisDef = {
   name: "Default Config",

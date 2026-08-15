@@ -783,7 +783,8 @@ STRNG["pl"] = {
     "Gaunter_Leader2": "Gaunter O'Dimm — Mistrz Czasu",
     thedevil: "Diabeł",
     eredin_bucket: "Eredin — W Pogoni Za Starszą Krwią",
-    discord_poor_infantry: "Biedna Pierdolona Piechota"
+    discord_poor_infantry: "Biedna Pierdolona Piechota",
+    striga: "Strzyga"
   },
   ui: {
     elem: {

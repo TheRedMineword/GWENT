@@ -569,7 +569,8 @@
       "sunbather_pink": "sky_spirit",
       "bluebird_a": "sky_item",
       "bluebird_b": "warrior",
-      "bluebird_sad": "sky_spirit"
+      "bluebird_sad": "sky_spirit",
+      "striga": "monster"
     },
     "STRNG": {
       "failure": {
@@ -1201,7 +1202,8 @@
           "Gaunter_Leader2": "Gaunter O'Dimm — Master of Time",
           "thedevil": "The Devil",
           "eredin_bucket": "Eredin — The Elder Blood Pursuer",
-          "discord_poor_infantry": "Poor Fucking Infantry"
+          "discord_poor_infantry": "Poor Fucking Infantry",
+          "striga": "Striga"
         },
         "ui": {
           "elem": {
@@ -2195,7 +2197,8 @@
           "Gaunter_Leader2": "Gaunter O'Dimm — Mistrz Czasu",
           "thedevil": "Diabeł",
           "eredin_bucket": "Eredin — W Pogoni Za Starszą Krwią",
-          "discord_poor_infantry": "Biedna Pierdolona Piechota"
+          "discord_poor_infantry": "Biedna Pierdolona Piechota",
+          "striga": "Strzyga"
         },
         "ui": {
           "elem": {
@@ -5726,6 +5729,16 @@
         "filename": "discord_poor_infantry",
         "note": "This is card from discord server integration!",
         "count": "0"
+      },
+      {
+        "name": "Striga",
+        "id": "1048",
+        "deck": "monsters",
+        "row": "ranged",
+        "strength": "5",
+        "ability": "bond",
+        "filename": "striga",
+        "count": "3"
       }
     ],
     "factions": {
