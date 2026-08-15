@@ -602,7 +602,7 @@ STRNG["en"] = {
     gerry: "Gerry from the River",
     lethosabotage: "Letho — The Saboteur",
     aidhorn: "Lyria and Rivia Banner",
-    Gaunter_Leader: "Gaunter o'Dim",
+    Gaunter_Leader: "Gaunter O'Dim",
     Ida_Emean_d20: "Ida Emean — Elven Divination",
     spice_trader: "Spice Merchant",
     roach: "Roach",
@@ -653,7 +653,7 @@ STRNG["en"] = {
     darkness_storm_leader: "Eden King",
     ranger: "Reassuring Ranger",
     tgc20: "20 Years Of ThatGameComapny",
-    elder_wasteland: "Wasteland Elder",
+    elder_wasteland: "Elder of Wasteland",
     colorguide: "Days Of Color Guide",
     colorcollab: "Trevor Project",
     aviary_medic: "Aviary Village Emotional Support",
@@ -856,11 +856,11 @@ STRNG["en"] = {
       scol_secondchance:
         "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from grave.", //unused
       gaunter:
-        "Gaunter o'Dim Ability Used:\nBoth sides recived additional card!",
+        "Gaunter O'Dim Ability Used:\nBoth sides recived additional card!",
       gaunter2:
-        "Gaunter o'Dim Ability Used:\nThe last round has been wiped; all players regain one life!",
+        "Gaunter O'Dim Ability Used:\nThe last round has been wiped; all players regain one life!",
       scol_secondchance_necro2:
-        "Gaunter o'Dim Ability Used:\nBoth sides recived additional card!",
+        "Gaunter O'Dim Ability Used:\nBoth sides recived additional card!",
       monsters:
         "Monsters faction ability triggered:\nOne Monster Unit Card stays on the board.",
       draw_end:
