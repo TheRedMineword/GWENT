@@ -340,7 +340,7 @@
       "catapult_1": "siege",
       "crinfrid": "soldier",
       "dethmold": "sorcerer",
-      "banner_nurse": "soldier",
+      "banner_nurse": "medic_she",
       "esterad": "royal",
       "natalis": "commander",
       "kaedwen_siege_1": "siege",
@@ -389,7 +389,7 @@
       "tibor": "commander",
       "vanhemar": "sorcerer",
       "vattier": "spy",
-      "sab": "spy",
+      "sab": "assasin",
       "vreemde": "soldier",
       "young_emissary": "soldier",
       "zerri": "siege",
@@ -452,7 +452,7 @@
       "eithne": "elf",
       "elf_skirmisher_1": "elf",
       "filavandrel": "commander",
-      "havekar_nurse_2": "soldier",
+      "havekar_nurse_2": "healer_she",
       "havekar_support_2": "soldier",
       "ida": "sorceress",
       "Ida_Emean_d20": "sorceress",
@@ -474,7 +474,7 @@
       "svalblod": "berserker",
       "svalblod_change": "berserker",
       "birna": "commander",
-      "bad_lady": "commander",
+      "bad_lady": "sabotage_she",
       "blueboy": "warrior",
       "cerys": "royal",
       "brokva_archer": "soldier",
@@ -484,7 +484,7 @@
       "tordarroch": "dwarf",
       "craite_warrior": "warrior",
       "donar": "warrior",
-      "draig": "warrior",
+      "draig": "bard",
       "ermion": "sorcerer",
       "hemdall": "warrior",
       "hjalmar": "commander",
@@ -507,7 +507,7 @@
       "gerry": "special",
       "aidhorn": "banner",
       "spice_trader": "spicetrader",
-      "roach": "special",
+      "roach": "roach",
       "axii": "magic",
       "axii_p": "magic",
       "aard": "magic",
@@ -532,7 +532,7 @@
       "fisstech": "special",
       "sigi_reuven": "spy",
       "king_of_beggers": "spy",
-      "magister": "sorcerer",
+      "magister": "assasin",
       "custom!power_place": "magic",
       "custom!m_moonlight": "magic",
       "custom!s_moonlight": "magic",
@@ -548,29 +548,191 @@
       "redcrab": "siege",
       "crabspy": "spy",
       "darkstorm": "special",
-      "darkness_storm_leader": "event",
-      "ranger": "sky_spirit",
+      "darkness_storm_leader": "royal",
+      "ranger": "medic",
       "tgc20": "magic",
-      "elder_wasteland": "event",
+      "elder_wasteland": "royal",
       "colorguide": "sky_guide_e",
       "colorcollab": "sky_guide_e",
       "aviary_medic": "sky_skykid",
-      "vault_elder_s2e": "event",
+      "vault_elder_s2e": "royal",
       "natureguide": "sky_guide_e",
       "naturecollab": "sky_guide_e",
       "skyfest": "sky_guide_e",
       "custom!traveling_spirit": "event",
-      "custom!dearvangogh": "sky_guide_s",
+      "custom!skyseason": "siege",
       "custom!sky_vincent": "sky_guide_s",
       "custom!vincent_painting_power": "sky_guide_s",
       "custom!sky_vincent_guys": "sky_spirit",
       "custom!sky_vincent_medic": "sky_spirit",
-      "valley_twins": "event",
+      "valley_twins": "royal",
       "sunbather_pink": "sky_spirit",
       "bluebird_a": "sky_item",
       "bluebird_b": "warrior",
       "bluebird_sad": "sky_spirit",
       "striga": "monster"
+    },
+    "classDecorators": {
+      "undefined": {
+        "prefix": "*\u003C",
+        "suffix": "\u003E*"
+      },
+      "none": {
+        "prefix": "*\u003C",
+        "suffix": "\u003E*"
+      },
+      "royal": {
+        "prefix": "♔ ",
+        "suffix": ""
+      },
+      "commander": {
+        "prefix": "⟪",
+        "suffix": "⟫"
+      },
+      "soldier": {
+        "prefix": "[",
+        "suffix": "]"
+      },
+      "witcher": {
+        "prefix": "⚔ ",
+        "suffix": ""
+      },
+      "witcheress": {
+        "prefix": "⚔ ",
+        "suffix": ""
+      },
+      "sorcerer": {
+        "prefix": "✦ ",
+        "suffix": " ✦"
+      },
+      "sorceress": {
+        "prefix": "✦ ",
+        "suffix": " ✦"
+      },
+      "elderblood": {
+        "prefix": "⟨",
+        "suffix": "⟩"
+      },
+      "magic": {
+        "prefix": "✧",
+        "suffix": "✧"
+      },
+      "monster": {
+        "prefix": "☾ ",
+        "suffix": " ☽"
+      },
+      "warrior": {
+        "prefix": "⚔ ",
+        "suffix": ""
+      },
+      "berserker": {
+        "prefix": "ᛒ ",
+        "suffix": ""
+      },
+      "dwarf": {
+        "prefix": "⛏ ",
+        "suffix": ""
+      },
+      "elf": {
+        "prefix": "❧ ",
+        "suffix": ""
+      },
+      "spy": {
+        "prefix": "⌁",
+        "suffix": "⌁"
+      },
+      "siege": {
+        "prefix": "▣ ",
+        "suffix": ""
+      },
+      "ship": {
+        "prefix": "⚓ ",
+        "suffix": ""
+      },
+      "bard": {
+        "prefix": "♪ ",
+        "suffix": " ♪"
+      },
+      "special": {
+        "prefix": "★ ",
+        "suffix": " ★"
+      },
+      "event": {
+        "prefix": "‹",
+        "suffix": "›"
+      },
+      "hebitch": {
+        "prefix": "「",
+        "suffix": "」"
+      },
+      "banner": {
+        "prefix": "⚑ ",
+        "suffix": ""
+      },
+      "spicetrader": {
+        "prefix": "✧ ",
+        "suffix": ""
+      },
+      "cow": {
+        "prefix": "🐄 ",
+        "suffix": ""
+      },
+      "sky_spirit": {
+        "prefix": "✦ ",
+        "suffix": " ✦"
+      },
+      "guard": {
+        "prefix": "🛡 ",
+        "suffix": ""
+      },
+      "sky_guide_e": {
+        "prefix": "‹",
+        "suffix": "›"
+      },
+      "sky_guide_s": {
+        "prefix": "❖ ",
+        "suffix": ""
+      },
+      "sky_skykid": {
+        "prefix": "☀ ",
+        "suffix": ""
+      },
+      "sky_item": {
+        "prefix": "◇ ",
+        "suffix": ""
+      },
+      "medic": {
+        "prefix": "✚ ",
+        "suffix": ""
+      },
+      "medic_she": {
+        "prefix": "✚ ",
+        "suffix": ""
+      },
+      "healer": {
+        "prefix": "✚ ",
+        "suffix": ""
+      },
+      "healer_she": {
+        "prefix": "✚ ",
+        "suffix": ""
+      },
+      "sabotage": {
+        "prefix": "⚠ ",
+        "suffix": ""
+      },
+      "sabotage_she": {
+        "prefix": "⚠ ",
+        "suffix": ""
+      },
+      "assasin": {
+        "prefix": "† ",
+        "suffix": ""
+      },
+      "roach": {
+        "prefix": "‹",
+        "suffix": "›"
+      }
     },
     "STRNG": {
       "failure": {
@@ -1167,14 +1329,14 @@
           "ranger": "Reassuring Ranger",
           "tgc20": "20 Years Of ThatGameComapny",
           "elder_wasteland": "Elder of the Wasteland",
-          "colorguide": "Days Of Color Guide",
+          "colorguide": "Days of Color Guide",
           "colorcollab": "Trevor Project",
           "aviary_medic": "Aviary Village Emotional Support",
           "vault_elder_s2e": "Elder of the Vault — Two Embers",
           "fisstech": "Fisstech",
           "sigi_reuven": "Sigi Reuven",
           "king_of_beggers": "King of Begger",
-          "natureguide": "Days Of Nature Guide",
+          "natureguide": "Days of Nature Guide",
           "naturecollab": "The Ocean Cleanup",
           "skyfest": "Sky Anniversary",
           "magister": "Magister",
@@ -1458,6 +1620,7 @@
           "toolow": "You dont have enought energy to activate ability (%x/%y)",
           "toolow_shield": "You have %x/%y of shield charges",
           "ophas": "Opponent have %x/%y",
+          "click": "Click counter to use leader ability!",
           "mehas": "You have %x/%y",
           "d20": {
             "critfail": {
@@ -1530,14 +1693,14 @@
         },
         "card_info": {
           "strings": {
-            "": "**{name}**\nSpecial Card",
-            "leader": "**{name}**\n{faction}; Leader Card",
+            "": "{class_prefix}**{name}**{class_suffix}\nSpecial Card",
+            "leader": "**{class_prefix}{name}{class_suffix}**\n{faction}; Leader Card",
             "weather": "**{name}**\nWeather Card",
-            "siege": "**{name}**\n{faction}; {class} {unit} Siege Card",
-            "ranged": "**{name}**\n{faction}; {class} {unit} Ranged Card",
-            "close": "**{name}**\n{faction}; {class} {unit} Melee Card",
-            "agile": "**{name}**\n{faction}; {class} Agile {unit} Card",
-            "all": "**{name}**\n{faction}; {class} Very Agile {unit} Card"
+            "siege": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Siege Card",
+            "ranged": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Ranged Card",
+            "close": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Melee Card",
+            "agile": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} Agile {unit} Card",
+            "all": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} Very Agile {unit} Card"
           },
           "unit": "Unit",
           "hero": "Hero",
@@ -1575,7 +1738,15 @@
             "sky_guide_e": "Event Guide",
             "sky_guide_s": "Seasonal Guide",
             "sky_skykid": "Sky Kid",
-            "sky_item": "Item"
+            "sky_item": "Item",
+            "medic": "Medic",
+            "medic_she": "Nurse",
+            "healer": "Healer",
+            "healer_she": "Healer",
+            "sabotage": "Saboteur",
+            "assasin": "Assasin",
+            "sabotage_she": "Saboteur",
+            "roach": "Roach"
           }
         }
       },
@@ -1960,7 +2131,7 @@
           "gaunter_odimm": "Gaunter O'Dim",
           "gaunter_odimm_darkness": "Gaunter O'Dim — Ciemność",
           "cow": "Krowa",
-          "chort": "Boviny Korpus Obrony",
+          "chort": "Bovinny Korpus Obrony",
           "ballista": "Balista",
           "blue_stripes": "Komando Niebieskich Pasów",
           "catapult_1": "Katapulta",
@@ -2136,41 +2307,41 @@
           "aard": "Znaki Wiedźmińskie: Aard",
           "yrden": "Znaki Wiedźmińskie: Yrden",
           "igni": "Znaki Wiedźmińskie: Ignii",
-          "udalryka_leader": "Udalryk an Brokvar — Gods Choosen",
-          "keadwen_weather": "Tactical Forecaster — Kaedwen Division",
-          "radovid_stern": "Radovid V the Stern — In Madness",
-          "fake_ciri": "False Ciri — Empress of Nilfgaard",
+          "udalryka_leader": "Udalryk an Brokvar — Wybraniec Bogów",
+          "keadwen_weather": "Taktyczna Prognoza — Dywizja z Keadwen",
+          "radovid_stern": "Radowid V Srogi — Zgubiony w Szaleństwie",
+          "fake_ciri": "Fałszywa Ciri — Cesarzowa Nilfgaardu",
           "whitefrost": "Białe Zimno",
           "temeriacall": "Temeria",
-          "temeriamoral": "Blue Stripe Commando — Scout",
-          "temeriabluestripe": "Blue Stripe Commando — Soldier",
-          "temeriabluestripe_2": "Blue Stripe Commando — Soldier",
-          "temeriamoral_1": "Blue Stripe Commando — Quen",
-          "vernontemeria_call": "Vernon Roche — Blue Stripes Commando Leader",
+          "temeriamoral": "omandosi Niebieskich Pasów — Zwiadowca",
+          "temeriabluestripe": "omandosi Niebieskich Pasów — Żołnierz",
+          "temeriabluestripe_2": "omandosi Niebieskich Pasów — Żółnierz",
+          "temeriamoral_1": "Komandosi Niebieskich Pasów — Quen",
+          "vernontemeria_call": "Vernon Roche — Dowódca Odziałów Specjalnych Niebieskich Pasów",
           "steward": "Hopeful Steward",
-          "guard": "Royal Guard",
+          "guard": "Straż Królewska",
           "chibi_mask": "Chibi Mask",
-          "krill": "Dark Dragon",
+          "krill": "Smok Ciemności",
           "rico": "Cackling Cannoneer",
-          "arcadaoffun": "Wandering Carnival",
+          "arcadaoffun": "Podróżujący Karnawał",
           "fortunedrum": "Fortune Drum",
           "spirit": "Ascended Ancestor Spirit",
-          "danielle": "Sky Kid — Danielle",
-          "redcrab": "Red Crab",
-          "crabspy": "Spy Crab",
-          "darkstorm": "Darkness Storm",
+          "danielle": "Dzieciuch — Danielle",
+          "redcrab": "Czerwony Krab",
+          "crabspy": "KraboSzpieg",
+          "darkstorm": "Sztorm Ciemności",
           "darkness_storm_leader": "Król Edenu",
           "ranger": "Reassuring Ranger",
           "tgc20": "20 Lat ThatGameComapny",
           "elder_wasteland": "Elder of the Wasteland",
-          "colorguide": "Days Of Color Guide",
+          "colorguide": "Days of Color Guide",
           "colorcollab": "Trevor Project",
           "aviary_medic": "Aviarskie Wsparcie Emocjonalne",
           "vault_elder_s2e": "Elder of the Vault — Two Embers",
           "fisstech": "Fisstech",
           "sigi_reuven": "Sigi Reuven",
           "king_of_beggers": "King of Begger",
-          "natureguide": "Days Of Nature Guide",
+          "natureguide": "Days of Nature Guide",
           "naturecollab": "The Ocean Cleanup",
           "skyfest": "Sky Anniversary",
           "magister": "Magister",
@@ -2178,9 +2349,9 @@
           "custom!traveling_spirit": "Podróżująca Dusza",
           "custom!dearvangogh": "Dear Van Gogh",
           "custom!sky_vincent": "Vincent Van Gogh",
-          "custom!vincent_painting_power": "Vincent Van Gogh: Painting",
-          "custom!sky_vincent_guys": "Dear Van Gogh — Seasonal Spirits",
-          "custom!sky_vincent_medic": "Dear Van Gogh — Seasonal Hearth",
+          "custom!vincent_painting_power": "Vincent Van Gogh: Obraz",
+          "custom!sky_vincent_guys": "Dear Van Gogh — Sezonowe Dusze",
+          "custom!sky_vincent_medic": "Dear Van Gogh — Sezonowe Serce",
           "hym": "Him",
           "custom!m_moonlight": "Światło Księżyca",
           "custom!s_moonlight": "Księżyc nad Nowigradem",
@@ -2454,6 +2625,7 @@
           "toolow": "Nie masz wystarczającej energi aby użyć tej zdolności (%x/%y)",
           "toolow_shield": "Masz %x/%y ładunków tarczy",
           "ophas": "przeciwnik ma %x/%y",
+          "click": "Kliknij licznik aby użyć zdolności lidera!",
           "mehas": "Ty masz %x/%y",
           "d20": {
             "critfail": {
@@ -2526,14 +2698,14 @@
         },
         "card_info": {
           "strings": {
-            "": "**{name}**\nKarta Specjalna",
-            "leader": "**{name}**\n{faction}Karta Dowódcy",
+            "": "{class_prefix}**{name}**{class_suffix}\nKarta Specjalna",
+            "leader": "**{class_prefix}{name}{class_suffix}**\n{faction}Karta Dowódcy",
             "weather": "**{name}**\nKarta Pogody",
-            "siege": "**{name}**\n{faction}Karta {unit} {class} Oblężnicza",
-            "ranged": "**{name}**\n{faction}Karta {unit} {class} Dalekiego Zasięgu",
-            "close": "**{name}**\n{faction}Karta {unit} {class} Bliskiego Starcia",
-            "agile": "**{name}**\n{faction}Karta {unit} {class} Zwinnego Starcia",
-            "all": "**{name}**\n{faction}Karta {unit} {class} Zwinnego Starcia"
+            "siege": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Oblężniczej",
+            "ranged": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Dalekiego Zasięgu",
+            "close": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Bliskiego Starcia",
+            "agile": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Zwinnego Starcia",
+            "all": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Zwinnego Starcia"
           },
           "unit": "Jednostki",
           "hero": "Bohatera",
@@ -2571,7 +2743,15 @@
             "sky_guide_e": "Przewodnika Wydarzeń",
             "sky_guide_s": "Przewodnika Sezonowego",
             "sky_skykid": "Dzieciucha",
-            "sky_item": "Przedmiotu"
+            "sky_item": "Przedmiotu",
+            "medic": "Medyka",
+            "medic_she": "Medyczki",
+            "healer": "Znachora",
+            "healer_she": "Znachorki",
+            "sabotage": "Sabotażysty",
+            "assasin": "Zabójcy",
+            "sabotage_she": "Sabotażystki",
+            "roach": "Płotki"
           }
         }
       }

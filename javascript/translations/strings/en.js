@@ -654,14 +654,14 @@ STRNG["en"] = {
     ranger: "Reassuring Ranger",
     tgc20: "20 Years Of ThatGameComapny",
     elder_wasteland: "Elder of the Wasteland",
-    colorguide: "Days Of Color Guide",
+    colorguide: "Days of Color Guide",
     colorcollab: "Trevor Project",
     aviary_medic: "Aviary Village Emotional Support",
     vault_elder_s2e: "Elder of the Vault — Two Embers",
     fisstech: "Fisstech",
     sigi_reuven: "Sigi Reuven",
     king_of_beggers: "King of Begger",
-    natureguide: "Days Of Nature Guide",
+    natureguide: "Days of Nature Guide",
     naturecollab: "The Ocean Cleanup",
     skyfest: "Sky Anniversary",
     magister: "Magister",
@@ -976,6 +976,7 @@ STRNG["en"] = {
     "toolow": "You dont have enought energy to activate ability (%x/%y)",
     "toolow_shield": "You have %x/%y of shield charges",
     "ophas": "Opponent have %x/%y",
+    "click": "Click counter to use leader ability!",
   "mehas": "You have %x/%y",
   "d20": {
     "critfail": {
@@ -1068,14 +1069,14 @@ discord: {
 }, 
 card_info: {
   strings: {
-    "": "**{name}**\nSpecial Card",
-    "leader": "**{name}**\n{faction}; Leader Card",
+    "": "{class_prefix}**{name}**{class_suffix}\nSpecial Card",
+    "leader": "**{class_prefix}{name}{class_suffix}**\n{faction}; Leader Card",
     "weather": "**{name}**\nWeather Card",
-    "siege": "**{name}**\n{faction}; {class} {unit} Siege Card",
-    "ranged": "**{name}**\n{faction}; {class} {unit} Ranged Card",
-    "close": "**{name}**\n{faction}; {class} {unit} Melee Card",
-    "agile": "**{name}**\n{faction}; {class} Agile {unit} Card",
-    "all": "**{name}**\n{faction}; {class} Very Agile {unit} Card"
+    "siege": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Siege Card",
+    "ranged": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Ranged Card",
+    "close": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Melee Card",
+    "agile": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} Agile {unit} Card",
+    "all": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} Very Agile {unit} Card"
   },
   unit: "Unit",
   hero: "Hero",
@@ -1113,7 +1114,15 @@ card_info: {
   sky_guide_e: "Event Guide",
   sky_guide_s: "Seasonal Guide",
   sky_skykid: "Sky Kid",
-  sky_item: "Item"
+  sky_item: "Item",
+  medic: "Medic",
+  medic_she: "Nurse",
+  healer: "Healer",
+  healer_she: "Healer",
+  sabotage: "Saboteur",
+  assasin: "Assasin",
+  sabotage_she: "Saboteur",
+  roach: "Roach"
 }
 }
 };

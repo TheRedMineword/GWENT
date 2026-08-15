@@ -1993,10 +1993,16 @@ function card_name_info(card, overflow = 65) {
     faction = getTranslation("card_info.factionNone");
   }
   try {
+    const { prefix, suffix } =
+      classDecorators[
+        card?.filename ? card_name_class[card.filename] : "none"
+      ] ?? classDecorators.none;
     var a = strings[card.row]
       .replace("{name}", card.name)
       .replace("{faction}", faction)
       .replace("{unit}", unit)
+      .replace("{class_suffix}", suffix)
+      .replace("{class_prefix}", prefix)
       .replace(
         "{class}",
         getTranslation(
@@ -2006,12 +2012,16 @@ function card_name_info(card, overflow = 65) {
     if (a.split("\n")[1].length > overflow) {
       a = a.replace("\n", "\n-# ");
     }
+    if (a.split("\n")[0].length > overflow - 8) {
+      a = `-# ${a}`;
+    }
     console.log(
       "card_name_info",
       a,
       a.split("\n")[1].length,
       overflow,
       a.split("\n")[1].length > overflow,
+      { prefix, suffix },
     );
     return a;
   } catch (e) {

@@ -159,7 +159,7 @@ function ability_update(side, gain = false) {
       tocar("tf2/meter", false);
 
       showSideTooltip(
-        `${getTranslation("ability_counter.manup").replace("%x", ability.current).replace("%y", ability.max)} \nClick counter to use leader ability!`,
+        `${getTranslation("ability_counter.manup").replace("%x", ability.current).replace("%y", ability.max)} \n${getTranslation("ability_counter.click")}`,
       );
     } else {
       showSideTooltip(
