@@ -2512,7 +2512,8 @@ var ability_dict = {
           card.deck !== "weather" &&
           card.filename !== "thedevil" &&
           !card.isSide &&
-          !card.isDecoy,
+          !card.isDecoy &&
+          !card.isScorch,
       );
 
       if (!preview || preview.length === 0) {
