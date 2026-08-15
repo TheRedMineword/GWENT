@@ -27,6 +27,7 @@ Patch Notes:
 ? Bond decay not apply in row under weather effect! (Even if weather shield is apply in that row)
   Morale boost and commander horn should not affect bond!
 ? Added delay for sync at "END TURN SHARE CARDS" in bucket.js (only for player who starts turn!)
+--- Card name info have also now for units and hero cards class names like, soldier, witcher, magic...
 + Added Striga moster card!
 <fat2>
 %%img src="img/lg/monsters_striga.jpg" style="max-width:25%"%% 
