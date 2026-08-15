@@ -12,7 +12,7 @@ function init_bucket() {
       row: "leader",
       strength: "",
       ability: "eredin_commander",
-      filename: "eredin_bronze",
+      filename: "eredin_rider",
       count: "1",
       name_muster: "Eredin - Commander of the Red Riders",
       name_english: "Eredin — Commander of the Red Riders",
