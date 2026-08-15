@@ -747,7 +747,7 @@ STRNG["pl"] = {
     darkness_storm_leader: "Król Edenu",
     ranger: "Reassuring Ranger",
     tgc20: "20 Lat ThatGameComapny",
-    elder_wasteland: "Elder of Wasteland",
+    elder_wasteland: "Elder of the Wasteland",
     colorguide: "Days Of Color Guide",
     colorcollab: "Trevor Project",
     aviary_medic: "Aviarskie Wsparcie Emocjonalne",

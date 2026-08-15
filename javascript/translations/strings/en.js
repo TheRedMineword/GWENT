@@ -653,7 +653,7 @@ STRNG["en"] = {
     darkness_storm_leader: "Eden King",
     ranger: "Reassuring Ranger",
     tgc20: "20 Years Of ThatGameComapny",
-    elder_wasteland: "Elder of Wasteland",
+    elder_wasteland: "Elder of the Wasteland",
     colorguide: "Days Of Color Guide",
     colorcollab: "Trevor Project",
     aviary_medic: "Aviary Village Emotional Support",
