@@ -2,7 +2,7 @@ STRNG["pl"] = {
     "TRANSLATED_BY": "DrMineword, Lambert, GamerMateusz",
     "_info": {
       "id": "Polski",
-      "translated": false, "msg": "Język Polski nie został jescze w pełni przetlumaczony!\n\nProsimy o cierpliwość\nNasi tłumacze: \"%s\"", tit: "Spolszczanie w trakcie!"
+      "translated": false, "msg": "Język Polski nie został jeszcze w pełni przetłumaczony!\n\nProsimy o cierpliwość\nNasi tłumacze: \"%s\"", tit: "Spolszczanie w trakcie!"
     },
   ability: {
     leader: "Zdolność Dowódcy",
