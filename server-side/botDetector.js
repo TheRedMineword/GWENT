@@ -2,7 +2,8 @@ const { UAParser } = require("ua-parser-js");
 const { isbot } = require("isbot");
 
 const HOSTING = [
-    "amazon","aws",
+    "amazon",
+    //"aws",
     "google","gcp",
     "azure","microsoft",
     "oracle","oci",
