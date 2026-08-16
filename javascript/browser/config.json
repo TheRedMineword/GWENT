@@ -2,12 +2,12 @@
     "allowedVerdicts": [
         "human"
     ],
-    "maxScore": 27,
-    "minConfidence": 78,
+    "maxScore": 41,
+    "minConfidence": 60,
     "allowVPN": true,
-    "allowHosting": false,
+    "allowHosting": true,
     "maxNetworkRisk": 30,
-    "allowWebDriver": false,
+    "allowWebDriver": true,
     "requireCanvas": true,
     "requireAudio": true,
     "requireWebGL": true,
