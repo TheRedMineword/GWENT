@@ -66,6 +66,18 @@ mountedRouter = router;
 
 let auth_needed = true;
 
+const blockedRelayTypes = new Set([
+  "new_css",
+  "new_visual",
+  "show_patchnotes",
+  "server_notif",
+  "NewPlayTheme",
+  "authRequired",
+  "discordinventory",
+  "discordintegration",
+  "welcome",
+]);
+
 const ADMIN_ENDPOINT_LOGIN = process.env.ADMIN_ENDPOINT_LOGIN;
 
 let sessions = {};
@@ -1601,6 +1613,9 @@ const connectionHandler = async (ws, req) => {
     }
 
     // Relay messages to the other player in the same session
+    if (blockedRelayTypes.has(data.type)) {
+  return;
+}
     if (ws.sessionId) {
       const sessionPlayers = sessions[ws.sessionId]?.players || [];
       sessionPlayers.forEach((player) => {
