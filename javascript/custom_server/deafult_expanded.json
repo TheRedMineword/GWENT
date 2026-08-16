@@ -1967,10 +1967,10 @@
           },
           "clear": {
             "name": "Czyste Niebo",
-            "description": "Usuwa wszystkie efekty kart Pogody (Siarczysty Mróz, Gęsta Mgła i Ulewny Deszcz). "
+            "description": "Usuwa wszystkie efekty kart Pogody (Trzaskający Mróz, Gęsta Mgła i Ulewny Deszcz). "
           },
           "frost": {
-            "name": "Siarczysty Mróz",
+            "name": "Trzaskający Mróz",
             "description": "Ustawia siłę wszystkich kart Walczących Wręcz na 1 dla obu graczy. "
           },
           "fog": {
@@ -2155,7 +2155,7 @@
             "description": "Zagraj kartę Gęsta Mgła ze swojej talii. Jeśli jej nie znajdziesz, nadal zużywasz ładunek przywódcy. Pozwala pomijać tury, ale przeciwnik ma 50% szansy podczas każdego pominięcia na skopiowanie niebohaterskiej karty z planszy. Potrzebujesz 1 ładunku, aby pominąć turę. Otrzymujesz 0,2 ładunku za każdą swoją turę, maksymalnie 1 przechowywany ładunek."
           },
           "foltest_lord": {
-            "description": "Usuwa wszystkie efekty Pogody (wynikające z kart Siarczysty Mróz, Ulewny Deszcz i Gęsta Mgła) znajdujące się w grze."
+            "description": "Usuwa wszystkie efekty Pogody (wynikające z kart Trzaskający Mróz, Ulewny Deszcz i Gęsta Mgła) znajdujące się w grze."
           },
           "foltest_siegemaster": {
             "description": "Podwaja siłę wszystkich twoich jednostek Oblężniczych (chyba że w tym rzędzie znajduje się również Róg Dowódcy)."
@@ -2228,7 +2228,7 @@
             "description": "Dobierz dodatkową kartę na początku bitwy."
           },
           "francesca_pureblood": {
-            "description": "Wybierz kartę Siarczysty Mróz ze swojej talii i natychmiast ją zagraj."
+            "description": "Wybierz kartę Trzaskający Mróz ze swojej talii i natychmiast ją zagraj."
           },
           "francesca_hope": {
             "description": "Przenosi jednostki Zwinne do rzędu, w którym osiągną największą siłę (nie przenosi jednostek znajdujących się już w optymalnym rzędzie)."
@@ -2314,7 +2314,7 @@
           "mysterious_elf": "Tajemniczy Elf",
           "decoy": "Manekin do Ćwiczeń",
           "custom!Decoy2": "Bożątko",
-          "frost": "Siarczysty Mróz",
+          "frost": "Trzaskający Mróz",
           "ciri": "Cirilla Fiona Elen Riannon",
           "clear": "Czyste Niebo",
           "horn": "Róg Dowódcy",

@@ -13,11 +13,11 @@ STRNG["pl"] = {
   clear: {
     name: "Czyste Niebo",
     description:
-      "Usuwa wszystkie efekty kart Pogody (Siarczysty Mróz, Gęsta Mgła i Ulewny Deszcz). "
+      "Usuwa wszystkie efekty kart Pogody (Trzaskający Mróz, Gęsta Mgła i Ulewny Deszcz). "
   },
 
   frost: {
-    name: "Siarczysty Mróz",
+    name: "Trzaskający Mróz",
     description:
       "Ustawia siłę wszystkich kart Walczących Wręcz na 1 dla obu graczy. "
   },
@@ -291,7 +291,7 @@ STRNG["pl"] = {
 
   foltest_lord: {
     description:
-      "Usuwa wszystkie efekty Pogody (wynikające z kart Siarczysty Mróz, Ulewny Deszcz i Gęsta Mgła) znajdujące się w grze."
+      "Usuwa wszystkie efekty Pogody (wynikające z kart Trzaskający Mróz, Ulewny Deszcz i Gęsta Mgła) znajdujące się w grze."
   },
 
   foltest_siegemaster: {
@@ -411,7 +411,7 @@ STRNG["pl"] = {
 
   francesca_pureblood: {
     description:
-      "Wybierz kartę Siarczysty Mróz ze swojej talii i natychmiast ją zagraj."
+      "Wybierz kartę Trzaskający Mróz ze swojej talii i natychmiast ją zagraj."
   },
 
   francesca_hope: {
@@ -525,7 +525,7 @@ STRNG["pl"] = {
   mysterious_elf: "Tajemniczy Elf",
   decoy: "Manekin do Ćwiczeń",
   "custom!Decoy2": "Bożątko",
-  frost: "Siarczysty Mróz",
+  frost: "Trzaskający Mróz",
   ciri: "Cirilla Fiona Elen Riannon",
   clear: "Czyste Niebo",
   horn: "Róg Dowódcy",
