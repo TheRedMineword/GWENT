@@ -978,7 +978,6 @@ STRNG["en"] = {
     "ophas": "Opponent have %x/%y",
     "mehas": "You have %x/%y",
     "click": "Click counter to use leader ability!",
-  "mehas": "You have %x/%y",
   "d20": {
     "critfail": {
       "me": "You rolled \"1\"\nOpponent draw an additional card!",

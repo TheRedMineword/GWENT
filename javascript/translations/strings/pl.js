@@ -1072,7 +1072,6 @@ STRNG["pl"] = {
     "ophas": "Przeciwnik ma %x/%y",
     "mehas": "Ty masz %x/%y",
     "click": "Kliknij licznik aby użyć zdolności lidera!",
-  "mehas": "Ty masz %x/%y",
   "d20": {
     "critfail": {
       "me": "Krytyczna porażka, wyrzucono \"1\"\nPrzeciwnik dobiera dodatkową kartę!",
