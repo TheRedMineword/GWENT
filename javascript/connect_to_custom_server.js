@@ -249,43 +249,63 @@ async function showThirdPartyWarning(url) {
     const overlay = document.createElement("div");
     overlay.className = "tp-overlay";
 
-    overlay.innerHTML = `
-  <div class="tp-modal">
-    <h3>⚠ Third-party Texture Pack</h3>
+    const modal = document.createElement("div");
+    modal.className = "tp-modal";
 
-    <p>
-      You are about to load a texture pack from:
-    </p>
+    const title = document.createElement("h3");
+    title.textContent = "⚠ Third-party Texture Pack";
 
-    <p>
-      <b>${url.length > 75 ? `${url.slice(0, 75)}....` : url}</b>
-    </p>
+    const description = document.createElement("p");
+    description.textContent = "You are about to load a texture pack from:";
 
-    <p>
-      We are not responsible for its content or safety.
-    </p>
+    const urlContainer = document.createElement("p");
+    const urlText = document.createElement("b");
 
-    <button class="tp-accept">Accept</button>
-    <button class="tp-cancel">Cancel</button>
-  </div>
-`;
+    // URL is untrusted: textContent prevents HTML/script interpretation.
+    const displayUrl =
+      typeof url === "string"
+        ? url.length > 75
+          ? `${url.slice(0, 75)}....`
+          : url
+        : "";
 
+    urlText.textContent = displayUrl;
+    urlContainer.appendChild(urlText);
+
+    const warning = document.createElement("p");
+    warning.textContent = "We are not responsible for its content or safety.";
+
+    const accept = document.createElement("button");
+    accept.className = "tp-accept";
+    accept.textContent = "Accept";
+
+    const cancel = document.createElement("button");
+    cancel.className = "tp-cancel";
+    cancel.textContent = "Cancel";
+
+    modal.append(title, description, urlContainer, warning, accept, cancel);
+
+    overlay.appendChild(modal);
     document.body.appendChild(overlay);
 
     const cleanup = () => overlay.remove();
 
-    overlay.querySelector(".tp-cancel").onclick = () => {
+    cancel.onclick = () => {
       cleanup();
       resolve(false);
     };
 
-    overlay.querySelector(".tp-accept").onclick = async () => {
+    accept.onclick = async () => {
       cleanup();
 
       try {
         const res = await fetch(url);
-        const blob = await res.blob();
 
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const blob = await res.blob();
         const zip = await JSZip.loadAsync(blob);
 
         if (!zip.file("data.meta")) {
@@ -319,6 +339,7 @@ async function showThirdPartyWarning(url) {
           assets: resolvedAssets,
           path: blob,
         };
+
         refreshFactionVisuals();
         refreshAllCards();
         resolve(true);
@@ -595,7 +616,10 @@ async function connect_to_custom_server(URL) {
     // APPLY ENV VARS
     // ===========================
     updateLoader("Parsing bit more...", 68);
-    if (data?.texture_pack_url || null !== null) {
+    if (
+      typeof data?.texture_pack_url === "string" &&
+      data.texture_pack_url.trim() !== ""
+    ) {
       updateLoader("Loading texture pack", 70);
       await showThirdPartyWarning(data.texture_pack_url);
     }
