@@ -305,15 +305,15 @@ document
     } else if (ability_data.me.type === "scorchstopper") {
       showSideTooltip(
         getTranslation("ability_counter.toolow_shield")
-          .replace("%x", ability_data.me.ability.current)
-          .replace("%y", ability_data.me.ability.max),
+          .replace("%x", ability_data.me.current)
+          .replace("%y", ability_data.me.max),
       );
     } else if (ability_data.me.type === "d20cloner") {
       if (ability_data.me.current < d20cloner.actiavate) {
         showSideTooltip(
           getTranslation("ability_counter.toolow")
-            .replace("%x", ability_data.me.ability.current)
-            .replace("%y", ability_data.me.ability.max),
+            .replace("%x", ability_data.me.current)
+            .replace("%y", ability_data.me.max),
         );
       } else {
         await ui.popup(
@@ -372,6 +372,7 @@ function getTurnSkiperCandidates() {
 async function ability_turn_skiper() {
   //   alert("test");
   if (ability_remove("me", turn_skipper_conf.actiavate)) {
+    var now = Date.now();
     console.log("[TURN_SKIPER] Ability started");
 
     const coin_toss = Math.random() < 0.5;
@@ -438,19 +439,7 @@ async function ability_turn_skiper() {
 
     console.log("[TURN_SKIPER] Ending my turn");
 
-    if (player_op.passed && !player_me.passed) {
-      ui.enablePlayer(false);
-      showTooltip(
-        getUiStrng("sync.sync").replace("%s", RegisterMovesHold / 1000),
-      );
-      ui.enablePlayer(false);
-      // showsyn(RegisterMovesHold);
-      showsync(RegisterMovesHold);
-      await sleep(RegisterMovesHold);
-      showTooltip(`You can play now again`);
-      ui.enablePlayer(true);
-      //         player_me.endTurn();
-    }
+    await resolve_pass_post_extrajson(Date.now() - now);
     player_me.endTurn();
   } else {
     ability_turn_skipper_no();
@@ -505,7 +494,7 @@ async function ability_turn_skipper_no() {
   await sleep(600);
   ui.enablePlayer(true);
   showSideTooltip(
-    getTranslation("ability_counter.ophas")
+    getTranslation("ability_counter.mehas")
       .replace("%x", ability_data.me.current)
       .replace("%y", ability_data.me.max),
   );
@@ -796,6 +785,7 @@ async function ability_counter_d20__me() {
     ability_turn_skipper_no();
     return false;
   }
+  var now = Date.now();
   tocar("ability_use_from_counter", false);
   let roll = Math.floor(Math.random() * 20) + 1;
   // debug
@@ -847,18 +837,7 @@ async function ability_counter_d20__me() {
   );
   payload.hand.after = serializeCards(player_me.hand.cards);
   await comp_and_send(socket, JSON.stringify(payload));
-  if (player_op.passed && !player_me.passed) {
-    ui.enablePlayer(false);
-    showTooltip(
-      getUiStrng("sync.sync").replace("%s", (RegisterMovesHold * 1.3) / 1000),
-    );
-    ui.enablePlayer(false);
-    showsync(RegisterMovesHold * 1.3);
-    await sleep(RegisterMovesHold * 1.3);
-    showTooltip(`You can play now again`);
-    ui.enablePlayer(true);
-    //         player_me.endTurn();
-  }
+  await resolve_pass_post_extrajson(Date.now() - now);
   player_me.endTurn();
 }
 

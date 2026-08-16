@@ -1980,33 +1980,121 @@ function card_name_info(card, overflow = 65) {
   if ((card?.faction ?? "N/A") === "faction") {
     return false;
   }
-  var strings = getTranslation("card_info.strings");
-  var unit = getTranslation("card_info.unit");
-  if (card.hero) {
-    unit = getTranslation("card_info.hero");
-  }
-  var faction = getTranslation("card_info.factionIs").replace(
-    "%s",
-    getTranslation(`factions.${card.faction}.name`),
-  );
-  if (card.faction === "neutral") {
-    faction = getTranslation("card_info.factionNone");
-  }
+  //  var strings = getTranslation("card_info.strings");
   try {
+    var gender = "male";
+    var aa = card?.filename ? card_name_class[card.filename] : "none_";
+    if (!aa) {
+      aa = "none_";
+    }
+    var r63hit = false;
+    card.heroo = card.hero;
+    getTranslation("card_info.rule63").forEach((element) => {
+      try {
+        console.log(
+          "card_name_rule63",
+          element,
+          aa.replace("%g", gender),
+          aa,
+          element.if === aa.split("_")[0],
+          card.hero == element.hero,
+          element.if === aa.replace("%g", card_gender[card.filename]),
+          card.hero == element.hero,
+        );
+        if (element.mode === "split") {
+          if (element.if === aa.split("_")[0] && card.hero == element.hero) {
+            gender = element.gender;
+            r63hit = true;
+          }
+        } else if (element.mode !== "filename") {
+          if (
+            element.if === aa.replace("%g", card_gender[card.filename]) &&
+            card.hero == element.hero
+          ) {
+            gender = element.gender;
+            r63hit = true;
+            if ((element?.extra2 ?? false) === true) {
+              switch (element?.extra) {
+                case "bad_lady":
+                  console.log(
+                    "BAD LADY POLISH OVERWRITE?",
+                    card.filename,
+                    element,
+                  );
+                  if (card.filename === element?.extra) {
+                    card.heroo = false;
+                  }
+                  break;
+              }
+            }
+          }
+        } else {
+          if (card.filename === element.if) {
+            gender = element.gender;
+            r63hit = true;
+          }
+        }
+      } catch (e) {}
+    });
+    console.log("card_name_rule63", r63hit);
     const { prefix, suffix } =
-      classDecorators[
-        card?.filename ? card_name_class[card.filename] : "none"
-      ] ?? classDecorators.none;
-    var a = strings[card.row]
+      classDecorators[aa.split("_")[0]] ?? classDecorators.none;
+    var b = card.row;
+    if (b === "NaR") {
+      b = "all";
+    }
+    if (
+      b === "close" ||
+      b === "ranged" ||
+      b === "siege" ||
+      b === "agile" ||
+      b === "all"
+    ) {
+      var c = card_gender[card.filename];
+      if (r63hit) {
+        c = gender;
+      } else {
+        if (!c) {
+          c = card_gender.undefined;
+        }
+      }
+      b = `${b}_isHero:${card.heroo}_${c}`;
+    }
+    if (card_gender[card.filename] === "female") {
+      gender = "female";
+    }
+    var unit = getTranslation(`card_info.unit_${gender}`);
+    if (card.hero) {
+      unit = getTranslation(`card_info.hero_${gender}`);
+    }
+    var faction = getTranslation("card_info.factionIs").replace(
+      "%s",
+      getTranslation(`factions.${card.faction}.name`),
+    );
+    if (card.faction === "neutral") {
+      faction = getTranslation("card_info.factionNone");
+    }
+    console.log(
+      "card_name_info",
+      b,
+      card.filename,
+      gender,
+      `card_info.classes.${(aa ?? "undefined").replace("%g", gender)}`,
+    );
+    var a = getTranslation(`card_info.strings.${b}`)
       .replace("{name}", card.name)
       .replace("{faction}", faction)
       .replace("{unit}", unit)
       .replace("{class_suffix}", suffix)
       .replace("{class_prefix}", prefix)
       .replace(
+        "{leader_but_gender}",
+        getTranslation(`card_info.leader_${gender}`),
+      )
+      .replace(
         "{class}",
         getTranslation(
-          `card_info.classes.${card?.filename ? card_name_class[card.filename] : "none"}`,
+          `card_info.classes.${(aa ?? "undefined").replace("%g", gender)}`,
         ),
       );
     if (a.split("\n")[1].length > overflow) {
@@ -2025,6 +2113,7 @@ function card_name_info(card, overflow = 65) {
     );
     return a;
   } catch (e) {
+    console.error("card_name_info", e);
     return false;
   }
 }
@@ -2065,7 +2154,7 @@ const GwentOverlay = (() => {
         left: 0;
         width: 100vw;
         height: calc(100vw * 1080 / 1920);
-        z-index: 1000000;
+        z-index: 1899;
         pointer-events: none;
         overflow: hidden; 
       }
