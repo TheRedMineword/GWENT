@@ -1347,7 +1347,9 @@ socket.onmessage = async (event) => {
         );
       }
       console.log("[OPHAND]", "OP", "PLAY", card, cards_to_find, data);
-
+      if (data.doppler?.a ?? false) {
+        it_is_me_an_doppler = data.doppler.b;
+      }
       if (!data.target_fake.a) {
         const splitRowName = data.row.split("-");
         let row;
@@ -5720,10 +5722,12 @@ class UI {
           row: nomeColuna,
           target: targetCard,
           target_fake: pickedfakecard,
+          doppler: it_is_me_an_doppler,
           isMeHand: handData,
           HandMePost: handData_after,
         }),
       );
+      it_is_me_an_doppler = null;
       pickedfakecard = { a: false, b: null };
       await resolve_extrajson_procces();
       await resolve_pass_post_extrajson(Date.now() - now);
@@ -5782,11 +5786,13 @@ class UI {
         card: playedCard,
         row: nomeColuna,
         target_fake: pickedfakecard,
+        doppler: it_is_me_an_doppler,
         isMeHand: handData,
         HandMePost: handData_after,
       }),
     );
     pickedfakecard = { a: false, b: null };
+    it_is_me_an_doppler = null;
     await resolve_extrajson_procces();
     await resolve_pass_post_extrajson(Date.now() - now);
     now = 0;

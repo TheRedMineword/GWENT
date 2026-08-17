@@ -1015,6 +1015,10 @@ var ability_dict = {
         // ====================================
 
         let picked = shuffled[0];
+        if (it_is_me_an_doppler?.a ?? false) {
+          picked = it_is_me_an_doppler.b;
+        }
+        it_is_me_an_doppler = { a: true, b: picked };
 
         console.log("[DOPLER] Picked:", picked);
         console.log("[DOPLER] Picked:", picked.name);
@@ -1062,6 +1066,9 @@ var ability_dict = {
         await board.addCardToRow(spawned, picked.row, card.holder.opponent());
 
         await spawned.animate("dopavenger");
+        if (card.holder.ThatPlayerId !== player_me.ThatPlayerId) {
+          it_is_me_an_doppler = null;
+        }
       } catch (e) {
         console.log("[DOPLER ERROR]", e);
       }

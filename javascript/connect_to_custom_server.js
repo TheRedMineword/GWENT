@@ -3,6 +3,7 @@ let IsNowCustom = false;
 // CONFIG
 // ===============================
 const IGNORE_PATTERNS = [
+  "it_is_me_an_doppler",
   "discord_cards",
   "discord_cards_array",
   "resync_contnet",

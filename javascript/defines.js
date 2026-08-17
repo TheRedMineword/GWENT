@@ -21,6 +21,7 @@ let showbankms = 9000;
 let gameended = false;
 let syndicate_spawn_start_card_id = "4001";
 let syndicate_spawn_start_card_row = "close";
+let it_is_me_an_doppler = null;
 const passmedicpercard = 1500;
 const medicdrawextrasecondswait = 2.2; // extraJson hold // no longer used
 const medic_ability_revive_wait_a_second = 1.7 * 1000;
