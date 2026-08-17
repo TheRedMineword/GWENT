@@ -179,19 +179,6 @@ var factions = {
   },
   syndicate: {
     name: "Syndicate",
-    factionAbility: (player) =>
-      game.gameStart.push(async () => {
-        try {
-          let card2 = Object.values(card_dict).find((c) => c.id === "4001");
-          let card = new Card(card2, player);
-          console.log("4001", card2, card, player, board);
-          try {
-            await board.addCardToRow(card, "close", player);
-          } catch (e) {
-            console.log("Drugs error", e);
-          }
-        } catch (e) {}
-      }),
     description: `Starts the game with the morale card on the board. \nCan create deck from ${Object.values(
       syndicate_faction_clone,
     )

@@ -1674,10 +1674,11 @@ class Player {
       name = getTranslation("ui.elem.definesJS.players.me");
     }
     let debug = null;
+    console.log("constructior player", id, name, deck);
     if (name === "BoardBot") {
       this.ThatPlayerId = "SystemId";
       debug = "THAT_IS_OP__RETURN_THIS";
-    } else if (name === players.me) {
+    } else if (id === 0) {
       this.ThatPlayerId = playerId;
       debug = "ME";
     } else {
@@ -3306,9 +3307,9 @@ class Board {
   // Returns the CardCard associated with the row name that the card would be sent to
   getRow(card, row_name, player) {
     player = player ? player : card ? card.holder : player_me;
-    let isMe = player.ThatPlayerId === player_me.ThatPlayerId;
+    let isMe = player === player_me;
     let isSpy = card.abilities.some((ability) => ThatIsSpy.includes(ability));
-    // console.log(card, "isSpy?", isSpy, "isMe?", isMe)
+    // console.log(card, "isSpy?", isSpy, "isMe?", isMe, player, player_me);
     switch (row_name) {
       case "weather":
         return weather;
@@ -3546,6 +3547,46 @@ class Game {
     reload_bucket_visual();
     // End of white falme
     // Cleared i hope
+    if (player_me.deck.faction === "syndicate") {
+      try {
+        console.log(
+          "Drugs spawn",
+          player_me.deck.faction,
+          player_me,
+          game,
+          await board.addCardToRow(
+            new Card(
+              Object.values(card_dict).find((c) => c.id === "4001"),
+              player_me,
+            ),
+            "close",
+            player_me,
+          ),
+        );
+      } catch (e) {
+        console.error("drugs crashed", e);
+      }
+    }
+    if (player_op.deck.faction === "syndicate") {
+      try {
+        console.log(
+          "Drugs spawn",
+          player_op.deck.faction,
+          player_op,
+          game,
+          await board.addCardToRow(
+            new Card(
+              Object.values(card_dict).find((c) => c.id === "4001"),
+              player_op,
+            ),
+            "close",
+            player_op,
+          ),
+        );
+      } catch (e) {
+        console.error("drugs crashed", e);
+      }
+    }
     await sleep(20);
     ui.youtubePlay(
       audio_yt_vid_soundtrack,
