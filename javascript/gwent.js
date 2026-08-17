@@ -3925,6 +3925,11 @@ class Game {
         r.updateScore();
       }
     });
+    board.row.forEach((r) => {
+      if (r.cards.some((card) => card.abilities?.includes("tgc_portal"))) {
+        r.updateScore();
+      }
+    });
     turncount = turncount + 1;
     console.log(
       `TURN ENDED: Turn ${turncount - 1}\nNext turn will be: ${turncount}`,
