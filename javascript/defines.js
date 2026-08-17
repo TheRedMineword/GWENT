@@ -218,6 +218,28 @@ let gryffinschool_conf = {
   anim_hand: "griffin_hand",
   topic: "Choose a Witcher Sign",
 };
+let viperSchool_conf = {
+  anim: "griffin",
+  anim_hand: "griffin_hand",
+  topic: "Choose a Witcher Sign",
+};
+let viper_potions_defs = {
+  potion_jaskolka: {
+    id: "spypotion",
+    affects: {
+      me: true,
+      op: true,
+    },
+    json: {
+      translation_key: "potions.spypotion",
+      turns_left: 5,
+      refresh_rows: {
+        type: "none",
+        value: null,
+      },
+    },
+  },
+};
 let mtg_conf = {
   anim: "mtg",
   anim_hand: "mtg_hand",
@@ -736,6 +758,8 @@ let card_name_class = {
   bluebird_b: "warrior_%g",
   bluebird_sad: "sky_spirit_%g",
   striga: "monster_%g",
+  viperwitcher: "witcher_%g",
+  potion_jaskolka: "potion_%g",
 };
 let classDecorators = {
   undefined: { prefix: "⩫<", suffix: ">⩫" },
@@ -778,6 +802,7 @@ let classDecorators = {
   sabotage: { prefix: "⚠ ", suffix: "" },
   assasin: { prefix: "† ", suffix: "" },
   roach: { prefix: "‹", suffix: "›" },
+  potion: { prefix: "🧪 ", suffix: "" },
 };
 let card_gender = {
   mysterious_elf: "male",
@@ -1005,6 +1030,7 @@ let ThisDef = {
       anim: deepClone(gryffinschool_conf.anim),
       anim_hand: deepClone(gryffinschool_conf.anim_hand),
     },
+    viperSchool_conf: deepClone(viperSchool_conf),
 
     mtg_conf: {
       anim: deepClone(mtg_conf.anim),
@@ -1037,6 +1063,7 @@ let ThisDef = {
     card_name_class: deepClone(card_name_class),
     classDecorators: deepClone(classDecorators),
     card_gender: deepClone(card_gender),
+    viper_potions_defs: deepClone(viper_potions_defs),
   },
 };
 

@@ -3982,6 +3982,7 @@ class Game {
       this.endRound();
     } else {
       if (this.currPlayer.tag === "me") {
+        await endOfTurn(player_me.ThatPlayerId);
         // Gain power to abilities
         if (ability_data.me.enabled) {
           try {
@@ -3989,6 +3990,7 @@ class Game {
           } catch (e) {}
         }
       } else {
+        await endOfTurn(player_op.ThatPlayerId);
         if (ability_data.op.enabled) {
           try {
             ability_add("op", ability_data.op.add);
@@ -7490,6 +7492,9 @@ function iconURL(name, ext = "png") {
   return imgURL("icons/" + name, ext);
 }
 function largeURL(name, ext = "jpg") {
+  if (name.toLowerCase().includes("potion")) {
+    ext = "png";
+  }
   var a = "";
   if (WEAR_TEXTURE_CONFIG.use && WEAR_TEXTURE_CONFIG.lg.use) {
     a = `${wearTexture(name, "lg")}, `;
@@ -7508,6 +7513,9 @@ function largeURL(name, ext = "jpg") {
   return `${a}${imgURL("lg/" + name, ext)}`;
 }
 function smallURL(name, ext = "jpg") {
+  if (name.toLowerCase().includes("potion")) {
+    ext = "png";
+  }
   var a = "";
   if (WEAR_TEXTURE_CONFIG.use && WEAR_TEXTURE_CONFIG.sm.use) {
     a = `${wearTexture(name)}, `;
@@ -7526,6 +7534,9 @@ function smallURL(name, ext = "jpg") {
   return `${a}${imgURL("sm/" + name, ext)}`;
 }
 function imgURL(path, ext) {
+  if (path.toLowerCase().includes("potion")) {
+    ext = "png";
+  }
   const blobUrl = getTexturePackBlob("img/" + path + "." + ext + "");
   if (blobUrl) {
     return `url('${blobUrl}')`;
@@ -7869,6 +7880,7 @@ async function iniciarMusica(bypass = false) {
 var ui = new UI();
 
 var board = new Board();
+var potions = new PotionManager(board);
 var weather = new Weather();
 var game = new Game();
 var player_me, player_op;

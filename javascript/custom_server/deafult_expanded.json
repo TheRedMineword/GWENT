@@ -119,6 +119,11 @@
       "anim": "griffin",
       "anim_hand": "griffin_hand"
     },
+    "viperSchool_conf": {
+      "anim": "griffin",
+      "anim_hand": "griffin_hand",
+      "topic": "Choose a Witcher Sign"
+    },
     "mtg_conf": {
       "anim": "mtg",
       "anim_hand": "mtg_hand",
@@ -568,7 +573,9 @@
       "bluebird_a": "sky_item_%g",
       "bluebird_b": "warrior_%g",
       "bluebird_sad": "sky_spirit_%g",
-      "striga": "monster_%g"
+      "striga": "monster_%g",
+      "viperwitcher": "witcher_%g",
+      "potion_jaskolka": "potion_%g"
     },
     "classDecorators": {
       "undefined": {
@@ -718,6 +725,10 @@
       "roach": {
         "prefix": "‹",
         "suffix": "›"
+      },
+      "potion": {
+        "prefix": "🧪 ",
+        "suffix": ""
       }
     },
     "card_gender": {
@@ -878,6 +889,23 @@
       "custom!sky_vincent_guys": "male",
       "custom!sky_vincent_medic": "male",
       "undefined": "male"
+    },
+    "viper_potions_defs": {
+      "potion_jaskolka": {
+        "id": "spypotion",
+        "affects": {
+          "me": true,
+          "op": true
+        },
+        "json": {
+          "translation_key": "potions.spypotion",
+          "turns_left": 5,
+          "refresh_rows": {
+            "type": "none",
+            "value": null
+          }
+        }
+      }
     },
     "STRNG": {
       "failure": {
@@ -1202,6 +1230,18 @@
           "discord": {
             "name": "Discord Community",
             "description": "This card comes from our Discord community server! "
+          },
+          "viperSchool": {
+            "name": "Witcher Viper School",
+            "description": "[BETA] EDIT LATER"
+          },
+          "potion_jaskolka": {
+            "name": "Swallow",
+            "description": "Apply for you and opponent potion effect that lets spy, sabotage and Call to Arms cards draw extra card "
+          },
+          "witcher_potion": {
+            "name": "Witcher Potion",
+            "description": "After uses gets discarded! "
           }
         },
         "factions": {
@@ -1510,7 +1550,9 @@
           "thedevil": "The Devil",
           "eredin_bucket": "Eredin — The Elder Blood Pursuer",
           "discord_poor_infantry": "Poor Fucking Infantry",
-          "striga": "Striga"
+          "striga": "Striga",
+          "potion_jaskolka": "Swallow",
+          "viperwitcher": "Viper School Witcher"
         },
         "ui": {
           "elem": {
@@ -1946,7 +1988,9 @@
             "roach_male": "Roach",
             "roach_female": "Roach",
             "rottenfruit_male": "Thug",
-            "rottenfruit_female": "Thug"
+            "rottenfruit_female": "Thug",
+            "potion_male": "Witcher Potion",
+            "potion_female": "Witcher Potion"
           },
           "rule63": []
         }
@@ -6215,6 +6259,27 @@
         "ability": "bond",
         "filename": "striga",
         "count": "3"
+      },
+      {
+        "name": "Viper School Witcher",
+        "id": "1050",
+        "deck": "neutral",
+        "row": "agile",
+        "strength": "5",
+        "ability": "viperSchool DontPickMeUp",
+        "filename": "viperwitcher",
+        "count": "0"
+      },
+      {
+        "name": "Jaskółka",
+        "id": "1051",
+        "deck": "neutral",
+        "row": "ranged",
+        "strength": "0",
+        "ability": "hero witcher_potion potion_jaskolka",
+        "filename": "potion_jaskolka",
+        "count": "0",
+        "viper_potion": true
       }
     ],
     "factions": {
@@ -6387,6 +6452,18 @@
         "description": ""
       },
       "gryffinSchool": {
+        "name": "",
+        "description": ""
+      },
+      "viperSchool": {
+        "name": "",
+        "description": ""
+      },
+      "potion_jaskolka": {
+        "name": "",
+        "description": ""
+      },
+      "witcher_potion": {
         "name": "",
         "description": ""
       },

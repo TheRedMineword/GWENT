@@ -460,6 +460,7 @@ var ability_dict = {
               c.abilities.includes("sabotage") ||
               c.abilities.includes("spy") ||
               c.abilities.includes("gryffinSchool") ||
+              c.abilities.includes("viperSchool") ||
               c.abilities.includes("magicthegathering") ||
               c.abilities.includes("tgc_portal") ||
               c.abilities.includes("hero") ||
@@ -702,6 +703,90 @@ var ability_dict = {
       card.holder.hand.addCard(created);
       created.animate(gryffinschool_conf.anim_hand);
       card.animate(gryffinschool_conf.anim);
+    },
+  },
+  viperSchool: {
+    name: "",
+    description: "",
+    placed: async (card) => {
+      let wrapper = { card: null };
+
+      // Don't simulate opponent
+      if (player_me.id !== card.holder.id) {
+        card.animate(viperSchool_conf.anim);
+        console.log("Opponent played Gryffin School, waiting for sync.");
+        return;
+      }
+      ignore_usage_duration_of_card_if_pass = true;
+
+      if (!viper_potions || viper_potions.length <= 0) return;
+
+      // Create TEMP cards for preview carousel
+      let previewCards = viper_potions.map((sign) => {
+        return new Card(sign, card.holder);
+      });
+
+      let container = {
+        cards: previewCards,
+      };
+
+      await ui.queueCarousel(
+        container,
+        1,
+        (c, i) => (wrapper.card = c.cards[i]),
+        () => true,
+        true,
+        false,
+        viperSchool_conf.topic,
+      );
+
+      let picked = wrapper.card;
+
+      if (!picked) return;
+
+      // Create REAL spawned copy
+      let cardData = Object.values(card_dict).find(
+        (c) => c.filename === picked.filename,
+      );
+
+      if (!cardData) return;
+
+      let created = new Card(cardData, card.holder);
+
+      card.holder.hand.addCard(created);
+      created.animate(viperSchool_conf.anim_hand);
+      card.animate(viperSchool_conf.anim);
+    },
+  },
+  potion_jaskolka: {
+    name: "",
+    description: "",
+  },
+  witcher_potion: {
+    name: "",
+    description: "",
+    placed: async (card, row) => {
+      var player = card.holder;
+      var potion = viper_potions_defs[card.filename];
+      if (!potion) {
+      } else {
+        if (potion.affects.me) {
+          var tmp = deepClone(potion.json);
+          tmp.turns_left = tmp.turns_left + 1;
+          await potions.addPotion(player.ThatPlayerId, potion.id, tmp);
+        }
+        if (potion.affects.op) {
+          await potions.addPotion(
+            player.opponent().ThatPlayerId,
+            potion.id,
+            potion.json,
+          );
+        }
+        await sleep(300);
+        await card.animate("morale");
+      }
+      await board.toGrave(card, row); // karta od razu na cmentarz
+      board.row.forEach((r) => r.updateScore()); // przelicz od razu
     },
   },
   magicthegathering: {

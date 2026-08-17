@@ -46,6 +46,7 @@ https://pngtree.com/freebackground/vintage-crinkled-paper-texture-aged-brown-bac
 - The Devil card: https://www.freeiconspng.com/img/44668, https://pixabay.com/sound-effects/people-possessed-laugh-94851/
 - "Bucket" row: https://www.magnific.com/free-photo/natural-woven-rattan-texture-detail_426434067.htm
 - Eredin elder blood: https://gwent.one/en/card/202606
+- Viper Witcher related assests: Witcher wiki
 > Some card/mechanics/assets are used from other project like this (For example: RandomPianist/gwent-classic-v3.1, other similar project are mentioned at start of this copyright notice)
 
 

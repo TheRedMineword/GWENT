@@ -3690,6 +3690,27 @@ var card_dict_base = [
     filename: "striga",
     count: "3",
   },
+  {
+    name: "Viper School Witcher",
+    id: "1050",
+    deck: "neutral",
+    row: "agile",
+    strength: "5",
+    ability: "viperSchool DontPickMeUp",
+    filename: "viperwitcher",
+    count: "0",
+  },
+  {
+    name: "Jaskółka",
+    id: "1051",
+    deck: "neutral",
+    row: "ranged",
+    strength: "0",
+    ability: "hero witcher_potion potion_jaskolka",
+    filename: "potion_jaskolka",
+    count: "0",
+    viper_potion: true,
+  },
 ];
 let pickedfakecard = { a: false, b: null };
 
@@ -3707,9 +3728,18 @@ const witcher_signs = Object.entries(card_dict)
     id: key,
     ...card,
   }));
+const viper_potions = Object.entries(card_dict)
+  .filter(([_, card]) => card.viper_potion)
+  .sort(([, a], [, b]) => a.name.localeCompare(b.name))
+  .map(([key, card]) => ({
+    id: key,
+    ...card,
+  }));
 
-loadingscreenupdate(`Loaded ${witcher_signs.length} witcher signs!`);
-console.log("Cards array", card_dict, witcher_signs);
+loadingscreenupdate(
+  `Loaded ${witcher_signs.length}/${viper_potions.length} witcher signs/potions!`,
+);
+console.log("Cards array", card_dict, witcher_signs, viper_potions);
 
 function escapeHtml_cards(text) {
   return text

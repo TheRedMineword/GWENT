@@ -378,7 +378,20 @@ STRNG["en"] = {
     discord: {
     name: "Discord Community",
     description: "This card comes from our Discord community server! "
+  },
+    viperSchool: {
+    name: "Witcher Viper School",
+    description: "[BETA] EDIT LATER"
+  },
+    potion_jaskolka: {
+    name: "Swallow",
+    description: "Apply for you and opponent potion effect that lets spy, sabotage and Call to Arms cards draw extra card "
+  },
+    witcher_potion: {
+    name: "Witcher Potion",
+    description: "After uses gets discarded! "
   }
+
 },
   factions: {
     realms: {
@@ -690,7 +703,9 @@ STRNG["en"] = {
     thedevil: "The Devil",
     eredin_bucket: "Eredin — The Elder Blood Pursuer",
     discord_poor_infantry: "Poor Fucking Infantry",
-    striga: "Striga"
+    striga: "Striga",
+    potion_jaskolka: "Swallow",
+    viperwitcher: "Viper School Witcher",
   },
   ui: {
     elem: {
@@ -1187,7 +1202,9 @@ card_info: {
   roach_male: "Roach",
   roach_female: "Roach",
   rottenfruit_male: "Thug",
-  rottenfruit_female: "Thug"
+  rottenfruit_female: "Thug",
+  potion_male: "Witcher Potion",
+  potion_female: "Witcher Potion"
 },
   rule63: [] // for classes if {"if": "siege", "gender": "female", "hero": false}
 }
