@@ -746,7 +746,7 @@ STRNG["pl"] = {
     darkstorm: "Sztorm Ciemności",
     darkness_storm_leader: "Król Edenu",
     ranger: "Reassuring Ranger",
-    tgc20: "20 Lat ThatGameComapny",
+    tgc20: "20 Lat ThatGameCompany",
     elder_wasteland: "Elder of the Wasteland",
     colorguide: "Days of Color Guide",
     colorcollab: "Trevor Project",
