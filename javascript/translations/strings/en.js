@@ -1111,12 +1111,13 @@ card_info: {
   factionIs: "%s Faction",
   factionNone: "Neutral",
   "classes": {
-  undefined: "Unparalleled",
+  undefined: "Unparalleled", // lot of fallbacks becuase script have autism
   undefined_male: "Unparalleled",
   undefined_female: "Unparalleled",
   none_male: "Unparalleled",
   none_female: "Unparalleled",
-
+  "none_": "Unparalleled",
+    // end of fallback values!
   royal_male: "Royal",
   royal_female: "Royal",
   commander_male: "Commander",

@@ -1204,12 +1204,13 @@ card_info: {
   factionNone: "",
 
   "classes": {
-  undefined: "Niespotykanego",
+  undefined: "Niespotykanego", // lot of fallbacks becuase script have autism
   undefined_male: "Niespotykanego",
   undefined_female: "Niespotykanej",
   none_male: "Niespotykanego",
   none_female: "Niespotykanej",
-
+  "none_": "Niespotykanego",
+// end of fallback values!
   royal_male: "Królewskiego",
   royal_female: "Królewskiej",
   commander_male: "Dowódcy",

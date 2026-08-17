@@ -19,6 +19,8 @@ let extraJSON = [];
 let displaynow = null;
 let showbankms = 9000;
 let gameended = false;
+let syndicate_spawn_start_card_id = "4001";
+let syndicate_spawn_start_card_row = "close";
 const passmedicpercard = 1500;
 const medicdrawextrasecondswait = 2.2; // extraJson hold // no longer used
 const medic_ability_revive_wait_a_second = 1.7 * 1000;
@@ -972,6 +974,8 @@ let ThisDef = {
     bucket_op_draw_per_power: deepClone(bucket_op_draw_per_power),
     bucket_cards_strenght: deepClone(bucket_cards_strenght),
     bond_config: deepClone(bond_config),
+    syndicate_spawn_start_card_id: deepClone(syndicate_spawn_start_card_id),
+    syndicate_spawn_start_card_row: deepClone(syndicate_spawn_start_card_row),
 
     ForGameStart: deepClone(ForGameStart),
 

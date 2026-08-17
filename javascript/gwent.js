@@ -3556,10 +3556,12 @@ class Game {
           game,
           await board.addCardToRow(
             new Card(
-              Object.values(card_dict).find((c) => c.id === "4001"),
+              Object.values(card_dict).find(
+                (c) => c.id === syndicate_spawn_start_card_id,
+              ),
               player_me,
             ),
-            "close",
+            syndicate_spawn_start_card_row,
             player_me,
           ),
         );
@@ -3576,10 +3578,12 @@ class Game {
           game,
           await board.addCardToRow(
             new Card(
-              Object.values(card_dict).find((c) => c.id === "4001"),
+              Object.values(card_dict).find(
+                (c) => c.id === syndicate_spawn_start_card_id,
+              ),
               player_op,
             ),
-            "close",
+            syndicate_spawn_start_card_row,
             player_op,
           ),
         );
