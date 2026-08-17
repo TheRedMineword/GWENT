@@ -10,7 +10,7 @@
     "OnGameStartDraw": 2,
     "medicsdraw": 1,
     "ThatIsSpy": [
-      "axii2_desc:",
+      "axii2_desc",
       "spy",
       "sabotage",
       "axii2_desc_playable",
@@ -99,13 +99,11 @@
       "ForEachCardGain": 1.11,
       "CountSelf": false,
       "WeatherDebuffPercent": 0.25,
-      "Ceil": false,
-      "desc": "Card base power grows by 1.11 for each card in the row (excluding itself). Card base power is not affected by weather, but its bonus power is reduced by 75% under weather effects. Values are rounded down."
+      "Ceil": false
     },
     "axii": {
       "IfBasePowerUnder": 5,
-      "TakeAway": 2,
-      "desc": "Each card in row under Axii effect that base power is less than 5 will lose 2 power. Debuffs dont stack. Dont affect hero cards"
+      "TakeAway": 2
     },
     "nilfard_drawmaster": {
       "handshort": 3,
@@ -192,14 +190,12 @@
     "turn_skipper_conf": {
       "perTurn": 0.35,
       "actiavate": 1,
-      "chargeMax": 2,
-      "desc": "Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need 1 charge to skip turn, you get 0.35 charges per your turn, up to 2 max charge(s) stored!"
+      "chargeMax": 2
     },
     "d20cloner": {
       "perTurn": 0.16,
       "actiavate": 1,
-      "chargeMax": 1,
-      "desc": "Let you roll D20 for chance to get additional card from board, but what card you can get depends on roll result. Success on even roll. You need 1 charge to roll dice, you get 0.16 charges per your turn, up to 1 max charge(s) stored!"
+      "chargeMax": 1
     },
     "map_results_color": {
       "realms": "#1E224F",
@@ -6552,10 +6548,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
-    "tavern_yt_vid": "8o-JI8VRyKo",
-    "tavern_yt_volume": 90
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack_volume": 90,
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }

@@ -3306,8 +3306,9 @@ class Board {
   // Returns the CardCard associated with the row name that the card would be sent to
   getRow(card, row_name, player) {
     player = player ? player : card ? card.holder : player_me;
-    let isMe = player === player_me;
+    let isMe = player.ThatPlayerId === player_me.ThatPlayerId;
     let isSpy = card.abilities.some((ability) => ThatIsSpy.includes(ability));
+    // console.log(card, "isSpy?", isSpy, "isMe?", isMe)
     switch (row_name) {
       case "weather":
         return weather;

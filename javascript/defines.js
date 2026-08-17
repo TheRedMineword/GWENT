@@ -23,7 +23,7 @@ const passmedicpercard = 1500;
 const medicdrawextrasecondswait = 2.2; // extraJson hold // no longer used
 const medic_ability_revive_wait_a_second = 1.7 * 1000;
 let ThatIsSpy = [
-  "axii2_desc:",
+  "axii2_desc",
   "spy",
   "sabotage",
   "axii2_desc_playable",
@@ -144,16 +144,16 @@ let powergain = {
   CountSelf: false,
   WeatherDebuffPercent: 0.25,
   Ceil: false,
-  desc: null,
+  // desc: null,
 };
-powergain.desc = `Card base power grows by ${powergain.ForEachCardGain} for each card in the row (${powergain.CountSelf ? "including itself" : "excluding itself"}). Card base power is not affected by weather, but its bonus power is reduced by ${Math.round((1 - powergain.WeatherDebuffPercent) * 100)}% under weather effects. Values are rounded ${powergain.Ceil ? "up" : "down"}.`;
+//powergain.desc = `Card base power grows by ${powergain.ForEachCardGain} for each card in the row (${powergain.CountSelf ? "including itself" : "excluding itself"}). Card base power is not affected by weather, but its bonus power is reduced by ${Math.round((1 - powergain.WeatherDebuffPercent) * 100)}% under weather effects. Values are rounded ${powergain.Ceil ? "up" : "down"}.`;
 
 let axii = {
   IfBasePowerUnder: 5,
   TakeAway: 2,
-  desc: null,
+  // desc: null,
 };
-axii.desc = `Each card in row under Axii effect that base power is less than ${axii.IfBasePowerUnder} will lose ${axii.TakeAway} power. Debuffs dont stack. Dont affect hero cards`;
+//axii.desc = `Each card in row under Axii effect that base power is less than ${axii.IfBasePowerUnder} will lose ${axii.TakeAway} power. Debuffs dont stack. Dont affect hero cards`;
 
 console.log("Spy draw:", spy, "\nPowergain:", powergain, "\nAxii:", axii);
 
@@ -405,7 +405,7 @@ let turn_skipper_conf = {
   perTurn: 0.35,
   actiavate: 1,
   chargeMax: 2,
-  desc: null,
+  //  desc: null,
 };
 let scorch_stopper = {
   save_charge: 1,
@@ -416,7 +416,7 @@ let d20cloner = {
   perTurn: 0.16,
   actiavate: 1,
   chargeMax: 1,
-  desc: null,
+  // desc: null,
 };
 let syndicate_faction_clone = {
   nilfgaard: {
@@ -453,8 +453,8 @@ let map_results_color = {
   sky: "#2D9DA0",
   syndicate: "#804400",
 };
-turn_skipper_conf.desc = `Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need ${turn_skipper_conf.actiavate} charge to skip turn, you get ${turn_skipper_conf.perTurn} charges per your turn, up to ${turn_skipper_conf.chargeMax} max charge(s) stored!`;
-d20cloner.desc = `Let you roll D20 for chance to get additional card from board, but what card you can get depends on roll result. Success on even roll. You need ${d20cloner.actiavate} charge to roll dice, you get ${d20cloner.perTurn} charges per your turn, up to ${d20cloner.chargeMax} max charge(s) stored!`;
+//turn_skipper_conf.desc = `Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need ${turn_skipper_conf.actiavate} charge to skip turn, you get ${turn_skipper_conf.perTurn} charges per your turn, up to ${turn_skipper_conf.chargeMax} max charge(s) stored!`;
+//d20cloner.desc = `Let you roll D20 for chance to get additional card from board, but what card you can get depends on roll result. Success on even roll. You need ${d20cloner.actiavate} charge to roll dice, you get ${d20cloner.perTurn} charges per your turn, up to ${d20cloner.chargeMax} max charge(s) stored!`;
 
 let card_name_class = {
   foltest_copper: "royal_%g",

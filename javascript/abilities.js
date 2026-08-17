@@ -553,27 +553,81 @@ var ability_dict = {
   axii: {
     name: "",
     description: ``,
+
     placed: async (card) => {
       try {
-        // Find axii card data by filename
+        console.log(
+          "[AXII]",
+          "card.holder =",
+          card.holder.ThatPlayerId,
+          "player_me =",
+          player_me.ThatPlayerId,
+          "controller =",
+          card.holder.controller,
+        );
+
+        // IMPORTANT:
+        // Only the player who owns the card executes the actual spawn.
+        if (card.holder.id !== player_me.id) {
+          await card.animate("axii");
+          console.log("[AXII] Remote client - waiting for owner sync.");
+          const targetData = Object.values(card_dict).find(
+            (c) => c.filename === "axii",
+          );
+
+          if (!targetData) {
+            console.warn("[AXII] Card data not found");
+            return;
+          }
+
+          //await card.animate("axii");
+
+          // At this point card.holder is the ORIGINAL owner.
+          // Therefore the Axii spy must go to the opponent.
+          const targetPlayer = player_op; //card.holder.opponent();
+
+          console.log(
+            "[AXII] OWNER SPAWN",
+            "owner =",
+            card.holder.ThatPlayerId,
+            "target =",
+            targetPlayer.ThatPlayerId,
+          );
+
+          const spawned = new Card(targetData, targetPlayer);
+
+          await board.addCardToRow(spawned, "close", targetPlayer);
+          return;
+        }
+
         const targetData = Object.values(card_dict).find(
           (c) => c.filename === "axii",
         );
 
         if (!targetData) {
-          console.warn("Axii card not found in card_dict");
+          console.warn("[AXII] Card data not found");
           return;
         }
-        await card.animate("axii");
-        // Create new card for opponent
-        const opponent = card.holder.opponent();
-        const spawned = new Card(targetData, opponent);
 
-        // Add to opponent close row
-        await board.addCardToRow(spawned, "close", opponent);
-        //  card.holder = card.holder.opponent();
+        await card.animate("axii");
+
+        // At this point card.holder is the ORIGINAL owner.
+        // Therefore the Axii spy must go to the opponent.
+        const targetPlayer = player_me; //card.holder.opponent();
+
+        console.log(
+          "[AXII] OWNER SPAWN",
+          "owner =",
+          card.holder.ThatPlayerId,
+          "target =",
+          targetPlayer.ThatPlayerId,
+        );
+
+        const spawned = new Card(targetData, targetPlayer);
+
+        await board.addCardToRow(spawned, "close", targetPlayer);
       } catch (e) {
-        console.log("Axii ability error:", e);
+        console.log("[AXII ERROR]", e);
       }
     },
   },
