@@ -92,6 +92,40 @@ let database = {
 let databaseOriginal = "";
 let playerSockets = {};
 
+const coinTossHistory = new Map();
+const COIN_TOSS_HISTORY_TTL = 60 * 60 * 1000;
+const COIN_TOSS_MAX_STREAK = 2;
+
+function coinTossHistoryCleanup() {
+  const cutoff = Date.now() - COIN_TOSS_HISTORY_TTL;
+  for (const [key, entry] of coinTossHistory) {
+    if (entry.timestamp < cutoff) coinTossHistory.delete(key);
+  }
+}
+intervals.push(setInterval(coinTossHistoryCleanup, 10 * 60 * 1000));
+
+function pickFirstPlayer(session) {
+  const ids = session.players.map((p) => p.playerId);
+  const pairKey = ids.slice().sort().join("|");
+  const prev = coinTossHistory.get(pairKey);
+  const prevFresh = prev && Date.now() - prev.timestamp < COIN_TOSS_HISTORY_TTL;
+
+  let winnerId;
+  if (prevFresh && prev.streak >= COIN_TOSS_MAX_STREAK && ids.includes(prev.winner)) {
+    // Same player has won the toss too many times in a row against this
+    // exact opponent recently -> force it to go the other way this time.
+    const otherIds = ids.filter((id) => id !== prev.winner);
+    winnerId = otherIds[crypto.randomInt(0, otherIds.length)];
+  } else {
+    winnerId = ids[crypto.randomInt(0, ids.length)];
+  }
+
+  const streak = prevFresh && prev.winner === winnerId ? prev.streak + 1 : 1;
+  coinTossHistory.set(pairKey, { winner: winnerId, streak, timestamp: Date.now() });
+
+  return winnerId;
+}
+
 if (dcbot) {
   dcbot
     .init({ sessions, playerSockets, sendToClient: comp_and_send })
@@ -1530,9 +1564,7 @@ const connectionHandler = async (ws, req) => {
           //         `Game started! Good Luck Everyone!!`,
           //       );
 
-          const firstPlayer =
-            session.players[Math.floor(Math.random() * session.players.length)]
-              .playerId;
+          const firstPlayer = pickFirstPlayer(session);
           sessions[ws.sessionId].firstPlayer = firstPlayer;
           sessions[ws.sessionId].special = "";
           //console.log(`Random coing ${JSON.stringify(random_coin)}`)
