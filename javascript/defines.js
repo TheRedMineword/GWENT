@@ -229,6 +229,7 @@ let viper_potions_defs = {
     affects: {
       me: true,
       op: true,
+      op_lasts: 5,
     },
     json: {
       translation_key: "potions.spypotion",

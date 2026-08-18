@@ -1751,6 +1751,7 @@ class Player {
     this.passed = false;
     this.handsize = thishandsize;
     this.winning = false;
+    potions.reset();
     ability_reset("me");
     ability_reset("op");
 
@@ -3399,6 +3400,7 @@ class Game {
   }
 
   async reset() {
+    potions.reset();
     this.firstPlayer;
     this.currPlayer = null;
 
@@ -3472,6 +3474,7 @@ class Game {
     btnJoinElem.classList.add("hidden");
     gameStartControlsElem.classList.add("hide");
     // isOpponentReadyElem.classList.add("hidden");
+    potions.reset();
     turncount = 1;
     gameID = gameID + 1;
     ui.resumeYouTube();
@@ -3982,7 +3985,7 @@ class Game {
       this.endRound();
     } else {
       if (this.currPlayer.tag === "me") {
-        await endOfTurn(player_me.ThatPlayerId);
+        await potions.endOfTurn(player_me.ThatPlayerId);
         // Gain power to abilities
         if (ability_data.me.enabled) {
           try {
@@ -3990,7 +3993,7 @@ class Game {
           } catch (e) {}
         }
       } else {
-        await endOfTurn(player_op.ThatPlayerId);
+        await potions.endOfTurn(player_op.ThatPlayerId);
         if (ability_data.op.enabled) {
           try {
             ability_add("op", ability_data.op.add);

@@ -183,4 +183,8 @@ class PotionManager {
 
     return true;
   }
+
+  reset() {
+    this.active_potions = {};
+  }
 }

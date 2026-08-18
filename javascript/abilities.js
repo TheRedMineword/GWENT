@@ -714,7 +714,7 @@ var ability_dict = {
       // Don't simulate opponent
       if (player_me.id !== card.holder.id) {
         card.animate(viperSchool_conf.anim);
-        console.log("Opponent played Gryffin School, waiting for sync.");
+        console.log("Opponent played Viper School, waiting for sync.");
         return;
       }
       ignore_usage_duration_of_card_if_pass = true;
@@ -776,10 +776,12 @@ var ability_dict = {
           await potions.addPotion(player.ThatPlayerId, potion.id, tmp);
         }
         if (potion.affects.op) {
+          var tmp2 = deepClone(potion.json);
+          tmp2.turns_left = deepClone(potion.affects.op_lasts);
           await potions.addPotion(
             player.opponent().ThatPlayerId,
             potion.id,
-            potion.json,
+            tmp2,
           );
         }
         await sleep(300);
