@@ -446,18 +446,21 @@ async function broadcastSessionState(
   const sessionBets = bets.get(sessionId) || {};
 
   for (const playerId of playerIds) {
-    const discordId = registerByPlayer.get(playerId);
+    const ws = deps.playerSockets[playerId];
 
-    if (!discordId) {
+    if (!ws || typeof deps.sendToClient !== "function") {
       continue;
     }
+
+    const discordId =
+      registerByPlayer.get(playerId) || null;
 
     const opponentId = playerIds.find(
       (pid) => pid !== playerId
     );
 
     const opponentDiscordId = opponentId
-      ? registerByPlayer.get(opponentId)
+      ? registerByPlayer.get(opponentId) || null
       : null;
 
     const meBet =
@@ -472,10 +475,12 @@ async function broadcastSessionState(
       by: byDiscordId || null,
       betpool: meBet + opBet,
 
-      me: await buildSnapshot(
-        discordId,
-        meBet
-      ),
+      me: discordId
+        ? await buildSnapshot(
+            discordId,
+            meBet
+          )
+        : null,
 
       op: opponentDiscordId
         ? await buildSnapshot(
