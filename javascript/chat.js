@@ -212,6 +212,13 @@ function addMessage(type, text) {
       // tocar("tf2/msg/Chat_display_text", false); // no sound effect for system so players can focus
     }
   }
+  if (parse_type === "$$valexample$$") {
+    if (type === "me") {
+      parse_type = deepClone(player_me.name);
+    } else {
+      parse_type = deepClone(player_op.name);
+    }
+  }
   div.textContent = `${parse_type}: ${text}`;
 
   log.appendChild(div);
