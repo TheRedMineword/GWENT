@@ -122,7 +122,7 @@
     "viperSchool_conf": {
       "anim": "griffin",
       "anim_hand": "griffin_hand",
-      "topic": "Choose a Witcher Sign"
+      "show_notif": 67000
     },
     "mtg_conf": {
       "anim": "mtg",
@@ -575,7 +575,10 @@
       "bluebird_sad": "sky_spirit_%g",
       "striga": "monster_%g",
       "viperwitcher": "witcher_%g",
-      "potion_jaskolka": "potion_%g"
+      "potion_jaskolka": "potion_%g",
+      "potion_soup": "potion_%g",
+      "potion_grom": "potion_%g",
+      "potion_white": "potion_%g"
     },
     "classDecorators": {
       "undefined": {
@@ -895,7 +898,8 @@
         "id": "spypotion",
         "affects": {
           "me": true,
-          "op": true
+          "op": true,
+          "op_lasts": 5
         },
         "json": {
           "translation_key": "potions.spypotion",
@@ -903,6 +907,42 @@
           "refresh_rows": {
             "type": "none",
             "value": null
+          }
+        }
+      },
+      "potion_soup": {
+        "id": "elfandonions",
+        "affects": {
+          "me": true,
+          "op": false,
+          "op_lasts": 0
+        },
+        "json": {
+          "translation_key": "potions.elfendonion",
+          "turns_left": 0,
+          "refresh_rows": {
+            "type": "ability",
+            "value": [
+              "avenger",
+              "dopavenger"
+            ]
+          }
+        }
+      },
+      "potion_grom": {
+        "id": "grom",
+        "affects": {
+          "me": true,
+          "op": true,
+          "op_lasts": 3
+        },
+        "json": {
+          "translation_key": "potions.grom",
+          "turns_left": 5,
+          "refresh_rows": {
+            "type": "row",
+            "value": "melee",
+            "times": 1.5
           }
         }
       }
@@ -1063,8 +1103,8 @@
             "description": "Each card in row under Axii effect that base power is less than 5 will lose 2 power. Debuffs dont stack. Dont affect hero cards "
           },
           "gryffinSchool": {
-            "name": "Griffin School",
-            "description": "Choose one Witcher Sign card and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! "
+            "name": "School of the Griffin",
+            "description": "Choose one Witcher Sign card and add it to your hand. "
           },
           "magicthegathering": {
             "name": "Conjunction of the Spheres",
@@ -1232,16 +1272,28 @@
             "description": "This card comes from our Discord community server! "
           },
           "viperSchool": {
-            "name": "Witcher Viper School",
-            "description": "[BETA] EDIT LATER"
+            "name": "School of the Viper",
+            "description": "Choose one Witcher Potion card and add it to your hand. "
           },
           "potion_jaskolka": {
             "name": "Swallow",
             "description": "Apply for you and opponent potion effect that lets spy, sabotage and Call to Arms cards draw extra card "
           },
+          "potion_soup": {
+            "name": "Elf and Onion Soup",
+            "description": "(Elf wich Onion goooood, tomato like, wanna some?) After use both players avenger cards will transform! "
+          },
+          "potion_grom": {
+            "name": "Thunderbolt",
+            "description": "Increases the final strength of melee units by 50% based on calculations; applies the effect for 5 turns to the player who activates it, and for 3 turns to their opponent. "
+          },
+          "potion_white": {
+            "name": "White Honey",
+            "description": "Removes all potion effects from all players! "
+          },
           "witcher_potion": {
             "name": "Witcher Potion",
-            "description": "After uses gets discarded! "
+            "description": "After use card gets discarded! Overwrites any active effect of this potion for target(s) player(s)! "
           }
         },
         "factions": {
@@ -1552,7 +1604,10 @@
           "discord_poor_infantry": "Poor Fucking Infantry",
           "striga": "Striga",
           "potion_jaskolka": "Swallow",
-          "viperwitcher": "Viper School Witcher"
+          "viperwitcher": "Viper School Witcher",
+          "potion_soup": "Elf and Onion soup",
+          "potion_grom": "Thunderbolt",
+          "potion_white": "White Honey"
         },
         "ui": {
           "elem": {
@@ -1664,7 +1719,9 @@
               "eredin_ok": "Choose a card to create a copy of",
               "skellige_mad_man": "Choose card to banish",
               "skellige_mad_man_ok": "Choose Tight Bond card",
-              "devildeal": "Choose a card to draw"
+              "devildeal": "Choose a card to draw",
+              "gryf": "Choose a Witcher Sign",
+              "viper": "Choose a Witcher Potion"
             },
             "ordinal": {
               "st": "st",
@@ -1927,8 +1984,6 @@
             "soldier_female": "Soldier",
             "witcher_male": "Witcher",
             "witcher_female": "Witcheress",
-            "witcheress_male": "Witcher",
-            "witcheress_female": "Witcheress",
             "sorcerer_male": "Sorcerer",
             "sorcerer_female": "Sorceress",
             "elderblood_male": "Elder Blood",
@@ -1993,6 +2048,15 @@
             "potion_female": "Witcher Potion"
           },
           "rule63": []
+        },
+        "potions": {
+          "topic": {
+            "me": "\u003Ccolor=#7FAF45\u003EYou:\u003C/color\u003E",
+            "op": "\u003Ccolor=#B33A3A\u003EOpponent:\u003C/color\u003E"
+          },
+          "spypotion": "\u003Ccolor=#C46A2B\u003ESwallow potion\u003C/color\u003E is active for next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!",
+          "elfendonion": "\u003Ccolor=#A69A45\u003EElf and Onion soup\u003C/color\u003E is here for next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!",
+          "grom": "\u003Ccolor=#3F6B32\u003EThunderbolt potion\u003C/color\u003E active for next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!"
         }
       },
       "pl": {
@@ -2141,7 +2205,7 @@
           },
           "gryffinSchool": {
             "name": "Szkoła Gryfa",
-            "description": "Wybierz jedną kartę Znaku Wiedźmińskiego i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Przynęty. "
+            "description": "Wybierz jedną kartę Znaku Wiedźmińskiego i dodaj ją do swojej ręki. "
           },
           "magicthegathering": {
             "name": "Koniunkcja Sfer",
@@ -2307,6 +2371,30 @@
           "discord": {
             "name": "Społeczność Discord",
             "description": "Ta karta pochodzi z naszego serwera społeczności Discord! "
+          },
+          "viperSchool": {
+            "name": "Szkoła Żmiji",
+            "description": "Wybierz jedną kartę Wiedźmińskich Eliksirów i dodaj ją do swojej ręki. "
+          },
+          "potion_jaskolka": {
+            "name": "Jaskółka",
+            "description": "Nakłada efekt dla obu graczy pozwalający zdolnością Szpiegostwa, Sabotażu i Wezwania Do Broni dobrać dodatkową kartę. "
+          },
+          "potion_soup": {
+            "name": "Zupa z Elfa i Cebuli",
+            "description": "(Elf z cebulą dobry, jak pomidor. Chcesz jeść?) Po użyciu karty mścicieli obu graczy trasfromują się! "
+          },
+          "potion_grom": {
+            "name": "Grzmot",
+            "description": "Zwiększa ostateczną siłę jednostek walczących wręcz o 50% (według obliczeń); efekt ten działa przez 5 tur na gracza, który go aktywuje, oraz przez 3 tury na jego przeciwnika. "
+          },
+          "potion_white": {
+            "name": "Biały Miód",
+            "description": "Usuwa wszystkie efekty eliksirów dla wszystkich graczy! "
+          },
+          "witcher_potion": {
+            "name": "Wiedźmiński Eliksir",
+            "description": "Po użyciu karta zostaje odrzucona! Nadpisuje wszytskie efekty tej mikstury dla każdego z celów eliksiru! "
           }
         },
         "factions": {
@@ -2615,7 +2703,12 @@
           "thedevil": "Diabeł",
           "eredin_bucket": "Eredin — W Pogoni Za Starszą Krwią",
           "discord_poor_infantry": "Biedna Pierdolona Piechota",
-          "striga": "Strzyga"
+          "striga": "Strzyga",
+          "potion_jaskolka": "Jaskółka",
+          "viperwitcher": "Wiedźmin Szkoły Żmiji",
+          "potion_soup": "Zupa z Elfa i Cebuli",
+          "potion_grom": "Grom",
+          "potion_white": "Biały Miód"
         },
         "ui": {
           "elem": {
@@ -2727,7 +2820,9 @@
               "eredin_ok": "Wybierz kartę do skopiowania",
               "skellige_mad_man": "Wybierz kartę do wygnania",
               "skellige_mad_man_ok": "Choose Tight Bond card",
-              "devildeal": "Wybierz kartę do dobrania"
+              "devildeal": "Wybierz kartę do dobrania",
+              "gryf": "Wybierz znak Wiedźmiński",
+              "viper": "Wybierz eliksir Wiedźmiński"
             },
             "ordinal": {
               "st": "",
@@ -2990,8 +3085,6 @@
             "soldier_female": "Żołnierki",
             "witcher_male": "Wiedźmina",
             "witcher_female": "Wiedźminki",
-            "witcheress_male": "Wiedźmina",
-            "witcheress_female": "Wiedźminki",
             "sorcerer_male": "Czarodzieja",
             "sorcerer_female": "Czarodziejki",
             "elderblood_male": "Starszej Krwi",
@@ -3091,6 +3184,15 @@
               "gender": "male"
             }
           ]
+        },
+        "potions": {
+          "topic": {
+            "me": "\u003Ccolor=#7FAF45\u003ETy:\u003C/color\u003E",
+            "op": "\u003Ccolor=#B33A3A\u003EPrzeciwnik:\u003C/color\u003E"
+          },
+          "spypotion": "\u003Ccolor=#C46A2B\u003EJaskółka\u003C/color\u003E jest aktywna na następne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!",
+          "elfendonion": "\u003Ccolor=#A69A45\u003EZupa z elfa i cebuli\u003C/color\u003E jest tutaj przez kolejne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!",
+          "grom": "\u003Ccolor=#3F6B32\u003EGrzmot\u003C/color\u003E jest aktywny na następne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!"
         }
       }
     },
@@ -6264,20 +6366,53 @@
         "name": "Viper School Witcher",
         "id": "1050",
         "deck": "neutral",
-        "row": "agile",
+        "row": "close",
         "strength": "5",
         "ability": "viperSchool DontPickMeUp",
         "filename": "viperwitcher",
         "count": "0"
       },
       {
-        "name": "Jaskółka",
+        "name": "Swallow",
         "id": "1051",
         "deck": "neutral",
         "row": "ranged",
         "strength": "0",
         "ability": "hero witcher_potion potion_jaskolka",
         "filename": "potion_jaskolka",
+        "count": "0",
+        "viper_potion": true
+      },
+      {
+        "name": "Elf and Onion soup",
+        "id": "1052",
+        "deck": "neutral",
+        "row": "ranged",
+        "strength": "0",
+        "ability": "hero witcher_potion potion_soup",
+        "filename": "potion_soup",
+        "count": "0",
+        "viper_potion": true
+      },
+      {
+        "name": "Thunderbolt",
+        "id": "1053",
+        "deck": "neutral",
+        "row": "ranged",
+        "strength": "0",
+        "ability": "hero witcher_potion potion_grom",
+        "filename": "potion_grom",
+        "count": "0",
+        "viper_potion": true
+      },
+      {
+        "name": "White Honey",
+        "id": "1053",
+        "deck": "neutral",
+        "row": "ranged",
+        "strength": "0",
+        "ability": "hero potion_white",
+        "filename": "potion_white",
         "count": "0",
         "viper_potion": true
       }
@@ -6463,7 +6598,19 @@
         "name": "",
         "description": ""
       },
+      "potion_soup": {
+        "name": "",
+        "description": ""
+      },
+      "potion_grom": {
+        "name": "",
+        "description": ""
+      },
       "witcher_potion": {
+        "name": "",
+        "description": ""
+      },
+      "potion_white": {
         "name": "",
         "description": ""
       },
@@ -6629,10 +6776,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 30
+    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }

@@ -370,7 +370,11 @@ var ability_dict = {
     description: ``,
     placed: async (card) => {
       await card.animate("spy");
-      for (let i = 0; i < spy.spy; i++) {
+      var tmp_draw = deepClone(spy.spy);
+      if (await potions.isEffectActive(card.holder.ThatPlayerId, "spypotion")) {
+        tmp_draw++;
+      }
+      for (let i = 0; i < tmp_draw; i++) {
         if (card.holder.deck.cards.length > 0)
           await card.holder.deck.draw(card.holder.hand);
       }
@@ -382,7 +386,11 @@ var ability_dict = {
     description: ``,
     placed: async (card) => {
       await card.animate("sab");
-      for (let i = 0; i < spy.sabotage; i++) {
+      var tmp_draw = deepClone(spy.sabotage);
+      if (await potions.isEffectActive(card.holder.ThatPlayerId, "spypotion")) {
+        tmp_draw++;
+      }
+      for (let i = 0; i < tmp_draw; i++) {
         if (card.holder.deck.cards.length > 0)
           await card.holder.deck.draw(card.holder.hand);
       }
@@ -514,21 +522,34 @@ var ability_dict = {
         player_me.id,
       );
       // await player_me.deck.draw(player_me.hand);
-
-      if (player_me.deck.cards.length)
-        for (let i = 0; i < spy.aid; i++) {
-          console.log("me draw");
+      var tmp_draw = deepClone(spy.aid);
+      if (await potions.isEffectActive(card.holder.ThatPlayerId, "spypotion")) {
+        tmp_draw++;
+      }
+      if (card.holder.deck.cards.length)
+        for (let i = 0; i < tmp_draw; i++) {
+          console.log("me draw", tmp_draw);
           try {
-            await player_me.deck.draw(player_me.hand);
+            await card.holder.deck.draw(card.holder.hand);
           } catch (e) {
             console.log("Is empty deck? got error", e);
           }
         }
-      if (player_op.deck.cards.length)
-        for (let i = 0; i < spy.aid; i++) {
-          console.log("enemy draw");
+      var op = null;
+      if (card.holder.ThatPlayerId === player_me.ThatPlayerId) {
+        op = player_op;
+      } else {
+        op = player_me;
+      }
+      var tmp_draw_op = deepClone(spy.aid);
+      if (await potions.isEffectActive(op.ThatPlayerId, "spypotion")) {
+        tmp_draw_op++;
+      }
+      if (op.deck.cards.length)
+        for (let i = 0; i < tmp_draw_op; i++) {
+          console.log("enemy draw", tmp_draw_op);
           try {
-            await player_op.deck.draw(player_op.hand);
+            await op.deck.draw(op.hand);
           } catch (e) {
             console.log("Is empty deck? got error", e);
           }
@@ -684,7 +705,7 @@ var ability_dict = {
         () => true,
         true,
         false,
-        gryffinschool_conf.topic,
+        getUiStrng("queueCarousel_other.gryf"),
       );
 
       let picked = wrapper.card;
@@ -737,7 +758,7 @@ var ability_dict = {
         () => true,
         true,
         false,
-        viperSchool_conf.topic,
+        getUiStrng("queueCarousel_other.viper"),
       );
 
       let picked = wrapper.card;
@@ -762,6 +783,14 @@ var ability_dict = {
     name: "",
     description: "",
   },
+  potion_soup: {
+    name: "",
+    description: "",
+  },
+  potion_grom: {
+    name: "",
+    description: "",
+  },
   witcher_potion: {
     name: "",
     description: "",
@@ -769,15 +798,24 @@ var ability_dict = {
       var player = card.holder;
       var potion = viper_potions_defs[card.filename];
       if (!potion) {
+        console.error("NO POTION DEF", card.filename);
       } else {
+        console.log("POTION", potion, player);
         if (potion.affects.me) {
           var tmp = deepClone(potion.json);
           tmp.turns_left = tmp.turns_left + 1;
+          console.log("POTION ME", player.ThatPlayerId, potion.id, tmp);
           await potions.addPotion(player.ThatPlayerId, potion.id, tmp);
         }
         if (potion.affects.op) {
           var tmp2 = deepClone(potion.json);
           tmp2.turns_left = deepClone(potion.affects.op_lasts);
+          console.log(
+            "POTION OP",
+            player.opponent().ThatPlayerId,
+            potion.id,
+            tmp2,
+          );
           await potions.addPotion(
             player.opponent().ThatPlayerId,
             potion.id,
@@ -787,8 +825,20 @@ var ability_dict = {
         await sleep(300);
         await card.animate("morale");
       }
-      await board.toGrave(card, row); // karta od razu na cmentarz
-      board.row.forEach((r) => r.updateScore()); // przelicz od razu
+      await board.toGrave(card, row);
+      //  board.row.forEach((r) => r.updateScore());
+    },
+  },
+  potion_white: {
+    name: "",
+    description: "",
+    placed: async (card, row) => {
+      await potions.white_honey();
+      await sleep(300);
+      await card.animate("morale");
+
+      await board.toGrave(card, row);
+      //  board.row.forEach((r) => r.updateScore());
     },
   },
   magicthegathering: {

@@ -216,12 +216,13 @@ console.log("nilfard_drawmaster", nilfard_drawmaster);
 let gryffinschool_conf = {
   anim: "griffin",
   anim_hand: "griffin_hand",
-  topic: "Choose a Witcher Sign",
+  //  topic: "Choose a Witcher Sign",
 };
 let viperSchool_conf = {
   anim: "griffin",
   anim_hand: "griffin_hand",
-  topic: "Choose a Witcher Sign",
+  // topic: "Choose a Potion",
+  show_notif: 67000,
 };
 let viper_potions_defs = {
   potion_jaskolka: {
@@ -237,6 +238,39 @@ let viper_potions_defs = {
       refresh_rows: {
         type: "none",
         value: null,
+      },
+    },
+  },
+  potion_soup: {
+    id: "elfandonions",
+    affects: {
+      me: true,
+      op: false,
+      op_lasts: 0,
+    },
+    json: {
+      translation_key: "potions.elfendonion",
+      turns_left: 0,
+      refresh_rows: {
+        type: "ability",
+        value: ["avenger", "dopavenger"],
+      },
+    },
+  },
+  potion_grom: {
+    id: "grom",
+    affects: {
+      me: true,
+      op: true,
+      op_lasts: 3,
+    },
+    json: {
+      translation_key: "potions.grom",
+      turns_left: 5,
+      refresh_rows: {
+        type: "row",
+        value: "melee",
+        times: 1.5,
       },
     },
   },
@@ -761,6 +795,9 @@ let card_name_class = {
   striga: "monster_%g",
   viperwitcher: "witcher_%g",
   potion_jaskolka: "potion_%g",
+  potion_soup: "potion_%g",
+  potion_grom: "potion_%g",
+  potion_white: "potion_%g",
 };
 let classDecorators = {
   undefined: { prefix: "⩫<", suffix: ">⩫" },

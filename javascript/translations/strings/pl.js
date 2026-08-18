@@ -205,7 +205,7 @@ STRNG["pl"] = {
   gryffinSchool: {
     name: "Szkoła Gryfa",
     description:
-      "Wybierz jedną kartę Znaku Wiedźmińskiego i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Przynęty. "
+      "Wybierz jedną kartę Znaku Wiedźmińskiego i dodaj ją do swojej ręki. "
   },
 
   magicthegathering: {
@@ -462,6 +462,30 @@ STRNG["pl"] = {
     discord: {
     name: "Społeczność Discord",
     description: "Ta karta pochodzi z naszego serwera społeczności Discord! "
+  },
+    viperSchool: {
+    name: "Szkoła Żmiji",
+    description: "Wybierz jedną kartę Wiedźmińskich Eliksirów i dodaj ją do swojej ręki. "
+  },
+    potion_jaskolka: {
+    name: "Jaskółka",
+    description: "Nakłada efekt dla obu graczy pozwalający zdolnością Szpiegostwa, Sabotażu i Wezwania Do Broni dobrać dodatkową kartę. "
+  },
+    potion_soup: {
+    name: "Zupa z Elfa i Cebuli",
+    description: "(Elf z cebulą dobry, jak pomidor. Chcesz jeść?) Po użyciu karty mścicieli obu graczy trasfromują się! "
+  },
+    potion_grom: {
+       name: "Grzmot",
+    description: "Zwiększa ostateczną siłę jednostek walczących wręcz o 50% (według obliczeń); efekt ten działa przez 5 tur na gracza, który go aktywuje, oraz przez 3 tury na jego przeciwnika. "
+    },
+     potion_white: {
+       name: "Biały Miód",
+    description: "Usuwa wszystkie efekty eliksirów dla wszystkich graczy! "
+    },
+    witcher_potion: {
+    name: "Wiedźmiński Eliksir",
+    description: "Po użyciu karta zostaje odrzucona! Nadpisuje wszytskie efekty tej mikstury dla każdego z celów eliksiru! "
   }
 },
     factions: {
@@ -784,7 +808,12 @@ STRNG["pl"] = {
     thedevil: "Diabeł",
     eredin_bucket: "Eredin — W Pogoni Za Starszą Krwią",
     discord_poor_infantry: "Biedna Pierdolona Piechota",
-    striga: "Strzyga"
+    striga: "Strzyga",
+    potion_jaskolka: "Jaskółka",
+    viperwitcher: "Wiedźmin Szkoły Żmiji",
+    potion_soup: "Zupa z Elfa i Cebuli",
+    potion_grom: "Grom",
+    potion_white: "Biały Miód"
   },
   ui: {
     elem: {
@@ -906,7 +935,9 @@ STRNG["pl"] = {
         eredin_ok: "Wybierz kartę do skopiowania",
         skellige_mad_man: "Wybierz kartę do wygnania",
         skellige_mad_man_ok: "Choose Tight Bond card",
-        devildeal: "Wybierz kartę do dobrania"
+        devildeal: "Wybierz kartę do dobrania",
+        gryf: "Wybierz znak Wiedźmiński",
+        viper: "Wybierz eliksir Wiedźmiński"
       },
         ordinal: {
       "st": "",
@@ -1219,8 +1250,6 @@ card_info: {
   soldier_female: "Żołnierki",
   witcher_male: "Wiedźmina",
   witcher_female: "Wiedźminki",
-  witcheress_male: "Wiedźmina",
-  witcheress_female: "Wiedźminki",
   sorcerer_male: "Czarodzieja",
   sorcerer_female: "Czarodziejki",
   elderblood_male: "Starszej Krwi",
@@ -1290,5 +1319,17 @@ rule63: [  // for classes
   {"if": "sabotage_female", "mode": "notsplit", "hero": true, "gender": "female", "extra": "bad_lady", "extra2": true}, // ponieważ ortografia
   {"if": "aviary_medic", "mode": "filename", "gender": "male"} 
 ]
-}
+},
+ "potions": {
+    "topic": {
+      "me": "<color=#7FAF45>Ty:</color>",
+      "op": "<color=#B33A3A>Przeciwnik:</color>"
+    },
+
+    "spypotion": "<color=#C46A2B>Jaskółka</color> jest aktywna na następne <color=#E6D8B5>%s</color> tury!",
+
+    "elfendonion": "<color=#A69A45>Zupa z elfa i cebuli</color> jest tutaj przez kolejne <color=#E6D8B5>%s</color> tury!",
+
+    "grom": "<color=#3F6B32>Grzmot</color> jest aktywny na następne <color=#E6D8B5>%s</color> tury!"
+  }
 };

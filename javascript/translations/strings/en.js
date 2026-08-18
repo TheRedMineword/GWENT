@@ -169,9 +169,9 @@ STRNG["en"] = {
         "Each card in row under Axii effect that base power is less than 5 will lose 2 power. Debuffs dont stack. Dont affect hero cards ",
     },
     gryffinSchool: {
-      name: "Griffin School",
+      name: "School of the Griffin",
       description:
-        "Choose one Witcher Sign card and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! ",
+        "Choose one Witcher Sign card and add it to your hand. ",
     },
     magicthegathering: {
       name: "Conjunction of the Spheres",
@@ -380,18 +380,29 @@ STRNG["en"] = {
     description: "This card comes from our Discord community server! "
   },
     viperSchool: {
-    name: "Witcher Viper School",
-    description: "[BETA] EDIT LATER"
+    name: "School of the Viper",
+    description: "Choose one Witcher Potion card and add it to your hand. "
   },
     potion_jaskolka: {
     name: "Swallow",
     description: "Apply for you and opponent potion effect that lets spy, sabotage and Call to Arms cards draw extra card "
   },
+    potion_soup: {
+    name: "Elf and Onion Soup",
+    description: "(Elf wich Onion goooood, tomato like, wanna some?) After use both players avenger cards will transform! "
+  },
+    potion_grom: {
+       name: "Thunderbolt",
+    description: "Increases the final strength of melee units by 50% based on calculations; applies the effect for 5 turns to the player who activates it, and for 3 turns to their opponent. "
+    },
+     potion_white: {
+       name: "White Honey",
+    description: "Removes all potion effects from all players! "
+    },
     witcher_potion: {
     name: "Witcher Potion",
-    description: "After uses gets discarded! "
+    description: "After use card gets discarded! Overwrites any active effect of this potion for target(s) player(s)! "
   }
-
 },
   factions: {
     realms: {
@@ -706,6 +717,9 @@ STRNG["en"] = {
     striga: "Striga",
     potion_jaskolka: "Swallow",
     viperwitcher: "Viper School Witcher",
+    potion_soup: "Elf and Onion soup",
+    potion_grom: "Thunderbolt",
+    potion_white: "White Honey"
   },
   ui: {
     elem: {
@@ -827,7 +841,9 @@ STRNG["en"] = {
         eredin_ok: "Choose a card to create a copy of",
         skellige_mad_man: "Choose card to banish",
         skellige_mad_man_ok: "Choose Tight Bond card",
-        devildeal: "Choose a card to draw"
+        devildeal: "Choose a card to draw",
+        gryf: "Choose a Witcher Sign",
+        viper: "Choose a Witcher Potion"
       },
       ordinal: {
       "st": "st",
@@ -1141,8 +1157,6 @@ card_info: {
   soldier_female: "Soldier",
   witcher_male: "Witcher",
   witcher_female: "Witcheress",
-  witcheress_male: "Witcher",
-  witcheress_female: "Witcheress",
   sorcerer_male: "Sorcerer",
   sorcerer_female: "Sorceress",
   elderblood_male: "Elder Blood",
@@ -1207,5 +1221,17 @@ card_info: {
   potion_female: "Witcher Potion"
 },
   rule63: [] // for classes if {"if": "siege", "gender": "female", "hero": false}
-}
+},
+ "potions": {
+    "topic": {
+      "me": "<color=#7FAF45>You:</color>",
+      "op": "<color=#B33A3A>Opponent:</color>"
+    },
+
+    "spypotion": "<color=#C46A2B>Swallow potion</color> is active for next <color=#E6D8B5>%s</color> turns!",
+
+    "elfendonion": "<color=#A69A45>Elf and Onion soup</color> is here for next <color=#E6D8B5>%s</color> turns!",
+
+    "grom": "<color=#3F6B32>Thunderbolt potion</color> active for next <color=#E6D8B5>%s</color> turns!"
+  }
 };

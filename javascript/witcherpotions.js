@@ -47,20 +47,39 @@ class PotionManager {
   async getPotion(player_id, potion_id) {
     return this.active_potions[player_id]?.[potion_id] ?? null;
   }
+  getPotion_fast(player_id, potion_id) {
+    return this.active_potions[player_id]?.[potion_id] ?? null;
+  }
 
   async isEffectActive(player_id, potion_id) {
     const potion = await this.getPotion(player_id, potion_id);
 
     return Boolean(potion && potion.active === true && potion.turns_left > 0);
   }
+  async getActivePotions_txt(player_id) {
+    const potions = this.active_potions[player_id] ?? {};
 
+    return Object.entries(potions)
+      .filter(([_, potion]) => potion?.active)
+      .map(([potion_id, potion]) =>
+        getTranslation(potion.translation_key).replace("%s", potion.turns_left),
+      )
+      .join("\n");
+  }
+  async white_honey() {
+    this.reset();
+    for (const row of this.board.row) {
+      await row.updateScore();
+    }
+    return true;
+  }
   async endOfTurn(player_id) {
     const potions = this.active_potions[player_id];
 
     if (!potions) {
       return;
     }
-
+    var force = false;
     for (const potion_id of Object.keys(potions)) {
       const potion = potions[potion_id];
 
@@ -69,13 +88,23 @@ class PotionManager {
       }
 
       potion.turns_left -= 1;
-
+      var update = false;
       if (potion.turns_left <= 0) {
         potion.turns_left = 0;
         potion.active = false;
+        update = true;
+        force = true;
+      } else if (potion.active) {
+        update = true;
+      }
+    }
 
-        // Keep this here so row effects can be removed later.
-        await this.refreshRows(player_id, potion_id);
+    if (update && !force) {
+      await this.refreshRows(player_id); //, potion_id);
+    }
+    if (force) {
+      for (const row of this.board.row) {
+        row.updateScore();
       }
     }
 
@@ -93,63 +122,52 @@ class PotionManager {
   }
 
   async refreshRows(player_id, potion_id = null) {
+    //  console.log("refreshRows(", player_id, potion_id, ")");
+
     if (!this.board?.row) {
       return;
     }
 
     const potions = this.active_potions[player_id] ?? {};
 
-    if ((potions?.refresh_rows?.type ?? "none") === "none") {
-      return;
+    for (const [activePotionId, potion] of Object.entries(potions)) {
+      if (!potion?.active) {
+        continue;
+      }
+
+      // If a specific potion was passed, only process that potion.
+      if (potion_id && activePotionId !== potion_id) {
+        continue;
+      }
+
+      this.board.row.forEach((row) => {
+        if (this.rowMatchesPotion(row, activePotionId)) {
+          //  console.log("POTION score update", activePotionId, row);
+          row.updateScore();
+        } else {
+          //  console.log("POTION not score update", activePotionId, row);
+        }
+      });
     }
-
-    this.board.row.forEach((row) => {
-      let shouldRefresh = false;
-
-      // Existing card-based refresh
-      if (
-        row.cards?.some((card) => card.abilities?.includes("magicthegathering"))
-      ) {
-        shouldRefresh = true;
-      }
-
-      // Potion-specific refresh
-      for (const [activePotionId, potion] of Object.entries(potions)) {
-        if (!potion.active) {
-          continue;
-        }
-
-        // If a specific potion was passed, only process that potion.
-        if (potion_id && activePotionId !== potion_id) {
-          continue;
-        }
-
-        if (this.rowMatchesPotion(row, potion)) {
-          shouldRefresh = true;
-        }
-      }
-
-      if (shouldRefresh) {
-        row.updateScore();
-      }
-    });
   }
 
-  async rowMatchesPotion(row, potion) {
-    if (!potion?.refresh_rows) {
-      return false;
-    }
+  rowMatchesPotion(row, potion) {
+    const potionDef = Object.values(viper_potions_defs).find(
+      (def) => def.id === potion,
+    );
 
-    const { type, value } = potion.refresh_rows;
+    const { type, value } = potionDef?.json?.refresh_rows ?? {};
 
     switch (type) {
       case "ability":
-        return row.cards?.some((card) =>
-          value?.some((ability) => card.abilities?.includes(ability)),
+        return (
+          row.cards?.some((card) =>
+            value?.some((ability) => card.abilities?.includes(ability)),
+          ) ?? false
         );
 
       case "row":
-        return value?.includes(row.id);
+        return value?.includes(row._id.short) ?? false;
 
       default:
         return false;
@@ -179,12 +197,19 @@ class PotionManager {
       delete this.active_potions[player_id];
     }
 
-    await this.refreshRows(player_id, potion_id);
+    await this.refreshRows(player_id); //, potion_id);
 
     return true;
   }
 
   reset() {
     this.active_potions = {};
+  }
+  async hasActiveEffect(player_id) {
+    const potions = this.active_potions[player_id] ?? {};
+
+    return Object.values(potions).some(
+      (potion) => potion?.active === true && potion?.turns_left > 0,
+    );
   }
 }

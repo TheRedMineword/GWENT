@@ -2854,6 +2854,38 @@ class Row extends CardContainer {
       this.scorch_a_card(card);
       return totalpower;
     }
+    //console.log(card)
+    (viper_potions_defs?.potion_soup?.json?.refresh_rows?.value ?? []).forEach(
+      (element) => {
+        //  console.log("for each potion", element, card.abilities.includes(element))
+        if (card.abilities.includes(element)) {
+          if (
+            (potions.getPotion_fast(player_me.ThatPlayerId, "elfandonions")
+              ?.active ?? false) === true
+          ) {
+            this.scorch_a_card_potion(card);
+          }
+          if (
+            (potions.getPotion_fast(player_op.ThatPlayerId, "elfandonions")
+              ?.active ?? false) === true
+          ) {
+            this.scorch_a_card_potion(card);
+          }
+        }
+      },
+    );
+    var row_name = this.id;
+    if (
+      row_name === "melee" &&
+      (potions.getPotion_fast(card.holder.ThatPlayerId, "grom")?.active ??
+        false) &&
+      !card.hero
+    ) {
+      totalpower = Math.floor(
+        totalpower *
+          (viper_potions_defs?.potion_grom?.json?.refresh_rows?.times ?? 1.3),
+      );
+    }
     return totalpower;
   }
   calcCardScore_work(card) {
@@ -3095,6 +3127,33 @@ class Row extends CardContainer {
 
     // Move card to graveyard
     await board.toGrave(card, row);
+  }
+  async scorch_a_card_potion(card) {
+    if (card?.scorch_a_card_potion ?? false) {
+      return;
+    }
+    card.scorch_a_card_potion = true;
+    console.log("scorch_a_card", name, this);
+    if (!card) return;
+    console.log("scorch_a_card(card)", card);
+    //   if (card.hero) return;
+
+    // Find the row/container the card is currently in
+    let row = board.row.find((r) => r.cards.includes(card));
+
+    if (!row) {
+      card.scorch_a_card_potion = false;
+      return;
+    }
+
+    // Play scorch animation
+
+    // Move card to graveyard
+    board.toGrave(card, row);
+    card.animate("scorch", true, false);
+    await sleep(700);
+    card.scorch_a_card_potion = false;
+    return true;
   }
 
   // Removes all cards and effects from this row
@@ -3498,6 +3557,13 @@ class Game {
     add_redraws = 0;
     if (
       player_me.leader.abilities?.includes("emhyr_whiteflame2") &&
+      player_op.leader.abilities?.includes("emhyr_whiteflame2")
+    ) {
+      player_me.disableLeader(true);
+      player_op.disableLeader(true);
+    }
+    if (
+      player_me.leader.abilities?.includes("emhyr_whiteflame2") &&
       player_me.leader.filename !== player_op.leader.filename
     ) {
       var tmp_faction_me = player_me.leader.faction;
@@ -3869,7 +3935,6 @@ class Game {
         hold = tmp;
       }
     }
-
     await ui.notification("round-start", ui_display_times.round_start);
     if (this.currPlayer.opponent().passed)
       await ui.notification(
@@ -3910,7 +3975,22 @@ class Game {
       //      document.removeEventListener("keydown", handleKeyDown);
       //    document.removeEventListener("keyup", handleKeyUp);
     }
-
+    if ((await potions.hasActiveEffect(player_me.ThatPlayerId)) === true) {
+      pushMessage(
+        formatMessage2(
+          `${getTranslation("potions.topic.me")}\n${await potions.getActivePotions_txt(player_me.ThatPlayerId)}`,
+        ),
+        viperSchool_conf.show_notif,
+      );
+    }
+    if ((await potions.hasActiveEffect(player_op.ThatPlayerId)) === true) {
+      pushMessage(
+        formatMessage2(
+          `${getTranslation("potions.topic.op")}\n${await potions.getActivePotions_txt(player_op.ThatPlayerId)}`,
+        ),
+        viperSchool_conf.show_notif,
+      );
+    }
     this.currPlayer.startTurn();
   }
 
