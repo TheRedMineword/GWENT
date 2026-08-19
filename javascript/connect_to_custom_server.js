@@ -26,8 +26,8 @@ const IGNORE_PATTERNS = [
   "*.removed",
   "*.activated",
   "api_url_msg",
-  "*.me",
-  "*.op",
+  "players.me",
+  "players.op",
   "current_op.*",
   "ongame_start_eval",
   "wsUrl",
@@ -415,17 +415,13 @@ function applyEnvVars(envVars, currentPath = "") {
 function isValidPath(path) {
   if (typeof path !== "string") return false;
 
-  path = path.trim(); // 👈 important fix
+  path = path.trim();
 
-  if (path.length === 0) return false;
+  if (!path) return false;
   if (path.startsWith(".") || path.endsWith(".")) return false;
   if (path.includes("..")) return false;
 
-  const parts = path.split(".");
-
-  const validKey = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/;
-
-  return parts.every((part) => validKey.test(part));
+  return path.split(".").every((part) => part.length > 0);
 }
 
 function setGlobalValue(path, value) {
@@ -433,48 +429,24 @@ function setGlobalValue(path, value) {
     console.warn("Invalid path:", path);
     return;
   }
+
   const parts = path.split(".");
 
-  let target = globalThis; // instead of window
+  let target = globalThis;
 
-  //    for (let i = 0; i < parts.length - 1; i++) {
-  //       const part = parts[i];
+  for (let i = 0; i < parts.length - 1; i++) {
+    const part = parts[i];
 
-  //     if (typeof target[part] !== 'object' || target[part] === null) {
-  //        target[part] = {};
-  //   }
-
-  // target = target[part];
-  //if (path = 'card_dict'){
-  //    console.log(LOG_PREFIX, `NEW CARDS SKIP`);
-  //     return;
-  // }
-  try {
-    if (typeof value === "object" && value !== null) {
-      console.log(LOG_PREFIX, `Set global value: ${path}`, `true`);
-      eval(`${path} = ${JSON.stringify(value)}`);
-      console.log(
-        LOG_PREFIX,
-        `Set global value: ${path}`,
-        `${path} = ${JSON.stringify(value)}`,
-      );
-    } else {
-      console.log(LOG_PREFIX, `Set global value: ${path}`, `false`);
-      eval(`${path} = ` + JSON.stringify(value) + `;`);
-      console.log(
-        LOG_PREFIX,
-        `Set global value: ${path}`,
-        `${path} = ` + JSON.stringify(value) + `;`,
-      );
+    if (typeof target[part] !== "object" || target[part] === null) {
+      target[part] = {};
     }
-  } catch (e) {
-    console.log("error", e, " is fatal? idk");
+
+    target = target[part];
   }
-  // }
 
-  // const lastKey = parts[parts.length - 1];
+  const lastKey = parts[parts.length - 1];
 
-  // target[lastKey] = value;
+  target[lastKey] = value;
 
   console.log(LOG_PREFIX, `Set global value: ${path}`, value);
 }
