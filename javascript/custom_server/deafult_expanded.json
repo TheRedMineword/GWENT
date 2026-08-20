@@ -120,9 +120,9 @@
       "anim_hand": "griffin_hand"
     },
     "viperSchool_conf": {
-      "anim": "griffin",
-      "anim_hand": "griffin_hand",
-      "show_notif": 67000
+      "anim": "viper",
+      "anim_hand": "viper_hand",
+      "show_notif": 5700
     },
     "mtg_conf": {
       "anim": "mtg",
@@ -1530,7 +1530,7 @@
           "beast_of_tussant": "Beast of Tussant",
           "dopler": "Doppler",
           "reveal_dopler": "Doppler Attack Force",
-          "wshield": "Witcher — Quen",
+          "wshield": "Witchers — Quen",
           "quen": "Witcher Signs: Quen",
           "eist_tuirseach": "Eist Tuirseach — King Of Citra",
           "svalblod": "Svalblod Cult",
@@ -1548,7 +1548,7 @@
           "temeriamoral": "Blue Stripe Commando — Scout",
           "temeriabluestripe": "Blue Stripe Commando — Soldier",
           "temeriabluestripe_2": "Blue Stripe Commando — Soldier",
-          "temeriamoral_1": "Blue Stripe Commando — Quen",
+          "temeriamoral_1": "Blue Stripe Commando — Scout",
           "vernontemeria_call": "Vernon Roche — Blue Stripes Commando Leader",
           "steward": "Hopeful Steward",
           "guard": "Royal Guard",
@@ -2631,7 +2631,7 @@
           "beast_of_tussant": "Bestia z Toussaints",
           "dopler": "Doppler",
           "reveal_dopler": "Siły Uderzeniowe Dopplera",
-          "wshield": "Wiedźmin — Quen",
+          "wshield": "Wiedźmini — Quen",
           "quen": "Znaki Wiedźmińskie: Quen",
           "eist_tuirseach": "Eist Tuirseach — King Of Citra",
           "svalblod": "Svalblod Cult",
@@ -2649,7 +2649,7 @@
           "temeriamoral": "Komandosi Niebieskich Pasów — Zwiadowca",
           "temeriabluestripe": "Komandosi Niebieskich Pasów — Żołnierz",
           "temeriabluestripe_2": "Komandosi Niebieskich Pasów — Żółnierz",
-          "temeriamoral_1": "Komandosi Niebieskich Pasów — Quen",
+          "temeriamoral_1": "Komandosi Niebieskich Pasów — Zwiadowca",
           "vernontemeria_call": "Vernon Roche — Dowódca Odziałów Specjalnych Niebieskich Pasów",
           "steward": "Hopeful Steward",
           "guard": "Straż Królewska",
@@ -3144,7 +3144,9 @@
             "roach_male": "Płotki",
             "roach_female": "Płotki",
             "rottenfruit_male": "Zbira",
-            "rottenfruit_female": "Zbira"
+            "rottenfruit_female": "Zbira",
+            "potion_male": "Wiedźmińskich Eliksirów",
+            "potion_female": "Wiedźmińskich Eliksirów"
           },
           "rule63": [
             {
@@ -6776,10 +6778,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
-    "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "yu197hlNWK0",
-    "tavern_yt_volume": 90
+    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
+    "audio_yt_vid_soundtrack_volume": 47,
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }

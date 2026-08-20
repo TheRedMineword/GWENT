@@ -736,7 +736,7 @@ STRNG["pl"] = {
     beast_of_tussant: "Bestia z Toussaints",
     dopler: "Doppler",
     reveal_dopler: "Siły Uderzeniowe Dopplera",
-    wshield: "Wiedźmin — Quen",
+    wshield: "Wiedźmini — Quen",
     quen: "Znaki Wiedźmińskie: Quen",
     eist_tuirseach: "Eist Tuirseach — King Of Citra",
     svalblod: "Svalblod Cult",
@@ -754,7 +754,7 @@ STRNG["pl"] = {
     temeriamoral: "Komandosi Niebieskich Pasów — Zwiadowca",
     temeriabluestripe: "Komandosi Niebieskich Pasów — Żołnierz",
     temeriabluestripe_2: "Komandosi Niebieskich Pasów — Żółnierz",
-    temeriamoral_1: "Komandosi Niebieskich Pasów — Quen",
+    temeriamoral_1: "Komandosi Niebieskich Pasów — Zwiadowca",
     vernontemeria_call: "Vernon Roche — Dowódca Odziałów Specjalnych Niebieskich Pasów",
     steward: "Hopeful Steward",
     guard: "Straż Królewska",
@@ -1309,7 +1309,9 @@ card_info: {
   roach_male: "Płotki",
   roach_female: "Płotki",
   rottenfruit_male: "Zbira",
-  rottenfruit_female: "Zbira"
+  rottenfruit_female: "Zbira",
+  potion_male: "Wiedźmińskich Eliksirów",
+  potion_female: "Wiedźmińskich Eliksirów"
 },
 rule63: [  // for classes
   {"if": "siege", "gender": "female", "hero": false, "mode": "split"}, // because siege strucutes powiny mieć "oblężniczej"

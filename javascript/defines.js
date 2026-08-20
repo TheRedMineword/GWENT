@@ -219,10 +219,10 @@ let gryffinschool_conf = {
   //  topic: "Choose a Witcher Sign",
 };
 let viperSchool_conf = {
-  anim: "griffin",
-  anim_hand: "griffin_hand",
+  anim: "viper",
+  anim_hand: "viper_hand",
   // topic: "Choose a Potion",
-  show_notif: 67000,
+  show_notif: 5700,
 };
 let viper_potions_defs = {
   potion_jaskolka: {
