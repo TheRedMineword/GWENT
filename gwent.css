@@ -1810,7 +1810,7 @@ html {
 	background-position: center;
 	background-repeat: no-repeat;
 
-	opacity: 0.4; /* controls how visible image is */
+	/* opacity: 0.4; /* controls how visible image is */
 	z-index: 0;
 }
 
