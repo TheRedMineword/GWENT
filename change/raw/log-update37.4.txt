@@ -90,7 +90,7 @@ This update brings server-side chnages and new leader card! And news about next 
 <color=#BBBCC1>Five new cards are coming to the **Sky Kingdom** faction for limited duration!</color>
 <color=#BBBCC1>Starting **!time:2026-08-28T07:00:00.000Z!** and ending at **!time:2026-09-10T07:00:00.000Z!** they be available to play!</color>
 <color=#BBBCC1>This will be the first visit of its kind, bringing together the group of traveling spirits from the Sky: Children of the Light to Gwent.</color>
-<color=#BBBCC1>Please remember that I am not affiliated with **ThatGameCompany** and am adding these cards of my own accord; the characters themselves remain the property of TGC.</color>
+<color=#BBBCC1>Please remember that I am not affiliated with **ThatGameCompany** and I am adding these cards of my own accord; the characters themselves remain the property of TGC.</color>
 <fat1>
 <color=#BBBCC1>About Special Visit: [ThatSkyGame Post 1](https://www.thatskygame.com/news/this-month-in-sky-august-2026-edition), [ThatSkyGame Post 2](https://www.youtube.com/watch?v=M3%5FAB5vBxnk), [Sky Children of The Light Discord Server](api/discord-iframe/page?64=eyJpbnZpdGUiOiJ0aGF0c2t5Z2FtZSJ9)</color>
 <color=#BBBCC1>Remember to join our Gwent [Discord Server](api/discord-iframe/page) for updates and more informations!</color>
