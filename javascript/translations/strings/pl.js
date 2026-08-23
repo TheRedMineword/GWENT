@@ -798,7 +798,7 @@ STRNG["pl"] = {
     nightwraith: "Północnica",
     noonwraith: "Południca",
     deatheatr: "Trupojad",
-    wardancer: "Tancerz Wojny",
+    wardancer: "Tancerz Wojenny",
     valley_twins: "Elders of the Valley",
     sunbather_pink: "Chill Sunbather z kokardą we włosach",
     bluebird_a: "Niebieskie Pióro",
