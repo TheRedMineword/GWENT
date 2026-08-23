@@ -39,6 +39,17 @@
 //   !gwentstatus             Show your current registration/bet state.
 //   !gwentinventory          Show your UnbelievaBoat inventory items.
 //   !gwentleaderboard [n]    Show the top n (default 5, max 15) cash balances.
+//   !gwentgiveaway <amount>  Take <amount> cash out of YOUR balance and post
+//                          it as a first-come-first-served claim in the free
+//                          money channel. Refunded automatically if the post
+//                          fails for any reason.
+//   !gwentspawn <amount>    ADMIN ONLY. Posts <amount> freshly-created cash
+//                          (not taken from anyone) as a claim in the free
+//                          money channel.
+//   !gwentcoinflip <amount> Flip a coin against the house for <amount> cash,
+//                          double or nothing.
+//   !gwenttip <@user> <amount>  Send <amount> of your own cash to another
+//                          Discord user directly.
 //   !gwenthelp               List all of the above.
 //
 
@@ -92,10 +103,10 @@
 // the right tool here. If you need bets to survive a server restart, swap
 // the Maps below for reads/writes to your `database`/Xano layer.
 
-let Client, GatewayIntentBits, ActivityType, ActionRowBuilder, ButtonBuilder, ButtonStyle;
+let Client, GatewayIntentBits, ActivityType, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField;
 
 try {
-  ({ Client, GatewayIntentBits, ActivityType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js"));
+  ({ Client, GatewayIntentBits, ActivityType, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField } = require("discord.js"));
 } catch (e) {
   // discord.js not installed - init() will log a clear error instead of crashing.
 }
@@ -133,6 +144,36 @@ const FREE_MONEY_ON_SOLO_LOSS = true;
 const FREE_MONEY_CHANNEL_ID =
   cfg.free_money_channel ||
   process.env.dc_free_money_channel;
+
+/*
+ * Discord user IDs allowed to run admin-only commands (currently just
+ * !gwentspawn), on top of anyone with the guild's Administrator
+ * permission. Configure via either the dc_bot JSON blob
+ * (cfg.admin_ids: ["123", "456"]) or a comma-separated env var.
+ */
+const ADMIN_IDS = new Set(
+  [
+    ...(Array.isArray(cfg.admin_ids) ? cfg.admin_ids : []),
+    ...String(process.env.dc_bot_admin_ids || "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean),
+  ].map(String)
+);
+
+function isAdmin(message) {
+  if (ADMIN_IDS.has(String(message.author.id))) {
+    return true;
+  }
+
+  try {
+    return !!message.member?.permissions?.has?.(
+      PermissionsBitField.Flags.Administrator
+    );
+  } catch (e) {
+    return false;
+  }
+}
 
 let client = null;
 let ready = false;
@@ -267,6 +308,57 @@ async function unbAdjustBalance(userId, cashDelta, reason) {
   }
 
   return res.json();
+}
+
+/*
+ * Same as unbAdjustBalance(), but retries on failure (network blip,
+ * UnbelievaBoat rate limit/5xx, etc.) before giving up.
+ *
+ * This exists specifically as a fail-safe for money-moving calls where a
+ * single transient failure means someone doesn't get paid (e.g. the
+ * winner payout below) - we've seen at least one unreproduced report of
+ * a winner not receiving their payout, and a bare unbAdjustBalance() call
+ * has no way to tell a one-off blip apart from a real failure. Every
+ * attempt (success or failure) is logged so a repeat can actually be
+ * diagnosed from the logs instead of just "it didn't work".
+ */
+async function unbAdjustBalanceWithRetry(
+  userId,
+  cashDelta,
+  reason,
+  attempts = 3
+) {
+  let lastErr;
+
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      const result = await unbAdjustBalance(
+        userId,
+        cashDelta,
+        reason
+      );
+
+      log(
+        `unbAdjustBalance OK (attempt ${attempt}/${attempts}) user=${userId} delta=${cashDelta} reason="${reason}" newCash=${result?.cash}`
+      );
+
+      return result;
+    } catch (e) {
+      lastErr = e;
+
+      log(
+        `unbAdjustBalance FAILED (attempt ${attempt}/${attempts}) user=${userId} delta=${cashDelta} reason="${reason}": ${e.message}`
+      );
+
+      if (attempt < attempts) {
+        await new Promise((resolve) =>
+          setTimeout(resolve, 400 * attempt)
+        );
+      }
+    }
+  }
+
+  throw lastErr;
 }
 
 // GET /guilds/{guild}/users/{user}/inventory
@@ -588,7 +680,7 @@ async function refundSessionBets(
         : null;
 
       try {
-        await unbAdjustBalance(
+        await unbAdjustBalanceWithRetry(
           bet.discordId,
           bet.amount,
           "Gwent bet refund"
@@ -795,7 +887,8 @@ async function postFreeMoneyMessage(
   sessionId,
   baseAmount,
   bonusPercent,
-  bonusAmount
+  bonusAmount,
+  customContent
 ) {
   if (
     !ready ||
@@ -842,8 +935,12 @@ async function postFreeMoneyMessage(
         ? ` (stake **${baseAmount}** + ${bonusPercent}% score bonus, **${bonusAmount}** extra)`
         : "";
 
+    const content =
+      customContent ||
+      `\uD83D\uDCB0 A Gwent bet went unmatched and the loser's stake is up for grabs: **${amount}** cash total${bonusText}. First to click claims it!`;
+
     await channel.send({
-      content: `\uD83D\uDCB0 A Gwent bet went unmatched and the loser's stake is up for grabs: **${amount}** cash total${bonusText}. First to click claims it!`,
+      content,
       components: [row],
     });
 
@@ -916,10 +1013,10 @@ async function handleFreeMoneyClaim(
   );
 
   try {
-    await unbAdjustBalance(
+    await unbAdjustBalanceWithRetry(
       interaction.user.id,
       amount,
-      "Gwent free money claim (unmatched bet, solo loss)"
+      "Gwent free money channel claim"
     );
 
     await interaction.update({
@@ -960,7 +1057,13 @@ async function onMatchResult(
   ws,
   data
 ) {
+  log(
+    `onMatchResult received: player=${ws?.playerId} sessionId=${ws?.sessionId} data=${JSON.stringify(data)}`
+  );
+
   if (!ready) {
+    log("onMatchResult ignored: bot not ready.");
+
     return;
   }
 
@@ -971,6 +1074,19 @@ async function onMatchResult(
     !sessionId ||
     !deps.sessions[sessionId]
   ) {
+    /*
+     * This report is now dropped on the floor - if the other client's
+     * report already came in and was waiting on this one, that pending
+     * report (and any bets tied to it) will just sit in `matchReports` /
+     * `bets` until the session is cleaned up some other way (disconnect,
+     * player-left). Logged loudly since a session vanishing out from
+     * under a still-relevant match report is a plausible cause of a
+     * "winner never got paid" bug that's otherwise hard to reproduce.
+     */
+    log(
+      `onMatchResult ignored: no active session for player ${ws?.playerId} (sessionId=${sessionId}). If a payout/refund was expected, check whether the session was removed prematurely.`
+    );
+
     return;
   }
 
@@ -998,6 +1114,10 @@ async function onMatchResult(
       : null;
 
   if (!winnerId) {
+    log(
+      `onMatchResult ignored: missing/empty winner_id from ${ws.playerId} in session ${sessionId} (data=${JSON.stringify(data)}).`
+    );
+
     return;
   }
 
@@ -1046,6 +1166,10 @@ async function onMatchResult(
     )
   ) {
     // Still waiting on the other report.
+    log(
+      `Still waiting on second report for session ${sessionId}: reports so far=${JSON.stringify(reports)}`
+    );
+
     return;
   }
 
@@ -1097,6 +1221,13 @@ async function onMatchResult(
   );
 
   /*
+   * Captured outside the try block so the catch{} safety net below can
+   * still see the bets that were in play even if the crash happens
+   * after they were pulled out of the `bets` Map.
+   */
+  let capturedSessionBets = null;
+
+  /*
    * Everything from here to the end of this function runs inside
    * try/finally so resolvingSessions.delete(sessionId) always fires -
    * on every return path below (missing bets, incomplete bookkeeping,
@@ -1116,6 +1247,8 @@ async function onMatchResult(
    */
   const sessionBets =
     bets.get(sessionId);
+
+  capturedSessionBets = sessionBets;
 
   bets.delete(sessionId);
 
@@ -1205,7 +1338,7 @@ async function onMatchResult(
         winAmount - bet.amount;
 
       try {
-        await unbAdjustBalance(
+        await unbAdjustBalanceWithRetry(
           bet.discordId,
           winAmount,
           bonusPercent > 0
@@ -1358,7 +1491,7 @@ async function onMatchResult(
     }
 
     try {
-      await unbAdjustBalance(
+      await unbAdjustBalanceWithRetry(
         bet.discordId,
         bet.amount,
         "Gwent bet refund (opponent never bet)"
@@ -1428,7 +1561,9 @@ async function onMatchResult(
     !loserBet
   ) {
     log(
-      `Incomplete bet bookkeeping for session ${sessionId}`
+      `Incomplete bet bookkeeping for session ${sessionId}: winnerPlayerId=${winnerPlayerId} loserPlayerId=${loserPlayerId} sessionBets=${JSON.stringify(
+        sessionBets
+      )} - refunding whatever bets exist instead of paying out.`
     );
 
     /*
@@ -1441,7 +1576,7 @@ async function onMatchResult(
       const bet of Object.values(sessionBets)
     ) {
       try {
-        await unbAdjustBalance(
+        await unbAdjustBalanceWithRetry(
           bet.discordId,
           bet.amount,
           "Gwent bet refund (incomplete bookkeeping)"
@@ -1509,7 +1644,7 @@ async function onMatchResult(
       : "Gwent bet payout";
 
   log(
-    `Payout for session ${sessionId}: pot=${pot} lowestScore=${lowestScore} bonus=${bonusPercent}% -> payout=${payout}`
+    `Payout for session ${sessionId}: winner=${winnerBet.discordId} loser=${loserBet.discordId} winnerStake=${winnerBet.amount} loserStake=${loserBet.amount} pot=${pot} lowestScore=${lowestScore} bonus=${bonusPercent}% -> payout=${payout}`
   );
 
   /*
@@ -1519,9 +1654,19 @@ async function onMatchResult(
    * The session is already locked and bets are already removed
    * from the active Map, so a duplicate event cannot perform
    * another payout.
+   *
+   * This is the single highest-stakes money call in the whole file - if
+   * it fails, both players' stakes are already gone (deducted when the
+   * bets were placed) and the winner just doesn't get paid, with nothing
+   * left in local state to retry from later. unbAdjustBalanceWithRetry
+   * absorbs transient failures (network blips, momentary 5xx/429s from
+   * UnbelievaBoat) that a bare call would not. If it still fails after
+   * retries, we log everything needed to pay the winner manually and, if
+   * a free money channel is configured, also post a visible alert there
+   * so it doesn't just sit unnoticed in the logs.
    */
   try {
-    await unbAdjustBalance(
+    await unbAdjustBalanceWithRetry(
       winnerBet.discordId,
       payout,
       reason
@@ -1542,14 +1687,33 @@ async function onMatchResult(
     );
   } catch (e) {
     log(
-      `Payout failed for session ${sessionId}:`,
-      e.message
+      `CRITICAL: payout FAILED for session ${sessionId} after retries - winner=${winnerBet.discordId} amount=${payout} (pot=${pot}, bonus=${bonusPercent}%) loser=${loserBet.discordId} loserStake=${loserBet.amount}: ${e.message}. Manual admin payout required.`
     );
 
     await dm(
       winnerBet.discordId,
-      `\u26A0\uFE0F You won, but crediting your **${payout}** payout failed. Please contact an admin.`
+      `\u26A0\uFE0F You won, but crediting your **${payout}** payout failed even after retries. Please contact an admin and mention session \`${sessionId}\` so they can pay you manually.`
     );
+
+    // Best-effort visible alert, on top of the log line above, so this
+    // doesn't just get buried - this is exactly the failure mode behind
+    // reports of a winner not getting their money.
+    if (FREE_MONEY_CHANNEL_ID && ready && client) {
+      try {
+        const alertChannel = await client.channels.fetch(
+          FREE_MONEY_CHANNEL_ID
+        );
+
+        await alertChannel.send(
+          `\uD83D\uDEA8 **Payout failure** - <@${winnerBet.discordId}> won a Gwent match (session \`${sessionId}\`) and should have been credited **${payout}** cash, but the economy API call failed after retries. Please pay them manually. (loser: <@${loserBet.discordId}>, error: ${e.message})`
+        );
+      } catch (e2) {
+        log(
+          `Also failed to post payout-failure alert for session ${sessionId}:`,
+          e2.message
+        );
+      }
+    }
   }
 
   pushIntegration(
@@ -1596,6 +1760,57 @@ async function onMatchResult(
   log(
     `Payout settlement completed for session ${sessionId}`
   );
+  } catch (e) {
+    /*
+     * Safety net for anything unexpected above (a bug, a bad assumption,
+     * a thrown error we didn't anticipate) that isn't already caught
+     * locally. Without this, an exception here would just propagate out
+     * of onMatchResult with the bets already pulled out of `bets` and
+     * nothing left to settle them from later - money silently stuck in
+     * limbo, which matches the "winner didn't get paid, couldn't
+     * reproduce" bug report. Instead: log everything needed to
+     * reconstruct what happened, and best-effort refund any captured
+     * bets so at minimum nobody is out their stake.
+     */
+    log(
+      `UNEXPECTED ERROR settling session ${sessionId} (winner=${reportA}): ${e?.stack || e}. capturedSessionBets=${JSON.stringify(
+        capturedSessionBets
+      )}`
+    );
+
+    if (capturedSessionBets) {
+      for (const bet of Object.values(capturedSessionBets)) {
+        try {
+          await unbAdjustBalanceWithRetry(
+            bet.discordId,
+            bet.amount,
+            "Gwent bet refund (settlement crashed)"
+          );
+
+          await dm(
+            bet.discordId,
+            `\u26A0\uFE0F Something went wrong settling your Gwent match, so your **${bet.amount}** stake was refunded rather than risk it being lost.`
+          );
+
+          log(
+            `Safety-net refund succeeded for ${bet.discordId} (${bet.amount}) in session ${sessionId}`
+          );
+        } catch (e2) {
+          log(
+            `CRITICAL: safety-net refund FAILED for ${bet.discordId} amount=${bet.amount} session=${sessionId}: ${e2.message}. Manual admin reconciliation required.`
+          );
+
+          await dm(
+            bet.discordId,
+            `\u26A0\uFE0F Something went wrong settling your Gwent match and we could not automatically refund your **${bet.amount}** stake. Please contact an admin and mention session \`${sessionId}\`.`
+          ).catch(() => {});
+        }
+      }
+    } else {
+      log(
+        `No captured bets to safety-refund for session ${sessionId} - if money is missing here, it needs manual admin reconciliation.`
+      );
+    }
   } finally {
     resolvingSessions.delete(sessionId);
   }
@@ -1611,6 +1826,18 @@ function usage(cmd) {
 
     gwentbet:
       "!gwentbet <amount>",
+
+    gwentgiveaway:
+      "!gwentgiveaway <amount>",
+
+    gwentspawn:
+      "!gwentspawn <amount>",
+
+    gwentcoinflip:
+      "!gwentcoinflip <amount>",
+
+  //  gwenttip:
+  //    "!gwenttip <@user> <amount>",
   };
 
   return (
@@ -2115,25 +2342,412 @@ async function handleLeaderboard(
 }
 
 
-function handleHelp(message) {
+// ---------- Giveaway / spawn / coinflip / tip ----------
+
+// User-funded: takes <amount> out of the caller's own balance and posts
+// it to the free money channel as a first-come-first-served claim.
+
+async function handleGiveaway(
+  message,
+  args
+) {
+  const amount =
+    Number.parseInt(
+      args[0],
+      10
+    );
+
+  if (
+    !Number.isInteger(amount) ||
+    amount <= 0
+  ) {
+    return message.reply(
+      `Usage: \`${usage("gwentgiveaway")}\` - amount must be a positive whole number.`
+    );
+  }
+
+  if (!FREE_MONEY_CHANNEL_ID) {
+    return message.reply(
+      "The free money channel isn't configured, so giveaways are disabled."
+    );
+  }
+
+  log(
+    `Giveaway requested by ${message.author.id}: ${amount}`
+  );
+
+  try {
+    const balance =
+      await unbGetBalance(
+        message.author.id
+      );
+
+    if (
+      (balance.cash ?? 0) <
+      amount
+    ) {
+      return message.reply(
+        `You only have **${balance.cash}** cash, which isn't enough to give away **${amount}**.`
+      );
+    }
+
+    await unbAdjustBalanceWithRetry(
+      message.author.id,
+      -amount,
+      "Gwent giveaway (user funded)"
+    );
+  } catch (e) {
+    log(
+      "Giveaway withdrawal failed:",
+      e.message
+    );
+
+    return message.reply(
+      "Couldn't reach the economy bot to take that money from you. Try again shortly."
+    );
+  }
+
+  const posted =
+    await postFreeMoneyMessage(
+      amount,
+      `giveaway:${message.author.id}`,
+      amount,
+      0,
+      0,
+      `\uD83C\uDF81 <@${message.author.id}> is giving away **${amount}** cash! First to click claims it.`
+    );
+
+  if (!posted) {
+    /*
+     * We already took the money - if we can't post the claim message,
+     * refund it immediately rather than letting it silently vanish.
+     */
+    try {
+      await unbAdjustBalanceWithRetry(
+        message.author.id,
+        amount,
+        "Gwent giveaway refund (post failed)"
+      );
+
+      log(
+        `Refunded failed giveaway of ${amount} to ${message.author.id}`
+      );
+    } catch (e) {
+      log(
+        `CRITICAL: failed to refund failed giveaway of ${amount} to ${message.author.id}: ${e.message}. Manual admin reconciliation required.`
+      );
+
+      return message.reply(
+        `\u26A0\uFE0F Took **${amount}** from you but failed to post the giveaway AND failed to refund it. Please contact an admin immediately.`
+      );
+    }
+
+    return message.reply(
+      "Couldn't post the giveaway message, so your money was refunded."
+    );
+  }
+
+  log(
+    `Giveaway posted: ${amount} from ${message.author.id} to the free money channel`
+  );
+
   return message.reply(
-    [
-      "**Gwent Discord commands**",
+    `\uD83C\uDF81 **${amount}** taken from your balance and posted to <#${FREE_MONEY_CHANNEL_ID}> - first click gets it!`
+  );
+}
 
-      `\`${usage("registerclient")}\` - link your Discord account to a connected game client`,
+// Admin-only: posts <amount> freshly-created cash (not taken from
+// anyone) to the free money channel.
 
-      "`!gwentunregister` - clear your registration",
+async function handleSpawnMoney(
+  message,
+  args
+) {
+  if (!isAdmin(message)) {
+    return message.reply(
+      "You need to be an admin to use this command."
+    );
+  }
 
-      `\`${usage("gwentbet")}\` - escrow cash as your match stake`,
+  const amount =
+    Number.parseInt(
+      args[0],
+      10
+    );
 
-      "`!gwentstatus` - show your registration/bet state",
+  if (
+    !Number.isInteger(amount) ||
+    amount <= 0
+  ) {
+    return message.reply(
+      `Usage: \`${usage("gwentspawn")}\` - amount must be a positive whole number.`
+    );
+  }
 
-      // "`!gwentinventory` - show your UnbelievaBoat inventory",
+  if (!FREE_MONEY_CHANNEL_ID) {
+    return message.reply(
+      "The free money channel isn't configured."
+    );
+  }
 
-      // "`!gwentleaderboard [count]` - show the top cash balances (default 5, max 15)",
+  log(
+    `Admin ${message.author.id} spawned ${amount} into the free money channel`
+  );
 
-      "`!gwenthelp` - show this message",
-    ].join("\n")
+  const posted =
+    await postFreeMoneyMessage(
+      amount,
+      `admin-spawn:${message.author.id}`,
+      amount,
+      0,
+      0,
+      `\uD83C\uDF89 An admin dropped **${amount}** cash into this channel. First to click claims it!`
+    );
+
+  if (!posted) {
+    return message.reply(
+      "Failed to post the giveaway message. Check the bot's channel config/permissions."
+    );
+  }
+
+  return message.reply(
+    `\u2705 Spawned **${amount}** into <#${FREE_MONEY_CHANNEL_ID}>.`
+  );
+}
+
+// Flip a coin against the house for <amount>, double or nothing.
+// No opponent, no session, no database - just a direct economy call.
+
+async function handleCoinflip(
+  message,
+  args
+) {
+  const amount =
+    Number.parseInt(
+      args[0],
+      10
+    );
+
+  if (
+    !Number.isInteger(amount) ||
+    amount <= 0
+  ) {
+    return message.reply(
+      `Usage: \`${usage("gwentcoinflip")}\` - amount must be a positive whole number.`
+    );
+  }
+
+  try {
+    const balance =
+      await unbGetBalance(
+        message.author.id
+      );
+
+    if (
+      (balance.cash ?? 0) <
+      amount
+    ) {
+      return message.reply(
+        `You only have **${balance.cash}** cash, which isn't enough to flip **${amount}**.`
+      );
+    }
+  } catch (e) {
+    log(
+      "Coinflip balance check failed:",
+      e.message
+    );
+
+    return message.reply(
+      "Couldn't reach the economy bot. Try again shortly."
+    );
+  }
+
+  const won =
+    Math.random() < 0.5;
+
+  const delta =
+    won ? amount : -amount;
+
+  try {
+    await unbAdjustBalanceWithRetry(
+      message.author.id,
+      delta,
+      won
+        ? "Gwent coinflip win"
+        : "Gwent coinflip loss"
+    );
+  } catch (e) {
+    log(
+      "Coinflip settlement failed:",
+      e.message
+    );
+
+    return message.reply(
+      `\u26A0\uFE0F The coin landed, but crediting/debiting your **${amount}** failed. Please contact an admin.`
+    );
+  }
+
+  log(
+    `Coinflip: ${message.author.id} ${won ? "won" : "lost"} ${amount}`
+  );
+
+  return message.reply(
+    won
+      ? `\uD83E\uDE99 Heads up - you won! **+${amount}**.`
+      : `\uD83E\uDE99 Tough luck - you lost **${amount}**.`
+  );
+}
+
+// Send <amount> of your own cash directly to another Discord user.
+
+async function handleTip(
+  message,
+  args
+) {
+  const target =
+    message.mentions.users.first();
+
+  const amount =
+    Number.parseInt(
+      args[1],
+      10
+    );
+
+  if (
+    !target ||
+    !Number.isInteger(amount) ||
+    amount <= 0
+  ) {
+    return message.reply(
+      `Usage: \`${usage("gwenttip")}\` - mention a user and give a positive whole amount.`
+    );
+  }
+
+  if (
+    target.id ===
+    message.author.id
+  ) {
+    return message.reply(
+      "You can't tip yourself."
+    );
+  }
+
+  if (target.bot) {
+    return message.reply(
+      "You can't tip a bot."
+    );
+  }
+
+  try {
+    const balance =
+      await unbGetBalance(
+        message.author.id
+      );
+
+    if (
+      (balance.cash ?? 0) <
+      amount
+    ) {
+      return message.reply(
+        `You only have **${balance.cash}** cash, which isn't enough to tip **${amount}**.`
+      );
+    }
+
+    await unbAdjustBalanceWithRetry(
+      message.author.id,
+      -amount,
+      `Gwent tip to ${target.id}`
+    );
+  } catch (e) {
+    log(
+      "Tip withdrawal failed:",
+      e.message
+    );
+
+    return message.reply(
+      "Couldn't reach the economy bot to take that money from you. Try again shortly."
+    );
+  }
+
+  try {
+    await unbAdjustBalanceWithRetry(
+      target.id,
+      amount,
+      `Gwent tip from ${message.author.id}`
+    );
+  } catch (e) {
+    /*
+     * Money already taken from the sender - refund immediately rather
+     * than stranding it.
+     */
+    log(
+      `Tip credit to ${target.id} failed, refunding ${message.author.id}: ${e.message}`
+    );
+
+    try {
+      await unbAdjustBalanceWithRetry(
+        message.author.id,
+        amount,
+        "Gwent tip refund (credit failed)"
+      );
+    } catch (e2) {
+      log(
+        `CRITICAL: tip refund also failed for ${message.author.id}: ${e2.message}. Manual admin reconciliation required.`
+      );
+
+      return message.reply(
+        `\u26A0\uFE0F Took **${amount}** from you but failed to send it AND failed to refund it. Please contact an admin immediately.`
+      );
+    }
+
+    return message.reply(
+      "Couldn't credit the recipient, so your money was refunded."
+    );
+  }
+
+  log(
+    `Tip: ${amount} from ${message.author.id} to ${target.id}`
+  );
+
+  return message.reply(
+    `\uD83D\uDCB8 Sent **${amount}** to <@${target.id}>.`
+  );
+}
+
+
+function handleHelp(message) {
+  const lines = [
+    "**Gwent Discord commands**",
+
+    `\`${usage("registerclient")}\` - link your Discord account to a connected game client`,
+
+    "`!gwentunregister` - clear your registration",
+
+    `\`${usage("gwentbet")}\` - escrow cash as your match stake`,
+
+    "`!gwentstatus` - show your registration/bet state",
+
+    // "`!gwentinventory` - show your UnbelievaBoat inventory",
+
+    // "`!gwentleaderboard [count]` - show the top cash balances (default 5, max 15)",
+
+    `\`${usage("gwentgiveaway")}\` - give away your own cash in the free money channel`,
+
+    `\`${usage("gwentcoinflip")}\` - flip a coin against the house, double or nothing`,
+
+  //  `\`${usage("gwenttip")}\` - send cash to another user`,
+
+    "`!gwenthelp` - show this message",
+  ];
+
+  if (isAdmin(message)) {
+    lines.push(
+      `\`${usage("gwentspawn")}\` - (admin) drop fresh cash into the free money channel`
+    );
+  }
+
+  return message.reply(
+    lines.join("\n")
   );
 }
 
@@ -2225,6 +2839,54 @@ async function onMessageCreate(
 
     // if (cmd === "gwentleaderboard")
     //   return void (await handleLeaderboard(message, args));
+
+    if (
+      cmd ===
+      "gwentgiveaway"
+    ) {
+      return void (
+        await handleGiveaway(
+          message,
+          args
+        )
+      );
+    }
+
+    if (
+      cmd ===
+      "gwentspawn"
+    ) {
+      return void (
+        await handleSpawnMoney(
+          message,
+          args
+        )
+      );
+    }
+
+    if (
+      cmd ===
+      "gwentcoinflip"
+    ) {
+      return void (
+        await handleCoinflip(
+          message,
+          args
+        )
+      );
+    }
+
+    if (
+      cmd ===
+      "gwenttip" && "a" === "b"
+    ) {
+      return void (
+        await handleTip(
+          message,
+          args
+        )
+      );
+    }
 
     if (
       cmd ===
