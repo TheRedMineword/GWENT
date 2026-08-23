@@ -254,7 +254,7 @@ async function processDiscordLogQueue() {
   }
 }
 const usewebhook = false;
-const usecustomlog =false;
+const usecustomlog = true;
 console.log = (message) => {
   process.stdout.write(String(message) + "\n");
   if (usecustomlog){
