@@ -198,6 +198,7 @@ async function processDiscordLogQueue() {
               embeds: [
                 {
                   description: item.message.slice(0, 4096),
+                  footer: `Lng: ${discordLogQueue.length}`,
                   timestamp: item.timestamp.toISOString(),
                 },
               ],
