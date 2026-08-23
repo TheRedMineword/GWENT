@@ -198,7 +198,7 @@ async function processDiscordLogQueue() {
               embeds: [
                 {
                   description: item.message.slice(0, 4096),
-                  footer: `Lng: ${discordLogQueue.length}`,
+                  footer: {text: `Lng: ${discordLogQueue.length}`, "icon_url": "https://theredmineword.github.io/GWENT/img/web/logo_round.png"},
                   timestamp: item.timestamp.toISOString(),
                 },
               ],
