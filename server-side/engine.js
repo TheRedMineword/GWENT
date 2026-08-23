@@ -204,7 +204,7 @@ async function processDiscordLogQueue() {
             }),
           }
         );
-        console.error(JSON.stringify(await response.json()))
+        console.error(JSON.stringify({"res": await response.json(), "head":  Object.fromEntries(response.headers.entries())}), response.status)
         if (response.status === 429) {
           let retryAfter = 5000;
 
