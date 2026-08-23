@@ -152,13 +152,115 @@ let trafficMonitor = {
 
 console.warn("PROCCESS ENV", process.env, process.env.VERIF || false);
 
-const webhookUrl = process.env.WEBHOOK_LOGS_URL;
+const webhookUrl = process.env.WEBHOOK_URL;
 
+const discordBotToken = process.env.DISCORD_BOT_TOKEN_logs;
+const discordChannelId = process.env.DISCORD_CHANNEL_ID_logs;
+
+const discordLogQueue = [];
+let discordLogWorkerRunning = false;
+
+const DISCORD_LOG_DELAY_MS = 1500;
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function queueDiscordLog(message) {
+  discordLogQueue.push({
+    message: String(message),
+    timestamp: new Date(),
+  });
+
+  processDiscordLogQueue();
+}
+
+async function processDiscordLogQueue() {
+  if (discordLogWorkerRunning) return;
+  if (!discordBotToken || !discordChannelId) return;
+
+  discordLogWorkerRunning = true;
+
+  try {
+    while (discordLogQueue.length > 0) {
+      const item = discordLogQueue.shift();
+
+      try {
+        const response = await fetch(
+          `https://discord.com/api/v10/channels/${discordChannelId}/messages`,
+          {
+            method: "POST",
+            headers: {
+              "Authorization": `Bot ${discordBotToken}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              embeds: [
+                {
+                  description: item.message.slice(0, 4096),
+                  timestamp: item.timestamp.toISOString(),
+                },
+              ],
+            }),
+          }
+        );
+
+        if (response.status === 429) {
+          let retryAfter = 5000;
+
+          try {
+            const data = await response.json();
+
+            if (typeof data.retry_after === "number") {
+              retryAfter = Math.ceil(data.retry_after * 1000);
+            }
+          } catch {
+            // Keep fallback delay.
+          }
+
+          discordLogQueue.unshift(item);
+
+          await sleep(retryAfter);
+          continue;
+        }
+
+        if (!response.ok) {
+          const body = await response.text().catch(() => "");
+          console.error(
+            `Discord log failed (${response.status}): ${body}`
+          );
+        }
+      } catch (error) {
+        discordLogQueue.unshift(item);
+
+        console.error("Discord log request failed:", error);
+
+        await sleep(5000);
+        continue;
+      }
+
+      if (discordLogQueue.length > 0) {
+        await sleep(DISCORD_LOG_DELAY_MS);
+      }
+    }
+  } finally {
+    discordLogWorkerRunning = false;
+
+    if (discordLogQueue.length > 0) {
+      processDiscordLogQueue();
+    }
+  }
+}
+const usewebhook = false;
 console.log = (message) => {
-  // keep console output
-  process.stdout.write(message + "\n");
+  process.stdout.write(String(message) + "\n");
 
-  // only send if env exists
+  if (discordBotToken && discordChannelId) {
+    queueDiscordLog(message);
+    return;
+  }
+
+  if (usewebhook){
   if (!webhookUrl) return;
 
   fetch(webhookUrl, {
@@ -170,12 +272,13 @@ console.log = (message) => {
       embeds: [
         {
           description: String(message).slice(0, 4000),
+          timestamp: new Date().toISOString(),
         },
       ],
     }),
   }).catch(() => {
-    // fail silently
-  });
+    // Fail silently.
+  });}
 };
 
 const heartbeatWaiting = new Map();
