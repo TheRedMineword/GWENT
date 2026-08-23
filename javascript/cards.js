@@ -3704,7 +3704,7 @@ var card_dict_base = [
       monitor: "based",
       id: "Viper_Is_Here",
       duration: {
-        start: "2026-08-01T07:00:00Z",
+        start: "2026-09-01T07:00:00Z",
         duration: 6566400,
       },
     },
