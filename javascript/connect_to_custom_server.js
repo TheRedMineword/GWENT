@@ -642,6 +642,16 @@ async function connect_to_custom_server(URL) {
     }
     await sleep(1500);
     updateLoader("Done", 100, `${s_name} Fully Loaded`);
+    try {
+      comp_and_send(
+        socket,
+        JSON.stringify({
+          type: "opChangeFaction",
+          faction: dm.faction,
+          info: { me_id: playerId, me_flag: country },
+        }),
+      );
+    } catch (e) {}
 
     console.log(LOG_PREFIX, "Custom server connection complete");
 
