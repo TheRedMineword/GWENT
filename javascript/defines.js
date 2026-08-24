@@ -674,7 +674,7 @@ let card_name_class = {
   eithne: "elf_%g",
   elf_skirmisher_1: "elf_%g",
   filavandrel: "elf_%g",
-  havekar_nurse_2: "elf_%g",
+  havekar_nurse_2: "healer_%g",
   havekar_support_2: "rottenfruit_%g",
   ida: "elf_%g",
   Ida_Emean_d20: "elf_%g",
@@ -940,6 +940,7 @@ let card_gender = {
   francesca_copper: "female",
   francesca_bronze: "female",
   francesca_hope_of_the_aen_seidhe: "female",
+  havekar_nurse_2: "female",
 
   ciaran: "male",
   barclay: "male",
