@@ -753,7 +753,7 @@ let card_name_class = {
   guard: "guard_%g",
   fisstech: "special_%g",
   sigi_reuven: "spy_%g",
-  king_of_beggers: "spy_%g",
+  king_of_beggers: "rottenfruit_%g",
   magister: "assasin_%g",
   "custom!power_place": "magic_%g",
   "custom!m_moonlight": "event_%g",
