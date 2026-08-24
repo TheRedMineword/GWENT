@@ -179,11 +179,7 @@ var factions = {
   },
   syndicate: {
     name: "Syndicate",
-    description: `Starts the game with the morale card on the board. \nCan create deck from ${Object.values(
-      syndicate_faction_clone,
-    )
-      .map((faction) => faction.name)
-      .join(", ")} factions non-leader cards.`,
+    description: `Starts the game with the morale card on the board. \nCan create deck from Nilfgaardian Empire, Scoia'tael, Skellige, Syndicate, Sky Kingdom factions non-leader cards.`,
   },
   sky: {
     name: "Sky Kingdom",
