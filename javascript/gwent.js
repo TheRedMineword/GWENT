@@ -2273,6 +2273,14 @@ const GwentOverlay = (() => {
     box.dataset.type = type;
     box.innerHTML = renderMiniMarkdown(text);
     box.classList.add("gwent-show");
+    try {
+      var t = game?.currPlayer?.tag ?? "op";
+      if (carousel.classList.value === "hide" && type.includes("top")) {
+        GwentOverlay.hide();
+      } else if (t !== "me" && type.includes("top")) {
+        GwentOverlay.hide();
+      }
+    } catch (e) {}
   }
 
   function hide() {
@@ -2941,24 +2949,23 @@ class Row extends CardContainer {
         return total;
       } else if (card.filename === "yrden") {
         if (this.cards.filter((c) => c.filename === "yrden").length > 1) {
-          return (
-            -1 * (this.cards.filter((c) => c.filename === "yrden").length - 1)
-          );
+          total =
+            -1 * (this.cards.filter((c) => c.filename === "yrden").length - 1);
         } else {
-          return 0;
+          total = 0;
         }
+      } else {
+        total = total - this.cards.filter((c) => c.filename === "yrden").length;
       }
-
-      total = total - this.cards.filter((c) => c.filename === "yrden").length;
     }
     if (this.cards.some((c) => c.filename === "igni")) {
       if (card.hero) {
         return total;
-      } else if (card.name === "Witcher Signs: Igni") {
-        return 0;
+      } else if (card.filename === "igni") {
+        total = 0;
+      } else {
+        total = total + 1; //this.cards.filter(c => c.filename === "igni").length;
       }
-
-      total = total + 1; //this.cards.filter(c => c.filename === "igni").length;
     }
     if (
       card.abilities.includes("magicthegathering") === true ||
@@ -2989,9 +2996,9 @@ class Row extends CardContainer {
           //	card.animate2("debuff");
         }
       } else if (mtg_conf.unstable_mode === "unrandom") {
-        return -3;
+        total = -3;
       } else {
-        return 0;
+        total = 0;
       }
     }
     if (card.abilities.includes("powergain") === true) {
@@ -3032,12 +3039,25 @@ class Row extends CardContainer {
     }
     // card.animate("powergain");
     if (card.hero) return total;
-    if (this.effects.weather)
+    if (this.effects.weather) {
       if (this_row_have_quen[row_name][0]) {
-        total = Math.ceil(total * this_row_have_quen[row_name][1]);
+        const multiplier = this_row_have_quen[row_name][1];
+
+        if (total < 0 && weatherAffectNegativeCard) {
+          //  console.warn(`total = Math.floor(${total} * ${multiplier});`)
+          total = Math.floor(total * (1.57 * multiplier));
+        } else {
+          total = Math.ceil(total * multiplier);
+        }
       } else {
-        total = Math.min(1, total);
+        if (total < 0 && weatherAffectNegativeCard) {
+          //  console.warn(`total = Math.floor(${total} * ${multiplier});`)
+          total = Math.floor(total * 0.5);
+        } else {
+          total = Math.min(1, total);
+        }
       }
+    }
     if (game.doubleSpyPower && card.abilities.includes("spy")) {
       total *= 2;
     }

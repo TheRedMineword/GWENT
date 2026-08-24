@@ -9,6 +9,7 @@
     },
     "OnGameStartDraw": 2,
     "useCanPlay_for_autopass": false,
+    "weatherAffectNegativeCard": true,
     "medicsdraw": 1,
     "ThatIsSpy": [
       "axii2_desc",

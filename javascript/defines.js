@@ -70,6 +70,7 @@ let fullscreenConfig = {
 };
 
 let useCanPlay_for_autopass = false;
+let weatherAffectNegativeCard = true;
 let OnGameStartDraw = 2;
 let tooltipQueue = [];
 let tooltipActive = false;
@@ -1032,6 +1033,7 @@ let ThisDef = {
 
     OnGameStartDraw: deepClone(OnGameStartDraw),
     useCanPlay_for_autopass: deepClone(useCanPlay_for_autopass),
+    weatherAffectNegativeCard: deepClone(weatherAffectNegativeCard),
     medicsdraw: deepClone(medicsdraw),
     ThatIsSpy: deepClone(ThatIsSpy),
     card_of_the_day: deepClone(card_of_the_day),
