@@ -69,6 +69,7 @@ let fullscreenConfig = {
   else: true,
 };
 
+let useCanPlay_for_autopass = false;
 let OnGameStartDraw = 2;
 let tooltipQueue = [];
 let tooltipActive = false;
@@ -1030,6 +1031,7 @@ let ThisDef = {
     fullscreenConfig: deepClone(fullscreenConfig),
 
     OnGameStartDraw: deepClone(OnGameStartDraw),
+    useCanPlay_for_autopass: deepClone(useCanPlay_for_autopass),
     medicsdraw: deepClone(medicsdraw),
     ThatIsSpy: deepClone(ThatIsSpy),
     card_of_the_day: deepClone(card_of_the_day),

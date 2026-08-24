@@ -100,7 +100,7 @@ class deck_importo_exporto1 {
           }),
         );
       }
-      sendChatMessageStrig(`play wich ${factions[deck.faction].name} faction!`);
+      //  sendChatMessageStrig(`play wich ${factions[deck.faction].name} faction!`);
       if (
         card_dict[deck.leader].row === "leader" &&
         deck.faction === card_dict[deck.leader].deck

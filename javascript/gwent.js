@@ -1891,7 +1891,12 @@ class Player {
 
   // Returns true if the Player can make any action other than passing
   canPlay() {
-    return this.hand.cards.length > 0 || this.leaderAvailable;
+    if (useCanPlay_for_autopass) {
+      console.log("CAN THIS PLAY?", this);
+      return this.hand.cards.length > 0 || this.leaderAvailable;
+    } else {
+      return true;
+    }
   }
 
   // Use a leader's Activate ability, then disable the leader
@@ -2934,8 +2939,14 @@ class Row extends CardContainer {
     if (this.cards.some((c) => c.filename === "yrden")) {
       if (card.hero) {
         return total;
-      } else if (card.name === "Witcher Signs: Yrden") {
-        return 0;
+      } else if (card.filename === "yrden") {
+        if (this.cards.filter((c) => c.filename === "yrden").length > 1) {
+          return (
+            -1 * (this.cards.filter((c) => c.filename === "yrden").length - 1)
+          );
+        } else {
+          return 0;
+        }
       }
 
       total = total - this.cards.filter((c) => c.filename === "yrden").length;
@@ -4564,6 +4575,7 @@ class Card {
       avenger_spawn_creature: "avenger",
       hero: "hero_anim",
       griffin: "moral",
+      viper: "moral",
       mtg: "cos",
       decoy: "spy",
       dopler: "spy",
@@ -4636,6 +4648,7 @@ class Card {
       avenger_spawn_creature: "avenger",
       hero: "hero_anim",
       griffin: "moral",
+      viper: "moral",
       mtg: "cos",
       decoy: "spy",
       dopler: "spy",
