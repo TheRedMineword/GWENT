@@ -6174,7 +6174,8 @@ class UI {
         };
 
     await this.queueCarousel(container, 1, action, () => true, false, true);
-    comp_and_send(socket, JSON.stringify({ type: "containerClosed" }));
+    //comp_and_send(socket, JSON.stringify({ type: "containerClosed" })); // pointless now
+    GwentOverlay.hide();
   }
 
   // Displays a Carousel menu of filtered container items that match the predicate.
@@ -7575,6 +7576,14 @@ function iconURL(name, ext = "png") {
   return imgURL("icons/" + name, ext);
 }
 function largeURL(name, ext = "jpg") {
+  // There is a bug and idk it source sooo:
+  if (
+    `${name.split("_")[1]}${name.split("_")[2]}`.replace("2", "") ===
+    "GaunterLeader"
+  ) {
+    name = name.replace(name.split("_")[0], "neutral");
+  }
+  //console.warn("Large", name, ext);
   if (name.toLowerCase().includes("potion")) {
     ext = "png";
   }
@@ -7596,6 +7605,13 @@ function largeURL(name, ext = "jpg") {
   return `${a}${imgURL("lg/" + name, ext)}`;
 }
 function smallURL(name, ext = "jpg") {
+  // There is a bug and idk it source sooo:
+  if (
+    `${name.split("_")[1]}${name.split("_")[2]}`.replace("2", "") ===
+    "GaunterLeader"
+  ) {
+    name = name.replace(name.split("_")[0], "neutral");
+  }
   if (name.toLowerCase().includes("potion")) {
     ext = "png";
   }
