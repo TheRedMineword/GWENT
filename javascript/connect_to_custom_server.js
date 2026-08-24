@@ -370,12 +370,13 @@ function resetTexturePack() {
 // IGNORE PATTERN MATCHING
 // ===============================
 
-function shouldIgnore(path) {
-  for (const pattern of IGNORE_PATTERNS) {
-    const regex = new RegExp(
-      "^" + pattern.replace(/\./g, "\\.").replace(/\*/g, ".*") + "$",
-    );
+const IGNORE_REGEXES = IGNORE_PATTERNS.map(
+  (pattern) =>
+    new RegExp("^" + pattern.replace(/\./g, "\\.").replace(/\*/g, ".*") + "$"),
+);
 
+function shouldIgnore(path) {
+  for (const regex of IGNORE_REGEXES) {
     if (regex.test(path)) {
       return true;
     }
@@ -423,6 +424,33 @@ function isValidPath(path) {
 
   return path.split(".").every((part) => part.length > 0);
 }
+const IDENTIFIER_RE = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
+
+function getGlobalRef(name) {
+  try {
+    return (0, eval)(name);
+  } catch (e) {
+    // Not declared anywhere yet (or a ReferenceError in strict mode) —
+    // caller treats this the same as "doesn't exist".
+    return undefined;
+  }
+}
+
+function setTopLevelGlobal(name, value) {
+  try {
+    globalThis.__envVarTmp__ = value;
+    (0, eval)(`${name} = globalThis.__envVarTmp__;`);
+  } catch (e) {
+    console.warn(
+      LOG_PREFIX,
+      `eval-assign failed for "${name}", falling back to property set:`,
+      e,
+    );
+    globalThis[name] = value;
+  } finally {
+    delete globalThis.__envVarTmp__;
+  }
+}
 
 function setGlobalValue(path, value) {
   if (!isValidPath(path)) {
@@ -432,9 +460,25 @@ function setGlobalValue(path, value) {
 
   const parts = path.split(".");
 
-  let target = globalThis;
+  if (!parts.every((part) => IDENTIFIER_RE.test(part))) {
+    console.warn(LOG_PREFIX, "Rejected unsafe path segment(s):", path);
+    return;
+  }
 
-  for (let i = 0; i < parts.length - 1; i++) {
+  if (parts.length === 1) {
+    setTopLevelGlobal(parts[0], value);
+    console.log(LOG_PREFIX, `Set global value: ${path}`, value);
+    return;
+  }
+
+  let target = getGlobalRef(parts[0]);
+
+  if (typeof target !== "object" || target === null) {
+    target = {};
+    setTopLevelGlobal(parts[0], target);
+  }
+
+  for (let i = 1; i < parts.length - 1; i++) {
     const part = parts[i];
 
     if (typeof target[part] !== "object" || target[part] === null) {
