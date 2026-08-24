@@ -8,6 +8,7 @@
       "else": true
     },
     "OnGameStartDraw": 2,
+    "useCanPlay_for_autopass": false,
     "medicsdraw": 1,
     "ThatIsSpy": [
       "axii2_desc",
