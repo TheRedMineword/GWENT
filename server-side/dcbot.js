@@ -103,10 +103,10 @@
 // the right tool here. If you need bets to survive a server restart, swap
 // the Maps below for reads/writes to your `database`/Xano layer.
 
-let Client, GatewayIntentBits, ActivityType, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField;
+let Client, GatewayIntentBits, ActivityType, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField, EmbedBuilder;
 
 try {
-  ({ Client, GatewayIntentBits, ActivityType, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField } = require("discord.js"));
+  ({ Client, GatewayIntentBits, ActivityType, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField, EmbedBuilder } = require("discord.js"));
 } catch (e) {
   // discord.js not installed - init() will log a clear error instead of crashing.
 }
@@ -181,12 +181,30 @@ function isAdmin(message) {
  * All configurable via the dc_bot JSON blob or plain env vars, same
  * pattern as everything above.
  *
- * IMPORTANT CAVEAT: like the rest of this file, lottery state (pool,
- * entrants, etc.) lives in memory only. If the bot process restarts
- * mid-round, the pool total and entrant list are lost even though the
- * lottery role and everyone's spent cash are not - see the warning
- * logged in initLottery() below. If that's not acceptable, this is the
- * one part of the file that genuinely wants a database.
+ * PERSISTENCE: like the rest of this file, lottery state (pool,
+ * entrants, etc.) lives in memory only - there's no database. To
+ * survive a restart anyway, the status message posted in
+ * LOTTERY_CHANNEL_ID is now an embed that doubles as a small save
+ * file:
+ *
+ *   - Entrants are rebuilt from who currently holds LOTTERY_ROLE_ID.
+ *     That role assignment lives in Discord, not this process, so it
+ *     survives a restart intact. Since every entrant always pays
+ *     exactly LOTTERY_TICKET_COST (no partial/multi-ticket joins),
+ *     re-crediting each recovered entrant that exact amount is exact,
+ *     not a guess.
+ *   - The pool total is read back from the "Pool" field of the last
+ *     posted status embed, which also captures any admin bonus added
+ *     via !gwentlotteryadd (that has no other record anywhere).
+ *
+ * See restoreLotteryStateFromChannel() below. This is a best-effort
+ * recovery, not a real datastore - it depends on the last status
+ * message still being editable/found in the channel and reflects
+ * state as of that last edit, not necessarily the instant before the
+ * crash (though every join/leave/draw immediately re-edits it, so the
+ * gap is normally milliseconds). If you need bets to survive with a
+ * hard guarantee, this is the one part of the file that genuinely
+ * wants a database.
  */
 
 // Role that lottery entrants get while they're in the current round,
@@ -578,7 +596,16 @@ function lotteryConfigured() {
   );
 }
 
-function buildLotteryStatusContent(
+/*
+ * Fixed footer text on the lottery status embed. Doubles as a marker
+ * so we can recognize "our" message (as opposed to some other bot
+ * message in the channel) both when reusing it on a normal update and
+ * when hunting for it to restore state after a restart.
+ */
+const LOTTERY_EMBED_FOOTER =
+  "Gwent Daily Lottery status \u2014 auto-updated, do not edit";
+
+function buildLotteryStatusEmbed(
   note
 ) {
   const winnerCount =
@@ -597,62 +624,179 @@ function buildLotteryStatusContent(
 
  // share = share * (cfg?.lottery_bonus ?? 1.6)
 
-  const lines = [
-    "\uD83C\uDFB0 **Gwent Daily Lottery**",
-    "",
-    `Pool: **${lotteryPool}** cash`,
-    `Entrants: **${lotteryEntrants.size}**`,
-    `Ticket cost: **${LOTTERY_TICKET_COST}**`,
-    `Winner slots: **${winnerCount}** (+1 every ${LOTTERY_ENTRANTS_PER_WINNER} entrant(s))`,
-    `Est. payout per winner: **~${share} (+${(((cfg?.lottery_bonus ?? 1.6) - 1) * 100).toFixed(2)}%)**`,
-    `Next draw: **${String(
-      LOTTERY_DRAW_HOUR_UTC
-    ).padStart(2, "0")}:${String(
-      LOTTERY_DRAW_MINUTE_UTC
-    ).padStart(2, "0")} UTC** daily`,
-  ];
+  const embed = new EmbedBuilder()
+    .setColor(0xf1c40f)
+    .setTitle("\uD83C\uDFB0 Gwent Daily Lottery")
+    .setDescription(
+      `Join with \`${usage("gwentlottery")}\``
+    )
+    .addFields(
+      {
+        name: "Pool",
+        value: `**${lotteryPool}** cash`,
+        inline: true,
+      },
+      {
+        name: "Entrants",
+        value: `**${lotteryEntrants.size}**`,
+        inline: true,
+      },
+      {
+        name: "Ticket cost",
+        value: `**${LOTTERY_TICKET_COST}**`,
+        inline: true,
+      },
+      {
+        name: "Winner slots",
+        value: `**${winnerCount}** (+1 every ${LOTTERY_ENTRANTS_PER_WINNER} entrant(s))`,
+        inline: true,
+      },
+      {
+        name: "Est. payout per winner",
+        value: `**~${share}** (+${(((cfg?.lottery_bonus ?? 1.6) - 1) * 100).toFixed(2)}%)`,
+        inline: true,
+      },
+      {
+        name: "Next draw",
+        value: `**${String(
+          LOTTERY_DRAW_HOUR_UTC
+        ).padStart(2, "0")}:${String(
+          LOTTERY_DRAW_MINUTE_UTC
+        ).padStart(2, "0")} UTC** daily`,
+        inline: true,
+      }
+    )
+    .setFooter({
+      text: LOTTERY_EMBED_FOOTER,
+    })
+    .setTimestamp();
 
   if (lotteryLocked) {
-    lines.push(
-      "",
-      "\u23F8\uFE0F Resetting after the last draw - joining is briefly locked."
-    );
+    embed.addFields({
+      name: "Status",
+      value:
+        "\u23F8\uFE0F Resetting after the last draw - joining is briefly locked.",
+    });
   }
 
   if (
     lotteryLastWinners.length > 0
   ) {
-    lines.push(
-      "",
-      "**Last draw:**"
-    );
-
-    for (
-      const w of lotteryLastWinners
-    ) {
-      lines.push(
-        `- <@${w.discordId}>: **${w.amount}**${
-          w.ok
-            ? ""
-            : " (payout failed - contact an admin)"
-        }`
-      );
-    }
+    embed.addFields({
+      name: "Last draw",
+      value: lotteryLastWinners
+        .map(
+          (w) =>
+            `<@${w.discordId}>: **${w.amount}**${
+              w.ok
+                ? ""
+                : " (payout failed - contact an admin)"
+            }`
+        )
+        .join("\n"),
+    });
   }
 
   if (note) {
-    lines.push(
-      "",
-      note
-    );
+    embed.addFields({
+      name: "Note",
+      value: note,
+    });
   }
 
-  lines.push(
-    "",
-    `Join with \`${usage("gwentlottery")}\``
-  );
+  return embed;
+}
 
-  return lines.join("\n");
+/*
+ * Pulls the pool total back out of a previously-posted status
+ * message, for restore purposes. Understands the current embed format
+ * (reads the "Pool" field) and falls back to regex-matching the old
+ * plain-text format, so a message posted by a pre-embed version of
+ * this bot can still be recovered/migrated instead of orphaned.
+ */
+function parseLotteryPoolFromMessage(
+  message
+) {
+  const embed =
+    message.embeds?.[0];
+
+  if (embed) {
+    const field =
+      embed.fields?.find(
+        (f) => f.name === "Pool"
+      );
+
+    if (field) {
+      const n =
+        Number.parseInt(
+          String(
+            field.value
+          ).replace(/[^\d]/g, ""),
+          10
+        );
+
+      if (Number.isFinite(n)) {
+        return n;
+      }
+    }
+  }
+
+  if (message.content) {
+    const match =
+      message.content.match(
+        /Pool:\s*\*\*([\d,]+)\*\*/
+      );
+
+    if (match) {
+      const n =
+        Number.parseInt(
+          match[1].replace(/,/g, ""),
+          10
+        );
+
+      if (Number.isFinite(n)) {
+        return n;
+      }
+    }
+  }
+
+  return null;
+}
+
+/*
+ * Finds "our" most recent lottery status message in the channel,
+ * whether it's the current embed format or an older plain-text one.
+ */
+async function findLotteryStatusMessage(
+  botClient,
+  channel
+) {
+  const recent =
+    await channel.messages.fetch({
+      limit: 25,
+    });
+
+  return (
+    recent.find(
+      (m) =>
+        m.author.id ===
+          botClient.user.id &&
+        m.embeds?.[0]?.footer
+          ?.text ===
+          LOTTERY_EMBED_FOOTER
+    ) ||
+    recent.find(
+      (m) =>
+        m.author.id ===
+          botClient.user.id &&
+        typeof m.content ===
+          "string" &&
+        m.content.includes(
+          "Gwent Daily Lottery"
+        )
+    ) ||
+    null
+  );
 }
 
 async function updateLotteryStatusMessage(
@@ -666,8 +810,8 @@ async function updateLotteryStatusMessage(
     return;
   }
 
-  const content =
-    buildLotteryStatusContent(
+  const embed =
+    buildLotteryStatusEmbed(
       note
     );
 
@@ -683,7 +827,13 @@ async function updateLotteryStatusMessage(
           lotteryStatusMessageId
         );
 
-      await msg.edit(content);
+      // content: "" clears any leftover plain-text body if this
+      // message was originally posted by a pre-embed version of the
+      // bot and is now being migrated in place.
+      await msg.edit({
+        content: "",
+        embeds: [embed],
+      });
 
       return;
     } catch (e) {
@@ -702,22 +852,20 @@ async function updateLotteryStatusMessage(
    * every restart.
    */
   try {
-    const recent =
-      await channel.messages.fetch({
-        limit: 25,
-      });
-
-    const mine = recent.find(
-      (m) =>
-        m.author.id ===
-        botClient.user.id
-    );
+    const mine =
+      await findLotteryStatusMessage(
+        botClient,
+        channel
+      );
 
     if (mine) {
       lotteryStatusMessageId =
         mine.id;
 
-      await mine.edit(content);
+      await mine.edit({
+        content: "",
+        embeds: [embed],
+      });
 
       return;
     }
@@ -728,11 +876,141 @@ async function updateLotteryStatusMessage(
     );
   }
 
-  const sent = await channel.send(
-    content
-  );
+  const sent = await channel.send({
+    embeds: [embed],
+  });
 
   lotteryStatusMessageId = sent.id;
+}
+
+/*
+ * Runs once at startup (from initLottery(), before the first status
+ * update is posted) to rebuild in-memory lottery state from what
+ * survived the restart:
+ *
+ *   - lotteryEntrants: rebuilt from whoever currently holds
+ *     LOTTERY_ROLE_ID. That's exact, since every entrant always pays
+ *     exactly LOTTERY_TICKET_COST.
+ *   - lotteryPool: read back from the "Pool" field of the last status
+ *     message, so it also picks back up any !gwentlotteryadd bonus.
+ *     Falls back to entrants * ticket cost if that message can't be
+ *     found or parsed (in which case any bonus is unrecoverable and
+ *     needs to be re-added manually).
+ *
+ * `joinedAt` for recovered entrants is set to "now" rather than their
+ * real join time, since that timestamp isn't persisted anywhere and
+ * isn't currently used for anything besides informational bookkeeping.
+ */
+async function restoreLotteryStateFromChannel(
+  botClient
+) {
+  if (!lotteryConfigured()) {
+    return;
+  }
+
+  try {
+    const channel =
+      await botClient.channels.fetch(
+        LOTTERY_CHANNEL_ID
+      );
+
+    const mine =
+      await findLotteryStatusMessage(
+        botClient,
+        channel
+      );
+
+    if (!mine) {
+      log(
+        "Lottery restore: no previous status message found in the channel - starting a fresh round (pool=0, entrants=0). If a round was actually in progress when the bot restarted, clear the lottery role manually and check the economy bot."
+      );
+
+      return;
+    }
+
+    lotteryStatusMessageId =
+      mine.id;
+
+    let restoredEntrants = 0;
+
+    try {
+      const guild =
+        botClient.guilds.cache.get(
+          GUILD_ID
+        ) ||
+        (await botClient.guilds.fetch(
+          GUILD_ID
+        ));
+
+      await guild.members
+        .fetch()
+        .catch((e) =>
+          log(
+            "Lottery restore: guild.members.fetch() failed, entrant recovery may be incomplete:",
+            e.message
+          )
+        );
+
+      const role =
+        await guild.roles.fetch(
+          LOTTERY_ROLE_ID
+        );
+
+      if (role) {
+        for (const id of role.members.keys()) {
+          lotteryEntrants.set(
+            id,
+            {
+              amount:
+                LOTTERY_TICKET_COST,
+              joinedAt: Date.now(),
+            }
+          );
+
+          restoredEntrants++;
+        }
+      }
+    } catch (e) {
+      log(
+        "Lottery restore: role member lookup failed, entrants could not be recovered:",
+        e.message
+      );
+    }
+
+    const bySize =
+      restoredEntrants *
+      LOTTERY_TICKET_COST;
+
+    const parsedPool =
+      parseLotteryPoolFromMessage(
+        mine
+      );
+
+    if (parsedPool !== null) {
+      lotteryPool = parsedPool;
+
+      if (lotteryPool !== bySize) {
+        log(
+          `Lottery restore: last posted pool (${lotteryPool}) differs from entrants*ticket_cost (${bySize}) - likely includes a !gwentlotteryadd bonus (or the ticket cost changed since), keeping the posted total.`
+        );
+      }
+    } else {
+      lotteryPool = bySize;
+
+      log(
+        "Lottery restore: couldn't parse a pool total off the last status message, falling back to entrants * ticket cost. Any !gwentlotteryadd bonus added before the restart is unrecoverable - re-add it manually if needed."
+      );
+    }
+
+    log(
+      `Lottery restore: recovered ${restoredEntrants} entrant(s) currently holding the lottery role and a pool of ${lotteryPool} cash from the last status message in <#${LOTTERY_CHANNEL_ID}>.`
+    );
+  } catch (e) {
+    log(
+      "Lottery restore failed, starting a fresh round:",
+      e.message
+    );
+  }
 }
 
 async function doLotteryJoin(
@@ -1322,9 +1600,11 @@ async function handleLotteryStatus(
     );
   }
 
-  return message.reply(
-    buildLotteryStatusContent()
-  );
+  return message.reply({
+    embeds: [
+      buildLotteryStatusEmbed(),
+    ],
+  });
 }
 
 async function handleLotteryOdds(
@@ -1478,7 +1758,7 @@ function maybeRunScheduledLotteryDraw() {
   }
 }
 
-function initLottery() {
+async function initLottery() {
   if (!lotteryConfigured()) {
     return;
   }
@@ -1487,16 +1767,31 @@ function initLottery() {
     `Lottery configured: role=${LOTTERY_ROLE_ID} channel=${LOTTERY_CHANNEL_ID} ticket=${LOTTERY_TICKET_COST} draw=${LOTTERY_DRAW_HOUR_UTC}:${LOTTERY_DRAW_MINUTE_UTC} UTC entrantsPerWinner=${LOTTERY_ENTRANTS_PER_WINNER}`
   );
 
-  log(
-    "NOTE: lottery pool/entrant state is in-memory only and will NOT survive a bot restart. If the process restarts mid-round, manually clear the lottery role from members and check the economy bot before starting a new round."
-  );
+  /*
+   * Routed through queueLotteryOp so it's serialized against any
+   * join/leave/draw command that happens to arrive while this is
+   * running, the same way every other lottery operation is - restore
+   * always finishes (or fails) before the next real command starts.
+   */
+  await queueLotteryOp(
+    async () => {
+      await restoreLotteryStateFromChannel(
+        client
+      );
 
-  updateLotteryStatusMessage(
-    client
+      await updateLotteryStatusMessage(
+        client
+      ).catch((e) =>
+        log(
+          "Initial lottery status message failed:",
+          e.message
+        )
+      );
+    }
   ).catch((e) =>
     log(
-      "Initial lottery status message failed:",
-      e.message
+      "Lottery restore/init failed:",
+      e?.stack || e
     )
   );
 
@@ -4398,7 +4693,7 @@ exports.init =
 
     ready = true;
 
-    initLottery();
+    await initLottery();
 
     if (STATUS_URL) {
       await refreshStatusList();
