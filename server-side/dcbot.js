@@ -604,7 +604,7 @@ function buildLotteryStatusContent(
     `Entrants: **${lotteryEntrants.size}**`,
     `Ticket cost: **${LOTTERY_TICKET_COST}**`,
     `Winner slots: **${winnerCount}** (+1 every ${LOTTERY_ENTRANTS_PER_WINNER} entrant(s))`,
-    `Est. payout per winner: **~${share} (+${((cfg?.lottery_bonus ?? 1.6) - 1) * 100}%)**`,
+    `Est. payout per winner: **~${share} (+${(((cfg?.lottery_bonus ?? 1.6) - 1) * 100).toFixed(2)}%)**`,
     `Next draw: **${String(
       LOTTERY_DRAW_HOUR_UTC
     ).padStart(2, "0")}:${String(
@@ -1213,7 +1213,7 @@ async function doLotteryDraw(
 
         await dm(
           winnerId,
-          `\uD83C\uDF70 You won the lottery! **+${b}+${((cfg?.lottery_bonus ?? 1.6) - 1) * 100}%, ${amount} in total!** cash credited.`
+          `\uD83C\uDF70 You won the lottery! **+${b}+${(((cfg?.lottery_bonus ?? 1.6) - 1) * 100).toFixed(2)}%, ${amount} in total!** cash credited.`
         );
 
         log(
