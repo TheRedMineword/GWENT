@@ -175,8 +175,111 @@ function isAdmin(message) {
   }
 }
 
+/*
+ * ---------- Daily lottery config ----------
+ *
+ * All configurable via the dc_bot JSON blob or plain env vars, same
+ * pattern as everything above.
+ *
+ * IMPORTANT CAVEAT: like the rest of this file, lottery state (pool,
+ * entrants, etc.) lives in memory only. If the bot process restarts
+ * mid-round, the pool total and entrant list are lost even though the
+ * lottery role and everyone's spent cash are not - see the warning
+ * logged in initLottery() below. If that's not acceptable, this is the
+ * one part of the file that genuinely wants a database.
+ */
+
+// Role that lottery entrants get while they're in the current round,
+// and the role the bot reads to know who's eligible to win.
+const LOTTERY_ROLE_ID =
+  cfg.lottery_role_id ||
+  process.env.dc_lottery_role_id;
+
+// Channel where the bot keeps a single, continuously-edited status
+// message with the pool/entrant/winner info.
+const LOTTERY_CHANNEL_ID =
+  cfg.lottery_channel_id ||
+  process.env.dc_lottery_channel_id;
+
+// Cost (in hand/cash, not bank) to buy one ticket.
+const LOTTERY_TICKET_COST = Math.max(
+  1,
+  Number.parseInt(
+    cfg.lottery_ticket_cost ??
+      process.env.dc_lottery_ticket_cost ??
+      100,
+    10
+  ) || 100
+);
+
+// Daily draw time, UTC. Hour is 0-23, minute is 0-59. Default: 00:00 UTC.
+const LOTTERY_DRAW_HOUR_UTC =
+  ((Number.parseInt(
+    cfg.lottery_draw_hour_utc ??
+      process.env.dc_lottery_draw_hour_utc ??
+      0,
+    10
+  ) || 0) %
+    24 +
+    24) %
+  24;
+
+const LOTTERY_DRAW_MINUTE_UTC =
+  ((Number.parseInt(
+    cfg.lottery_draw_minute_utc ??
+      process.env.dc_lottery_draw_minute_utc ??
+      0,
+    10
+  ) || 0) %
+    60 +
+    60) %
+  60;
+
+// Every N entrants adds one more winner slot (round starts at 1 winner).
+const LOTTERY_ENTRANTS_PER_WINNER = Math.max(
+  1,
+  Number.parseInt(
+    cfg.lottery_entrants_per_winner ??
+      process.env.dc_lottery_entrants_per_winner ??
+      10,
+    10
+  ) || 10
+);
+
 let client = null;
 let ready = false;
+
+/*
+ * ---------- Lottery runtime state ----------
+ *
+ * lotteryQueue serializes EVERY lottery operation (join, leave, admin
+ * add-money, and draws - scheduled or manual) onto a single promise
+ * chain, so two people clicking !gwentlottery at the same instant (or a
+ * scheduled draw firing while someone is mid-join) never interleave.
+ * Each operation only starts once the previous one has fully finished
+ * (charge, role change, and status message update all settled), so
+ * money is never charged/paid without the corresponding state update
+ * landing, and vice versa.
+ */
+let lotteryQueue = Promise.resolve();
+
+function queueLotteryOp(fn) {
+  const run = lotteryQueue.then(fn, fn);
+
+  // Swallow here so a failed op doesn't break the chain for the next
+  // one - the real error is still returned to whoever called this.
+  lotteryQueue = run.catch(() => {});
+
+  return run;
+}
+
+let lotteryPool = 0;
+let lotteryEntrants = new Map(); // discordId -> { amount, joinedAt }
+let lotteryLastWinners = []; // [{ discordId, amount, ok }] from the most recent draw
+let lotteryLocked = false; // true while a draw + role reset is in progress
+let lotteryStatusMessageId = null;
+let lotteryLastDrawDayKey = null; // "YYYY-MM-DD" (UTC) of the last scheduled draw, to avoid double-firing
+let lotteryDrawIntervalHandle = null;
 
 let deps = {
   sessions: {},
@@ -448,6 +551,970 @@ async function fetchDiscordUser(discordId) {
   } catch (e) {
     return null;
   }
+}
+
+
+// ---------- Daily lottery ----------
+
+function lotteryWinnerCount() {
+  const n = lotteryEntrants.size;
+
+  if (n === 0) {
+    return 0;
+  }
+
+  return (
+    1 +
+    Math.floor(
+      n / LOTTERY_ENTRANTS_PER_WINNER
+    )
+  );
+}
+
+function lotteryConfigured() {
+  return !!(
+    LOTTERY_ROLE_ID &&
+    LOTTERY_CHANNEL_ID
+  );
+}
+
+function buildLotteryStatusContent(
+  note
+) {
+  const winnerCount =
+    Math.max(
+      lotteryWinnerCount(),
+      1
+    );
+
+  let share =
+    lotteryEntrants.size > 0
+      ? Math.floor(
+          lotteryPool /
+            winnerCount
+        )
+      : 0;
+
+ // share = share * (cfg?.lottery_bonus ?? 1.6)
+
+  const lines = [
+    "\uD83C\uDFB0 **Gwent Daily Lottery**",
+    "",
+    `Pool: **${lotteryPool}** cash`,
+    `Entrants: **${lotteryEntrants.size}**`,
+    `Ticket cost: **${LOTTERY_TICKET_COST}**`,
+    `Winner slots: **${winnerCount}** (+1 every ${LOTTERY_ENTRANTS_PER_WINNER} entrant(s))`,
+    `Est. payout per winner: **~${share} (+${((cfg?.lottery_bonus ?? 1.6) - 1) * 100}%)**`,
+    `Next draw: **${String(
+      LOTTERY_DRAW_HOUR_UTC
+    ).padStart(2, "0")}:${String(
+      LOTTERY_DRAW_MINUTE_UTC
+    ).padStart(2, "0")} UTC** daily`,
+  ];
+
+  if (lotteryLocked) {
+    lines.push(
+      "",
+      "\u23F8\uFE0F Resetting after the last draw - joining is briefly locked."
+    );
+  }
+
+  if (
+    lotteryLastWinners.length > 0
+  ) {
+    lines.push(
+      "",
+      "**Last draw:**"
+    );
+
+    for (
+      const w of lotteryLastWinners
+    ) {
+      lines.push(
+        `- <@${w.discordId}>: **${w.amount}**${
+          w.ok
+            ? ""
+            : " (payout failed - contact an admin)"
+        }`
+      );
+    }
+  }
+
+  if (note) {
+    lines.push(
+      "",
+      note
+    );
+  }
+
+  lines.push(
+    "",
+    `Join with \`${usage("gwentlottery")}\``
+  );
+
+  return lines.join("\n");
+}
+
+async function updateLotteryStatusMessage(
+  botClient,
+  note
+) {
+  if (
+    !lotteryConfigured() ||
+    !ready
+  ) {
+    return;
+  }
+
+  const content =
+    buildLotteryStatusContent(
+      note
+    );
+
+  const channel =
+    await botClient.channels.fetch(
+      LOTTERY_CHANNEL_ID
+    );
+
+  if (lotteryStatusMessageId) {
+    try {
+      const msg =
+        await channel.messages.fetch(
+          lotteryStatusMessageId
+        );
+
+      await msg.edit(content);
+
+      return;
+    } catch (e) {
+      log(
+        "Lottery status message fetch/edit failed, will look for or create a new one:",
+        e.message
+      );
+
+      lotteryStatusMessageId = null;
+    }
+  }
+
+  /*
+   * Per the "check that channel for the latest bot message" ask: reuse
+   * our most recent message there instead of creating a fresh one on
+   * every restart.
+   */
+  try {
+    const recent =
+      await channel.messages.fetch({
+        limit: 25,
+      });
+
+    const mine = recent.find(
+      (m) =>
+        m.author.id ===
+        botClient.user.id
+    );
+
+    if (mine) {
+      lotteryStatusMessageId =
+        mine.id;
+
+      await mine.edit(content);
+
+      return;
+    }
+  } catch (e) {
+    log(
+      "Lottery status message lookup failed:",
+      e.message
+    );
+  }
+
+  const sent = await channel.send(
+    content
+  );
+
+  lotteryStatusMessageId = sent.id;
+}
+
+async function doLotteryJoin(
+  message
+) {
+  if (!lotteryConfigured()) {
+    return message.reply(
+      "The lottery isn't configured on this server."
+    );
+  }
+
+  if (lotteryLocked) {
+    return message.reply(
+      "The lottery is resetting after the last draw - try again in a moment."
+    );
+  }
+
+  if (
+    lotteryEntrants.has(
+      message.author.id
+    )
+  ) {
+    return message.reply(
+      "You're already in this round's lottery."
+    );
+  }
+
+  const member =
+    await message.guild.members
+      .fetch(message.author.id)
+      .catch(() => null);
+
+  if (!member) {
+    return message.reply(
+      "Couldn't verify your server membership."
+    );
+  }
+
+  try {
+    const balance =
+      await unbGetBalance(
+        message.author.id
+      );
+
+    if (
+      (balance.cash ?? 0) <
+      LOTTERY_TICKET_COST
+    ) {
+      return message.reply(
+        `A ticket costs **${LOTTERY_TICKET_COST}** cash, you only have **${balance.cash}**.`
+      );
+    }
+  } catch (e) {
+    log(
+      "Lottery join balance check failed:",
+      e.message
+    );
+
+    return message.reply(
+      "Couldn't reach the economy bot. Try again shortly."
+    );
+  }
+
+  try {
+    await unbAdjustBalanceWithRetry(
+      message.author.id,
+      -LOTTERY_TICKET_COST,
+      "Gwent lottery ticket"
+    );
+  } catch (e) {
+    log(
+      "Lottery ticket charge failed:",
+      e.message
+    );
+
+    return message.reply(
+      "Couldn't take the ticket cost from your balance. Try again shortly."
+    );
+  }
+
+  try {
+    await member.roles.add(
+      LOTTERY_ROLE_ID
+    );
+  } catch (e) {
+    log(
+      `Lottery role add failed for ${message.author.id}, refunding: ${e.message}`
+    );
+
+    try {
+      await unbAdjustBalanceWithRetry(
+        message.author.id,
+        LOTTERY_TICKET_COST,
+        "Gwent lottery ticket refund (role add failed)"
+      );
+    } catch (e2) {
+      log(
+        `CRITICAL: lottery join refund FAILED for ${message.author.id}: ${e2.message}. Manual admin reconciliation required.`
+      );
+
+      return message.reply(
+        `\u26A0\uFE0F Took your **${LOTTERY_TICKET_COST}** but couldn't add the lottery role AND couldn't refund it. Please contact an admin immediately.`
+      );
+    }
+
+    return message.reply(
+      "Couldn't add the lottery role, so your ticket was refunded."
+    );
+  }
+
+  lotteryEntrants.set(
+    message.author.id,
+    {
+      amount: LOTTERY_TICKET_COST,
+      joinedAt: Date.now(),
+    }
+  );
+
+  lotteryPool += LOTTERY_TICKET_COST;
+
+  log(
+    `Lottery join: ${message.author.id} paid ${LOTTERY_TICKET_COST}, pool=${lotteryPool}, entrants=${lotteryEntrants.size}`
+  );
+
+  await updateLotteryStatusMessage(
+    message.client
+  ).catch((e) =>
+    log(
+      "Lottery status update after join failed:",
+      e.message
+    )
+  );
+
+  return message.reply(
+    `\uD83C\uDFAB You're in! Pool is now **${lotteryPool}** cash across **${lotteryEntrants.size}** entrant(s).`
+  );
+}
+
+async function doLotteryLeave(
+  message
+) {
+  if (lotteryLocked) {
+    return message.reply(
+      "The lottery is resetting - try again shortly."
+    );
+  }
+
+  const entry =
+    lotteryEntrants.get(
+      message.author.id
+    );
+
+  if (!entry) {
+    return message.reply(
+      "You're not in this round's lottery."
+    );
+  }
+
+  lotteryEntrants.delete(
+    message.author.id
+  );
+
+  lotteryPool -= entry.amount;
+
+  const member =
+    await message.guild.members
+      .fetch(message.author.id)
+      .catch(() => null);
+
+  if (member) {
+    await member.roles
+      .remove(LOTTERY_ROLE_ID)
+      .catch((e) =>
+        log(
+          `Lottery leave: role remove failed for ${message.author.id}:`,
+          e.message
+        )
+      );
+  }
+
+  try {
+    await unbAdjustBalanceWithRetry(
+      message.author.id,
+      entry.amount,
+      "Gwent lottery ticket refund (left)"
+    );
+  } catch (e) {
+    /*
+     * Refund failed - put the bookkeeping back exactly as it was so
+     * the money isn't just dropped from the pool, and tell the user
+     * they're still in rather than claiming a refund that didn't
+     * happen.
+     */
+    log(
+      `CRITICAL: lottery leave refund FAILED for ${message.author.id}: ${e.message}`
+    );
+
+    lotteryEntrants.set(
+      message.author.id,
+      entry
+    );
+
+    lotteryPool += entry.amount;
+
+    return message.reply(
+      "Couldn't refund your ticket, so you're still in the lottery. Try again shortly."
+    );
+  }
+
+  log(
+    `Lottery leave: ${message.author.id} refunded ${entry.amount}, pool=${lotteryPool}, entrants=${lotteryEntrants.size}`
+  );
+
+  await updateLotteryStatusMessage(
+    message.client
+  ).catch(() => {});
+
+  return message.reply(
+    `Left the lottery, **${entry.amount}** refunded.`
+  );
+}
+
+async function resetLotteryRound(
+  botClient
+) {
+  const idsToClean = new Set(
+    lotteryEntrants.keys()
+  );
+
+  try {
+    const guild =
+      botClient.guilds.cache.get(
+        GUILD_ID
+      ) ||
+      (await botClient.guilds.fetch(
+        GUILD_ID
+      ));
+
+    // Populate the member cache first - role.members below only reflects
+    // cached members, and without this it can be empty even with the
+    // GuildMembers intent on.
+    await guild.members
+      .fetch()
+      .catch((e) =>
+        log(
+          "Lottery reset: guild.members.fetch() failed, role sweep may be incomplete:",
+          e.message
+        )
+      );
+
+    const role =
+      await guild.roles.fetch(
+        LOTTERY_ROLE_ID
+      );
+
+    if (role) {
+      // Also sweep anyone holding the role who somehow isn't in our
+      // tracked entrants (manual role grant, earlier bug, etc.) so a
+      // stray role never permanently locks someone out of future
+      // rounds.
+      for (const id of role.members.keys()) {
+        idsToClean.add(id);
+      }
+    }
+
+    for (const id of idsToClean) {
+      try {
+        const member =
+          await guild.members
+            .fetch(id)
+            .catch(() => null);
+
+        if (
+          member &&
+          member.roles.cache.has(
+            LOTTERY_ROLE_ID
+          )
+        ) {
+          await member.roles.remove(
+            LOTTERY_ROLE_ID
+          );
+        }
+      } catch (e) {
+        log(
+          `Lottery reset: failed to remove role from ${id}:`,
+          e.message
+        );
+      }
+    }
+  } catch (e) {
+    log(
+      "Lottery reset: role cleanup failed:",
+      e.message
+    );
+  }
+
+  lotteryEntrants.clear();
+  lotteryPool = 0;
+
+  log(
+    "Lottery round reset: role cleared and pool/entrants zeroed."
+  );
+}
+
+async function doLotteryDraw(
+  trigger,
+  botClient,
+  triggeringMessage
+) {
+  if (!lotteryConfigured()) {
+    log(
+      "Lottery draw skipped: not configured."
+    );
+
+    return triggeringMessage?.reply(
+      "The lottery isn't configured on this server."
+    );
+  }
+
+  // Locked for the whole draw + reset so no join can land mid-draw.
+  lotteryLocked = true;
+
+  try {
+    const entrantIds = [
+      ...lotteryEntrants.keys(),
+    ];
+
+    log(
+      `Lottery draw (${trigger}) starting: entrants=${entrantIds.length} pool=${lotteryPool}`
+    );
+
+    if (entrantIds.length === 0) {
+      lotteryLastWinners = [];
+
+      await updateLotteryStatusMessage(
+        botClient,
+        "No entrants this round - nobody to draw from."
+      ).catch(() => {});
+
+      return triggeringMessage?.reply(
+        "No one is in the lottery right now."
+      );
+    }
+
+    /*
+     * Per the request, winners come from members who currently hold
+     * the role - but only ones we also have a recorded ticket for, so
+     * someone with the role manually added (or left over from a bug)
+     * can't win without having actually paid in.
+     */
+    let candidateIds = entrantIds;
+
+    try {
+      const guild =
+        botClient.guilds.cache.get(
+          GUILD_ID
+        ) ||
+        (await botClient.guilds.fetch(
+          GUILD_ID
+        ));
+
+      await guild.members
+        .fetch()
+        .catch((e) =>
+          log(
+            "Lottery draw: guild.members.fetch() failed, role check may be incomplete:",
+            e.message
+          )
+        );
+
+      const role =
+        await guild.roles.fetch(
+          LOTTERY_ROLE_ID
+        );
+
+      if (role) {
+        const roleMemberIds = [
+          ...role.members.keys(),
+        ];
+
+        const filtered =
+          roleMemberIds.filter(
+            (id) =>
+              lotteryEntrants.has(
+                id
+              )
+          );
+
+        if (filtered.length > 0) {
+          candidateIds = filtered;
+        } else {
+          log(
+            `Lottery draw (${trigger}): no role holders matched tracked entrants, falling back to the tracked list.`
+          );
+        }
+      }
+    } catch (e) {
+      log(
+        `Lottery draw (${trigger}): role member fetch failed, falling back to tracked entrants:`,
+        e.message
+      );
+    }
+
+    const winnerCount = Math.min(
+      lotteryWinnerCount(),
+      candidateIds.length
+    );
+
+    const shuffled = [
+      ...candidateIds,
+    ];
+
+    for (
+      let i = shuffled.length - 1;
+      i > 0;
+      i--
+    ) {
+      const j = Math.floor(
+        Math.random() * (i + 1)
+      );
+
+      [shuffled[i], shuffled[j]] = [
+        shuffled[j],
+        shuffled[i],
+      ];
+    }
+
+    const winners = shuffled.slice(
+      0,
+      winnerCount
+    );
+
+    const pool = lotteryPool;
+
+    const share = Math.floor(
+      pool / winners.length
+    );
+
+    // Give any rounding remainder to the first winner instead of
+    // letting it evaporate.
+    const remainder =
+      pool -
+      share * winners.length;
+
+    log(
+      `Lottery draw (${trigger}): pool=${pool} winners=${JSON.stringify(
+        winners
+      )} share=${share} remainder=${remainder}`
+    );
+
+    const payoutResults = [];
+
+    for (
+      let i = 0;
+      i < winners.length;
+      i++
+    ) {
+      const winnerId = winners[i];
+
+      let amount =
+        share +
+        (i === 0 ? remainder : 0);
+      let b = amount;
+      amount = Math.floor(amount * (cfg?.lottery_bonus ?? 1.6));
+
+      try {
+        await unbAdjustBalanceWithRetry(
+          winnerId,
+          amount,
+          "Gwent lottery win"
+        );
+
+        payoutResults.push({
+          discordId: winnerId,
+          amount,
+          ok: true,
+        });
+
+        await dm(
+          winnerId,
+          `\uD83C\uDF70 You won the lottery! **+${b}+${((cfg?.lottery_bonus ?? 1.6) - 1) * 100}%, ${amount} in total!** cash credited.`
+        );
+
+        log(
+          `Lottery payout OK: ${winnerId} +${amount}`
+        );
+      } catch (e) {
+        payoutResults.push({
+          discordId: winnerId,
+          amount,
+          ok: false,
+          error: e.message,
+        });
+
+        log(
+          `CRITICAL: lottery payout FAILED for ${winnerId} amount=${amount}: ${e.message}. Manual admin payout required.`
+        );
+
+        await dm(
+          winnerId,
+          `\u26A0\uFE0F You won the lottery, but crediting your **${amount}** failed even after retries. Please contact an admin.`
+        );
+      }
+    }
+
+    const failedPayouts =
+      payoutResults.filter(
+        (r) => !r.ok
+      );
+
+    if (
+      failedPayouts.length > 0
+    ) {
+      try {
+        const channel =
+          await botClient.channels.fetch(
+            LOTTERY_CHANNEL_ID
+          );
+
+        await channel.send(
+          `\uD83D\uDEA8 **Lottery payout failure** - ${failedPayouts
+            .map(
+              (r) =>
+                `<@${r.discordId}> (${r.amount})`
+            )
+            .join(
+              ", "
+            )} won but couldn't be paid automatically. Please pay manually.`
+        );
+      } catch (e) {
+        log(
+          "Also failed to post lottery payout-failure alert:",
+          e.message
+        );
+      }
+    }
+
+    lotteryLastWinners =
+      payoutResults;
+
+    // Reset for the next round - clears the role from everyone and
+    // zeroes the pool/entrants. Joins stay locked (lotteryLocked)
+    // until this fully finishes.
+    await resetLotteryRound(
+      botClient
+    );
+
+    await updateLotteryStatusMessage(
+      botClient
+    ).catch((e) =>
+      log(
+        "Lottery status update after draw failed:",
+        e.message
+      )
+    );
+
+    return triggeringMessage?.reply(
+      `Lottery drawn: ${winners.length} winner(s) sharing a pool of **${pool}**.`
+    );
+  } finally {
+    lotteryLocked = false;
+  }
+}
+
+async function handleLotteryJoin(
+  message
+) {
+  return queueLotteryOp(() =>
+    doLotteryJoin(message)
+  );
+}
+
+async function handleLotteryLeave(
+  message
+) {
+  return queueLotteryOp(() =>
+    doLotteryLeave(message)
+  );
+}
+
+async function handleLotteryStatus(
+  message
+) {
+  if (!lotteryConfigured()) {
+    return message.reply(
+      "The lottery isn't configured on this server."
+    );
+  }
+
+  return message.reply(
+    buildLotteryStatusContent()
+  );
+}
+
+async function handleLotteryOdds(
+  message
+) {
+  if (!lotteryConfigured()) {
+    return message.reply(
+      "The lottery isn't configured on this server."
+    );
+  }
+
+  const entry =
+    lotteryEntrants.get(
+      message.author.id
+    );
+
+  if (!entry) {
+    return message.reply(
+      `You're not in this round yet. Join with \`${usage(
+        "gwentlottery"
+      )}\` for **${LOTTERY_TICKET_COST}** cash.`
+    );
+  }
+
+  const winnerCount = Math.max(
+    lotteryWinnerCount(),
+    1
+  );
+
+  const odds = (
+    (Math.min(
+      winnerCount,
+      lotteryEntrants.size
+    ) /
+      lotteryEntrants.size) *
+    100
+  ).toFixed(1);
+
+  return message.reply(
+    `You're in with **${lotteryEntrants.size}** total entrant(s) and **${winnerCount}** winner slot(s) - roughly a **${odds}%** chance of winning something this round.`
+  );
+}
+
+async function handleLotteryAddMoney(
+  message,
+  args
+) {
+  if (!isAdmin(message)) {
+    return message.reply(
+      "You need to be an admin to use this command."
+    );
+  }
+
+  if (!lotteryConfigured()) {
+    return message.reply(
+      "The lottery isn't configured on this server."
+    );
+  }
+
+  const amount =
+    Number.parseInt(
+      args[0],
+      10
+    );
+
+  if (
+    !Number.isInteger(amount) ||
+    amount <= 0
+  ) {
+    return message.reply(
+      `Usage: \`${usage("gwentlotteryadd")}\` - amount must be a positive whole number.`
+    );
+  }
+
+  return queueLotteryOp(
+    async () => {
+      lotteryPool += amount;
+
+      log(
+        `Admin ${message.author.id} added ${amount} bonus to the lottery pool, new pool=${lotteryPool}`
+      );
+
+      await updateLotteryStatusMessage(
+        message.client
+      ).catch(() => {});
+
+      return message.reply(
+        `\u2705 Added **${amount}** bonus to the lottery pool. Pool is now **${lotteryPool}**.`
+      );
+    }
+  );
+}
+
+async function handleLotteryDraw(
+  message
+) {
+  if (!isAdmin(message)) {
+    return message.reply(
+      "You need to be an admin to use this command."
+    );
+  }
+
+  return queueLotteryOp(() =>
+    doLotteryDraw(
+      "manual",
+      message.client,
+      message
+    )
+  );
+}
+
+function maybeRunScheduledLotteryDraw() {
+  if (
+    !lotteryConfigured() ||
+    !ready
+  ) {
+    return;
+  }
+
+  const now = new Date();
+
+  const dayKey =
+    now.toISOString().slice(0, 10);
+
+  if (
+    now.getUTCHours() ===
+      LOTTERY_DRAW_HOUR_UTC &&
+    now.getUTCMinutes() ===
+      LOTTERY_DRAW_MINUTE_UTC &&
+    lotteryLastDrawDayKey !==
+      dayKey
+  ) {
+    lotteryLastDrawDayKey = dayKey;
+
+    log(
+      `Scheduled lottery draw firing for ${dayKey} ${LOTTERY_DRAW_HOUR_UTC}:${LOTTERY_DRAW_MINUTE_UTC} UTC`
+    );
+
+    queueLotteryOp(() =>
+      doLotteryDraw(
+        "scheduled",
+        client,
+        null
+      )
+    ).catch((e) =>
+      log(
+        "Scheduled lottery draw failed:",
+        e?.stack || e
+      )
+    );
+  }
+}
+
+function initLottery() {
+  if (!lotteryConfigured()) {
+    return;
+  }
+
+  log(
+    `Lottery configured: role=${LOTTERY_ROLE_ID} channel=${LOTTERY_CHANNEL_ID} ticket=${LOTTERY_TICKET_COST} draw=${LOTTERY_DRAW_HOUR_UTC}:${LOTTERY_DRAW_MINUTE_UTC} UTC entrantsPerWinner=${LOTTERY_ENTRANTS_PER_WINNER}`
+  );
+
+  log(
+    "NOTE: lottery pool/entrant state is in-memory only and will NOT survive a bot restart. If the process restarts mid-round, manually clear the lottery role from members and check the economy bot before starting a new round."
+  );
+
+  updateLotteryStatusMessage(
+    client
+  ).catch((e) =>
+    log(
+      "Initial lottery status message failed:",
+      e.message
+    )
+  );
+
+  if (lotteryDrawIntervalHandle) {
+    clearInterval(
+      lotteryDrawIntervalHandle
+    );
+  }
+
+  lotteryDrawIntervalHandle =
+    setInterval(
+      maybeRunScheduledLotteryDraw,
+      30 * 1000
+    );
+
+  intervals.push(
+    lotteryDrawIntervalHandle
+  );
 }
 
 
@@ -1836,8 +2903,26 @@ function usage(cmd) {
     gwentcoinflip:
       "!gwentcoinflip <amount>",
 
-  //  gwenttip:
-  //    "!gwenttip <@user> <amount>",
+ //   gwenttip:
+ //     "!gwenttip <@user> <amount>",
+
+    gwentlottery:
+      "!gwentlottery",
+
+    gwentlotteryleave:
+      "!gwentlotteryleave",
+
+    gwentlotterystatus:
+      "!gwentlotterystatus",
+
+    gwentlotteryodds:
+      "!gwentlotteryodds",
+
+    gwentlotteryadd:
+      "!gwentlotteryadd <amount>",
+
+    gwentlotterydraw:
+      "!gwentlotterydraw",
   };
 
   return (
@@ -2740,10 +3825,34 @@ function handleHelp(message) {
     "`!gwenthelp` - show this message",
   ];
 
+  if (lotteryConfigured()) {
+    lines.push(
+      "",
+      "**Daily lottery**",
+
+      `\`${usage("gwentlottery")}\` - buy a ticket (**${LOTTERY_TICKET_COST}** cash) for today's draw`,
+
+      `\`${usage("gwentlotteryleave")}\` - leave this round and get refunded`,
+
+      `\`${usage("gwentlotterystatus")}\` - show the current pool/entrants`,
+
+      `\`${usage("gwentlotteryodds")}\` - show your odds this round`
+    );
+  }
+
   if (isAdmin(message)) {
     lines.push(
+      "",
       `\`${usage("gwentspawn")}\` - (admin) drop fresh cash into the free money channel`
     );
+
+    if (lotteryConfigured()) {
+      lines.push(
+        `\`${usage("gwentlotteryadd")}\` - (admin) add bonus cash to the lottery pool`,
+
+        `\`${usage("gwentlotterydraw")}\` - (admin) force an immediate lottery draw`
+      );
+    }
   }
 
   return message.reply(
@@ -2878,12 +3987,79 @@ async function onMessageCreate(
 
     if (
       cmd ===
-      "gwenttip" && "a" === "b"
+      "gwenttip" && "a" ==="b"
     ) {
       return void (
         await handleTip(
           message,
           args
+        )
+      );
+    }
+
+    if (
+      cmd ===
+      "gwentlottery"
+    ) {
+      return void (
+        await handleLotteryJoin(
+          message
+        )
+      );
+    }
+
+    if (
+      cmd ===
+      "gwentlotteryleave"
+    ) {
+      return void (
+        await handleLotteryLeave(
+          message
+        )
+      );
+    }
+
+    if (
+      cmd ===
+      "gwentlotterystatus"
+    ) {
+      return void (
+        await handleLotteryStatus(
+          message
+        )
+      );
+    }
+
+    if (
+      cmd ===
+      "gwentlotteryodds"
+    ) {
+      return void (
+        await handleLotteryOdds(
+          message
+        )
+      );
+    }
+
+    if (
+      cmd ===
+      "gwentlotteryadd"
+    ) {
+      return void (
+        await handleLotteryAddMoney(
+          message,
+          args
+        )
+      );
+    }
+
+    if (
+      cmd ===
+      "gwentlotterydraw"
+    ) {
+      return void (
+        await handleLotteryDraw(
+          message
         )
       );
     }
@@ -3167,6 +4343,15 @@ exports.init =
           GatewayIntentBits.Guilds,
           GatewayIntentBits.GuildMessages,
           GatewayIntentBits.MessageContent,
+          /*
+           * Needed for the lottery: reading who currently holds the
+           * lottery role (role.members) and adding/removing that role
+           * both rely on the guild members cache being populated. This
+           * is a privileged intent - it must also be turned on for the
+           * bot under "Server Members Intent" in the Discord Developer
+           * Portal (Bot page), or login will be rejected.
+           */
+          GatewayIntentBits.GuildMembers,
         ],
       });
 
@@ -3212,6 +4397,8 @@ exports.init =
     );
 
     ready = true;
+
+    initLottery();
 
     if (STATUS_URL) {
       await refreshStatusList();
