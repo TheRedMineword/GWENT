@@ -2,6 +2,8 @@
 
 class Controller {}
 
+let gameInProgress = false;
+
 // Better menu //
 const menuBtn = document.getElementById("top-menu-btn");
 const menu = document.getElementById("top-menu");
@@ -2275,10 +2277,13 @@ const GwentOverlay = (() => {
     box.classList.add("gwent-show");
     try {
       var t = game?.currPlayer?.tag ?? "op";
-      if (carousel.classList.value === "hide" && type.includes("top")) {
-        GwentOverlay.hide();
-      } else if (t !== "me" && type.includes("top")) {
-        GwentOverlay.hide();
+      //  console.log("GWENT OVERLAY FALSE POSITIVE CHECK, ",carousel.classList,carousel.classList.value, type, "will result in: ", carousel.classList.value === "hide" && type.includes("top"), "\n", "else check,", t, "will reuslt in: ", t !== "me" && type.includes("top"))
+      if (gameInProgress) {
+        if (carousel.classList.value === "hide" && type.includes("top")) {
+          GwentOverlay.hide();
+        } else if (t !== "me" && type.includes("top")) {
+          GwentOverlay.hide();
+        }
       }
     } catch (e) {}
   }
@@ -3705,6 +3710,7 @@ class Game {
       state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
       status: getTranslation("ui.mmenu.status.gameinprogress"),
     });
+    gameInProgress = true;
     await sleep(10);
     player_op.total = 0;
     player_me.total = 0;
@@ -4202,6 +4208,7 @@ class Game {
   }
   // Sets up and displays the end-game screen
   async endGame() {
+    gameInProgress = false;
     document.getElementById("session-start-control").classList.remove("ready");
     let endScreen = document.getElementById("end-screen");
     const endText = document.getElementById("end-text");
@@ -4293,6 +4300,7 @@ class Game {
     }
   }
   async surrenderEnd(winner) {
+    gameInProgress = false;
     Bucket.reset();
     //  document
     //    .getElementById("session-start-control")
