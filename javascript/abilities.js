@@ -2693,6 +2693,7 @@ var ability_dict = {
         row.removeCard(card);
         return false;
       }
+      ignore_usage_duration_of_card_if_pass = true;
       let wrapper = { card: null };
 
       let deck = card.holder.deck.cards;
