@@ -1,0 +1,12 @@
+<title>Possible bug</title>
+<desc>It is possible that a bug has reached the live version of the game that may lead to an incorrect reset of the board after the end of the round.
+
+I am aware of this, but I will take action the next morning because as a human being I have to sleep
+However, I will try to investigate this as soon as possible.
+
+If you find any bugs, please report them via discord server or github issue
+
+I apologize for any problems this may cause.
+~DrMineword</desc>
+<bottom_link>true</bottom_link>
+<bottom_link_value>Join Discord Server for updates!###https://theredmineword.github.io/GWENT/api/discord-iframe/page</bottom_link_value>
