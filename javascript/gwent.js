@@ -370,6 +370,12 @@ const wsUrl = isElectronLauncher
     ? "ws://localhost:8081"
     : socket_domain;
 
+const apiURL = isElectronLauncher
+  ? domain
+  : isLocalhost
+    ? "http://localhost:8081/"
+    : domain;
+
 function showBrickScreen() {
   document.documentElement.innerHTML = `
     <style>
@@ -4056,6 +4062,11 @@ class Game {
         r.updateScore();
       }
     });
+    stats.turnEnd({
+      userid: playerId,
+      session: ThisSessionId,
+      turn: turncount,
+    });
     turncount = turncount + 1;
     console.log(
       `TURN ENDED: Turn ${turncount - 1}\nNext turn will be: ${turncount}`,
@@ -4123,6 +4134,12 @@ class Game {
 
   // Ends the round and may end the game. Determines final scores and the round winner.
   async endRound() {
+    stats.roundEnd({
+      userid: playerId,
+      session: ThisSessionId,
+      turn: turncount,
+      round: game.roundHistoryResults.length,
+    });
     let dif = player_me.total - player_op.total;
 
     // null = no Nilfgaard tie-break, "me" = I won by Nilfgaard, "op" = opponent won by Nilfgaard
@@ -4258,6 +4275,16 @@ class Game {
           }),
         );
         var end_screen = true;
+        stats.gameEnd({
+          userid: playerId,
+          session: ThisSessionId,
+          turn: turncount,
+          round: game.roundHistoryResults.length,
+          result: {
+            winner: "none",
+            reason: "normal",
+          },
+        });
         tocar("tf2/game_draw_not_redraw", true);
         endScreen.getElementsByTagName("p")[0].classList.remove("hide");
         endScreen.children[0].classList.add("end-draw");
@@ -4272,6 +4299,16 @@ class Game {
         }),
       );
       var end_screen = true;
+      stats.gameEnd({
+        userid: playerId,
+        session: ThisSessionId,
+        turn: turncount,
+        round: game.roundHistoryResults.length,
+        result: {
+          winner: "me",
+          reason: "normal",
+        },
+      });
       tocar("game_win", true);
       endScreen.children[0].classList.add("end-win");
       console.log("Game over || Victory");
@@ -4286,6 +4323,16 @@ class Game {
         }),
       );
       var end_screen = true;
+      stats.gameEnd({
+        userid: playerId,
+        session: ThisSessionId,
+        turn: turncount,
+        round: game.roundHistoryResults.length,
+        result: {
+          winner: "op",
+          reason: "normal",
+        },
+      });
       tocar("game_lose", true);
       endScreen.children[0].classList.add("end-lose");
       endScreen.children[0].classList.add("end-lose");
@@ -4312,8 +4359,28 @@ class Game {
     var a = "";
     if (winner === player_me) {
       a = getTranslation("game_end.sur.op");
+      stats.gameEnd({
+        userid: playerId,
+        session: ThisSessionId,
+        turn: turncount,
+        round: game.roundHistoryResults.length,
+        result: {
+          winner: "me",
+          reason: "normal",
+        },
+      });
     } else {
       a = getTranslation("game_end.sur.me");
+      stats.gameEnd({
+        userid: playerId,
+        session: ThisSessionId,
+        turn: turncount,
+        round: game.roundHistoryResults.length,
+        result: {
+          winner: "op",
+          reason: "normal",
+        },
+      });
     }
     document.getElementById("end-text").innerHTML =
       `${buildRoundHistoryText(game.roundHistoryResults)}\n\n${a}`
@@ -8021,6 +8088,7 @@ var ui = new UI();
 
 var board = new Board();
 var potions = new PotionManager(board);
+var stats = new gamestats(apiURL);
 var weather = new Weather();
 var game = new Game();
 var player_me, player_op;

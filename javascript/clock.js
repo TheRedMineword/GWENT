@@ -652,6 +652,7 @@ let the_image_json = {};
     "javascript/jszip.min.js",
     "javascript/defines.js",
     "javascript/witcherpotions.js",
+    "javascript/gamestats.js",
     "javascript/card_skins.js",
     "javascript/cards.js",
     "javascript/bucket.js",
