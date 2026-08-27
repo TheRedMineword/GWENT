@@ -7,7 +7,7 @@ const discord_cards = {
 let discord_cards_array = [];
 const debuglunchcustomcards = false; // if false when ready use: lunch_gwent_ui
 let onYouTubeIframeAPIReady_status = false;
-const showagile_and_alldescindeckmaker = false;
+let showagile_and_alldescindeckmaker = false;
 var init_button_show_patchnotes = true;
 let _debug_volume = 50;
 let videoMapLyrics = {};
@@ -1062,6 +1062,10 @@ let ThisDef = {
     resync_wait: deepClone(resync_wait),
 
     spy: deepClone(spy),
+
+    showagile_and_alldescindeckmaker: deepClone(
+      showagile_and_alldescindeckmaker,
+    ),
 
     powergain: deepClone(powergain),
 
