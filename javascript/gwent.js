@@ -1795,6 +1795,14 @@ class Player {
     board.updateLeader();
   }
 
+  SetTotal(n) {
+    // console.log(`UPdtae total this`, this);
+    this.total = n;
+    document.getElementById("score-total-" + this.tag).children[0].innerHTML =
+      this.total;
+    board.updateLeader();
+  }
+
   // Puts the player in the winning state
   setWinning(isWinning) {
     this.winning = Boolean(isWinning);
@@ -2856,11 +2864,13 @@ class Row extends CardContainer {
     }
     let player =
       this.elem_parent.parentElement.id === "field-op" ? player_op : player_me;
-    player.updateTotal(total - this.total);
+    //player.updateTotal(total - this.total);
     this.total = total;
     this.elem_parent.getElementsByClassName(
       `row-score-${this._id.raw}`,
     )[0].innerHTML = this.total;
+    board.boardupdatePlayers("me");
+    board.boardupdatePlayers("op");
   }
 
   // Calculates and set the card's current power
@@ -3347,6 +3357,34 @@ class Board {
       this.row[x] = new Row(elem);
     }
   }
+  boardupdatePlayers(playertag) {
+    switch (playertag) {
+      case "me":
+        player_me.SetTotal(
+          this.row[5].total + this.row[4].total + this.row[3].total,
+        );
+        this.me_score = deepClone(
+          this.row[5].total + this.row[4].total + this.row[3].total,
+        );
+        return {
+          a: [this.row[5].total, this.row[4].total, this.row[3].total],
+          b: this.row[5].total + this.row[4].total + this.row[3].total,
+        };
+        break;
+      case "op":
+        player_op.SetTotal(
+          this.row[0].total + this.row[1].total + this.row[2].total,
+        );
+        this.op_score = deepClone(
+          this.row[0].total + this.row[1].total + this.row[2].total,
+        );
+        return {
+          a: [this.row[0].total, this.row[1].total, this.row[2].total],
+          b: this.row[0].total + this.row[1].total + this.row[2].total,
+        };
+        break;
+    }
+  }
 
   // Get the opponent of this Player
   opponent(player) {
@@ -3588,6 +3626,8 @@ class Game {
     await sleep(10);
     player_op.total = 0;
     player_me.total = 0;
+    board.me_score = 0;
+    board.op_score = 0;
     board.row.forEach((r) => r.updateScore());
     ability_disable("me");
     ability_disable("op");
@@ -3724,6 +3764,9 @@ class Game {
     player_op.setWinning(false);
     this.resetTurnUI("me");
     this.resetTurnUI("op");
+    await sleep(15);
+    board.boardupdatePlayers("me");
+    board.boardupdatePlayers("op");
     ui.toggleMusic_elem.style.left = "26vw";
 
     ui.toggleMusic_elem.classList.remove("music-customization");
@@ -3978,6 +4021,8 @@ class Game {
         hold = tmp;
       }
     }
+    board.boardupdatePlayers("me");
+    board.boardupdatePlayers("op");
     await ui.notification("round-start", ui_display_times.round_start);
     if (this.currPlayer.opponent().passed)
       await ui.notification(
@@ -4062,6 +4107,8 @@ class Game {
         r.updateScore();
       }
     });
+    board.boardupdatePlayers("me");
+    board.boardupdatePlayers("op");
     stats.turnEnd({
       userid: playerId,
       session: ThisSessionId,
@@ -4134,6 +4181,12 @@ class Game {
 
   // Ends the round and may end the game. Determines final scores and the round winner.
   async endRound() {
+    await board.row.forEach((r) => {
+      r.updateScore();
+    });
+    await sleep(50);
+    board.boardupdatePlayers("me");
+    board.boardupdatePlayers("op");
     stats.roundEnd({
       userid: playerId,
       session: ThisSessionId,
@@ -4674,6 +4727,7 @@ class Card {
       mtg: "cos",
       decoy: "spy",
       dopler: "spy",
+      sab: "spy",
       dopavenger: "moral",
       dopler_spawn_creature: "avenger",
       muster2: "ally",
@@ -4747,6 +4801,7 @@ class Card {
       mtg: "cos",
       decoy: "spy",
       dopler: "spy",
+      sab: "spy",
       dopavenger: "moral",
       dopler_spawn_creature: "avenger",
       muster2: "ally",
