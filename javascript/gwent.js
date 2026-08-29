@@ -3525,6 +3525,29 @@ function buildRoundHistoryText(roundHistoryResults) {
     .join("\n");
 }
 
+function clearPendingScorch() {
+  const graves = [player_me?.grave?.cards ?? [], player_op?.grave?.cards ?? []];
+
+  graves.forEach((cards, graveIndex) => {
+    cards.forEach((card, cardIndex) => {
+      if (card?.pendingScorch === true) {
+        card.pendingScorch = false;
+
+        console.log(
+          `[Pending Scorch Cleared] ${
+            card.name_english || card.name || "Unknown Card"
+          }`,
+          {
+            grave: graveIndex === 0 ? "player_me" : "player_op",
+            index: cardIndex,
+            card,
+          },
+        );
+      }
+    });
+  });
+}
+
 class Game {
   constructor() {
     this.endScreen = document.getElementById("end-screen");
@@ -4116,6 +4139,9 @@ class Game {
       session: ThisSessionId,
       turn: turncount,
     });
+    if (!darknessstorm_await) {
+      clearPendingScorch();
+    }
     turncount = turncount + 1;
     console.log(
       `TURN ENDED: Turn ${turncount - 1}\nNext turn will be: ${turncount}`,
