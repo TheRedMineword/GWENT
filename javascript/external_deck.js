@@ -1,5 +1,6 @@
 //"use strict";
-
+const IMPORTVERSION_raw = 3;
+const IMPORTVERSION = `v.${IMPORTVERSION_raw}.${btoa(`${IMPORTVERSION_raw}`)}`;
 class deck_importo_exporto1 {
   constructor() {
     console.log("Nothing to do here");
@@ -101,11 +102,22 @@ class deck_importo_exporto1 {
         );
       }
       //  sendChatMessageStrig(`play wich ${factions[deck.faction].name} faction!`);
+      //var leader_index = card_dict.findIndex((c) => `${c.id}_${c.filename}` === deck.leader)
       if (
         card_dict[deck.leader].row === "leader" &&
-        deck.faction === card_dict[deck.leader].deck
+        deck.faction === card_dict[deck.leader].deck &&
+        Number(card_dict[deck.leader].count) > 0
       ) {
         dm.leader = dm.leaders.find((c) => c.index === deck.leader);
+        console.log(
+          "dm.leader",
+          dm.leader,
+          dm.leaders.find(
+            (c) => `${c.card.id}_${c.card.filename}` === deck.leader,
+          ),
+          deck.leader,
+          dm.leaders,
+        );
         var tmp = dm.leader.card.deck + "_" + dm.leader.card.filename;
 
         if (dm.leader.card.filename === "Gaunter_Leader") {
@@ -113,6 +125,12 @@ class deck_importo_exporto1 {
         }
 
         dm.leader_elem.children[1].style.backgroundImage = largeURL(tmp);
+      } else {
+        console.log("LEADER ERR?");
+        warn_screen(
+          `${getTranslation("ui.mmenu.c.warn3")}\n\"It appears that leader card from import is invalid, for example it is no longer defined as leader or count is set as 0\"`,
+        );
+        return;
       }
       dm.makeBank(deck.faction, cards);
       dm.update();
@@ -125,9 +143,10 @@ class deck_importo_exporto1 {
     console.log("cards leader", card_dict, dm.leader.card.index, dm.leader);
 
     const obj = {
-      version: 2,
+      version: IMPORTVERSION,
       faction: dm.faction,
-      leader: dm.leader.card.id,
+      leader: `${dm.leader.card.id}_${dm.leader.card.filename}`,
+      leader_raw: dm.leader,
       cards: dm.deck
         .filter((x) => x.count > 0)
         .map((x) => {
@@ -160,7 +179,10 @@ class deck_importo_exporto1 {
     };
 
     // Convert leader filename -> index
-    let leader = card_dict.find((l) => l.id === v2.leader);
+    var leader_index = card_dict.findIndex(
+      (c) => `${c.id}_${c.filename}` === v2.leader,
+    );
+    let leader = card_dict[leader_index] ?? card_dict[0]; // .find((l) => l.id === v2.leader);
     leader = card_dict.findIndex((c) => c === leader);
     console.log("is leaader", leader);
     //  if (leader) {
@@ -227,6 +249,14 @@ class deck_importo_exporto1 {
         } else {
           var leg = this.deckToLegacy(e.target.result);
           console.log("[DECK.U]", "deckFromJSON", leg);
+          var tmp = JSON.parse(e.target.result);
+          console.log("DECK PARSED for version check", tmp);
+          if (tmp.version != IMPORTVERSION) {
+            warn_screen(
+              `Deck version \"${tmp.version}\" is outdated!\nExpected: \"${IMPORTVERSION}\"`,
+            );
+            return;
+          }
           this.legacy_deckFromJSON(leg);
         }
       } catch (err) {

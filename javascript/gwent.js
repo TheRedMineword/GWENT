@@ -7111,7 +7111,13 @@ class DeckMaker {
 
     this.leaders = card_dict
       .map((c, i) => ({ index: i, card: c }))
-      .filter((c) => c.card.deck === faction_name && c.card.row === "leader");
+      .filter(
+        (c) =>
+          c.card.deck === faction_name &&
+          c.card.row === "leader" &&
+          Number(c.card.count) > 0,
+      );
+    console.warn("this.leaders", this.leaders);
     if (!this.leader || this.faction !== faction_name) {
       this.leader = this.leaders[0];
       var tmp = this.leader.card.deck + "_" + this.leader.card.filename;

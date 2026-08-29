@@ -2390,7 +2390,7 @@ var card_dict_base = [
     strength: "",
     ability: "crach_an_craite",
     filename: "crach_an_craite",
-    count: "0",
+    count: "1",
   },
   {
     name: "King Bran",
@@ -2400,7 +2400,7 @@ var card_dict_base = [
     strength: "",
     ability: "king_bran",
     filename: "king_bran",
-    count: "0",
+    count: "1",
   },
   {
     name: "Schirru",
@@ -2777,7 +2777,7 @@ var card_dict_base = [
     strength: "",
     ability: "eist_tuirseach",
     filename: "eist_tuirseach",
-    count: "0",
+    count: "1",
   },
   {
     name: "Svalblod Cult",
@@ -2787,7 +2787,7 @@ var card_dict_base = [
     strength: "",
     ability: "skellige_berserk_reward",
     filename: "svalblod",
-    count: "0",
+    count: "1",
   },
   {
     name: "Svalblod Cult - Transformation",
@@ -2807,7 +2807,7 @@ var card_dict_base = [
     strength: "",
     ability: "skellige_bond_summoner",
     filename: "Arnjolf_the_Patricide",
-    count: "0",
+    count: "1",
   },
   {
     name: "Witcher Signs: Aard",
@@ -2850,7 +2850,7 @@ var card_dict_base = [
     strength: "",
     ability: "turn_skiper",
     filename: "udalryka_leader",
-    count: "0",
+    count: "1",
   },
   {
     name: "Tactical Forecaster — Kaedwen Division",
@@ -2860,7 +2860,7 @@ var card_dict_base = [
     strength: "",
     ability: "keadwen_weather",
     filename: "keadwen_weather",
-    count: "0",
+    count: "1",
   },
   {
     name: "Radovid V the Stern — In Madness",
@@ -2870,7 +2870,7 @@ var card_dict_base = [
     strength: "",
     ability: "scorchstopper",
     filename: "radovid_stern",
-    count: "0",
+    count: "1",
   },
   {
     name: "False Ciri — Empress of Nilfgaard",
@@ -2880,7 +2880,7 @@ var card_dict_base = [
     strength: "",
     ability: "turn_skiper",
     filename: "fake_ciri",
-    count: "0",
+    count: "1",
   },
   {
     name: "White Frost",
@@ -2955,7 +2955,7 @@ var card_dict_base = [
     strength: "",
     ability: "temeria_call",
     filename: "vernontemeria_call",
-    count: "0",
+    count: "1",
   },
   // Custom faction or something
   {
@@ -3159,7 +3159,7 @@ var card_dict_base = [
     strength: "",
     ability: "turn_skiper",
     filename: "vault_elder_s2e",
-    count: "0",
+    count: "1",
   },
   {
     name: "Fisstech",
@@ -3179,7 +3179,7 @@ var card_dict_base = [
     strength: "0",
     ability: "mediclove",
     filename: "sigi_reuven",
-    count: "0",
+    count: "1",
   },
   {
     name: "King of Begger",
@@ -3189,7 +3189,7 @@ var card_dict_base = [
     strength: "0",
     ability: "emhyr_whiteflame2",
     filename: "king_of_beggers",
-    count: "0",
+    count: "1",
   },
   {
     name: "Days Of Nature Guide",
@@ -3603,7 +3603,7 @@ var card_dict_base = [
     strength: "",
     ability: "francesca_beautiful",
     filename: "valley_twins",
-    count: "0",
+    count: "1",
   },
   {
     name: "Chill Sunbather with a bow in thier hair",
@@ -3667,7 +3667,7 @@ var card_dict_base = [
     strength: "",
     ability: "bucket",
     filename: "eredin_bucket",
-    count: "0",
+    count: "1",
   },
   {
     name: "Poor Fucking Infantry",
