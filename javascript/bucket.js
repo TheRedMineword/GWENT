@@ -306,6 +306,7 @@ async function END_TURN_SHARE_CARDS(player) {
 function is_bucket_vibecheck_name(vara) {
   var map = {
     bucket: true,
+    scorchstopper_single: true,
   };
 
   return map[vara] ?? false;

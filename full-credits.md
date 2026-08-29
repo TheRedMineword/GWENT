@@ -47,6 +47,9 @@ https://pngtree.com/freebackground/vintage-crinkled-paper-texture-aged-brown-bac
 - "Bucket" row: https://www.magnific.com/free-photo/natural-woven-rattan-texture-detail_426434067.htm
 - Eredin elder blood: https://gwent.one/en/card/202606
 - Viper Witcher related assests: Witcher wiki / Icon: https://www.deviantart.com/ari-m94/art/THE-WITCHER-SCHOOL-OF-THE-VIPER-LOGO-1027784715
+- OLgierd von Everec leader card: https://gwent.one/en/card/112207
+- Iorveth leader card (bucket + turn skipper): https://gwint.fandom.com/wiki/Iorweth
+- Whoreson Junior leader: https://witcher.fandom.com/wiki/Cyprian_Wiley
 > Some card/mechanics/assets are used from other project like this (For example: RandomPianist/gwent-classic-v3.1, other similar project are mentioned at start of this copyright notice)
 
 

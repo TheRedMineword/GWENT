@@ -486,7 +486,10 @@ STRNG["pl"] = {
     witcher_potion: {
     name: "Wiedźmiński Eliksir",
     description: "Po użyciu karta zostaje odrzucona! Nadpisuje wszytskie efekty tej mikstury dla każdego z celów eliksiru! "
-  }
+  },
+    scorchstopper_single: {
+     description: "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawaiania zależy od liderów z tą zdolnością w grze. Zwycięzca tury przejmuje pulę, przegrany zamienia cześć uwolnionej mocy w dobrnia kart. Ochrania jedną kartę przed efektem Piekielnej Pożogi"
+    },
 },
     factions: {
   realms: {
@@ -813,7 +816,12 @@ francesca_hope_of_the_aen_seidhe:
     viperwitcher: "Wiedźmin Szkoły Żmiji",
     potion_soup: "Zupa z Elfa i Cebuli",
     potion_grom: "Grom",
-    potion_white: "Biały Miód"
+    potion_white: "Biały Miód",
+    kingkrill: "Potwór Otchłani",
+    olgierd_headless: "Olgierd von Everec — Bezgłowy",
+    iorwethbucketcommander: "Iorveth — Zwykły Skurwysyn",
+    iorwethpatience: "Iorveth — Zwykły Skurwysyn?",
+    whatthesandwitch: "Skurwiel Junior — Największy Chuj w Nowigradzie"
   },
   ui: {
     elem: {
@@ -1311,13 +1319,19 @@ card_info: {
   rottenfruit_male: "Zbira",
   rottenfruit_female: "Zbira",
   potion_male: "Wiedźmińskich Eliksirów",
-  potion_female: "Wiedźmińskich Eliksirów"
+  potion_female: "Wiedźmińskich Eliksirów",
+  dark_creature_male: "Istoty Ciemności",
+  dark_creature_female: "Istoty Ciemności",
+  light_creature_male: "Istoty Światła",
+  light_creature_female: "Istoty Światła",
 },
 rule63: [  // for classes
   {"if": "siege", "gender": "female", "hero": false, "mode": "split"}, // because siege strucutes powiny mieć "oblężniczej"
   {"if": "siege", "gender": "female", "hero": true, "mode": "split"},
   {"if": "magic", "gender": "female", "hero": false, "mode": "split"}, // because siege strucutes powiny mieć "oblężniczej"
-   {"if": "stennis", "gender": "female", "mode": "filename"},
+  {"if": "magic", "gender": "female", "hero": false, "mode": "split"},
+  {"if": "stennis", "gender": "female", "mode": "filename"},
+   {"if": "redcrab", "gender": "female", "mode": "filename"},
   {"if": "sabotage_female", "mode": "notsplit", "hero": true, "gender": "female", "extra": "bad_lady", "extra2": true}, // ponieważ ortografia
   {"if": "aviary_medic", "mode": "filename", "gender": "male"} 
 ]

@@ -34,7 +34,7 @@ let ThatIsSpy = [
   "yrden",
 ];
 let bucket_max = 7;
-let bucket_spawn_base = 6;
+let bucket_spawn_base = 6; // Maybe set to 7?
 let bucket_spawn_per_lider_minus = 2;
 let bucket_op_draw_per_power = 4.65;
 let bucket_cards_strenght = {
@@ -769,7 +769,7 @@ let card_name_class = {
   fortunedrum: "sky_item_%g",
   spirit: "sky_spirit_%g",
   danielle: "sky_skykid_%g",
-  redcrab: "siege_%g",
+  redcrab: "dark_creature_%g",
   crabspy: "spy_%g",
   darkstorm: "special_%g",
   darkness_storm_leader: "royal_%g",
@@ -800,6 +800,11 @@ let card_name_class = {
   potion_soup: "potion_%g",
   potion_grom: "potion_%g",
   potion_white: "potion_%g",
+  kingkrill: "dark_creature_%g",
+  olgierd_headless: "rottenfruit_%g",
+  iorwethbucketcommander: "hebitch_%g",
+  iorwethpatience: "hebitch_%g",
+  whatthesandwitch: "rottenfruit_%g",
 };
 let classDecorators = {
   undefined: { prefix: "⩫<", suffix: ">⩫" },
@@ -843,6 +848,9 @@ let classDecorators = {
   assasin: { prefix: "† ", suffix: "" },
   roach: { prefix: "‹", suffix: "›" },
   potion: { prefix: "🧪 ", suffix: "" },
+
+  dark_creature: { prefix: "▼", suffix: "▼" },
+  light_creature: { prefix: "▽", suffix: "▽" },
 };
 let card_gender = {
   mysterious_elf: "male",

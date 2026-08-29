@@ -4,37 +4,46 @@ const ability_data = {
   me: createAbility(),
   op: createAbility(),
 };
-
-let ABILITIES = {
-  turn_skiper: {
-    type: "skip",
-    max: turn_skipper_conf.chargeMax,
-    onClick: null,
-    add: turn_skipper_conf.perTurn,
-    start: 0,
-  },
-  keadwen_weather: {
-    type: "skip",
-    max: Math.floor(turn_skipper_conf.chargeMax / 2),
-    onClick: null,
-    add: Number((turn_skipper_conf.perTurn - 0.15).toFixed(2)),
-    start: 0,
-  },
-  scorchstopper: {
-    type: "antischorch",
-    max: scorch_stopper.max,
-    onClick: null,
-    add: 0,
-    start: scorch_stopper.max,
-  },
-  d20cloner: {
-    type: "d20cloner",
-    max: d20cloner.chargeMax,
-    onClick: null,
-    add: d20cloner.perTurn,
-    start: 0,
-  },
-};
+function makeabilities() {
+  return deepClone({
+    turn_skiper: {
+      type: "skip",
+      max: turn_skipper_conf.chargeMax,
+      onClick: null,
+      add: turn_skipper_conf.perTurn,
+      start: 0,
+    },
+    keadwen_weather: {
+      type: "skip",
+      max: Math.floor(turn_skipper_conf.chargeMax / 2),
+      onClick: null,
+      add: Number((turn_skipper_conf.perTurn - 0.15).toFixed(2)),
+      start: 0,
+    },
+    scorchstopper: {
+      type: "antischorch",
+      max: scorch_stopper.max,
+      onClick: null,
+      add: 0,
+      start: scorch_stopper.max,
+    },
+    scorchstopper_single: {
+      type: "antischorch",
+      max: 1,
+      onClick: null,
+      add: 0,
+      start: 1,
+    },
+    d20cloner: {
+      type: "d20cloner",
+      max: d20cloner.chargeMax,
+      onClick: null,
+      add: d20cloner.perTurn,
+      start: 0,
+    },
+  });
+}
+let ABILITIES = makeabilities();
 
 function createAbility() {
   return {
@@ -303,6 +312,12 @@ document
         );
       }
     } else if (ability_data.me.type === "scorchstopper") {
+      showSideTooltip(
+        getTranslation("ability_counter.toolow_shield")
+          .replace("%x", ability_data.me.current)
+          .replace("%y", ability_data.me.max),
+      );
+    } else if (ability_data.me.type === "scorchstopper_single") {
       showSideTooltip(
         getTranslation("ability_counter.toolow_shield")
           .replace("%x", ability_data.me.current)

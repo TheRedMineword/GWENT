@@ -551,7 +551,7 @@
       "fortunedrum": "sky_item_%g",
       "spirit": "sky_spirit_%g",
       "danielle": "sky_skykid_%g",
-      "redcrab": "siege_%g",
+      "redcrab": "dark_creature_%g",
       "crabspy": "spy_%g",
       "darkstorm": "special_%g",
       "darkness_storm_leader": "royal_%g",
@@ -581,7 +581,12 @@
       "potion_jaskolka": "potion_%g",
       "potion_soup": "potion_%g",
       "potion_grom": "potion_%g",
-      "potion_white": "potion_%g"
+      "potion_white": "potion_%g",
+      "kingkrill": "dark_creature_%g",
+      "olgierd_headless": "rottenfruit_%g",
+      "iorwethbucketcommander": "hebitch_%g",
+      "iorwethpatience": "hebitch_%g",
+      "whatthesandwitch": "rottenfruit_%g"
     },
     "classDecorators": {
       "undefined": {
@@ -735,6 +740,14 @@
       "potion": {
         "prefix": "🧪 ",
         "suffix": ""
+      },
+      "dark_creature": {
+        "prefix": "▼",
+        "suffix": "▼"
+      },
+      "light_creature": {
+        "prefix": "▽",
+        "suffix": "▽"
       }
     },
     "card_gender": {
@@ -1298,6 +1311,9 @@
           "witcher_potion": {
             "name": "Witcher Potion",
             "description": "After use card gets discarded! Overwrites any active effect of this potion for target(s) player(s)! "
+          },
+          "scorchstopper_single": {
+            "description": "Random cards will appear in the \"bucket\" every few turns; the frequency of their appearance depends on the number of commanders with this ability currently in play. The winner of the round takes the pot, the loser turns some of the released power into cards draw. Protects single card from Scorch effect. "
           }
         },
         "factions": {
@@ -1611,7 +1627,12 @@
           "viperwitcher": "Viper School Witcher",
           "potion_soup": "Elf and Onion soup",
           "potion_grom": "Thunderbolt",
-          "potion_white": "White Honey"
+          "potion_white": "White Honey",
+          "kingkrill": "Abyss Monster",
+          "olgierd_headless": "Olgierd von Everec — The Headless",
+          "iorwethbucketcommander": "Iorveth — Ordinary Son of a Whore",
+          "iorwethpatience": "Iorveth — Ordinary Son of a Whore?",
+          "whatthesandwitch": "Whoreson Junior — The Biggest Prick in Novigrad"
         },
         "ui": {
           "elem": {
@@ -2049,7 +2070,11 @@
             "rottenfruit_male": "Thug",
             "rottenfruit_female": "Thug",
             "potion_male": "Witcher Potion",
-            "potion_female": "Witcher Potion"
+            "potion_female": "Witcher Potion",
+            "dark_creature_male": "Dark Creature",
+            "dark_creature_female": "Dark Creature",
+            "light_creature_male": "Light Creature",
+            "light_creature_female": "Light Creature"
           },
           "rule63": []
         },
@@ -2399,6 +2424,9 @@
           "witcher_potion": {
             "name": "Wiedźmiński Eliksir",
             "description": "Po użyciu karta zostaje odrzucona! Nadpisuje wszytskie efekty tej mikstury dla każdego z celów eliksiru! "
+          },
+          "scorchstopper_single": {
+            "description": "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawaiania zależy od liderów z tą zdolnością w grze. Zwycięzca tury przejmuje pulę, przegrany zamienia cześć uwolnionej mocy w dobrnia kart. Ochrania jedną kartę przed efektem Piekielnej Pożogi"
           }
         },
         "factions": {
@@ -2712,7 +2740,12 @@
           "viperwitcher": "Wiedźmin Szkoły Żmiji",
           "potion_soup": "Zupa z Elfa i Cebuli",
           "potion_grom": "Grom",
-          "potion_white": "Biały Miód"
+          "potion_white": "Biały Miód",
+          "kingkrill": "Potwór Otchłani",
+          "olgierd_headless": "Olgierd von Everec — Bezgłowy",
+          "iorwethbucketcommander": "Iorveth — Zwykły Skurwysyn",
+          "iorwethpatience": "Iorveth — Zwykły Skurwysyn?",
+          "whatthesandwitch": "Skurwiel Junior — Największy Chuj w Nowigradzie"
         },
         "ui": {
           "elem": {
@@ -3150,7 +3183,11 @@
             "rottenfruit_male": "Zbira",
             "rottenfruit_female": "Zbira",
             "potion_male": "Wiedźmińskich Eliksirów",
-            "potion_female": "Wiedźmińskich Eliksirów"
+            "potion_female": "Wiedźmińskich Eliksirów",
+            "dark_creature_male": "Istoty Ciemności",
+            "dark_creature_female": "Istoty Ciemności",
+            "light_creature_male": "Istoty Światła",
+            "light_creature_female": "Istoty Światła"
           },
           "rule63": [
             {
@@ -3172,7 +3209,18 @@
               "mode": "split"
             },
             {
+              "if": "magic",
+              "gender": "female",
+              "hero": false,
+              "mode": "split"
+            },
+            {
               "if": "stennis",
+              "gender": "female",
+              "mode": "filename"
+            },
+            {
+              "if": "redcrab",
               "gender": "female",
               "mode": "filename"
             },
@@ -5047,7 +5095,7 @@
         "strength": "",
         "ability": "crach_an_craite",
         "filename": "crach_an_craite",
-        "count": "0"
+        "count": "1"
       },
       {
         "name": "King Bran",
@@ -5057,7 +5105,7 @@
         "strength": "",
         "ability": "king_bran",
         "filename": "king_bran",
-        "count": "0"
+        "count": "1"
       },
       {
         "name": "Schirru",
@@ -5420,7 +5468,7 @@
         "strength": "",
         "ability": "eist_tuirseach",
         "filename": "eist_tuirseach",
-        "count": "0"
+        "count": "1"
       },
       {
         "name": "Svalblod Cult",
@@ -5430,7 +5478,7 @@
         "strength": "",
         "ability": "skellige_berserk_reward",
         "filename": "svalblod",
-        "count": "0"
+        "count": "1"
       },
       {
         "name": "Svalblod Cult - Transformation",
@@ -5450,7 +5498,7 @@
         "strength": "",
         "ability": "skellige_bond_summoner",
         "filename": "Arnjolf_the_Patricide",
-        "count": "0"
+        "count": "1"
       },
       {
         "name": "Witcher Signs: Aard",
@@ -5493,7 +5541,7 @@
         "strength": "",
         "ability": "turn_skiper",
         "filename": "udalryka_leader",
-        "count": "0"
+        "count": "1"
       },
       {
         "name": "Tactical Forecaster — Kaedwen Division",
@@ -5503,7 +5551,7 @@
         "strength": "",
         "ability": "keadwen_weather",
         "filename": "keadwen_weather",
-        "count": "0"
+        "count": "1"
       },
       {
         "name": "Radovid V the Stern — In Madness",
@@ -5513,7 +5561,7 @@
         "strength": "",
         "ability": "scorchstopper",
         "filename": "radovid_stern",
-        "count": "0"
+        "count": "1"
       },
       {
         "name": "False Ciri — Empress of Nilfgaard",
@@ -5523,7 +5571,7 @@
         "strength": "",
         "ability": "turn_skiper",
         "filename": "fake_ciri",
-        "count": "0"
+        "count": "1"
       },
       {
         "name": "White Frost",
@@ -5610,7 +5658,7 @@
         "strength": "",
         "ability": "temeria_call",
         "filename": "vernontemeria_call",
-        "count": "0"
+        "count": "1"
       },
       {
         "name": "Hopeful Steward",
@@ -5816,7 +5864,7 @@
         "strength": "",
         "ability": "turn_skiper",
         "filename": "vault_elder_s2e",
-        "count": "0"
+        "count": "1"
       },
       {
         "name": "Fisstech",
@@ -5836,7 +5884,7 @@
         "strength": "0",
         "ability": "mediclove",
         "filename": "sigi_reuven",
-        "count": "0"
+        "count": "1"
       },
       {
         "name": "King of Begger",
@@ -5846,7 +5894,7 @@
         "strength": "0",
         "ability": "emhyr_whiteflame2",
         "filename": "king_of_beggers",
-        "count": "0"
+        "count": "1"
       },
       {
         "name": "Days Of Nature Guide",
@@ -6278,7 +6326,7 @@
         "strength": "",
         "ability": "francesca_beautiful",
         "filename": "valley_twins",
-        "count": "0"
+        "count": "1"
       },
       {
         "name": "Chill Sunbather with a bow in thier hair",
@@ -6345,7 +6393,7 @@
         "strength": "",
         "ability": "bucket",
         "filename": "eredin_bucket",
-        "count": "0"
+        "count": "1"
       },
       {
         "name": "Poor Fucking Infantry",
@@ -6422,7 +6470,7 @@
       },
       {
         "name": "White Honey",
-        "id": "1053",
+        "id": "1054",
         "deck": "neutral",
         "row": "ranged",
         "strength": "0",
@@ -6430,6 +6478,101 @@
         "filename": "potion_white",
         "count": "0",
         "viper_potion": true
+      },
+      {
+        "name": "Abyss Monster",
+        "id": "3043",
+        "deck": "sky",
+        "row": "siege",
+        "strength": "8",
+        "ability": "hero wshield",
+        "filename": "kingkrill",
+        "count": "0",
+        "count_monitor": {
+          "base": 1,
+          "monitor": "based",
+          "id": "1wrzesnia_1",
+          "duration": {
+            "start": "2026-09-01T07:00:00Z",
+            "duration": 6566400
+          }
+        }
+      },
+      {
+        "name": "Olgierd von Everec — The Headless",
+        "id": "1055",
+        "deck": "realms",
+        "row": "leader",
+        "strength": "",
+        "ability": "bucket",
+        "filename": "olgierd_headless",
+        "count": "0",
+        "count_monitor": {
+          "base": 1,
+          "monitor": "based",
+          "id": "1wrzesnia_2",
+          "duration": {
+            "start": "2026-09-01T07:00:00Z",
+            "duration": 6566400
+          }
+        }
+      },
+      {
+        "name": "Iorwteth — Ordinary Son of a Whore?",
+        "id": "1056",
+        "deck": "scoiatael",
+        "row": "leader",
+        "strength": "",
+        "ability": "turn_skiper",
+        "filename": "iorwethpatience",
+        "count": "0",
+        "count_monitor": {
+          "base": 1,
+          "monitor": "based",
+          "id": "1wrzesnia_3",
+          "duration": {
+            "start": "2026-09-01T07:00:00Z",
+            "duration": 6566400
+          }
+        }
+      },
+      {
+        "name": "Iorwteth — Ordinary Son of a Whore",
+        "id": "1057",
+        "deck": "scoiatael",
+        "row": "leader",
+        "strength": "",
+        "ability": "bucket",
+        "filename": "iorwethbucketcommander",
+        "count": "0",
+        "count_monitor": {
+          "base": 1,
+          "monitor": "based",
+          "id": "1wrzesnia_3.5",
+          "duration": {
+            "start": "2026-09-01T07:00:00Z",
+            "duration": 6566400
+          }
+        }
+      },
+      {
+        "name": "Whoreson Junior — The Biggest Prick in Novigrad",
+        "id": "1058",
+        "deck": "syndicate",
+        "row": "leader",
+        "strength": "",
+        "ability": "turn_skiper",
+        "filename": "whatthesandwitch",
+        "count": "0",
+        "count_monitor": {
+          "base": 1,
+          "monitor": "based",
+          "id": "1wrzesnia_4",
+          "duration": {
+            "start": "2026-09-01T07:00:00Z",
+            "duration": 6566400
+          }
+        }
       }
     ],
     "factions": {
@@ -6683,6 +6826,9 @@
       "bucket": {
         "description": ""
       },
+      "scorchstopper_single": {
+        "description": ""
+      },
       "keadwen_weather": {
         "description": ""
       },
@@ -6791,10 +6937,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "yu197hlNWK0",
-    "tavern_yt_volume": 90
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }

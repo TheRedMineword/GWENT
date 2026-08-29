@@ -402,7 +402,10 @@ STRNG["en"] = {
     witcher_potion: {
     name: "Witcher Potion",
     description: "After use card gets discarded! Overwrites any active effect of this potion for target(s) player(s)! "
-  }
+  },
+    scorchstopper_single: {
+     description: "Random cards will appear in the \"bucket\" every few turns; the frequency of their appearance depends on the number of commanders with this ability currently in play. The winner of the round takes the pot, the loser turns some of the released power into cards draw. Protects single card from Scorch effect. "
+    }
 },
   factions: {
     realms: {
@@ -719,7 +722,12 @@ STRNG["en"] = {
     viperwitcher: "Viper School Witcher",
     potion_soup: "Elf and Onion soup",
     potion_grom: "Thunderbolt",
-    potion_white: "White Honey"
+    potion_white: "White Honey",
+    kingkrill: "Abyss Monster",
+    olgierd_headless: "Olgierd von Everec — The Headless",
+    iorwethbucketcommander: "Iorveth — Ordinary Son of a Whore",
+    iorwethpatience: "Iorveth — Ordinary Son of a Whore?",
+    whatthesandwitch: "Whoreson Junior — The Biggest Prick in Novigrad"
   },
   ui: {
     elem: {
@@ -1218,7 +1226,12 @@ card_info: {
   rottenfruit_male: "Thug",
   rottenfruit_female: "Thug",
   potion_male: "Witcher Potion",
-  potion_female: "Witcher Potion"
+  potion_female: "Witcher Potion",
+  dark_creature_male: "Dark Creature",
+  dark_creature_female: "Dark Creature",
+  light_creature_male: "Light Creature",
+  light_creature_female: "Light Creature",
+
 },
   rule63: [] // for classes if {"if": "siege", "gender": "female", "hero": false}
 },

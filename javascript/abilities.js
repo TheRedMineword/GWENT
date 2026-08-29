@@ -1616,6 +1616,9 @@ var ability_dict = {
   bucket: {
     description: ``,
   },
+  scorchstopper_single: {
+    description: ``,
+  },
   keadwen_weather: {
     description: ``,
 
@@ -2843,7 +2846,9 @@ const ability_dict_resolveScorch = async (rows, require10 = true) => {
 
     const hasShield =
       leader?.abilities?.includes("scorch_stopper") ||
-      leader?.abilities?.includes("scorchstopper");
+      leader?.abilities?.includes("scorchstopper") ||
+      leader?.abilities?.includes("scorchstopper_single") ||
+      leader?.abilities?.includes("scorchstopper_single");
 
     const hasCharge =
       tag != null && ability_data[tag]?.current >= scorch_stopper.save_charge;

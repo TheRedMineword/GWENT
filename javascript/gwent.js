@@ -2939,6 +2939,8 @@ class Row extends CardContainer {
     console.log("CALC swicth", leader_ability);
     switch (leader_ability) {
       case "king_bran":
+        //  if (card.holder.tag === "me")
+        // console.log("king_bran", card?.holder?.tag ?? "yes", card, player, leader_ability)
         this_row_have_quen[row_name][0] = true;
         this_row_have_quen[row_name][1] = 0.5;
         //    console.log("this_row_have_quen change", this_row_have_quen);
@@ -3071,9 +3073,9 @@ class Row extends CardContainer {
           total = Math.ceil(total * multiplier);
         }
       } else {
-        if (total < 0 && weatherAffectNegativeCard) {
+        if (total > 0 && weatherAffectNegativeCard) {
           //  console.warn(`total = Math.floor(${total} * ${multiplier});`)
-          total = Math.floor(total * 0.5);
+          total = Math.min(1, total);
         } else {
           total = Math.min(1, total);
         }

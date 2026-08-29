@@ -74,6 +74,7 @@ const IGNORE_PATTERNS = [
   "sha",
   "timezone",
   "timed_count_change",
+  "ABILITIES",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 
@@ -668,6 +669,12 @@ async function connect_to_custom_server(URL) {
     await custom_card_builder_init();
     await setDiscordCards(allowdiscordintegration, discord_cards_array);
     custom_updater = false;
+    var tmp_ab = makeabilities();
+    console.log(
+      "CUSTOM SERVER COUNTER FACTION ABILITY: was/will be",
+      `\n${JSON.stringify(ABILITIES)}\n\n${JSON.stringify(tmp_ab)}`,
+    );
+    ABILITIES = tmp_ab;
     //    updateLoader("Almost there", 99, `Updating cards!`);
     // timed_count_change = [];
     // card_dict.forEach((card) => {
