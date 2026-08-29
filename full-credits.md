@@ -50,6 +50,7 @@ https://pngtree.com/freebackground/vintage-crinkled-paper-texture-aged-brown-bac
 - OLgierd von Everec leader card: https://gwent.one/en/card/112207
 - Iorveth leader card (bucket + turn skipper): https://gwint.fandom.com/wiki/Iorweth
 - Whoreson Junior leader: https://witcher.fandom.com/wiki/Cyprian_Wiley
+- Oxenfurt Academy start screen: https://witcher.fandom.com/wiki/Oxenfurt_Academy
 > Some card/mechanics/assets are used from other project like this (For example: RandomPianist/gwent-classic-v3.1, other similar project are mentioned at start of this copyright notice)
 
 
