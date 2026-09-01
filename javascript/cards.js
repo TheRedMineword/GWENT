@@ -3761,16 +3761,7 @@ var card_dict_base = [
     strength: "8",
     ability: "hero wshield",
     filename: "kingkrill",
-    count: "0",
-    count_monitor: {
-      base: 1,
-      monitor: "based",
-      id: "1wrzesnia_1",
-      duration: {
-        start: "2026-09-01T07:00:00Z",
-        duration: 6566400,
-      },
-    },
+    count: "1",
   },
   {
     name: "Olgierd von Everec — The Headless",
@@ -3780,16 +3771,7 @@ var card_dict_base = [
     strength: "",
     ability: "bucket",
     filename: "olgierd_headless",
-    count: "0",
-    count_monitor: {
-      base: 1,
-      monitor: "based",
-      id: "1wrzesnia_2",
-      duration: {
-        start: "2026-09-01T07:00:00Z",
-        duration: 6566400,
-      },
-    },
+    count: "1",
   },
   {
     name: "Iorwteth — Ordinary Son of a Whore?",
@@ -3799,16 +3781,7 @@ var card_dict_base = [
     strength: "",
     ability: "turn_skiper",
     filename: "iorwethpatience",
-    count: "0",
-    count_monitor: {
-      base: 1,
-      monitor: "based",
-      id: "1wrzesnia_3",
-      duration: {
-        start: "2026-09-01T07:00:00Z",
-        duration: 6566400,
-      },
-    },
+    count: "1",
   },
   {
     name: "Iorwteth — Ordinary Son of a Whore",
@@ -3818,16 +3791,7 @@ var card_dict_base = [
     strength: "",
     ability: "bucket",
     filename: "iorwethbucketcommander",
-    count: "0",
-    count_monitor: {
-      base: 1,
-      monitor: "based",
-      id: "1wrzesnia_3.5",
-      duration: {
-        start: "2026-09-01T07:00:00Z",
-        duration: 6566400,
-      },
-    },
+    count: "1",
   },
   {
     name: "Whoreson Junior — The Biggest Prick in Novigrad",
@@ -3837,16 +3801,7 @@ var card_dict_base = [
     strength: "",
     ability: "turn_skiper",
     filename: "whatthesandwitch",
-    count: "0",
-    count_monitor: {
-      base: 1,
-      monitor: "based",
-      id: "1wrzesnia_4",
-      duration: {
-        start: "2026-09-01T07:00:00Z",
-        duration: 6566400,
-      },
-    },
+    count: "1",
   },
 ];
 let pickedfakecard = { a: false, b: null };

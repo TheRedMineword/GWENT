@@ -6487,16 +6487,7 @@
         "strength": "8",
         "ability": "hero wshield",
         "filename": "kingkrill",
-        "count": "0",
-        "count_monitor": {
-          "base": 1,
-          "monitor": "based",
-          "id": "1wrzesnia_1",
-          "duration": {
-            "start": "2026-09-01T07:00:00Z",
-            "duration": 6566400
-          }
-        }
+        "count": "1"
       },
       {
         "name": "Olgierd von Everec — The Headless",
@@ -6506,16 +6497,7 @@
         "strength": "",
         "ability": "bucket",
         "filename": "olgierd_headless",
-        "count": "0",
-        "count_monitor": {
-          "base": 1,
-          "monitor": "based",
-          "id": "1wrzesnia_2",
-          "duration": {
-            "start": "2026-09-01T07:00:00Z",
-            "duration": 6566400
-          }
-        }
+        "count": "1"
       },
       {
         "name": "Iorwteth — Ordinary Son of a Whore?",
@@ -6525,16 +6507,7 @@
         "strength": "",
         "ability": "turn_skiper",
         "filename": "iorwethpatience",
-        "count": "0",
-        "count_monitor": {
-          "base": 1,
-          "monitor": "based",
-          "id": "1wrzesnia_3",
-          "duration": {
-            "start": "2026-09-01T07:00:00Z",
-            "duration": 6566400
-          }
-        }
+        "count": "1"
       },
       {
         "name": "Iorwteth — Ordinary Son of a Whore",
@@ -6544,16 +6517,7 @@
         "strength": "",
         "ability": "bucket",
         "filename": "iorwethbucketcommander",
-        "count": "0",
-        "count_monitor": {
-          "base": 1,
-          "monitor": "based",
-          "id": "1wrzesnia_3.5",
-          "duration": {
-            "start": "2026-09-01T07:00:00Z",
-            "duration": 6566400
-          }
-        }
+        "count": "1"
       },
       {
         "name": "Whoreson Junior — The Biggest Prick in Novigrad",
@@ -6563,16 +6527,7 @@
         "strength": "",
         "ability": "turn_skiper",
         "filename": "whatthesandwitch",
-        "count": "0",
-        "count_monitor": {
-          "base": 1,
-          "monitor": "based",
-          "id": "1wrzesnia_4",
-          "duration": {
-            "start": "2026-09-01T07:00:00Z",
-            "duration": 6566400
-          }
-        }
+        "count": "1"
       }
     ],
     "factions": {
@@ -6937,8 +6892,8 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
-    "audio_yt_vid_soundtrack_volume": 90,
+    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
+    "audio_yt_vid_soundtrack_volume": 47,
     "tavern_yt_vid": "6U9gVpMHhiA",
     "tavern_yt_volume": 30
   },
