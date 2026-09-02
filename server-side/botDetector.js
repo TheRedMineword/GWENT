@@ -92,9 +92,22 @@ module.exports = function analyseBot(data = {}) {
         mobileHosting: 0
     };
 
+    // Crawler-focused mode: keep every detection for diagnostics, but only
+    // recognized crawlers contribute meaningful blocking score.
+    const CRAWLER_WEIGHT = 100;
+    const SECONDARY_SIGNAL_WEIGHT = 0;
+
     function add(category, points, reason) {
         breakdown[category] += points;
         suspicious.push(reason);
+    }
+
+    function addSignal(category, points, reason) {
+        add(
+            category,
+            category === "crawler" ? CRAWLER_WEIGHT : SECONDARY_SIGNAL_WEIGHT,
+            reason
+        );
     }
 
     // ------------------------------------------------
@@ -102,11 +115,11 @@ module.exports = function analyseBot(data = {}) {
     // ------------------------------------------------
 
     if (isbot(ua)) {
-        add("crawler", 100, "Known crawler");
+        addSignal("crawler", CRAWLER_WEIGHT, "Known crawler");
     }
 
     if (/Headless|PhantomJS|Playwright|Puppeteer/i.test(ua)) {
-        add("headless", 100, "Headless browser");
+        addSignal("headless", 100, "Headless browser");
     }
 
     // ------------------------------------------------
@@ -114,7 +127,7 @@ module.exports = function analyseBot(data = {}) {
     // ------------------------------------------------
 
     if (finger.webdriver || native.webdriver) {
-        add("webdriver", 80, "navigator.webdriver=true");
+        addSignal("webdriver", 80, "navigator.webdriver=true");
     } else {
         reasons.push("WebDriver disabled");
     }
@@ -124,18 +137,18 @@ module.exports = function analyseBot(data = {}) {
     // ------------------------------------------------
 
     if (proxy.vpn === "yes")
-        add("vpn", 35, "VPN detected");
+        addSignal("vpn", 35, "VPN detected");
 
     if (proxy.proxy === "yes")
-        add("proxy", 35, "Proxy detected");
+        addSignal("proxy", 35, "Proxy detected");
 
     if (proxy.tor === "yes")
-        add("tor", 80, "TOR exit node");
+        addSignal("tor", 80, "TOR exit node");
 
     if ((proxy.risk || 0) >= 75)
-        add("risk", 35, `High IP risk (${proxy.risk})`);
+        addSignal("risk", 35, `High IP risk (${proxy.risk})`);
     else if ((proxy.risk || 0) >= 40)
-        add("risk", 15, `Medium IP risk (${proxy.risk})`);
+        addSignal("risk", 15, `Medium IP risk (${proxy.risk})`);
 
     // ------------------------------------------------
     // Hosting
@@ -145,7 +158,7 @@ module.exports = function analyseBot(data = {}) {
         `${geo.isp || ""} ${geo.org || ""} ${geo.as || ""}`;
 
     if (containsHosting(network)) {
-        add("hosting", 40, "Hosting ASN");
+        addSignal("hosting", 40, "Hosting ASN");
     } else {
         reasons.push("Residential ISP");
     }
@@ -154,7 +167,7 @@ module.exports = function analyseBot(data = {}) {
         device.type === "mobile" &&
         containsHosting(network)
     ) {
-        add(
+        addSignal(
             "mobileHosting",
             35,
             "Mobile UA from hosting network"
@@ -166,13 +179,13 @@ module.exports = function analyseBot(data = {}) {
     // ------------------------------------------------
 
     if (!headers["accept-language"])
-        add("headers", 5, "Missing Accept-Language");
+        addSignal("headers", 5, "Missing Accept-Language");
 
     if (!headers["sec-fetch-site"])
-        add("headers", 5, "Missing Sec-Fetch-Site");
+        addSignal("headers", 5, "Missing Sec-Fetch-Site");
 
     if (!headers["sec-fetch-mode"])
-       add("headers", 5, "Missing Sec-Fetch-Mode");
+       addSignal("headers", 5, "Missing Sec-Fetch-Mode");
 
  //   if (!headers["sec-ch-ua"])
  //       add("headers", 5, "Missing Sec-CH-UA"); // Not really that usefull, will temponary disable
@@ -199,7 +212,7 @@ module.exports = function analyseBot(data = {}) {
                 .startsWith(first.slice(0, 2))
         ) {
 
-            add(
+            addSignal(
                 "language",
                 15,
                 "Browser language mismatch"
@@ -233,7 +246,7 @@ module.exports = function analyseBot(data = {}) {
         (finger.plugins || []).length === 0
     ) {
 
-        add(
+        addSignal(
             "plugins",
             15,
             "Chrome without plugins"
@@ -245,7 +258,7 @@ module.exports = function analyseBot(data = {}) {
         (finger.mimeTypes || []).length === 0 
     ) {
 
-        add(
+        addSignal(
             "mimeTypes",
             10,
             "Chrome without mime types"
@@ -261,33 +274,33 @@ module.exports = function analyseBot(data = {}) {
     browser.name === "Firefox" &&
     headers["sec-ch-ua"]
 )
-    add("headers",25,"Firefox sent Chromium hints");
+    addSignal("headers",25,"Firefox sent Chromium hints");
     if (
     browser.name==="Safari" &&
     os.name==="Windows"
 )
-    add("uaMismatch",40,"Impossible browser/OS");
+    addSignal("uaMismatch",40,"Impossible browser/OS");
     if (
     browser.name==="Chrome" &&
     ua.includes("Edg/")
 )
-    add("uaMismatch",15,"UA parser mismatch");
+    addSignal("uaMismatch",15,"UA parser mismatch");
 
     // ------------------------------------------------
     // Graphics
     // ------------------------------------------------
 
     if (!data.canvasFingerprint)
-        add("canvas", 6, "Canvas fingerprint missing");
+        addSignal("canvas", 6, "Canvas fingerprint missing");
 
     if (!data.audioFingerprint)
-        add("audio", 6, "Audio fingerprint missing");
+        addSignal("audio", 6, "Audio fingerprint missing");
 
     if (
         !data.webglFingerprint ||
         !data.webglFingerprint.renderer
     ) {
-        add("webgl", 10, "WebGL unavailable");
+        addSignal("webgl", 10, "WebGL unavailable");
     }
 
     // ------------------------------------------------

@@ -303,114 +303,133 @@ async function init_scan_is_human(
 
         const failures = [];
 
-        // -----------------------------
-        // Verdict
-        // -----------------------------
-        if (
-            Array.isArray(config.allowedVerdicts) &&
-            !config.allowedVerdicts.includes(result.verdict)
-        ) {
-            failures.push(`Verdict "${result.verdict}" not allowed`);
-        }
+        // Keep the detector permissive: the primary blocking signal is a
+        // recognized crawler. Other heuristics remain available for diagnostics,
+        // but do not block a normal browser by themselves.
+        const crawlerScore =
+            Number(result.debug?.scoreBreakdown?.crawler) ||
+            Number(result.scoreBreakdown?.crawler) ||
+            0;
+
+        const knownCrawler =
+            crawlerScore > 0 ||
+            (Array.isArray(result.suspicious) &&
+                result.suspicious.some(reason =>
+                    /known crawler/i.test(String(reason))
+                ));
 
         // -----------------------------
-        // Score
+        // Verdict / known crawler
         // -----------------------------
-        if (
-            typeof config.maxScore === "number" &&
-            result.score > config.maxScore
-        ) {
-            failures.push(
-                `Score ${result.score}/${result.maxScore} exceeds ${config.maxScore}`
-            );
+        if (knownCrawler) {
+            failures.push("Known crawler");
         }
 
-        // -----------------------------
-        // Confidence
-        // -----------------------------
-        if (
-            typeof config.minConfidence === "number" &&
-            result.confidence < config.minConfidence
-        ) {
-            failures.push(
-                `Confidence ${result.confidence}% below ${config.minConfidence}%`
-            );
-        }
+        // Secondary heuristics are diagnostics by default. Set
+        // config.enforceSecondaryChecks=true if you explicitly want the old
+        // score/VPN/hosting/fingerprint checks enforced again.
+        if (config.enforceSecondaryChecks === true) {
+            // -----------------------------
+            // Score
+            // -----------------------------
+            if (
+                typeof config.maxScore === "number" &&
+                result.score > config.maxScore
+            ) {
+                failures.push(
+                    `Score ${result.score}/${result.maxScore} exceeds ${config.maxScore}`
+                );
+            }
 
-        // -----------------------------
-        // VPN
-        // -----------------------------
-        if (
-            config.allowVPN === false &&
-            result.network?.vpn !== "no"
-        ) {
-            failures.push(`VPN detected (${result.network?.vpn})`);
-        }
+            // -----------------------------
+            // Confidence
+            // -----------------------------
+            if (
+                typeof config.minConfidence === "number" &&
+                result.confidence < config.minConfidence
+            ) {
+                failures.push(
+                    `Confidence ${result.confidence}% below ${config.minConfidence}%`
+                );
+            }
 
-        // -----------------------------
-        // Hosting
-        // -----------------------------
-        if (
-            config.allowHosting === false &&
-            result.network?.hosting === true
-        ) {
-            failures.push("Hosting provider detected");
-        }
+            // -----------------------------
+            // VPN
+            // -----------------------------
+            if (
+                config.allowVPN === false &&
+                result.network?.vpn !== "no"
+            ) {
+                failures.push(`VPN detected (${result.network?.vpn})`);
+            }
 
-        // -----------------------------
-        // Network risk
-        // -----------------------------
-        if (
-            typeof config.maxNetworkRisk === "number" &&
-            (result.network?.risk ?? 0) > config.maxNetworkRisk
-        ) {
-            failures.push(
-                `Network risk ${result.network.risk} exceeds ${config.maxNetworkRisk}`
-            );
-        }
+            // -----------------------------
+            // Hosting
+            // -----------------------------
+            if (
+                config.allowHosting === false &&
+                result.network?.hosting === true
+            ) {
+                failures.push("Hosting provider detected");
+            }
 
-        // -----------------------------
-        // WebDriver
-        // -----------------------------
-        if (
-            config.allowWebDriver === false &&
-            (
-                result.browser?.webdriver ||
-                result.native?.webdriver
-            )
-        ) {
-            failures.push("WebDriver detected");
-        }
+            // -----------------------------
+            // Network risk
+            // -----------------------------
+            if (
+                typeof config.maxNetworkRisk === "number" &&
+                (result.network?.risk ?? 0) > config.maxNetworkRisk
+            ) {
+                failures.push(
+                    `Network risk ${result.network.risk} exceeds ${config.maxNetworkRisk}`
+                );
+            }
 
-        // -----------------------------
-        // Graphics
-        // -----------------------------
-        if (config.requireCanvas && !result.graphics?.canvas) {
-            failures.push("Canvas unavailable");
-        }
+            // -----------------------------
+            // WebDriver
+            // -----------------------------
+            if (
+                config.allowWebDriver === false &&
+                (
+                    result.browser?.webdriver ||
+                    result.native?.webdriver
+                )
+            ) {
+                failures.push("WebDriver detected");
+            }
 
-        if (config.requireAudio && !result.graphics?.audio) {
-            failures.push("Audio fingerprint unavailable");
-        }
+            // -----------------------------
+            // Graphics
+            // -----------------------------
+            if (config.requireCanvas && !result.graphics?.canvas) {
+                failures.push("Canvas unavailable");
+            }
 
-        if (config.requireWebGL && !result.graphics?.webglRenderer) {
-            failures.push("WebGL unavailable");
-        }
+            if (config.requireAudio && !result.graphics?.audio) {
+                failures.push("Audio fingerprint unavailable");
+            }
 
-        // -----------------------------
-        // Suspicious checks
-        // -----------------------------
-        if (
-            config.failOnSuspicious &&
-            Array.isArray(result.suspicious) &&
-            result.suspicious.length
-        ) {
-            failures.push(...result.suspicious);
+            if (config.requireWebGL && !result.graphics?.webglRenderer) {
+                failures.push("WebGL unavailable");
+            }
+
+            // -----------------------------
+            // Suspicious checks
+            // -----------------------------
+            if (
+                config.failOnSuspicious &&
+                Array.isArray(result.suspicious) &&
+                result.suspicious.length
+            ) {
+                failures.push(...result.suspicious);
+            }
+
         }
 
         return {
             success: true,
-            human: failures.length < 2, // So for some time we will let 1 failure go past bot check
+            // In crawler-focused mode, only a known crawler should fail.
+            human: !knownCrawler,
             verdict: result.verdict,
             score: result.score,
             confidence: result.confidence,
@@ -434,7 +453,60 @@ async function init_scan_is_human(
 
 
 
+const CAPTCHA_STORAGE_KEY = "captcha_verified_at";
+const CAPTCHA_VALID_FOR_MS = 15 * 24 * 60 * 60 * 1000;
+
+function getCaptchaVerifiedAt() {
+    try {
+        const raw = localStorage.getItem(CAPTCHA_STORAGE_KEY);
+        const timestamp = Number(raw);
+
+        if (!Number.isFinite(timestamp) || timestamp <= 0) {
+            return null;
+        }
+
+        return timestamp;
+    } catch {
+        return null;
+    }
+}
+
+function captchaRecentlyVerified() {
+    const verifiedAt = getCaptchaVerifiedAt();
+
+    if (verifiedAt === null) {
+        return false;
+    }
+
+    const age = Date.now() - verifiedAt;
+
+    // Clock moved backwards: keep the cached verification.
+    if (age < 0) {
+        return true;
+    }
+
+    if (age < CAPTCHA_VALID_FOR_MS) {
+        return true;
+    }
+
+    try {
+        localStorage.removeItem(CAPTCHA_STORAGE_KEY);
+    } catch {}
+
+    return false;
+}
+
+function rememberCaptchaVerification() {
+    try {
+        localStorage.setItem(CAPTCHA_STORAGE_KEY, String(Date.now()));
+    } catch {}
+}
+
 function show_captcha(reportText = "Report feedback") {
+    // Skip re-evaluating the CAPTCHA for 15 days after a successful solve.
+    if (captchaRecentlyVerified()) {
+        return Promise.resolve(true);
+    }
     return new Promise((resolve) => {
 
         const overlay = document.createElement("div");
@@ -706,7 +778,13 @@ Prove you are human.<br>
 
             overlay.remove();
 
-            resolve(Math.abs(squirrelCenter - treeCenter) < 45);
+            const passed = Math.abs(squirrelCenter - treeCenter) < 45;
+
+            if (passed) {
+                rememberCaptchaVerification();
+            }
+
+            resolve(passed);
 
         };
 

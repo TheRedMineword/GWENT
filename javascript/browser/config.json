@@ -11,5 +11,6 @@
     "requireCanvas": true,
     "requireAudio": true,
     "requireWebGL": true,
-    "failOnSuspicious": true
+    "failOnSuspicious": true,
+    "enforceSecondaryChecks": false
 }
