@@ -1,9 +1,14 @@
 "use strict";
 // (function () {
+const ICON_BASE_PATH = "img/patchnotes/";
 
-let STORAGE_KEY = "patchnotes_shown_id";
-let STORAGE_KEY_B = "patchnotes_shown_id";
-let patchnotesWatcher = null;
+const UI_TEXT = {
+  expires_prefix: "Expires in ",
+  expired_text: "<l>UPDATING PATCH NOTES…</l>",
+  deck_loading_text: "Downloading…",
+  deck_error_text: "Failed to load, try again",
+  deck_empty_text: "No new notices.",
+};
 
 const DEFAULTS = {
   small_text: {
@@ -29,6 +34,63 @@ const DEFAULTS = {
   },
 };
 
+const ICON_SIZES = {
+  patch_icon_px: 28, // generic inline icon (deck rows, box header, timer icon...)
+  bell_icon_px: 26, // icon inside the floating bell button
+  bell_button_px: 52, // diameter of the floating bell button itself
+};
+
+let SHOW_BELL_BUTTON = true;
+
+function setPatchnotesVisible(visible) {
+  SHOW_BELL_BUTTON = visible;
+
+  const bell = document.getElementById("patch-bell");
+  const panel = document.getElementById("patch-deck-panel");
+
+  if (bell) {
+    bell.style.display = visible ? "flex" : "none";
+  }
+
+  if (panel) {
+    panel.style.display = visible ? "" : "none";
+  }
+}
+
+const Z_INDEX = {
+  overlay: 2147483647, // the full patch-note/news modal
+  bell: 2147483000, // the floating bell button
+  deck_panel: 2147483000, // the inbox/deck panel
+};
+
+const SEEN_STORAGE_KEY = "patchnotes_seen_v2";
+
+function loadSeenMap() {
+  try {
+    return JSON.parse(localStorage.getItem(SEEN_STORAGE_KEY)) || {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveSeenMap(map) {
+  try {
+    localStorage.setItem(SEEN_STORAGE_KEY, JSON.stringify(map));
+  } catch (e) {
+    console.warn("Patch notes: failed to persist seen state:", e);
+  }
+}
+
+function isSeen(id) {
+  return !!loadSeenMap()[id];
+}
+
+function markSeen(id) {
+  const map = loadSeenMap();
+  map[id] = true;
+  saveSeenMap(map);
+}
+
 function cacheBust() {
   return Date.now().toString(36);
 }
@@ -53,6 +115,45 @@ function deepMerge(target, source) {
 
 function clone(obj) {
   return JSON.parse(JSON.stringify(obj));
+}
+
+function iconUrl(iconId) {
+  return `${ICON_BASE_PATH}${iconId}.svg`;
+}
+
+function iconImg(iconId, alt = "", fallbackId = null) {
+  if (!iconId) return "";
+
+  const onerror = fallbackId
+    ? `this.onerror=function(){this.style.display='none'};this.src='${iconUrl(fallbackId)}'`
+    : `this.style.display='none'`;
+
+  return `<img class="patch-icon" width="${ICON_SIZES.patch_icon_px}" height="${ICON_SIZES.patch_icon_px}" src="${iconUrl(iconId)}" alt="${escapeHtml(alt)}" onerror="${onerror}">`;
+}
+
+let always_full_timer_in_patchnotes = true;
+
+let timerAnimationFrame = 0;
+const timerAnimation = ["|", "/", "-", "\\"];
+
+function formatCountdown(ms) {
+  if (ms <= 0) return "0s";
+
+  const totalSeconds = Math.floor(ms / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  if (always_full_timer_in_patchnotes) {
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
+
+  if (days > 0) return `${days}d ${hours}h`;
+  if (hours > 0) return `${hours}h ${minutes}m`;
+  if (minutes > 0) return `${minutes}m ${seconds}s`;
+
+  return `${seconds}s`;
 }
 
 function parsePatchNotes(text) {
@@ -83,73 +184,6 @@ function parsePatchNotes(text) {
   return returnss;
 }
 
-function getActiveId(index, setupWatcher = true) {
-  const now = Clock.now();
-
-  let active = {
-    a: index.default,
-    b: false,
-    c: index.default,
-  };
-
-  let nextChange = Infinity;
-
-  if (Array.isArray(index.timed)) {
-    for (let i = index.timed.length - 1; i >= 0; i--) {
-      const timed = index.timed[i];
-
-      const from = timed.from ? new Date(timed.from).getTime() : -Infinity;
-      const until = timed.until ? new Date(timed.until).getTime() : Infinity;
-
-      // Active timed entry
-      if (now >= from && now <= until) {
-        active = {
-          a: timed.id,
-          b: true,
-          c: index.default,
-        };
-
-        // expiration is the next possible change
-        if (until !== Infinity && until > now) {
-          nextChange = Math.min(nextChange, until + 1);
-        }
-
-        break;
-      }
-
-      // Upcoming entry
-      if (from > now) {
-        nextChange = Math.min(nextChange, from);
-      }
-    }
-  }
-
-  if (setupWatcher && nextChange !== Infinity) {
-    setupPatchnotesWatcher(index, nextChange);
-  }
-
-  return active;
-}
-
-function setupPatchnotesWatcher(index, timestamp) {
-  if (patchnotesWatcher) {
-    clearTimeout(patchnotesWatcher);
-  }
-
-  const delay = timestamp - Clock.now();
-
-  if (delay <= 0) return;
-
-  patchnotesWatcher = setTimeout(() => {
-    console.log("Patchnotes schedule changed, refreshing...");
-
-    run_patchnotes();
-
-    // setup the next watcher
-    getActiveId(index);
-  }, delay);
-}
-
 function escapeHtml(text) {
   return text
     .replace(/&/g, "&amp;")
@@ -158,7 +192,6 @@ function escapeHtml(text) {
 }
 
 function formatInline(text) {
-  console.log("text", text);
   text = text.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   text = text.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, "<em>$1</em>");
   text = text.replace(/_(.+?)_/g, "<em>$1</em>");
@@ -200,12 +233,6 @@ function formatPatchText(text) {
   }
 
   for (let line of lines) {
-    //       if (line.startsWith("\\")) {
-    //   closeList();
-    //   html += `<p>${formatInline(line.substring(1))}</p>`;
-    //   continue;
-    //}
-    //  console.log(line);
     const raw = line;
     line = unescape(line);
     if (line === escapeHtml("<fat1>")) {
@@ -226,15 +253,14 @@ function formatPatchText(text) {
       continue;
     }
 
-    //  console.log(`[Patch notes: Per Each Line], line raw:${JSON.stringify(raw)}, unescape:${JSON.stringify(line)}`)
-    const regex = /%%img\s+src="([^"]+)"(?:\s+style="([^"]*)")?\s*%%/g;
+    const imgRegex = /%%img\s+src="([^"]+)"(?:\s+style="([^"]*)")?\s*%%/g;
 
-    const matches = [...raw.matchAll(regex)];
+    const imgMatches = [...raw.matchAll(imgRegex)];
 
-    if (matches.length > 0) {
+    if (imgMatches.length > 0) {
       closeList();
 
-      for (const m of matches) {
+      for (const m of imgMatches) {
         const src = m[1];
         const style = m[2] || "";
 
@@ -413,8 +439,15 @@ function formatPatchText(text) {
   });
   return html;
 }
+
 function installStyles(color) {
-  const style = document.createElement("style");
+  let style = document.getElementById("patchnotes-style");
+
+  if (!style) {
+    style = document.createElement("style");
+    style.id = "patchnotes-style";
+    document.head.appendChild(style);
+  }
 
   style.textContent = `
 .new-badge {
@@ -431,21 +464,9 @@ function installStyles(color) {
   box-shadow: 0 0 4px rgba(93, 143, 179, 0.35);
 }
 
-.diff-add{
-color:#6BCB77;
-font-weight:bold;
-}
-
-.diff-modify{
-color:#e5a84b;
-font-weight:bold;
-}
-
-.diff-remove{
-color:#ff6b6b;
-font-weight:bold;
-}
-
+.diff-add{ color:#6BCB77; font-weight:bold; }
+.diff-modify{ color:#e5a84b; font-weight:bold; }
+.diff-remove{ color:#ff6b6b; font-weight:bold; }
 
 .briefing-overlay{
 position:fixed;
@@ -455,14 +476,13 @@ justify-content:center;
 align-items:center;
 background:rgba(0,0,0,.88);
 backdrop-filter:blur(4px);
-z-index:2147483647;
+z-index:${Z_INDEX.overlay};
 font-family:Arial,Helvetica,sans-serif;
 }
 
 .briefing-overlay *{
 box-sizing:border-box;
 font-family:inherit;
-/* color:#fff; */
 }
 
 .briefing-loader{
@@ -502,6 +522,13 @@ box-shadow:
 0 0 30px ${color},
 0 0 70px rgba(0,0,0,.8);
 color:#fff;
+}
+
+.briefing-box--fullscreen{
+width:100vw;
+height:100vh;
+max-height:100vh;
+border-radius:0;
 }
 
 .briefing-small-text-box{
@@ -545,10 +572,37 @@ object-fit:contain;
 flex:none;
 }
 
-.briefing-header>div{
+.briefing-title-block{
+flex:1;
+min-width:0;
+display:flex;
+flex-direction:column;
+gap:6px;
+}
+
+.briefing-title-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:14px;
+}
+
+.briefing-title{
 font-size:34px;
 font-weight:700;
 line-height:1.1;
+color:#fff;
+min-width:0;
+}
+
+.briefing-expiry-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:8px;
+font-size:13px;
+letter-spacing:.02em;
+opacity:.75;
 color:#fff;
 }
 
@@ -604,6 +658,147 @@ transition:.2s;
 
 .briefing-button:active{
 transform:none;
+}
+
+/* ---------- Inbox / deck ---------- */
+
+.patch-icon{
+width:${ICON_SIZES.patch_icon_px}px;
+height:${ICON_SIZES.patch_icon_px}px;
+min-width:${ICON_SIZES.patch_icon_px}px;
+min-height:${ICON_SIZES.patch_icon_px}px;
+object-fit:contain;
+flex:0 0 auto;
+display:inline-block;
+z-index: -100;
+}
+
+.patch-bell{
+position:fixed;
+right:20px;
+bottom:20px;
+width:${ICON_SIZES.bell_button_px}px;
+height:${ICON_SIZES.bell_button_px}px;
+min-width:${ICON_SIZES.bell_button_px}px;
+min-height:${ICON_SIZES.bell_button_px}px;
+border-radius:50%;
+background:#090909;
+border:1px solid ${color};
+box-shadow:0 0 16px ${color};
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+z-index:${Z_INDEX.bell};
+}
+
+.patch-bell img{
+width:${ICON_SIZES.bell_icon_px}px;
+height:${ICON_SIZES.bell_icon_px}px;
+min-width:${ICON_SIZES.bell_icon_px}px;
+min-height:${ICON_SIZES.bell_icon_px}px;
+}
+
+.patch-bell-badge{
+position:absolute;
+top:-4px;
+right:-4px;
+min-width:18px;
+height:18px;
+padding:0 4px;
+border-radius:999px;
+background:#ff4d4d;
+color:#fff;
+font-size:11px;
+font-weight:700;
+align-items:center;
+justify-content:center;
+box-shadow:0 0 6px rgba(255,77,77,.8);
+}
+
+.patch-deck-panel{
+position:fixed;
+right:20px;
+bottom:calc(20px + ${ICON_SIZES.bell_button_px}px + 12px);
+width:min(360px,90vw);
+max-height:60vh;
+overflow-y:auto;
+background:#090909;
+border:1px solid ${color};
+border-radius:12px;
+box-shadow:0 0 24px rgba(0,0,0,.7);
+z-index:${Z_INDEX.deck_panel};
+padding:8px;
+display:none;
+}
+
+.patch-deck-panel.open{
+display:block;
+}
+
+.patch-deck-empty{
+padding:16px;
+text-align:center;
+opacity:.6;
+font-size:13px;
+color:#fff;
+}
+
+.patch-deck-item{
+padding:10px 12px;
+border-radius:8px;
+margin-bottom:6px;
+background:rgba(255,255,255,.03);
+border:1px solid transparent;
+cursor:pointer;
+transition:background .15s, border-color .15s;
+}
+
+.patch-deck-item:hover{
+background:rgba(255,255,255,.07);
+border-color:${color};
+}
+
+.patch-deck-item-top{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:8px;
+}
+
+.patch-deck-item-title{
+font-size:14px;
+font-weight:600;
+color:#fff;
+display:flex;
+align-items:center;
+gap:6px;
+min-width:0;
+}
+
+.patch-deck-item-title span{
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
+}
+
+.patch-deck-dot{
+width:8px;
+height:8px;
+border-radius:50%;
+background:#ff4d4d;
+box-shadow:0 0 6px rgba(255,77,77,.9);
+flex:none;
+}
+
+.patch-deck-item-sub{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-top:4px;
+font-size:11px;
+opacity:.7;
+color:#fff;
 }
 
 /* ---------- Markdown ---------- */
@@ -699,77 +894,197 @@ font-family:Consolas,monospace;
 white-space:pre-wrap;
 }
 
-.patch-gap-1{
-    height:6px;
-}
-
-.patch-gap-2{
-    height:12px;
-}
-
-.patch-gap-3{
-    height:20px;
-}
+.patch-gap-1{ height:6px; }
+.patch-gap-2{ height:12px; }
+.patch-gap-3{ height:20px; }
 
 .patch-color,
 .patch-color * {
     color: inherit !important;
 }
 `;
-
-  document.head.appendChild(style);
 }
 
-async function showPatch(data) {
-  installStyles(data.box.lines_outline_hex);
+function getWindow(entry, fromKey = "from", untilKey = "until") {
+  const from = entry[fromKey] ? new Date(entry[fromKey]).getTime() : -Infinity;
+  const until = entry[untilKey]
+    ? new Date(entry[untilKey]).getTime()
+    : Infinity;
+  return { from, until };
+}
 
-  const overlay = document.createElement("div");
-  overlay.className = "briefing-overlay";
+function resolveIndex(index) {
+  const now = Clock.now();
+  const patchnoteCandidates = [];
+  const newsCandidates = [];
+  let nextChange = Infinity;
 
-  overlay.innerHTML = `
-<div class="briefing-loader">
-<hr>
-<div>${data.load.text}</div>
-<hr>
-</div>
-`;
+  const base = index?.patchnotes?.base;
+  if (base && base.id) {
+    patchnoteCandidates.push({
+      type: "patchnote",
+      kind: "base",
+      id: base.id,
+      weight: base.weight ?? 0,
+      icon: base.icon || "patchnote",
+      title: base.title || base.id,
+      display: base.display || "modal",
+      showCountdown: false,
+      until: Infinity,
+    });
+  }
 
-  document.body.appendChild(overlay);
+  let activeTimed = null;
+  if (Array.isArray(index?.patchnotes?.timed)) {
+    for (const timed of index.patchnotes.timed) {
+      const { from, until } = getWindow(timed);
 
-  await new Promise((resolve) =>
-    setTimeout(resolve, parseInt(data.load.duration_ms, 10) || 3000),
+      if (now >= from && now <= until) {
+        if (!activeTimed || (timed.weight ?? 0) > (activeTimed.weight ?? 0)) {
+          activeTimed = timed;
+        }
+      } else if (from > now) {
+        nextChange = Math.min(nextChange, from);
+      }
+
+      if (until !== Infinity && until > now) {
+        nextChange = Math.min(nextChange, until + 1);
+      }
+    }
+  }
+
+  if (activeTimed) {
+    const timedUntil = getWindow(activeTimed).until;
+
+    patchnoteCandidates.push({
+      type: "patchnote",
+      kind: "timed",
+      id: activeTimed.id,
+      weight: activeTimed.weight ?? 0,
+      icon: activeTimed.icon || "patchnote",
+      title: activeTimed.title || activeTimed.id,
+      display: activeTimed.display || "modal",
+      showCountdown: timedUntil !== Infinity, // shows a countdown if it actually expires
+      until: timedUntil,
+    });
+  }
+
+  if (Array.isArray(index?.news)) {
+    for (const news of index.news) {
+      const { from: start, until: end } = getWindow(news, "start", "end");
+
+      if (now >= start && now <= end) {
+        newsCandidates.push({
+          type: "news",
+          kind: "news",
+          id: news.id,
+          weight: news.weight ?? 0,
+          icon: news.icon || "news",
+          title: news.title || news.id,
+          display: news.display || "modal",
+          autodisplay: !!news.autodisplay,
+          showCountdown: end !== Infinity,
+          until: end,
+        });
+
+        if (end !== Infinity && end > now) {
+          nextChange = Math.min(nextChange, end + 1);
+        }
+      } else if (start > now) {
+        nextChange = Math.min(nextChange, start);
+      }
+    }
+  }
+
+  return { patchnoteCandidates, newsCandidates, nextChange };
+}
+
+function pickAutoDisplay(patchnoteCandidates, newsCandidates) {
+  //  console.error("pickAutoDisplay", patchnoteCandidates, newsCandidates)
+  try {
+    const eligible = [
+      ...patchnoteCandidates.filter((n) => !(loadSeenMap()?.[n.id] ?? false)),
+      ...newsCandidates.filter(
+        (n) => n.autodisplay && !(loadSeenMap()?.[n.id] ?? false),
+      ),
+    ];
+    //console.warn(eligible);
+    if (!eligible.length) return null;
+
+    eligible.sort((a, b) => b.weight - a.weight);
+    return eligible[0];
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function fetchEntryText(id) {
+  const res = await fetch(`change/log-${id}.txt.bin?v=${cacheBust()}`);
+
+  if (!res.ok) throw new Error(`Failed to fetch log-${id}`);
+
+  const bytes = new Uint8Array(await res.arrayBuffer());
+  const base64 = btoa(
+    Array.from(bytes, (b) => String.fromCharCode(b)).join(""),
   );
 
-  overlay.innerHTML = `
-<div class="briefing-box">
+  return decompressBase64(base64);
+}
 
-<div class="briefing-small-text-box">
-${data.small_text.text}
-</div>
+async function fetchEntryData(id) {
+  const text = await fetchEntryText(id);
+  return parsePatchNotes(text);
+}
 
-${data.images.banner ? `<img class="briefing-banner" src="${data.images.banner}">` : ""}
+let openBoxEntry = null;
+let boxCountdownInterval = null;
 
-<div class="briefing-header">
+function stopBoxCountdown() {
+  if (boxCountdownInterval) clearInterval(boxCountdownInterval);
+  boxCountdownInterval = null;
+}
 
-${data.images.logo ? `<img class="briefing-logo" src="${data.images.logo}">` : ""}
+function closeOverlay(overlay) {
+  stopBoxCountdown();
+  openBoxEntry = null;
+  overlay.remove();
+}
 
-<div>${data.box.title}</div>
+function startBoxCountdown(overlay, entry) {
+  stopBoxCountdown();
 
-</div>
+  boxCountdownInterval = setInterval(() => {
+    const now = Clock.now();
+    const remaining = entry.until - now;
+    const textEl = overlay.querySelector("[data-expiry-text]");
 
-<div class="briefing-scrollable-text">
-${formatPatchText(data.box.text)}
-</div>
+    if (remaining <= 0) {
+      stopBoxCountdown();
 
-<button class="briefing-button">
-${data.button.name}
-</button>
+      if (textEl) textEl.innerHTML = UI_TEXT.expired_text;
 
-</div>
-`;
+      onPatchnoteEvent("entry_expired", entry);
+
+      setTimeout(async () => {
+        closeOverlay(overlay);
+        await reloadIndexAndRefresh();
+      }, 1200);
+
+      return;
+    }
+
+    if (textEl) {
+      textEl.textContent = `${UI_TEXT.expires_prefix}${formatCountdown(remaining)}`;
+    }
+  }, 1000);
+}
+
+function wireBoxInteractions(overlay, data) {
+  const doClose = () => closeOverlay(overlay);
+
   if (`${data?.restart ?? false}` === "true") {
     overlay.querySelector(".briefing-button").onclick = () => {
-      overlay.remove();
+      doClose();
 
       requestAnimationFrame(async () => {
         console.log(
@@ -800,8 +1115,9 @@ ${data.button.name}
       });
     };
   } else {
-    overlay.querySelector(".briefing-button").onclick = () => overlay.remove();
+    overlay.querySelector(".briefing-button").onclick = doClose;
   }
+
   document.querySelectorAll("video[data-src]").forEach((video) => {
     const src = video.dataset.src;
 
@@ -819,60 +1135,386 @@ ${data.button.name}
   });
 }
 
-async function run_patchnotes() {
+function renderBox(overlay, entry, data) {
+  openBoxEntry = entry;
+
+  const now = Clock.now();
+  const fullscreenClass =
+    entry.display === "fullscreen" ? " briefing-box--fullscreen" : "";
+  const title = data.box.title || entry.title || "";
+
+  overlay.innerHTML = `
+<div class="briefing-box${fullscreenClass}">
+
+<div class="briefing-small-text-box">
+${data.small_text.text}
+</div>
+
+${data.images.banner ? `<img class="briefing-banner" src="${data.images.banner}">` : ""}
+
+<div class="briefing-header">
+
+${data.images.logo ? `<img class="briefing-logo" src="${data.images.logo}">` : ""}
+
+<div class="briefing-title-block">
+  <div class="briefing-title-row">
+    <div class="briefing-title">${title}</div>
+    ${iconImg(entry.icon, title, entry.type === "news" ? "news" : "patchnote")}
+  </div>
+  ${
+    entry.showCountdown
+      ? `<div class="briefing-expiry-row">
+    <span data-expiry-text>${UI_TEXT.expires_prefix}${formatCountdown(entry.until - now)}</span>
+  </div>`
+      : ""
+  }
+</div>
+
+</div>
+
+<div class="briefing-scrollable-text">
+${formatPatchText(data.box.text)}
+</div>
+
+<button class="briefing-button">
+${data.button.name}
+</button>
+
+</div>
+`;
+
+  wireBoxInteractions(overlay, data);
+
+  if (entry.showCountdown && entry.until !== Infinity) {
+    startBoxCountdown(overlay, entry);
+  }
+}
+
+async function presentEntry(entry, { fromAuto = false, rowEl = null } = {}) {
+  console.log("presentEntry", entry, { fromAuto, rowEl });
+  try {
+    onPatchnoteEvent(fromAuto ? "auto_display" : "manual_open", entry);
+
+    if (rowEl) setRowLoading(rowEl, true);
+
+    const data = await fetchEntryData(entry.id);
+
+    if (rowEl) setRowLoading(rowEl, false);
+
+    installStyles(data.box.lines_outline_hex);
+
+    const overlay = document.createElement("div");
+    overlay.className = "briefing-overlay";
+    document.body.appendChild(overlay);
+
+    if (fromAuto) {
+      overlay.innerHTML = `
+<div class="briefing-loader">
+<hr>
+<div>${data.load.text}</div>
+<hr>
+</div>
+`;
+      await new Promise((resolve) =>
+        setTimeout(resolve, parseInt(data.load.duration_ms, 10) || 3000),
+      );
+    }
+
+    renderBox(overlay, entry, data);
+
+    //   if (fromAuto) {
+    markSeen(entry.id);
+    //  }
+    renderDeck();
+
+    onPatchnoteEvent(
+      entry.type === "news" ? "news_seen" : "patchnote_seen",
+      entry,
+    );
+  } catch (e) {
+    console.error("Patch notes: failed to present entry", entry?.id, e);
+    if (rowEl) setRowLoading(rowEl, false, true);
+  }
+}
+
+let DECK_POOL = [];
+let deckTickInterval = null;
+
+function ensureDeckUI() {
+  if (!document.getElementById("patchnotes-style")) {
+    installStyles(DEFAULTS.box.lines_outline_hex);
+  }
+
+  if (SHOW_BELL_BUTTON && !document.getElementById("patch-bell")) {
+    const bell = document.createElement("div");
+    bell.id = "patch-bell";
+    bell.className = "patch-bell";
+    bell.innerHTML = `${iconImg("bell", "notifications")}<span id="patch-bell-badge" class="patch-bell-badge" style="display:none;"></span>`;
+    bell.onclick = toggleDeck;
+
+    document.body.appendChild(bell);
+  }
+
+  if (document.getElementById("patch-deck-panel")) return;
+
+  const panel = document.createElement("div");
+  panel.id = "patch-deck-panel";
+  panel.className = "patch-deck-panel";
+  panel.innerHTML = `<div id="patch-deck-list"></div>`;
+
+  document.body.appendChild(panel);
+}
+
+function toggleDeck() {
+  const panel = document.getElementById("patch-deck-panel");
+  if (!panel) return;
+
+  const opening = !panel.classList.contains("open");
+  panel.classList.toggle("open", opening);
+
+  if (opening) {
+    startDeckTicker();
+    onPatchnoteEvent("deck_open", { pool: DECK_POOL });
+  } else {
+    stopDeckTicker();
+    onPatchnoteEvent("deck_close", {});
+  }
+}
+
+function setRowLoading(rowEl, loading, failed = false) {
+  let subEl = rowEl.querySelector(".patch-deck-item-sub");
+
+  if (!subEl) {
+    subEl = document.createElement("div");
+    subEl.className = "patch-deck-item-sub";
+    rowEl.appendChild(subEl);
+  }
+
+  if (loading) {
+    subEl.dataset.prevHtml = subEl.dataset.prevHtml ?? subEl.innerHTML;
+    subEl.innerHTML = `<span>${UI_TEXT.deck_loading_text}</span>`;
+  } else if (failed) {
+    subEl.innerHTML = `<span>${UI_TEXT.deck_error_text}</span>`;
+  } else if (subEl.dataset.prevHtml !== undefined) {
+    subEl.innerHTML = subEl.dataset.prevHtml;
+    delete subEl.dataset.prevHtml;
+  }
+}
+
+function renderDeck() {
+  ensureDeckUI();
+
+  const seen = loadSeenMap();
+  const listEl = document.getElementById("patch-deck-list");
+  const badgeEl = document.getElementById("patch-bell-badge");
+
+  const unseenCount = DECK_POOL.filter((e) => !seen[e.id]).length;
+
+  if (badgeEl) {
+    if (unseenCount > 0) {
+      badgeEl.textContent = unseenCount > 9 ? "9+" : String(unseenCount);
+      badgeEl.style.display = "flex";
+    } else {
+      badgeEl.style.display = "none";
+    }
+  }
+
+  if (!listEl) return;
+
+  if (!DECK_POOL.length) {
+    listEl.innerHTML = `<div class="patch-deck-empty">${UI_TEXT.deck_empty_text}</div>`;
+    return;
+  }
+
+  const now = Clock.now();
+
+  listEl.innerHTML = DECK_POOL.slice()
+    .sort((a, b) => b.weight - a.weight)
+    .map((entry) => {
+      console.log("ALERT ENTRY", entry);
+      const unseen = !seen[entry.id];
+
+      const sub = entry.showCountdown
+        ? `<div class="patch-deck-item-sub" data-until="${entry.until}">
+             <span data-countdown>${UI_TEXT.expires_prefix}${formatCountdown(entry.until - now)}</span>
+           </div>`
+        : "";
+
+      return `
+      <div class="patch-deck-item" data-id="${entry.id}">
+        <div class="patch-deck-item-top">
+          <div class="patch-deck-item-title">
+            ${unseen ? `<span class="patch-deck-dot"></span>` : ""}
+            <span>${entry.title}</span>
+          </div>
+          ${iconImg(entry.icon, entry.title, entry.type === "news" ? "news" : "patchnote")}
+        </div>
+        ${sub}
+      </div>`;
+    })
+    .join("");
+
+  listEl.querySelectorAll(".patch-deck-item").forEach((rowEl) => {
+    rowEl.onclick = () => {
+      const id = rowEl.dataset.id;
+      const entry = DECK_POOL.find((e) => e.id === id);
+      if (entry) presentEntry(entry, { fromAuto: false, rowEl });
+    };
+  });
+
+  if (document.getElementById("patch-deck-panel")?.classList.contains("open")) {
+    startDeckTicker();
+  }
+}
+
+function startDeckTicker() {
+  stopDeckTicker();
+
+  deckTickInterval = setInterval(() => {
+    const now = Clock.now();
+    let expiredSomething = false;
+
+    document
+      .querySelectorAll("#patch-deck-list [data-until]")
+      .forEach((subEl) => {
+        const until = Number(subEl.dataset.until);
+        const span = subEl.querySelector("[data-countdown]");
+
+        if (now >= until) {
+          expiredSomething = true;
+          return;
+        }
+
+        if (span) {
+          span.textContent = `${UI_TEXT.expires_prefix}${formatCountdown(until - now)}`;
+        }
+      });
+
+    if (expiredSomething) {
+      stopDeckTicker();
+      reloadIndexAndRefresh();
+    }
+  }, 1000);
+}
+
+function stopDeckTicker() {
+  if (deckTickInterval) clearInterval(deckTickInterval);
+  deckTickInterval = null;
+}
+
+function onPatchnoteEvent(event, payload) {
+  //  console.log(event, payload, "onPatchnoteEvent")
+  switch (event) {
+    case "init":
+      break;
+
+    case "refreshed":
+      break;
+
+    case "auto_display":
+      //  tocar("hero", false);
+      break;
+
+    case "manual_open":
+      tocar("card", false);
+      break;
+
+    case "patchnote_seen":
+      break;
+
+    case "news_seen":
+      break;
+
+    case "entry_expired":
+      break;
+
+    case "deck_open":
+      tocar("card", false);
+      break;
+
+    case "deck_close":
+      tocar("card", false);
+      break;
+
+    default:
+      break;
+  }
+}
+
+let INDEX_CACHE = null;
+let watcherTimer = null;
+
+function scheduleWatcher(nextChange) {
+  if (watcherTimer) clearTimeout(watcherTimer);
+  watcherTimer = null;
+
+  if (nextChange === Infinity) return;
+
+  const delay = Math.max(nextChange - Clock.now(), 1000);
+
+  watcherTimer = setTimeout(() => {
+    console.log("Patchnotes schedule changed, refreshing...");
+    reloadIndexAndRefresh();
+  }, delay);
+}
+
+async function reloadIndexAndRefresh() {
+  // try {
+  //   const res = await fetch(`change/index.json?v=${cacheBust()}`);
+  //  if (res.ok) INDEX_CACHE = await res.json();
+  // } catch (e) {
+  //   console.warn("Patch notes: failed to reload index:", e);
+  // }
+
+  await refreshFromIndex();
+}
+
+async function refreshFromIndex() {
+  if (!INDEX_CACHE) return;
+
+  const { patchnoteCandidates, newsCandidates, nextChange } =
+    resolveIndex(INDEX_CACHE);
+  const auto = pickAutoDisplay(patchnoteCandidates, newsCandidates);
+
+  DECK_POOL = [...patchnoteCandidates, ...newsCandidates];
+
+  renderDeck();
+  scheduleWatcher(nextChange);
+
+  onPatchnoteEvent("refreshed", { pool: DECK_POOL, auto });
+
+  if (!openBoxEntry && auto && !isSeen(auto.id)) {
+    await presentEntry(auto, { fromAuto: true });
+  }
+}
+let json_patchnotes_for_this_session = {};
+async function initPatchnotes() {
   try {
     const indexRes = await fetch(`change/index.json?v=${cacheBust()}`);
 
     if (!indexRes.ok) return;
 
-    const index = await indexRes.json();
-    var raw_ids = getActiveId(index);
-    let id = raw_ids.a;
-    if (raw_ids.b) {
-      STORAGE_KEY = `${STORAGE_KEY}_TIMEDEVENTS`;
-    }
-    //    console.log("RAW IDS", raw_ids, localStorage[STORAGE_KEY]);
+    INDEX_CACHE = await indexRes.json();
 
-    if (!id) return;
+    json_patchnotes_for_this_session = INDEX_CACHE;
 
-    var shown = localStorage.getItem(STORAGE_KEY);
+    onPatchnoteEvent("init", { index: INDEX_CACHE });
 
-    if (raw_ids.b && shown !== id) {
-    } else {
-      STORAGE_KEY = STORAGE_KEY_B;
-      shown = localStorage.getItem(STORAGE_KEY);
-      id = raw_ids.c;
-    }
+    await refreshFromIndex();
 
-    if (shown === id) return;
-
-    const txtRes = await fetch(`change/log-${id}.txt.bin?v=${cacheBust()}`);
-
-    if (!txtRes.ok) return;
-
-    //  const text = await txtRes.text();
-
-    const text = await decompressBase64(
-      btoa(
-        Array.from(new Uint8Array(await txtRes.arrayBuffer()), (b) =>
-          String.fromCharCode(b),
-        ).join(""),
-      ),
-    );
-
-    const data = parsePatchNotes(text);
-
-    await showPatch(data);
-
-    localStorage.setItem(STORAGE_KEY, id);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        reloadIndexAndRefresh();
+      }
+    });
   } catch (e) {
     console.error("Patch notes failed:", e);
   }
 }
 
 //    if (document.readyState === "loading")
-//        document.addEventListener("DOMContentLoaded", run_patchnotes);
+//        document.addEventListener("DOMContentLoaded", initPatchnotes);
 //    else
-//        run_patchnotes();
+//        initPatchnotes();
 
 // })();

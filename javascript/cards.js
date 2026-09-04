@@ -3698,16 +3698,7 @@ var card_dict_base = [
     strength: "5",
     ability: "viperSchool DontPickMeUp",
     filename: "viperwitcher",
-    count: "0",
-    count_monitor: {
-      base: 2,
-      monitor: "based",
-      id: "Viper_Is_Here",
-      duration: {
-        start: "2026-09-01T07:00:00Z",
-        duration: 6566400,
-      },
-    },
+    count: "2",
   },
   {
     name: "Swallow",

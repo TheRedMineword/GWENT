@@ -1,0 +1,2 @@
+mail.svg -> https://fonts.google.com/icons
+bell.svg -> was build based on https://fonts.google.com/icons

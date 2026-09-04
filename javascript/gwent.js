@@ -832,10 +832,14 @@ socket.onmessage = async (event) => {
       break;
     case "show_patchnotes":
       if (data.content) {
-        console.log(
-          "Server asked to show patchnotes",
-          await showPatch(parsePatchNotes(data.content)),
-        );
+        // console.log(
+        //  "Server asked to show patchnotes",
+        //await showPatch(parsePatchNotes(data.content)),
+        var overlay = document.createElement("div");
+        overlay.className = "briefing-overlay";
+        document.body.appendChild(overlay);
+        renderBox(overlay, {}, parsePatchNotes(data.content));
+        //   );
       }
       break;
     case "server_notif":
@@ -3642,6 +3646,7 @@ class Game {
     turncount = 1;
     gameID = gameID + 1;
     ui.resumeYouTube();
+    setPatchnotesVisible(false);
     // CLEAR OLD BOARD
     board.row.forEach((row) => row.clear());
     weather.clearWeather();
@@ -3782,6 +3787,7 @@ class Game {
       status: getTranslation("ui.mmenu.status.gameinprogress"),
     });
     gameInProgress = true;
+    setPatchnotesVisible(!gameInProgress);
     await sleep(10);
     player_op.total = 0;
     player_me.total = 0;
@@ -4307,6 +4313,7 @@ class Game {
   // Sets up and displays the end-game screen
   async endGame() {
     gameInProgress = false;
+    setPatchnotesVisible(!gameInProgress);
     document.getElementById("session-start-control").classList.remove("ready");
     let endScreen = document.getElementById("end-screen");
     const endText = document.getElementById("end-text");
@@ -4429,6 +4436,7 @@ class Game {
   }
   async surrenderEnd(winner) {
     gameInProgress = false;
+    setPatchnotesVisible(!gameInProgress);
     Bucket.reset();
     //  document
     //    .getElementById("session-start-control")
@@ -8210,7 +8218,8 @@ async function inicio() {
   tocar("menu_opening", false);
   //openFullscreen();
   if (init_button_show_patchnotes) {
-    run_patchnotes();
+    //  run_patchnotes();
+    initPatchnotes();
   }
   await iniciarMusica(false);
   if (ui.getAudioState() !== 1) {

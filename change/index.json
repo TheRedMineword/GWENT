@@ -1,1 +1,27 @@
-{"default":"update38","timed":[]}
+{
+  "patchnotes": {
+    "base": {
+      "id": "update38.1",
+      "weight": 50,
+      "title": "Patch Notes",
+      "icon": "patchnote",
+      "display": "modal",
+      "showCountdown": true
+    },
+    "timed": []
+  },
+
+  "news": [
+    {
+        "id": "sorry-04092026",
+        "weight": 25,
+        "start": "2026-09-04T17:19:30Z",
+        "end": "2026-09-11T00:00:00Z",
+        "title": "Thank you for bearing with us!",
+        "icon": "mail",
+        "display": "modal",
+        "autodisplay": true,
+        "showCountdown": true
+      }
+    ]
+}

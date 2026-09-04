@@ -3,6 +3,13 @@ let IsNowCustom = false;
 // CONFIG
 // ===============================
 const IGNORE_PATTERNS = [
+  "openBoxEntry",
+  "boxCountdownInterval",
+  "DECK_POOL",
+  "deckTickInterval",
+  "INDEX_CACHE",
+  "watcherTimer",
+  "SHOW_BELL_BUTTON",
   "gameInProgress",
   "it_is_me_an_doppler",
   "discord_cards",
