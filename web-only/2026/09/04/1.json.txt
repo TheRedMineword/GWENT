@@ -1,0 +1,10 @@
+<title>Known Issue</title>
+<desc>For some reason idk for how long, gwent.localplayer.dev is using outdated html
+
+It will be updated later in today patch
+
+This mistake results in fatal silence crash
+
+~DrMineword</desc>
+<bottom_link>true</bottom_link>
+<bottom_link_value>Join Discord Server for updates!###https://theredmineword.github.io/GWENT/api/discord-iframe/page</bottom_link_value>
