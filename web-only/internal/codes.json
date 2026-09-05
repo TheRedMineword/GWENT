@@ -1,14 +1,24 @@
-{"id_map": "[\"test 3\"]", "codes":[
+{"id_map": "[\"welcome\", \"Sorry05092026\"]", "codes":[
     {
         "active": true,
         "givetype": "currency",
-        "value": "750",
+        "value": "350",
+        "duration": {
+            "use": false,
+            "start_end": []
+        },
+        "_id": "hi"
+    },
+    {
+        "active": true,
+        "givetype": "currency",
+        "value": "700",
         "duration": {
             "use": true,
             "start_end": [
-                "2026-09-04T17:19:30Z", "2026-09-11T00:00:00Z"
+                "2026-09-04T17:19:30Z", "2026-09-14T00:00:00Z"
             ]
         },
-        "_id": "test 3"
+        "_id": "hi"
     }
 ]}

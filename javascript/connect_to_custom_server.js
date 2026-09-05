@@ -3,6 +3,7 @@ let IsNowCustom = false;
 // CONFIG
 // ===============================
 const IGNORE_PATTERNS = [
+  "reinit_after",
   "openBoxEntry",
   "boxCountdownInterval",
   "DECK_POOL",

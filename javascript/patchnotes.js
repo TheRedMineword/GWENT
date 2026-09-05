@@ -923,6 +923,7 @@ function resolveIndex(index) {
   if (base && base.id) {
     patchnoteCandidates.push({
       type: "patchnote",
+      text: base?.text ?? false,
       kind: "base",
       id: base.id,
       weight: base.weight ?? 0,
@@ -958,6 +959,7 @@ function resolveIndex(index) {
 
     patchnoteCandidates.push({
       type: "patchnote",
+      text: activeTimed?.text ?? false,
       kind: "timed",
       id: activeTimed.id,
       weight: activeTimed.weight ?? 0,
@@ -978,6 +980,7 @@ function resolveIndex(index) {
           type: "news",
           kind: "news",
           id: news.id,
+          text: news?.text ?? false,
           weight: news.weight ?? 0,
           icon: news.icon || "news",
           title: news.title || news.id,
@@ -1018,21 +1021,64 @@ function pickAutoDisplay(patchnoteCandidates, newsCandidates) {
   }
 }
 
-async function fetchEntryText(id) {
-  const res = await fetch(`change/log-${id}.txt.bin?v=${cacheBust()}`);
+async function fetchEntryText(id, asText) {
+  let url = `https://theredmineword.github.io/GWENT/change/log-${id}.txt.bin`;
 
-  if (!res.ok) throw new Error(`Failed to fetch log-${id}`);
+  if (
+    window.location.host === "localhost:8080" ||
+    window.location.host === "localhost:8081"
+  ) {
+    url = `change/log-${id}.txt.bin`;
+  }
 
-  const bytes = new Uint8Array(await res.arrayBuffer());
-  const base64 = btoa(
-    Array.from(bytes, (b) => String.fromCharCode(b)).join(""),
-  );
+  try {
+    const res = await fetch(url);
 
-  return decompressBase64(base64);
+    console.log("fetch:", url, res.status, res.ok, asText);
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch log-${id}: HTTP ${res.status}`);
+    }
+
+    if (asText) {
+      console.log("reading response as text...");
+
+      const text = await res.text();
+
+      console.log("text received:", text.length, "chars");
+
+      return text;
+    }
+
+    console.log("reading response as arrayBuffer...");
+
+    const buffer = await res.arrayBuffer();
+
+    console.log("arrayBuffer received:", buffer.byteLength, "bytes");
+
+    const bytes = new Uint8Array(buffer);
+
+    const base64 = btoa(
+      Array.from(bytes, (b) => String.fromCharCode(b)).join(""),
+    );
+
+    console.log("base64 created:", base64.length, "chars");
+    console.log("calling decompressBase64...");
+
+    const result = await decompressBase64(base64);
+
+    console.log("decompressBase64 succeeded");
+
+    return result;
+  } catch (err) {
+    console.error(`fetchEntryText(${id}) failed:`, err);
+    throw err;
+  }
 }
 
-async function fetchEntryData(id) {
-  const text = await fetchEntryText(id);
+async function fetchEntryData(id, asText) {
+  const text = await fetchEntryText(id, asText);
+  // console.warn(parsePatchNotes(text));
   return parsePatchNotes(text);
 }
 
@@ -1197,7 +1243,7 @@ async function presentEntry(entry, { fromAuto = false, rowEl = null } = {}) {
 
     if (rowEl) setRowLoading(rowEl, true);
 
-    const data = await fetchEntryData(entry.id);
+    const data = await fetchEntryData(entry.id, entry?.text ?? false);
 
     if (rowEl) setRowLoading(rowEl, false);
 
@@ -1459,12 +1505,28 @@ function scheduleWatcher(nextChange) {
 }
 
 async function reloadIndexAndRefresh() {
-  // try {
-  //   const res = await fetch(`change/index.json?v=${cacheBust()}`);
-  //  if (res.ok) INDEX_CACHE = await res.json();
-  // } catch (e) {
-  //   console.warn("Patch notes: failed to reload index:", e);
-  // }
+  if (reinit_after < Clock.now() - 150000) {
+    try {
+      var url = `https://theredmineword.github.io/GWENT/change/index.json?v=${cacheBust()}`;
+      if (window.location.host === "localhost:8080") {
+        url = `change/index.json?v=${cacheBust()}`;
+      }
+      if (window.location.host === "localhost:8081") {
+        url = `change/index.json?v=${cacheBust()}`;
+      }
+      const indexRes = await fetch(url);
+
+      if (!indexRes.ok) return;
+
+      reinit_after = Clock.now();
+
+      INDEX_CACHE = await indexRes.json();
+
+      json_patchnotes_for_this_session = INDEX_CACHE;
+    } catch (e) {
+      console.error("Patch notes failed:", e);
+    }
+  }
 
   await refreshFromIndex();
 }
@@ -1488,11 +1550,21 @@ async function refreshFromIndex() {
   }
 }
 let json_patchnotes_for_this_session = {};
+let reinit_after = 0;
 async function initPatchnotes() {
   try {
-    const indexRes = await fetch(`change/index.json?v=${cacheBust()}`);
+    var url = `https://theredmineword.github.io/GWENT/change/index.json?v=${cacheBust()}`;
+    if (window.location.host === "localhost:8080") {
+      url = `change/index.json?v=${cacheBust()}`;
+    }
+    if (window.location.host === "localhost:8081") {
+      url = `change/index.json?v=${cacheBust()}`;
+    }
+    const indexRes = await fetch(url);
 
     if (!indexRes.ok) return;
+
+    reinit_after = Clock.now();
 
     INDEX_CACHE = await indexRes.json();
 
