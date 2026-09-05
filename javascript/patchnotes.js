@@ -1584,6 +1584,13 @@ async function initPatchnotes() {
   }
 }
 
+try {
+  ThisDef.env_vars = {
+    ...deepClone(ThisDef).env_vars,
+    always_full_timer_in_patchnotes: deepClone(always_full_timer_in_patchnotes),
+  };
+} catch (e) {}
+
 //    if (document.readyState === "loading")
 //        document.addEventListener("DOMContentLoaded", initPatchnotes);
 //    else

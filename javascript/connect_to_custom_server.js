@@ -3,6 +3,17 @@ let IsNowCustom = false;
 // CONFIG
 // ===============================
 const IGNORE_PATTERNS = [
+  "dm",
+  "youtubeInitializing",
+  "playerId",
+  "opponentReady",
+  "amReady",
+  "socket",
+  "debug",
+  "createdSessionId",
+  "joinedSessionId",
+  "ThisSessionId",
+  "op_icon_faction",
   "reinit_after",
   "openBoxEntry",
   "boxCountdownInterval",
@@ -83,6 +94,8 @@ const IGNORE_PATTERNS = [
   "timezone",
   "timed_count_change",
   "ABILITIES",
+  "Bucket",
+  "player_board",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 
