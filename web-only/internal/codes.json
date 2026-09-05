@@ -1,1 +1,13 @@
-{"id_map": "[\"test 123\"]"}
+{"id_map": "[\"test 123\"]", "codes":[
+    {
+        "active": true,
+        "givetype": "currency",
+        "value": "750",
+        "duration": {
+            "use": true,
+            "start_end": [
+                "2026-09-04T17:19:30Z", "2026-09-11T00:00:00Z"
+            ]
+        }
+    }
+]}
