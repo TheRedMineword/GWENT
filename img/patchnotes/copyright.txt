@@ -1,3 +1,4 @@
 mail.svg -> https://fonts.google.com/icons
 bell.svg -> was build based on https://fonts.google.com/icons
 calendar.svg -> https://fonts.google.com/icons
+moonstars.svg -> https://fonts.google.com/icons

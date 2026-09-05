@@ -1505,7 +1505,7 @@ function scheduleWatcher(nextChange) {
 }
 
 async function reloadIndexAndRefresh() {
-  if (reinit_after < Clock.now() - 150000) {
+  if (reinit_after < Clock.now() - 1.9 * 150000) {
     try {
       var url = `https://theredmineword.github.io/GWENT/change/index.json?v=${cacheBust()}`;
       if (window.location.host === "localhost:8080") {
