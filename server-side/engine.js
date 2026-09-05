@@ -293,7 +293,8 @@ function isKnownIssuePath(filename = "") {
     /^web-only\/isissue\.txt$/i.test(filename) ||
     /^web-only\/knownissues\.json$/i.test(filename) ||
     /^web-only\/\d{4}\/\d{2}\/\d{2}\/[^/]+\.json\.txt$/i.test(filename) ||
-    /^web-only\/change\/web-only\/ping_news\.txt$/i.test(filename)
+    /^web-only\/change\/web-only\/ping_news\.txt$/i.test(filename) ||
+    /(^|\/)change\/.+$/i.test(filename)
   );
 }
 
