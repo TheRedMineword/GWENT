@@ -1,4 +1,4 @@
-{"id_map": "[\"test 123\"]", "codes":[
+{"id_map": "[\"test 3\"]", "codes":[
     {
         "active": true,
         "givetype": "currency",
@@ -9,6 +9,6 @@
                 "2026-09-04T17:19:30Z", "2026-09-11T00:00:00Z"
             ]
         },
-        "_id": "test_id_123"
+        "_id": "test 3"
     }
 ]}
