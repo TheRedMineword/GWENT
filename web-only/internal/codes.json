@@ -1,4 +1,4 @@
-{"id_map": "[\"welcome\", \"Sorry05092026\"]", "codes":[
+{"id_map": "[\"welcome\", \"Sorry05092026\", \"<@&1522315139204776098>\"]", "codes":[
     {
         "active": true,
         "givetype": "currency",
@@ -20,5 +20,15 @@
             ]
         },
         "_id": "hi"
+    },
+    {
+        "active": true,
+        "givetype": "currency",
+        "value": "500",
+        "duration": {
+            "use": false,
+            "start_end": []
+        },
+        "_id": "magister"
     }
 ]}
