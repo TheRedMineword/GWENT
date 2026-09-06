@@ -541,9 +541,9 @@
       "magister": "assasin_%g",
       "custom!power_place": "magic_%g",
       "custom!m_moonlight": "event_%g",
-      "custom!s_moonlight": "siege_%g",
-      "custom!deatheatersmoon": "magic_%g",
-      "custom!nightwraithsmoon": "magic_%g",
+      "custom!s_moonlight": "event_%g",
+      "custom!deatheatersmoon": "event_%g",
+      "custom!nightwraithsmoon": "event_%g",
       "steward": "sky_guide_s_%g",
       "chibi_mask": "sky_item_%g",
       "rico": "sky_spirit_%g",
@@ -586,7 +586,8 @@
       "olgierd_headless": "rottenfruit_%g",
       "iorwethbucketcommander": "hebitch_%g",
       "iorwethpatience": "hebitch_%g",
-      "whatthesandwitch": "rottenfruit_%g"
+      "whatthesandwitch": "rottenfruit_%g",
+      "dożynki": "event_%g"
     },
     "classDecorators": {
       "undefined": {
@@ -1633,7 +1634,8 @@
           "olgierd_headless": "Olgierd von Everec — The Headless",
           "iorwethbucketcommander": "Iorveth — Ordinary Son of a Whore",
           "iorwethpatience": "Iorveth — Ordinary Son of a Whore?",
-          "whatthesandwitch": "Whoreson Junior — The Biggest Prick in Novigrad"
+          "whatthesandwitch": "Whoreson Junior — The Biggest Prick in Novigrad",
+          "dożynki": "Harvest festival"
         },
         "ui": {
           "elem": {
@@ -2746,7 +2748,8 @@
           "olgierd_headless": "Olgierd von Everec — Bezgłowy",
           "iorwethbucketcommander": "Iorveth — Zwykły Skurwysyn",
           "iorwethpatience": "Iorveth — Zwykły Skurwysyn?",
-          "whatthesandwitch": "Skurwiel Junior — Największy Chuj w Nowigradzie"
+          "whatthesandwitch": "Skurwiel Junior — Największy Chuj w Nowigradzie",
+          "dożynki": "Dożynki"
         },
         "ui": {
           "elem": {
@@ -6520,6 +6523,27 @@
         "ability": "turn_skiper",
         "filename": "whatthesandwitch",
         "count": "1"
+      },
+      {
+        "name": "Harvest Festival",
+        "id": "1056",
+        "deck": "neutral",
+        "row": "NaR",
+        "strength": "0",
+        "ability": "decoy2 DontPickMeUp morale",
+        "filename": "dożynki",
+        "count": "0",
+        "isDecoy": true,
+        "isDecoyMath": false,
+        "count_monitor": {
+          "base": 1,
+          "monitor": "based",
+          "id": "Dożynki",
+          "duration": {
+            "start": "2026-09-13T07:00:00.000Z",
+            "duration": "9999999999999999999999999"
+          }
+        }
       }
     ],
     "factions": {
@@ -6884,9 +6908,9 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
-    "tavern_yt_vid": "yu197hlNWK0",
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack_volume": 90,
+    "tavern_yt_vid": "8o-JI8VRyKo",
     "tavern_yt_volume": 90
   },
   "texture_pack_url": null

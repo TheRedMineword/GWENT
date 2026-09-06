@@ -1117,6 +1117,8 @@ socket.onmessage = async (event) => {
       }
       console.log("---------------------");
       console.log("Opponent left the game");
+      gameInProgress = false;
+      setPatchnotesVisible(!gameInProgress);
       // isOpponentReadyElem.classList.add("hidden");
       updateOpponentUI({
         name: getUiStrng("no_op_ui"),

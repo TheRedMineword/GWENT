@@ -727,7 +727,8 @@ STRNG["en"] = {
     olgierd_headless: "Olgierd von Everec — The Headless",
     iorwethbucketcommander: "Iorveth — Ordinary Son of a Whore",
     iorwethpatience: "Iorveth — Ordinary Son of a Whore?",
-    whatthesandwitch: "Whoreson Junior — The Biggest Prick in Novigrad"
+    whatthesandwitch: "Whoreson Junior — The Biggest Prick in Novigrad",
+    dożynki: "Harvest festival"
   },
   ui: {
     elem: {

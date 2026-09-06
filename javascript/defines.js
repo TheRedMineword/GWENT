@@ -759,9 +759,9 @@ let card_name_class = {
   magister: "assasin_%g",
   "custom!power_place": "magic_%g",
   "custom!m_moonlight": "event_%g",
-  "custom!s_moonlight": "siege_%g",
-  "custom!deatheatersmoon": "magic_%g",
-  "custom!nightwraithsmoon": "magic_%g",
+  "custom!s_moonlight": "event_%g",
+  "custom!deatheatersmoon": "event_%g",
+  "custom!nightwraithsmoon": "event_%g",
   steward: "sky_guide_s_%g",
   chibi_mask: "sky_item_%g",
   rico: "sky_spirit_%g",
@@ -805,6 +805,7 @@ let card_name_class = {
   iorwethbucketcommander: "hebitch_%g",
   iorwethpatience: "hebitch_%g",
   whatthesandwitch: "rottenfruit_%g",
+  dożynki: "event_%g",
 };
 let classDecorators = {
   undefined: { prefix: "⩫<", suffix: ">⩫" },

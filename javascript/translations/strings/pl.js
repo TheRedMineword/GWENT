@@ -821,7 +821,8 @@ francesca_hope_of_the_aen_seidhe:
     olgierd_headless: "Olgierd von Everec — Bezgłowy",
     iorwethbucketcommander: "Iorveth — Zwykły Skurwysyn",
     iorwethpatience: "Iorveth — Zwykły Skurwysyn?",
-    whatthesandwitch: "Skurwiel Junior — Największy Chuj w Nowigradzie"
+    whatthesandwitch: "Skurwiel Junior — Największy Chuj w Nowigradzie",
+    dożynki: "Dożynki"
   },
   ui: {
     elem: {

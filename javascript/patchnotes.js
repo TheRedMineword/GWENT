@@ -966,7 +966,7 @@ function resolveIndex(index) {
       icon: activeTimed.icon || "patchnote",
       title: activeTimed.title || activeTimed.id,
       display: activeTimed.display || "modal",
-      showCountdown: timedUntil !== Infinity, // shows a countdown if it actually expires
+      showCountdown: activeTimed?.showCountdown ?? false, //timedUntil !== Infinity, // shows a countdown if it actually expires
       until: timedUntil,
     });
   }
@@ -986,7 +986,7 @@ function resolveIndex(index) {
           title: news.title || news.id,
           display: news.display || "modal",
           autodisplay: !!news.autodisplay,
-          showCountdown: end !== Infinity,
+          showCountdown: news?.showCountdown ?? false, //end !== Infinity,
           until: end,
         });
 

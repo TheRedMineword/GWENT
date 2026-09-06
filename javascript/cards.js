@@ -3794,6 +3794,27 @@ var card_dict_base = [
     filename: "whatthesandwitch",
     count: "1",
   },
+  {
+    name: "Harvest Festival",
+    id: "1056",
+    deck: "neutral",
+    row: "NaR",
+    strength: "0",
+    ability: "decoy2 DontPickMeUp morale",
+    filename: "dożynki",
+    count: "0",
+    isDecoy: true,
+    isDecoyMath: false,
+    count_monitor: {
+      base: 1,
+      monitor: "based",
+      id: "Dożynki",
+      duration: {
+        start: "2026-09-13T07:00:00.000Z",
+        duration: "9999999999999999999999999",
+      },
+    },
+  },
 ];
 let pickedfakecard = { a: false, b: null };
 
