@@ -75,7 +75,7 @@ Gwent will soon see multiple events featuring temporary cards running simultaneo
 <fat1>
 <color=#A0DB21>⫸</color> <color=#BBF23D>(!time:2026-08-27T07:00:00.000Z! - !time:2026-08-31T07:00:00.000Z!)</color> <color=#B6CC7E>The **Traveling Spirit** will visit the Sky Kingdom faction.</color>
 <fat1>
-<color=#A0DB21>⫸</color> <color=#BBF23D>(!time:2026-08-28T07:00:00.000Z! - !time:2026-09-10T07:00:00.000Z!)</color> <color=#B6CC7E>Special visitors from the "**Nine-Colored Deer**" season will visit the Sky Kingdom factions! The Seasonal Pendant card will be available to all factions, though the spirits cards themselves are exclusive to the Sky Kingdom; all these cards feature the Muster ability.</color>
+<color=#A0DB21>⫸</color> <color=#BBF23D>(!time:2026-08-28T07:00:00.000Z! - !time:2026-09-11T07:00:00.000Z!)</color> <color=#B6CC7E>Special visitors from the "**Nine-Colored Deer**" season will visit the Sky Kingdom factions! The Seasonal Pendant card will be available to all factions, though the spirits cards themselves are exclusive to the Sky Kingdom; all these cards feature the Muster ability.</color>
 ```
 <fat3>
 # 15 August, 2026
@@ -135,7 +135,7 @@ This update brings server-side chnages and new leader card! And news about next 
 ## <color=#AE6E6C>Season of Nine-Colored Deer Special Visit</color>
 <fat1>
 <color=#BBBCC1>Five new cards are coming to the **Sky Kingdom** faction for limited duration!</color>
-<color=#BBBCC1>Starting **!time:2026-08-28T07:00:00.000Z!** and ending at **!time:2026-09-10T07:00:00.000Z!** they be available to play!</color>
+<color=#BBBCC1>Starting **!time:2026-08-28T07:00:00.000Z!** and ending at **!time:2026-09-11T07:00:00.000Z!** they be available to play!</color>
 <color=#BBBCC1>This will be the first visit of its kind, bringing together the group of traveling spirits from the Sky: Children of the Light to Gwent.</color>
 <color=#BBBCC1>Please remember that I am not affiliated with **ThatGameCompany** and I am adding these cards of my own accord; the characters themselves remain the property of TGC.</color>
 <fat1>
