@@ -116,8 +116,16 @@ function deepMerge(target, source) {
 function clone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
-
 function iconUrl(iconId) {
+  var a = iconUrl2(iconId);
+  console.log(iconId, a);
+  return a;
+}
+function iconUrl2(iconId) {
+  if (iconId.startsWith("custom!")) {
+    return iconId.slice(7);
+  }
+
   return `${ICON_BASE_PATH}${iconId}.svg`;
 }
 
