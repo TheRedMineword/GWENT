@@ -1,4 +1,4 @@
-{"id_map": "[\"welcome\", \"Sorry05092026\", \"<@&1522315139204776098>\"]", "codes":[
+{"id_map": "[\"welcome\", \"Sorry05092026\", \"<@&1522315139204776098>\", \"<@777143528475852841>\", \"fun\"]", "codes":[
     {
         "active": true,
         "givetype": "currency",
@@ -30,5 +30,25 @@
             "start_end": []
         },
         "_id": "magister"
+    },
+    {
+        "active": true,
+        "givetype": "currency",
+        "value": "100",
+        "duration": {
+            "use": false,
+            "start_end": []
+        },
+        "_id": "vernonroche"
+    },
+    {
+        "active": true,
+        "givetype": "currency",
+        "value": "-1",
+        "duration": {
+            "use": false,
+            "start_end": []
+        },
+        "_id": "vernonroche_funny"
     }
 ]}
