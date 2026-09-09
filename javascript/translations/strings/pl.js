@@ -720,7 +720,7 @@ francesca_hope_of_the_aen_seidhe:
     crach_an_craite: "Crach an Craite",
     king_bran: "Król Bran",
     schirru: "Schirru",
-    gerry: "Żeralt z Rzeki",
+    gerry: "Gerwazy z Rzeki",
     lethosabotage: "Letho — Sabotażysta",
     aidhorn: "Sztandar Lyrii i Rivii",
     Gaunter_Leader: "Gaunter O'Dim",
