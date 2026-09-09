@@ -3515,7 +3515,7 @@ async function handleBet(
   await message.reply(
     existingBet
       ? `\uD83D\uDCB0 Added **${amount}** to your bet. Total now: **${totalBet}**.`
-      : `\uD83D\uDCB0 Bet placed: **${amount}** locked in.`
+      : `\uD83D\uDCB0 Bet placed: **${amount}** locked in.  Total now: **${totalBet}**.`
   );
 
   const opponentPlayerId =
@@ -3551,15 +3551,15 @@ async function handleBet(
       null
     );
 
-    await dm(
-      message.author.id,
-      `Both players have bet. Pot: **${pot}**. Good luck!`
-    );
+ //   await dm(
+ //     message.author.id,
+ //     `Both players have bet. Pot: **${pot}**. Good luck!`
+ //   );
 
-    await dm(
-      opponentBet.discordId,
-      `Both players have bet. Pot: **${pot}**. Good luck!`
-    );
+ //   await dm(
+ //     opponentBet.discordId,
+ //     `Both players have bet. Pot: **${pot}**. Good luck!`
+//    );
   }
 }
 
