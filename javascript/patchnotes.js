@@ -59,8 +59,8 @@ function setPatchnotesVisible(visible) {
 
 const Z_INDEX = {
   overlay: 2147483647, // the full patch-note/news modal
-  bell: 2147483000, // the floating bell button
-  deck_panel: 2147483000, // the inbox/deck panel
+  bell: 9997, // the floating bell button
+  deck_panel: 9998, // the inbox/deck panel
 };
 
 const SEEN_STORAGE_KEY = "patchnotes_seen_v2";
