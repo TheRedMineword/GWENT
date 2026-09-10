@@ -6526,7 +6526,7 @@
       },
       {
         "name": "Harvest Festival",
-        "id": "1056",
+        "id": "1059",
         "deck": "neutral",
         "row": "NaR",
         "strength": "0",
@@ -6908,10 +6908,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
-    "tavern_yt_vid": "8o-JI8VRyKo",
-    "tavern_yt_volume": 90
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack_volume": 90,
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }

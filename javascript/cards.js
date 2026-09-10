@@ -3796,7 +3796,7 @@ var card_dict_base = [
   },
   {
     name: "Harvest Festival",
-    id: "1056",
+    id: "1059",
     deck: "neutral",
     row: "NaR",
     strength: "0",
@@ -4082,6 +4082,7 @@ function scanTimedCountChange() {
 
     // Start time reached
     if (!timer.activated && now >= timer.start && now < end) {
+      // console.warn("TIMER CARD", card, card?.count_monitor?.base ?? false);
       card.count = card.count_monitor.base;
 
       timer.activated = true;
