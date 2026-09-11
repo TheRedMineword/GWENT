@@ -590,7 +590,7 @@ let card_name_class = {
   assire: "sorcerer_%g",
   black_archer_1: "soldier_%g",
   cahir: "commander_%g",
-  cynthia: "spy_%g",
+  cynthia: "sorcerer_%g",
   archer_support: "soldier_%g",
   fringilla: "sorcerer_%g",
   heavy_zerri: "siege_%g",
