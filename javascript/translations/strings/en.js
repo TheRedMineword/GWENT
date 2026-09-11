@@ -1024,6 +1024,7 @@ STRNG["en"] = {
       "op": "Opponent rolled \"1\"\nYou draw an additional card!"
     },
     "roll": {
+      "done": "Rolled: %s",
       "name": "Fate roll",
       "name_sideB": "Opponent roll dice for addtional cards",
       "res1": "Critical Failure",

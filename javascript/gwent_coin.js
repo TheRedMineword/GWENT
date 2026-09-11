@@ -712,7 +712,10 @@ async function displayD20Roll(resultValue = null, options = {}) {
     } catch (e) {}
   }
 
-  result.textContent = `Rolled: ${resultValue}`;
+  result.textContent = getTranslation("ability_counter.d20.roll.done").replace(
+    "%s",
+    resultValue,
+  );
 
   result.animate(
     [

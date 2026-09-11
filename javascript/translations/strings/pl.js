@@ -1118,8 +1118,9 @@ francesca_hope_of_the_aen_seidhe:
       "op": "Przeciwnik wyrzucił \"1\"\nDobierasz dodatkową kartę!"
     },
     "roll": {
+      "done": "Wyrzucono: %s",
       "name": "Rzut Losu",
-      "name_sideB": "Przeciwnik rzucam kostką o dodatkowe karty",
+      "name_sideB": "Przeciwnik rzuca kostką o dodatkowe karty",
       "res1": "Krtytczna Porażka",
       "res2": "Naturalna Dwudziestka!",
       "res3": "Sukces",
@@ -1199,7 +1200,7 @@ francesca_hope_of_the_aen_seidhe:
 
   discord_error_generic:
     "<color=#2121DB>DISCORD</color>: Coś poszło nie tak <color=#FF5555>(%s)</color>.",
-  discord_card_recived: "<color=#2121DB>DISCORD</color>: Otrzymano ekwipunek z <color=#2121DB>discorda</color>!\nZsynchronizowano <color=#FFD700>%s</color> kart!\n<color=#AAAAFF>Jeśli nei widzisz tych kart odśwież kontruktor talii poprzez zmianę frakcji!</color>"
+  discord_card_recived: "<color=#2121DB>DISCORD</color>: Otrzymano ekwipunek z <color=#2121DB>discorda</color>!\nZsynchronizowano <color=#FFD700>%s</color> kart!\n<color=#AAAAFF>Jeśli nie widzisz tych kart odśwież kontruktor talii poprzez zmianę frakcji!</color>"
 }, 
 card_info: {
   strings: {

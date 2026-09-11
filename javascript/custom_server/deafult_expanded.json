@@ -1900,6 +1900,7 @@
               "op": "Opponent rolled \"1\"\nYou draw an additional card!"
             },
             "roll": {
+              "done": "Rolled: %s",
               "name": "Fate roll",
               "name_sideB": "Opponent roll dice for addtional cards",
               "res1": "Critical Failure",
@@ -3014,8 +3015,9 @@
               "op": "Przeciwnik wyrzucił \"1\"\nDobierasz dodatkową kartę!"
             },
             "roll": {
+              "done": "Wyrzucono: %s",
               "name": "Rzut Losu",
-              "name_sideB": "Przeciwnik rzucam kostką o dodatkowe karty",
+              "name_sideB": "Przeciwnik rzuca kostką o dodatkowe karty",
               "res1": "Krtytczna Porażka",
               "res2": "Naturalna Dwudziestka!",
               "res3": "Sukces",
@@ -3075,7 +3077,7 @@
           "discord_refund": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Zakład zwrócony: \u003Ccolor=#AAAAAA\u003E%s\u003C/color\u003E.",
           "discord_error_not_registered": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Najpierw musisz użyć \u003Ccolor=#FFAA00\u003E!registerclient\u003C/color\u003E na Discordzie.",
           "discord_error_generic": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Coś poszło nie tak \u003Ccolor=#FF5555\u003E(%s)\u003C/color\u003E.",
-          "discord_card_recived": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Otrzymano ekwipunek z \u003Ccolor=#2121DB\u003Ediscorda\u003C/color\u003E!\nZsynchronizowano \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E kart!\n\u003Ccolor=#AAAAFF\u003EJeśli nei widzisz tych kart odśwież kontruktor talii poprzez zmianę frakcji!\u003C/color\u003E"
+          "discord_card_recived": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Otrzymano ekwipunek z \u003Ccolor=#2121DB\u003Ediscorda\u003C/color\u003E!\nZsynchronizowano \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E kart!\n\u003Ccolor=#AAAAFF\u003EJeśli nie widzisz tych kart odśwież kontruktor talii poprzez zmianę frakcji!\u003C/color\u003E"
         },
         "card_info": {
           "strings": {
@@ -6908,10 +6910,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 30
+    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }
