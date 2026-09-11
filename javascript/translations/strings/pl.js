@@ -943,7 +943,7 @@ francesca_hope_of_the_aen_seidhe:
         eredin2: "Wybierz kartę do wygnania (2/2)",
         eredin_ok: "Wybierz kartę do skopiowania",
         skellige_mad_man: "Wybierz kartę do wygnania",
-        skellige_mad_man_ok: "Choose Tight Bond card",
+        skellige_mad_man_ok: "Wybierz kartę Braterskiej Więzi",
         devildeal: "Wybierz kartę do dobrania",
         gryf: "Wybierz znak Wiedźmiński",
         viper: "Wybierz eliksir Wiedźmiński"
