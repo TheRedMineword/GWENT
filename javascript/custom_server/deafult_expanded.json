@@ -6543,7 +6543,7 @@
           "id": "Dożynki",
           "duration": {
             "start": "2026-09-13T07:00:00.000Z",
-            "duration": "9999999999999999999999999"
+            "duration": "99999999999999"
           }
         }
       }
@@ -6910,10 +6910,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
-    "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "yu197hlNWK0",
-    "tavern_yt_volume": 90
+    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
+    "audio_yt_vid_soundtrack_volume": 47,
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }

@@ -3811,7 +3811,7 @@ var card_dict_base = [
       id: "Dożynki",
       duration: {
         start: "2026-09-13T07:00:00.000Z",
-        duration: "9999999999999999999999999",
+        duration: "99999999999999",
       },
     },
   },
