@@ -1,5 +1,32 @@
 {
   "version": "pre-live-final/live.0.1",
+  "emote": {
+  "quen": {
+    "emoji": "<:quen:1524156827963756554>",
+    "name": "Quen",
+    "display": "<:quen:1524156827963756554> Quen"
+  },
+  "ignii": {
+    "emoji": "<:ignii:1524156774754685029>",
+    "name": "Ignii",
+    "display": "<:ignii:1524156774754685029> Ignii"
+  },
+  "yrden": {
+    "emoji": "<:yrden:1524156706651635802>",
+    "name": "Yrden",
+    "display": "<:yrden:1524156706651635802> Yrden"
+  },
+  "aard": {
+    "emoji": "<:aard:1524156951682879683>",
+    "name": "Aard",
+    "display": "<:aard:1524156951682879683> Aard"
+  },
+  "axii": {
+    "emoji": "<:axii:1524156885710672113>",
+    "name": "Axii",
+    "display": "<:axii:1524156885710672113> Axii"
+  }
+},
   "idmaps": {
     "igni":  { "quen": "ig_qu", "aard": "ig_aa", "yrden": "ig_yr", "axii": "ig_ax", "igni": "draw_igni" },
     "quen":  { "igni": "ig_qu", "aard": "qu_aa", "yrden": "qu_yr", "axii": "qu_ax", "quen": "draw_quen" },
