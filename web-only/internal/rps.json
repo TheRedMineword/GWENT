@@ -1,4 +1,5 @@
 {
+  "version": "pre-live-final/live.0.1",
   "idmaps": {
     "igni":  { "quen": "ig_qu", "aard": "ig_aa", "yrden": "ig_yr", "axii": "ig_ax", "igni": "draw_igni" },
     "quen":  { "igni": "ig_qu", "aard": "qu_aa", "yrden": "qu_yr", "axii": "qu_ax", "quen": "draw_quen" },
@@ -10,78 +11,78 @@
     "ig_qu": {
       "winner": "quen",
       "msgs": {
-        "igni_quen": "{{a}} hurls flame at {{b}} — the shield holds, fire snuffed cold.",
-        "quen_igni": "{{a}} braces as {{b}} burns in — the barrier smothers it easily."
+        "igni_quen": "<<a>> hurls flame at <<b>> — the shield holds, fire snuffed cold.",
+        "quen_igni": "<<a>> braces as <<b>> burns in — the barrier smothers it easily."
       }
     },
     "ig_aa": {
       "winner": "aard",
       "msgs": {
-        "igni_aard": "{{a}} throws fire at {{b}} — the shockwave scatters it like ash.",
-        "aard_igni": "{{a}} slams a wave into {{b}} — the flame dies before it catches."
+        "igni_aard": "<<a>> throws fire at <<b>> — the shockwave scatters it like ash.",
+        "aard_igni": "<<a>> slams a wave into <<b>> — the flame dies before it catches."
       }
     },
     "ig_yr": {
       "winner": "igni",
       "msgs": {
-        "igni_yrden": "{{a}} sets the ground ablaze — {{b}}'s glyphs burn out unused.",
-        "yrden_igni": "{{a}} lays a trap, but {{b}} torches it before it can trigger."
+        "igni_yrden": "<<a>> sets the ground ablaze — <<b>>'s glyphs burn out unused.",
+        "yrden_igni": "<<a>> lays a trap, but <<b>> torches it before it can trigger."
       }
     },
     "ig_ax": {
       "winner": "igni",
       "msgs": {
-        "igni_axii": "{{a}}'s heat breaks {{b}}'s focus mid-cast — the mind-trick fizzles.",
-        "axii_igni": "{{a}} reaches for {{b}}'s mind, but the flames disrupt the link."
+        "igni_axii": "<<a>>'s heat breaks <<b>>'s focus mid-cast — the mind-trick fizzles.",
+        "axii_igni": "<<a>> reaches for <<b>>'s mind, but the flames disrupt the link."
       }
     },
     "qu_aa": {
       "winner": "quen",
       "msgs": {
-        "quen_aard": "{{a}} raises a barrier — {{b}}'s shockwave crashes and dissipates.",
-        "aard_quen": "{{a}} unleashes a wave, but {{b}}'s shield absorbs it whole."
+        "quen_aard": "<<a>> raises a barrier — <<b>>'s shockwave crashes and dissipates.",
+        "aard_quen": "<<a>> unleashes a wave, but <<b>>'s shield absorbs it whole."
       }
     },
     "qu_yr": {
       "winner": "yrden",
       "msgs": {
-        "quen_yrden": "{{a}} shields up top, but {{b}}'s trap springs from below.",
-        "yrden_quen": "{{a}} sets the glyph — {{b}}'s barrier does nothing against it."
+        "quen_yrden": "<<a>> shields up top, but <<b>>'s trap springs from below.",
+        "yrden_quen": "<<a>> sets the glyph — <<b>>'s barrier does nothing against it."
       }
     },
     "qu_ax": {
       "winner": "axii",
       "msgs": {
-        "quen_axii": "{{a}} locks in a shield, but {{b}}'s whisper makes them drop it.",
-        "axii_quen": "{{a}} bends {{b}}'s will — the barrier falls before it's needed."
+        "quen_axii": "<<a>> locks in a shield, but <<b>>'s whisper makes them drop it.",
+        "axii_quen": "<<a>> bends <<b>>'s will — the barrier falls before it's needed."
       }
     },
     "aa_yr": {
       "winner": "aard",
       "msgs": {
-        "aard_yrden": "{{a}}'s shockwave rips through before {{b}}'s glyphs can trigger.",
-        "yrden_aard": "{{a}} sets a trap, but {{b}}'s wave levels it first."
+        "aard_yrden": "<<a>>'s shockwave rips through before <<b>>'s glyphs can trigger.",
+        "yrden_aard": "<<a>> sets a trap, but <<b>>'s wave levels it first."
       }
     },
     "aa_ax": {
       "winner": "axii",
       "msgs": {
-        "aard_axii": "{{a}} channels a shockwave, but {{b}} bends their aim off-target.",
-        "axii_aard": "{{a}} clouds {{b}}'s mind — the force wave goes wide."
+        "aard_axii": "<<a>> channels a shockwave, but <<b>> bends their aim off-target.",
+        "axii_aard": "<<a>> clouds <<b>>'s mind — the force wave goes wide."
       }
     },
     "yr_ax": {
       "winner": "yrden",
       "msgs": {
-        "yrden_axii": "{{a}}'s field disorients {{b}} before the mental link can lock in.",
-        "axii_yrden": "{{a}} reaches out, but {{b}}'s trap scrambles the connection first."
+        "yrden_axii": "<<a>>'s field disorients <<b>> before the mental link can lock in.",
+        "axii_yrden": "<<a>> reaches out, but <<b>>'s trap scrambles the connection first."
       }
     },
-    "draw_igni":  { "winner": false, "msgs": { "igni_igni":  "{{a}} and {{b}} both hurl flame — the fires collide and burn out together." } },
-    "draw_quen":  { "winner": false, "msgs": { "quen_quen":  "{{a}} and {{b}} both raise shields — the barriers meet and hold." } },
-    "draw_aard":  { "winner": false, "msgs": { "aard_aard":  "{{a}} and {{b}} both unleash shockwaves — they cancel in a burst of force." } },
-    "draw_yrden": { "winner": false, "msgs": { "yrden_yrden": "{{a}} and {{b}} both lay traps — the glyphs tangle and short out." } },
-    "draw_axii":  { "winner": false, "msgs": { "axii_axii":  "{{a}} and {{b}} both reach for the other's mind — neither will bends." } }
+    "draw_igni":  { "winner": false, "msgs": { "igni_igni":  "<<a>> and <<b>> both hurl flame — the fires collide and burn out together." } },
+    "draw_quen":  { "winner": false, "msgs": { "quen_quen":  "<<a>> and <<b>> both raise shields — the barriers meet and hold." } },
+    "draw_aard":  { "winner": false, "msgs": { "aard_aard":  "<<a>> and <<b>> both unleash shockwaves — they cancel in a burst of force." } },
+    "draw_yrden": { "winner": false, "msgs": { "yrden_yrden": "<<a>> and <<b>> both lay traps — the glyphs tangle and short out." } },
+    "draw_axii":  { "winner": false, "msgs": { "axii_axii":  "<<a>> and <<b>> both reach for the other's mind — neither will bends." } }
   },
   "legacy": {
   "idmaps": {
