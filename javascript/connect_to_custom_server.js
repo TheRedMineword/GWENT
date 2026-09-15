@@ -96,6 +96,7 @@ const IGNORE_PATTERNS = [
   "ABILITIES",
   "Bucket",
   "player_board",
+  "map_results_txt", // special script will handle that
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 
