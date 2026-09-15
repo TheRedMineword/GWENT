@@ -29,7 +29,7 @@
 },
   "config": {
     "hex": "#02e8db",
-    "wait": "((1*60)+30)"
+    "wait": "((2*60)+1)"
   },
   "idmaps": {
     "igni":  { "quen": "ig_qu", "aard": "ig_aa", "yrden": "ig_yr", "axii": "ig_ax", "igni": "draw_igni" },
