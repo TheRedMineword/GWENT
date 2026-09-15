@@ -1,5 +1,5 @@
 {
-  "version": "pre-live-final/live.0.1",
+  "version": "live.0.1",
   "emote": {
   "quen": {
     "emoji": "<:quen:1524156827963756554>",
@@ -27,6 +27,10 @@
     "display": "<:axii:1524156885710672113> Axii"
   }
 },
+  "config": {
+    "hex": "#02e8db",
+    "wait": "((1*60)+30)"
+  },
   "idmaps": {
     "igni":  { "quen": "ig_qu", "aard": "ig_aa", "yrden": "ig_yr", "axii": "ig_ax", "igni": "draw_igni" },
     "quen":  { "igni": "ig_qu", "aard": "qu_aa", "yrden": "qu_yr", "axii": "qu_ax", "quen": "draw_quen" },
