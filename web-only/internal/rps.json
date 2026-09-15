@@ -82,5 +82,27 @@
     "draw_aard":  { "winner": false, "msgs": { "aard_aard":  "{{a}} and {{b}} both unleash shockwaves — they cancel in a burst of force." } },
     "draw_yrden": { "winner": false, "msgs": { "yrden_yrden": "{{a}} and {{b}} both lay traps — the glyphs tangle and short out." } },
     "draw_axii":  { "winner": false, "msgs": { "axii_axii":  "{{a}} and {{b}} both reach for the other's mind — neither will bends." } }
+  },
+  "legacy": {
+  "idmaps": {
+    "igni":  { "quen": "ig_qu", "aard": "ig_aa", "yrden": "ig_yr", "axii": "ig_ax", "igni": "draw" },
+    "quen":  { "igni": "ig_qu", "aard": "qu_aa", "yrden": "qu_yr", "axii": "qu_ax", "quen": "draw" },
+    "aard":  { "igni": "ig_aa", "quen": "qu_aa", "yrden": "aa_yr", "axii": "aa_ax", "aard": "draw" },
+    "yrden": { "igni": "ig_yr", "quen": "qu_yr", "aard": "aa_yr", "axii": "yr_ax", "yrden": "draw" },
+    "axii":  { "igni": "ig_ax", "quen": "qu_ax", "aard": "aa_ax", "yrden": "yr_ax", "axii": "draw" }
+  },
+  "results": {
+    "ig_qu": { "msg": "<<a>> clashes with <<b>> — Quen's shield snuffs the flame out cold.", "winner": "quen" },
+    "ig_aa": { "msg": "<<a>> clashes with <<b>> — Aard's shockwave scatters the fire like ash.", "winner": "aard" },
+    "ig_yr": { "msg": "<<a>> clashes with <<b>> — Igni's flames burn straight through the trap glyphs.", "winner": "igni" },
+    "ig_ax": { "msg": "<<a>> clashes with <<b>> — the heat breaks the focus Axii needs to hold.", "winner": "igni" },
+    "qu_aa": { "msg": "<<a>> clashes with <<b>> — Quen's barrier absorbs the force and holds firm.", "winner": "quen" },
+    "qu_yr": { "msg": "<<a>> clashes with <<b>> — the trap triggers from beneath, ignoring the shield entirely.", "winner": "yrden" },
+    "qu_ax": { "msg": "<<a>> clashes with <<b>> — a whispered command makes the caster drop their own shield.", "winner": "axii" },
+    "aa_yr": { "msg": "<<a>> clashes with <<b>> — the shockwave rips through before the glyphs can trigger.", "winner": "aard" },
+    "aa_ax": { "msg": "<<a>> clashes with <<b>> — mind-bent, the caster hurls the force wave off-target.", "winner": "axii" },
+    "yr_ax": { "msg": "<<a>> clashes with <<b>> — the disorienting field breaks the mental link before it locks in.", "winner": "yrden" },
+    "draw":  { "msg": "<<a>> and <<b>> collide head-on — the signs cancel each other out.", "winner": false }
   }
+}
 }
