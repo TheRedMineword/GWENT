@@ -1,6 +1,7 @@
 {
   "version": "live.0.1",
   "emote": {
+    "false": "draw",
   "quen": {
     "emoji": "<:quen:1524156827963756554>",
     "name": "Quen",
