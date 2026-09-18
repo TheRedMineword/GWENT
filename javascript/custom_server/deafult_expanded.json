@@ -6540,10 +6540,10 @@
         "count_monitor": {
           "base": 1,
           "monitor": "based",
-          "id": "Dożynki",
+          "id": "HarvestFestival",
           "duration": {
             "start": "2026-09-13T07:00:00.000Z",
-            "duration": "99999999999999"
+            "duration": "999999999999"
           }
         }
       }
@@ -6910,10 +6910,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 30
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack_volume": 90,
+    "tavern_yt_vid": "8o-JI8VRyKo",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }

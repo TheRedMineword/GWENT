@@ -1127,9 +1127,12 @@ async function rebuildCustomCardsMaps() {
   });
   card_dict.forEach((card) => {
     if (card.count_monitor) {
-      loadingscreenupdate(
-        `Checking timer for ${card.filename.split("custom!")[1]}!`,
-      );
+      var tmp = card.filename.split("custom!")[1];
+      if (tmp === undefined) {
+        tmp = deepClone(card.filename);
+      }
+      //console.log("Checking timer for", card, tmp)
+      loadingscreenupdate(`Checking timer for ${tmp}!`);
       pushTimedCount(card);
     }
   });

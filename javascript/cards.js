@@ -3808,10 +3808,10 @@ var card_dict_base = [
     count_monitor: {
       base: 1,
       monitor: "based",
-      id: "Dożynki",
+      id: "HarvestFestival",
       duration: {
         start: "2026-09-13T07:00:00.000Z",
-        duration: "99999999999999",
+        duration: "999999999999",
       },
     },
   },
