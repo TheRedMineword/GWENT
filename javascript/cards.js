@@ -3861,7 +3861,7 @@ function setupSpiritTimer(card, data) {
       start: data.when.arrive,
       duration: Number(data.when.duration),
     },
-    msg: false, // temporary change
+    msg: data?.when?.sidenotif ?? false, // made it josn config false, // temporary change
 
     msg_data: {
       msg: getTranslation("ui.notif_side.ts").replace(
