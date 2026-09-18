@@ -1,1 +1,40 @@
-{"patchnotes":{"base":{"id":"update38.2","text":false,"weight":100,"title":"Patch Notes","icon":"patchnote","display":"modal","showCountdown":true},"timed":[]},"news":[{"id":"harvest130926","text":true,"weight":71,"start":"2026-09-13T07:00:00.000Z","end":"2026-09-31T07:00:00.000Z","title":"Harvest Festival has begun!","icon":"calendar","display":"modal","autodisplay":false,"showCountdown":false}]}
+{
+  "patchnotes": {
+    "base": {
+      "id": "update38.2",
+      "text": false,
+      "weight": 100,
+      "title": "Patch Notes",
+      "icon": "patchnote",
+      "display": "modal",
+      "showCountdown": true
+    },
+    "timed": []
+  },
+  "news": [
+    {
+      "id": "harvest130926",
+      "text": true,
+      "weight": 71,
+      "start": "2026-09-13T07:00:00.000Z",
+      "end": "2026-09-31T07:00:00.000Z",
+      "title": "Harvest Festival has begun!",
+      "icon": "calendar",
+      "display": "modal",
+      "autodisplay": false,
+      "showCountdown": false
+    },
+    {
+      "id": "fullmoon18092026",
+      "text": true,
+      "weight": 72,
+      "start": "2026-09-24T07:00:00.000Z",
+      "end": "2026-09-27T22:50:04.172Z",
+      "title": "Full moon is upon us!",
+      "icon": "calendar",
+      "display": "modal",
+      "autodisplay": false,
+      "showCountdown": true
+    }
+  ]
+}
