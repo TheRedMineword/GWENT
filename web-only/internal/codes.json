@@ -1,4 +1,4 @@
-{"id_map": "[\"welcome\", \"Sorry05092026\", \"<@&1522315139204776098>\", \"<@777143528475852841>\", \"fun\"]", "codes":[
+{"id_map": "[\"welcome\", \"Sorry05092026\", \"<@&1522315139204776098>\", \"<@777143528475852841>\", \"gwent\"]", "codes":[
     {
         "active": true,
         "givetype": "currency",
@@ -44,11 +44,11 @@
     {
         "active": true,
         "givetype": "currency",
-        "value": "-1",
+        "value": "150",
         "duration": {
             "use": false,
             "start_end": []
         },
-        "_id": "vernonroche_funny"
+        "_id": "gwent"
     }
 ]}
