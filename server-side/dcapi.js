@@ -894,6 +894,12 @@ const router = express.Router();
 //
 //   router.use("/api/dc", dcapi.router);
 router.get('/', (req, res) => {
+
+  const { key } = req.query;
+if (key !== process.env.ADMIN_ENDPOINT_LOGIN){
+return res.status(401).json({ ok: false, error: 'Whats the key?' });
+}
+
   const mode = String(req.query.mode || '');
 
   switch (mode) {
