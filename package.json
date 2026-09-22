@@ -2,7 +2,7 @@
   "name": "gwent",
   "version": "1.0.0",
   "description": "![cover](https://user-images.githubusercontent.com/26311830/116256903-f1599b00-a7b6-11eb-84a1-16dcb5c9bfc6.jpg)",
-  "main": "gwent.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
@@ -24,6 +24,8 @@
     "sharp": "^0.34.5",
     "ua-parser-js": "^2.0.10",
     "vm": "^0.1.0",
-    "ws": "^8.18.0"
+    "ws": "^8.18.0",
+    "undici": "^7.16.0",
+    "global-agent": "^3.0.0"
   }
 }
