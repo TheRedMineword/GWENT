@@ -768,6 +768,10 @@ router.get("/api/get-health", (req, res) => {
         checkdchealth = (dcbot?.getHealth()) ?? "func_err";
     } catch (e) {
     }
+    if (key !== process.env.ADMIN_ENDPOINT_LOGIN){
+        checkdchealth = "401";
+    }
+    
   const mem = process.memoryUsage();
 
   res.json({
