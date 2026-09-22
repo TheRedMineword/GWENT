@@ -763,6 +763,11 @@ router.post("/api/bot-check", async (req, res) => {
   });
 });
 router.get("/api/get-health", (req, res) => {
+    let checkdchealth = false;
+    try {
+        checkdchealth = (dcbot?.getHealth()) ?? "func_err";
+    } catch (e) {
+    }
   const mem = process.memoryUsage();
 
   res.json({
@@ -780,6 +785,7 @@ router.get("/api/get-health", (req, res) => {
       environment: process.env.NODE_ENV || "production",
       platform: process.platform,
     },
+      checkdchealth: checkdchealth ?? null,
     time: new Date().toISOString(),
   });
 });
