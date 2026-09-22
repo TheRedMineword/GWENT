@@ -9,8 +9,9 @@
 //
 // This module deliberately owns `deps` (sessions / playerSockets /
 // sendToClient) too, set once via setDeps() from dcapi.js's init(), so that
-// betting.js (which has no hook into init() itself) can still look up which
-// session a Discord user's registered client is currently in.
+// any part of dcapi.js can look up which session a Discord user's
+// registered client is currently in without threading deps through every
+// function call.
 // ---------------------------------------------------------------------------
 
 let deps = {
@@ -35,11 +36,18 @@ function getDeps() {
 const registerByPlayer = new Map();  // playerId   -> discordId
 const registerByDiscord = new Map(); // discordId  -> playerId
 
-// register(discordId, playerId) - matches the !register wiring:
-//   GET /api/dc?mode=handleregisters&userid=<discordId>&gwentid=<playerId>
+// register(discordId, playerId) - matches the !registerclient wiring:
+//   GET /api/dc?mode=register&userid=<discordId>&gwentid=<playerId>
 // Returns false if that playerId isn't a currently-connected client (same
 // validation dcbot.js effectively got for free from discord.js message
 // context - here we have to check deps.playerSockets ourselves).
+//
+// NOTE: unlike dcbot.js's handleRegisterClient, this does not reject a
+// re-registration that would steal a client/discordId already linked to
+// someone else - it just relinks (clearing the stale side of both prior
+// links, same as before). The external bot is expected to own any
+// "already registered to someone else" UX/consent check on its side
+// before it ever calls this endpoint; dcapi.js trusts its caller.
 function register(discordId, playerId) {
   if (!discordId || !playerId) return false;
   if (!deps.playerSockets || !deps.playerSockets[playerId]) return false;
@@ -77,6 +85,28 @@ function getDiscordIdForPlayer(playerId) {
 
 function getPlayerIdForDiscord(discordId) {
   return registerByDiscord.get(discordId) || null;
+}
+
+// ---------------------------------------------------------------------------
+// Display-name cache: discordId -> username, best-effort.
+//
+// dcbot.js used to call fetchDiscordUser() (a live Discord REST call) every
+// time it built a me/op snapshot for the game client. dcapi.js has no
+// Discord connection of its own anymore, so it can't do that - instead the
+// external bot passes a username along whenever it registers a client
+// (mode=register&...&username=<name>), and we cache it here for snapshots
+// to read synchronously. Stale/missing is fine; it's cosmetic.
+// ---------------------------------------------------------------------------
+
+const usernames = new Map(); // discordId -> username
+
+function setUsername(discordId, username) {
+  if (!discordId || !username) return;
+  usernames.set(discordId, String(username).slice(0, 64));
+}
+
+function getUsername(discordId) {
+  return usernames.get(discordId) || null;
 }
 
 // ---------------------------------------------------------------------------
@@ -126,6 +156,10 @@ function reportResult(sessionId, playerId, winnerId, score) {
   return { reports, scores };
 }
 
+function getMatchScores(sessionId) {
+  return matchScores.get(sessionId) || {};
+}
+
 function clearMatch(sessionId) {
   matchReports.delete(sessionId);
   matchScores.delete(sessionId);
@@ -160,9 +194,12 @@ function isResolving(sessionId) {
 // This is NOT the same number as their actual UnbelievaBoat balance - it's
 // a local bookkeeping copy (useful for e.g. a leaderboard/inventory display
 // on the game client) that the external bot's own UB-side changes don't
-// automatically sync into. mode=removecash uses this directly; real money
-// movement (payouts/refunds/free claims) instead goes out as scan events
-// for the external bot to actually apply against UnbelievaBoat.
+// automatically sync into. mode=removecash/mode=addcash update this
+// directly (the bot calls these AFTER it has already moved the real
+// UnbelievaBoat money itself, purely to keep this local copy in sync); real
+// money movement dcapi.js initiates itself (payouts/refunds/free claims)
+// instead goes out as scan events for the external bot to actually apply
+// against UnbelievaBoat.
 // ---------------------------------------------------------------------------
 
 const cash = new Map(); // discordId -> number
@@ -187,6 +224,7 @@ function getCash(discordId) {
 //                                               (no specific dc to credit)
 //   { a: "addcash", dc, val, reason }          credit this discord user's
 //                                               real UnbelievaBoat balance
+//                                               (val may be negative)
 //   { a: "offline", dc }                       client disconnected, purge
 // ---------------------------------------------------------------------------
 
@@ -211,11 +249,15 @@ module.exports = {
   getDiscordIdForPlayer,
   getPlayerIdForDiscord,
 
+  setUsername,
+  getUsername,
+
   placeBet,
   getSessionBets,
   takeSessionBets,
 
   reportResult,
+  getMatchScores,
   clearMatch,
 
   claimSession,
