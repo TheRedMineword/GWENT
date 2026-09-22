@@ -5,6 +5,20 @@
 //   dc_bot={"token":"...","id":"...","economybot":"...","guild_id":"...","free_money_channel":"..."}
 //   dc_bot_status=<url to a JSON array/object of bot statuses>   (optional)
 //   dc_free_money_channel=<channel id>   (optional, alternative to cfg.free_money_channel)
+//   dc_bot_proxy=<http(s) proxy URL>   (optional, alternative to cfg.proxy)
+//     Routes both Discord (REST + gateway) and UnbelievaBoat/status-feed
+//     traffic through this proxy. Needs `npm install undici global-agent`.
+//     Unset by default - nothing about existing behavior changes unless
+//     this is set. See "Outbound proxy setup" further down for details.
+//   dc_bot_debug=true   (optional, alternative to cfg.debug)
+//     Pipes discord.js's low-level gateway "debug" events into the log.
+//     Very noisy - only meant to be switched on temporarily.
+//
+// Health/diagnostics: exports.getHealth() returns a plain object summarizing
+// Discord/UnbelievaBoat connectivity (proxy status, last request results,
+// consecutive-failure counts, gateway disconnects/rate-limits, etc.) meant
+// to be wired into engine.js's http server as a GET /healthz route - see
+// the comment above exports.getHealth() near the bottom of this file.
 //
 // FREE_MONEY_ON_SOLO_LOSS (see const below, default true):
 //   If only one side of a match ever placed a bet, and that lone
@@ -103,10 +117,10 @@
 // the right tool here. If you need bets to survive a server restart, swap
 // the Maps below for reads/writes to your `database`/Xano layer.
 
-let Client, GatewayIntentBits, ActivityType, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField, EmbedBuilder;
+let Client, GatewayIntentBits, ActivityType, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField, EmbedBuilder, RESTEvents;
 
 try {
-  ({ Client, GatewayIntentBits, ActivityType, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField, EmbedBuilder } = require("discord.js"));
+  ({ Client, GatewayIntentBits, ActivityType, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField, EmbedBuilder, RESTEvents } = require("discord.js"));
 } catch (e) {
   // discord.js not installed - init() will log a clear error instead of crashing.
 }
@@ -125,6 +139,41 @@ const BOT_TOKEN = cfg.token;
 const ECONOMY_TOKEN = cfg.economybot;
 const GUILD_ID = cfg.guild_id;
 const STATUS_URL = process.env.dc_bot_status;
+
+/*
+ * ---------- Outbound proxy (optional) ----------
+ *
+ * Render (and similar PaaS hosts) put multiple apps behind a small pool of
+ * shared outbound IPs. If another tenant on the same IP gets heavy-handed
+ * with Discord or UnbelievaBoat, Discord/Cloudflare/UnbelievaBoat can start
+ * blocking that *IP*, not this bot specifically - which looks exactly like
+ * "sometimes get IP banned and no idea why". Routing this bot's outbound
+ * traffic (Discord REST + gateway, and the plain fetch() calls to
+ * UnbelievaBoat / the status feed below) through a proxy gives it its own
+ * IP, decoupled from Render's shared pool.
+ *
+ * Configure with EITHER:
+ *   - cfg.proxy inside the existing dc_bot JSON blob, or
+ *   - a standalone env var: dc_bot_proxy=http://user:pass@host:port
+ * Leave both unset and nothing changes - proxying is fully opt-in and the
+ * rest of this file behaves exactly as before.
+ *
+ * Needs `npm install undici global-agent` to actually take effect (both
+ * are lazy-required in setupProxy() below, so not having them installed
+ * just logs a warning and runs unproxied instead of crashing).
+ */
+const PROXY_URL =
+  cfg.proxy ||
+  process.env.dc_bot_proxy ||
+  process.env.dc_proxy_url;
+
+// Set dc_bot_debug=true to also pipe discord.js's low-level "debug" events
+// (heartbeats, session/resume info, raw gateway close codes) to the log.
+// Very noisy - only meant to be flipped on temporarily while chasing a
+// connection issue.
+const DEBUG_GATEWAY =
+  String(cfg.debug ?? process.env.dc_bot_debug ?? "").toLowerCase() ===
+  "true";
 
 /*
  * When true (the default): if a bet session only ever had ONE side
@@ -266,6 +315,51 @@ const LOTTERY_ENTRANTS_PER_WINNER = Math.max(
 
 let client = null;
 let ready = false;
+let proxyAgentInstance = null; // undici ProxyAgent, if proxying is active
+
+/*
+ * ---------- Health / diagnostics state ----------
+ *
+ * Kept in memory (same rationale as everything else in this file - see
+ * the note at the top). Read via exports.getHealth() below, which
+ * engine.js's http server can expose on a route like GET /healthz so you
+ * get visibility into Discord/UnbelievaBoat connectivity from the outside
+ * without having to dig through logs.
+ */
+const health = {
+  startedAt: Date.now(),
+  proxy: {
+    configured: !!PROXY_URL,
+    active: false,
+    lastError: null,
+  },
+  unb: {
+    lastAt: null,
+    lastOk: null,
+    lastStatus: null,
+    lastMs: null,
+    lastError: null,
+    lastEndpoint: null,
+    consecutiveFailures: 0,
+    totalRequests: 0,
+    totalFailures: 0,
+  },
+  statusFeed: {
+    lastAt: null,
+    lastOk: null,
+    lastError: null,
+  },
+  gateway: {
+    loggedInAt: null,
+    lastShardEvent: null,
+    lastShardEventAt: null,
+    disconnectsTotal: 0,
+    reconnectsTotal: 0,
+    errorsTotal: 0,
+    rateLimitHitsTotal: 0,
+    forbiddenOrRateLimitedResponsesTotal: 0,
+  },
+};
 
 /*
  * ---------- Lottery runtime state ----------
@@ -366,69 +460,181 @@ const resolvingSessions = new Set();
  */
 const claimedFreeMoneyMessages = new Set();
 
-function log(...args) {
-  var log = "[dcbot]: ";
+function formatLogArgs(args) {
+  var out = "";
 
   args.forEach((arg) => {
     try {
-      log += JSON.stringify(arg);
+      out += typeof arg === "string" ? arg : JSON.stringify(arg);
     } catch {
-      log += String(arg);
+      out += String(arg);
     }
+
+    out += " ";
   });
 
+  return out.trimEnd();
+}
+
+// level: "INFO" | "WARN" | "ERROR". Every line gets an ISO timestamp so
+// log lines can actually be correlated with Render's own request/ban
+// timestamps when digging through a postmortem.
+function logAt(level, args) {
+  const line = `[dcbot] ${new Date().toISOString()} ${level} ${formatLogArgs(
+    args
+  )}`;
+
   try {
-    console.log(log);
+    if (level === "ERROR") {
+      console.error(line);
+    } else if (level === "WARN") {
+      console.warn(line);
+    } else {
+      console.log(line);
+    }
   } catch (e) {
-    console.log("[dcbot]", ...args);
+    console.log("[dcbot]", level, ...args);
   }
+}
+
+// Unchanged signature/behavior from before (every existing call site keeps
+// working as-is) - just now timestamped and going through logAt().
+function log(...args) {
+  logAt("INFO", args);
+}
+
+function logWarn(...args) {
+  logAt("WARN", args);
+}
+
+function logErr(...args) {
+  logAt("ERROR", args);
 }
 
 
 // ---------- UnbelievaBoat helpers ----------
 
-async function unbGetBalance(userId) {
-  const res = await fetch(
-    `${UNB_BASE}/guilds/${GUILD_ID}/users/${userId}`,
-    {
+/*
+ * Every UnbelievaBoat call funnels through here so we get one place that:
+ *   - times the request
+ *   - logs method/endpoint/status/latency (success AND failure)
+ *   - updates `health.unb` for exports.getHealth()
+ *   - flags the specific failure shapes that look like an IP-level block
+ *     (a 403, a 429, or a network-level error with no HTTP status at all -
+ *     e.g. ECONNRESET/ETIMEDOUT/EAI_AGAIN - as opposed to an ordinary 4xx
+ *     like "user not found") so it's obvious from the logs alone.
+ *
+ * `label` is just a short human-readable tag for the endpoint, kept
+ * separate from the URL so nothing sensitive (tokens are in headers, not
+ * the URL, but userIds/amounts still needn't be in every log line) leaks
+ * into logs by default.
+ */
+async function unbRequest(label, path, options = {}) {
+  const url = `${UNB_BASE}${path}`;
+  const method = options.method || "GET";
+  const startedAt = Date.now();
+
+  health.unb.totalRequests++;
+
+  let res;
+
+  try {
+    res = await fetch(url, {
+      ...options,
       headers: {
         Authorization: ECONOMY_TOKEN,
+        ...(options.body
+          ? { "Content-Type": "application/json" }
+          : {}),
+        ...options.headers,
       },
-    }
-  );
+    });
+  } catch (e) {
+    // Network-level failure - never even got an HTTP response. On a
+    // proxied/banned IP this is the shape you'll typically see (connection
+    // refused/reset/timeout), vs. a normal Discord/UnbelievaBoat-side 4xx.
+    const ms = Date.now() - startedAt;
+
+    health.unb.lastAt = startedAt;
+    health.unb.lastOk = false;
+    health.unb.lastStatus = null;
+    health.unb.lastMs = ms;
+    health.unb.lastEndpoint = label;
+    health.unb.lastError = `${e.code || e.name || "network error"}: ${
+      e.message
+    }`;
+    health.unb.consecutiveFailures++;
+    health.unb.totalFailures++;
+
+    logErr(
+      `UnbelievaBoat ${method} ${label} NETWORK ERROR after ${ms}ms (code=${
+        e.code || "?"
+      }, consecutiveFailures=${health.unb.consecutiveFailures}):`,
+      e.message
+    );
+
+    throw e;
+  }
+
+  const ms = Date.now() - startedAt;
+
+  health.unb.lastAt = startedAt;
+  health.unb.lastStatus = res.status;
+  health.unb.lastMs = ms;
+  health.unb.lastEndpoint = label;
 
   if (!res.ok) {
+    const bodyText = await res.text();
+
+    health.unb.lastOk = false;
+    health.unb.lastError = `${res.status}: ${bodyText.slice(0, 300)}`;
+    health.unb.consecutiveFailures++;
+    health.unb.totalFailures++;
+
+    const suspicious = res.status === 403 || res.status === 429;
+
+    (suspicious ? logErr : logWarn)(
+      `UnbelievaBoat ${method} ${label} FAILED status=${res.status} ${ms}ms consecutiveFailures=${health.unb.consecutiveFailures}${
+        suspicious
+          ? " (403/429 - looks like a rate-limit or IP-level block, not a normal request error)"
+          : ""
+      }:`,
+      bodyText.slice(0, 300)
+    );
+
     throw new Error(
-      `UnbelievaBoat GET balance ${res.status}: ${await res.text()}`
+      `UnbelievaBoat ${method} ${label} ${res.status}: ${bodyText}`
     );
   }
+
+  health.unb.lastOk = true;
+  health.unb.lastError = null;
+  health.unb.consecutiveFailures = 0;
+
+  log(`UnbelievaBoat ${method} ${label} OK ${ms}ms`);
 
   return res.json();
 }
 
+async function unbGetBalance(userId) {
+  return unbRequest(
+    "GET balance",
+    `/guilds/${GUILD_ID}/users/${userId}`
+  );
+}
+
 async function unbAdjustBalance(userId, cashDelta, reason) {
-  const res = await fetch(
-    `${UNB_BASE}/guilds/${GUILD_ID}/users/${userId}`,
+  return unbRequest(
+    "PATCH balance",
+    `/guilds/${GUILD_ID}/users/${userId}`,
     {
       method: "PATCH",
-      headers: {
-        Authorization: ECONOMY_TOKEN,
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         cash: cashDelta,
         reason: reason || "Gwent bet",
       }),
     }
   );
-
-  if (!res.ok) {
-    throw new Error(
-      `UnbelievaBoat PATCH balance ${res.status}: ${await res.text()}`
-    );
-  }
-
-  return res.json();
 }
 
 /*
@@ -494,22 +700,10 @@ async function unbGetInventory(
     offset: String(offset),
   });
 
-  const res = await fetch(
-    `${UNB_BASE}/guilds/${GUILD_ID}/users/${userId}/inventory?${qs}`,
-    {
-      headers: {
-        Authorization: ECONOMY_TOKEN,
-      },
-    }
+  return unbRequest(
+    "GET inventory",
+    `/guilds/${GUILD_ID}/users/${userId}/inventory?${qs}`
   );
-
-  if (!res.ok) {
-    throw new Error(
-      `UnbelievaBoat GET inventory ${res.status}: ${await res.text()}`
-    );
-  }
-
-  return res.json();
 }
 
 // GET /guilds/{guild}/users -> guild balance leaderboard
@@ -523,22 +717,10 @@ async function unbGetLeaderboard({
     sort,
   });
 
-  const res = await fetch(
-    `${UNB_BASE}/guilds/${GUILD_ID}/users?${qs}`,
-    {
-      headers: {
-        Authorization: ECONOMY_TOKEN,
-      },
-    }
+  return unbRequest(
+    "GET leaderboard",
+    `/guilds/${GUILD_ID}/users?${qs}`
   );
-
-  if (!res.ok) {
-    throw new Error(
-      `UnbelievaBoat GET leaderboard ${res.status}: ${await res.text()}`
-    );
-  }
-
-  return res.json();
 }
 
 
@@ -4512,6 +4694,8 @@ async function refreshStatusList() {
     return;
   }
 
+  const startedAt = Date.now();
+
   try {
     const res =
       await fetch(
@@ -4522,9 +4706,16 @@ async function refreshStatusList() {
         }
       );
 
+    health.statusFeed.lastAt = startedAt;
+
     if (!res.ok) {
-      log(
-        `Status fetch failed: ${res.status}`
+      health.statusFeed.lastOk = false;
+      health.statusFeed.lastError = `status ${res.status}`;
+
+      logWarn(
+        `Status fetch failed: ${res.status} (${
+          Date.now() - startedAt
+        }ms)`
       );
 
       return;
@@ -4535,11 +4726,22 @@ async function refreshStatusList() {
         await res.json()
       );
 
+    health.statusFeed.lastOk = true;
+    health.statusFeed.lastError = null;
+
     log(
-      `Loaded ${statusList.length} bot statuses from ${STATUS_URL}`
+      `Loaded ${statusList.length} bot statuses from ${STATUS_URL} (${
+        Date.now() - startedAt
+      }ms)`
     );
   } catch (e) {
-    log(
+    health.statusFeed.lastAt = startedAt;
+    health.statusFeed.lastOk = false;
+    health.statusFeed.lastError = `${e.code || e.name || "error"}: ${
+      e.message
+    }`;
+
+    logErr(
       "Status fetch error:",
       e.message
     );
@@ -4598,6 +4800,112 @@ function applyRandomStatus() {
 }
 
 
+// ---------- Outbound proxy setup ----------
+
+/*
+ * Called once, at the top of init(), before the Discord Client is built or
+ * any fetch() happens. Wires up BOTH halves proxying discord.js needs:
+ *
+ *   1. REST (Discord API calls + the plain fetch() calls to UnbelievaBoat
+ *      and the status feed above): undici's ProxyAgent, set as the global
+ *      dispatcher so every fetch() call in this process - not just
+ *      discord.js's - goes through it.
+ *   2. Gateway (the persistent websocket): discord.js's `ws` connection
+ *      doesn't take an undici agent, so this uses `global-agent` to patch
+ *      Node's global http(s) agent instead, which `ws` does respect.
+ *
+ * Returns the ProxyAgent instance (or null if no proxy is configured/the
+ * packages aren't installed) so init() can also hand it to discord.js's
+ * REST manager via `rest: { agent }` - belt and suspenders with (1) above,
+ * and it's what discord.js's own docs recommend.
+ *
+ * Never throws - a proxy misconfiguration should degrade to "run
+ * unproxied" plus a loud log line, not take the whole bot down.
+ */
+function setupProxy() {
+  if (!PROXY_URL) {
+    return null;
+  }
+
+  let ProxyAgent;
+
+  try {
+    ({ ProxyAgent } = require("undici"));
+  } catch (e) {
+    health.proxy.lastError =
+      "undici not installed (npm install undici)";
+
+    logErr(
+      "dc_bot_proxy is set but the 'undici' package isn't installed - running UNPROXIED. Run: npm install undici global-agent"
+    );
+
+    return null;
+  }
+
+  let agent;
+
+  try {
+    agent = new ProxyAgent(PROXY_URL);
+
+    // Covers every plain fetch() call in this file (UnbelievaBoat,
+    // status feed) process-wide.
+    const { setGlobalDispatcher } = require("undici");
+    setGlobalDispatcher(agent);
+  } catch (e) {
+    health.proxy.lastError = `ProxyAgent setup failed: ${e.message}`;
+
+    logErr(
+      "Failed to set up REST proxy (check dc_bot_proxy's format, e.g. http://user:pass@host:port):",
+      e.message
+    );
+
+    return null;
+  }
+
+  // Gateway (websocket) proxying - best-effort, separate from the REST
+  // agent above. If global-agent isn't installed, REST calls still get
+  // proxied fine; only the gateway connection stays direct.
+  try {
+    const { bootstrap } = require("global-agent");
+
+    bootstrap();
+
+    global.GLOBAL_AGENT.HTTP_PROXY = PROXY_URL;
+    global.GLOBAL_AGENT.HTTPS_PROXY = PROXY_URL;
+
+    log(`Outbound proxy active (REST + gateway) via ${redactProxyUrl(PROXY_URL)}`);
+  } catch (e) {
+    logWarn(
+      "'global-agent' not installed - REST calls (Discord API + UnbelievaBoat) are proxied, but the gateway websocket is NOT. Run: npm install global-agent",
+      e.message
+    );
+
+    log(`Outbound proxy active (REST only) via ${redactProxyUrl(PROXY_URL)}`);
+  }
+
+  health.proxy.active = true;
+  health.proxy.lastError = null;
+
+  return agent;
+}
+
+// Strips credentials before a proxy URL ever hits a log line.
+function redactProxyUrl(url) {
+  try {
+    const u = new URL(url);
+
+    if (u.username || u.password) {
+      u.username = "***";
+      u.password = "***";
+    }
+
+    return u.toString();
+  } catch (e) {
+    return "(unparseable proxy url)";
+  }
+}
+
+
 // ---------- Public API ----------
 
 exports.init =
@@ -4632,6 +4940,8 @@ exports.init =
       return;
     }
 
+    proxyAgentInstance = setupProxy();
+
     client =
       new Client({
         intents: [
@@ -4648,7 +4958,87 @@ exports.init =
            */
           GatewayIntentBits.GuildMembers,
         ],
+        ...(proxyAgentInstance
+          ? { rest: { agent: proxyAgentInstance } }
+          : {}),
       });
+
+    // ---- Diagnostics: REST-level (Discord API) ----
+
+    client.rest.on("rateLimited", (info) => {
+      health.gateway.rateLimitHitsTotal++;
+
+      logWarn(
+        `Discord REST rate limited: route=${info.route} method=${info.method} global=${info.global} retryAfter=${info.retryAfter}ms (total hits this run: ${health.gateway.rateLimitHitsTotal})`
+      );
+    });
+
+    if (RESTEvents) {
+      client.rest.on(RESTEvents.Response, (req, res) => {
+        if (res.status !== 403 && res.status !== 429) {
+          return;
+        }
+
+        health.gateway.forbiddenOrRateLimitedResponsesTotal++;
+
+        logErr(
+          `Discord REST ${res.status} on ${req.method} ${req.route} (total this run: ${health.gateway.forbiddenOrRateLimitedResponsesTotal}) - 403 here usually means the bot token/IP combo is being rejected, not a normal permissions error`
+        );
+      });
+    }
+
+    // ---- Diagnostics: gateway (websocket) level ----
+
+    client.on("shardError", (e, shardId) => {
+      health.gateway.errorsTotal++;
+      health.gateway.lastShardEvent = "shardError";
+      health.gateway.lastShardEventAt = Date.now();
+
+      logErr(`Shard ${shardId} error:`, e.message);
+    });
+
+    client.on("shardDisconnect", (event, shardId) => {
+      health.gateway.disconnectsTotal++;
+      health.gateway.lastShardEvent = "shardDisconnect";
+      health.gateway.lastShardEventAt = Date.now();
+
+      logWarn(
+        `Shard ${shardId} disconnected: code=${event?.code} reason=${
+          event?.reason || "?"
+        } (total disconnects this run: ${
+          health.gateway.disconnectsTotal
+        })`
+      );
+    });
+
+    client.on("shardReconnecting", (shardId) => {
+      health.gateway.lastShardEvent = "shardReconnecting";
+      health.gateway.lastShardEventAt = Date.now();
+
+      log(`Shard ${shardId} reconnecting...`);
+    });
+
+    client.on("shardResume", (shardId, replayedEvents) => {
+      health.gateway.reconnectsTotal++;
+      health.gateway.lastShardEvent = "shardResume";
+      health.gateway.lastShardEventAt = Date.now();
+
+      log(
+        `Shard ${shardId} resumed (replayed ${replayedEvents} events, total resumes this run: ${health.gateway.reconnectsTotal})`
+      );
+    });
+
+    client.on("invalidated", () => {
+      logErr(
+        "Discord session invalidated - full re-login required. If this repeats, it can indicate the token/IP is being flagged."
+      );
+    });
+
+    client.on("warn", (msg) => logWarn("discord.js warn:", msg));
+
+    if (DEBUG_GATEWAY) {
+      client.on("debug", (msg) => log("discord.js debug:", msg));
+    }
 
     client.on(
       "messageCreate",
@@ -4680,16 +5070,38 @@ exports.init =
 
     client.on(
       "error",
-      (e) =>
-        log(
+      (e) => {
+        health.gateway.errorsTotal++;
+
+        logErr(
           "Discord client error:",
           e.message
-        )
+        );
+      }
     );
+
+    // discord.js renamed "ready" -> "clientReady" in newer releases (both
+    // still fire on v14.16+); listen for both and just dedupe so this
+    // logs exactly once regardless of which version is installed.
+    let loggedGatewayReady = false;
+
+    const onGatewayReady = () => {
+      if (loggedGatewayReady) return;
+      loggedGatewayReady = true;
+
+      log(
+        `Discord gateway ready as ${client.user?.tag} (ping=${client.ws.ping}ms)`
+      );
+    };
+
+    client.once("ready", onGatewayReady);
+    client.once("clientReady", onGatewayReady);
 
     await client.login(
       BOT_TOKEN
     );
+
+    health.gateway.loggedInAt = Date.now();
 
     ready = true;
 
@@ -4730,6 +5142,103 @@ exports.onDmRequest =
   onDmRequest;
 
 
+/*
+ * Point engine.js's http server at this from a route (e.g. GET /healthz)
+ * to get live visibility into Discord/UnbelievaBoat connectivity without
+ * digging through logs. Never throws, always returns a plain object.
+ *
+ * Suggested wiring in engine.js (adjust to whatever it's built on):
+ *
+ *   const dcbot = require("./dcbot");
+ *   // plain http.createServer:
+ *   if (req.url === "/healthz") {
+ *     const h = dcbot.getHealth();
+ *     res.writeHead(h.ok ? 200 : 503, { "Content-Type": "application/json" });
+ *     res.end(JSON.stringify(h));
+ *     return;
+ *   }
+ *   // express:
+ *   app.get("/healthz", (req, res) => {
+ *     const h = dcbot.getHealth();
+ *     res.status(h.ok ? 200 : 503).json(h);
+ *   });
+ */
+exports.getHealth = function getHealth() {
+  const now = Date.now();
+
+  // "ok" is deliberately conservative: only false when something is
+  // actively broken (integration configured but not connected, or
+  // UnbelievaBoat has failed several times in a row), not just because a
+  // single request happened to fail once.
+  const integrationConfigured = !!(
+    Client &&
+    BOT_TOKEN &&
+    GUILD_ID &&
+    ECONOMY_TOKEN
+  );
+
+  const unbLooksDown = health.unb.consecutiveFailures >= 3;
+
+  const ok =
+    !integrationConfigured || (ready && !unbLooksDown);
+
+  return {
+    ok,
+    uptimeSeconds: Math.floor((now - health.startedAt) / 1000),
+    integration: {
+      discordJsInstalled: !!Client,
+      configured: integrationConfigured,
+      discordReady: ready,
+      discordWsPingMs: client?.ws?.ping ?? null,
+      loggedInAt: health.gateway.loggedInAt,
+    },
+    proxy: {
+      configured: health.proxy.configured,
+      active: health.proxy.active,
+      lastError: health.proxy.lastError,
+    },
+    unbelievaboat: {
+      lastRequestAt: health.unb.lastAt,
+      lastOk: health.unb.lastOk,
+      lastStatus: health.unb.lastStatus,
+      lastEndpoint: health.unb.lastEndpoint,
+      lastLatencyMs: health.unb.lastMs,
+      lastError: health.unb.lastError,
+      consecutiveFailures: health.unb.consecutiveFailures,
+      totalRequests: health.unb.totalRequests,
+      totalFailures: health.unb.totalFailures,
+      looksDown: unbLooksDown,
+    },
+    statusFeed: STATUS_URL
+      ? {
+          url: STATUS_URL,
+          lastFetchAt: health.statusFeed.lastAt,
+          lastOk: health.statusFeed.lastOk,
+          lastError: health.statusFeed.lastError,
+        }
+      : null,
+    gateway: {
+      lastShardEvent: health.gateway.lastShardEvent,
+      lastShardEventAt: health.gateway.lastShardEventAt,
+      disconnectsTotal: health.gateway.disconnectsTotal,
+      reconnectsTotal: health.gateway.reconnectsTotal,
+      errorsTotal: health.gateway.errorsTotal,
+      rateLimitHitsTotal: health.gateway.rateLimitHitsTotal,
+      forbiddenOrRateLimitedResponsesTotal:
+        health.gateway.forbiddenOrRateLimitedResponsesTotal,
+    },
+    state: {
+      sessionsTracked: Object.keys(deps.sessions || {}).length,
+      registeredClients: registerByPlayer.size,
+      openBetSessions: bets.size,
+      lotteryPool,
+      lotteryEntrants: lotteryEntrants.size,
+      lotteryLocked,
+    },
+  };
+};
+
+
 exports.stop =
   function stop() {
     ready = false;
@@ -4749,4 +5258,7 @@ exports.stop =
 
       client = null;
     }
+
+    proxyAgentInstance = null;
+    health.proxy.active = false;
   };
