@@ -763,6 +763,7 @@ router.post("/api/bot-check", async (req, res) => {
   });
 });
 router.get("/api/get-health", (req, res) => {
+    const { key } = req.query;
     let checkdchealth = false;
     try {
         checkdchealth = (dcbot?.getHealth()) ?? "func_err";
