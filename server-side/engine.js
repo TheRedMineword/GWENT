@@ -315,6 +315,9 @@ async function updateTrafficMonitor() {
     console.log(
       `[TrafficMonitor] Updated \`${JSON.stringify(trafficMonitor)}\` + auth \`${auth_needed}\``,
     );
+    console.log(
+      `[TrafficMonitor] blockedDomains = ${JSON.stringify(trafficMonitor.blockedDomains || [])}`,
+    );
   } catch (err) {
     console.error("[TrafficMonitor]", err);
   }
@@ -656,11 +659,20 @@ function checkCors(req, res) {
 
   return false;
 }
-function isBlockedDomain(host) {
-  if (!host) return false;
+function isBlockedDomain(hostOrUrl) {
+  if (!hostOrUrl) return false;
 
-  // Remove port
-  const hostname = host.split(":")[0].toLowerCase().trim();
+  // Accepts either a plain "host:port" (from the Host header) or a full
+  // URL (from Origin/Referer headers, e.g. "https://evil.com/path").
+  let hostname;
+  try {
+    hostname = hostOrUrl.includes("://")
+      ? new URL(hostOrUrl).hostname
+      : hostOrUrl.split(":")[0];
+  } catch (e) {
+    return false;
+  }
+  hostname = hostname.toLowerCase().trim();
 
   const blockedDomains = Array.isArray(trafficMonitor.blockedDomains)
     ? trafficMonitor.blockedDomains
@@ -679,9 +691,13 @@ function isBlockedDomain(host) {
 router.use(cors({ origin: "*" }));
 router.use((req, res, next) => {
   const host = req.headers.host;
+  const origin = req.headers.origin;
+  const referer = req.headers.referer;
 
-  if (isBlockedDomain(host)) {
-    console.log(`[TrafficMonitor] Blocked domain: ${host}`);
+  if (isBlockedDomain(host) || isBlockedDomain(origin) || isBlockedDomain(referer)) {
+    console.log(
+      `[TrafficMonitor] Blocked domain: host=${host} origin=${origin} referer=${referer}`,
+    );
 
     return res.status(403).json({
       ok: false,
@@ -1382,10 +1398,11 @@ riskinfo = "{}";
 server.on("upgrade", (req, socket, head) => {
   const host = req.headers.host;
   const origin = req.headers.origin;
+  const referer = req.headers.referer;
 
-  if (isBlockedDomain(host) || isBlockedDomain(origin)) {
+  if (isBlockedDomain(host) || isBlockedDomain(origin) || isBlockedDomain(referer)) {
     console.log(
-      `[TrafficMonitor] Blocked WebSocket upgrade host=${host} origin=${origin}`
+      `[TrafficMonitor] Blocked WebSocket upgrade host=${host} origin=${origin} referer=${referer}`
     );
 
     socket.write(
