@@ -1,0 +1,10 @@
+<title>Maintenance</title>
+<desc>As for testing for update of Gwent server update
+
+I will have to temporarily change few values and check database
+
+This may affect the game!
+
+~DrMineword</desc>
+<bottom_link>true</bottom_link>
+<bottom_link_value>Join Discord Server for updates!###https://theredmineword.github.io/GWENT/api/discord-iframe/page</bottom_link_value>
