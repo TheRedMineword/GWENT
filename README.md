@@ -28,5 +28,11 @@ endorsed by, or sponsored by CD PROJEKT RED.`
 > Full copyright notice avitable at [./full-credits.md](https://github.com/TheRedMineword/GWENT/blob/main/full-credits.md)
 ```
 You are free to copy, distribute or use this project for your purposes under the conditions of preserving information about the original creators and copyrights of the resources used, you may not use it in any other ways than non commercial fan project!
-Before copying my work leave me a message, I am willing to give you open files used for special/own/custom/edited assets
+Before copying my work leave me a message, I am willing to give you open files used for special/own/custom/edited assets and compressed bin or obsufated javascripts
+
+To make it clearer what is written above, you may copy this project but you must leave, information thats it been forked, you cant take whats been not made by you there as your own
+Please do not use my server/api/websocket wichout permission from me in your project, self host it if you can
+
+Ignorance of this part of the readme does not release you from your obligations
+~@DrMineword (https://github.com/TheRedMineword/GWENT/)
 ```
