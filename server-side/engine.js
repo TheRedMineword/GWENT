@@ -1379,6 +1379,29 @@ function broadcastToSession(sessionId, payload) {
   return true;
 }
 riskinfo = "{}";
+server.on("upgrade", (req, socket, head) => {
+  const host = req.headers.host;
+  const origin = req.headers.origin;
+
+  if (isBlockedDomain(host) || isBlockedDomain(origin)) {
+    console.log(
+      `[TrafficMonitor] Blocked WebSocket upgrade host=${host} origin=${origin}`
+    );
+
+    socket.write(
+      "HTTP/1.1 403 Forbidden\r\n" +
+      "Connection: close\r\n" +
+      "\r\n"
+    );
+
+    socket.destroy();
+    return;
+  }
+
+  wss.handleUpgrade(req, socket, head, (ws) => {
+    wss.emit("connection", ws, req);
+  });
+});
 const connectionHandler = async (ws, req) => {
   ws.authenticated = false;
   ws.user = null;
