@@ -2,6 +2,9 @@ console.log("ITS ME AN ENGINE!");
 let intervals = [];
 let listeners = [];
 let mountedRouter = null;
+let processHandlersAttached = false;
+let onUncaughtException = null;
+let onUnhandledRejection = null;
 
 function unmountRouter(app, router) {
     if (!router || !app?._router?.stack) return;
@@ -35,6 +38,14 @@ exports.stop = ({ app, server, wss }) => {
 
     unmountRouter(app, mountedRouter);
     mountedRouter = null;
+
+    if (processHandlersAttached) {
+        if (onUncaughtException) process.off("uncaughtException", onUncaughtException);
+        if (onUnhandledRejection) process.off("unhandledRejection", onUnhandledRejection);
+        onUncaughtException = null;
+        onUnhandledRejection = null;
+        processHandlersAttached = false;
+    }
 };
 
 exports.start = ({ app, server, wss }) => {
@@ -63,6 +74,25 @@ const dcapi = dcBotEnabled ? require("./dcapi") : null;
 const router = express.Router();
 app.use(router);
 mountedRouter = router;
+
+// Diagnostic safety net: without this, ANY unhandled synchronous throw in an
+// event handler (e.g. the 'upgrade' listener below, or a ws 'message'
+// handler) crashes the entire Node process with no trace of what happened,
+// which is indistinguishable from a "silent crash". This logs the full
+// stack instead. It does NOT attempt to keep the process healthy after a
+// truly corrupt state — it's for diagnosis, not a substitute for fixing the
+// underlying bug once you see the stack trace.
+if (!processHandlersAttached) {
+  onUncaughtException = (err) => {
+    console.error("[FATAL] Uncaught exception:", err && err.stack ? err.stack : err);
+  };
+  onUnhandledRejection = (reason) => {
+    console.error("[FATAL] Unhandled rejection:", reason && reason.stack ? reason.stack : reason);
+  };
+  process.on("uncaughtException", onUncaughtException);
+  process.on("unhandledRejection", onUnhandledRejection);
+  processHandlersAttached = true;
+}
 
 let auth_needed = true;
 
@@ -690,22 +720,27 @@ function isBlockedDomain(hostOrUrl) {
 }
 router.use(cors({ origin: "*" }));
 router.use((req, res, next) => {
-  const host = req.headers.host;
-  const origin = req.headers.origin;
-  const referer = req.headers.referer;
+  try {
+    const host = req.headers.host;
+    const origin = req.headers.origin;
+    const referer = req.headers.referer;
 
-  if (isBlockedDomain(host) || isBlockedDomain(origin) || isBlockedDomain(referer)) {
-    console.log(
-      `[TrafficMonitor] Blocked domain: host=${host} origin=${origin} referer=${referer}`,
-    );
+    if (isBlockedDomain(host) || isBlockedDomain(origin) || isBlockedDomain(referer)) {
+      console.log(
+        `[TrafficMonitor] Blocked domain: host=${host} origin=${origin} referer=${referer}`,
+      );
 
-    return res.status(403).json({
-      ok: false,
-      error: "Domain blocked",
-    });
+      return res.status(403).json({
+        ok: false,
+        error: "Domain blocked",
+      });
+    }
+
+    next();
+  } catch (err) {
+    console.error("[TrafficMonitor] Error in domain-block middleware:", err && err.stack ? err.stack : err);
+    next();
   }
-
-  next();
 });
 router.get("/api/recive-hearthbeat", (req, res) => {
   const id = req.query.db;
@@ -1396,28 +1431,42 @@ function broadcastToSession(sessionId, payload) {
 }
 riskinfo = "{}";
 server.on("upgrade", (req, socket, head) => {
-  const host = req.headers.host;
-  const origin = req.headers.origin;
-  const referer = req.headers.referer;
+  try {
+    const host = req.headers.host;
+    const origin = req.headers.origin;
+    const referer = req.headers.referer;
 
-  if (isBlockedDomain(host) || isBlockedDomain(origin) || isBlockedDomain(referer)) {
-    console.log(
-      `[TrafficMonitor] Blocked WebSocket upgrade host=${host} origin=${origin} referer=${referer}`
-    );
+    if (isBlockedDomain(host) || isBlockedDomain(origin) || isBlockedDomain(referer)) {
+      console.log(
+        `[TrafficMonitor] Blocked WebSocket upgrade host=${host} origin=${origin} referer=${referer}`
+      );
 
-    socket.write(
-      "HTTP/1.1 403 Forbidden\r\n" +
-      "Connection: close\r\n" +
-      "\r\n"
-    );
+      if (!socket.destroyed) {
+        socket.write(
+          "HTTP/1.1 403 Forbidden\r\n" +
+          "Connection: close\r\n" +
+          "\r\n"
+        );
+        socket.destroy();
+      }
+      return;
+    }
 
-    socket.destroy();
-    return;
+    wss.handleUpgrade(req, socket, head, (ws) => {
+      wss.emit("connection", ws, req);
+    });
+  } catch (err) {
+    // If this throws unhandled, it takes down the whole process (no
+    // uncaughtException handler exists), which looks like a silent crash
+    // and can also abort in-flight upgrades for non-blocked hosts if this
+    // listener races with another 'upgrade' listener on the same server
+    // (e.g. the ws library's own internal listener, if `wss` was created
+    // with `{ server }` instead of `{ noServer: true }`).
+    console.error("[Upgrade] Unhandled error during upgrade:", err && err.stack ? err.stack : err);
+    try {
+      if (!socket.destroyed) socket.destroy();
+    } catch (e) {}
   }
-
-  wss.handleUpgrade(req, socket, head, (ws) => {
-    wss.emit("connection", ws, req);
-  });
 });
 const connectionHandler = async (ws, req) => {
   ws.authenticated = false;
