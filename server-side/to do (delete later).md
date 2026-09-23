@@ -1,0 +1,2 @@
+- New api, discord inventory sync
+- finish new bot
