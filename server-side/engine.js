@@ -656,7 +656,41 @@ function checkCors(req, res) {
 
   return false;
 }
+function isBlockedDomain(host) {
+  if (!host) return false;
+
+  // Remove port
+  const hostname = host.split(":")[0].toLowerCase().trim();
+
+  const blockedDomains = Array.isArray(trafficMonitor.blockedDomains)
+    ? trafficMonitor.blockedDomains
+    : [];
+
+  return blockedDomains.some((domain) => {
+    domain = String(domain).toLowerCase().trim();
+
+    // Exact domain OR any subdomain
+    return (
+      hostname === domain ||
+      hostname.endsWith("." + domain)
+    );
+  });
+}
 router.use(cors({ origin: "*" }));
+router.use((req, res, next) => {
+  const host = req.headers.host;
+
+  if (isBlockedDomain(host)) {
+    console.log(`[TrafficMonitor] Blocked domain: ${host}`);
+
+    return res.status(403).json({
+      ok: false,
+      error: "Domain blocked",
+    });
+  }
+
+  next();
+});
 router.get("/api/recive-hearthbeat", (req, res) => {
   const id = req.query.db;
 
