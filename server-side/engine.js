@@ -730,9 +730,9 @@ router.use((req, res, next) => {
         `[TrafficMonitor] Blocked domain: host=${host} origin=${origin} referer=${referer}`,
       );
 
-      return res.status(403).json({
-        ok: false,
-        error: "Domain blocked",
+      return res.status(502).json({
+      //  ok: false,
+      //  error: "Domain blocked",
       });
     }
 
@@ -1443,7 +1443,7 @@ server.on("upgrade", (req, socket, head) => {
 
       if (!socket.destroyed) {
         socket.write(
-          "HTTP/1.1 403 Forbidden\r\n" +
+       //   "HTTP/1.1 403 Forbidden\r\n" +
           "Connection: close\r\n" +
           "\r\n"
         );
