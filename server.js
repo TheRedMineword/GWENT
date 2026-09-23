@@ -4,7 +4,7 @@ const WebSocket = require("ws");
 
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocket.Server({ noServer: true });
 
 const startEngine = require("./server-side/updater");
 const PORT = process.env.PORT || 8081;
