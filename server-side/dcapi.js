@@ -66,6 +66,17 @@
 //   GET /api/dc?mode=cash&userid=<discordId>
 //     Read the local cash ledger for one user.
 //
+//   GET /api/dc?mode=inventory&userid=<discordId>&serverid=<guildId>&token=<unbelievaboatToken>
+//     Fetches <discordId>'s UnbelievaBoat inventory directly from
+//     UnbelievaBoat's API (ported from dcbot.js's unbGetInventory() +
+//     pushInventorySnapshot()). dcapi.js holds no UnbelievaBoat
+//     credentials of its own anymore, so the guild id + bot token are
+//     passed in per-call. Always returns the inventory in the HTTP
+//     response; if a game client is currently registered for that
+//     Discord user, it's also pushed to that client's websocket as a
+//     "discordinventory" message (same shape dcbot.js used to push
+//     right after !registerclient).
+//
 //   GET /api/dc?mode=scan
 //     Drain and return the outbound event queue (dm/free/addcash/offline -
 //     see dcstate.js for the exact shapes). Poll this every ~10s.
@@ -109,6 +120,40 @@ const MAX_BONUS_PERCENT = 15;
 
 const DM_REQUEST_COOLDOWN_MS = 5000;
 const lastDmRequestAt = new Map(); // playerId -> timestamp
+
+// ---------------------------------------------------------------------------
+// UnbelievaBoat REST call, ported from dcbot.js's unbGetInventory(). Unlike
+// dcbot.js, this module has no standing GUILD_ID/ECONOMY_TOKEN of its own -
+// the external bot passes both in on every call (see mode=inventory below) -
+// so this is a plain one-off fetch() rather than the shared unbRequest()
+// helper dcbot.js used for every UnbelievaBoat call.
+// ---------------------------------------------------------------------------
+
+const UNB_BASE = 'https://unbelievaboat.com/api/v1';
+
+async function unbGetInventory(guildId, token, userId, { limit = 100, offset = 0 } = {}) {
+  const qs = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+  const url = `${UNB_BASE}/guilds/${guildId}/users/${userId}/inventory?${qs}`;
+
+  let res;
+  try {
+    res = await fetch(url, { headers: { Authorization: token } });
+  } catch (e) {
+    throw new Error(`network error: ${e.message}`);
+  }
+
+  const bodyText = await res.text();
+
+  if (!res.ok) {
+    throw new Error(`${res.status}: ${bodyText.slice(0, 300)}`);
+  }
+
+  try {
+    return bodyText ? JSON.parse(bodyText) : {};
+  } catch (e) {
+    throw new Error(`non-JSON response (${res.status}): ${bodyText.slice(0, 300)}`);
+  }
+}
 
 let ready = false;
 
@@ -849,6 +894,53 @@ function handleCashRead(req, res) {
   return res.json({ ok: true, balance: state.getCash(discordId) });
 }
 
+// Ported from dcbot.js's pushInventorySnapshot()/handleInventory(). The
+// caller (external bot) supplies the guild id + UnbelievaBoat token
+// per-request since dcapi.js no longer holds either as static config.
+// Always answers the HTTP request with the inventory; additionally pushes
+// a "discordinventory" websocket message to the linked game client, same
+// shape dcbot.js used to send right after a successful !registerclient.
+async function handleInventorySync(req, res) {
+  const discordId = String(req.query.userid || '').trim();
+  const guildId = String(req.query.serverid || '').trim();
+  const token = String(req.query.token || '').trim();
+
+  if (!discordId || !guildId || !token) {
+    return res.json({ ok: false, error: 'missing_params' });
+  }
+
+  let inv;
+  try {
+    inv = await unbGetInventory(guildId, token, discordId);
+  } catch (e) {
+    log(`Inventory sync failed for ${discordId}:`, e.message);
+    return res.json({ ok: false, error: 'unb_request_failed', detail: e.message });
+  }
+
+  const items = Array.isArray(inv?.items) ? inv.items : [];
+  const page = inv?.page ?? 1;
+  const totalPages = inv?.totalPages ?? 1;
+
+  const playerId = state.getPlayerIdForDiscord(discordId);
+  if (playerId) {
+    const deps = state.getDeps();
+    const ws = deps.playerSockets[playerId];
+
+    if (ws && typeof deps.sendToClient === 'function') {
+      deps.sendToClient(ws, {
+        type: 'discordinventory',
+        items,
+        page,
+        totalPages,
+      });
+
+      log(`Pushed inventory snapshot to client ${playerId} (${discordId}): ${items.length} item(s)`);
+    }
+  }
+
+  return res.json({ ok: true, items, page, totalPages });
+}
+
 function handleScan(req, res) {
   return res.json({ ok: true, events: state.drainEvents() });
 }
@@ -917,6 +1009,8 @@ return res.status(401).json({ ok: false, error: 'Whats the key?' });
       return handleCashAdjust(req, res, -1);
     case 'cash':
       return handleCashRead(req, res);
+    case 'inventory':
+      return handleInventorySync(req, res);
     case 'scan':
       return handleScan(req, res);
     case 'push':
