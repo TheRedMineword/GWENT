@@ -1,1 +1,10 @@
-This is help message
+- `!gwenthelp`: This command
+
+- `!registerclient <id>`: Register your active game session wich discord id, your gwent id can be seen multiplayer menu in game!
+- `!gwentbet <amount>`: Bet *Lambert Orens* on your game to gain them back wich bonus, or lose them!
+- `!code`: Redeem an code!
+
+**Admin:**
+- `!gping`: Ping server!
+- `!spawnmoney <amount>`: Spawn *Lambert Orens* to free money channel! (Try "welcome")
+
