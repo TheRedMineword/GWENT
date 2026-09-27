@@ -3,6 +3,8 @@
 - `!registerclient <id>`: Register your active game session wich discord id, your gwent id can be seen multiplayer menu in game!
 - `!gwentbet <amount>`: Bet *Lambert Orens* on your game to gain them back wich bonus, or lose them!
 - `!code`: Redeem an code!
+- `!treechance`: What chance you have to spawn **SCP-2536**!
+- `!year`: Year progress bar
 
 **Admin:**
 - `!gping`: Ping server!
