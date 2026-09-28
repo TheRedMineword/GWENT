@@ -2,6 +2,7 @@ console.log("ITS ME AN ENGINE!");
 let intervals = [];
 let listeners = [];
 let mountedRouter = null;
+let eventStreamCloseAll = null;
 let processHandlersAttached = false;
 let onUncaughtException = null;
 let onUnhandledRejection = null;
@@ -36,6 +37,10 @@ exports.stop = ({ app, server, wss }) => {
         }
     }
 
+    try {
+        if (eventStreamCloseAll) eventStreamCloseAll();
+    } catch (e) {}
+    eventStreamCloseAll = null;
     unmountRouter(app, mountedRouter);
     mountedRouter = null;
 
@@ -317,6 +322,7 @@ function isKnownIssuePath(filename = "") {
     /^web-only\/knownissues\.json$/i.test(filename) ||
     /^web-only\/\d{4}\/\d{2}\/\d{2}\/[^/]+\.json\.txt$/i.test(filename) ||
     /^web-only\/change\/web-only\/ping_news\.txt$/i.test(filename) ||
+    /^buttons\.json$/i.test(filename) ||
     /(^|\/)change\/.+$/i.test(filename)
   );
 }
@@ -786,6 +792,176 @@ router.use(
 router.get("/wake", (req, res) => {
   res.json({ ok: "ok" });
 });
+const STREAM_HEARTBEAT_MS = 20000;
+const STREAM_STATE_GRACE_MS = 60000;
+
+const streamAllowedOrigins = [
+  ...allowedOrigins,
+  "http://localhost:8080",
+  "http://localhost:8081",
+  "http://localhost:1111",
+];
+
+const eventstream = new Map();
+
+function getStreamState(id) {
+  let s = eventstream.get(id);
+  if (!s) {
+    s = {
+      js_ready: false,
+      game_ready: false,
+      playerid: id,
+      res: null,
+      pending: new Map(), // sent or waiting, not yet acknowledged
+      closeTimer: null,
+    };
+    eventstream.set(id, s);
+  }
+  return s;
+}
+
+function streamOriginAllowed(req) {
+  const claimed = String(req.query.orygin || "");
+  const header = req.headers.origin; // browsers set it on cross-origin EventSource
+  if (!claimed || !streamAllowedOrigins.includes(claimed)) return false;
+  if (header && header !== claimed) return false;
+  return true;
+}
+
+function streamWrite(s, msg) {
+  if (!s.res) return false;
+  try {
+    s.res.write(`id: ${msg.mid}\ndata: ${JSON.stringify(msg)}\n\n`);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+// Send everything unacknowledged, but only once the client JS reported ready.
+function flushStream(s) {
+  if (!s.res || !s.js_ready) return;
+  for (const msg of s.pending.values()) streamWrite(s, msg);
+}
+
+function pushStreamMessage(playerId, message) {
+  const expire = message.expire ? new Date(message.expire) : null;
+  if (expire && isNaN(expire)) throw new Error("expire must be an ISO date");
+
+  const msg = {
+    id: String(message.id || "warn"),
+    showcountdown: !!message.showcountdown,
+    expire: expire ? expire.toISOString() : null,
+    predefined: message.predefined !== false,
+    content: message.content ?? null,
+    mid: crypto.randomUUID(), // kept in memory until acked
+  };
+
+  const s = getStreamState(playerId);
+  s.pending.set(msg.mid, msg);
+  flushStream(s);
+  return msg.mid;
+}
+
+function broadcastStreamMessage(message) {
+  return Object.keys(playerSockets).map((id) => pushStreamMessage(id, message));
+}
+
+router.get("/stream", (req, res) => {
+  const id = String(req.query.id || "");
+
+  if (!id || !playerSockets[id]) return res.sendStatus(404);
+  if (!streamOriginAllowed(req)) return res.sendStatus(403);
+
+  const s = getStreamState(id);
+  if (s.closeTimer) clearTimeout(s.closeTimer);
+  if (s.res) {
+    try {
+      s.res.end();
+    } catch (e) {}
+  }
+
+  res.set({
+    "Content-Type": "text/event-stream",
+    "Cache-Control": "no-cache, no-transform",
+    Connection: "keep-alive",
+    "X-Accel-Buffering": "no",
+  });
+  res.flushHeaders();
+  res.write("retry: 3000\n\n");
+
+  s.res = res;
+  // js_ready / game_ready are NOT touched here: the page reports them (POST /stream/ready) right after connecting
+
+  req.on("close", () => {
+    if (s.res === res) s.res = null;
+    s.closeTimer = setTimeout(() => {
+      if (!s.res && !playerSockets[id]) eventstream.delete(id);
+    }, STREAM_STATE_GRACE_MS);
+  });
+});
+
+router.post("/stream/ready", (req, res) => {
+  const { id, js_ready, game_ready } = req.body || {};
+  const s = eventstream.get(String(id));
+  if (!s) return res.sendStatus(404);
+
+  if (typeof js_ready === "boolean") s.js_ready = js_ready;
+  if (typeof game_ready === "boolean") s.game_ready = game_ready;
+
+  flushStream(s);
+  res.sendStatus(204);
+});
+
+router.post("/stream/ack", (req, res) => {
+  const { id, mid } = req.body || {};
+  const s = eventstream.get(String(id));
+  if (!s) return res.sendStatus(404);
+
+  res.sendStatus(s.pending.delete(String(mid)) ? 204 : 404);
+});
+
+router.post("/api/stream-push", (req, res) => {
+  const { key, target, message } = req.body || {};
+
+  const a = Buffer.from(String(key || ""));
+  const b = Buffer.from(String(ADMIN_ENDPOINT_LOGIN || ""));
+  if (!ADMIN_ENDPOINT_LOGIN || a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
+    return res.sendStatus(401);
+  }
+  if (!message || typeof message !== "object") return res.sendStatus(400);
+
+  try {
+    const mids =
+      target === "all"
+        ? broadcastStreamMessage(message)
+        : [pushStreamMessage(String(target), message)];
+    res.json({ ok: true, mids });
+  } catch (e) {
+    res.status(400).json({ ok: false, error: e.message });
+  }
+});
+
+intervals.push(
+  setInterval(() => {
+    for (const s of eventstream.values()) {
+      try {
+        if (s.res) s.res.write(": ping\n\n");
+      } catch (e) {}
+    }
+  }, STREAM_HEARTBEAT_MS),
+);
+
+eventStreamCloseAll = () => {
+  for (const s of eventstream.values()) {
+    try {
+      if (s.res) s.res.end();
+    } catch (e) {}
+  }
+  eventstream.clear();
+};
+// ============================================================================
+
 router.post("/api/verdict", (req, res) => {
   const { value } = req.body;
 

@@ -52,6 +52,7 @@ https://pngtree.com/freebackground/vintage-crinkled-paper-texture-aged-brown-bac
 - Whoreson Junior leader: https://witcher.fandom.com/wiki/Cyprian_Wiley
 - Oxenfurt Academy start screen: https://witcher.fandom.com/wiki/Oxenfurt_Academy
 - Harvest Festival card: https://commons.wikimedia.org/wiki/File:Le_Costumes_du_Peuple_Polonais_-_Leon_Zienkowicz_-_01.jpg
+- Mail sound effect: https://pixabay.com/pl/sound-effects/filmy-i-efekty-specjalne-notification-291236
 > Some card/mechanics/assets are used from other project like this (For example: RandomPianist/gwent-classic-v3.1, other similar project are mentioned at start of this copyright notice)
 
 

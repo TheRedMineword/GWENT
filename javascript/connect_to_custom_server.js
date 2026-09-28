@@ -97,6 +97,12 @@ const IGNORE_PATTERNS = [
   "Bucket",
   "player_board",
   "map_results_txt", // special script will handle that
+  "have_player_id",
+  "have_inited_stream",
+  "pcnr",
+  "streamPlayerId",
+  "streamDraining",
+  "streamSource",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 

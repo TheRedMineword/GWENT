@@ -998,6 +998,11 @@ socket.onmessage = async (event) => {
       break;
     case "welcome":
       playerId = data.playerId;
+      have_player_id = true;
+      if (have_player_id && !have_inited_stream && pcnr) {
+        have_inited_stream = true;
+        startEventStream(playerId);
+      }
       console.log(
         "[SERVER DROPPED IP DATA",
         ip_data,

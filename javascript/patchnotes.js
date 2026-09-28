@@ -1,4 +1,5 @@
 "use strict";
+let pcnr = false;
 // (function () {
 const ICON_BASE_PATH = "img/patchnotes/";
 
@@ -41,6 +42,28 @@ const ICON_SIZES = {
 };
 
 let SHOW_BELL_BUTTON = true;
+
+const STREAM_MESSAGES = {
+  warn: `
+<box.title>Server notice</box.title>
+<small_text.text>SERVER WARNING</small_text.text>
+<button.name>OK</button.name>
+<box.text>
+# Warning
+The server will restart soon.
+-# Please finish your match.
+</box.text>
+`,
+};
+var who = false;
+if (
+  window.location.host === "localhost:8080" ||
+  window.location.host === "localhost:8081"
+) {
+  who = true;
+}
+
+const STREAM_BASE = who ? "http://localhost:8081" : `https://${domain_raw}`;
 
 function setPatchnotesVisible(visible) {
   SHOW_BELL_BUTTON = visible;
@@ -1251,7 +1274,10 @@ async function presentEntry(entry, { fromAuto = false, rowEl = null } = {}) {
 
     if (rowEl) setRowLoading(rowEl, true);
 
-    const data = await fetchEntryData(entry.id, entry?.text ?? false);
+    // stream entries carry their own content, everything else is fetched
+    const data =
+      entry.streamData ??
+      (await fetchEntryData(entry.id, entry?.text ?? false));
 
     if (rowEl) setRowLoading(rowEl, false);
 
@@ -1292,7 +1318,20 @@ async function presentEntry(entry, { fromAuto = false, rowEl = null } = {}) {
 }
 
 let DECK_POOL = [];
+let INDEX_POOL = []; // entries that come from index.json
+const streamEntries = new Map(); // inbox entries that came from the event stream (id -> entry)
 let deckTickInterval = null;
+
+// inbox = index entries + non-expired stream entries
+function rebuildDeckPool() {
+  const now = Clock.now();
+
+  for (const [id, entry] of streamEntries) {
+    if (entry.until <= now) streamEntries.delete(id);
+  }
+
+  DECK_POOL = [...INDEX_POOL, ...streamEntries.values()];
+}
 
 function ensureDeckUI() {
   if (!document.getElementById("patchnotes-style")) {
@@ -1515,7 +1554,7 @@ function scheduleWatcher(nextChange) {
 async function reloadIndexAndRefresh() {
   if (reinit_after < Clock.now() - 1.9 * 150000) {
     try {
-      var url = `https://theredmineword.github.io/GWENT/change/index.json?v=${cacheBust()}`;
+      var url = `${patchnotes_index_src}?v=${cacheBust()}`;
       if (window.location.host === "localhost:8080") {
         url = `change/index.json?v=${cacheBust()}`;
       }
@@ -1546,7 +1585,8 @@ async function refreshFromIndex() {
     resolveIndex(INDEX_CACHE);
   const auto = pickAutoDisplay(patchnoteCandidates, newsCandidates);
 
-  DECK_POOL = [...patchnoteCandidates, ...newsCandidates];
+  INDEX_POOL = [...patchnoteCandidates, ...newsCandidates];
+  rebuildDeckPool();
 
   renderDeck();
   scheduleWatcher(nextChange);
@@ -1557,11 +1597,161 @@ async function refreshFromIndex() {
     await presentEntry(auto, { fromAuto: true });
   }
 }
+
+let streamSource = null;
+let streamPlayerId = null;
+const streamSeen = new Set(); // mids already handled (server re-sends unacked ones on reconnect)
+const streamQueue = [];
+let streamDraining = false;
+
+function streamPost(path, body) {
+  return fetch(`${STREAM_BASE}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  }).catch((e) => console.warn("stream post failed:", path, e));
+}
+
+const streamFlags = { js_ready: true, game_ready: false };
+
+function startEventStream(playerId, flags = {}) {
+  if (streamSource) streamSource.close();
+  streamPlayerId = playerId;
+  Object.assign(streamFlags, flags);
+
+  const url =
+    `${STREAM_BASE}/stream?id=${encodeURIComponent(playerId)}` +
+    `&orygin=${encodeURIComponent(location.origin)}`;
+
+  streamSource = new EventSource(url);
+
+  // report the current state on every connect (also after automatic reconnects)
+  streamSource.onopen = () =>
+    streamPost("/stream/ready", { id: streamPlayerId, ...streamFlags });
+
+  streamSource.onmessage = (ev) => {
+    let msg;
+    try {
+      msg = JSON.parse(ev.data);
+    } catch (e) {
+      return;
+    }
+    handleStreamMessage(msg);
+  };
+
+  streamSource.onerror = () =>
+    console.warn("event stream error / reconnecting");
+}
+
+// Update the state later, e.g. setStreamReady({ game_ready: true }) when the game UI is loaded.
+function setStreamReady(flags) {
+  Object.assign(streamFlags, flags);
+  if (!streamPlayerId) return;
+  streamPost("/stream/ready", { id: streamPlayerId, ...streamFlags });
+}
+setStreamReady({ game_ready: true });
+function handleStreamMessage(msg) {
+  console.log("[STREAM MSG]", msg);
+  if (!msg || !msg.mid) return;
+
+  // acknowledge on receipt so the server drops it from memory
+  streamPost("/stream/ack", { id: streamPlayerId, mid: msg.mid });
+
+  if (streamSeen.has(msg.mid)) return; // replayed duplicate
+  streamSeen.add(msg.mid);
+
+  tocar("mail");
+
+  // content (if not null) wins over the predefined text
+  const source =
+    msg.content ?? (msg.predefined ? STREAM_MESSAGES[msg.id] : null) ?? null;
+  if (source === null) return; // nothing to display
+
+  const until = msg.expire ? new Date(msg.expire).getTime() : Infinity;
+  if (until <= Clock.now()) return; // already expired
+
+  const data = parsePatchNotes(String(source));
+
+  // plain string content without <box.text> tags is shown as the body
+  if (data.box.text === undefined) {
+    data.box.text = String(source);
+  }
+
+  const entry = {
+    type: "news",
+    kind: "stream",
+    id: `stream-${msg.mid}`,
+    text: true,
+    weight: Number.MAX_SAFE_INTEGER,
+    icon: "news",
+    title: data.box.title || msg.id,
+    display: "modal",
+    showCountdown: !!msg.showcountdown && until !== Infinity,
+    until,
+    streamData: data, // parsed content, shown when opened from the inbox
+  };
+
+  // every stream message goes into the inbox
+  streamEntries.set(entry.id, entry);
+  rebuildDeckPool();
+  renderDeck();
+
+  // drop it from the inbox when it expires
+  if (until !== Infinity) {
+    setTimeout(
+      () => {
+        rebuildDeckPool();
+        renderDeck();
+      },
+      Math.min(until - Clock.now() + 50, 2147483647),
+    );
+  }
+
+  // popup unless the payload says autodisplay: false
+  if ((msg?.autodisplay ?? false) !== false) {
+    streamQueue.push(entry);
+    drainStreamQueue();
+  }
+}
+
+async function drainStreamQueue() {
+  if (streamDraining) return;
+  streamDraining = true;
+
+  try {
+    while (streamQueue.length) {
+      // wait while a patch note / another message is open
+      while (openBoxEntry) await new Promise((r) => setTimeout(r, 500));
+
+      const entry = streamQueue.shift();
+      const data = entry.streamData;
+      if (entry.until <= Clock.now()) continue; // expired while queued
+      if (isSeen(entry.id)) continue; // already opened from the inbox while queued
+
+      installStyles(data.box.lines_outline_hex);
+
+      const overlay = document.createElement("div");
+      overlay.className = "briefing-overlay";
+      document.body.appendChild(overlay);
+
+      renderBox(overlay, entry, data);
+
+      markSeen(entry.id);
+      renderDeck();
+      onPatchnoteEvent("news_seen", entry);
+    }
+  } finally {
+    streamDraining = false;
+  }
+}
+
 let json_patchnotes_for_this_session = {};
 let reinit_after = 0;
+let have_player_id = false;
+let have_inited_stream = false;
 async function initPatchnotes() {
   try {
-    var url = `https://theredmineword.github.io/GWENT/change/index.json?v=${cacheBust()}`;
+    var url = `${patchnotes_index_src}?v=${cacheBust()}`;
     if (window.location.host === "localhost:8080") {
       url = `change/index.json?v=${cacheBust()}`;
     }
@@ -1587,9 +1777,14 @@ async function initPatchnotes() {
         reloadIndexAndRefresh();
       }
     });
+    if (have_player_id && !have_inited_stream) {
+      have_inited_stream = true;
+      startEventStream(playerId);
+    }
   } catch (e) {
     console.error("Patch notes failed:", e);
   }
+  pcnr = true;
 }
 
 try {
