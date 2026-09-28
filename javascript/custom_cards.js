@@ -1015,15 +1015,17 @@ async function rebuildCustomCardsMaps() {
 
   custom_blob_urls.clear();
 
-  const txtRes = await fetch("img/c_builder/traveling_spirits/arrive.bin");
+  const txtRes = await fetch(arrive_cards_bin_src);
 
-  const text = await decompressBase64(
-    btoa(
-      Array.from(new Uint8Array(await txtRes.arrayBuffer()), (b) =>
-        String.fromCharCode(b),
-      ).join(""),
-    ),
-  );
+  const text = arrive_cards_bin_src_is_text
+    ? await txtRes.text()
+    : await decompressBase64(
+        btoa(
+          Array.from(new Uint8Array(await txtRes.arrayBuffer()), (b) =>
+            String.fromCharCode(b),
+          ).join(""),
+        ),
+      );
 
   const ts = JSON.parse(text);
   console.log("CARD BUILDER arrive.json", ts);

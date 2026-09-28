@@ -56,8 +56,16 @@ With new cards and factions!" />
 </style>
 <script>
 	const domain = "https://drmineword-gwent.onrender.com/";
-	const domain_raw = "drmineword-gwent.onrender.com"
+	const domain_raw = "drmineword-gwent.onrender.com";
+	const buttons_src = "buttons.json";
+	const bin_clock_config_src = "javascript/clock_config.bin";
+	const bin_clock_config_src_is_text = false;
 	const socket_domain = `wss://${domain_raw}`;
+	const knowissuescript_src = {
+		"base": "https://theredmineword.github.io/GWENT/web-only"
+	};
+	const arrive_cards_bin_src = "img/c_builder/traveling_spirits/arrive.bin";
+	const arrive_cards_bin_src_is_text = false;
 	function check_if_redirect() {
     const host = window.location.hostname;
 		console.log("REDIR CHECK HOST", host);
