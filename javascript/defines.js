@@ -56,6 +56,8 @@ let bond_config = {
   // Optional total/base-strength safety cap
   power_cap: true,
   max_ratio: 2.4,
+
+  ignore_bond_card_that_less_than_or_equal_to: 2
 };
 //host alone
 let players = {

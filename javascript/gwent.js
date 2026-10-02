@@ -3105,6 +3105,8 @@ class Row extends CardContainer {
       if (!bond_config.use) {
         total *= Number(bond);
       } else {
+        if (card._raw.strength > bond_config.ignore_bond_card_that_less_than_or_equal_to) {
+       // 
         let strength = Number(card._raw.strength);
 
         // Weak cards get full bond value up to bond_start.
@@ -3140,6 +3142,9 @@ class Row extends CardContainer {
         }
 
         total = Math.floor(total);
+      } else {
+        total *= Number(bond);
+      }
       }
     }
     //	if (this?.effects.morale > 0) {
