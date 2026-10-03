@@ -266,6 +266,11 @@ function formatPatchText(text) {
   for (let line of lines) {
     const raw = line;
     line = unescape(line);
+    if (line === escapeHtml("<fat-1>")) {
+      closeList();
+      html += '<div class="patch-gap--1"></div>';
+      continue;
+    }
     if (line === escapeHtml("<fat1>")) {
       closeList();
       html += '<div class="patch-gap-1"></div>';
@@ -432,6 +437,24 @@ function formatPatchText(text) {
     if (line.startsWith("-# ")) {
       closeList();
       html += `<div class="patch-small">${formatInline(line.substring(3))}</div>`;
+      continue;
+    }
+
+    if (line.startsWith("-## ")) {
+      closeList();
+      html += `<div class="patch-small2">${formatInline(line.substring(4))}</div>`;
+      continue;
+    }
+
+    if (line.startsWith("-#_ ")) {
+      closeList();
+      html += `<div class="patch-smallx">${formatInline(line.substring(4))}</div>`;
+      continue;
+    }
+
+    if (line.startsWith("-##_ ")) {
+      closeList();
+      html += `<div class="patch-small2x">${formatInline(line.substring(5))}</div>`;
       continue;
     }
 
@@ -862,6 +885,25 @@ opacity:.65;
 font-style:italic;
 }
 
+.patch-small2{
+margin:2px 0;
+font-size:14px;
+opacity:.65;
+font-style:italic;
+}
+
+.patch-smallx{
+margin:2px 0;
+font-size:12px;
+opacity:.65;
+}
+
+.patch-small2x{
+margin:2px 0;
+font-size:14px;
+opacity:.65;
+}
+
 .patch-quote{
 margin:6px 0;
 padding-left:14px;
@@ -925,6 +967,7 @@ font-family:Consolas,monospace;
 white-space:pre-wrap;
 }
 
+.patch-gap--1{ height:3px; }
 .patch-gap-1{ height:6px; }
 .patch-gap-2{ height:12px; }
 .patch-gap-3{ height:20px; }

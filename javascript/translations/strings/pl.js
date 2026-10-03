@@ -822,7 +822,11 @@ francesca_hope_of_the_aen_seidhe:
     iorwethbucketcommander: "Iorveth — Zwykły Skurwysyn",
     iorwethpatience: "Iorveth — Zwykły Skurwysyn?",
     whatthesandwitch: "Skurwiel Junior — Największy Chuj w Nowigradzie",
-    dożynki: "Dożynki"
+    dożynki: "Dożynki",
+    dziady: "Dziady",
+    scary_puppy: "Piekielny Pies",
+    scary_flower: "Archespor",
+    skylena: "Skylena Snow"
   },
   ui: {
     elem: {

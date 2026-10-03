@@ -56,7 +56,8 @@
       "decay": 0.4,
       "power_threshold": 5,
       "power_cap": true,
-      "max_ratio": 2.4
+      "max_ratio": 2.4,
+      "ignore_bond_card_that_less_than_or_equal_to": 2
     },
     "syndicate_spawn_start_card_id": "4001",
     "syndicate_spawn_start_card_row": "close",
@@ -587,7 +588,11 @@
       "iorwethbucketcommander": "hebitch_%g",
       "iorwethpatience": "hebitch_%g",
       "whatthesandwitch": "rottenfruit_%g",
-      "dożynki": "event_%g"
+      "dożynki": "event_%g",
+      "dziady": "event_%g",
+      "scary_flower": "monster_%g",
+      "scary_puppy": "monster_%g",
+      "skylena": "sky_skykid_%g"
     },
     "classDecorators": {
       "undefined": {
@@ -909,6 +914,7 @@
       "custom!vincent_painting_power": "male",
       "custom!sky_vincent_guys": "male",
       "custom!sky_vincent_medic": "male",
+      "skylena": "female",
       "undefined": "male"
     },
     "viper_potions_defs": {
@@ -1635,7 +1641,11 @@
           "iorwethbucketcommander": "Iorveth — Ordinary Son of a Whore",
           "iorwethpatience": "Iorveth — Ordinary Son of a Whore?",
           "whatthesandwitch": "Whoreson Junior — The Biggest Prick in Novigrad",
-          "dożynki": "Harvest festival"
+          "dożynki": "Harvest festival",
+          "dziady": "Forefathers' Eve",
+          "scary_puppy": "Hellhound",
+          "scary_flower": "Archespores",
+          "skylena": "Skylena Snow"
         },
         "ui": {
           "elem": {
@@ -2750,7 +2760,11 @@
           "iorwethbucketcommander": "Iorveth — Zwykły Skurwysyn",
           "iorwethpatience": "Iorveth — Zwykły Skurwysyn?",
           "whatthesandwitch": "Skurwiel Junior — Największy Chuj w Nowigradzie",
-          "dożynki": "Dożynki"
+          "dożynki": "Dożynki",
+          "dziady": "Dziady",
+          "scary_puppy": "Piekielny Pies",
+          "scary_flower": "Archespor",
+          "skylena": "Skylena Snow"
         },
         "ui": {
           "elem": {
@@ -6484,7 +6498,11 @@
         "strength": "8",
         "ability": "hero wshield",
         "filename": "kingkrill",
-        "count": "1"
+        "count": "0",
+        "reinforce": {
+          "owner_name": "skylena",
+          "spawn_count": 1
+        }
       },
       {
         "name": "Olgierd von Everec — The Headless",
@@ -6534,18 +6552,51 @@
         "strength": "0",
         "ability": "decoy2 DontPickMeUp morale",
         "filename": "dożynki",
-        "count": "0",
+        "count": "1",
         "isDecoy": true,
-        "isDecoyMath": false,
-        "count_monitor": {
-          "base": 1,
-          "monitor": "based",
-          "id": "HarvestFestival",
-          "duration": {
-            "start": "2026-09-13T07:00:00.000Z",
-            "duration": "999999999999"
-          }
-        }
+        "isDecoyMath": false
+      },
+      {
+        "name": "Forefathers' Eve",
+        "id": "1060",
+        "deck": "neutral",
+        "row": "NaR",
+        "strength": "0",
+        "ability": "decoy2 DontPickMeUp",
+        "filename": "dziady",
+        "count": "1",
+        "isDecoy": true,
+        "isDecoyMath": false
+      },
+      {
+        "name": "Hellhound",
+        "id": "1061",
+        "deck": "monsters",
+        "row": "close",
+        "strength": "4",
+        "ability": "bond",
+        "filename": "scary_puppy",
+        "count": "3"
+      },
+      {
+        "name": "Archespores",
+        "id": "1062",
+        "deck": "monsters",
+        "row": "all",
+        "strength": "2",
+        "ability": "morale",
+        "filename": "scary_flower",
+        "count": "1"
+      },
+      {
+        "name": "Skylena Snow",
+        "id": "3044",
+        "deck": "sky",
+        "row": "ranged",
+        "strength": "0",
+        "ability": "hero reinforce",
+        "filename": "skylena",
+        "count": "1"
       }
     ],
     "factions": {
@@ -6910,8 +6961,8 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
-    "audio_yt_vid_soundtrack_volume": 90,
+    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
+    "audio_yt_vid_soundtrack_volume": 47,
     "tavern_yt_vid": "8o-JI8VRyKo",
     "tavern_yt_volume": 90
   },

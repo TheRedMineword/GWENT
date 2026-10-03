@@ -1,7 +1,7 @@
 {
   "patchnotes": {
     "base": {
-      "id": "update38.2",
+      "id": "update38.3",
       "text": false,
       "weight": 100,
       "title": "Patch Notes",
@@ -17,13 +17,24 @@
       "text": true,
       "weight": 71,
       "start": "2026-09-13T07:00:00.000Z",
-      "end": "2026-10-31T07:00:00.000Z",
+      "end": "2026-10-15T07:00:00.000Z",
       "title": "Harvest Festival has begun!",
       "icon": "calendar",
       "display": "modal",
       "autodisplay": false,
-      "showCountdown": false
+      "showCountdown": true
+    },
+    {
+      "id": "dziadycard031026",
+      "text": true,
+      "weight": 71,
+      "start": "2026-10-27T08:00:00.000Z",
+      "end": "2026-11-07T08:00:00.000Z",
+      "title": "Forefathers' Eve is coming!",
+      "icon": "calendar",
+      "display": "modal",
+      "autodisplay": false,
+      "showCountdown": true
     }
-
   ]
 }

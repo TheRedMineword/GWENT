@@ -728,7 +728,11 @@ STRNG["en"] = {
     iorwethbucketcommander: "Iorveth — Ordinary Son of a Whore",
     iorwethpatience: "Iorveth — Ordinary Son of a Whore?",
     whatthesandwitch: "Whoreson Junior — The Biggest Prick in Novigrad",
-    dożynki: "Harvest festival"
+    dożynki: "Harvest festival",
+    dziady: "Forefathers' Eve",
+    scary_puppy: "Hellhound",
+    scary_flower: "Archespores",
+    skylena: "Skylena Snow"
   },
   ui: {
     elem: {

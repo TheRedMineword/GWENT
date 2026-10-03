@@ -57,7 +57,7 @@ let bond_config = {
   power_cap: true,
   max_ratio: 2.4,
 
-  ignore_bond_card_that_less_than_or_equal_to: 2
+  ignore_bond_card_that_less_than_or_equal_to: 2,
 };
 //host alone
 let players = {
@@ -808,6 +808,10 @@ let card_name_class = {
   iorwethpatience: "hebitch_%g",
   whatthesandwitch: "rottenfruit_%g",
   dożynki: "event_%g",
+  dziady: "event_%g",
+  scary_flower: "monster_%g",
+  scary_puppy: "monster_%g",
+  skylena: "sky_skykid_%g",
 };
 let classDecorators = {
   undefined: { prefix: "⩫<", suffix: ">⩫" },
@@ -1029,6 +1033,8 @@ let card_gender = {
   "custom!vincent_painting_power": "male",
   "custom!sky_vincent_guys": "male",
   "custom!sky_vincent_medic": "male",
+
+  skylena: "female",
 };
 card_gender.undefined = "male";
 let ThisDef = {
