@@ -180,137 +180,104 @@ let trafficMonitor = {
 
 console.warn("PROCCESS ENV", process.env, process.env.VERIF || false);
 
-const webhookUrl = process.env.WEBHOOK_URL;
-
-const discordBotToken = process.env.DISCORD_BOT_TOKEN_logs;
-const discordChannelId = process.env.DISCORD_CHANNEL_ID_logs;
-
-const discordLogQueue = [];
-let discordLogWorkerRunning = false;
-
-const DISCORD_LOG_DELAY_MS = 1500;
-
+// ---------------------------------------------------------------------------
+// Log forwarding (env: forward_logs)
+//
+// forward_logs={"use": true, "put_api": "<url>", "maxatonce": 50, "limitsbeetwencalls": 7}
+//   use                 - enable/disable forwarding
+//   put_api             - stream API. Receives a JSON array of Discord-formatted
+//                         messages, loops over it and forwards each to Discord,
+//                         and finally responds with the text "done".
+//   maxatonce           - max messages per call (slice of the log array)
+//   limitsbeetwencalls  - seconds to wait between calls
+// ---------------------------------------------------------------------------
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function queueDiscordLog(message) {
-  discordLogQueue.push({
-    message: String(message),
-    timestamp: new Date(),
+function parseForwardLogsEnv() {
+  const fallback = { use: false, put_api: "", maxatonce: 50, limitsbeetwencalls: 7 };
+  const raw = process.env.forward_logs;
+  if (!raw) return fallback;
+  try {
+    const cfg = { ...fallback, ...JSON.parse(raw) };
+    cfg.maxatonce = Math.max(1, parseInt(cfg.maxatonce, 10) || fallback.maxatonce);
+    cfg.limitsbeetwencalls = Math.max(0, Number(cfg.limitsbeetwencalls) || 0);
+    return cfg;
+  } catch (e) {
+    process.stderr.write("forward_logs env is not valid JSON: " + e.message + "\n");
+    return fallback;
+  }
+}
+
+const forwardLogs = parseForwardLogsEnv();
+const forwardLogsActive = !!(forwardLogs.use && forwardLogs.put_api);
+
+// Array of Discord-formatted messages waiting to be sent.
+const logBuffer = [];
+let logForwarderRunning = false;
+
+function pushLog(message) {
+  logBuffer.push({
+    embeds: [
+      {
+        description: String(message).slice(0, 4096),
+        footer: {
+          text: "Lng: " + logBuffer.length,
+          icon_url: "https://theredmineword.github.io/GWENT/img/web/logo_round.png",
+        },
+        timestamp: new Date().toISOString(),
+      },
+    ],
   });
-
-  processDiscordLogQueue();
+  runLogForwarder();
 }
 
-async function processDiscordLogQueue() {
-  if (discordLogWorkerRunning) return;
-  if (!discordBotToken || !discordChannelId) return;
-
-  discordLogWorkerRunning = true;
+async function runLogForwarder() {
+  if (logForwarderRunning || !forwardLogsActive) return;
+  logForwarderRunning = true;
 
   try {
-    while (discordLogQueue.length > 0) {
-      const item = discordLogQueue.shift();
+    while (logBuffer.length > 0) {
+      const batch = logBuffer.slice(0, forwardLogs.maxatonce);
+      let ok = false;
 
       try {
-        const response = await fetch(
-          `https://discord.com/api/v10/channels/${discordChannelId}/messages`,
-          {
-            method: "POST",
-            headers: {
-              "Authorization": `Bot ${discordBotToken}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              embeds: [
-                {
-                  description: item.message.slice(0, 4096),
-                  footer: {text: `Lng: ${discordLogQueue.length}`, "icon_url": "https://theredmineword.github.io/GWENT/img/web/logo_round.png"},
-                  timestamp: item.timestamp.toISOString(),
-                },
-              ],
-            }),
-          }
-        );
-        if (response.status !== 200){
-          console.error(JSON.stringify({"res": await response.json(), "head":  Object.fromEntries(response.headers.entries())}), response.status)
-        }
-        if (response.status === 429) {
-          let retryAfter = 5000;
+        const response = await fetch(forwardLogs.put_api, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(batch),
+        });
 
-          try {
-            const data = await response.json();
+        // Stream API: wait for the whole stream, it ends with "done".
+        const body = await response.text();
+        ok = response.ok && body.trim().toLowerCase().endsWith("done");
 
-            if (typeof data.retry_after === "number") {
-              retryAfter = Math.ceil(data.retry_after * 1000);
-            }
-          } catch {
-            // Keep fallback delay.
-          }
-
-          discordLogQueue.unshift(item);
-
-          await sleep(retryAfter);
-          continue;
-        }
-
-        if (!response.ok) {
-          const body = await response.text().catch(() => "");
-          console.error(
-            `Discord log failed (${response.status}): ${body}`
+        if (!ok) {
+          process.stderr.write(
+            "forward_logs: bad response (" + response.status + "): " + body.slice(0, 300) + "\n",
           );
         }
       } catch (error) {
-        discordLogQueue.unshift(item);
-
-        console.error("Discord log request failed:", error);
-
-        await sleep(5000);
-        continue;
+        process.stderr.write("forward_logs: request failed: " + error.message + "\n");
       }
 
-      if (discordLogQueue.length > 0) {
-        await sleep(DISCORD_LOG_DELAY_MS);
+      if (ok) {
+        logBuffer.splice(0, batch.length); // drop only what was confirmed sent
       }
+
+      // wait between calls (also acts as retry delay on failure)
+      await sleep(Math.max(forwardLogs.limitsbeetwencalls, 1) * 1000);
     }
   } finally {
-    discordLogWorkerRunning = false;
-
-    if (discordLogQueue.length > 0) {
-      processDiscordLogQueue();
-    }
+    logForwarderRunning = false;
+    if (logBuffer.length > 0) runLogForwarder();
   }
 }
-const usewebhook = false;
-const usecustomlog = false;
+
 console.log = (message) => {
   process.stdout.write(String(message) + "\n");
-  if (usecustomlog){
-  if (discordBotToken && discordChannelId) {
-    queueDiscordLog(message);
-    return;
-  }
-
-  if (usewebhook){
-  if (!webhookUrl) return;
-
-  fetch(webhookUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      embeds: [
-        {
-          description: String(message).slice(0, 4000),
-          timestamp: new Date().toISOString(),
-        },
-      ],
-    }),
-  }).catch(() => {
-    // Fail silently.
-  });}}
+  if (forwardLogsActive) pushLog(message);
 };
 
 const heartbeatWaiting = new Map();
