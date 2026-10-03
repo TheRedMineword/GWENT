@@ -3815,7 +3815,16 @@ var card_dict_base = [
     strength: "0",
     ability: "decoy2 DontPickMeUp",
     filename: "dziady",
-    count: "1",
+    count: "0",
+    count_monitor: {
+      base: 1,
+      monitor: "based",
+      id: "dziady",
+      duration: {
+        start: "2026-11-01T08:00:00.000Z",
+        duration: "9999999999",
+      },
+    },
     isDecoy: true,
     isDecoyMath: false,
   },
