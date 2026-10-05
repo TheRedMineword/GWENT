@@ -1,0 +1,43 @@
+<small_text.text>
+NEWS / SPECIAL EVENT
+</small_text.text>
+
+<images.logo>
+img/web/logo_round.png
+</images.logo>
+
+<images.banner>
+img/web/bar.png
+</images.banner>
+
+<box.lines_outline_hex>
+#CF8E09
+</box.lines_outline_hex>
+
+<box.title>
+Community support needed!
+</box.title>
+
+<box.text>
+Hello everyone!
+Dev here, At the time of writing this message, my feedback form still **didn't recive any answers**!
+Which is unfortunately bad news because I don't know what needs to be improved and what not.
+<fat2>
+Therefore, I reiterate my request to complete this short survey!
+-# In addition, I will probably be looking for translators soon, but that later
+<fat2>
+[**Feedback Form**](https://docs.google.com/forms/d/e/1FAIpQLScubyspH1D_0U0ZaQMvWgH5T4GABswBBNH1N8AXK7tjIVvfeg/viewform?usp=dialog) [**Discord Server**](https://gwent.localplayer.dev/api/discord-iframe/page)
+</box.text>
+
+
+<button.name>
+CONTINUE
+</button.name>
+
+<load.text>
+<l>Loading...</l>
+</load.text>
+
+<load.duration_ms>
+101
+</load.duration_ms>
