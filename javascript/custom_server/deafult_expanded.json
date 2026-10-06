@@ -1875,7 +1875,24 @@
               "load": "Load Deck",
               "change": "Change Faction",
               "getfile": "Download Deck"
-            }
+            },
+            "loginscreen": [
+              "UP FOR",
+              "A FEW ROUNDS",
+              "OF GWENT?"
+            ],
+            "ingame": [
+              "Pass",
+              "Surrender",
+              "Chat",
+              "Message...",
+              "Send",
+              "Messages"
+            ],
+            "isopready": [
+              "Yes",
+              "No"
+            ]
           },
           "startwarnings": {
             "a": "Your deck must have at least %s unit cards. ",
@@ -2994,7 +3011,24 @@
               "load": "Wczytaj Talię",
               "change": "Zmień Frakcję",
               "getfile": "Pobierz Talię"
-            }
+            },
+            "loginscreen": [
+              "ZAINTERESOWANY",
+              "PAROMA RUNDKAMI",
+              "GWINTA?"
+            ],
+            "ingame": [
+              "Pas",
+              "Poddaj się",
+              "Czat",
+              "Wiadomość...",
+              "Wyślij",
+              "Wiadomości"
+            ],
+            "isopready": [
+              "Tak",
+              "Nie"
+            ]
           },
           "startwarnings": {
             "a": "Twoja talia musi mieć conajmniej %s kart jednostek ",
@@ -6970,8 +7004,8 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
+    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
+    "audio_yt_vid_soundtrack_volume": 90,
     "tavern_yt_vid": "8o-JI8VRyKo",
     "tavern_yt_volume": 90
   },
