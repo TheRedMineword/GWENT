@@ -993,7 +993,10 @@ STRNG["en"] = {
   "load": "Load Deck",
   "change": "Change Faction",
   "getfile": "Download Deck"
-}
+},
+"loginscreen": ["UP FOR","A FEW ROUNDS","OF GWENT?"],
+"ingame": ["Pass", "Surrender", "Chat", "Message...", "Send", "Messages"],
+"isopready": ["Yes", "No"]
     },
   startwarnings: {
     "a": "Your deck must have at least %s unit cards. ",

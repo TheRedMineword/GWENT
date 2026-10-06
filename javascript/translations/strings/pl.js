@@ -1087,7 +1087,10 @@ francesca_hope_of_the_aen_seidhe:
   "load": "Wczytaj Talię",
   "change": "Zmień Frakcję",
   "getfile": "Pobierz Talię"
-}
+},
+"loginscreen": ["ZAINTERESOWANY","PAROMA RUNDKAMI","GWINTA?"],
+"ingame": ["Pas", "Poddaj się", "Czat", "Wiadomość...", "Wyślij", "Wiadomości"],
+"isopready": ["Tak", "Nie"]
     },
   startwarnings: {
     "a": "Twoja talia musi mieć conajmniej %s kart jednostek ",

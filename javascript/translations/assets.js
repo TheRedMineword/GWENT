@@ -584,6 +584,40 @@ function translate_ui_hub() {
     getTranslation("ui.mmenu.d.change"); // Change Faction
   document.querySelector("#download-deck").textContent =
     getTranslation("ui.mmenu.d.getfile"); // Download Deck
+
+  // other elements (start screen)
+  const el = document.querySelector("#very_start");
+
+  const textNodes = [...el.childNodes].filter(
+    (node) => node.nodeType === Node.TEXT_NODE,
+  );
+
+  textNodes[0].textContent = getTranslation("ui.mmenu.loginscreen")[0];
+  textNodes[1].textContent = getTranslation("ui.mmenu.loginscreen")[1];
+  textNodes[2].textContent = getTranslation("ui.mmenu.loginscreen")[2];
+
+  // chat
+  document.querySelector("#chat-toggle").textContent =
+    getTranslation("ui.mmenu.ingame")[2];
+  document.querySelector("#chat-input").placeholder =
+    getTranslation("ui.mmenu.ingame")[3];
+  document.querySelector("#chat-send").textContent =
+    getTranslation("ui.mmenu.ingame")[4];
+
+  const header = document.querySelector("#chat-header");
+
+  const textNode = [...header.childNodes].find(
+    (node) => node.nodeType === Node.TEXT_NODE,
+  );
+
+  if (textNode) {
+    textNode.textContent = getTranslation("ui.mmenu.ingame")[5];
+  }
+
+  document.querySelector("#pass-button").textContent =
+    getTranslation("ui.mmenu.ingame")[0];
+  document.querySelector("#surrender-button").textContent =
+    getTranslation("ui.mmenu.ingame")[1];
 }
 function getUiHtmlStrng(key, linebreakertobr = false) {
   let html = getUiStrng(`html.${key}`);

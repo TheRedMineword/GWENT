@@ -1184,7 +1184,7 @@ socket.onmessage = async (event) => {
       updateOpponentUI({
         name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]}`,
         state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
-        status: `${getTranslation("ui.mmenu.status.ready")} ${opponentReady}`,
+        status: `${getTranslation("ui.mmenu.status.ready")} ${`${opponentReady}`.replace(true, getTranslation("ui.mmenu.isopready")[0]).replace(false, getTranslation("ui.mmenu.isopready")[1])}`,
       });
       player_op = new Player(
         1,
@@ -1213,7 +1213,7 @@ socket.onmessage = async (event) => {
         updateOpponentUI({
           name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]}`,
           state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
-          status: `${getTranslation("ui.mmenu.status.ready")} ${opponentReady}`,
+          status: `${getTranslation("ui.mmenu.status.ready")} ${`${opponentReady}`.replace(true, getTranslation("ui.mmenu.isopready")[0]).replace(false, getTranslation("ui.mmenu.isopready")[1])}`,
         });
       }
       break;
@@ -1243,7 +1243,7 @@ socket.onmessage = async (event) => {
       updateOpponentUI({
         name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]?.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m])}`,
         state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
-        status: `${getTranslation("ui.mmenu.status.ready")} ${opponentReady}`,
+        status: `${getTranslation("ui.mmenu.status.ready")} ${`${opponentReady}`.replace(true, getTranslation("ui.mmenu.isopready")[0]).replace(false, getTranslation("ui.mmenu.isopready")[1])}`,
       });
       // opponentReadyElem.querySelector("img").src = `img/icons/deck_shield_${data.faction}.png`
       break;
@@ -1265,7 +1265,7 @@ socket.onmessage = async (event) => {
       updateOpponentUI({
         name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]?.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m])}`,
         state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
-        status: `${getTranslation("ui.mmenu.status.ready")} ${opponentReady}`,
+        status: `${getTranslation("ui.mmenu.status.ready")} ${`${opponentReady}`.replace(true, getTranslation("ui.mmenu.isopready")[0]).replace(false, getTranslation("ui.mmenu.isopready")[1])}`,
       });
       //	twoPlayersConnected = true;
       showTooltip(getUiStrng("op_unready"));
