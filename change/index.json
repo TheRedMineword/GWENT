@@ -47,8 +47,7 @@
       "display": "modal",
       "autodisplay": false,
       "showCountdown": true
-    }
-  ],
+    },
     {
       "id": "newmoonfrom07102026",
       "text": true,
@@ -61,4 +60,5 @@
       "autodisplay": false,
       "showCountdown": true
     }
+]
 }
