@@ -194,12 +194,12 @@ STRNG["en"] = {
         "Summons additional cards to board, summoned cards dont need to be in hand or deck. ",
     },
     medic: {
-      name: "medic",
+      name: "Medic",
       description:
         "Choose one card from your discard pile and play it instantly (no Heroes or Special Cards). ",
     },
     medic_n: {
-      name: "necromancy",
+      name: "Necromancer",
       description:
         "Choose one card from your discard pile and play it instantly (no Heroes or Special Cards). ",
     },
