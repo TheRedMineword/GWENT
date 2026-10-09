@@ -853,7 +853,7 @@ html {
 	top: 43.1vw;
 	left: 67.95vw;
 }
-
+/*
 .card-lg {
 	height: 30.4vw;
 	width: 16.1vw;
@@ -862,7 +862,7 @@ html {
 	background-position: top;
 	background-repeat: no-repeat;
 }
-
+*/
 .card-description {
 	position: absolute;
 	height: 11vw;
@@ -923,7 +923,7 @@ html {
 	align-items: flex-start;
 	justify-content: space-between;
 }
-
+/*
 #carousel>:nth-child(1)>:nth-child(3) {
 	border: .3vw solid goldenrod;
 	box-shadow: 0 0 4vw goldenrod;
@@ -935,7 +935,7 @@ html {
 	box-shadow: 0 0 4vw goldenrod;
 	background-origin: border-box;
 }
-
+*/
 #carousel>:nth-child(1)>:nth-child(2n) {
 	width: 13.75vw;
 	height: 25.9vw;
@@ -968,7 +968,7 @@ html {
 	box-shadow: 0 0 4vw green;
 	background-origin: border-box;
 }
-
+/*
 .card-lg {
 	border: .1vw solid transparent;
 }
@@ -991,7 +991,7 @@ html {
 #carousel .card-lg:hover {
 	background-origin: border-box;
 }
-
+*/
 #carousel .card-description {
 	left: 35.35%;
 	top: 77%;
@@ -1182,7 +1182,7 @@ html {
     box-shadow: 0 0 1vw #6d5210;
 }
 
-#pass-button:hover, #toggle-music:hover {
+#pass-button:hover, #toggle-music:hover, #surrender-button:hover {
 	text-shadow: 0 0 1vw #6d5210;
 }
 

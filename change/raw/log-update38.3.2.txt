@@ -1,0 +1,488 @@
+<small_text.text>
+NEWS / PATCHNOTES
+</small_text.text>
+
+<images.logo>
+img/web/logo_round.png
+</images.logo>
+
+<images.banner>
+img/web/bar.png
+</images.banner>
+
+<box.lines_outline_hex>
+#CF8E09
+</box.lines_outline_hex>
+
+<box.title>
+Patch Notes:
+</box.title>
+
+<box.text>
+# 9 October, 2026
+```diff
+--- Fixed the card hover effect and (presumably) the surrender button hover; all card hover effects are now customizable via the board theme
+```
+<fat3>
+# 6 October, 2026
+```diff
+--- Added last missing translation strings (I belive, I got them all now)
+```
+<fat3>
+# 3 October, 2026
+Today's patch adds new cards and a balance adjustment for the Bond ability, and also prepares a new event card for the future!
+```diff
+? If card base strenght is below 3, bond rebalance wont affect it!
+--- Fixed a bug where cards name prefix and suffix wont be correctly used
++ Added new cards; 2 for Monsters, 1 for Sky and 1 Neutral! !new!
+<fat2>
+%%img src="img\lg\neutral_dziady.jpg" style="max-width:25%"%% %%img src="img\lg\monsters_scary_puppy.jpg" style="max-width:25%"%% %%img src="img\lg\monsters_scary_flower.jpg" style="max-width:25%"%% %%img src="img\lg\sky_skylena.jpg" style="max-width:25%"%%
+```
+<fat1>
+## Forefathers' Eve
+**Forefathers' Eve** neutral diversion will be available !time:2026-11-01T08:00:00.000Z! and will be a new permanent card!
+<fat3>
+# 6 September, 2026
+```diff
+--- Bug fixed gameInProgress variable and patchnotes showCountdown entry value
++ Added Harvest Festival card !new!
+```
+# 4 September, 2026
+```diff
+--- Updated patchnotes to mail inbox style
+```
+<fat3>
+# 1 September, 2026
+## Gwent back on path!
+<fat1>
+Hello, players!
+This update brings new cards to practically every faction!
+<fat1>
+And here is the list of cards:
+```diff
+⫸ Bucket ability;
+  Random cards will appear in the "bucket" every few turns; the frequency of their appearance depends on the number of commanders with this ability currently in play. The winner of the round takes the pot, the loser turns some of the released power into cards draw.
++ Olgierd von Everec — The Headless (Northern Realms)
++ Iorwteth — Ordinary Son of a Whore (Scoia'tael)
+<fat2>
+%%img src="img/lg/realms_olgierd_headless.jpg" style="max-width:25%"%% %%img src="img/lg/scoiatael_iorwethbucketcommander.jpg" style="max-width:25%"%% 
+<fat1>
+⫸ Turn skippers ability;
+  Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need 1 charge to skip turn, you get 0.35 charges per your turn, up to 2 max charge(s) stored!
++ Iorwteth — Ordinary Son of a Whore? (Scoia'tael)
++ Whoreson Junior — The Biggest Prick in Novigrad (Syndicate)
+<fat2>
+%%img src="img/lg/scoiatael_iorwethpatience.jpg" style="max-width:25%"%% %%img src="img\lg\syndicate_whatthesandwitch.jpg" style="max-width:25%"%% 
+<fat1>
+⫸ Hero shield cards;
+  Partialy protects all cards in same row from weather card effects and axii, Commander's Horn will have no effect in that row.
++ Abyss Monster (Sky Kingdom)
+<fat2>
+%%img src="img/lg/sky_kingkrill.jpg" style="max-width:25%"%% 
+<fat1>
+⫸ Viper School ability; !new!
+  Choose one Witcher Potion card and add it to your hand.
++ Viper School Witcher (Neutral)
+  **And few witcher school potions!!** !new!
+<fat2>
+%%img src="img/lg/neutral_viperwitcher.jpg" style="max-width:25%"%% 
+```
+<fat3>
+# 21 August, 2026
+## Spheres Overload Soon!
+<fat1>
+Gwent will soon see multiple events featuring temporary cards running simultaneously; here is what to expect.
+```diff
+<color=#A0DB21>⫸</color> <color=#BBF23D>(!time:2026-08-26T22:19:39.396Z! - !time:2026-08-29T10:19:39.396Z!)</color> <color=#B6CC7E>The **Full Moon** will light up the Gwent board. Accompanying the full moon is a card that summons necrophages to the board.</color>
+<fat1>
+<color=#A0DB21>⫸</color> <color=#BBF23D>(!time:2026-08-27T07:00:00.000Z! - !time:2026-08-31T07:00:00.000Z!)</color> <color=#B6CC7E>The **Traveling Spirit** will visit the Sky Kingdom faction.</color>
+<fat1>
+<color=#A0DB21>⫸</color> <color=#BBF23D>(!time:2026-08-28T07:00:00.000Z! - !time:2026-09-11T07:00:00.000Z!)</color> <color=#B6CC7E>Special visitors from the "**Nine-Colored Deer**" season will visit the Sky Kingdom factions! The Seasonal Pendant card will be available to all factions, though the spirits cards themselves are exclusive to the Sky Kingdom; all these cards feature the Muster ability.</color>
+```
+<fat3>
+# 15 August, 2026
+## Bond Rebalance!
+```diff
+? Rebalance: Bond ability nerfed! Now bond increases the strength of the cards but also applies decay! As a result, weaker cards remain largely unchanged to a certain extent, while stronger cards are not impossible to beat.
+  Custom server can disable, or edit how bond decay!
+? Bond decay not apply in row under weather effect! (Even if weather shield is apply in that row)
+  Morale boost and commander horn should not affect bond!
+? Added delay for sync at "END TURN SHARE CARDS" in bucket.js (only for player who starts turn!)
+--- Card name info have also now for units and hero cards class names like, soldier, witcher, magic...
++ Added Striga moster card!
+<fat2>
+%%img src="img/lg/monsters_striga.jpg" style="max-width:25%"%% 
+```
+<fat3>
+# 14 August, 2026
+```diff
+--- Fixed multiple leader cars using wron visual assets!
++ Added card name information to card preview and carousel!
+```
+<fat3>
+# 12 August, 2026
+## Hotfix!!
+Moon phases script was a bit wrong, creating incorrect moon phases for the given moment, it was fixed now, **10 August, 2026** news have now corrected timestamps!
+<fat3>
+# 10 August, 2026
+## <color=#C5E0DF>New Moon is coming!</color>
+```diff
+<color=#C5E0DF>_It will begin on **!time:2026-08-11T11:37:49.473Z!**; the moon will vanish from the sky, darkness will fall, and the long-dead will rise from their graves!_</color>
+<color=#C5E0DF>_The </color><color=#A6ABAB>**New Moon** </color><color=#C5E0DF>card will summon </color><color=#2A7B40>**Nightraiths**</color> <color=#C5E0DF>to the board._</color>
+<color=#C5E0DF>_The Moon will lose its power on **!time:2026-08-13T23:37:49.473Z!**_</color>
+<fat2>
+%%img src="img/lg/monsters_nightwraith.jpg" style="max-width:25%"%% 
+```
+<fat3>
+# 7 August, 2026
+```diff
+? tgc\_portal lowered card to choose from! From 25 to 5
+? Pass sync duration is now dynamic!
+--- Updated bucket texture (Lower quality and size)
+```
+<fat3>
+# 6 August, 2026
+The process of translating Gwent into Polish is almost complete!
+<fat1>
+This update brings server-side chnages and new leader card! And news about next special visit!
+```diff
+? Gaunter O'Dimm — Master of Time is no longer [BETA], but still can recive rebalance updates!
++ Added "Eredin — The Elder Blood Pursuer" leader card; Random cards will appear in the "bucket" every few turns; the frequency of their appearance depends on the number of commanders with this ability currently in play. The winner of the round takes the pot, the loser turns some of the released power into cards draw.
+<fat2>
+%%img src="img/lg/monsters_eredin_bucket.jpg" style="max-width:25%"%%
+```
+<fat3>
+## <color=#AE6E6C>Season of Nine-Colored Deer Special Visit</color>
+<fat1>
+<color=#BBBCC1>Five new cards are coming to the **Sky Kingdom** faction for limited duration!</color>
+<color=#BBBCC1>Starting **!time:2026-08-28T07:00:00.000Z!** and ending at **!time:2026-09-11T07:00:00.000Z!** they be available to play!</color>
+<color=#BBBCC1>This will be the first visit of its kind, bringing together the group of traveling spirits from the Sky: Children of the Light to Gwent.</color>
+<color=#BBBCC1>Please remember that I am not affiliated with **ThatGameCompany** and I am adding these cards of my own accord; the characters themselves remain the property of TGC.</color>
+<fat1>
+<color=#BBBCC1>About Special Visit: [ThatSkyGame Post 1](https://www.thatskygame.com/news/this-month-in-sky-august-2026-edition), [ThatSkyGame Post 2](https://www.youtube.com/watch?v=M3%5FAB5vBxnk), [Sky Children of The Light Discord Server](api/discord-iframe/page?64=eyJpbnZpdGUiOiJ0aGF0c2t5Z2FtZSJ9)</color>
+<color=#BBBCC1>Remember to join our Gwent [Discord Server](api/discord-iframe/page) for updates and more informations!</color>
+<fat3>
+# 1 August, 2026
+Netlify app host of Gwent was discontinued for technical reasons, Gwent is still hosted on [gwent.localplayer.dev](https://gwent.localplayer.dev/) and github pages!
+```diff
++ Added "The Devil" card! !new!
+Discard after playing. Lets you pick and draw to hand 1 out of 3 random picked cards from deck. Tricks opponent into thinking you played that card!
+%%img src="img/lg/neutral_thedevil.jpg" style="max-width:25%"%%
+<fat2>
+```
+<fat3>
+# 31 July, 2026
+This update brings bug fixes to new beta test <color=#56D1B7>**Gaunter O'Dimm – Master of Time**</color> ability!
+Axii casted by Lambert cloned by Gaunter should be now placeable on opponet side of board!
+<color=#880808>**Known issue:**</color> No translation key for "ui.notif.gaunter2" as none was desing yet
+<fat3>
+# 28 July, 2026
+Added to testing to live version of game new neutral leader:
+<color=#56D1B7>**Gaunter O'Dimm – Master of Time**</color> is now available for all factions!
+```
+Gaunter O'Dimm – Master of Time: Both players will regain up to one life and one recent round will be erased, 60% of the cards from their graveyards will be copied to their hands, and the graveyards will be moved into the decks and shuffled.
+<fat2>
+%%img src="img/lg/neutral_Gaunter_Leader2.jpg" style="max-width:25%"%%
+```
+# 26 July, 2026
+```diff
++ Sky Kingdom Blue Bird cards were added !new!
+<fat2>
+%%img src="img/lg/sky_bluebird_a.jpg" style="max-width:25%"%% %%img src="img/lg/sky_bluebird_b.jpg" style="max-width:25%"%% %%img src="img/lg/sky_bluebird_sad.jpg" style="max-width:25%"%%
+```
+<fat3>
+# 25 July, 2026
+## News & Updates
+And next Traveling Spirit is Chill Sunba...., just kidding. "<color=#A42D23>**Confetti Cousin**</color>" will visit <color=#12cadb>**Sky Kingdom**</color> Faction as Traveling Spirit at !time:2026-07-30T07:00:00.000Z! and will stay for 4 days!
+<fat2>
+<color=#b3c8c9>**Full Moon**</color> is coming! The <color=#b3c8c9>**necrophages**</color> are coming to greet the moonlight. Starting at !time:2026-07-28T07:23:45.061Z!, for limited time <color=#b3c8c9>**Full Moon**</color> card will be available to all factions! Have fun while we seek an Witcher to resolve that monster issue!
+<fat2>
+Remember to join our Gwent [Discord Server](api/discord-iframe/page) for updates!
+<fat1>
+Other changes:
+```diff
++ Added Chill Sunbather with a bow in thier hair as Sky Kingdom agile card! !new!
++ Added Wardancer an Scoia'tael all rows unit card! !new!
++ Added Elders of the Valley Sky Kingdom leader card !new!
+  Double strenght of all ranged cards (unless a Commander's Horn is also present on that row)
+- Sky Kingdom Fortune Drum is no longer accessible to players, but remains in the game files (custom server still can bring it back).
+--- Bug fixes; Fixed changing faction confirmation menu
++ Added new card row type: "all", card can be placed in all close, ranged, siege row, and will be revived by medics to ranged row !new!
+--- Fixed 20th years of ThatGameCompany card!
+? Godling card strenght was lowered to 8 from 10
+<fat2>
+%%img src="img/lg/sky_sunbather_pink.jpg" style="max-width:25%"%% %%img src="img/lg/scoiatael_wardancer.jpg" style="max-width:25%"%% %%img src="img/lg/sky_valley_twins.jpg" style="max-width:25%"%%
+```
+<fat2>
+%%img src="img/web/other/dearvangogh/bar-thin.jpg" style="max-width:100%"%%
+### <color=#32b6fc>Dear Van Gogh Continues</color>
+The "<color=#32b6fc>Starry Night</color>" game background is returning to Gwent for a limited time!
+Starting **!time:2026-07-30T07:00:00.000Z!** till **!time:2026-08-03T07:00:00.000Z!** board will turn <color=#32b6fc>blue</color>, but will have no animated background!
+<fat1>
+<color=#adcbdb>About Dear Van Gogh: [ThatSkyGame Post](https://www.thatskygame.com/dearvangogh/), [Sky Children of The Light Discord Server](api/discord-iframe/page?64=eyJpbnZpdGUiOiJ0aGF0c2t5Z2FtZSJ9)</color>
+%%img src="img/web/other/dearvangogh/bar-thin.jpg" style="max-width:100%"%%
+<fat1>
+<fat3>
+# 24 July, 2026
+Active work on adding translations to the game has been underway for a few days, but this patch is about something else.
+```diff
++ Added Monsters faction Godling card !new!
+  Godling is an Diversion card, a reskin of Decoy, but it counts towards total score!
+<fat2>
+%%img src="img/web/other/card_builder_cards/godling.jpg" style="max-width:25%"%%
+```
+<fat3>
+# 21 July, 2026
+This patch brings moonlight with it!
+```diff
++ Monster faction recived 3 new cards !new!
+  Two available at the deck-builder level, one as a card ability.
+? Added 1.7 seconds long sleep before sending all cards player revived.
+- Removed "Dear van Gogh" background to lower game size!
+--- Optymalizated and updated  middle-right area of ​​the screen notyfication (Added yesterday in an undocumented change).
+--- Fixed one background config.
++ Around the time of the real-life Full Moon and New Moon, special moon cards will be available in the game! !new!
+(Next Full Moon card: !time:2026-07-28T07:23:45.061Z! - !time:2026-07-30T19:23:45.061Z!)
+<fat2>
+%%img src="img/lg/monsters_nightwraith.jpg" style="max-width:25%"%% %%img src="img/lg/monsters_noonwraith.jpg" style="max-width:25%"%% %%img src="img/lg/monsters_deatheatr.jpg" style="max-width:25%"%%
+```
+<fat3>
+# 20 July, 2026
+```diff
++ Added new easterr egg random coin toss "ancient" !new!
+<fat2>
+%%img src="img/icons/notif_me_coin_ancient.png" style="max-width:10%"%% %%img src="img/icons/notif_op_coin_ancient.png" style="max-width:10%"%% 
+```
+<fat3>
+# 19 July, 2026
+```diff
++ Added new moonlight cards for Monster & Syndicate faction !new!
+<fat2>
+%%img src="img/web/other/card_builder_cards/m_moonlight.jpg" style="max-width:25%"%% %%img src="img/web/other/card_builder_cards/s_moonlight.jpg" style="max-width:25%"%%
+```
+<fat3>
+# 17-18 July, 2026
+Gwent is now hosted also on [gwent.localplayer.dev](https://gwent.localplayer.dev/) and **[REMOVED]** outside github pages!
+<fat1>
+This patch bring few balance changes and documenting undocummented chnages!
+```diff
++ Added more backgrounds to the Gwent !new!
+--- Fixed some bugs
+? Avenger cards can no longer be picked up after placing!
+? Added "DontPickMeUp" me up ability, replacing other hard coded abilities not allowing pick up ater placing !new!
++ Added Anti-Bot check + captcha in case of false positves
+```
+<fat3>
+# 16 July, 2026
+This update bring small improvements to the Gwent!
+```diff
+? Updated Traveling Spirit card descryption, count and abilities!
+--- The requirement to log in to play Gwent has been disabled for an indefinite period.
+--- Patchnotes will now load after pressing the "button_start" button (lunching game button after loading).
+? Medic ability was improved! Clients will immediately tell each other what card(s) are revived!
+--- Added new version to deck export, changing card index in card_dict should no longer affect card imports! !new!
+```
+<fat3>
+# 15 July, 2026
+This update adds small quality-of-life changes!
+```diff
+--- Updated all user input function (change faction, join session, create session) wich new UI!
+--- Tried fixing issue where extraJSON was being send too fast, slowed each send for few seconds so other client can keep up!
+--- Added game init loading status! !new!
+```
+<fat3>
+# 14 July, 2026
+```diff
+--- Fixed Udalryk an Brokvar — Gods Choosen lg image
+--- Fixed typos in Sky Kingdom faction!
+--- Fixed again soundtrack player on web, hope it will work again, I have also no idea how it works
+<fat2>
+%%img src="img/lg/skellige_udalryka_leader.jpg" style="max-width:25%"%%
+```
+<fat3>
+# 13 July, 2026
+```diff
+--- Fixed Traveling Spirit card for exe app
+--- Custom server now restarts tavern ost (Deck Maker soundtrack)
++ Added Hym: Monster faction necromancer card !new!
+? You can see now cards you have in deck (Cards will be shown in alphabetic order), by clicking in match deck card pile!
+<fat2>
+%%img src="img/lg/monsters_hym.jpg" style="max-width:25%"%%
+```
+<fat3>
+<fat2>
+%%img src="img/web/other/dearvangogh/bar-thin.jpg" style="max-width:100%"%%
+### Season of Dear Van Gogh
+With the start of the new season in **Sky: Children of the Light**, new cards themed around that season will be added to **Gwent**.
+These cards will be available on **!time:2026-07-17T07:00:00.000Z!**, and more information about them will be available on the same day.
+<fat2>
+Join our Gwent [Discord Server](api/discord-iframe/page) for updates!
+<fat1>
+About Dear Van Gogh: [ThatSkyGame Post](https://www.thatskygame.com/dearvangogh/), [Sky Children of The Light Discord Server](api/discord-iframe/page?64=eyJpbnZpdGUiOiJ0aGF0c2t5Z2FtZSJ9)
+%%img src="img/web/other/dearvangogh/bar-thin.jpg" style="max-width:100%"%%
+<fat3>
+# 12 July, 2026
+## Gwent Was Patched!
+This is an expansion of yesterday's update; the changes introduce fixes and new features.
+```diff
+--- Fixed audio ost not playing in some browsers, now correctly use hls
+--- Tried making Gwent clock synced to global UTC clock, for now it works fine
++ Custom Card Builder, make card from json defined in card_dict during game lunch or joining custom server !new!
++ Added daily Circle of Elements card !new!
++ Added logic for cards being avitable during selected time period !new!
++ Added Traveling Spirit for Sky faction card (Will be avitable wich Spirit That visit in game) !new!
+<fat2>
+%%img src="img/web/other/card_builder_cards/axii.jpg" style="max-width:25%"%% %%img src="img/web/other/card_builder_cards/bird_guy.jpg" style="max-width:25%"%%
+```
+<fat3>
+# 11 July, 2026
+## Gwent Was Patched!
+This patch bring bug fixes and small improvements!
+```diff
+--- Improved Discord join redirect page: now have meta tags, support custom banners and is more universal
+- Removed old news about developer out of town, but kept img asset
+? Scorch now corretly pick targets between clients
+--- Fixed description of the scorchstopper card's ability
+--- Changed patchnotes display order (latest on top)
+--- Improved patchnotes (read below)
+--- Updated Spice Merchant card lg assets (now use correct font for name)
++ Added Magister scorch hero card !new!
++ Added Agile Schorch card ability !new!
+? While asking for surrender ui is now disabled
++ Added reskin of medic ability: necromancy ability, basicly it change sfx and animation
+? Made Yennefer of Vengerberg necromancer
+<fat2>
+%%img src="img/lg/syndicate_magister.jpg" style="max-width:25%"%% %%img src="img/lg/realms_spice_trader.jpg" style="max-width:25%"%% 
+```
+<fat2>
+Patchnotes was imporoved added new effect and also now diff supports:
+```diff
++ added
+- removed
+--- changed
+? rebalanced !new!
+```
+<fat3>
+# 10 July, 2026
+## Developer Back In Town!
+Hello **everyone** it's me **DrMineword**
+Im back and ready to work on **Gwent**, starting tommorow I will start add changes to the game from the to-do list!
+I've rested enough to keep working. And few new patches are now on the way!!`
+See ya soon!! and remember to join the [Discord server](api/discord-iframe/page) for more news!
+<fat3>
+# 27 June, 2026
+This is the last patch I’ll be making for the time being; Gwent won’t receive any updates over the next few days.
+More information on the [Discord server](api/discord-iframe/page) or in tomorrow's message.
+```diff
++ Added Days of Nature Guide Sky Kingdom faction wich reinforce ability!
++ Added The Ocean Cleanup card that get summoned after use of Days of Nature Guide card!
+--- Updated Sky Kingdom faction card_back images wich a bit better quality ones!
+--- Updated Sky Kingdom The Trevor Project card lg assets!
++ Added Sky Kingdom Sky Anniversary ranged morale card!
+--- Droped volume of "The Mandragora" from 50 to 30 (Was too loud)
+--- Fixed Days of Color Guide card (Improved quality of assets)
+<fat2>
+%%img src="img/lg/sky_natureguide.jpg" style="max-width:25%"%% %%img src="img/lg/sky_naturecollab.jpg" style="max-width:25%"%% %%img src="img/lg/sky_skyfest.jpg" style="max-width:25%"%%
+<fat1>
+%%img src="img/lg/sky_colorcollab.jpg" style="max-width:25%"%% %%img src="img/lg/sky_colorguide.jpg" style="max-width:25%"%%
+<fat1>
+%%img src="img/lg/faction_sky.jpg" style="max-width:17%"%%
+```
+<fat3>
+# 26 June, 2026
+```diff
+--- Updated this patchnotes screen!
+--- Updated multiple htmls
+```
+<fat1>
+### Hotfix:
+```diff
+--- Fixed patchnotes screen button hover
+--- Fixed when opponent have custom name set, country code next to his name is gone
+```
+<fat3>
+# 25 June, 2026
+```diff
+- Removed: Jan Calveit: Calculated Recovery leader card (It was just bad desing one)
++ Added Scoia'tael new leader card; Ida Emean — Elven Divination: Let you roll D20 for chance to get additional card from board, but what card you can get depends on roll result. Success on even roll. You need 1 charge to roll dice, you get 0.16 charges per your turn, up to 1 max charge(s) stored!
+  Ability is to be rebalnced!
+--- Fixed audio bug wich sfx/card.mp3 not playing
+<fat2>
+%%img src="img/lg/scoiatael_Ida_Emean_d20.jpg" style="max-width:25%"%%
+```
+<fat3>
+# 22 June, 2026
+```diff
+--- Rebalance for syndicate faction!
+--- Small changes and bug fixes
+--- Updated coin toss (now wich animation)
++ Added new syndicate leader that copy opponent ability!
+<fat2>
+%%img src="img/lg/syndicate_king_of_beggers.jpg" style="max-width:25%"%%
+<fat1>
+%%img src="img/icons/notif_me_coin.png" style="max-width:10%"%% %%img src="img/icons/notif_op_coin.png" style="max-width:10%"%% %%img src="img/icons/notif_me_coin_lambert.png" style="max-width:10%"%% %%img src="img/icons/notif_op_coin_lambert.png" style="max-width:10%"%% %%img src="img/icons/notif_me_coin_squirrel.png" style="max-width:10%"%% %%img src="img/icons/notif_op_coin_squirrel.png" style="max-width:10%"%%
+```
+<fat3>
+# 21 June, 2026
+## New Faction!!
+Coming from RandomPianist/gwent-classic-v3.1, Syndicate faction was added!
+Syndicate ability let you begin game wich morale card on board at game start! Additionally, this faction has access to all non-leader cards from all other factions!
+```diff
++ Added new leader ability, letting medic revive extra card
++ Added medicsdraw config
++ Added 2 new cards for syndicate Fisstech (morale ability), Sigi Reuven (Leader: extra medic revive)
+- Removed cards modified at patch 18 June, 2026, due to issues (I hope its ends now)
+  Also all card exports can now be broken!
++ Added different ui.notif when Nilfgaard wins round via draw
+<fat2>
+%%img src="img/lg/syndicate_fisstech.jpg" style="max-width:25%"%% %%img src="img/lg/syndicate_sigi_reuven.jpg" style="max-width:25%"%%
+```
+<fat3>
+# 20 June, 2026
+## Gwent Was Patched!
+```diff
+--- Skellige ability now sanitze cards to prevent activation of unwanted effects!
+--- Ignii card now remove itself on second board cleanup when round ends!
+--- Fixed Gaunter Neutral Leader card preview not previewing itself when ability is used
+--- Fixed one ost overlay
+--- Eredin The Destroyer was stoped, it can be used when hand is x < 2 cards!
+```
+<fat3>
+# 19 June, 2026
+```diff
++ Added White Frost weather card (ability: frost and fog)
++ Added: Vernon Roche – Blue Stripes Commando Leader leader card; Spawns Blue Stripes Commando attack force in close row, but makes you pass. (Could need a rebalnce, waiting for feedback)
+<fat2>
+%%img src="img/lg/weather_whitefrost.jpg" style="max-width:25%"%% %%img src="img/lg/realms_vernontemeria_call.jpg" style="max-width:25%"%%
+```
+<fat3>
+# 18 June, 2026
+```diff
+- Removed multiple card variants (due to issue wich random deck generator letting you pick inf number of them), this change dont afect gameplay, just visual, you still can have same amount of cards
++ Added new leader card; Radovid V the Stern — In Madness: Protect your cards from any Scorch effect as long as you have enough Shield Charges. Each save costs 1 charge. Starts with 5 charges and cannot be recharged. Shield break when youuse any Scorch card!
++ Turn skipper leader ability recived new cards for faction: Nilfgaard and Sky Kingdom!
+<fat2>
+%%img src="img/lg/realms_radovid_stern.jpg" style="max-width:25%"%% %%img src="img/lg/nilfgaard_fake_ciri.jpg" style="max-width:25%"%% %%img src="img/lg/sky_vault_elder_s2e.jpg" style="max-width:25%"%%
+```
+<fat3>
+# 17 June, 2026
+## ## SUMMER TIME SOON!!
+```diff
+--- Updated the board, deck customization background and the start screen as a seasonal holiday background.
++ Added easter egg wich Lambert during coin toss (Lambert, Lambert - What a prick, yes i will let you decide who start game... Sometimes)
+<fat2>
+%%img src="img/icons/notif_me_coin_lambert.png" style="max-width:10%"%% %%img src="img/icons/notif_op_coin_lambert.png" style="max-width:10%"%%
+```
+</box.text>
+
+<button.name>
+CONTINUE
+</button.name>
+
+<load.text>
+<l>INCOMING PATCHNOTES</l>
+</load.text>
+
+<load.duration_ms>
+3000
+</load.duration_ms>

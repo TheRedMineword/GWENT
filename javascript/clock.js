@@ -195,42 +195,175 @@ function hexWithAlpha(hex, alpha) {
   return `#${hex}${alphaHex}`;
 }
 
+const DEFAULT_UICARDS = {
+  cardLg: {
+    width: null,
+    aspectRatio: null,
+    borderRadius: "4.4% / 2.3%",
+    backgroundSize: "100% 100%",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  },
+  carousel: {
+    borderWidth: ".3vw",
+    borderColor: "goldenrod",
+    glowSize: "4vw",
+    glowColor: "goldenrod",
+    fillColor: "transparent",
+  },
+  cardLgHover: {
+    outlineWidth: ".12vw",
+    outlineColor: "goldenrod",
+    innerShadow: "0 0 3px rgba(0, 0, 0, .8)",
+    glowSize: "1.5vw",
+    glowColor: "goldenrod",
+    fillColor: "transparent",
+  },
+  startGame: {
+    outlineWidth: ".1vw",
+    outlineColor: "white",
+    glowSize: ".2vw",
+    glowColor: "white",
+  },
+  badge: {
+    borderRadius: "10px",
+  },
+};
+
+const pick = (value, fallback) =>
+  value === null || value === undefined || value === "" ? fallback : value;
+
+function resolveSection(userSection, defaults) {
+  const src = userSection || {};
+  const out = {};
+  for (const key of Object.keys(defaults)) {
+    out[key] = pick(src[key], defaults[key]);
+  }
+  return out;
+}
+
+function resolveUICards(uicards) {
+  const ui = uicards || {};
+  return {
+    cardLg: resolveSection(ui.cardLg, DEFAULT_UICARDS.cardLg),
+    carousel: resolveSection(ui.carousel, DEFAULT_UICARDS.carousel),
+    cardLgHover: resolveSection(ui.cardLgHover, DEFAULT_UICARDS.cardLgHover),
+    startGame: resolveSection(ui.startGame, DEFAULT_UICARDS.startGame),
+    badge: resolveSection(ui.badge, DEFAULT_UICARDS.badge),
+  };
+}
+
 function generateCSS(theme) {
   console.log("setting css", theme);
+
   if (menubntconfig.wasINIT) {
     document.getElementById("top-menu-btn").style.color = theme.menu_color;
   }
+
   menubntconfig.color = theme.menu_color;
+
   document.documentElement.style.setProperty(
     "--card-hover-shadow",
     theme.rowHover.color,
   );
+
+  const { cardLg, carousel, cardLgHover, startGame, badge } = resolveUICards(
+    theme.uicards,
+  );
+
   return `
 .current-turn {
-    box-shadow: ${theme.currentTurn.offsetX}
-                ${theme.currentTurn.offsetY}
-                ${theme.currentTurn.blur}
-                ${theme.currentTurn.spread}
-                ${theme.currentTurn.color};
+  box-shadow: ${theme.currentTurn.offsetX}
+              ${theme.currentTurn.offsetY}
+              ${theme.currentTurn.blur}
+              ${theme.currentTurn.spread}
+              ${theme.currentTurn.color};
 }
 
 .row-selectable:hover {
-    box-shadow: 0 0 ${theme.rowHover.blur} ${theme.rowHover.color};
-    box-sizing: border-box;
+  box-shadow: 0 0 ${theme.rowHover.blur} ${theme.rowHover.color};
+  box-sizing: border-box;
 }
 
 .card-selectable > .card:hover {
-    border: ${theme.cardHover.borderWidth} outset ${theme.cardHover.color};
-    border-radius: ${theme.cardHover.borderRadius};
-    margin-bottom: ${theme.cardHover.marginBottom};
-    z-index: 1;
+  border: ${theme.cardHover.borderWidth} outset ${theme.cardHover.color};
+  border-radius: ${theme.cardHover.borderRadius};
+  margin-bottom: ${theme.cardHover.marginBottom};
+  z-index: 1;
 }
-    .row-selectable {
-	background-color: ${hexWithAlpha(theme.rowselectable.hex, theme.rowselectable.alpha)};
+
+.row-selectable {
+  background-color: ${hexWithAlpha(
+    theme.rowselectable.hex,
+    theme.rowselectable.alpha,
+  )};
 }
-  ${atob(theme.row_scores)}
+
+/* Large card base (standard art size 410x775) */
+.card-lg {
+  width: ${cardLg.width};
+  aspect-ratio: ${cardLg.aspectRatio};
+  border-radius: ${cardLg.borderRadius};
+  background-size: ${cardLg.backgroundSize};
+  background-position: ${cardLg.backgroundPosition};
+  background-repeat: ${cardLg.backgroundRepeat};
+}
+
+/* Carousel card: applies even when NOT hovered */
+#carousel > :nth-child(1) > :nth-child(3) {
+  border: ${carousel.borderWidth} solid ${carousel.borderColor};
+  box-shadow: 0 0 ${carousel.glowSize} ${carousel.glowColor};
+  background-color: ${carousel.fillColor};
+  background-clip: border-box;
+  background-origin: border-box;
+}
+
+/* Deck maker large card hover */
+.card-lg:hover {
+  outline: ${cardLgHover.outlineWidth} solid ${cardLgHover.outlineColor};
+  outline-offset: 0;
+  box-shadow:
+    ${cardLgHover.innerShadow},
+    0 0 ${cardLgHover.glowSize} ${cardLgHover.glowColor};
+  background-color: ${cardLgHover.fillColor};
+  background-clip: border-box;
+}
+
+/* Carousel large card hover */
+#carousel .card-lg:hover {
+  outline: ${cardLgHover.outlineWidth} solid ${cardLgHover.outlineColor};
+  outline-offset: 0;
+  box-shadow:
+    ${cardLgHover.innerShadow},
+    0 0 ${cardLgHover.glowSize} ${cardLgHover.glowColor};
+  background-color: ${cardLgHover.fillColor};
+  background-clip: border-box;
+  background-origin: border-box;
+}
+
+/* Count badge: overrides the inline 6px radius */
+.card-count-badge {
+  border-radius: ${badge.borderRadius} !important;
+}
+
+/* Start game hover */
+.start-game_class:hover {
+  outline: ${startGame.outlineWidth} solid ${startGame.outlineColor};
+  outline-offset: 0;
+  box-shadow: 0 0 ${startGame.glowSize} ${startGame.glowColor};
+}
+
+/* Disable hover effects */
+#no_hover:hover {
+  outline: none;
+  box-shadow: none;
+  border-color: transparent;
+}
+
+${atob(theme.row_scores || "")}
 `;
 }
+
 async function setBackground(source) {
   console.log("[Background] Requested:", source);
 
