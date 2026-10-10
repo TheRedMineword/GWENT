@@ -3,6 +3,9 @@ let IsNowCustom = false;
 // CONFIG
 // ===============================
 const IGNORE_PATTERNS = [
+  "moonWatcherId",
+  "currentMoonState",
+  "inlines_moon",
   "dm",
   "youtubeInitializing",
   "playerId",
@@ -103,6 +106,40 @@ const IGNORE_PATTERNS = [
   "streamPlayerId",
   "streamDraining",
   "streamSource",
+  // readonkly consts
+  // abilities.js
+  "NotPickUpAbilities",
+  // bucket.js
+  "banned_bucket_abilities",
+  // clock.js
+  "locationJson",
+  "DEFAULT_UICARDS",
+  // clock_ui.js
+  "NOTES",
+  "player_switch",
+  // connect_to_custom_server.js
+  "IGNORE_PATTERNS",
+  // decks.js
+  "GLOBAL_DECKS",
+  // defines.js
+  "discord_cards",
+  "pick_array",
+  "AUDIO_STATE",
+  "inlines_moon",
+  "playBlock",
+  // faction_ability_counter.js
+  "ability_data",
+  // gwent.js
+  "GwentOverlayTypes",
+  // patchnotes.js
+  "UI_TEXT",
+  "DEFAULTS",
+  "ICON_SIZES",
+  "STREAM_MESSAGES",
+  "Z_INDEX",
+  "timerAnimation",
+  "streamQueue",
+  "streamFlags",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 

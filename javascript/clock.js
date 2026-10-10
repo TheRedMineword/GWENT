@@ -197,7 +197,8 @@ function hexWithAlpha(hex, alpha) {
 
 const DEFAULT_UICARDS = {
   cardLg: {
-    width: null,
+    width: "16.1vw",
+    height: "30.4vw",
     aspectRatio: null,
     borderRadius: "4.4% / 2.3%",
     backgroundSize: "100% 100%",
@@ -210,6 +211,12 @@ const DEFAULT_UICARDS = {
     glowSize: "4vw",
     glowColor: "goldenrod",
     fillColor: "transparent",
+  },
+  selection: {
+    borderWidth: ".3vw",
+    borderColor: "green",
+    glowSize: "4vw",
+    glowColor: "green",
   },
   cardLgHover: {
     outlineWidth: ".12vw",
@@ -244,13 +251,11 @@ function resolveSection(userSection, defaults) {
 
 function resolveUICards(uicards) {
   const ui = uicards || {};
-  return {
-    cardLg: resolveSection(ui.cardLg, DEFAULT_UICARDS.cardLg),
-    carousel: resolveSection(ui.carousel, DEFAULT_UICARDS.carousel),
-    cardLgHover: resolveSection(ui.cardLgHover, DEFAULT_UICARDS.cardLgHover),
-    startGame: resolveSection(ui.startGame, DEFAULT_UICARDS.startGame),
-    badge: resolveSection(ui.badge, DEFAULT_UICARDS.badge),
-  };
+  const out = {};
+  for (const section of Object.keys(DEFAULT_UICARDS)) {
+    out[section] = resolveSection(ui[section], DEFAULT_UICARDS[section]);
+  }
+  return out;
 }
 
 function generateCSS(theme) {
@@ -267,9 +272,17 @@ function generateCSS(theme) {
     theme.rowHover.color,
   );
 
-  const { cardLg, carousel, cardLgHover, startGame, badge } = resolveUICards(
-    theme.uicards,
-  );
+  const { cardLg, carousel, selection, cardLgHover, startGame, badge } =
+    resolveUICards(theme.uicards);
+
+  // Size lines are only emitted when a value is set (no "null" in the CSS)
+  const cardLgSize = [
+    cardLg.width ? `width: ${cardLg.width};` : "",
+    cardLg.height ? `height: ${cardLg.height};` : "",
+    cardLg.aspectRatio ? `aspect-ratio: ${cardLg.aspectRatio};` : "",
+  ]
+    .filter(Boolean)
+    .join("\n  ");
 
   return `
 .current-turn {
@@ -299,22 +312,42 @@ function generateCSS(theme) {
   )};
 }
 
-/* Large card base (standard art size 410x775) */
+/* Large card base. Single-class specificity, so contexts with their own
+   sizes (.card-array, carousel 2n / 4n-3) still override it. */
 .card-lg {
-  width: ${cardLg.width};
-  aspect-ratio: ${cardLg.aspectRatio};
+  ${cardLgSize}
   border-radius: ${cardLg.borderRadius};
   background-size: ${cardLg.backgroundSize};
   background-position: ${cardLg.backgroundPosition};
   background-repeat: ${cardLg.backgroundRepeat};
 }
 
+/* Radius only (never size) for contexts that hardcode 1vw in gwent.css,
+   and make the inner art layer follow the card's corners */
+.card-array .card-lg,
+.card-preview .card-lg,
+#carousel .card-lg {
+  border-radius: ${cardLg.borderRadius} !important;
+}
+
+.card-lg .card-large-bg {
+  border-radius: inherit !important;
+}
+
 /* Carousel card: applies even when NOT hovered */
 #carousel > :nth-child(1) > :nth-child(3) {
   border: ${carousel.borderWidth} solid ${carousel.borderColor};
+  border-radius: ${cardLg.borderRadius};
   box-shadow: 0 0 ${carousel.glowSize} ${carousel.glowColor};
   background-color: ${carousel.fillColor};
   background-clip: border-box;
+  background-origin: border-box;
+}
+
+/* Carousel selection (was hardcoded green in gwent.css) */
+#carousel .selection {
+  border: ${selection.borderWidth} solid ${selection.borderColor};
+  box-shadow: 0 0 ${selection.glowSize} ${selection.glowColor};
   background-origin: border-box;
 }
 

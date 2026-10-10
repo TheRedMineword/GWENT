@@ -398,7 +398,6 @@ let WEAR_TEXTURE_CONFIG = {
     spotOffsetX: 25,
     spotOffsetY: 18,
 
-    // noticeably smaller
     scratchLength: 20,
     scratchWidth: 1.1,
     spotRadius: 1.3,
@@ -407,22 +406,102 @@ let WEAR_TEXTURE_CONFIG = {
   },
 };
 
-async function cacheWaitMusic() {
-  // Load the Blob (assuming you fetch it from server or have it)
-  let response = await fetch("sfx/oldgwent/Inline.ogg");
-  let blob = await response.blob();
-  cachedWaitMusicBlobUrl = URL.createObjectURL(blob);
+const inlines_moon = {
+  full: "sfx/oldgwent/Spooky.mp3",
+  none: "sfx/oldgwent/Inline.ogg",
+  new: "sfx/oldgwent/Spooky.mp3",
+};
+const moonslifetime = 30;
+const moonslifetimeduration = Math.floor(moonslifetime * 60 * 60 * 2);
+const MOON_CHECK_INTERVAL_MS = 5 * 60 * 1000;
+function toMs(v) {
+  if (v == null) return NaN;
+  const t = v instanceof Date ? v.getTime() : new Date(v).getTime();
+  return Number.isFinite(t) ? t : NaN;
 }
+
+const MOON_DURATION_MS = moonslifetimeduration * 1000;
+
+function isActive(startMs, now) {
+  return !isNaN(startMs) && now >= startMs && now <= startMs + MOON_DURATION_MS;
+}
+
+function getMoonState(date = new Date()) {
+  const now = date.getTime();
+
+  const newStart = toMs(getNearestNewMoon(moonslifetime));
+  const fullStart = toMs(getNearestFullMoon(moonslifetime));
+
+  if (isActive(newStart, now)) return "new";
+  if (isActive(fullStart, now)) return "full";
+  return "none";
+}
+let currentMoonState = "none";
+let moonWatcherId = null;
+
+const SWAP_WHILE_PLAYING = true; // false = apply new track on next play_wait_music()
+let cacheInFlight = null;
+
+function cacheWaitMusic() {
+  if (cacheInFlight) return cacheInFlight;
+
+  cacheInFlight = (async () => {
+    const state = getMoonState();
+    const src = inlines_moon[state] || inlines_moon.none;
+    try {
+      const response = await fetch(src);
+      const blob = await response.blob();
+      const oldUrl = cachedWaitMusicBlobUrl;
+      cachedWaitMusicBlobUrl = URL.createObjectURL(blob);
+      currentMoonState = state;
+
+      if (SWAP_WHILE_PLAYING && waitMusicPlaying && waitMusicAudio) {
+        waitMusicAudio.src = cachedWaitMusicBlobUrl;
+        try {
+          await waitMusicAudio.play();
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      if (oldUrl) setTimeout(() => URL.revokeObjectURL(oldUrl), 5000);
+      console.log("[MOON]", "cached:", state);
+    } catch (e) {
+      console.error("[MOON] cache failed:", e);
+    } finally {
+      cacheInFlight = null;
+    }
+  })();
+
+  return cacheInFlight;
+}
+
+function checkMoonChange() {
+  if (getMoonState() !== currentMoonState) cacheWaitMusic();
+}
+
+function startMoonWatcher() {
+  if (moonWatcherId) return;
+  moonWatcherId = setInterval(checkMoonChange, MOON_CHECK_INTERVAL_MS);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) checkMoonChange();
+  });
+  window.addEventListener("focus", checkMoonChange);
+}
+
+function stopMoonWatcher() {
+  clearInterval(moonWatcherId);
+  moonWatcherId = null;
+}
+cacheWaitMusic().then(startMoonWatcher);
 async function play_wait_music() {
   console.log("[WAITING]", "PLAY");
-  if (waitMusicPlaying) return; // Already playing
+  if (waitMusicPlaying) return;
 
   waitMusicPlaying = true;
-  let url = cachedWaitMusicBlobUrl || "sfx/oldgwent/Inline.ogg";
+  const url =
+    cachedWaitMusicBlobUrl || inlines_moon[getMoonState()] || inlines_moon.none;
   waitMusicAudio = new Audio(url);
   waitMusicAudio.loop = true;
-
-  // Set volume to 60%
   waitMusicAudio.volume = 0.6;
 
   try {
@@ -439,6 +518,7 @@ async function play_wait_music() {
     waitMusicAudio = null;
   }
 }
+
 function stop_wait_music() {
   console.log("[WAITING]", "STOP");
   waitMusicPlaying = false;
@@ -456,7 +536,7 @@ function monitorVolume() {
   setTimeout(monitorVolume, 100);
 }
 
-cacheWaitMusic();
+// cacheWaitMusic();
 monitorVolume();
 
 console.log("gaunter_lider", gaunter_lider);

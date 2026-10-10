@@ -487,6 +487,9 @@ function cancelSession() {
     tocar("tf2/Trade_failure", false);
   }
   isconnectedtosession = false;
+  if (!waitMusicPlaying) {
+    ui.youtubePlay(tavern_yt_vid, tavern_yt_volume, true);
+  }
   document.getElementById("session-start-control").classList.add("hidden");
 
   btnCreateElem.classList.remove("hidden");
