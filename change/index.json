@@ -40,22 +40,10 @@
       "id": "dziadycard031026",
       "text": true,
       "weight": 71,
-      "start": "2026-10-27T08:00:00.000Z",
+      "start": "2026-10-26T08:00:00.000Z",
       "end": "2026-11-07T08:00:00.000Z",
       "title": "Forefathers' Eve is coming!",
       "icon": "calendar",
-      "display": "modal",
-      "autodisplay": false,
-      "showCountdown": true
-    },
-    {
-      "id": "newmoonfrom07102026",
-      "text": true,
-      "weight": 81,
-      "start": "2026-10-08T12:00:00.000Z",
-      "end": "2026-10-11T21:51:10.419Z",
-      "title": "The New Moon is coming!",
-      "icon": "moonstars",
       "display": "modal",
       "autodisplay": false,
       "showCountdown": true
