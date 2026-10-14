@@ -113,7 +113,7 @@ function verdictseen(onchange) {
         : domain;
 
     const seenmapstrng_2 = localStorage.getItem(SEEN_STORAGE_KEY) || {};
-    seenmapstrn = JSON.stringify(localStorage.getItem(SEEN_STORAGE_KEY) || {});
+    seenmapstrng = JSON.stringify(localStorage.getItem(SEEN_STORAGE_KEY) || {});
 
     return fetch(`${apiUrlcPN}api/verdict`, {
       method: "POST",
