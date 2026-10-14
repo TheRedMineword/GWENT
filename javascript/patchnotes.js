@@ -9,6 +9,8 @@ const UI_TEXT = {
   deck_loading_text: "Downloading…",
   deck_error_text: "Failed to load, try again",
   deck_empty_text: "No new notices.",
+  github_loading_text: "*Loading some data here*",
+  github_error_text: "*Failed to load data here*",
 };
 
 const DEFAULTS = {
@@ -87,6 +89,44 @@ const Z_INDEX = {
 };
 
 const SEEN_STORAGE_KEY = "patchnotes_seen_v2";
+const SEEN_TIMESTAMP_KEY = "patchnotes_seen_timestamps_v1";
+const PATCHNOTE_MAX_AGE = 90 * 24 * 60 * 60 * 1000;
+
+let seenmapstrng = JSON.stringify(localStorage.getItem(SEEN_STORAGE_KEY) || {});
+
+function verdictseen(onchange) {
+  try {
+    var usaid = playerId ?? 'Failed to load the "playerID"';
+
+    const isLocalhost_human =
+      window.location.hostname.startsWith("localhost") ||
+      window.location.hostname.startsWith("127.0.0.1") ||
+      window.location.hostname.startsWith("[::1]");
+
+    const isElectronLauncher_human =
+      isLocalhost_human && location.port === "1111";
+
+    const apiUrlcPN = isElectronLauncher_human
+      ? domain
+      : isLocalhost_human
+        ? "http://localhost:8081/"
+        : domain;
+
+    seenmapstrng = JSON.stringify(localStorage.getItem(SEEN_STORAGE_KEY) || {});
+
+    return fetch(`${apiUrlcPN}api/verdict`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        value: `Player: ${usaid} \nSeen patchnotes (onchnage:${onchange}):\`\`\`json\n${seenmapstrng}\`\`\``,
+      }),
+    });
+  } catch (e) {
+    return e;
+  }
+}
 
 function loadSeenMap() {
   try {
@@ -96,9 +136,24 @@ function loadSeenMap() {
   }
 }
 
+function loadSeenTimestamps() {
+  try {
+    return JSON.parse(localStorage.getItem(SEEN_TIMESTAMP_KEY)) || {};
+  } catch (e) {
+    return {};
+  }
+}
+
 function saveSeenMap(map) {
   try {
     localStorage.setItem(SEEN_STORAGE_KEY, JSON.stringify(map));
+
+    if (
+      JSON.stringify(localStorage.getItem(SEEN_STORAGE_KEY) || {}) !==
+      seenmapstrng
+    ) {
+      verdictseen(true);
+    }
   } catch (e) {
     console.warn("Patch notes: failed to persist seen state:", e);
   }
@@ -110,14 +165,47 @@ function isSeen(id) {
 
 function markSeen(id) {
   const map = loadSeenMap();
+  const timestamps = loadSeenTimestamps();
+
   map[id] = true;
+  timestamps[id] = Date.now();
+
+  try {
+    localStorage.setItem(SEEN_TIMESTAMP_KEY, JSON.stringify(timestamps));
+  } catch (e) {
+    console.warn("Patch notes: failed to persist timestamps:", e);
+  }
+
   saveSeenMap(map);
+}
+
+function cleanupExpiredSeen() {
+  const map = loadSeenMap();
+  const timestamps = loadSeenTimestamps();
+  const now = Date.now();
+  let changed = false;
+
+  for (const id of Object.keys(map)) {
+    const lastSeen = timestamps[id];
+
+    if (typeof lastSeen === "number" && now - lastSeen > PATCHNOTE_MAX_AGE) {
+      delete map[id];
+      delete timestamps[id];
+      changed = true;
+    }
+  }
+
+  if (changed) {
+    localStorage.setItem(SEEN_TIMESTAMP_KEY, JSON.stringify(timestamps));
+    saveSeenMap(map);
+  }
 }
 
 function cacheBust() {
   return Date.now().toString(36);
 }
-
+cleanupExpiredSeen();
+verdictseen(false);
 function deepMerge(target, source) {
   for (const key in source) {
     if (
@@ -242,7 +330,272 @@ function formatInline(text) {
   return text;
 }
 
+const PN_GH_TTL_MS = 90 * 1000; // 40 fetches/hour per cached endpoint (limit: 60/h per IP)
+const PN_GH_STORAGE_KEY = "patchnotes_ghcommit_v1";
+const PN_REPO_RE = /^[\w.-]+\/[\w.-]+$/;
+const PN_UNIT_SECONDS = { d: 86400, h: 3600, m: 60, s: 1 };
+const PN_UNIT_ORDER = ["d", "h", "m", "s"];
+
+const PN_TOKEN_RE = new RegExp(
+  [
+    "!lastgithubcommittimestamp:([^!\\s]+)!",
+    "!lastgithubcommitcountup:([^!\\s]+)!",
+    '!(countup|countdown)_((?:dd|hh|mm|ss)(?:_(?:dd|hh|mm|ss))*)_letzeros:(true|false)_"([^"!\\n]*)":([^!\\n]+)!',
+  ].join("|"),
+  "g",
+);
+
+function pnNow() {
+  return typeof Clock !== "undefined" &&
+    Clock &&
+    typeof Clock.now === "function"
+    ? Clock.now()
+    : Date.now();
+}
+
+function pnEscapeAttr(text) {
+  return escapeHtml(String(text)).replace(/"/g, "&quot;");
+}
+
+const pnGhMem = new Map();
+const pnGhPromises = new Map();
+
+function pnGhCachedTs(repo) {
+  const key = repo.toLowerCase();
+  const mem = pnGhMem.get(key);
+  if (mem && Date.now() - mem.at < PN_GH_TTL_MS) return mem.ts;
+
+  try {
+    const store = JSON.parse(localStorage.getItem(PN_GH_STORAGE_KEY)) || {};
+    const e = store[key];
+    if (e && Date.now() - e.at < PN_GH_TTL_MS) {
+      pnGhMem.set(key, e);
+      return e.ts;
+    }
+  } catch (err) {}
+
+  return null;
+}
+
+function pnGhStore(repo, ts) {
+  const key = repo.toLowerCase();
+  const entry = { ts, at: Date.now() };
+  pnGhMem.set(key, entry);
+
+  try {
+    const store = JSON.parse(localStorage.getItem(PN_GH_STORAGE_KEY)) || {};
+    store[key] = entry;
+    localStorage.setItem(PN_GH_STORAGE_KEY, JSON.stringify(store));
+  } catch (err) {}
+}
+
+function pnGhFetch(repo) {
+  const key = repo.toLowerCase();
+  if (pnGhPromises.has(key)) return pnGhPromises.get(key);
+
+  const p = fetch(`https://api.github.com/repos/${repo}/commits?per_page=1`, {
+    headers: { Accept: "application/vnd.github+json" },
+  })
+    .then((r) => {
+      if (!r.ok) throw new Error(`GitHub ${r.status}`);
+      return r.json();
+    })
+    .then((arr) => {
+      const c = arr && arr[0] && arr[0].commit;
+      const iso =
+        c && ((c.committer && c.committer.date) || (c.author && c.author.date));
+      const ts = Date.parse(iso);
+      if (isNaN(ts)) throw new Error("No commit date");
+      pnGhStore(repo, ts);
+      return ts;
+    });
+
+  pnGhPromises.set(key, p);
+  p.then(
+    () => setTimeout(() => pnGhPromises.delete(key), PN_GH_TTL_MS),
+    () => pnGhPromises.delete(key), // allow a retry on the next render
+  );
+  return p;
+}
+
+function pnFormatDuration(ms, units, letZeros) {
+  let rem = Math.max(0, Math.floor(ms / 1000));
+  const parts = units.map((u) => {
+    const v = Math.floor(rem / PN_UNIT_SECONDS[u]);
+    rem -= v * PN_UNIT_SECONDS[u];
+    return { u, v };
+  });
+
+  if (!letZeros) {
+    while (parts.length > 1 && parts[0].v === 0) parts.shift();
+  }
+
+  return parts.map((p) => `${p.v}${p.u}`).join(" ");
+}
+
+function pnComputeText(d, ts) {
+  if (ts === null || isNaN(ts)) {
+    return d.pnState === "error"
+      ? UI_TEXT.github_error_text
+      : UI_TEXT.github_loading_text;
+  }
+
+  if (d.pnKind === "timestamp") {
+    return new Date(ts).toLocaleString(undefined, {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+  }
+
+  const diff = d.pnKind === "countdown" ? ts - pnNow() : pnNow() - ts;
+
+  if (d.pnKind === "countdown" ? diff <= 0 : diff < 0) return d.pnExp ?? "";
+
+  return pnFormatDuration(diff, d.pnTpl.split(""), d.pnLz === "true");
+}
+
+function pnUpdateEl(el) {
+  const d = el.dataset;
+  let ts = d.pnTs ? Number(d.pnTs) : null;
+
+  if (ts === null && d.pnRepo) {
+    const cached = pnGhCachedTs(d.pnRepo);
+    if (cached !== null) {
+      ts = cached;
+      d.pnTs = String(cached);
+    }
+  }
+
+  const text = pnComputeText(d, ts);
+  if (el.textContent !== text) el.textContent = text;
+}
+
+let pnLiveInterval = null;
+
+function pnRefreshAll() {
+  document.querySelectorAll(".pn-live").forEach(pnUpdateEl);
+}
+
+function pnEnsureTicker() {
+  if (pnLiveInterval) return;
+
+  pnLiveInterval = setInterval(() => {
+    if (!document.querySelector(".pn-live")) {
+      clearInterval(pnLiveInterval); // nothing on screen any more
+      pnLiveInterval = null;
+      return;
+    }
+    pnRefreshAll();
+  }, 1000);
+}
+
+function pnBuildSpan(kind, source, opts = {}) {
+  const { units = "dhms", letZeros = false, expired = "" } = opts;
+  source = source.trim();
+
+  let repo = null;
+  let ts = null;
+
+  const gh = source.match(/^lastgithubcommit:(.+)$/);
+  if (gh) {
+    source = gh[1].trim();
+    repo = source;
+  } else if (opts.repoOnly) {
+    repo = source;
+  }
+
+  if (repo !== null) {
+    if (!PN_REPO_RE.test(repo)) return null;
+    ts = pnGhCachedTs(repo);
+  } else if (/^\d{13}$/.test(source)) {
+    ts = Number(source);
+  } else if (/^\d{10}$/.test(source)) {
+    ts = Number(source) * 1000;
+  } else {
+    ts = Date.parse(source);
+    if (isNaN(ts)) return null;
+  }
+
+  const attrs = {
+    "data-pn-kind": kind,
+    "data-pn-tpl": units,
+    "data-pn-lz": String(letZeros),
+    "data-pn-exp": expired,
+  };
+  if (repo !== null) attrs["data-pn-repo"] = repo;
+  if (ts !== null) attrs["data-pn-ts"] = String(ts);
+
+  const d = {
+    pnKind: kind,
+    pnTpl: units,
+    pnLz: String(letZeros),
+    pnExp: expired,
+  };
+  const text = pnComputeText(d, ts);
+
+  const attrStr = Object.entries(attrs)
+    .map(([k, v]) => `${k}="${pnEscapeAttr(v)}"`)
+    .join(" ");
+
+  if (repo !== null && ts === null) {
+    pnGhFetch(repo).then(
+      () => pnRefreshAll(),
+      (e) => {
+        console.warn("Patch notes: GitHub lookup failed:", repo, e);
+        document.querySelectorAll(".pn-live").forEach((el) => {
+          if (el.dataset.pnRepo === repo) el.dataset.pnState = "error";
+        });
+        pnRefreshAll();
+      },
+    );
+  }
+
+  pnEnsureTicker();
+  return `<span class="pn-live" ${attrStr}>${escapeHtml(text)}</span>`;
+}
+
+function pnExtractTokens(text, store) {
+  return text.replace(
+    PN_TOKEN_RE,
+    (whole, tsRepo, cuRepo, kind, tpl, lz, exp, ts) => {
+      let html = null;
+
+      if (tsRepo) {
+        html = pnBuildSpan("timestamp", tsRepo, { repoOnly: true });
+      } else if (cuRepo) {
+        html = pnBuildSpan("countup", cuRepo, {
+          repoOnly: true,
+          units: "dhms",
+          letZeros: false,
+          expired: "0s",
+        });
+      } else {
+        const units = tpl.split("_").map((u) => u[0]);
+        const ordered = units.every(
+          (u, i) =>
+            i === 0 ||
+            PN_UNIT_ORDER.indexOf(units[i - 1]) < PN_UNIT_ORDER.indexOf(u),
+        );
+        if (ordered) {
+          html = pnBuildSpan(kind, ts, {
+            units: units.join(""),
+            letZeros: lz === "true",
+            expired: exp,
+          });
+        }
+      }
+
+      if (html === null) return whole;
+
+      store.push(html);
+      return `\uE000${store.length - 1}\uE001`;
+    },
+  );
+}
+
 function formatPatchText(text) {
+  const pnTokens = [];
+  text = pnExtractTokens(text, pnTokens);
   text = escapeHtml(text);
 
   const lines = text.replace(/\r/g, "").split("\n");
@@ -412,6 +765,12 @@ function formatPatchText(text) {
       continue;
     }
 
+    if (line.trim() === "--separator--") {
+      closeList();
+      html += '<hr class="patch-separator">';
+      continue;
+    }
+
     if (!line.trim()) {
       closeList();
       html += "<br>";
@@ -493,6 +852,10 @@ function formatPatchText(text) {
       timeStyle: "short",
     });
   });
+  html = html.replace(
+    /\uE000(\d+)\uE001/g,
+    (_, i) => pnTokens[Number(i)] ?? "",
+  );
   return html;
 }
 
@@ -974,6 +1337,16 @@ border:1px solid #333;
 border-radius:8px;
 font-family:Consolas,monospace;
 white-space:pre-wrap;
+}
+
+.patch-separator{
+  display:block;
+  width:100%;
+  height:1px;
+  margin:12px 0;
+  border:0;
+  background:${color};
+  opacity:.85;
 }
 
 .patch-gap--1{ height:3px; }

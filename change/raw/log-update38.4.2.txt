@@ -19,10 +19,15 @@ Patch Notes:
 </box.title>
 
 <box.text>
+-#_ <color=#fff8db>**!lastgithubcommitcountup:TheRedMineword/GWENT!** since last Github commit! (!lastgithubcommittimestamp:TheRedMineword/GWENT!)</color>
+--separator--
+<fat1>
 # 14 October, 2026
 Gwent was patched!
 ```diff
 --- Fixed this patch note (also added new diff style)
+--- Added an countdowns to patchnotes formating
+--- Patch Notes will display now time since last github commit!
 --- Fixed Harvest Festival english translation string
 ? Forefathers' Eve is now "morale" card!
 --- Sky Seasons card have now its own card class!
@@ -62,7 +67,7 @@ Today's patch adds new cards and a balance adjustment for the Bond ability, and 
 ```
 <fat1>
 ## Forefathers' Eve
-**Forefathers' Eve** neutral diversion will be available !time:2026-11-01T08:00:00.000Z! and will be a new permanent card!
+**Forefathers' Eve** neutral diversion will be available !time:2026-11-01T08:00:00.000Z! (in !countdown_dd_hh_mm_ss_letzeros:false_"0s":2026-11-01T08:00:00.000Z!) and will be a new permanent card!
 <fat3>
 # 6 September, 2026
 ```diff

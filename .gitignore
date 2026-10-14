@@ -28,3 +28,4 @@ javascript/clock_config.json
 javascript/browser/validate-full.js
 /change/appinfo/commits_gen
 javascript/redirect_human.js
+change/time_formatting_guide.md
