@@ -111,6 +111,7 @@ const blockedRelayTypes = new Set([
   "discordinventory",
   "discordintegration",
   "welcome",
+  "discordintegration__screenshot"
 ]);
 
 const ADMIN_ENDPOINT_LOGIN = process.env.ADMIN_ENDPOINT_LOGIN;
