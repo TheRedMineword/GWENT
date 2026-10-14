@@ -29,6 +29,7 @@ Gwent was patched!
 --- Added an countdowns to patchnotes formating
 --- Patch Notes will display now time since last github commit!
 --- Fixed Harvest Festival english translation string
+--- Added wip screenshots feature, not usable right now
 ? Forefathers' Eve is now "morale" card!
 --- Sky Seasons card have now its own card class!
 --- Feedback news will now autodisplay: true becuase i still got no answer
