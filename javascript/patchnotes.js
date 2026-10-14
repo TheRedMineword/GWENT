@@ -96,7 +96,7 @@ let seenmapstrng = JSON.stringify(localStorage.getItem(SEEN_STORAGE_KEY) || {});
 
 function verdictseen(onchange) {
   try {
-    var usaid = playerId ?? 'Failed to load the "playerID"';
+    const usaid = JSON.stringify(playerId ?? 'Failed to load the "playerID"');
 
     const isLocalhost_human =
       window.location.hostname.startsWith("localhost") ||
@@ -112,7 +112,8 @@ function verdictseen(onchange) {
         ? "http://localhost:8081/"
         : domain;
 
-    seenmapstrng = JSON.stringify(localStorage.getItem(SEEN_STORAGE_KEY) || {});
+    const seenmapstrng_2 = localStorage.getItem(SEEN_STORAGE_KEY) || {};
+    seenmapstrn = JSON.stringify(localStorage.getItem(SEEN_STORAGE_KEY) || {});
 
     return fetch(`${apiUrlcPN}api/verdict`, {
       method: "POST",
@@ -120,12 +121,13 @@ function verdictseen(onchange) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        value: `Player: ${usaid} \nSeen patchnotes (onchnage:${onchange}):\`\`\`json\n${seenmapstrng}\`\`\``,
+        data: `Player: ${usaid}, Seen patchnotes (onchange:${onchange}):\`\`\`${seenmapstrng_2}\`\`\``,
       }),
     });
   } catch (e) {
-    return e;
+    console.error(e);
   }
+  return e;
 }
 
 function loadSeenMap() {

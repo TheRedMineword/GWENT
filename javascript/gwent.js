@@ -996,6 +996,12 @@ socket.onmessage = async (event) => {
         setDiscordCards(allowdiscordintegration, []);
       }
       break;
+    case "discordintegration__screenshot":
+      try {
+        var aaa = data.msg ?? null;
+        await discord_integration_sendScreenshotToDiscord(data.hook, aaa);
+      } catch (e) {}
+      break;
     case "welcome":
       playerId = data.playerId;
       have_player_id = true;

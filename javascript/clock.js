@@ -838,6 +838,7 @@ let the_image_json = {};
     "javascript/chat.js",
     "javascript/faction_ability_counter.js",
     "javascript/connect_to_custom_server.js",
+    "javascript/screenshots.js",
   ];
   window.Clock = {
     now() {
