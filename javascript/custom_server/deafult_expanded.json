@@ -567,7 +567,7 @@
       "naturecollab": "sky_guide_e_%g",
       "skyfest": "sky_guide_e_%g",
       "custom!traveling_spirit": "event_%g",
-      "custom!skyseason": "siege_%g",
+      "custom!skyseason": "skyseasonevent_hardcoded",
       "custom!sky_vincent": "sky_guide_s_%g",
       "custom!vincent_painting_power": "sky_guide_s_%g",
       "custom!sky_vincent_guys": "sky_spirit_%g",
@@ -1641,7 +1641,7 @@
           "iorwethbucketcommander": "Iorveth — Ordinary Son of a Whore",
           "iorwethpatience": "Iorveth — Ordinary Son of a Whore?",
           "whatthesandwitch": "Whoreson Junior — The Biggest Prick in Novigrad",
-          "dożynki": "Harvest festival",
+          "dożynki": "Harvest Festival",
           "dziady": "Forefathers' Eve",
           "scary_puppy": "Hellhound",
           "scary_flower": "Archespores",
@@ -2105,7 +2105,8 @@
             "dark_creature_male": "Dark Creature",
             "dark_creature_female": "Dark Creature",
             "light_creature_male": "Light Creature",
-            "light_creature_female": "Light Creature"
+            "light_creature_female": "Light Creature",
+            "skyseasonevent_hardcoded": "Sky: Children of the Light Seasonal"
           },
           "rule63": []
         },
@@ -3241,7 +3242,8 @@
             "dark_creature_male": "Istoty Ciemności",
             "dark_creature_female": "Istoty Ciemności",
             "light_creature_male": "Istoty Światła",
-            "light_creature_female": "Istoty Światła"
+            "light_creature_female": "Istoty Światła",
+            "skyseasonevent_hardcoded": "Sezonu z \"Sky: Children of the Light\" Starcia"
           },
           "rule63": [
             {
@@ -3290,6 +3292,11 @@
               "if": "aviary_medic",
               "mode": "filename",
               "gender": "male"
+            },
+            {
+              "if": "custom!skyseason",
+              "gender": "male",
+              "mode": "filename"
             }
           ]
         },
@@ -6596,7 +6603,7 @@
         "deck": "neutral",
         "row": "NaR",
         "strength": "0",
-        "ability": "decoy2 DontPickMeUp",
+        "ability": "decoy2 DontPickMeUp morale",
         "filename": "dziady",
         "count": "0",
         "count_monitor": {
@@ -7006,7 +7013,7 @@
     },
     "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "8o-JI8VRyKo",
+    "tavern_yt_vid": "yu197hlNWK0",
     "tavern_yt_volume": 90
   },
   "texture_pack_url": null

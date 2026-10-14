@@ -3813,7 +3813,7 @@ var card_dict_base = [
     deck: "neutral",
     row: "NaR",
     strength: "0",
-    ability: "decoy2 DontPickMeUp",
+    ability: "decoy2 DontPickMeUp morale",
     filename: "dziady",
     count: "0",
     count_monitor: {

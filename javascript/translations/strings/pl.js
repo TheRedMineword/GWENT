@@ -1333,6 +1333,7 @@ card_info: {
   dark_creature_female: "Istoty Ciemności",
   light_creature_male: "Istoty Światła",
   light_creature_female: "Istoty Światła",
+  skyseasonevent_hardcoded: "Sezonu z \"Sky: Children of the Light\" Starcia"
 },
 rule63: [  // for classes
   {"if": "siege", "gender": "female", "hero": false, "mode": "split"}, // because siege strucutes powiny mieć "oblężniczej"
@@ -1342,7 +1343,8 @@ rule63: [  // for classes
   {"if": "stennis", "gender": "female", "mode": "filename"},
    {"if": "redcrab", "gender": "female", "mode": "filename"},
   {"if": "sabotage_female", "mode": "notsplit", "hero": true, "gender": "female", "extra": "bad_lady", "extra2": true}, // ponieważ ortografia
-  {"if": "aviary_medic", "mode": "filename", "gender": "male"} 
+  {"if": "aviary_medic", "mode": "filename", "gender": "male"},
+  {"if": "custom!skyseason", "gender": "male", "mode": "filename"},
 ]
 },
  "potions": {

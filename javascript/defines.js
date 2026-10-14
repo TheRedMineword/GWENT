@@ -866,7 +866,7 @@ let card_name_class = {
   naturecollab: "sky_guide_e_%g",
   skyfest: "sky_guide_e_%g",
   "custom!traveling_spirit": "event_%g",
-  "custom!skyseason": "siege_%g",
+  "custom!skyseason": "skyseasonevent_hardcoded",
   "custom!sky_vincent": "sky_guide_s_%g",
   "custom!vincent_painting_power": "sky_guide_s_%g",
   "custom!sky_vincent_guys": "sky_spirit_%g",

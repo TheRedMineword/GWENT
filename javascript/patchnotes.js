@@ -400,6 +400,8 @@ function formatPatchText(text) {
           html += `<div class="patch-remove">${formatInline(line)}</div>`;
         } else if (line.startsWith("?")) {
           html += `<div class="patch-rebalnce">${formatInline(line)}</div>`;
+        } else if (line.startsWith("&")) {
+          html += `<div class="patch-funny">${formatInline(line)}</div>`;
         } else {
           html += `<div>${formatInline(line)}</div>`;
         }
@@ -944,6 +946,13 @@ margin:1px 0;
 .patch-rebalnce{
 color:#8FD3FF;
 font-weight:bold;
+margin:1px 0;
+    line-height:1.35;
+}
+.patch-funny{
+color:#9DF2C9;
+font-weight: bold;
+font-style: italic;
 margin:1px 0;
     line-height:1.35;
 }

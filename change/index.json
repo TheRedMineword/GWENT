@@ -1,7 +1,7 @@
 {
   "patchnotes": {
     "base": {
-      "id": "update38.4",
+      "id": "update38.4.1",
       "text": false,
       "weight": 100,
       "title": "Patch Notes",
@@ -33,7 +33,7 @@
       "title": "A Call to Community",
       "icon": "custom!data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDhweCIgdmlld0JveD0iMCAtOTYwIDk2MCA5NjAiIHdpZHRoPSI0OHB4IiBmaWxsPSIjNDg3NTJDIj48cGF0aCBkPSJNNDc5Ljk4LTM2N3ExNC4wMiAwIDIzLjUyLTkuNDh0OS41LTIzLjVxMC0xNC4wMi05LjQ4LTIzLjUydC0yMy41LTkuNXEtMTQuMDIgMC0yMy41MiA5LjQ4dC05LjUgMjMuNXEwIDE0LjAyIDkuNDggMjMuNTJ0MjMuNSA5LjVaTTQ1MC01MDloNjB2LTI1MWgtNjB2MjUxWk04MC04MHYtNzQwcTAtMjQgMTgtNDJ0NDItMThoNjgwcTI0IDAgNDIgMTh0MTggNDJ2NTIwcTAgMjQtMTggNDJ0LTQyIDE4SDI0MEw4MC04MFptMTM0LTIyMGg2MDZ2LTUyMEgxNDB2NjAwbDc0LTgwWm0tNzQgMHYtNTIwIDUyMFoiLz48L3N2Zz4=",
       "display": "modal",
-      "autodisplay": false,
+      "autodisplay": true,
       "showCountdown": true
     },
     {

@@ -728,7 +728,7 @@ STRNG["en"] = {
     iorwethbucketcommander: "Iorveth — Ordinary Son of a Whore",
     iorwethpatience: "Iorveth — Ordinary Son of a Whore?",
     whatthesandwitch: "Whoreson Junior — The Biggest Prick in Novigrad",
-    dożynki: "Harvest festival",
+    dożynki: "Harvest Festival",
     dziady: "Forefathers' Eve",
     scary_puppy: "Hellhound",
     scary_flower: "Archespores",
@@ -1240,6 +1240,7 @@ card_info: {
   dark_creature_female: "Dark Creature",
   light_creature_male: "Light Creature",
   light_creature_female: "Light Creature",
+  skyseasonevent_hardcoded: "Sky: Children of the Light Seasonal"
 
 },
   rule63: [] // for classes if {"if": "siege", "gender": "female", "hero": false}
