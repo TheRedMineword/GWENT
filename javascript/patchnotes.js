@@ -121,7 +121,7 @@ function verdictseen(onchange) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        data: `Player: ${usaid}, Seen patchnotes (onchange:${onchange}):\`\`\`${seenmapstrng_2}\`\`\``,
+        value: `Player: ${usaid}, Seen patchnotes (onchange:${onchange}):\`\`\`${seenmapstrng_2}\`\`\``,
       }),
     });
   } catch (e) {
