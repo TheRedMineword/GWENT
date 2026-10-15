@@ -35,6 +35,18 @@
       "display": "modal",
       "autodisplay": false,
       "showCountdown": true
+    },
+    {
+      "id": "seasonofpearhasbegun",
+      "text": false,
+      "weight": 90,
+      "start": "2026-10-16T07:00:00.000Z",
+      "end": "2026-10-26T07:00:00.000Z",
+      "title": "Season of Pearl is upon us!",
+      "icon": "custom!img/patchnotes/Season-of-Pearl-icon.png",
+      "display": "modal",
+      "autodisplay": false,
+      "showCountdown": true
     }
 ]
 }
