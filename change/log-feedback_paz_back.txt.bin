@@ -30,6 +30,9 @@ A: The soundtrack changes in a 24-hour rotation, each day, different one or at l
 Q: Starter deck
 A: Yeah, they are bit buggy and randomly generated each time you load game, becuause i had few issues wich them while adding and fixing cards (also I see now that few of them have empty config array, i will fill it now)
 
+Q: Leader cards?
+A: We have all leader cards from Witcher 3 and also few custom ones, you can change leader by clicking leader card in middle of deck maker
+
 Q: -BUG-
 A: Harvest festival card should not be resurrectable, thanks for bug report, i guess game still thinks they units
 
