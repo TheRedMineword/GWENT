@@ -8075,75 +8075,61 @@ async function loadPackedSFX() {
 }
 // new:
 function tocar(arquivo, pararMusica) {
-  if (arquivo.includes("card") || arquivo.includes("game_buy")) {
-  } else {
-    if (playBlock[utf8ToBase64(arquivo)]) {
-      if (playBlock[utf8ToBase64(arquivo)] === 1) {
-        playBlock[utf8ToBase64(arquivo)] = 2;
-        //	console.log("TOCAR PLAY", playBlock, arquivo);
-      } else {
-        //			console.log("TOCAR BLOCK PLAY", playBlock, arquivo);
-        return false;
-      }
-    } else {
-      playBlock[utf8ToBase64(arquivo)] = 2;
-      //	console.log("TOCAR PLAY", playBlock, arquivo);
+  const key = utf8ToBase64(arquivo);
+  const usaBlock = !arquivo.includes("card") && !arquivo.includes("game_buy");
+
+  if (usaBlock) {
+    if (playBlock[key] === 2) {
+      return false; // Another call already owns this lock
     }
+
+    playBlock[key] = 2;
   }
 
-  // console.log("TOCAR", arquivo, pararMusica);
-  //console.log("[sfx] tocar() called", "\n[sfx] params -> arquivo:", arquivo, "| pararMusica:", pararMusica);
-  //console.log("[sfx] current lastSound:", lastSound);
-
-  if (arquivo != lastSound && arquivo != "") {
-    //	console.log("[sfx] sound allowed to play");
-
-    var audioPath =
-      getTexturePackBlob("sfx/" + arquivo + ".mp3") ||
-      audio_cache[arquivo] ||
-      "sfx/" + arquivo + ".mp3";
-
-    // console.log("[sfx] creating Audio with path:", audioPath);
-
-    var s = new Audio(audioPath);
-
-    if (pararMusica) {
-      console.log("[sfx] pararMusica is true", ui.getAudioState());
-      if (ui.getAudioState() === 1) {
-        ui.stopYouTube();
-      }
+  // If playback is skipped, release the lock we just acquired.
+  if (arquivo === "" || arquivo === lastSound) {
+    if (usaBlock && playBlock[key] === 2) {
+      playBlock[key] = 1;
     }
+    return false;
+  }
 
-    lastSound = arquivo;
-    //console.log("[sfx] lastSound updated to:", lastSound);
+  const audioPath =
+    getTexturePackBlob("sfx/" + arquivo + ".mp3") ||
+    audio_cache[arquivo] ||
+    "sfx/" + arquivo + ".mp3";
 
-    s.play()
-      .then(() => {
-        if (playBlock[utf8ToBase64(arquivo)]) {
-          playBlock[utf8ToBase64(arquivo)] = 1;
-          //	console.log("TOCAR DEL NOW:", playBlock, arquivo);
-        }
-        //	console.log("[sfx] audio playback started successfully");
-      })
-      .catch((err) => {
-        if (playBlock[utf8ToBase64(arquivo)]) {
-          playBlock[utf8ToBase64(arquivo)] = 1;
-          //	console.log("TOCAR DEL NOW:", playBlock, arquivo);
-        }
-        //	console.error("[sfx] audio playback failed:", err);
-      });
+  const s = new Audio(audioPath);
 
-    setTimeout(function () {
-      //	console.log("[sfx] resetting lastSound after timeout");
+  if (pararMusica && ui.getAudioState() === 1) {
+    ui.stopYouTube();
+  }
+
+  lastSound = arquivo;
+
+  // Release the lock regardless of playback success or failure.
+  const releaseLock = () => {
+    if (usaBlock && playBlock[key] === 2) {
+      playBlock[key] = 1;
+    }
+  };
+
+  try {
+    s.play().then(
+      () => releaseLock(),
+      () => releaseLock(),
+    );
+  } catch (err) {
+    releaseLock();
+  }
+
+  setTimeout(() => {
+    if (lastSound === arquivo) {
       lastSound = "";
-    }, 50);
-  } else {
-    if (arquivo == "") {
-      //console.warn("[sfx] blocked: arquivo is empty");
-    } else {
-      //	console.warn("[sfx] blocked: same as lastSound:", arquivo);
     }
-  }
+  }, 50);
+
+  return true;
 }
 
 let youtubeInitializing = false;
