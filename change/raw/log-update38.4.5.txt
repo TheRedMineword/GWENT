@@ -22,6 +22,18 @@ Patch Notes:
 -#_ <color=#fff8db>**!lastgithubcommitcountup:TheRedMineword/GWENT!** since last Github commit! (!lastgithubcommittimestamp:TheRedMineword/GWENT!)</color>
 --separator--
 <fat1>
+# 15 October, 2026 - Feedback Patch
+Based on feedback I recive this changes were issued:
+```diff
++ An message was issued, answering questions anonymously
+--- Medic & Necromancers no longer are able to revive diversion cards, unless something is broken again
+    (This cards have an uniqe row id, that is also just placeholder that crashed game becuase its not real row)
+--- Expanded the card configuration array for the deck generator
++ Added 2 new deck maker button to see current cards !new!
+& Calling all Witchers to Kear Mohren!
+```
+<color=#BBBCC1>Remember to join our Gwent [Discord Server](api/discord-iframe/page) to give me more feedback or fill the an anonymous survey while there’s still time!</color>
+<fat3>
 # 15 October, 2026
 Gwent was patched!
 ```diff

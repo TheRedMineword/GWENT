@@ -1,4 +1,196 @@
 "use strict";
+// Helpers for buttons & previews
+// Adds card-view buttons under the Bank and Deck headings.
+function positionButtonUnderHeading(heading, button) {
+  const range = document.createRange();
+  range.selectNodeContents(heading);
+
+  const textRect = range.getBoundingClientRect();
+  const parent = button.offsetParent;
+
+  if (!parent || !textRect.width || !textRect.height) return;
+
+  const parentRect = parent.getBoundingClientRect();
+
+  const scaleX = parentRect.width / (parent.offsetWidth || 1);
+  const scaleY = parentRect.height / (parent.offsetHeight || 1);
+
+  const left =
+    (textRect.left + textRect.width / 2 - parentRect.left) / scaleX -
+    button.offsetWidth / 2;
+
+  const top = (textRect.bottom - parentRect.top) / scaleY + 5;
+
+  button.style.setProperty("left", `${left}px`, "important");
+  button.style.setProperty("top", `${top}px`, "important");
+}
+function addDeckBankCarouselButtons() {
+  const buttons = [
+    {
+      titleId: "card-bank-title",
+      buttonId: "view-bank-cards-btn",
+      label: "",
+      ariaLabel: "View available bank cards",
+      source: "bank",
+    },
+    {
+      titleId: "card-deck-title",
+      buttonId: "view-deck-cards-btn",
+      label: "",
+      ariaLabel: "View deck cards",
+      source: "deck",
+    },
+  ];
+
+  for (const config of buttons) {
+    const heading = document.getElementById(config.titleId);
+
+    if (!heading) {
+      console.warn(`[CardCarousel] Heading not found: ${config.titleId}`);
+      continue;
+    }
+
+    if (document.getElementById(config.buttonId)) continue;
+
+    const button = document.createElement("button");
+
+    button.id = config.buttonId;
+    button.type = "button";
+    button.className = "card-carousel-view-btn";
+    button.title = config.ariaLabel;
+    button.setAttribute("aria-label", config.ariaLabel);
+
+    const img = document.createElement("img");
+    img.src = "img/icons/anim_spy.png";
+    img.alt = "";
+    img.width = 24;
+    img.height = 24;
+
+    img.onerror = () => {
+      img.remove();
+      button.textContent = "👁";
+    };
+
+    button.appendChild(img);
+
+    if (config.label) {
+      button.appendChild(document.createTextNode(config.label));
+    }
+
+    button.addEventListener("click", async () => {
+      if (typeof ShowDeckBankCarousel !== "function") {
+        console.error("[CardCarousel] ShowDeckBankCarousel() is not defined.");
+        return;
+      }
+
+      button.disabled = true;
+
+      try {
+        await ShowDeckBankCarousel(config.source);
+      } catch (error) {
+        console.error("[CardCarousel] Failed:", error);
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    heading.insertAdjacentElement("afterend", button);
+
+    const reposition = () => positionButtonUnderHeading(heading, button);
+
+    requestAnimationFrame(reposition);
+    window.addEventListener("resize", reposition);
+  }
+}
+// Opens a carousel showing one copy of each available card.
+// source: "deck", "bank", or "both"
+async function ShowDeckBankCarousel(source = "both") {
+  if (!["deck", "bank", "both"].includes(source)) {
+    throw new TypeError('source must be "deck", "bank", or "both"');
+  }
+
+  const container = new CardContainer();
+  const seen = new Set();
+
+  const owner = typeof player_me !== "undefined" ? player_me : null;
+
+  // Add a card only once, even if multiple copies exist.
+  function addUniqueCard(cardOrData) {
+    if (!cardOrData) return;
+
+    const isCard = cardOrData instanceof Card;
+    const data = isCard ? (cardOrData._raw ?? cardOrData) : cardOrData;
+
+    const faction = cardOrData.faction ?? data.deck;
+    const filename = cardOrData.filename ?? data.filename;
+
+    const key = `${faction}:${filename}`;
+
+    if (!filename || seen.has(key)) return;
+
+    seen.add(key);
+
+    container.cards.push(isCard ? cardOrData : new Card(data, owner));
+  }
+
+  // Convert DeckMaker entries into actual Card objects.
+  function addDeckMakerCards(entries) {
+    for (const entry of entries ?? []) {
+      // Skip cards that are not available in this collection.
+      if (!(Number(entry?.count) > 0)) continue;
+
+      const cardData = card_dict[entry.index];
+
+      if (cardData) {
+        addUniqueCard(cardData);
+      }
+    }
+  }
+
+  const hasDeckMaker =
+    typeof dm !== "undefined" &&
+    Array.isArray(dm?.deck) &&
+    Array.isArray(dm?.bank);
+
+  if (hasDeckMaker) {
+    if (source === "deck" || source === "both") {
+      addDeckMakerCards(dm.deck);
+    }
+
+    if (source === "bank" || source === "both") {
+      addDeckMakerCards(dm.bank);
+    }
+  } else if (source !== "bank") {
+    // Fallback: show the current player's actual game deck.
+    const playerCards =
+      typeof player_me !== "undefined" ? (player_me?.deck?.cards ?? []) : [];
+
+    playerCards.forEach(addUniqueCard);
+  }
+
+  // Fallback if the deck builder had no cards to show.
+  if (
+    container.cards.length === 0 &&
+    source !== "bank" &&
+    typeof player_me !== "undefined"
+  ) {
+    (player_me?.deck?.cards ?? []).forEach(addUniqueCard);
+  }
+
+  if (container.cards.length === 0) {
+    showTooltip("No available cards to display.");
+    return;
+  }
+
+  // Sort cards before displaying them.
+  container.cards.sort((a, b) => Card.compare(a, b));
+
+  console.log(`[CARD CAROUSEL] Showing ${container.cards.length} unique cards`);
+
+  // Open the existing carousel and wait until it closes.
+  await ui.viewCardsInContainer(container);
+}
+//
 
 const GLOBAL_DECKS = ["neutral", "special", "weather"];
 const MIN_UNITS = 22;
@@ -471,7 +663,7 @@ function gen_premade_decks() {
         ["natalis", 1],
         ["philippa", 1],
         ["trebuchet_1", 2],
-        ["kaedwen_siege_1", 5],
+        ["kaedwen_siege_1", 3],
         ["decoy", 2],
         ["horn", 1],
         ["scorch", 1],
@@ -492,44 +684,133 @@ function gen_premade_decks() {
         ["tibor", 1],
         ["siege_engineer", 1],
         ["heavy_zerri", 1],
+        ["black_archer_1", 2],
+        ["archer_support", 2],
+        ["assire", 1],
         ["decoy", 2],
         ["scorch", 1],
       ]),
     },
-
     {
       faction: "monsters",
-      // TODO: verify this string matches a card.filename in card_dict —
-      // it currently looks like a display name, not a filename.
       leader: getLeaderIndex("eredin_gold"),
-      cards: getCardsIndex("monsters", []),
+      cards: getCardsIndex("monsters", [
+        ["arachas_1", 3],
+        ["arachas_behemoth", 1],
+        ["ghoul", 3],
+        ["nekker", 3],
+        ["witch_velen", 1],
+        ["witch_velen_1", 1],
+        ["witch_velen_2", 1],
+        ["bruxa", 1],
+        ["ekkima", 1],
+        ["fleder", 1],
+        ["garkain", 1],
+        ["katakan", 1],
+        ["striga", 3],
+        ["scary_puppy", 3],
+        ["draug", 1],
+        ["kayran", 1],
+        ["leshen", 1],
+        ["toad", 1],
+        ["decoy", 2],
+        ["scorch", 1],
+      ]),
     },
-
     {
       faction: "scoiatael",
-      // TODO: verify this string matches a card.filename in card_dict.
       leader: getLeaderIndex("francesca_hope_of_the_aen_seidhe"),
-      cards: getCardsIndex("scoiatael", []),
+      cards: getCardsIndex("scoiatael", [
+        ["dwarf", 3],
+        ["elf_skirmisher_1", 3],
+        ["havekar_nurse_2", 3],
+        ["havekar_support_2", 3],
+        ["dol_infantry_2", 3],
+        ["mahakam_4", 3],
+        ["wardancer", 2],
+        ["vrihedd_brigade_1", 2],
+        ["eithne", 1],
+        ["iorveth", 1],
+        ["isengrim", 1],
+        ["saskia", 1],
+        ["schirru", 1],
+        ["decoy", 1],
+        ["scorch", 1],
+      ]),
     },
-
     {
       faction: "skellige",
-      // TODO: verify this string matches a card.filename in card_dict.
       leader: getLeaderIndex("eist_tuirseach"),
-      cards: getCardsIndex("skellige", []),
+      cards: getCardsIndex("skellige", [
+        ["shield_maiden_2", 3],
+        ["craite_warrior", 3],
+        ["war_longship", 2],
+        ["young_berserker", 3],
+        ["light_longship", 3],
+        ["cerys", 1],
+        ["ermion", 1],
+        ["hjalmar", 1],
+        ["olaf", 1],
+        ["gerry", 1],
+        ["birna", 1],
+        ["kambi", 1],
+        ["draig", 1],
+        ["mardroeme", 2],
+        ["storm", 1],
+        ["decoy", 1],
+      ]),
     },
-
-    // Work in progress
     {
       faction: "sky",
       leader: getLeaderIndex("darkness_storm_leader"),
-      cards: getCardsIndex("sky", []),
+      cards: getCardsIndex("sky", [
+        ["guard", 3],
+        ["chibi_mask", 3],
+        ["krill", 3],
+        ["arcadaoffun", 2],
+        ["spirit", 2],
+        ["redcrab", 2],
+        ["crabspy", 2],
+        ["tgc20", 2],
+        ["custom!sky_vincent_guys", 3],
+        ["steward", 1],
+        ["rico", 1],
+        ["danielle", 1],
+        ["ranger", 1],
+        ["aviary_medic", 1],
+        ["custom!sky_vincent", 1],
+        ["custom!sky_vincent_medic", 1],
+      ]),
     },
     {
       faction: "syndicate",
-      // TODO: change later when better leader; verify filename match.
       leader: getLeaderIndex("sigi_reuven"),
-      cards: getCardsIndex("syndicate", []),
+      // The dictionary has few playable Syndicate units,
+      // so this template uses neutral cards to fill out the deck.
+      cards: getCardsIndex("syndicate", [
+        ["fisstech", 2],
+        ["magister", 1],
+        ["custom!s_moonlight", 2],
+        ["decoy", 2],
+        ["scorch", 1],
+        ["horn", 1],
+        ["clear", 1],
+        ["mysterious_elf", 1],
+        ["geralt", 1],
+        ["ciri", 1],
+        ["yennefer", 1],
+        ["triss", 1],
+        ["villen", 1],
+        ["lambert", 1],
+        ["eskel", 1],
+        ["olgierd", 1],
+        ["zoltan", 1],
+        ["GryffinWitcher", 2],
+        ["dopler", 2],
+        ["roach", 1],
+        ["gaunter_odimm_darkness", 2],
+        ["dandelion", 1],
+      ]),
     },
   ];
 }

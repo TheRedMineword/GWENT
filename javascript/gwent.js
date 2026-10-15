@@ -8204,6 +8204,7 @@ ui.enablePlayer(false);
 let dm = null;
 if (debuglunchcustomcards) {
   dm = new DeckMaker();
+  addDeckBankCarouselButtons();
 } else {
 }
 
@@ -8371,6 +8372,7 @@ async function lunch_gwent_ui() {
   console.log("dm init", card_dict);
   //  onYouTubeIframeAPIReady();
   dm = new DeckMaker();
+  addDeckBankCarouselButtons();
   console.log("DM", dm);
   if (wsUrl === "ws://localhost:8081") {
     notifyLocalhost(timed_count_change);

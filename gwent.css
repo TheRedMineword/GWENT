@@ -1,3 +1,52 @@
+/* Position the eye buttons under the Bank and Deck headings */
+#view-bank-cards-btn,
+#view-deck-cards-btn {
+    position: absolute !important;
+    z-index: 9999999 !important;
+
+    width: 28px !important;
+    height: 26px !important;
+    padding: 2px !important;
+    margin: 0 !important;
+
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+    background: #959595 !important;
+    border: 1px solid #666 !important;
+    border-radius: 5px;
+
+    cursor: pointer;
+    transform: none !important;
+}
+
+
+
+.card-carousel-view-btn img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+#view-bank-cards-btn:hover,
+#view-deck-cards-btn:hover {
+    background: #b0b0b0 !important;
+}
+
+/* Eye / spy icon */
+.card-carousel-view-btn img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+/* Hover effect */
+#view-bank-cards-btn:hover,
+#view-deck-cards-btn:hover {
+    background: #b0b0b0 !important;
+}
+
 .faction-ability {
 	background-image:url("./img/icons/faction-ability.png");
 	top:9.6%;

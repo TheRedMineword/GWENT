@@ -465,7 +465,9 @@ var ability_dict = {
               c.abilities.includes("muster") ||
               c.abilities.includes("medic") ||
               c.abilities.includes("medic_n") ||
-              c.abilities.includes("sabotage") ||
+              c.abilities.includes("decoy2") ||
+              c.abilities.includes("decoy") |
+                c.abilities.includes("sabotage") ||
               c.abilities.includes("spy") ||
               c.abilities.includes("gryffinSchool") ||
               c.abilities.includes("viperSchool") ||
@@ -1281,7 +1283,8 @@ var ability_dict = {
       for (let revive = 0; revive < reviveCount; revive++) {
         let units = card.holder.grave
           .findCards((c) => c.isUnit())
-          .filter((c) => c.row !== "NaR");
+          .filter((c) => c.row !== "NaR")
+          .filter((c) => c.abilities.includes("decoy2") !== true);
 
         if (units.length <= 0) break;
 
@@ -1394,7 +1397,8 @@ var ability_dict = {
       for (let revive = 0; revive < reviveCount; revive++) {
         let units = card.holder.grave
           .findCards((c) => c.isUnit())
-          .filter((c) => c.row !== "NaR");
+          .filter((c) => c.row !== "NaR")
+          .filter((c) => c.abilities.includes("decoy2") !== true);
 
         if (units.length <= 0) break;
 

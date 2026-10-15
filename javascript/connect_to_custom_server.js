@@ -896,6 +896,7 @@ async function reloadRuntimeConfigs() {
     cleanDeckMakerButtons();
 
     dm = new DeckMaker();
+    addDeckBankCarouselButtons();
 
     document
       .getElementById("session-start-control")

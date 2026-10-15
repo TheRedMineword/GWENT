@@ -28,7 +28,7 @@ Q: Always the same soundtrack?
 A: The soundtrack changes in a 24-hour rotation, each day, different one or at least it should be, during moon event also "waiting" music will be more _spooky_
 
 Q: Starter deck
-A: Yeah, they are bit buggy and randomly generated each time you load game, becuause i had few issues wich them while adding and fixing cards
+A: Yeah, they are bit buggy and randomly generated each time you load game, becuause i had few issues wich them while adding and fixing cards (also I see now that few of them have empty config array, i will fill it now)
 
 Q: -BUG-
 A: Harvest festival card should not be resurrectable, thanks for bug report, i guess game still thinks they units
