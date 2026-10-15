@@ -13,18 +13,6 @@
   },
   "news": [
     {
-      "id": "harvest130926",
-      "text": true,
-      "weight": 71,
-      "start": "2026-09-13T07:00:00.000Z",
-      "end": "2026-10-15T07:00:00.000Z",
-      "title": "Harvest Festival has begun!",
-      "icon": "calendar",
-      "display": "modal",
-      "autodisplay": false,
-      "showCountdown": true
-    },
-    {
       "id": "feedbackhelp2026paz05",
       "text": true,
       "weight": 80,
