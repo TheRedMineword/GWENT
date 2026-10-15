@@ -787,7 +787,7 @@ let card_name_class = {
   dimun_pirate: "warrior_%g",
   shield_maiden_2: "warrior_%g",
   heymaey: "bard_%g",
-  tordarroch: "dwarf_%g",
+  tordarroch: "human_%g",
   craite_warrior: "warrior_%g",
   donar: "warrior_%g",
   draig: "bard_%g",
@@ -897,6 +897,8 @@ let classDecorators = {
   undefined: { prefix: "⩫<", suffix: ">⩫" },
   none: { prefix: "⩫<", suffix: ">⩫" },
 
+  skyseasonevent: { prefix: "⩫<", suffix: ">⩫" },
+
   royal: { prefix: "♔ ", suffix: "" },
   commander: { prefix: "⟪", suffix: "⟫" },
   soldier: { prefix: "[", suffix: "]" },
@@ -911,6 +913,7 @@ let classDecorators = {
   berserker: { prefix: "ᛒ ", suffix: "" },
   dwarf: { prefix: "⛏ ", suffix: "" },
   elf: { prefix: "❧ ", suffix: "" },
+  human: { prefix: "⪩ ", suffix: "" },
   spy: { prefix: "⌁", suffix: "⌁" },
   siege: { prefix: "▣ ", suffix: "" },
   ship: { prefix: "⚓ ", suffix: "" },

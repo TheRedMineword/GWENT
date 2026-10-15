@@ -1161,7 +1161,7 @@ francesca_hope_of_the_aen_seidhe:
     "wiped": {
       "wiped": "Wymazano!",
       "res": {
-        "gaunter_revert": "Gaunter O'dim cofął czas"
+        "gaunter_revert": "Gaunter O'dim cofnął czas"
       }
     },
     "sep": "|",
@@ -1304,7 +1304,7 @@ card_info: {
   cow_male: "Krowy",
   cow_female: "Krowy",
   sky_spirit_male: "Ducha",
-  sky_spirit_female: "Duchyni",
+  sky_spirit_female: "Duszki",
   guard_male: "Strażnika",
   guard_female: "Strażniczki",
   sky_guide_e_male: "Przewodnika Wydarzeń",
@@ -1333,7 +1333,9 @@ card_info: {
   dark_creature_female: "Istoty Ciemności",
   light_creature_male: "Istoty Światła",
   light_creature_female: "Istoty Światła",
-  skyseasonevent_hardcoded: "Sezonu z \"Sky: Children of the Light\" Starcia"
+  skyseasonevent_hardcoded: "Sezonu z \"Sky: Children of the Light\" Starcia",
+  human_male: "Człowieka",
+  human_female: "Człowieka"
 },
 rule63: [  // for classes
   {"if": "siege", "gender": "female", "hero": false, "mode": "split"}, // because siege strucutes powiny mieć "oblężniczej"

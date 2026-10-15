@@ -1240,7 +1240,9 @@ card_info: {
   dark_creature_female: "Dark Creature",
   light_creature_male: "Light Creature",
   light_creature_female: "Light Creature",
-  skyseasonevent_hardcoded: "Sky: Children of the Light Seasonal"
+  skyseasonevent_hardcoded: "Sky: Children of the Light Seasonal",
+  human_male: "Human",
+  human_female: "Human"
 
 },
   rule63: [] // for classes if {"if": "siege", "gender": "female", "hero": false}

@@ -488,7 +488,7 @@
       "dimun_pirate": "warrior_%g",
       "shield_maiden_2": "warrior_%g",
       "heymaey": "bard_%g",
-      "tordarroch": "dwarf_%g",
+      "tordarroch": "human_%g",
       "craite_warrior": "warrior_%g",
       "donar": "warrior_%g",
       "draig": "bard_%g",
@@ -603,6 +603,10 @@
         "prefix": "⩫\u003C",
         "suffix": "\u003E⩫"
       },
+      "skyseasonevent": {
+        "prefix": "⩫\u003C",
+        "suffix": "\u003E⩫"
+      },
       "royal": {
         "prefix": "♔ ",
         "suffix": ""
@@ -657,6 +661,10 @@
       },
       "elf": {
         "prefix": "❧ ",
+        "suffix": ""
+      },
+      "human": {
+        "prefix": "⪩ ",
         "suffix": ""
       },
       "spy": {
@@ -2106,7 +2114,9 @@
             "dark_creature_female": "Dark Creature",
             "light_creature_male": "Light Creature",
             "light_creature_female": "Light Creature",
-            "skyseasonevent_hardcoded": "Sky: Children of the Light Seasonal"
+            "skyseasonevent_hardcoded": "Sky: Children of the Light Seasonal",
+            "human_male": "Human",
+            "human_female": "Human"
           },
           "rule63": []
         },
@@ -3100,7 +3110,7 @@
           "wiped": {
             "wiped": "Wymazano!",
             "res": {
-              "gaunter_revert": "Gaunter O'dim cofął czas"
+              "gaunter_revert": "Gaunter O'dim cofnął czas"
             }
           },
           "sep": "|",
@@ -3214,7 +3224,7 @@
             "cow_male": "Krowy",
             "cow_female": "Krowy",
             "sky_spirit_male": "Ducha",
-            "sky_spirit_female": "Duchyni",
+            "sky_spirit_female": "Duszki",
             "guard_male": "Strażnika",
             "guard_female": "Strażniczki",
             "sky_guide_e_male": "Przewodnika Wydarzeń",
@@ -3243,7 +3253,9 @@
             "dark_creature_female": "Istoty Ciemności",
             "light_creature_male": "Istoty Światła",
             "light_creature_female": "Istoty Światła",
-            "skyseasonevent_hardcoded": "Sezonu z \"Sky: Children of the Light\" Starcia"
+            "skyseasonevent_hardcoded": "Sezonu z \"Sky: Children of the Light\" Starcia",
+            "human_male": "Człowieka",
+            "human_female": "Człowieka"
           },
           "rule63": [
             {
@@ -7011,9 +7023,9 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
-    "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "yu197hlNWK0",
+    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
+    "audio_yt_vid_soundtrack_volume": 47,
+    "tavern_yt_vid": "8o-JI8VRyKo",
     "tavern_yt_volume": 90
   },
   "texture_pack_url": null
