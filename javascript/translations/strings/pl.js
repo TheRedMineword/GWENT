@@ -1040,6 +1040,7 @@ francesca_hope_of_the_aen_seidhe:
       }
     },
     mmenu: {
+      "leader-topic": "Dowódca",
       "create-game": "Stwórz Grę",
       joingame: "Dołącz do Gry",
       "session-start-control_ready": "Gotów",

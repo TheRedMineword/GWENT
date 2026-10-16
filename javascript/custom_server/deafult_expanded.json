@@ -979,6 +979,24 @@
         }
       }
     },
+    "LEADER_HINT_CONFIG": {
+      "size": "62%",
+      "minSize": "44px",
+      "maxSize": "100px",
+      "opacityMin": 0.26,
+      "opacityMax": 0.9998,
+      "rotationSeconds": 16,
+      "pulseSeconds": 2.8,
+      "blendMode": "screen",
+      "glow": true,
+      "glowColor": "rgba(255, 205, 105, 0.75)",
+      "horizontalOffset": "0px",
+      "verticalOffset": "0px",
+      "animate": true,
+      "checkInterval": 800,
+      "debug": false,
+      "use": true
+    },
     "always_full_timer_in_patchnotes": true,
     "STRNG": {
       "failure": {
@@ -1836,6 +1854,7 @@
             }
           },
           "mmenu": {
+            "leader-topic": "Leader",
             "create-game": "Create Game",
             "joingame": "Join Game",
             "session-start-control_ready": "Ready",
@@ -2975,6 +2994,7 @@
             }
           },
           "mmenu": {
+            "leader-topic": "Dowódca",
             "create-game": "Stwórz Grę",
             "joingame": "Dołącz do Gry",
             "session-start-control_ready": "Gotów",
@@ -7023,10 +7043,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
-    "tavern_yt_vid": "8o-JI8VRyKo",
-    "tavern_yt_volume": 90
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack_volume": 90,
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }

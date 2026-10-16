@@ -946,6 +946,7 @@ STRNG["en"] = {
       }
     },
     mmenu: {
+      "leader-topic": "Leader",
       "create-game": "Create Game",
       joingame: "Join Game",
       "session-start-control_ready": "Ready",

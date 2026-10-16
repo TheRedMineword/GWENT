@@ -1120,6 +1120,35 @@ let card_gender = {
   skylena: "female",
 };
 card_gender.undefined = "male";
+
+let LEADER_HINT_CONFIG = {
+  size: "62%",
+  minSize: "44px",
+  maxSize: "100px",
+
+  opacityMin: 0.26,
+  opacityMax: 0.9998,
+
+  rotationSeconds: 16,
+  pulseSeconds: 2.8,
+
+  blendMode: "screen",
+
+  glow: true,
+  glowColor: "rgba(255, 205, 105, 0.75)",
+
+  horizontalOffset: "0px",
+  verticalOffset: "0px",
+
+  animate: true,
+
+  // Recheck interval in milliseconds
+  checkInterval: 800,
+
+  debug: false,
+  use: true,
+};
+
 let ThisDef = {
   name: "Default Config",
 
@@ -1211,6 +1240,7 @@ let ThisDef = {
     classDecorators: deepClone(classDecorators),
     card_gender: deepClone(card_gender),
     viper_potions_defs: deepClone(viper_potions_defs),
+    LEADER_HINT_CONFIG: deepClone(LEADER_HINT_CONFIG),
   },
 };
 

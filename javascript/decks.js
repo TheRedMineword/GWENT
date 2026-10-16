@@ -184,6 +184,22 @@ async function ShowDeckBankCarousel(source = "both") {
 
   // Sort cards before displaying them.
   container.cards.sort((a, b) => Card.compare(a, b));
+  // console.log("container.cards", container.cards);
+  container.cards.sort((a, b) => {
+    const c1 = {
+      name: a.name,
+      basePower: -Number(a._raw?.strength ?? a.basePower),
+      faction: a.faction,
+    };
+
+    const c2 = {
+      name: b.name,
+      basePower: -Number(b._raw?.strength ?? b.basePower),
+      faction: b.faction,
+    };
+
+    return Card.compare(c1, c2);
+  });
 
   console.log(`[CARD CAROUSEL] Showing ${container.cards.length} unique cards`);
 
@@ -191,6 +207,268 @@ async function ShowDeckBankCarousel(source = "both") {
   await ui.viewCardsInContainer(container);
 }
 //
+
+// Deck helper, change lider
+// https://fonts.google.com/icons?icon.query=settings&selected=Material+Symbols+Outlined:settings:FILL@0;wght@400;GRAD@0;opsz@24&icon.size=24&icon.color=%23FFFFFF
+const SVG_settings_leader_change = `<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+    <path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z"/>
+</svg>`;
+async function init_leader_hints() {
+  (() => {
+    const PRIVATE = {
+      target: "#card-leader",
+      image: "#card-leader > div",
+      className: "leader-change-hint-overlay",
+      styleId: "leader-change-hint-styles",
+      svgVariable: "SVG_settings_leader_change",
+    };
+
+    const GLOBAL_NAME = "LeaderHint";
+    window[GLOBAL_NAME]?.stop?.();
+
+    let timer = null;
+    let observer = null;
+    let currentTarget = null;
+    let currentOverlay = null;
+    let styleElement = null;
+
+    function getSvgSource() {
+      try {
+        return typeof SVG_settings_leader_change !== "undefined"
+          ? SVG_settings_leader_change
+          : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function createSvg() {
+      const source = getSvgSource();
+      let svg = null;
+
+      if (typeof source === "string") {
+        const template = document.createElement("template");
+        template.innerHTML = source.trim();
+        svg = template.content.querySelector("svg");
+      } else if (
+        source instanceof SVGElement &&
+        source.tagName.toLowerCase() === "svg"
+      ) {
+        svg = source.cloneNode(true);
+      }
+
+      if (!svg) {
+        console.warn("[LeaderHint] SVG source unavailable or invalid.");
+        return null;
+      }
+
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("focusable", "false");
+
+      return svg;
+    }
+
+    function installStyles() {
+      const c = LEADER_HINT_CONFIG;
+
+      styleElement?.remove();
+
+      styleElement = document.createElement("style");
+      styleElement.id = PRIVATE.styleId;
+
+      styleElement.textContent = `
+      .${PRIVATE.className} {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 10;
+
+        transform: translate(
+          ${c.horizontalOffset},
+          ${c.verticalOffset}
+        );
+
+        mix-blend-mode: ${c.blendMode};
+        opacity: ${c.opacityMax};
+
+        animation: ${
+          c.animate
+            ? `leaderHintPulse ${c.pulseSeconds}s ease-in-out infinite alternate`
+            : "none"
+        };
+      }
+
+      .${PRIVATE.className} svg {
+        display: block;
+        width: ${c.size};
+        height: ${c.size};
+        min-width: ${c.minSize};
+        min-height: ${c.minSize};
+        max-width: ${c.maxSize};
+        max-height: ${c.maxSize};
+        object-fit: contain;
+        overflow: visible;
+
+        filter: ${
+          c.glow
+            ? `drop-shadow(0 0 5px ${c.glowColor})
+               drop-shadow(0 0 12px ${c.glowColor})`
+            : "none"
+        };
+
+        animation: ${
+          c.animate
+            ? `leaderHintSpin ${c.rotationSeconds}s linear infinite`
+            : "none"
+        };
+      }
+
+      @keyframes leaderHintPulse {
+        from { opacity: ${c.opacityMin}; }
+        to   { opacity: ${c.opacityMax}; }
+      }
+
+      @keyframes leaderHintSpin {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+      }
+    `;
+
+      document.head.appendChild(styleElement);
+    }
+
+    function update() {
+      if (!styleElement?.isConnected) {
+        installStyles();
+      } else {
+        installStyles();
+      }
+
+      const card = document.querySelector(PRIVATE.target);
+      const target = card?.querySelector(PRIVATE.image);
+
+      if (!target) {
+        currentOverlay?.remove();
+        currentOverlay = null;
+        currentTarget = null;
+        return;
+      }
+
+      if (
+        target === currentTarget &&
+        currentOverlay?.parentElement === target
+      ) {
+        return;
+      }
+
+      currentOverlay?.remove();
+
+      target
+        .querySelectorAll(`:scope > .${PRIVATE.className}`)
+        .forEach((el) => el.remove());
+
+      const svg = createSvg();
+      if (!svg) return;
+
+      const overlay = document.createElement("div");
+      overlay.className = PRIVATE.className;
+      overlay.setAttribute("aria-hidden", "true");
+      overlay.appendChild(svg);
+
+      if (getComputedStyle(target).position === "static") {
+        target.style.position = "relative";
+      }
+
+      target.appendChild(overlay);
+
+      currentTarget = target;
+      currentOverlay = overlay;
+
+      if (LEADER_HINT_CONFIG.debug) {
+        console.log("[LeaderHint] Overlay attached.", target);
+      }
+    }
+
+    function stop() {
+      if (timer !== null) clearInterval(timer);
+      observer?.disconnect();
+      currentOverlay?.remove();
+      styleElement?.remove();
+
+      timer = null;
+      observer = null;
+      currentTarget = null;
+      currentOverlay = null;
+      styleElement = null;
+
+      if (window[GLOBAL_NAME]?.stop === stop) {
+        delete window[GLOBAL_NAME];
+      }
+    }
+
+    function start() {
+      installStyles();
+      update();
+
+      observer = new MutationObserver(() => {
+        const card = document.querySelector(PRIVATE.target);
+        const target = card?.querySelector(PRIVATE.image);
+
+        if (
+          target !== currentTarget ||
+          currentOverlay?.parentElement !== target
+        ) {
+          update();
+        }
+      });
+
+      observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+      });
+
+      timer = setInterval(
+        update,
+        Math.max(100, Number(LEADER_HINT_CONFIG.checkInterval) || 800),
+      );
+
+      window[GLOBAL_NAME] = {
+        update,
+        stop,
+        restart() {
+          stop();
+          start();
+        },
+      };
+
+      if (LEADER_HINT_CONFIG.debug) {
+        console.log("[LeaderHint] Started.");
+      }
+    }
+
+    start();
+  })();
+}
+async function sync_update_deck_helper_leader__see_me_human_and_thats_also_very_long_function_name() {
+  await LeaderHint.stop();
+  try {
+    await LeaderHint.update();
+  } catch (e) {}
+  if (LEADER_HINT_CONFIG.use) {
+    try {
+      await LeaderHint.start();
+    } catch (e) {
+      await init_leader_hints();
+    }
+  }
+  return "OK";
+}
+init_leader_hints();
+// ===================================
 
 const GLOBAL_DECKS = ["neutral", "special", "weather"];
 const MIN_UNITS = 22;

@@ -544,6 +544,9 @@ function getUiHtmlStrng_escapeHtml(str) {
     .replace(/'/g, "&#39;");
 }
 function translate_ui_hub() {
+  document.querySelector("#card-leader > p").textContent = getTranslation(
+    "ui.mmenu.leader-topic",
+  ); // Leader box
   document.getElementById("create-game").textContent = getTranslation(
     "ui.mmenu.create-game",
   ); //"Create Server";

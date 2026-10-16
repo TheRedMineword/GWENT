@@ -896,7 +896,8 @@ async function reloadRuntimeConfigs() {
     cleanDeckMakerButtons();
 
     dm = new DeckMaker();
-    addDeckBankCarouselButtons();
+    await sync_update_deck_helper_leader__see_me_human_and_thats_also_very_long_function_name();
+    await addDeckBankCarouselButtons();
 
     document
       .getElementById("session-start-control")
