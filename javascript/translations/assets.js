@@ -53,6 +53,13 @@ function buildNotificationTranslations() {
 	content: "Nilfgaard  faction ability triggered: \A Nilfgaard wins any round that ends in a draw. ";
 }
 
+#notif-witcherforces_draw {
+	background-image: url(img/icons/notif_witcherforces.png);
+}
+
+#notif-witcherforces_draw::after {
+	content: "Witcher Forces faction ability triggered: \A Witchers draw a card. ";
+}
 
 #notif-op-leader::after {
 	content: "Opponent uses leader";

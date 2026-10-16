@@ -228,9 +228,62 @@ var factions = {
     description:
       "Keeps the strongest Unit Card out after each round. Factions full of morale boosting cards.",
   },
+  witchersforces: {
+    _indev: true,
+    name: "Witcher Forces",
+
+    factionAbility: (player) =>
+      game.roundStart.push(async () => {
+        if (game.roundCount <= 1) return false;
+
+        const previousRound = game.roundHistory[game.roundCount - 2];
+        if (
+          previousRound.winner !== player &&
+          previousRound.winner !== player.opponent()
+        ) {
+          player.deck.draw(player.hand);
+
+          await ui.notification(
+            "witcherforces_draw",
+            ui_display_times.faction_ability,
+          );
+
+          await init_sync_hands();
+        }
+
+        return false;
+      }),
+
+    description:
+      "Draw a card if the round ends in a draw or loss. Units have 30% resistance to weather.",
+  },
 };
 
 const factions_base = deepClone(factions);
 loadingscreenupdate(`Translating factions!`);
 factions = translatefactionsdict();
 loadingscreenupdate(`Loaded ${Object.keys(factions).length} factions!`);
+// ===============================
+// FACTION WATCHER
+// ===============================
+(() => {
+  const isLocalhostDev =
+    location.hostname === "localhost" &&
+    ["8080", "8081"].includes(location.port);
+
+  const removedFactions = [];
+
+  if (!isLocalhostDev) {
+    for (const [key, faction] of Object.entries(factions)) {
+      if (faction?._indev === true) {
+        removedFactions.push(faction.name || key);
+        delete factions[key];
+      }
+    }
+  }
+  console.log("[Faction Watcher]", {
+    environment: isLocalhostDev ? "DEV" : "PRODUCTION",
+    remaining: Object.keys(factions),
+    removed: removedFactions,
+  });
+})();

@@ -439,6 +439,11 @@ STRNG["en"] = {
       description:
         "Keeps the strongest Unit Card out after each round. Factions full of morale boosting cards.",
     },
+    witchersforces: {
+    name: "Witcher Forces",
+    description:
+      "Draw a card if round ends in draw or loss, units have 30% resistance to weather.",
+  }
   },
   card: {
         "foltest_copper": "Foltest — King of Temeria",
@@ -871,6 +876,7 @@ STRNG["en"] = {
         "Nilfgaard faction ability triggered:\nNilfgaard wins any round that ends in a draw.",
       op_win_via_nilfgaard:
         "Nilfgaard faction ability triggered:\nNilfgaard wins any round that ends in a draw.",
+      witcherforces_draw: "Witcher Forces faction ability triggered: \A Witchers draw a card. ",
       "op-leader": "Opponent uses leader",
       "op-white-flame":
         "The opponent's leader cancel\nyour opponent's Leader Ability", //unused

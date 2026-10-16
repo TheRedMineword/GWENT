@@ -215,7 +215,8 @@
       "monsters": "#660101",
       "skellige": "#54016C",
       "sky": "#2D9DA0",
-      "syndicate": "#804400"
+      "syndicate": "#804400",
+      "witchersforces": "#71827f"
     },
     "clock_config": {
       "enabled": true,
@@ -1378,6 +1379,10 @@
           "sky": {
             "name": "Sky Kingdom",
             "description": "Keeps the strongest Unit Card out after each round. Factions full of morale boosting cards."
+          },
+          "witchersforces": {
+            "name": "Witcher Forces",
+            "description": "Draw a card if round ends in draw or loss, units have 30% resistance to weather."
           }
         },
         "card": {
@@ -1798,6 +1803,7 @@
             "nilfgaard-wins-draws": "Nilfgaard wins draws",
             "me_win_via_nilfgaard": "Nilfgaard faction ability triggered:\nNilfgaard wins any round that ends in a draw.",
             "op_win_via_nilfgaard": "Nilfgaard faction ability triggered:\nNilfgaard wins any round that ends in a draw.",
+            "witcherforces_draw": "Witcher Forces faction ability triggered: A Witchers draw a card. ",
             "op-leader": "Opponent uses leader",
             "op-white-flame": "The opponent's leader cancel\nyour opponent's Leader Ability",
             "meve_white_queen": "Lyria & Rivia leader allows both players to restore\n2 units when using the medic ability.",
@@ -5311,6 +5317,26 @@
         "count": "1"
       },
       {
+        "name": "Gaunter o'Dim",
+        "id": "1004-witcher",
+        "deck": "witchersforces",
+        "row": "leader",
+        "strength": "0",
+        "ability": "gaunter_neutral_leader",
+        "filename": "Gaunter_Leader",
+        "count": "1"
+      },
+      {
+        "name": "Gaunter O'Dimm — Master of Time",
+        "id": "1004-1-witcher",
+        "deck": "witchersforces",
+        "row": "leader",
+        "strength": "0",
+        "ability": "time_round_reverse",
+        "filename": "Gaunter_Leader2",
+        "count": "1"
+      },
+      {
         "name": "Gaunter O'Dimm — Master of Time",
         "id": "1004-1-mon",
         "deck": "monsters",
@@ -6709,6 +6735,11 @@
       "sky": {
         "name": "Sky Kingdom",
         "description": "Keeps the strongest Unit Card out after each round. Factions full of morale boosting cards."
+      },
+      "witchersforces": {
+        "_indev": true,
+        "name": "Witcher Forces",
+        "description": "Draw a card if the round ends in a draw or loss. Units have 30% resistance to weather."
       }
     },
     "ability_dict": {

@@ -2966,6 +2966,13 @@ class Row extends CardContainer {
         //    console.log("this_row_have_quen change", this_row_have_quen);
         break;
     }
+    console.log("calc switch factions", card.holder.deck.faction);
+    switch (card.holder.deck.faction) {
+      case "witchersforces":
+        this_row_have_quen[row_name][0] = true;
+        this_row_have_quen[row_name][1] = 0.3;
+        break;
+    }
     if (
       this.cards.some((c) => c.filename === "wshield" || c.filename === "quen")
     ) {

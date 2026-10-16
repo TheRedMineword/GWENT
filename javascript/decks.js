@@ -549,6 +549,23 @@ function getLeaderIndex(name) {
   return index;
 }
 
+function getLeaderIndex_byid(name) {
+  const index = card_dict.findIndex(
+    (card) =>
+      card.row === "leader" &&
+      STRNG_lowercase(card.id) === STRNG_lowercase(name),
+  );
+
+  if (index === -1) {
+    console.warn(
+      `getLeaderIndex: no leader found for "${name}". ` +
+        `Check that this string matches a card.filename value in card_dict.`,
+    );
+  }
+
+  return index;
+}
+
 function getCardIndex(name, requestedCount = 1) {
   const cards = card_dict.filter(
     (card) =>
@@ -1089,6 +1106,11 @@ function gen_premade_decks() {
         ["gaunter_odimm_darkness", 2],
         ["dandelion", 1],
       ]),
+    },
+    {
+      faction: "witchersforces",
+      leader: getLeaderIndex_byid("1004-1-witcher"), //getLeaderIndex("1004-1-witcher"),
+      cards: getCardsIndex("witchersforces", []),
     },
   ];
 }
