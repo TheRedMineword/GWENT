@@ -2946,6 +2946,17 @@ class Row extends CardContainer {
     //  console.log("calcCardScore(card)", card, this); //this.cards[0].holder.leader.abilities to get card 0 leader abilities, could be usefull in future
     if (card.isDecoyMath) return 0;
     let total = card.basePower;
+    if (card.abilities?.includes("witcherschool")) {
+      console.log(
+        card,
+        "has wicther bonus bonus/total:",
+        getWitcherUnityBonus(card),
+        card.basePower,
+        "total",
+        deepClone(card.basePower + getWitcherUnityBonus(card)),
+      );
+      total = deepClone(card.basePower + getWitcherUnityBonus(card));
+    }
     var row_name = this.id;
     var player = card.holder;
     var leader_ability = player.leader.abilities[0];
@@ -2983,7 +2994,11 @@ class Row extends CardContainer {
       if (card.hero === false) {
         card.pendingScorch = true;
         // this.scorch_a_card(card);
-        return card.basePower;
+        if (card.abilities?.includes("witcherschool")) {
+          return deepclone(card.basePower + getWitcherUnityBonus(card));
+        } else {
+          return deepclone(card.basePower);
+        }
       }
     }
     if (
@@ -3251,7 +3266,11 @@ class Row extends CardContainer {
     console.log("Before:", this.cards);
 
     this.cards
-      .filter((c) => c.noRemove === "1" || !c.noRemove)
+      .filter(
+        (c) =>
+          !c.abilities?.includes("witcherschool") &&
+          (c.noRemove === "1" || !c.noRemove),
+      )
       .forEach((c) => board.toGrave(c, this));
 
     console.log("After grave:", this.cards);
@@ -3514,6 +3533,22 @@ class Board {
             card.holder.name,
         );
     }
+  }
+
+  getPlayerRows(player, merge = false) {
+    const isMe = player === player_me;
+
+    const rows = [
+      this.row[isMe ? 3 : 2], // close / melee
+      this.row[isMe ? 4 : 1], // ranged
+      this.row[isMe ? 5 : 0], // siege
+    ];
+
+    if (!merge) {
+      return rows;
+    }
+
+    return rows.flatMap((row) => row.cards);
   }
 
   // Updates which player currently is in the lead
@@ -3803,6 +3838,50 @@ class Game {
         );
       } catch (e) {
         console.error("drugs crashed", e);
+      }
+    }
+    if (player_me.deck.faction === "witchersforces") {
+      try {
+        console.log(
+          "school spawn",
+          player_me.deck.faction,
+          player_me,
+          game,
+          await board.addCardToRow(
+            new Card(
+              Object.values(card_dict).find(
+                (c) => c.id === witchersforces_spawn_start_card_id,
+              ),
+              player_me,
+            ),
+            witchersforces_spawn_start_card_row,
+            player_me,
+          ),
+        );
+      } catch (e) {
+        console.error("school crashed", e);
+      }
+    }
+    if (player_op.deck.faction === "witchersforces") {
+      try {
+        console.log(
+          "school spawn",
+          player_op.deck.faction,
+          player_op,
+          game,
+          await board.addCardToRow(
+            new Card(
+              Object.values(card_dict).find(
+                (c) => c.id === witchersforces_spawn_start_card_id,
+              ),
+              player_op,
+            ),
+            witchersforces_spawn_start_card_row,
+            player_op,
+          ),
+        );
+      } catch (e) {
+        console.error("school crashed", e);
       }
     }
     await sleep(20);
@@ -4166,6 +4245,11 @@ class Game {
     });
     board.row.forEach((r) => {
       if (r.cards.some((card) => card.abilities?.includes("tgc_portal"))) {
+        r.updateScore();
+      }
+    });
+    board.row.forEach((r) => {
+      if (r.cards.some((card) => card.abilities?.includes("witcherschool"))) {
         r.updateScore();
       }
     });
@@ -4707,8 +4791,17 @@ class Card {
       this.power = n;
       elem.innerHTML = this.power;
     }
-    elem.style.color =
-      n > this.basePower ? "goldenrod" : n < this.basePower ? "red" : "";
+    if (!this.abilities?.includes("witcherschool")) {
+      elem.style.color =
+        n > this.basePower ? "goldenrod" : n < this.basePower ? "red" : "";
+    } else {
+      elem.style.color =
+        n > deepClone(this.basePower + getWitcherUnityBonus(this))
+          ? "goldenrod"
+          : n < deepClone(this.basePower + getWitcherUnityBonus(this))
+            ? "red"
+            : "";
+    }
   }
 
   // Resets the power of this card to default
@@ -4995,7 +5088,15 @@ class Card {
   static compare(a, b) {
     var dif = factionRank(a) - factionRank(b);
     if (dif !== 0) return dif;
-    dif = a.basePower - b.basePower;
+    var c = a.basePower;
+    var d = b.basePower;
+    if (a.abilities?.includes("witcherschool")) {
+      c = deepClone(c + getWitcherUnityBonus(a));
+    }
+    if (b.abilities?.includes("witcherschool")) {
+      d = deepClone(d + getWitcherUnityBonus(a));
+    }
+    dif = c - d;
     if (dif && dif !== 0) return dif;
     return a.name.localeCompare(b.name);
 

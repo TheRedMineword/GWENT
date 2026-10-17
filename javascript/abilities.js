@@ -1507,6 +1507,38 @@ var ability_dict = {
         await Promise.all(bonds.map((c) => c.animate("bond")));
     },
   },
+  bondwitcher: {
+    name: "Witcher Unity",
+    description:
+      "(Witcher Forces Faction; For each Witcher on board increase a bit base strength of Witcher School)",
+
+    placed: async (card) => {
+      const cards = board.getPlayerRows(card.holder, true);
+
+      const bonds = cards.filter((c) => c.abilities?.includes("bondwitcher"));
+
+      const schools = cards.filter((c) =>
+        c.abilities?.includes("witcherschool"),
+      );
+
+      console.log("witcher bonding", bonds, schools);
+      if (schools.length === 0) {
+      } else {
+        if (bonds.length > 1) {
+          await Promise.all(
+            bonds.map((c) => c.animate("bond")), // change me later
+          );
+        }
+
+        await Promise.all(schools.map((c) => c.animate("powergain")));
+      }
+    },
+  },
+  witcherschool: {
+    name: "",
+    description: "",
+    placed: async (card) => await card.animate("powergain"),
+  },
   avenger: {
     name: "",
     description: "",
@@ -2779,10 +2811,14 @@ const ability_dict_resolveScorch = async (rows, require10 = true) => {
   let targets = [];
 
   if (!require10) {
-    // Classic scorch: strongest unit(s) on entire board
-
+    // Classic scorch: strongest non-witcherschool units on entire board
     const maxUnits = rows
-      .map((r) => [r, r.maxUnits()])
+      .map((r) => [
+        r,
+        r
+          .maxUnits()
+          .filter((unit) => !unit.abilities?.includes("witcherschool")),
+      ])
       .filter(([, units]) => units.length > 0);
 
     if (maxUnits.length === 0) return;
@@ -2793,53 +2829,42 @@ const ability_dict_resolveScorch = async (rows, require10 = true) => {
       .filter(([, units]) => units[0].power === maxPower)
       .flatMap(([row, units]) => units.map((unit) => [row, unit]));
   } else {
-    // Row scorch: strongest unit(s) in rows with total >= 10
-
+    // Row scorch: strongest non-witcherschool units in rows with total >= 10
     targets = rows
-      .map((row) => [row, row.maxUnits()])
+      .map((row) => [
+        row,
+        row
+          .maxUnits()
+          .filter((unit) => !unit.abilities?.includes("witcherschool")),
+      ])
       .filter(([row, units]) => units.length > 0 && row.total >= 10)
       .flatMap(([row, units]) => units.map((unit) => [row, unit]));
   }
 
-  if (targets.length === 0) return;
-
-  // Deterministic ordering
+  // Keep your existing deterministic sorting here.
   targets.sort((a, b) => {
     const [rowA, cardA] = a;
     const [rowB, cardB] = b;
 
-    // 1. Player
     const player = (cardA.holder?.ThatPlayerId || "").localeCompare(
       cardB.holder?.ThatPlayerId || "",
     );
     if (player) return player;
 
-    // 2. Card name
     if (cardA.name !== cardB.name) return cardA.name < cardB.name ? -1 : 1;
-
-    // 3. Row
     if (rowA.type !== rowB.type) return rowA.type < rowB.type ? -1 : 1;
-
-    // 4. Power
     if (cardA.power !== cardB.power) return cardA.power - cardB.power;
-
-    // 5. Base power
     if (cardA.basePower !== cardB.basePower)
       return cardA.basePower - cardB.basePower;
-
-    // 6. Hero
     if (cardA.hero !== cardB.hero)
       return Number(cardA.hero) - Number(cardB.hero);
 
-    // 7. Ability string
     const abilA = cardA.abilities.join(",");
     const abilB = cardB.abilities.join(",");
     if (abilA !== abilB) return abilA < abilB ? -1 : 1;
 
     return 0;
   });
-
-  console.log("scorch targets", targets);
 
   const saved = [];
   const scorched = [];
@@ -2851,7 +2876,6 @@ const ability_dict_resolveScorch = async (rows, require10 = true) => {
     const hasShield =
       leader?.abilities?.includes("scorch_stopper") ||
       leader?.abilities?.includes("scorchstopper") ||
-      leader?.abilities?.includes("scorchstopper_single") ||
       leader?.abilities?.includes("scorchstopper_single");
 
     const hasCharge =
@@ -2859,19 +2883,29 @@ const ability_dict_resolveScorch = async (rows, require10 = true) => {
 
     if (hasShield && hasCharge) {
       ability_remove(tag, scorch_stopper.save_charge);
-
       saved.push([row, unit]);
     } else {
       scorched.push([row, unit]);
     }
   }
 
+  // Witcher School units are saved separately; they never enter targets.
+  console.log(
+    "Witcher School units are saved separately; they never enter targets.",
+    rows,
+  );
+  for (const row of rows) {
+    for (const unit of row.cards) {
+      if (unit.abilities?.includes("witcherschool")) {
+        saved.push([row, unit]);
+      }
+    }
+  }
+
   await Promise.all([
     ...saved.map(async ([, unit]) => {
-      //  console.log("Saved:", unit);
       await unit.animate2("scorch_fail");
     }),
-
     ...scorched.map(async ([, unit]) => {
       await unit.animate("scorch", true, false);
     }),
@@ -2879,6 +2913,26 @@ const ability_dict_resolveScorch = async (rows, require10 = true) => {
 
   await Promise.all(scorched.map(([row, unit]) => board.toGrave(unit, row)));
 };
+function getWitcherUnityBonus(card) {
+  try {
+    if (!card.abilities?.includes("witcherschool")) return 0;
+
+    const witcherCount = board
+      .getPlayerRows(card.holder, true)
+      .filter((c) => c.abilities.includes("bondwitcher") === true).length;
+
+    const bonusPerWitcher = perwitcherschool;
+
+    var extra = 0;
+    if (witcherCount > 0) {
+      extra = 0.7;
+    }
+    return Math.floor(witcherCount * bonusPerWitcher + extra);
+  } catch (e) {
+    console.error("getWitcherUnityBonus(card) ERROR", e, card);
+    return 0;
+  }
+}
 
 async function playFakeCard(filename) {
   console.log("========== playFakeCard ==========");

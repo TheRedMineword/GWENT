@@ -74,7 +74,17 @@ function openDiscordIframePage() {
   }
 }
 
-fetch(buttons_src)
+function buttonurl_src() {
+  const host = location.hostname;
+
+  const isLocalhost =
+    host === "localhost" || host === "127.0.0.1" || host === "[::1]";
+
+  return isLocalhost && location.port !== "1111"
+    ? "/buttons.json"
+    : buttons_src;
+}
+fetch(buttonurl_src())
   .then((res) => res.json())
   .then((buttons) => {
     const style_buttons = document.createElement("style");

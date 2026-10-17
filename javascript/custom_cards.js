@@ -747,6 +747,10 @@ async function DEBUGGER_make_json(
         width: "94,5236px",
         height: "690,8468px",
       },
+      witchersforces: {
+        width: "94,5236px",
+        height: "690,8468px",
+      },
       sky: {
         width: "111,6125 px",
         height: "701,8821 px",
@@ -774,6 +778,10 @@ async function DEBUGGER_make_json(
     };
     var sizes2 = {
       syndicate: {
+        left: "11,0863px",
+        top: "-4,0833px",
+      },
+      witcherforces: {
         left: "11,0863px",
         top: "-4,0833px",
       },

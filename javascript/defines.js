@@ -21,10 +21,13 @@ let showbankms = 9000;
 let gameended = false;
 let syndicate_spawn_start_card_id = "4001";
 let syndicate_spawn_start_card_row = "close";
+let witchersforces_spawn_start_card_id = "7000";
+let witchersforces_spawn_start_card_row = "siege";
 let it_is_me_an_doppler = null;
 const passmedicpercard = 1500;
 const medicdrawextrasecondswait = 2.2; // extraJson hold // no longer used
 const medic_ability_revive_wait_a_second = 1.7 * 1000;
+let perwitcherschool = 0.55;
 let ThatIsSpy = [
   "axii2_desc",
   "spy",
@@ -893,6 +896,7 @@ let card_name_class = {
   scary_flower: "monster_%g",
   scary_puppy: "monster_%g",
   skylena: "sky_skykid_%g",
+  kearseren: "special_%g",
 };
 let classDecorators = {
   undefined: { prefix: "⩫<", suffix: ">⩫" },
@@ -1166,6 +1170,7 @@ let ThisDef = {
     weatherAffectNegativeCard: deepClone(weatherAffectNegativeCard),
     medicsdraw: deepClone(medicsdraw),
     ThatIsSpy: deepClone(ThatIsSpy),
+    perwitcherschool: deepClone(perwitcherschool),
     card_of_the_day: deepClone(card_of_the_day),
     bucket_max: deepClone(bucket_max),
     bucket_spawn_base: deepClone(bucket_spawn_base),
@@ -1175,6 +1180,12 @@ let ThisDef = {
     bond_config: deepClone(bond_config),
     syndicate_spawn_start_card_id: deepClone(syndicate_spawn_start_card_id),
     syndicate_spawn_start_card_row: deepClone(syndicate_spawn_start_card_row),
+    witchersforces_spawn_start_card_id: deepClone(
+      witchersforces_spawn_start_card_id,
+    ),
+    witchersforces_spawn_start_card_row: deepClone(
+      witchersforces_spawn_start_card_row,
+    ),
 
     ForGameStart: deepClone(ForGameStart),
 

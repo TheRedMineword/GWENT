@@ -217,6 +217,16 @@ STRNG["en"] = {
       description:
         "Place it next to a card with the same name to significantly boost the strength of both cards to a certain extent. ",
     },
+    bondwitcher: {
+      name: "Witcher Unity", // Jedność Wiedźmińska
+      description:
+        "(Witcher Forces Faction; For each Witcher on board increase a bit base strenght of Witcher School) ",
+    },
+    witcherschool: {
+      name: "Witcher School",
+      description:
+        "This card cant be removed or destroyed! ",
+    },
     avenger: {
       name: "Avenger",
       description:
@@ -737,7 +747,8 @@ STRNG["en"] = {
     dziady: "Forefathers' Eve",
     scary_puppy: "Hellhound",
     scary_flower: "Archespores",
-    skylena: "Skylena Snow"
+    skylena: "Skylena Snow",
+    kearseren: "Kear Selen"
   },
   ui: {
     elem: {
@@ -876,7 +887,7 @@ STRNG["en"] = {
         "Nilfgaard faction ability triggered:\nNilfgaard wins any round that ends in a draw.",
       op_win_via_nilfgaard:
         "Nilfgaard faction ability triggered:\nNilfgaard wins any round that ends in a draw.",
-      witcherforces_draw: "Witcher Forces faction ability triggered: \A Witchers draw a card. ",
+      witcherforces_draw: "Witcher Forces faction ability triggered:\nWitchers draw a card. ",
       "op-leader": "Opponent uses leader",
       "op-white-flame":
         "The opponent's leader cancel\nyour opponent's Leader Ability", //unused

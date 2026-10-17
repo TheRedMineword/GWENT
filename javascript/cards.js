@@ -3878,6 +3878,18 @@ var card_dict_base = [
     filename: "skylena",
     count: "1",
   },
+
+  // Work In Progress
+  {
+    name: "Kear Seren",
+    id: "7000",
+    deck: "witchersforces",
+    row: "all",
+    strength: "3",
+    ability: "witcherschool",
+    filename: "kearseren",
+    count: "0",
+  },
 ];
 let pickedfakecard = { a: false, b: null };
 

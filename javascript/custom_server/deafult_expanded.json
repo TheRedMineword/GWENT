@@ -19,6 +19,7 @@
       "dopler",
       "yrden"
     ],
+    "perwitcherschool": 0.55,
     "card_of_the_day": {
       "run": false,
       "reset": {
@@ -61,6 +62,8 @@
     },
     "syndicate_spawn_start_card_id": "4001",
     "syndicate_spawn_start_card_row": "close",
+    "witchersforces_spawn_start_card_id": "7000",
+    "witchersforces_spawn_start_card_row": "siege",
     "ForGameStart": {
       "unitscards": 22,
       "special": 10,
@@ -593,7 +596,8 @@
       "dziady": "event_%g",
       "scary_flower": "monster_%g",
       "scary_puppy": "monster_%g",
-      "skylena": "sky_skykid_%g"
+      "skylena": "sky_skykid_%g",
+      "kearseren": "special_%g"
     },
     "classDecorators": {
       "undefined": {
@@ -1194,6 +1198,14 @@
             "name": "Tight Bond",
             "description": "Place it next to a card with the same name to significantly boost the strength of both cards to a certain extent. "
           },
+          "bondwitcher": {
+            "name": "Witcher Unity",
+            "description": "(Witcher Forces Faction; For each Witcher on board increase a bit base strenght of Witcher School) "
+          },
+          "witcherschool": {
+            "name": "Witcher School",
+            "description": "This card cant be removed or destroyed! "
+          },
           "avenger": {
             "name": "Avenger",
             "description": "When this card is removed from the battlefield, it summons a powerful new Unit Card to take its place. "
@@ -1676,7 +1688,8 @@
           "dziady": "Forefathers' Eve",
           "scary_puppy": "Hellhound",
           "scary_flower": "Archespores",
-          "skylena": "Skylena Snow"
+          "skylena": "Skylena Snow",
+          "kearseren": "Kear Selen"
         },
         "ui": {
           "elem": {
@@ -1803,7 +1816,7 @@
             "nilfgaard-wins-draws": "Nilfgaard wins draws",
             "me_win_via_nilfgaard": "Nilfgaard faction ability triggered:\nNilfgaard wins any round that ends in a draw.",
             "op_win_via_nilfgaard": "Nilfgaard faction ability triggered:\nNilfgaard wins any round that ends in a draw.",
-            "witcherforces_draw": "Witcher Forces faction ability triggered: A Witchers draw a card. ",
+            "witcherforces_draw": "Witcher Forces faction ability triggered:\nWitchers draw a card. ",
             "op-leader": "Opponent uses leader",
             "op-white-flame": "The opponent's leader cancel\nyour opponent's Leader Ability",
             "meve_white_queen": "Lyria & Rivia leader allows both players to restore\n2 units when using the medic ability.",
@@ -6705,6 +6718,16 @@
         "ability": "hero reinforce",
         "filename": "skylena",
         "count": "1"
+      },
+      {
+        "name": "Kear Seren",
+        "id": "7000",
+        "deck": "witchersforces",
+        "row": "all",
+        "strength": "3",
+        "ability": "witcherschool",
+        "filename": "kearseren",
+        "count": "0"
       }
     ],
     "factions": {
@@ -6945,6 +6968,14 @@
         "name": "",
         "description": ""
       },
+      "bondwitcher": {
+        "name": "Witcher Unity",
+        "description": "(Witcher Forces Faction; For each Witcher on board increase a bit base strength of Witcher School)"
+      },
+      "witcherschool": {
+        "name": "",
+        "description": ""
+      },
       "avenger": {
         "name": "",
         "description": ""
@@ -7074,10 +7105,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 30
+    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }
