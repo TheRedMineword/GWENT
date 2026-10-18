@@ -225,7 +225,7 @@ STRNG["en"] = {
     witcherschool: {
       name: "Witcher School",
       description:
-        "This card cant be removed or destroyed! ",
+        "This card cant be destroyed! ",
     },
     avenger: {
       name: "Avenger",
@@ -452,7 +452,7 @@ STRNG["en"] = {
     witchersforces: {
     name: "Witcher Forces",
     description:
-      "Draw a card if round ends in draw or loss, units have 30% resistance to weather.",
+      "Draw a card if round ends in draw or loss.\nWith each Witcher, Witcher School strenght grows!",
   }
   },
   card: {
@@ -748,7 +748,8 @@ STRNG["en"] = {
     scary_puppy: "Hellhound",
     scary_flower: "Archespores",
     skylena: "Skylena Snow",
-    kearseren: "Kear Selen"
+    kearseren: "Kear Selen",
+    carwitcher: "Cat School Witcher"
   },
   ui: {
     elem: {
@@ -1260,7 +1261,8 @@ card_info: {
   light_creature_female: "Light Creature",
   skyseasonevent_hardcoded: "Sky: Children of the Light Seasonal",
   human_male: "Human",
-  human_female: "Human"
+  human_female: "Human",
+  witcherschool_hardcoded: "Witcher School"
 
 },
   rule63: [] // for classes if {"if": "siege", "gender": "female", "hero": false}

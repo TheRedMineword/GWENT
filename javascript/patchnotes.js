@@ -43,6 +43,77 @@ const ICON_SIZES = {
   bell_button_px: 52, // diameter of the floating bell button itself
 };
 
+const BIGPICTURE = {
+  width_px: 360,
+  height_px: 64,
+  min_load_ms: 1, // minimum time the 3-squares loader is visible
+  default_countdown_color: "#ffffff",
+  default_countdown_pos: { right: "2%", bottom: "2%" },
+};
+
+function safeCssColor(value, fallback) {
+  const v = typeof value === "string" ? value.trim() : "";
+  return v && /^[#\w(),.%\s-]+$/.test(v) ? v : fallback;
+}
+
+function parseBigPictureCords(text) {
+  const pos = {};
+  const horizontal = ["left", "right"];
+  const vertical = ["top", "bottom"];
+  const axisTaken = { h: false, v: false };
+
+  for (const part of String(text ?? "").split(",")) {
+    const m = part
+      .trim()
+      .match(/^(-?\d+(?:\.\d+)?)\s*(px|%)?\s+(left|right|top|bottom)$/i);
+    if (!m) continue;
+
+    const side = m[3].toLowerCase();
+    const axis = horizontal.includes(side) ? "h" : "v";
+    if (axisTaken[axis]) continue; // one value per axis
+    axisTaken[axis] = true;
+
+    pos[side] = `${m[1]}${(m[2] || "%").toLowerCase()}`;
+  }
+
+  if (!axisTaken.h) pos.right = BIGPICTURE.default_countdown_pos.right;
+  if (!axisTaken.v) pos.bottom = BIGPICTURE.default_countdown_pos.bottom;
+  return pos;
+}
+
+function normalizeAdvanced(raw) {
+  const adv = raw && typeof raw === "object" ? raw : null;
+  const url = typeof adv?.bigpicture === "string" ? adv.bigpicture.trim() : "";
+  if (!url) return null;
+
+  const ownSize = adv.own_size === true || adv.own_size === "true";
+  const pick = (v, fallback, min, max) => {
+    const n = Number(v);
+    return ownSize && Number.isFinite(n) && n > 0
+      ? Math.min(Math.max(Math.round(n), min), max)
+      : fallback;
+  };
+
+  return {
+    bigpicture: url,
+    size: {
+      width_px: pick(adv.size?.width_px, BIGPICTURE.width_px, 40, 2000),
+      height_px: pick(adv.size?.height_px, BIGPICTURE.height_px, 16, 800),
+    },
+    loadingColor: safeCssColor(
+      adv.color_loading?.box_outlines,
+      DEFAULTS.box.lines_outline_hex,
+    ),
+    countdownColor: safeCssColor(
+      adv.color_post?.countdown,
+      BIGPICTURE.default_countdown_color,
+    ),
+    countdownPos: parseBigPictureCords(
+      adv.ifcountown__cords ?? adv.ifcountdown__cords,
+    ),
+  };
+}
+
 let SHOW_BELL_BUTTON = true;
 
 const STREAM_MESSAGES = {
@@ -1222,6 +1293,109 @@ opacity:.7;
 color:#fff;
 }
 
+/* ---------- Big picture inbox rows ---------- */
+
+.patch-deck-item--big{
+position:relative;
+box-sizing:border-box;
+flex:none;
+padding:0;
+overflow:hidden;
+background:#111;
+}
+
+.patch-bp-img{
+position:absolute;
+inset:0;
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+pointer-events:none;
+}
+
+.patch-bp-loader{
+display:none;
+gap:10px;
+pointer-events:none;
+}
+
+/* loaded row: dim overlay with squares while the patchnote is opening */
+.patch-deck-item--big .patch-bp-loader{
+position:absolute;
+inset:0;
+align-items:center;
+justify-content:center;
+}
+
+.patch-deck-item--big.is-opening .patch-bp-loader{
+display:flex;
+background:rgba(0,0,0,.55);
+}
+
+.patch-deck-item--big.is-failed{
+border-color:#ff4d4d;
+}
+
+/* loading row: default look, only outline color + small squares bottom-right */
+.patch-deck-item.patch-deck-item--bp-loading{
+position:relative;
+}
+
+.patch-deck-item.patch-deck-item--bp-loading,
+.patch-deck-item.patch-deck-item--bp-loading:hover{
+border-color:var(--bp-load,#fff);
+}
+
+.patch-deck-item--bp-loading .patch-bp-loader{
+display:flex;
+position:absolute;
+right:12px;
+bottom:10px;
+gap:5px;
+}
+
+.patch-bp-loader i{
+display:block;
+box-sizing:border-box;
+width:14px;
+height:14px;
+border:2px solid var(--bp-load,#fff);
+animation:patch-bp-pulse 1s infinite ease-in-out;
+}
+
+.patch-deck-item--bp-loading .patch-bp-loader i{
+width:9px;
+height:9px;
+border-width:1.5px;
+}
+
+.patch-bp-loader i:nth-child(2){ animation-delay:.15s; }
+.patch-bp-loader i:nth-child(3){ animation-delay:.3s; }
+
+@keyframes patch-bp-pulse{
+0%,100%{ transform:scale(.6); opacity:.3; }
+50%{ transform:scale(1); opacity:1; }
+}
+
+.patch-bp-dot{
+position:absolute;
+top:6px;
+left:6px;
+z-index:2;
+}
+
+.patch-bp-countdown{
+position:absolute;
+z-index:2;
+font-size:11px;
+font-weight:700;
+white-space:nowrap;
+color:var(--bp-count,#fff);
+text-shadow:0 0 3px #000,0 0 6px #000;
+pointer-events:none;
+}
+
 /* ---------- Markdown ---------- */
 
 .patch-h1{
@@ -1390,6 +1564,7 @@ function resolveIndex(index) {
       display: base.display || "modal",
       showCountdown: false,
       until: Infinity,
+      advenced: normalizeAdvanced(base.advenced ?? base.advanced),
     });
   }
 
@@ -1426,6 +1601,7 @@ function resolveIndex(index) {
       display: activeTimed.display || "modal",
       showCountdown: activeTimed?.showCountdown ?? false, //timedUntil !== Infinity, // shows a countdown if it actually expires
       until: timedUntil,
+      advenced: normalizeAdvanced(activeTimed.advenced ?? activeTimed.advanced),
     });
   }
 
@@ -1446,6 +1622,7 @@ function resolveIndex(index) {
           autodisplay: !!news.autodisplay,
           showCountdown: news?.showCountdown ?? false, //end !== Infinity,
           until: end,
+          advenced: normalizeAdvanced(news.advenced ?? news.advanced),
         });
 
         if (end !== Infinity && end > now) {
@@ -1701,6 +1878,10 @@ async function presentEntry(entry, { fromAuto = false, rowEl = null } = {}) {
 
     if (rowEl) setRowLoading(rowEl, true);
 
+    if (patchnotesdebug_slowerload) {
+      await sleep(1000);
+    }
+
     // stream entries carry their own content, everything else is fetched
     const data =
       entry.streamData ??
@@ -1793,6 +1974,8 @@ function toggleDeck() {
   panel.classList.toggle("open", opening);
 
   if (opening) {
+    retryFailedBigPictures();
+    renderDeck(); // starts the big picture loading
     startDeckTicker();
     onPatchnoteEvent("deck_open", { pool: DECK_POOL });
   } else {
@@ -1802,6 +1985,13 @@ function toggleDeck() {
 }
 
 function setRowLoading(rowEl, loading, failed = false) {
+  // big picture rows have a fixed size: show the squares over the image instead
+  if (rowEl.classList.contains("patch-deck-item--big")) {
+    rowEl.classList.toggle("is-opening", loading);
+    rowEl.classList.toggle("is-failed", failed);
+    return;
+  }
+
   let subEl = rowEl.querySelector(".patch-deck-item-sub");
 
   if (!subEl) {
@@ -1819,6 +2009,92 @@ function setRowLoading(rowEl, loading, failed = false) {
     subEl.innerHTML = subEl.dataset.prevHtml;
     delete subEl.dataset.prevHtml;
   }
+}
+
+const BIGPIC_STATE = new Map(); // url -> "loaded" | "failed"
+const BIGPIC_PENDING = new Map(); // url -> Promise<boolean>
+
+function loadBigPicture(url) {
+  if (BIGPIC_PENDING.has(url)) return BIGPIC_PENDING.get(url);
+
+  const fetched = new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src = url;
+  });
+  var extra = 0;
+  if (patchnotesdebug_slowerload) {
+    extra = 3500;
+  }
+  const minWait = new Promise((r) =>
+    setTimeout(r, BIGPICTURE.min_load_ms + extra),
+  );
+
+  const promise = Promise.all([fetched, minWait]).then(([ok]) => {
+    BIGPIC_STATE.set(url, ok ? "loaded" : "failed");
+    BIGPIC_PENDING.delete(url);
+    return ok;
+  });
+
+  BIGPIC_PENDING.set(url, promise);
+  return promise;
+}
+
+// failed pictures get another try every time the inbox is opened
+function retryFailedBigPictures() {
+  for (const [url, state] of BIGPIC_STATE) {
+    if (state === "failed") BIGPIC_STATE.delete(url);
+  }
+}
+
+function renderBigRow(entry, unseen, now) {
+  const adv = entry.advenced;
+
+  const posStyle = Object.entries(adv.countdownPos)
+    .map(([side, value]) => `${side}:${value}`)
+    .join(";");
+
+  const countdown =
+    entry.showCountdown && entry.until !== Infinity
+      ? `<div class="patch-bp-countdown" data-until="${entry.until}" style="${posStyle}">
+           <span data-countdown>${UI_TEXT.expires_prefix}${formatCountdown(entry.until - now)}</span>
+         </div>`
+      : "";
+
+  return `
+      <div class="patch-deck-item patch-deck-item--big" data-id="${entry.id}"
+           style="width:100%;max-width:${adv.size.width_px}px;height:${adv.size.height_px}px;--bp-load:${adv.loadingColor};--bp-count:${adv.countdownColor}">
+        <img class="patch-bp-img" alt="${pnEscapeAttr(entry.title)}">
+        <div class="patch-bp-loader"><i></i><i></i><i></i></div>
+        ${unseen ? `<span class="patch-deck-dot patch-bp-dot"></span>` : ""}
+        ${countdown}
+      </div>`;
+}
+
+function hydrateBigPictures() {
+  const panelOpen = document
+    .getElementById("patch-deck-panel")
+    ?.classList.contains("open");
+
+  document
+    .querySelectorAll(
+      "#patch-deck-list .patch-deck-item--big, #patch-deck-list .patch-deck-item--bp-loading",
+    )
+    .forEach((rowEl) => {
+      const entry = DECK_POOL.find((e) => e.id === rowEl.dataset.id);
+      const url = entry?.advenced?.bigpicture;
+      if (!url) return;
+
+      const state = BIGPIC_STATE.get(url);
+
+      if (state === "loaded") {
+        const img = rowEl.querySelector(".patch-bp-img");
+        if (img) img.src = url;
+      } else if (!state && panelOpen && !BIGPIC_PENDING.has(url)) {
+        loadBigPicture(url).then(() => renderDeck());
+      }
+    });
 }
 
 function renderDeck() {
@@ -1854,6 +2130,16 @@ function renderDeck() {
       console.log("ALERT ENTRY", entry);
       const unseen = !seen[entry.id];
 
+      const bpState = entry.advenced
+        ? BIGPIC_STATE.get(entry.advenced.bigpicture)
+        : null;
+
+      if (bpState === "loaded") {
+        return renderBigRow(entry, unseen, now);
+      }
+
+      const bpLoading = !!entry.advenced && bpState !== "failed";
+
       const sub = entry.showCountdown
         ? `<div class="patch-deck-item-sub" data-until="${entry.until}">
              <span data-countdown>${UI_TEXT.expires_prefix}${formatCountdown(entry.until - now)}</span>
@@ -1861,7 +2147,7 @@ function renderDeck() {
         : "";
 
       return `
-      <div class="patch-deck-item" data-id="${entry.id}">
+      <div class="patch-deck-item${bpLoading ? " patch-deck-item--bp-loading" : ""}" data-id="${entry.id}"${bpLoading ? ` style="--bp-load:${entry.advenced.loadingColor}"` : ""}>
         <div class="patch-deck-item-top">
           <div class="patch-deck-item-title">
             ${unseen ? `<span class="patch-deck-dot"></span>` : ""}
@@ -1870,6 +2156,7 @@ function renderDeck() {
           ${iconImg(entry.icon, entry.title, entry.type === "news" ? "news" : "patchnote")}
         </div>
         ${sub}
+        ${bpLoading ? `<div class="patch-bp-loader"><i></i><i></i><i></i></div>` : ""}
       </div>`;
     })
     .join("");
@@ -1885,6 +2172,8 @@ function renderDeck() {
   if (document.getElementById("patch-deck-panel")?.classList.contains("open")) {
     startDeckTicker();
   }
+
+  hydrateBigPictures();
 }
 
 function startDeckTicker() {

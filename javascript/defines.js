@@ -23,6 +23,11 @@ let syndicate_spawn_start_card_id = "4001";
 let syndicate_spawn_start_card_row = "close";
 let witchersforces_spawn_start_card_id = "7000";
 let witchersforces_spawn_start_card_row = "siege";
+let witchersforcess__hates_weather = {
+  use: false,
+  value: 0.3,
+};
+let patchnotesdebug_slowerload = false;
 let it_is_me_an_doppler = null;
 const passmedicpercard = 1500;
 const medicdrawextrasecondswait = 2.2; // extraJson hold // no longer used
@@ -896,19 +901,22 @@ let card_name_class = {
   scary_flower: "monster_%g",
   scary_puppy: "monster_%g",
   skylena: "sky_skykid_%g",
-  kearseren: "special_%g",
+  kearseren: "witcherschool_hardcoded",
+  carwitcher: "witcher_%g",
 };
 let classDecorators = {
   undefined: { prefix: "⩫<", suffix: ">⩫" },
   none: { prefix: "⩫<", suffix: ">⩫" },
 
   skyseasonevent: { prefix: "⩫<", suffix: ">⩫" },
+  skyseasonevent_hardcoded: { prefix: "⩫<", suffix: ">⩫" },
 
   royal: { prefix: "♔ ", suffix: "" },
   commander: { prefix: "⟪", suffix: "⟫" },
   soldier: { prefix: "[", suffix: "]" },
   witcher: { prefix: "⚔ ", suffix: "" },
-  witcheress: { prefix: "⚔ ", suffix: "" },
+  witcherschool: { prefix: "✧⚔ ", suffix: " ⚔✧" },
+  witcherschool_hardcoded: { prefix: "✧⚔ ", suffix: " ⚔✧" },
   sorcerer: { prefix: "✦ ", suffix: " ✦" },
   elderblood: { prefix: "⟨", suffix: "⟩" },
   magic: { prefix: "✧", suffix: "✧" },
@@ -1186,6 +1194,7 @@ let ThisDef = {
     witchersforces_spawn_start_card_row: deepClone(
       witchersforces_spawn_start_card_row,
     ),
+    witchersforcess__hates_weather: deepClone(witchersforcess__hates_weather),
 
     ForGameStart: deepClone(ForGameStart),
 
@@ -1252,6 +1261,7 @@ let ThisDef = {
     classDecorators: deepClone(classDecorators),
     card_gender: deepClone(card_gender),
     viper_potions_defs: deepClone(viper_potions_defs),
+    patchnotesdebug_slowerload: deepClone(patchnotesdebug_slowerload),
     LEADER_HINT_CONFIG: deepClone(LEADER_HINT_CONFIG),
   },
 };

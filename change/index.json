@@ -1,13 +1,25 @@
 {
   "patchnotes": {
     "base": {
-      "id": "update38.5",
+      "id": "update38.6",
       "text": false,
       "weight": 100,
       "title": "Patch Notes",
       "icon": "patchnote",
       "display": "modal",
-      "showCountdown": true
+      "showCountdown": true,
+      "advenced": {
+        "bigpicture": "img/patchnotes/bigpicture/_patchnotes.png",
+        "own_size": true,
+  "size": { "width_px": 360, "height_px": 50 },
+        "color_loading": {
+          "box_outlines": "#31ff8e"
+        },
+        "color_post": {
+          "countdown": "#A1A1A1"
+        },
+        "ifcountown__cords": "2 left, 4 bottom"
+      }
     },
     "timed": []
   },
@@ -55,10 +67,22 @@
       "start": "2026-10-16T07:00:00.000Z",
       "end": "2026-10-26T07:00:00.000Z",
       "title": "Season of Pearl is upon us!",
-      "icon": "custom!img/patchnotes/Season-of-Pearl-icon.png",
+      "icon": "calendar",
       "display": "modal",
       "autodisplay": false,
-      "showCountdown": true
+      "showCountdown": true,
+      "advenced": {
+        "bigpicture": "img/patchnotes/bigpicture/_pearishere.png",
+        "own_size": true,
+  "size": { "width_px": 360, "height_px": 50 },
+        "color_loading": {
+          "box_outlines": "#29ced6"
+        },
+        "color_post": {
+          "countdown": "#A1A1A1"
+        },
+        "ifcountown__cords": "25 left, 15 bottom"
+      }
     }
   ]
 }

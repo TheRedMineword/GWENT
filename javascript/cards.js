@@ -3890,6 +3890,16 @@ var card_dict_base = [
     filename: "kearseren",
     count: "0",
   },
+  {
+    name: "Kear Seren",
+    id: "7001",
+    deck: "witchersforces",
+    row: "close",
+    strength: "3",
+    ability: "bondwitcher",
+    filename: "carwitcher",
+    count: "3",
+  },
 ];
 let pickedfakecard = { a: false, b: null };
 

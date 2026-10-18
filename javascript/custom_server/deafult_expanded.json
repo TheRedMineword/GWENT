@@ -64,6 +64,10 @@
     "syndicate_spawn_start_card_row": "close",
     "witchersforces_spawn_start_card_id": "7000",
     "witchersforces_spawn_start_card_row": "siege",
+    "witchersforcess__hates_weather": {
+      "use": false,
+      "value": 0.3
+    },
     "ForGameStart": {
       "unitscards": 22,
       "special": 10,
@@ -597,7 +601,8 @@
       "scary_flower": "monster_%g",
       "scary_puppy": "monster_%g",
       "skylena": "sky_skykid_%g",
-      "kearseren": "special_%g"
+      "kearseren": "witcherschool_hardcoded",
+      "carwitcher": "witcher_%g"
     },
     "classDecorators": {
       "undefined": {
@@ -609,6 +614,10 @@
         "suffix": "\u003E⩫"
       },
       "skyseasonevent": {
+        "prefix": "⩫\u003C",
+        "suffix": "\u003E⩫"
+      },
+      "skyseasonevent_hardcoded": {
         "prefix": "⩫\u003C",
         "suffix": "\u003E⩫"
       },
@@ -628,9 +637,13 @@
         "prefix": "⚔ ",
         "suffix": ""
       },
-      "witcheress": {
-        "prefix": "⚔ ",
-        "suffix": ""
+      "witcherschool": {
+        "prefix": "✧⚔ ",
+        "suffix": " ⚔✧"
+      },
+      "witcherschool_hardcoded": {
+        "prefix": "✧⚔ ",
+        "suffix": " ⚔✧"
       },
       "sorcerer": {
         "prefix": "✦ ",
@@ -984,6 +997,7 @@
         }
       }
     },
+    "patchnotesdebug_slowerload": false,
     "LEADER_HINT_CONFIG": {
       "size": "62%",
       "minSize": "44px",
@@ -1204,7 +1218,7 @@
           },
           "witcherschool": {
             "name": "Witcher School",
-            "description": "This card cant be removed or destroyed! "
+            "description": "This card cant be destroyed! "
           },
           "avenger": {
             "name": "Avenger",
@@ -1394,7 +1408,7 @@
           },
           "witchersforces": {
             "name": "Witcher Forces",
-            "description": "Draw a card if round ends in draw or loss, units have 30% resistance to weather."
+            "description": "Draw a card if round ends in draw or loss.\nWith each Witcher, Witcher School strenght grows!"
           }
         },
         "card": {
@@ -1689,7 +1703,8 @@
           "scary_puppy": "Hellhound",
           "scary_flower": "Archespores",
           "skylena": "Skylena Snow",
-          "kearseren": "Kear Selen"
+          "kearseren": "Kear Selen",
+          "carwitcher": "Cat School Witcher"
         },
         "ui": {
           "elem": {
@@ -2154,7 +2169,8 @@
             "light_creature_female": "Light Creature",
             "skyseasonevent_hardcoded": "Sky: Children of the Light Seasonal",
             "human_male": "Human",
-            "human_female": "Human"
+            "human_female": "Human",
+            "witcherschool_hardcoded": "Witcher School"
           },
           "rule63": []
         },
@@ -2352,6 +2368,14 @@
             "name": "Braterska Więź",
             "description": "Umieść obok karty o tej samej nazwie, aby znacznie zwiększyć siłę obu kart do pewnog stopnia. "
           },
+          "bondwitcher": {
+            "name": "Jedność Wiedźmińska",
+            "description": "(Frakcja Sił Wiedźmińskich; Za każdą kartę Wiedźminów na planszy, Szkoła Wiedźmińska rośnię w siłę) "
+          },
+          "witcherschool": {
+            "name": "Szkoła Wiedźmińska",
+            "description": "Ta karta nie może być zniszona! "
+          },
           "avenger": {
             "name": "Mściciel",
             "description": "Gdy ta karta zostanie usunięta z pola bitwy, przywołuje potężną nową jednostkę, która zajmuje jej miejsce. "
@@ -2537,6 +2561,10 @@
           "sky": {
             "name": "Królestwo Nieba",
             "description": "Po każdej rundzie pozostawia na polu bitwy najsilniejszą kartę Jednostki. Frakcja pełna kart wzmacniających morale."
+          },
+          "witchersforces": {
+            "name": "Siły Wiedźmińskie",
+            "description": "Za każdą przegraną lub zremisowaną rundę dobierz kartę z tali.\nZ każdym Wiedźminem siła Szkoły Wiedźmińskiej rośnie!"
           }
         },
         "card": {
@@ -2830,7 +2858,9 @@
           "dziady": "Dziady",
           "scary_puppy": "Piekielny Pies",
           "scary_flower": "Archespor",
-          "skylena": "Skylena Snow"
+          "skylena": "Skylena Snow",
+          "kearseren": "Kear Selen",
+          "carwitcher": "Wiedźmin Cechu Kota"
         },
         "ui": {
           "elem": {
@@ -2957,6 +2987,7 @@
             "nilfgaard-wins-draws": "Nilfgaard wygrywa remisy",
             "me_win_via_nilfgaard": "Zdolność Nilfgaardu aktywowana:\nNilfgaard wygrywa każdą turę zakończoną remisem.",
             "op_win_via_nilfgaard": "Zdolność Nilfgaardu aktywowana:\nNilfgaard wygrywa każdą turę zakończoną remisem.",
+            "witcherforces_draw": "Zdolność Sił Wiedźmińskich aktywowana:\nWiedźmini dobierają kartę! ",
             "op-leader": "Przeciwnik używa zdolności Leadera",
             "op-white-flame": "The opponent's leader cancel\nyour opponent's Leader Ability",
             "meve_white_queen": "Lyria & Rivia leader allows both players to restore\n2 units when using the medic ability.",
@@ -3294,7 +3325,8 @@
             "light_creature_female": "Istoty Światła",
             "skyseasonevent_hardcoded": "Sezonu z \"Sky: Children of the Light\" Starcia",
             "human_male": "Człowieka",
-            "human_female": "Człowieka"
+            "human_female": "Człowieka",
+            "witcherschool_hardcoded": "Szkoły Wiedźmińskiej"
           },
           "rule63": [
             {
@@ -6728,6 +6760,16 @@
         "ability": "witcherschool",
         "filename": "kearseren",
         "count": "0"
+      },
+      {
+        "name": "Kear Seren",
+        "id": "7001",
+        "deck": "witchersforces",
+        "row": "close",
+        "strength": "3",
+        "ability": "bondwitcher",
+        "filename": "carwitcher",
+        "count": "3"
       }
     ],
     "factions": {
@@ -7105,9 +7147,9 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
+    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_vid": "8o-JI8VRyKo",
     "tavern_yt_volume": 90
   },
   "texture_pack_url": null

@@ -19,7 +19,9 @@ New Version Available!
 </box.title>
 
 <box.text>
-**{{commiter}}** just pushed some fresh changes to **{{repo}}:{{branch}}**!
+-#_ <color=#fff8db>**!lastgithubcommitcountup:TheRedMineword/GWENT!** since last Github commit!</color>
+--separator--
+**{{commiter}}** just pushed some fresh changes to **{{repo}}**!
 <fat1>
 Make sure to restart your game right now so you don't miss out on the fixes and new content!
 <fat1>

@@ -262,6 +262,18 @@ STRNG["pl"] = {
       "Umieść obok karty o tej samej nazwie, aby znacznie zwiększyć siłę obu kart do pewnog stopnia. "
   },
 
+  bondwitcher: {
+      name: "Jedność Wiedźmińska",
+      description:
+        "(Frakcja Sił Wiedźmińskich; Za każdą kartę Wiedźminów na planszy, Szkoła Wiedźmińska rośnię w siłę) ",
+    },
+
+    witcherschool: {
+      name: "Szkoła Wiedźmińska",
+      description:
+        "Ta karta nie może być zniszona! ",
+    },
+
   avenger: {
     name: "Mściciel",
     description:
@@ -533,6 +545,11 @@ STRNG["pl"] = {
     description:
       "Po każdej rundzie pozostawia na polu bitwy najsilniejszą kartę Jednostki. Frakcja pełna kart wzmacniających morale."
   },
+    witchersforces: {
+    name: "Siły Wiedźmińskie",
+    description:
+      "Za każdą przegraną lub zremisowaną rundę dobierz kartę z tali.\nZ każdym Wiedźminem siła Szkoły Wiedźmińskiej rośnie!",
+  }
 },
   card: {
     "foltest_copper": "Foltest — Król Temerii",
@@ -826,7 +843,9 @@ francesca_hope_of_the_aen_seidhe:
     dziady: "Dziady",
     scary_puppy: "Piekielny Pies",
     scary_flower: "Archespor",
-    skylena: "Skylena Snow"
+    skylena: "Skylena Snow",
+    kearseren: "Kear Selen",
+    carwitcher: "Wiedźmin Cechu Kota"
   },
   ui: {
     elem: {
@@ -965,6 +984,7 @@ francesca_hope_of_the_aen_seidhe:
         "Zdolność Nilfgaardu aktywowana:\nNilfgaard wygrywa każdą turę zakończoną remisem.",
       op_win_via_nilfgaard:
         "Zdolność Nilfgaardu aktywowana:\nNilfgaard wygrywa każdą turę zakończoną remisem.",
+      witcherforces_draw: "Zdolność Sił Wiedźmińskich aktywowana:\nWiedźmini dobierają kartę! ",
       "op-leader": "Przeciwnik używa zdolności Leadera",
       "op-white-flame":
         "The opponent's leader cancel\nyour opponent's Leader Ability", //unused
@@ -1336,7 +1356,8 @@ card_info: {
   light_creature_female: "Istoty Światła",
   skyseasonevent_hardcoded: "Sezonu z \"Sky: Children of the Light\" Starcia",
   human_male: "Człowieka",
-  human_female: "Człowieka"
+  human_female: "Człowieka",
+  witcherschool_hardcoded: "Szkoły Wiedźmińskiej"
 },
 rule63: [  // for classes
   {"if": "siege", "gender": "female", "hero": false, "mode": "split"}, // because siege strucutes powiny mieć "oblężniczej"

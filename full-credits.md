@@ -56,6 +56,7 @@ https://pngtree.com/freebackground/vintage-crinkled-paper-texture-aged-brown-bac
 - Forefathers' Eve: Autorstwa Czesław Borys Jankowski – File:Adam Mickiewicz - Dziady część I, II i IV.djvu, Domena publiczna, https://commons.wikimedia.org/w/index.php?curid=57593864
 - Hellhound: https://witcher.fandom.com/wiki/Hellhound?file=Gwent_cardart_monsters_the_beast.png monsters_scary_puppy
 - Archespores: https://witcher.fandom.com/wiki/Archespore?file=Gwent_cardart_monsters_archespore.jpg monsters_scary_flower
+- Witchers Forces faction cards images comes from Witchers wikis like: https://witcher.fandom.com/wiki/School_of_the_Cat
 > Some card/mechanics/assets are used from other project like this (For example: RandomPianist/gwent-classic-v3.1, other similar project are mentioned at start of this copyright notice)
 
 

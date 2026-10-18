@@ -141,6 +141,10 @@ const IGNORE_PATTERNS = [
   "timerAnimation",
   "streamQueue",
   "streamFlags",
+  // new for big picture
+  "BIGPICTURE",
+  "BIGPIC_STATE",
+  "BIGPIC_PENDING",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 

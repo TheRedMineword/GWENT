@@ -1524,11 +1524,11 @@ var ability_dict = {
       console.log("witcher bonding", bonds, schools);
       if (schools.length === 0) {
       } else {
-        if (bonds.length > 1) {
-          await Promise.all(
-            bonds.map((c) => c.animate("bond")), // change me later
-          );
-        }
+        //  if (bonds.length > 1) {
+        await Promise.all(
+          bonds.map((c) => c.animate("muster2")), // change me later
+        );
+        //  }
 
         await Promise.all(schools.map((c) => c.animate("powergain")));
       }
