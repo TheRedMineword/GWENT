@@ -1,0 +1,15 @@
+"advenced": {
+        "bigpicture": "img/patchnotes/bigpicture/_newmoon.png",
+        "own_size": true,
+        "size": {
+          "width_px": 360,
+          "height_px": 50
+        },
+        "color_loading": {
+          "box_outlines": "#d33737"
+        },
+        "color_post": {
+          "countdown": "#A1A1A1"
+        },
+        "ifcountown__cords": "32 left, 4 bottom"
+      }

@@ -1,0 +1,118 @@
+<small_text.text>
+NEWS / FEEDBACK
+</small_text.text>
+
+<images.logo>
+img/web/logo_round.png
+</images.logo>
+
+<images.banner>
+img/web/bar.png
+</images.banner>
+
+<box.lines_outline_hex>
+#aaad80
+</box.lines_outline_hex>
+
+<box.title>
+Future plans & Survey conclusion!
+</box.title>
+
+<box.text>
+Hello everyone!
+Dev here, this will be a long wall of text, so have have index here:
+```
+1. Feedback Survey Result
+1.1. Feedback Q&A 
+2. Changes I made
+3. New Faction !new!
+```
+--separator--
+<fat2>
+# (1.) Feedback Survey Result:
+<fat1>
+The October feedback form process was effectively a failure. **Only one** person responded, but their honest answers were valuable and gaved me space to make preparations and plan for the near future.
+_**Whoever you are, thank you very much.**_
+<fat1>
+Based on the message received, here are the responses and Q&A:
+--separator--
+# (1.1.) Feedback Q&A:
+```diff
+Q: The ability to see card abilities without having to add/remove them from the deck.
+A: You say, and you have; I will add an button to start a carousel with cards something like in Witcher 3 ui to see all card you have in your deck
+
+Q: Always the same soundtrack?
+A: The soundtrack changes in a 24-hour rotation, each day, different one or at least it should be, during moon event also "waiting" music will be more _spooky_
+A': Please note that custom server have at botton of json keys for "tavern & match ost", correct value is youtube video id, any video id, do with this information what you want
+A'': Talking about custom server, after most of Gwent updates custom server gets updated too!
+
+Q: Starter deck
+A: Yeah, they are bit buggy and randomly generated each time you load game, becuause i had few issues wich them while adding and fixing cards (also I see now that few of them have empty config array, i will fill it now)
+
+Q: Leader cards?
+A: We have all leader cards from Witcher 3 and also few custom ones, you can change leader by clicking leader card in middle of deck maker
+A': I am now planning to add a flashing icon next to the leader change element to attract users' attention
+
+Q: -BUG-
+A: Harvest festival card should not be resurrectable, thanks for bug report, i guess game still thinks they units
+
+Q: New Faction?
+A: It would be a nice challange, maybe, I could use some help wich it for idea, but why not if I can
+
+Q: New cards?
+A: I am always willing to add a new card if I come up with an idea or if the suggestion is valuable enought, right now a new card will be added automatically the following month, as its arrival has already been scheduled
+```
+<fat3>
+<fat1>
+--separator--
+# (2.) Changes I made:
+After reciving feedback, checking logs and etc, following changes were issued:
+-# (Content of patchnotes)
+<fat1>
+### _16 October, 2026_
+_Taking into account the feedback I received, as well as an analysis of the server logs and the design of the user interface, the result is the following update:_
+```diff
+--- _Added an animated settings wheel over the deck maker change leader element!_
+    _I hope now everyone will see how to change your leader and discover more before hidden cards!_
+    _I will keep an eye on whether any other changes to the interface might be needed!_
+```
+### _15 October, 2026 - Feedback Patch_
+_Based on feedback I recive this changes were issued:_
+```diff
++ _An message was issued, answering questions anonymously_
+--- _Medic & Necromancers no longer are able to revive diversion cards, unless something is broken again_
+    _(This cards have an uniqe row id, that is also just placeholder that crashed game becuase its not real row)_
+--- _Expanded the card configuration array for the deck generator_
++ _Added 2 new deck maker button to see current cards !new!_
+& _Calling all Witchers to Kear Mohren!_
+```
+<fat3>
+# (3.) New Faction !new!
+--separator--
+## **Work on a new faction has begun!**
+Please welcome the **_Witchers Forces_**!
+<fat1>
+%%img src="img/icons/deck_shield_witchersforces.png" style="max-width:45%"%%
+-# 
+%%img src="img/icons/deck_back_witchersforces.jpg" style="max-width:15%"%%
+<fat1>
+Witcher faction forcess will work around _Witcher Unity_, each Witcher on board will raise strenght of _Witcher School_ on board!
+On top of that, for each lost or draw round Witcher faction pasive ability will trigger, allowing Witcher to draw a card!
+Work is still in progress so things can change!
+<fat1>
+Thank you for your attention!
+-##_ <color=#BBBCC1>Remember to join our Gwent [Discord Server](api/discord-iframe/page) to give me more feedback!</color>
+</box.text>
+
+
+<button.name>
+CONTINUE
+</button.name>
+
+<load.text>
+<l>Loading...</l>
+</load.text>
+
+<load.duration_ms>
+101
+</load.duration_ms>

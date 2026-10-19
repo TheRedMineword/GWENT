@@ -1,5 +1,127 @@
 "use strict";
 let pcnr = false;
+
+let PN_OPTIMIZE = {
+  auto_tune: true,
+  lazy_icons: true,
+  icon_spinner: true,
+  icon_min_spinner_ms: 0,
+  icon_debug_extra_ms: 3500,
+  image_queue: false,
+  image_concurrency: 6,
+  ticker_interval_ms: 1000,
+  ticker_pause_when_hidden: true,
+  debug_logs: true,
+  log_categories: ["fetch", "stream", "schedule", "tune"],
+};
+
+const PN_PROFILES = {
+  normal: {
+    image_queue: false,
+    image_concurrency: 6,
+    ticker_interval_ms: 1000,
+  },
+  slow: { image_queue: true, image_concurrency: 1, ticker_interval_ms: 2000 },
+};
+
+function pnLog(category, message, data) {
+  if (!PN_OPTIMIZE.debug_logs) return;
+  const only = PN_OPTIMIZE.log_categories;
+  if (only && !only.includes(category)) return;
+  if (data === undefined) console.log(`[PN:${category}]`, message);
+  else console.log(`[PN:${category}]`, message, data);
+}
+
+function pnSlowDebug() {
+  return (
+    typeof patchnotesdebug_slowerload !== "undefined" &&
+    !!patchnotesdebug_slowerload
+  );
+}
+
+const pnQ = [];
+let pnQActive = 0;
+let pnTuneBound = false;
+
+function pnPump() {
+  while (pnQActive < PN_OPTIMIZE.image_concurrency && pnQ.length) {
+    const run = pnQ.shift();
+    pnQActive++;
+    run().finally(() => {
+      pnQActive--;
+      pnPump();
+    });
+  }
+}
+
+function pnEnqueue(task) {
+  if (!PN_OPTIMIZE.image_queue) return task();
+  return new Promise((resolve) => {
+    pnQ.push(() => task().then(resolve, resolve));
+    pnPump();
+  });
+}
+
+function pnTune(mode = "auto", overrides = {}) {
+  const c = navigator.connection || {};
+  const slow =
+    mode === "slow" ||
+    (mode === "auto" &&
+      (c.saveData === true ||
+        /^(slow-2g|2g|3g)$/.test(c.effectiveType || "") ||
+        (c.downlink > 0 && c.downlink < 1.5)));
+
+  PN_OPTIMIZE = {
+    ...PN_OPTIMIZE,
+    ...PN_PROFILES[slow ? "slow" : "normal"],
+    ...overrides,
+  };
+
+  pnLog("tune", slow ? "slow profile" : "normal profile", PN_OPTIMIZE);
+  onPatchnoteEvent("tuned", { slow, config: PN_OPTIMIZE });
+  pnPump();
+  return PN_OPTIMIZE;
+}
+
+function pnIconSettle(img, ok) {
+  const wrap = img.parentNode;
+  if (!wrap) return;
+
+  const fallback = img.dataset.pnFallback;
+  if (!ok && fallback && !img.dataset.pnFell) {
+    img.dataset.pnFell = "1";
+    img.src = fallback;
+    return;
+  }
+
+  const wait = Math.max(
+    PN_OPTIMIZE.icon_min_spinner_ms,
+    pnSlowDebug() ? PN_OPTIMIZE.icon_debug_extra_ms : 0,
+  );
+
+  setTimeout(() => {
+    wrap.classList.add(ok ? "is-loaded" : "is-failed");
+    if (!ok) onPatchnoteEvent("icon_failed", { src: img.src });
+  }, wait);
+}
+
+function pnHydrateIcons(root = document) {
+  root.querySelectorAll("img[data-pn-src]").forEach((img) => {
+    const src = img.dataset.pnSrc;
+    delete img.dataset.pnSrc;
+
+    pnEnqueue(
+      () =>
+        new Promise((done) => {
+          if (!img.isConnected) return done();
+          img.addEventListener("load", done, { once: true });
+          img.addEventListener("error", done, { once: true });
+          img.src = src;
+        }),
+    );
+  });
+}
+
 // (function () {
 const ICON_BASE_PATH = "img/patchnotes/";
 
@@ -151,6 +273,12 @@ function setPatchnotesVisible(visible) {
   if (panel) {
     panel.style.display = visible ? "" : "none";
   }
+
+  // bell is back: build it if needed and cue anything that became active meanwhile
+  if (visible && pcnr) {
+    renderDeck();
+    pnCheckUnseenActive();
+  }
 }
 
 const Z_INDEX = {
@@ -198,7 +326,7 @@ function verdictseen(onchange) {
   } catch (e) {
     console.error(e);
   }
-  return e;
+  return null;
 }
 
 function loadSeenMap() {
@@ -261,10 +389,16 @@ function cleanupExpiredSeen() {
   for (const id of Object.keys(map)) {
     const lastSeen = timestamps[id];
 
-    if (typeof lastSeen === "number" && now - lastSeen > PATCHNOTE_MAX_AGE) {
+    if (id.startsWith("stream-")) {
       delete map[id];
       delete timestamps[id];
       changed = true;
+    } else {
+      if (typeof lastSeen === "number" && now - lastSeen > PATCHNOTE_MAX_AGE) {
+        delete map[id];
+        delete timestamps[id];
+        changed = true;
+      }
     }
   }
 
@@ -301,9 +435,7 @@ function clone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 function iconUrl(iconId) {
-  var a = iconUrl2(iconId);
-  console.log(iconId, a);
-  return a;
+  return iconUrl2(iconId);
 }
 function iconUrl2(iconId) {
   if (iconId.startsWith("custom!")) {
@@ -316,11 +448,18 @@ function iconUrl2(iconId) {
 function iconImg(iconId, alt = "", fallbackId = null) {
   if (!iconId) return "";
 
-  const onerror = fallbackId
-    ? `this.onerror=function(){this.style.display='none'};this.src='${iconUrl(fallbackId)}'`
-    : `this.style.display='none'`;
+  const px = ICON_SIZES.patch_icon_px;
+  const url = pnEscapeAttr(iconUrl(iconId));
+  const srcAttr = PN_OPTIMIZE.image_queue
+    ? `data-pn-src="${url}"`
+    : `src="${url}"`;
+  const fallbackAttr = fallbackId
+    ? ` data-pn-fallback="${pnEscapeAttr(iconUrl(fallbackId))}"`
+    : "";
+  const lazy = PN_OPTIMIZE.lazy_icons ? ` loading="lazy" decoding="async"` : "";
+  const ready = PN_OPTIMIZE.icon_spinner ? "" : " is-loaded";
 
-  return `<img class="patch-icon" width="${ICON_SIZES.patch_icon_px}" height="${ICON_SIZES.patch_icon_px}" src="${iconUrl(iconId)}" alt="${escapeHtml(alt)}" onerror="${onerror}">`;
+  return `<span class="patch-icon-wrap${ready}" style="width:${px}px;height:${px}px"><img class="patch-icon" width="${px}" height="${px}"${lazy} ${srcAttr}${fallbackAttr} alt="${escapeHtml(alt)}" onload="pnIconSettle(this,true)" onerror="pnIconSettle(this,false)"></span>`;
 }
 
 let always_full_timer_in_patchnotes = true;
@@ -372,7 +511,7 @@ function parsePatchNotes(text) {
     current[path[0]] = value;
   }
   var returnss = deepMerge(clone(DEFAULTS), result);
-  console.log("patch notes", text, returnss);
+  pnLog("parse", "patch notes parsed", returnss);
   return returnss;
 }
 
@@ -818,6 +957,18 @@ function formatPatchText(text) {
 
     if (inCode) {
       if (codeLang === "diff") {
+        //   console.log("LINE", line.substring(0, 10), line.startsWith("Q"), line.startsWith("A"), line.substring(0,1) === "A");
+        if (line.startsWith("Q")) {
+          closeList();
+          html += `<div class="patch-QandA_Q">${formatInline(line)}</div>`;
+          continue;
+        }
+
+        if (line.startsWith("A")) {
+          closeList();
+          html += `<div class="patch-QandA_A">${formatInline(line)}</div>`;
+          continue;
+        }
         if (line.startsWith("+")) {
           html += `<div class="patch-add">${formatInline(line)}</div>`;
         } else if (line.startsWith("---")) {
@@ -894,7 +1045,7 @@ function formatPatchText(text) {
 
     if (line.startsWith("> ")) {
       closeList();
-      html += `<div class="patch-quote">${formatInline(line.substring(2))}</div>`;
+      html += `<div class="patch-quote">${formatInline(line)}</div>`;
       continue;
     }
 
@@ -1154,6 +1305,45 @@ transform:none;
 
 /* ---------- Inbox / deck ---------- */
 
+.patch-icon-wrap{
+position:relative;
+display:inline-flex;
+flex:0 0 auto;
+align-items:center;
+justify-content:center;
+}
+
+.patch-icon-wrap::before{
+content:"";
+position:absolute;
+width:40%;
+height:40%;
+border:2px solid ${color};
+animation:patch-icon-spin .9s linear infinite;
+}
+
+.patch-icon-wrap.is-loaded::before,
+.patch-icon-wrap.is-failed::before{
+display:none;
+}
+
+.patch-icon-wrap:not(.is-loaded) .patch-icon{
+opacity:0;
+}
+
+.patch-icon-wrap.is-failed .patch-icon{
+display:none;
+}
+
+@keyframes patch-icon-spin{
+to{ transform:rotate(360deg); }
+}
+
+.patch-bell .patch-icon-wrap{
+width:${ICON_SIZES.bell_icon_px}px !important;
+height:${ICON_SIZES.bell_icon_px}px !important;
+}
+
 .patch-icon{
 width:${ICON_SIZES.patch_icon_px}px;
 height:${ICON_SIZES.patch_icon_px}px;
@@ -1184,7 +1374,7 @@ cursor:pointer;
 z-index:${Z_INDEX.bell};
 }
 
-.patch-bell img{
+.patch-bell img.patch-icon{
 width:${ICON_SIZES.bell_icon_px}px;
 height:${ICON_SIZES.bell_icon_px}px;
 min-width:${ICON_SIZES.bell_icon_px}px;
@@ -1462,6 +1652,17 @@ text-decoration:none;
 text-decoration:underline;
 }
 
+.patch-QandA_Q{
+color:#A0FF8F;
+margin:1px 0;
+    line-height:1.35;
+}
+.patch-QandA_A{
+color:#FFD28F;
+margin:1px 0;
+    line-height:1.35;
+}
+
 .patch-add{
 color:#77dd77;
 font-weight:bold;
@@ -1669,27 +1870,27 @@ async function fetchEntryText(id, asText) {
   try {
     const res = await fetch(url);
 
-    console.log("fetch:", url, res.status, res.ok, asText);
+    pnLog("fetch", "entry", { id, url, status: res.status, asText });
 
     if (!res.ok) {
       throw new Error(`Failed to fetch log-${id}: HTTP ${res.status}`);
     }
 
     if (asText) {
-      console.log("reading response as text...");
+      // pnLog("reading response as text...");
 
       const text = await res.text();
 
-      console.log("text received:", text.length, "chars");
+      // pnLog("text received:", text.length, "chars");
 
       return text;
     }
 
-    console.log("reading response as arrayBuffer...");
+    // pnLog("reading response as arrayBuffer...");
 
     const buffer = await res.arrayBuffer();
 
-    console.log("arrayBuffer received:", buffer.byteLength, "bytes");
+    // pnLog("arrayBuffer received:", buffer.byteLength, "bytes");
 
     const bytes = new Uint8Array(buffer);
 
@@ -1697,12 +1898,12 @@ async function fetchEntryText(id, asText) {
       Array.from(bytes, (b) => String.fromCharCode(b)).join(""),
     );
 
-    console.log("base64 created:", base64.length, "chars");
-    console.log("calling decompressBase64...");
+    // pnLog("base64 created:", base64.length, "chars");
+    // pnLog("calling decompressBase64...");
 
     const result = await decompressBase64(base64);
 
-    console.log("decompressBase64 succeeded");
+    // pnLog("decompressBase64 succeeded");
 
     return result;
   } catch (err) {
@@ -1726,9 +1927,11 @@ function stopBoxCountdown() {
 }
 
 function closeOverlay(overlay) {
+  const entry = openBoxEntry;
   stopBoxCountdown();
   openBoxEntry = null;
   overlay.remove();
+  onPatchnoteEvent("box_close", entry);
 }
 
 function startBoxCountdown(overlay, entry) {
@@ -1768,21 +1971,21 @@ function wireBoxInteractions(overlay, data) {
       doClose();
 
       requestAnimationFrame(async () => {
-        console.log(
-          location.hostname,
-          `${location.hostname === "localhost"}`,
-          location.port,
-          `${location.port === "1111"}`,
-        );
+        // pnLog(
+        //   location.hostname,
+        //   `${location.hostname === "localhost"}`,
+        //   location.port,
+        //   `${location.port === "1111"}`,
+        // );
         var doit = true;
         if (location.hostname === "localhost" && location.port === "1111") {
-          console.log(doit);
+          // pnLog(doit);
           try {
-            console.log("Post because 1111");
+            pnLog("restart", "local launcher restart", location.port);
             await fetch("http://localhost:1111/local-api/restart", {
               method: "POST",
             });
-            console.log("Screen beacuse 1111");
+            // pnLog("Screen beacuse 1111");
             showBrickScreen();
             doit = false;
           } catch (err) {
@@ -1790,7 +1993,7 @@ function wireBoxInteractions(overlay, data) {
           }
         }
         if (doit) {
-          console.log("Reloading");
+          pnLog("restart", "reloading page");
           location.reload();
         }
       });
@@ -1864,6 +2067,7 @@ ${data.button.name}
 </div>
 `;
 
+  pnHydrateIcons(overlay);
   wireBoxInteractions(overlay, data);
 
   if (entry.showCountdown && entry.until !== Infinity) {
@@ -1872,7 +2076,7 @@ ${data.button.name}
 }
 
 async function presentEntry(entry, { fromAuto = false, rowEl = null } = {}) {
-  console.log("presentEntry", entry, { fromAuto, rowEl });
+  pnLog("entry", "present", { id: entry?.id, fromAuto });
   try {
     onPatchnoteEvent(fromAuto ? "auto_display" : "manual_open", entry);
 
@@ -1882,10 +2086,8 @@ async function presentEntry(entry, { fromAuto = false, rowEl = null } = {}) {
       await sleep(1000);
     }
 
-    // stream entries carry their own content, everything else is fetched
-    const data =
-      entry.streamData ??
-      (await fetchEntryData(entry.id, entry?.text ?? false));
+    // stream entries carry (or load) their own content, everything else is fetched
+    const data = await pnEntryData(entry);
 
     if (rowEl) setRowLoading(rowEl, false);
 
@@ -1951,9 +2153,15 @@ function ensureDeckUI() {
     bell.id = "patch-bell";
     bell.className = "patch-bell";
     bell.innerHTML = `${iconImg("bell", "notifications")}<span id="patch-bell-badge" class="patch-bell-badge" style="display:none;"></span>`;
-    bell.onclick = toggleDeck;
+    bell.onclick = () => {
+      onPatchnoteEvent("bell_click", { bell });
+      toggleDeck();
+    };
+    bell.onmouseenter = () => onPatchnoteEvent("bell_hover", { bell });
+    bell.onmouseleave = () => onPatchnoteEvent("bell_leave", { bell });
 
     document.body.appendChild(bell);
+    pnHydrateIcons(bell);
   }
 
   if (document.getElementById("patch-deck-panel")) return;
@@ -2017,12 +2225,15 @@ const BIGPIC_PENDING = new Map(); // url -> Promise<boolean>
 function loadBigPicture(url) {
   if (BIGPIC_PENDING.has(url)) return BIGPIC_PENDING.get(url);
 
-  const fetched = new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => resolve(true);
-    img.onerror = () => resolve(false);
-    img.src = url;
-  });
+  const fetched = pnEnqueue(
+    () =>
+      new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = url;
+      }),
+  );
   var extra = 0;
   if (patchnotesdebug_slowerload) {
     extra = 3500;
@@ -2034,6 +2245,7 @@ function loadBigPicture(url) {
   const promise = Promise.all([fetched, minWait]).then(([ok]) => {
     BIGPIC_STATE.set(url, ok ? "loaded" : "failed");
     BIGPIC_PENDING.delete(url);
+    onPatchnoteEvent(ok ? "bigpicture_loaded" : "bigpicture_failed", { url });
     return ok;
   });
 
@@ -2127,7 +2339,7 @@ function renderDeck() {
   listEl.innerHTML = DECK_POOL.slice()
     .sort((a, b) => b.weight - a.weight)
     .map((entry) => {
-      console.log("ALERT ENTRY", entry);
+      // pnLog("deck", "entry", entry);
       const unseen = !seen[entry.id];
 
       const bpState = entry.advenced
@@ -2161,11 +2373,26 @@ function renderDeck() {
     })
     .join("");
 
+  pnHydrateIcons(listEl);
+
   listEl.querySelectorAll(".patch-deck-item").forEach((rowEl) => {
+    const entryOf = () => DECK_POOL.find((e) => e.id === rowEl.dataset.id);
+
     rowEl.onclick = () => {
-      const id = rowEl.dataset.id;
-      const entry = DECK_POOL.find((e) => e.id === id);
-      if (entry) presentEntry(entry, { fromAuto: false, rowEl });
+      const entry = entryOf();
+      if (!entry) return;
+      onPatchnoteEvent("row_click", { entry, rowEl });
+      presentEntry(entry, { fromAuto: false, rowEl });
+    };
+
+    rowEl.onmouseenter = () => {
+      const entry = entryOf();
+      if (entry) onPatchnoteEvent("row_hover", { entry, rowEl });
+    };
+
+    rowEl.onmouseleave = () => {
+      const entry = entryOf();
+      if (entry) onPatchnoteEvent("row_leave", { entry, rowEl });
     };
   });
 
@@ -2180,6 +2407,7 @@ function startDeckTicker() {
   stopDeckTicker();
 
   deckTickInterval = setInterval(() => {
+    if (PN_OPTIMIZE.ticker_pause_when_hidden && document.hidden) return;
     const now = Clock.now();
     let expiredSomething = false;
 
@@ -2203,7 +2431,7 @@ function startDeckTicker() {
       stopDeckTicker();
       reloadIndexAndRefresh();
     }
-  }, 1000);
+  }, PN_OPTIMIZE.ticker_interval_ms);
 }
 
 function stopDeckTicker() {
@@ -2212,7 +2440,7 @@ function stopDeckTicker() {
 }
 
 function onPatchnoteEvent(event, payload) {
-  //  console.log(event, payload, "onPatchnoteEvent")
+  pnLog("event", event, payload);
   switch (event) {
     case "init":
       break;
@@ -2245,6 +2473,50 @@ function onPatchnoteEvent(event, payload) {
       tocar("card", false);
       break;
 
+    case "row_click":
+      break;
+
+    case "row_hover":
+      tocar("card", false);
+      break;
+
+    case "row_leave":
+      break;
+
+    case "bell_click":
+      tocar("card", false);
+      break;
+
+    case "bell_hover":
+      tocar("card", false);
+      break;
+
+    case "bell_leave":
+      break;
+
+    case "box_close":
+      break;
+
+    case "icon_failed":
+      break;
+
+    case "bigpicture_loaded":
+      break;
+
+    case "bigpicture_failed":
+      break;
+
+    case "stream_message":
+      tocar("card", false);
+      break;
+
+    case "tuned":
+      break;
+
+    case "unseen_timed_now_active":
+      tocar("card", false);
+      break;
+
     default:
       break;
   }
@@ -2262,7 +2534,7 @@ function scheduleWatcher(nextChange) {
   const delay = Math.max(nextChange - Clock.now(), 1000);
 
   watcherTimer = setTimeout(() => {
-    console.log("Patchnotes schedule changed, refreshing...");
+    pnLog("schedule", "changed, refreshing");
     reloadIndexAndRefresh();
   }, delay);
 }
@@ -2307,18 +2579,67 @@ async function refreshFromIndex() {
   renderDeck();
   scheduleWatcher(nextChange);
 
+  const popup = !openBoxEntry && auto && !isSeen(auto.id) ? auto : null;
+
+  // cue for unseen entries that just became active (the popup one is skipped)
+  pnCheckUnseenActive(popup?.id ?? null);
+
   onPatchnoteEvent("refreshed", { pool: DECK_POOL, auto });
 
-  if (!openBoxEntry && auto && !isSeen(auto.id)) {
-    await presentEntry(auto, { fromAuto: true });
+  if (popup) {
+    await presentEntry(popup, { fromAuto: true });
   }
 }
 
+// ---------------------------------------------------------------------------
+// "unseen entry is active now" cue
+// ---------------------------------------------------------------------------
+const pnAnnounced = new Set(); // ids already checked this session
+
+// true only when the bell button is really on screen
+function pnBellVisible() {
+  if (!SHOW_BELL_BUTTON) return false;
+  const bell = document.getElementById("patch-bell");
+  if (!bell || !bell.isConnected) return false;
+  const cs = getComputedStyle(bell);
+  return cs.display !== "none" && cs.visibility !== "hidden";
+}
+
+// Fires "unseen_timed_now_active" once for entries that just became active
+// and are unseen. Does nothing (and remembers nothing) while the bell is
+// hidden, so the cue still fires once the bell shows up.
+// skipId = entry that is about to pop up as a modal anyway.
+function pnCheckUnseenActive(skipId = null) {
+  if (!pnBellVisible()) return [];
+
+  const now = Clock.now();
+  const fresh = DECK_POOL.filter((e) => !pnAnnounced.has(e.id));
+  fresh.forEach((e) => pnAnnounced.add(e.id));
+
+  const unseen = fresh.filter(
+    (e) => e.id !== skipId && e.until > now && !isSeen(e.id),
+  );
+  if (!unseen.length) return [];
+
+  onPatchnoteEvent("unseen_timed_now_active", {
+    entry: unseen[0],
+    entries: unseen,
+    count: unseen.length,
+  });
+  return unseen;
+}
+
+// ---------------------------------------------------------------------------
+// Event stream
+// ---------------------------------------------------------------------------
 let streamSource = null;
 let streamPlayerId = null;
-const streamSeen = new Set(); // mids already handled (server re-sends unacked ones on reconnect)
+const STREAM_SEEN_MAX = 500;
+const streamSeen = new Set(); // keys already handled (server re-sends unacked ones on reconnect)
 const streamQueue = [];
 let streamDraining = false;
+let streamRetryTimer = null;
+let streamRetryMs = 1000;
 
 function streamPost(path, body) {
   return fetch(`${STREAM_BASE}${path}`, {
@@ -2332,6 +2653,8 @@ const streamFlags = { js_ready: true, game_ready: false };
 
 function startEventStream(playerId, flags = {}) {
   if (streamSource) streamSource.close();
+  clearTimeout(streamRetryTimer);
+  streamRetryTimer = null;
   streamPlayerId = playerId;
   Object.assign(streamFlags, flags);
 
@@ -2339,24 +2662,30 @@ function startEventStream(playerId, flags = {}) {
     `${STREAM_BASE}/stream?id=${encodeURIComponent(playerId)}` +
     `&orygin=${encodeURIComponent(location.origin)}`;
 
-  streamSource = new EventSource(url);
+  const source = new EventSource(url);
+  streamSource = source;
 
   // report the current state on every connect (also after automatic reconnects)
-  streamSource.onopen = () =>
+  source.onopen = () => {
+    streamRetryMs = 1000;
     streamPost("/stream/ready", { id: streamPlayerId, ...streamFlags });
-
-  streamSource.onmessage = (ev) => {
-    let msg;
-    try {
-      msg = JSON.parse(ev.data);
-    } catch (e) {
-      return;
-    }
-    handleStreamMessage(msg);
   };
 
-  streamSource.onerror = () =>
+  source.onmessage = (ev) => handleStreamPayload(ev.data);
+
+  source.onerror = () => {
     console.warn("event stream error / reconnecting");
+    // EventSource retries by itself, unless the browser gave up (CLOSED)
+    if (source !== streamSource || source.readyState !== EventSource.CLOSED) {
+      return;
+    }
+    clearTimeout(streamRetryTimer);
+    streamRetryTimer = setTimeout(
+      () => startEventStream(streamPlayerId),
+      streamRetryMs,
+    );
+    streamRetryMs = Math.min(streamRetryMs * 2, 30000);
+  };
 }
 
 // Update the state later, e.g. setStreamReady({ game_ready: true }) when the game UI is loaded.
@@ -2366,68 +2695,293 @@ function setStreamReady(flags) {
   streamPost("/stream/ready", { id: streamPlayerId, ...streamFlags });
 }
 setStreamReady({ game_ready: true });
-function handleStreamMessage(msg) {
-  console.log("[STREAM MSG]", msg);
-  if (!msg || !msg.mid) return;
 
-  // acknowledge on receipt so the server drops it from memory
-  streamPost("/stream/ack", { id: streamPlayerId, mid: msg.mid });
+// ---- small helpers --------------------------------------------------------
+function pnBool(v) {
+  return v === true || /^(true|1|yes|on)$/i.test(String(v ?? "").trim());
+}
 
-  if (streamSeen.has(msg.mid)) return; // replayed duplicate
-  streamSeen.add(msg.mid);
+function pnHash(text) {
+  let h = 5381;
+  for (let i = 0; i < text.length; i++)
+    h = ((h << 5) + h + text.charCodeAt(i)) | 0;
+  return (h >>> 0).toString(36);
+}
 
-  tocar("mail");
+// ISO string, ms number, 10-digit unix seconds, numeric string -> ms (or null)
+function pnParseTime(v) {
+  if (v === undefined || v === null || v === "" || v === false) return null;
+  if (typeof v === "number")
+    return Number.isFinite(v) ? (v < 1e12 ? v * 1000 : v) : null;
+  const s = String(v).trim();
+  if (/^\d+$/.test(s)) return pnParseTime(Number(s));
+  const t = Date.parse(s);
+  return Number.isNaN(t) ? null : t;
+}
+
+// run fn at timestamp ts (setTimeout can't wait longer than ~24 days)
+function pnLater(ts, fn) {
+  const wait = ts - Clock.now();
+  if (wait <= 0) return fn();
+  setTimeout(() => pnLater(ts, fn), Math.min(wait, 2147483000));
+}
+
+function pnSafeIconId(icon, type) {
+  const fallback = type === "patchnote" ? "patchnote" : "news";
+  if (typeof icon !== "string") return fallback;
+  const id = icon.trim();
+  if (/^custom!.+/.test(id) || /^[\w-]+$/.test(id)) return id;
+  return fallback;
+}
+
+function pnSafeUrl(u) {
+  try {
+    const x = new URL(String(u).trim(), location.href);
+    return /^https?:$/.test(x.protocol) ? x.href : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function pnNormalizeData(data) {
+  if (typeof data.box.text !== "string")
+    data.box.text = String(data.box.text ?? "");
+  return data;
+}
+
+// Accepts: tagged text (<box.text>..</box.text>), plain text (used as body),
+// a JSON string holding either of those, or a JSON object ({box:{title,text},button:{name},...}).
+function pnContentToData(raw) {
+  let value = raw;
+
+  if (typeof raw === "string") {
+    const t = raw.trim();
+    if (/^["{]/.test(t)) {
+      try {
+        value = JSON.parse(t);
+      } catch (e) {}
+    }
+  }
+
+  if (value && typeof value === "object" && !Array.isArray(value)) {
+    const data = deepMerge(clone(DEFAULTS), clone(value));
+    if (data.box.text === undefined) {
+      data.box.text = value.text ?? value.body ?? value.message ?? "";
+    }
+    return pnNormalizeData(data);
+  }
+
+  const text = String(value ?? "");
+  const data = parsePatchNotes(text);
+  if (data.box.text === undefined) data.box.text = text; // plain string = body
+  return pnNormalizeData(data);
+}
+
+async function pnLoadExternal(url, asText) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`external content HTTP ${res.status}`);
+  if (asText) return pnContentToData(await res.text());
+
+  const bytes = new Uint8Array(await res.arrayBuffer());
+  let text;
+  try {
+    text = await decompressBase64(
+      btoa(Array.from(bytes, (b) => String.fromCharCode(b)).join("")),
+    );
+  } catch (e) {
+    text = new TextDecoder().decode(bytes); // wasn't compressed after all
+  }
+  return pnContentToData(text);
+}
+
+// Decide where a message's content comes from.
+// returns { data } (ready now), { loader } (fetched when opened) or null (nothing to show)
+//   source: "$predefined"            -> STREAM_MESSAGES[id]
+//           "$rawcontent=<text|json>" -> inline content
+//           "$external=<url>"         -> fetched from a url (also a bare http(s) url)
+//           ""                        -> content / predefined (legacy), else the
+//                                        normal change/log-<id> file (index-style entry)
+function pnStreamPlan(msg) {
+  const src = typeof msg.source === "string" ? msg.source.trim() : "";
+  let m;
+
+  if (/^\$predefined$/i.test(src)) {
+    const s = STREAM_MESSAGES[msg.id];
+    if (s == null) {
+      console.warn("Patch notes: no predefined stream message:", msg.id);
+      return null;
+    }
+    return { data: pnContentToData(s) };
+  }
+
+  if ((m = src.match(/^\$rawcon\w*\s*=\s*([\s\S]*)$/i))) {
+    return { data: pnContentToData(m[1]) };
+  }
+
+  if (
+    (m = src.match(/^\$external\s*=\s*(.+)$/i)) ||
+    /^https?:\/\//i.test(src)
+  ) {
+    const url = pnSafeUrl(m ? m[1] : src);
+    if (!url) {
+      console.warn("Patch notes: bad external url:", src);
+      return null;
+    }
+    const asText = msg.text === undefined ? true : pnBool(msg.text);
+    return { loader: () => pnLoadExternal(url, asText) };
+  }
+
+  if (src) return { data: pnContentToData(src) };
 
   // content (if not null) wins over the predefined text
-  const source =
-    msg.content ?? (msg.predefined ? STREAM_MESSAGES[msg.id] : null) ?? null;
-  if (source === null) return; // nothing to display
-
-  const until = msg.expire ? new Date(msg.expire).getTime() : Infinity;
-  if (until <= Clock.now()) return; // already expired
-
-  const data = parsePatchNotes(String(source));
-
-  // plain string content without <box.text> tags is shown as the body
-  if (data.box.text === undefined) {
-    data.box.text = String(source);
+  if (msg.content != null) return { data: pnContentToData(msg.content) };
+  if (msg.predefined && STREAM_MESSAGES[msg.id] != null) {
+    return { data: pnContentToData(STREAM_MESSAGES[msg.id]) };
   }
+
+  // index-shaped message (id + title, no content): load log-<id> like an index entry
+  if (msg.id && (msg.title || msg.advenced || msg.advanced)) {
+    const asText = pnBool(msg.text); // default false, same as index entries
+    return {
+      loader: async () => pnNormalizeData(await fetchEntryData(msg.id, asText)),
+    };
+  }
+
+  return null;
+}
+
+// one place that resolves an entry's content (stream, external, or index log)
+async function pnEntryData(entry) {
+  if (entry.streamData) return entry.streamData;
+
+  if (entry.streamLoader) {
+    if (!entry.streamLoading) {
+      entry.streamLoading = entry.streamLoader().then(
+        (d) => (entry.streamData = d),
+        (e) => {
+          entry.streamLoading = null; // allow a retry on the next click
+          throw e;
+        },
+      );
+    }
+    return entry.streamLoading;
+  }
+
+  return fetchEntryData(entry.id, entry?.text ?? false);
+}
+
+// ---- incoming ---------------------------------------------------------------
+// Handles anything the server sends: one object, an array of objects,
+// a JSON string, or plain text (shown as the body).
+function handleStreamPayload(raw) {
+  let parsed = raw;
+
+  if (typeof raw === "string") {
+    if (!raw.trim()) return;
+    try {
+      parsed = JSON.parse(raw);
+    } catch (e) {
+      parsed = { content: raw };
+    }
+  }
+
+  for (const item of Array.isArray(parsed) ? parsed : [parsed]) {
+    try {
+      handleStreamMessage(typeof item === "string" ? { content: item } : item);
+    } catch (e) {
+      console.error("Patch notes: bad stream message", item, e);
+    }
+  }
+}
+
+function handleStreamMessage(msg) {
+  pnLog("stream", "message", msg);
+  if (!msg || typeof msg !== "object") return;
+  if (/^(ping|heartbeat|keepalive)$/i.test(String(msg.type ?? ""))) return;
+
+  const hasMid = msg.mid !== undefined && msg.mid !== null && msg.mid !== "";
+  const key = hasMid ? String(msg.mid) : `h${pnHash(JSON.stringify(msg))}`;
+
+  // acknowledge on receipt so the server drops it from memory
+  if (hasMid) streamPost("/stream/ack", { id: streamPlayerId, mid: msg.mid });
+
+  if (streamSeen.has(key)) return; // replayed duplicate
+  streamSeen.add(key);
+  if (streamSeen.size > STREAM_SEEN_MAX) {
+    streamSeen.delete(streamSeen.values().next().value);
+  }
+
+  const plan = pnStreamPlan(msg);
+
+  // messages without mid are only real if they have something to show
+  if (!plan && !hasMid) return;
+
+  onPatchnoteEvent("stream_message", msg);
+  tocar("mail");
+
+  if (!plan) return; // nothing to display
+
+  const now = Clock.now();
+  const start = pnParseTime(msg.start ?? msg.from);
+  const until = pnParseTime(msg.end ?? msg.until ?? msg.expire) ?? Infinity;
+  if (until <= now) return; // already expired
+
+  const data = plan.data ?? null;
+  const type = /^patchnote$/i.test(String(msg.type ?? ""))
+    ? "patchnote"
+    : "news";
+  const weight = Number(msg.weight);
 
   const entry = {
-    type: "news",
+    type,
     kind: "stream",
-    id: `stream-${msg.mid}`,
+    id: `stream-${key}`,
     text: true,
-    weight: Number.MAX_SAFE_INTEGER,
-    icon: "news",
-    title: data.box.title || msg.id,
-    display: "modal",
-    showCountdown: !!msg.showcountdown && until !== Infinity,
+    weight: Number.isFinite(weight) ? weight : Number.MAX_SAFE_INTEGER,
+    icon: pnSafeIconId(msg.icon ?? data?.icon, type),
+    title: String(msg.title ?? data?.box?.title ?? msg.id ?? ""),
+    display: msg.display === "fullscreen" ? "fullscreen" : "modal",
+    autodisplay: pnBool(msg.autodisplay),
+    showCountdown:
+      pnBool(msg.showCountdown ?? msg.showcountdown) && until !== Infinity,
     until,
-    streamData: data, // parsed content, shown when opened from the inbox
+    advenced: normalizeAdvanced(msg.advenced ?? msg.advanced),
+    streamData: data, // parsed content, if already available
+    streamLoader: plan.loader ?? null, // otherwise fetched when opened
   };
 
-  // every stream message goes into the inbox
-  streamEntries.set(entry.id, entry);
-  rebuildDeckPool();
-  renderDeck();
+  const delayed = start !== null && start > now;
 
-  // drop it from the inbox when it expires
-  if (until !== Infinity) {
-    setTimeout(
-      () => {
+  const activate = () => {
+    if (entry.until <= Clock.now()) return;
+
+    // a live message was already cued by stream_message above
+    if (!delayed) pnAnnounced.add(entry.id);
+
+    streamEntries.set(entry.id, entry);
+    rebuildDeckPool();
+    renderDeck();
+
+    if (delayed) pnCheckUnseenActive(entry.autodisplay ? entry.id : null);
+
+    // drop it from the inbox when it expires
+    if (entry.until !== Infinity) {
+      pnLater(entry.until + 50, () => {
         rebuildDeckPool();
         renderDeck();
-      },
-      Math.min(until - Clock.now() + 50, 2147483647),
-    );
-  }
+      });
+    }
 
-  // popup unless the payload says autodisplay: false
-  if ((msg?.autodisplay ?? false) !== false) {
-    streamQueue.push(entry);
-    drainStreamQueue();
-  }
+    // popup only when the payload says autodisplay: true (default false)
+    if (entry.autodisplay) {
+      streamQueue.push(entry);
+      drainStreamQueue();
+    }
+  };
+
+  if (delayed)
+    pnLater(start, activate); // not active yet: appears at "start"
+  else activate();
 }
 
 async function drainStreamQueue() {
@@ -2440,9 +2994,20 @@ async function drainStreamQueue() {
       while (openBoxEntry) await new Promise((r) => setTimeout(r, 500));
 
       const entry = streamQueue.shift();
-      const data = entry.streamData;
       if (entry.until <= Clock.now()) continue; // expired while queued
       if (isSeen(entry.id)) continue; // already opened from the inbox while queued
+
+      let data;
+      try {
+        data = await pnEntryData(entry);
+      } catch (e) {
+        console.warn("Patch notes: stream content failed to load", entry.id, e);
+        continue;
+      }
+      if (openBoxEntry) {
+        streamQueue.unshift(entry); // something opened while loading
+        continue;
+      }
 
       installStyles(data.box.lines_outline_hex);
 
@@ -2454,7 +3019,10 @@ async function drainStreamQueue() {
 
       markSeen(entry.id);
       renderDeck();
-      onPatchnoteEvent("news_seen", entry);
+      onPatchnoteEvent(
+        entry.type === "news" ? "news_seen" : "patchnote_seen",
+        entry,
+      );
     }
   } finally {
     streamDraining = false;
@@ -2466,6 +3034,16 @@ let reinit_after = 0;
 let have_player_id = false;
 let have_inited_stream = false;
 async function initPatchnotes() {
+  if (PN_OPTIMIZE.auto_tune) {
+    pnTune("auto");
+    if (!pnTuneBound) {
+      pnTuneBound = true;
+      navigator.connection?.addEventListener?.(
+        "change",
+        () => PN_OPTIMIZE.auto_tune && pnTune("auto"),
+      );
+    }
+  }
   try {
     var url = `${patchnotes_index_src}?v=${cacheBust()}`;
     if (window.location.host === "localhost:8080") {

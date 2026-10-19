@@ -22,6 +22,14 @@ Patch Notes:
 -#_ <color=#fff8db>**!lastgithubcommitcountup:TheRedMineword/GWENT!** since last Github commit! (!lastgithubcommittimestamp:TheRedMineword/GWENT!)</color>
 --separator--
 <fat1>
+# 19 October, 2026
+```diff
+--- An attempt was made to optimize the patch notes for slower connections!
+& Analizated translation for issues gremlins
+--- Pushed an update to new news stream system to issue directly to player(s) messages
+--- Fixed "showBrickScreen()"
++ Added more Big Picture assets!
+<fat3>
 # 18 October, 2026
 ```diff
 + Added "Big Picture" feature for patchnotes and news! !new!

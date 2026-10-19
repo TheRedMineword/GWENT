@@ -813,19 +813,26 @@ function flushStream(s) {
 }
 
 function pushStreamMessage(playerId, message) {
-  const expire = message.expire ? new Date(message.expire) : null;
-  if (expire && isNaN(expire)) throw new Error("expire must be an ISO date");
+  if (!message || typeof message !== "object" || Array.isArray(message)) {
+    throw new Error("Each stream payload must be a JSON object");
+  }
 
-  const msg = {
-    id: String(message.id || "warn"),
-    showcountdown: !!message.showcountdown,
-    expire: expire ? expire.toISOString() : null,
-    predefined: message.predefined !== false,
-    content: message.content ?? null,
-    mid: crypto.randomUUID(), // kept in memory until acked
-  };
+  // Preserve the complete entry payload used by patchnotes.js (source, title,
+  // advanced options, scheduling fields, arbitrary JSON content, etc.).
+  const msg = { ...message, mid: crypto.randomUUID() };
+  if (msg.id != null) msg.id = String(msg.id);
+  if (msg.expire) {
+    const expire = new Date(msg.expire);
+    if (isNaN(expire)) throw new Error("expire must be a valid date");
+    msg.expire = expire.toISOString();
+  } else if (msg.expire === undefined) {
+    msg.expire = null;
+  }
+  if (msg.showcountdown === undefined && msg.showCountdown !== undefined) {
+    msg.showcountdown = msg.showCountdown;
+  }
 
-  const s = getStreamState(playerId);
+  const s = getStreamState(String(playerId));
   s.pending.set(msg.mid, msg);
   flushStream(s);
   return msg.mid;
@@ -889,22 +896,131 @@ router.post("/stream/ack", (req, res) => {
   res.sendStatus(s.pending.delete(String(mid)) ? 204 : 404);
 });
 
-router.post("/api/stream-push", (req, res) => {
-  const { key, target, message } = req.body || {};
-
-  const a = Buffer.from(String(key || ""));
+function adminKeyIsValid(value) {
+  const a = Buffer.from(String(value || ""));
   const b = Buffer.from(String(ADMIN_ENDPOINT_LOGIN || ""));
-  if (!ADMIN_ENDPOINT_LOGIN || a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
-    return res.sendStatus(401);
+  return !!ADMIN_ENDPOINT_LOGIN && a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+
+function safeSocketSnapshot(ws) {
+  const blocked = new Set([
+    "_socket", "_sender", "_receiver", "socket", "req", "upgradeReq",
+    "_events", "_eventsCount", "_maxListeners", "heartbeatInterval",
+  ]);
+  const raw = {};
+  for (const [key, value] of Object.entries(ws)) {
+    if (blocked.has(key) || typeof value === "function") continue;
+    if (key === "user" && value && typeof value === "object") {
+      raw.user = { ...value };
+    } else if (value === null || ["string", "number", "boolean"].includes(typeof value)) {
+      raw[key] = value;
+    } else if (Array.isArray(value) || (value && typeof value === "object")) {
+      try { raw[key] = JSON.parse(JSON.stringify(value)); } catch (e) {}
+    }
   }
-  if (!message || typeof message !== "object") return res.sendStatus(400);
+  return raw;
+}
+
+// Admin read endpoint:
+//   GET /api/admin/sessions?key=...             -> active sessions and players
+//   GET /api/admin/sessions?key=...&fullraw=true -> include safe raw session/socket fields
+//   GET /api/admin/sessions?key=...&justcount=true -> connected-player count (integer JSON)
+router.get("/api/admin/sessions", (req, res) => {
+  if (!adminKeyIsValid(req.query.key)) return res.sendStatus(401);
+
+  const connected = Object.values(playerSockets).filter(
+    (ws) => ws && ws.readyState === WebSocket.OPEN,
+  );
+  if (String(req.query.justcount).toLowerCase() === "true") {
+    return res.json(connected.length);
+  }
+
+  const fullRaw = String(req.query.fullraw).toLowerCase() === "true";
+  const now = Date.now();
+  const seenPlayerIds = new Set();
+  const toPlayer = (ws) => {
+    const connectedAt = Number(ws.connectedAt || ws.connected_at || now);
+    const player = {
+      playerId: String(ws.playerId || ""),
+      connectedSeconds: Math.max(0, Math.floor((now - connectedAt) / 1000)),
+      readyState: ws.readyState,
+    };
+    if (fullRaw) player.raw = safeSocketSnapshot(ws);
+    return player;
+  };
+
+  // Return actual game sessions, counting only currently open sockets.
+  const result = Object.entries(sessions).map(([sessionId, session]) => {
+    const sessionPlayers = (session?.players || [])
+      .filter((ws) => ws && ws.readyState === WebSocket.OPEN)
+      .map((ws) => {
+        if (ws.playerId != null) seenPlayerIds.add(String(ws.playerId));
+        return toPlayer(ws);
+      });
+    const item = {
+      sessionId,
+      playerCount: sessionPlayers.length,
+      players: sessionPlayers,
+    };
+    if (fullRaw) {
+      try { item.raw = JSON.parse(JSON.stringify({ ...session, players: undefined })); }
+      catch (e) { item.raw = {}; }
+    }
+    return item;
+  }).filter((session) => session.playerCount > 0);
+
+  // A WebSocket can be connected without having created/joined a game session.
+  // Include those players instead of returning [] while clients are connected.
+  const unassigned = connected.filter((ws) => !seenPlayerIds.has(String(ws.playerId)));
+  if (unassigned.length) {
+    const item = {
+      sessionId: null,
+      status: "connected-not-in-session",
+      playerCount: unassigned.length,
+      players: unassigned.map(toPlayer),
+    };
+    if (fullRaw) item.raw = { note: "Connected players that have not joined a game session" };
+    result.push(item);
+  }
+
+  res.json(result);
+});
+
+router.post("/api/stream-push", (req, res) => {
+  const { key, target, message, payloads } = req.body || {};
+  if (!adminKeyIsValid(key)) return res.sendStatus(401);
+
+  // New shape: { key, target: "all" | ["playerId", ...], payloads: [...] }
+  // Backwards compatible shape: { key, target: "all" | "playerId", message: {...} }
+  const destinations = target === "all"
+    ? Object.keys(playerSockets)
+    : Array.isArray(target)
+      ? [...new Set(target.map(String))]
+      : target == null ? [] : [String(target)];
+  const batch = payloads !== undefined ? payloads : (message !== undefined ? [message] : null);
+  if (!Array.isArray(batch) || batch.length === 0 ||
+      batch.some((item) => !item || typeof item !== "object" || Array.isArray(item))) {
+    return res.status(400).json({
+      ok: false,
+      error: "Provide payloads: [JSON objects] (or legacy message: JSON object)",
+    });
+  }
+  if (!destinations.length) {
+    return res.status(400).json({ ok: false, error: "target must be 'all', a player ID, or an array of player IDs" });
+  }
 
   try {
-    const mids =
-      target === "all"
-        ? broadcastStreamMessage(message)
-        : [pushStreamMessage(String(target), message)];
-    res.json({ ok: true, mids });
+    const results = [];
+    for (const playerId of destinations) {
+      if (!playerSockets[playerId]) {
+        results.push({ playerId, ok: false, error: "player is not connected" });
+        continue;
+      }
+      for (const payload of batch) {
+        results.push({ playerId, mid: pushStreamMessage(playerId, payload), ok: true });
+      }
+    }
+    res.json({ ok: true, sent: results.filter((x) => x.ok).length, results });
   } catch (e) {
     res.status(400).json({ ok: false, error: e.message });
   }
@@ -1616,6 +1732,7 @@ const connectionHandler = async (ws, req) => {
   ws.authenticated = false;
   ws.user = null;
   ws.playerId = await generatePlayerId(req);
+  ws.connectedAt = Date.now();
 
   playerSockets[ws.playerId] = ws;
 

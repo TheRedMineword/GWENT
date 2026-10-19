@@ -377,46 +377,59 @@ const apiURL = isElectronLauncher
     : domain;
 
 function showBrickScreen() {
-  document.documentElement.innerHTML = `
-    <style>
-      body {
-        margin:0;
-        background:#0d0d0d;
-        color:#ff4d4d;
-        font-family:Arial,sans-serif;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        height:100vh;
-        text-align:center;
-      }
+  // Prevent duplicate overlays
+  if (document.getElementById("brick-screen-overlay")) return;
 
-      .box {
-        max-width:700px;
-        padding:40px;
-        border:2px solid #ff4d4d;
-        background:#1a0000;
-        box-shadow:0 0 30px rgba(255,0,0,.35);
-      }
+  const overlay = document.createElement("div");
+  overlay.id = "brick-screen-overlay";
 
-      h1 {
-        font-size:42px;
-        margin-bottom:20px;
-      }
+  Object.assign(overlay.style, {
+    position: "fixed",
+    inset: "0",
+    zIndex: "2147483647",
+    background: "#0d0d0d",
+    color: "#ff4d4d",
+    fontFamily: "Arial, sans-serif",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    overflow: "auto",
+  });
 
-      p {
-        font-size:20px;
-        line-height:1.6;
-        color:#ffd0d0;
-      }
-    </style>
+  const box = document.createElement("div");
 
-    <div class="box">
-      <h1>${getUiHtmlStrng("brick.name")}</h1>
-      <p>${getUiHtmlStrng("brick.why", true)}</p>
-    </div>
-  `;
-  fetch(wakeUrl);
+  Object.assign(box.style, {
+    maxWidth: "700px",
+    margin: "20px",
+    padding: "40px",
+    border: "2px solid #ff4d4d",
+    background: "#1a0000",
+    boxShadow: "0 0 30px rgba(255,0,0,.35)",
+  });
+
+  const heading = document.createElement("h1");
+  heading.style.fontSize = "42px";
+  heading.style.marginBottom = "20px";
+  heading.textContent = getTranslation("ui.elem.html.brick.name");
+
+  const message = document.createElement("p");
+  Object.assign(message.style, {
+    fontSize: "20px",
+    lineHeight: "1.6",
+    color: "#ffd0d0",
+    whiteSpace: "pre-wrap",
+  });
+  message.textContent = getTranslation("ui.elem.html.brick.why");
+
+  box.append(heading, message);
+  overlay.appendChild(box);
+
+  (document.body || document.documentElement).appendChild(overlay);
+
+  if (wakeUrl) {
+    fetch(wakeUrl).catch(console.error);
+  }
 }
 
 console.log("Websocket", wsUrl);

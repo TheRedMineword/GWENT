@@ -145,6 +145,18 @@ const IGNORE_PATTERNS = [
   "BIGPICTURE",
   "BIGPIC_STATE",
   "BIGPIC_PENDING",
+  // new for patchnotes optymalization
+  "auto_tune",
+  "lazy_icons",
+  "icon_spinner",
+  "icon_min_spinner_ms",
+  "icon_debug_extra_ms",
+  "image_queue",
+  "image_concurrency",
+  "ticker_interval_ms",
+  "ticker_pause_when_hidden",
+  "debug_logs",
+  "log_categories",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 
