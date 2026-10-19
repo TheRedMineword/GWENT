@@ -11,7 +11,10 @@
       "advenced": {
         "bigpicture": "img/patchnotes/bigpicture/_patchnotes.png",
         "own_size": true,
-  "size": { "width_px": 360, "height_px": 50 },
+        "size": {
+          "width_px": 360,
+          "height_px": 50
+        },
         "color_loading": {
           "box_outlines": "#31ff8e"
         },
@@ -74,7 +77,10 @@
       "advenced": {
         "bigpicture": "img/patchnotes/bigpicture/_pearishere.png",
         "own_size": true,
-  "size": { "width_px": 360, "height_px": 50 },
+        "size": {
+          "width_px": 360,
+          "height_px": 50
+        },
         "color_loading": {
           "box_outlines": "#29ced6"
         },
