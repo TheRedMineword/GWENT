@@ -110,9 +110,9 @@ CONTINUE
 </button.name>
 
 <load.text>
-<l>Loading...</l>
+<l>INCOMING DEV LOG!</l>
 </load.text>
 
 <load.duration_ms>
-101
+3000
 </load.duration_ms>

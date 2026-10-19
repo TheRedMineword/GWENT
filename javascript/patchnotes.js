@@ -3,8 +3,8 @@ let pcnr = false;
 
 let PN_OPTIMIZE = {
   auto_tune: false,
-  lazy_icons: true,
-  icon_spinner: true,
+  lazy_icons: false,
+  icon_spinner: false,
   icon_min_spinner_ms: 0,
   icon_debug_extra_ms: 3500,
   image_queue: false,
@@ -21,7 +21,7 @@ const PN_PROFILES = {
     image_concurrency: 99,
     ticker_interval_ms: 1,
   },
-  slow: { image_queue: false, image_concurrency: 1, ticker_interval_ms: 1000 },
+  slow: { image_queue: false, image_concurrency: 99, ticker_interval_ms: 1 },
 };
 
 function pnLog(category, message, data) {
@@ -93,8 +93,8 @@ function pnIconSettle(img, ok) {
     img.src = fallback;
     return;
   }
-
-  const wait = Math.max(
+  /*
+   const wait = Math.max(
     PN_OPTIMIZE.icon_min_spinner_ms,
     pnSlowDebug() ? PN_OPTIMIZE.icon_debug_extra_ms : 0,
   );
@@ -103,6 +103,9 @@ function pnIconSettle(img, ok) {
     wrap.classList.add(ok ? "is-loaded" : "is-failed");
     if (!ok) onPatchnoteEvent("icon_failed", { src: img.src });
   }, wait);
+  */
+  wrap.classList.add(ok ? "is-loaded" : "is-failed");
+  if (!ok) onPatchnoteEvent("icon_failed", { src: img.src });
 }
 
 function pnHydrateIcons(root = document) {
@@ -150,7 +153,7 @@ const DEFAULTS = {
 
   load: {
     text: "<l>INCOMING MESSAGE</l>",
-    duration_ms: "3000",
+    duration_ms: "0",
   },
 
   images: {
@@ -168,7 +171,7 @@ const ICON_SIZES = {
 const BIGPICTURE = {
   width_px: 360,
   height_px: 64,
-  min_load_ms: 1, // minimum time the 3-squares loader is visible
+  min_load_ms: 0, // no artificial minimum loading time
   default_countdown_color: "#ffffff",
   default_countdown_pos: { right: "2%", bottom: "2%" },
 };
@@ -2096,7 +2099,6 @@ async function presentEntry(entry, { fromAuto = false, rowEl = null } = {}) {
     const overlay = document.createElement("div");
     overlay.className = "briefing-overlay";
     document.body.appendChild(overlay);
-
     if (fromAuto) {
       overlay.innerHTML = `
 <div class="briefing-loader">
@@ -2109,7 +2111,6 @@ async function presentEntry(entry, { fromAuto = false, rowEl = null } = {}) {
         setTimeout(resolve, parseInt(data.load.duration_ms, 10) || 3000),
       );
     }
-
     renderBox(overlay, entry, data);
 
     //   if (fromAuto) {
