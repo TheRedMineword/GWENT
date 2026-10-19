@@ -2,14 +2,14 @@
 let pcnr = false;
 
 let PN_OPTIMIZE = {
-  auto_tune: true,
+  auto_tune: false,
   lazy_icons: true,
   icon_spinner: true,
   icon_min_spinner_ms: 0,
   icon_debug_extra_ms: 3500,
   image_queue: false,
-  image_concurrency: 6,
-  ticker_interval_ms: 1000,
+  image_concurrency: 99,
+  ticker_interval_ms: 1,
   ticker_pause_when_hidden: true,
   debug_logs: true,
   log_categories: ["fetch", "stream", "schedule", "tune"],
@@ -18,10 +18,10 @@ let PN_OPTIMIZE = {
 const PN_PROFILES = {
   normal: {
     image_queue: false,
-    image_concurrency: 6,
-    ticker_interval_ms: 1000,
+    image_concurrency: 99,
+    ticker_interval_ms: 1,
   },
-  slow: { image_queue: true, image_concurrency: 1, ticker_interval_ms: 2000 },
+  slow: { image_queue: false, image_concurrency: 1, ticker_interval_ms: 1000 },
 };
 
 function pnLog(category, message, data) {

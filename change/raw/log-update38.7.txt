@@ -22,6 +22,11 @@ Patch Notes:
 -#_ <color=#fff8db>**!lastgithubcommitcountup:TheRedMineword/GWENT!** since last Github commit! (!lastgithubcommittimestamp:TheRedMineword/GWENT!)</color>
 --separator--
 <fat1>
+# 19 October, 2026 - HOTFIX 1
+```diff
+--- Disabled patchnotes optymalization as it was too sensitive
+```
+<fat2>
 # 19 October, 2026
 ```diff
 --- An attempt was made to optimize the patch notes for slower connections!
