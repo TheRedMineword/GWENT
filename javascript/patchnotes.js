@@ -3,8 +3,8 @@ let pcnr = false;
 
 let PN_OPTIMIZE = {
   auto_tune: false,
-  lazy_icons: false, // i broke it
-  icon_spinner: true, // also i guess broken as css noted out "patch-icon-wrap"
+  lazy_icons: false,
+  icon_spinner: true,
   icon_min_spinner_ms: 0,
   icon_debug_extra_ms: 3500,
   image_queue: false,
@@ -1321,9 +1321,9 @@ content:"";
 position:absolute;
 width:40%;
 height:40%;
-/*
+/* HERE IN CASE YOU NEED TO COMMENT OUT IT AGAIN */
 border:2px solid ${color};
-// animation:patch-icon-spin .9s linear infinite; */
+animation:patch-icon-spin .9s linear infinite;
 }
 
 .patch-icon-wrap.is-loaded::before,
