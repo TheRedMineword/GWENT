@@ -1,8 +1,9 @@
 "use strict";
 let pcnr = false;
 
+const PN_WIFI_OPTIMIZE = true;
+
 let PN_OPTIMIZE = {
-  auto_tune: false,
   lazy_icons: false,
   icon_spinner: true,
   icon_min_spinner_ms: 0,
@@ -17,11 +18,17 @@ let PN_OPTIMIZE = {
 
 const PN_PROFILES = {
   normal: {
+    lazy_icons: false,
     image_queue: false,
     image_concurrency: 99,
     ticker_interval_ms: 1,
   },
-  slow: { image_queue: false, image_concurrency: 99, ticker_interval_ms: 1 },
+  slow: {
+    lazy_icons: true,
+    image_queue: true,
+    image_concurrency: 4,
+    ticker_interval_ms: 500,
+  },
 };
 
 function pnLog(category, message, data) {
@@ -64,12 +71,13 @@ function pnEnqueue(task) {
 
 function pnTune(mode = "auto", overrides = {}) {
   const c = navigator.connection || {};
+  // deliberately conservative: only clearly bad connections count as slow
   const slow =
     mode === "slow" ||
     (mode === "auto" &&
       (c.saveData === true ||
-        /^(slow-2g|2g|3g)$/.test(c.effectiveType || "") ||
-        (c.downlink > 0 && c.downlink < 1.5)));
+        /^(slow-2g|2g)$/.test(c.effectiveType || "") ||
+        (c.downlink > 0 && c.downlink < 0.7)));
 
   PN_OPTIMIZE = {
     ...PN_OPTIMIZE,
@@ -2278,7 +2286,7 @@ function renderBigRow(entry, unseen, now) {
 
   return `
       <div class="patch-deck-item patch-deck-item--big" data-id="${entry.id}"
-           style="width:100%;max-width:${adv.size.width_px}px;height:${adv.size.height_px}px;--bp-load:${adv.loadingColor};--bp-count:${adv.countdownColor}">
+           style="width:100%;max-width:${adv.size.width_px}px;aspect-ratio:${adv.size.width_px}/${adv.size.height_px};height:auto;--bp-load:${adv.loadingColor};--bp-count:${adv.countdownColor}">
         <img class="patch-bp-img" alt="${pnEscapeAttr(entry.title)}">
         <div class="patch-bp-loader"><i></i><i></i><i></i></div>
         ${unseen ? `<span class="patch-deck-dot patch-bp-dot"></span>` : ""}
@@ -3036,13 +3044,13 @@ let reinit_after = 0;
 let have_player_id = false;
 let have_inited_stream = false;
 async function initPatchnotes() {
-  if (PN_OPTIMIZE.auto_tune) {
+  if (PN_WIFI_OPTIMIZE) {
     pnTune("auto");
     if (!pnTuneBound) {
       pnTuneBound = true;
       navigator.connection?.addEventListener?.(
         "change",
-        () => PN_OPTIMIZE.auto_tune && pnTune("auto"),
+        () => PN_WIFI_OPTIMIZE && pnTune("auto"),
       );
     }
   }
