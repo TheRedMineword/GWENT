@@ -788,12 +788,41 @@ function getStreamState(id) {
   return s;
 }
 
+const ALLOWED_LOCAL_PORTS = new Set(["8080", "8081", "1111"]);
+const ALLOWED_DOMAINS = [
+  "gwent.localplayer.dev",
+  "theredmineword.github.io",
+];
+
+function originMatches(origin) {
+  let u;
+  try {
+    u = new URL(origin);
+  } catch {
+    return false;
+  }
+  if (u.origin !== origin) return false;
+
+  if (u.hostname === "localhost" || u.hostname === "127.0.0.1") {
+    return ALLOWED_LOCAL_PORTS.has(u.port);
+  }
+  if (u.protocol !== "https:") return false;
+  return ALLOWED_DOMAINS.some(
+    (d) => u.hostname === d || u.hostname.endsWith("." + d)
+  );
+}
+
 function streamOriginAllowed(req) {
   const claimed = String(req.query.orygin || "");
-  const header = req.headers.origin; // browsers set it on cross-origin EventSource
-  if (!claimed || !streamAllowedOrigins.includes(claimed)) return false;
-  if (header && header !== claimed) return false;
-  return true;
+  const header = req.headers.origin;
+
+  let reason = null;
+  if (!claimed) reason = "no orygin param";
+  else if (!originMatches(claimed)) reason = "claimed origin not in allowlist";
+  else if (header && header !== claimed) reason = "Origin header != claimed";
+
+  if (reason) slog("origin rejected:", { reason, claimed, header });
+  return !reason;
 }
 
 function streamWrite(s, msg) {
