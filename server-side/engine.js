@@ -841,16 +841,41 @@ function pushStreamMessage(playerId, message) {
 function broadcastStreamMessage(message) {
   return Object.keys(playerSockets).map((id) => pushStreamMessage(id, message));
 }
+// Flip to false to silence all stream logs (or use STREAM_DEBUG=true in env)
+const STREAM_DEBUG = process.env.STREAM_DEBUG
+  ? process.env.STREAM_DEBUG === "true"
+  : true;
+
+const slog = (...args) => {
+  if (STREAM_DEBUG) console.log(`[stream ${new Date().toISOString()}]`, ...args);
+};
 
 router.get("/stream", (req, res) => {
   const id = String(req.query.id || "");
 
-  if (!id || !playerSockets[id]) return res.sendStatus(404);
-  if (!streamOriginAllowed(req)) return res.sendStatus(403);
+  slog("connect attempt", {
+    id,
+    hasSocket: !!playerSockets[id],
+    originHeader: req.get("origin"),
+    referer: req.get("referer"),
+    queryOrigin: req.query.origin,
+    queryOrygin: req.query.orygin, // typo detector, remove once client is fixed
+    ip: req.ip,
+  });
+
+  if (!id || !playerSockets[id]) {
+    slog("404 reject: unknown id or no player socket", { id });
+    return res.sendStatus(404);
+  }
+  if (!streamOriginAllowed(req)) {
+    slog("403 reject: origin not allowed", { id });
+    return res.sendStatus(403);
+  }
 
   const s = getStreamState(id);
   if (s.closeTimer) clearTimeout(s.closeTimer);
   if (s.res) {
+    slog("replacing existing stream", { id });
     try {
       s.res.end();
     } catch (e) {}
@@ -866,34 +891,44 @@ router.get("/stream", (req, res) => {
   res.write("retry: 3000\n\n");
 
   s.res = res;
-  // js_ready / game_ready are NOT touched here: the page reports them (POST /stream/ready) right after connecting
+
+  // Readiness is no longer reported by the page (/stream/ready is legacy),
+  // so a connected stream counts as ready and queued events are delivered now.
+  s.js_ready = true;
+  s.game_ready = true;
+  flushStream(s);
+
+  slog("connected", { id, pending: s.pending?.size ?? 0 });
 
   req.on("close", () => {
+    slog("closed", { id });
     if (s.res === res) s.res = null;
     s.closeTimer = setTimeout(() => {
-      if (!s.res && !playerSockets[id]) eventstream.delete(id);
+      if (!s.res && !playerSockets[id]) {
+        slog("state evicted", { id });
+        eventstream.delete(id);
+      }
     }, STREAM_STATE_GRACE_MS);
   });
 });
 
+// LEGACY: kept so old clients don't get errors. Does nothing.
 router.post("/stream/ready", (req, res) => {
-  const { id, js_ready, game_ready } = req.body || {};
-  const s = eventstream.get(String(id));
-  if (!s) return res.sendStatus(404);
-
-  if (typeof js_ready === "boolean") s.js_ready = js_ready;
-  if (typeof game_ready === "boolean") s.game_ready = game_ready;
-
-  flushStream(s);
+  slog("legacy /stream/ready ignored", { id: req.body?.id });
   res.sendStatus(204);
 });
 
 router.post("/stream/ack", (req, res) => {
   const { id, mid } = req.body || {};
   const s = eventstream.get(String(id));
-  if (!s) return res.sendStatus(404);
+  if (!s) {
+    slog("ack 404: no stream state", { id, mid });
+    return res.sendStatus(404);
+  }
 
-  res.sendStatus(s.pending.delete(String(mid)) ? 204 : 404);
+  const removed = s.pending.delete(String(mid));
+  slog(removed ? "ack ok" : "ack 404: mid not pending", { id, mid });
+  res.sendStatus(removed ? 204 : 404);
 });
 
 function adminKeyIsValid(value) {
