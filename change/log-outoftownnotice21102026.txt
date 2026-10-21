@@ -19,7 +19,14 @@ Developer Out Of Town!
 </box.title>
 
 <box.text>
-[Discord Server](https://theredmineword.github.io/GWENT/api/discord-iframe/page)
+# Hello everyone!
+**DrMineword** here!
+<fat1>
+As you can see, I will be leaving my home for a few days.
+And during this time I wont be able to fully work on Gwent!
+<fat1>
+Due to this, work on adding a new Faction and improving Gwent itself will be suspended (probably until this message expires).
+-# Remember to join our [Discord Server](https://theredmineword.github.io/GWENT/api/discord-iframe/page) for news and updates!
 </box.text>
 
 <button.name>
