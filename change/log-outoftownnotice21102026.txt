@@ -1,0 +1,35 @@
+<small_text.text>
+NEWS / NOTICE
+</small_text.text>
+
+<images.logo>
+img/web/logo_round.png
+</images.logo>
+
+<images.banner>
+img/web/other/devoutoftown/bar.jpg
+</images.banner>
+
+<box.lines_outline_hex>
+#00FFFF
+</box.lines_outline_hex>
+
+<box.title>
+Developer Out Of Town!
+</box.title>
+
+<box.text>
+[Discord Server](https://theredmineword.github.io/GWENT/api/discord-iframe/page)
+</box.text>
+
+<button.name>
+CONTINUE
+</button.name>
+
+<load.text>
+<l>Receiving a pre-recorded message</l>
+</load.text>
+
+<load.duration_ms>
+6000
+</load.duration_ms>
