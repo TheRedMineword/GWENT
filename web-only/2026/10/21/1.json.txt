@@ -1,0 +1,8 @@
+<title>Server Maintenance</title>
+<desc>Work has begun on the communication system (server-players) using patchnotes.js!
+
+Test messages may be sent to all active clients!
+
+~DrMineword</desc>
+<bottom_link>true</bottom_link>
+<bottom_link_value>Join Discord Server for updates!###https://theredmineword.github.io/GWENT/api/discord-iframe/page</bottom_link_value>
