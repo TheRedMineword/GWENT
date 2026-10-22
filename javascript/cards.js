@@ -3841,7 +3841,7 @@ var card_dict_base = [
       monitor: "based",
       id: "dziady",
       duration: {
-        start: "2026-11-01T08:00:00.000Z",
+        start: "2026-11-01T05:20:00.000Z",
         duration: "9999999999",
       },
     },
