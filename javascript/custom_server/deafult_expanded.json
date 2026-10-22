@@ -2182,6 +2182,20 @@
           "spypotion": "\u003Ccolor=#C46A2B\u003ESwallow potion\u003C/color\u003E is active for next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!",
           "elfendonion": "\u003Ccolor=#A69A45\u003EElf and Onion soup\u003C/color\u003E is here for next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!",
           "grom": "\u003Ccolor=#3F6B32\u003EThunderbolt potion\u003C/color\u003E active for next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!"
+        },
+        "ui_user_settings": {
+          "menu.title": "Player Settings",
+          "menu.close": "Close",
+          "btn.name": "Change name",
+          "btn.screenshot": "Screenshot",
+          "btn.pfp": "Profile picture",
+          "locked": "This option is currently disabled",
+          "screenshot.unavailable": "Screenshots are not available",
+          "screenshot.fail": "Screenshot failed: %s",
+          "pfp.header": "Choose profile picture",
+          "pfp.default": "Vanilla Ice Cream",
+          "pfp.close": "Close",
+          "pfp.empty": "No profile pictures available"
         }
       },
       "pl": {
@@ -3391,6 +3405,20 @@
           "spypotion": "\u003Ccolor=#C46A2B\u003EJaskółka\u003C/color\u003E jest aktywna na następne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!",
           "elfendonion": "\u003Ccolor=#A69A45\u003EZupa z elfa i cebuli\u003C/color\u003E jest tutaj przez kolejne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!",
           "grom": "\u003Ccolor=#3F6B32\u003EGrzmot\u003C/color\u003E jest aktywny na następne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!"
+        },
+        "ui_user_settings": {
+          "menu.title": "Ustawienia Gracza",
+          "menu.close": "Zamknij",
+          "btn.name": "Zmień nazwę",
+          "btn.screenshot": "Zrzut Ekranu",
+          "btn.pfp": "Awatar",
+          "locked": "Ta opcja jest w tej chwili niedostępna",
+          "screenshot.unavailable": "Zrzuty z ekranu nie są teraz dostępne",
+          "screenshot.fail": "Błąd zrzutu z ekranu: %s",
+          "pfp.header": "Wybierz nowy awatar",
+          "pfp.default": "Lody Waniliowe",
+          "pfp.close": "Zamknij",
+          "pfp.empty": "Brak dostępnych awatarów!"
         }
       }
     },
@@ -7149,8 +7177,8 @@
     },
     "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "8o-JI8VRyKo",
-    "tavern_yt_volume": 90
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }
