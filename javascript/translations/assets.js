@@ -628,6 +628,12 @@ function translate_ui_hub() {
     getTranslation("ui.mmenu.ingame")[0];
   document.querySelector("#surrender-button").textContent =
     getTranslation("ui.mmenu.ingame")[1];
+
+  try {
+    translation_user_settings = deepClone(getTranslation("ui_user_settings"));
+    document.querySelector("#user_menu").textContent =
+      getTranslation("ui_user_settings")["menu.title"];
+  } catch (e) {}
 }
 function getUiHtmlStrng(key, linebreakertobr = false) {
   let html = getUiStrng(`html.${key}`);

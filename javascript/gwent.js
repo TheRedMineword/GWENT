@@ -1055,6 +1055,7 @@ socket.onmessage = async (event) => {
             is: players.me,
           }),
         );
+        send_my_pfp();
       } else {
         comp_and_send(
           socket,
@@ -1063,6 +1064,7 @@ socket.onmessage = async (event) => {
             a: false,
           }),
         );
+        send_my_pfp();
       }
       break;
     case "sessionCreated":
@@ -1105,6 +1107,7 @@ socket.onmessage = async (event) => {
           }),
         );
       }
+      send_my_pfp();
       //  sendChatMessageStrig(`play wich ${factions[faction_name].name} faction!`);
       break;
 
@@ -1143,6 +1146,7 @@ socket.onmessage = async (event) => {
       console.log("Opponent left the game");
       gameInProgress = false;
       setPatchnotesVisible(!gameInProgress);
+      player_ssettings_allow(true, true, false);
       // isOpponentReadyElem.classList.add("hidden");
       updateOpponentUI({
         name: getUiStrng("no_op_ui"),
@@ -3714,6 +3718,7 @@ class Game {
 
   // Initializes player abilities, hands and waits for cointoss
   async startGame() {
+    player_ssettings_allow(false, true, true);
     await game.reset();
     var btn = document.getElementById("session-start-control");
     btn.textContent = "Game \nStarting";
@@ -4445,6 +4450,7 @@ class Game {
   async endGame() {
     gameInProgress = false;
     setPatchnotesVisible(!gameInProgress);
+    player_ssettings_allow(true, true, false);
     document.getElementById("session-start-control").classList.remove("ready");
     let endScreen = document.getElementById("end-screen");
     const endText = document.getElementById("end-text");
@@ -4568,6 +4574,7 @@ class Game {
   async surrenderEnd(winner) {
     gameInProgress = false;
     setPatchnotesVisible(!gameInProgress);
+    player_ssettings_allow(true, true, false);
     Bucket.reset();
     //  document
     //    .getElementById("session-start-control")
@@ -7276,6 +7283,7 @@ class DeckMaker {
           }),
         );
       }
+      send_my_pfp();
       //  sendChatMessageStrig(`play wich ${factions[faction_name].name} faction!`);
       //  return true;
     }

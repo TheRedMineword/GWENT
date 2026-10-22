@@ -157,6 +157,14 @@ const IGNORE_PATTERNS = [
   "ticker_pause_when_hidden",
   "debug_logs",
   "log_categories",
+  // pfp update
+  "translation_user_settings",
+  "user_settings",
+  "pfp_list",
+  "pfp_list_src",
+  "PFP_STORAGE_KEY",
+  "user_menu_el",
+  "USER_MENU_ITEMS",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 

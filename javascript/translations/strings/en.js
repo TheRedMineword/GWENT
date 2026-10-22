@@ -1278,5 +1278,19 @@ card_info: {
     "elfendonion": "<color=#A69A45>Elf and Onion soup</color> is here for next <color=#E6D8B5>%s</color> turns!",
 
     "grom": "<color=#3F6B32>Thunderbolt potion</color> active for next <color=#E6D8B5>%s</color> turns!"
-  }
+  },
+  "ui_user_settings": {
+  "menu.title": "Player Settings",
+  "menu.close": "Close",
+  "btn.name": "Change name",
+  "btn.screenshot": "Screenshot",
+  "btn.pfp": "Profile picture",
+  "locked": "This option is currently disabled",
+  "screenshot.unavailable": "Screenshots are not available",
+  "screenshot.fail": "Screenshot failed: %s",
+  "pfp.header": "Choose profile picture",
+  "pfp.default": "Vanilla Ice Cream",
+  "pfp.close": "Close",
+  "pfp.empty": "No profile pictures available",
+}
 };

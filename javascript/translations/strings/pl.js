@@ -1382,5 +1382,19 @@ rule63: [  // for classes
     "elfendonion": "<color=#A69A45>Zupa z elfa i cebuli</color> jest tutaj przez kolejne <color=#E6D8B5>%s</color> tury!",
 
     "grom": "<color=#3F6B32>Grzmot</color> jest aktywny na następne <color=#E6D8B5>%s</color> tury!"
-  }
+  },
+  "ui_user_settings": {
+  "menu.title": "Ustawienia Gracza",
+  "menu.close": "Zamknij",
+  "btn.name": "Zmień nazwę",
+  "btn.screenshot": "Zrzut Ekranu",
+  "btn.pfp": "Awatar",
+  "locked": "Ta opcja jest w tej chwili niedostępna",
+  "screenshot.unavailable": "Zrzuty z ekranu nie są teraz dostępne",
+  "screenshot.fail": "Błąd zrzutu z ekranu: %s",
+  "pfp.header": "Wybierz nowy awatar",
+  "pfp.default": "Lody Waniliowe",
+  "pfp.close": "Zamknij",
+  "pfp.empty": "Brak dostępnych awatarów!",
+}
 };
