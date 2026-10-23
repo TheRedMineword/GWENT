@@ -796,9 +796,9 @@ STRNG["en"] = {
           ok: "OK",
         },
         askForSessionId: {
-          header: "Join Session",
-          enter: "Enter Session ID",
-          input: "Session ID",
+          header: "Join Lobby",
+          enter: "Enter Lobby ID",
+          input: "Lobby ID",
           ok: "Join",
           notOk: "Cancel",
         },
@@ -817,17 +817,17 @@ STRNG["en"] = {
         },
         session_mode: {
           header: "Create Game",
-          text: "Choose session type",
-          create: "Create Server",
-          custom: "Custom Server",
+          text: "Choose lobby type",
+          create: "Create Lobby",
+          custom: "Custom Lobby",
         },
 
         custom_server: {
-          header: "Custom Server",
-          placeholder: "Enter JSON config...",
+          header: "Custom Lobby",
+          placeholder: "Enter {JSON} config...",
           start: "Start",
           cancel: "Cancel",
-          invalid_json: "Invalid JSON",
+          invalid_json: "Invalid {JSON}",
         },
 
         player_name: {
@@ -965,12 +965,12 @@ STRNG["en"] = {
     },
     mmenu: {
       "leader-topic": "Leader",
-      "create-game": "Create Game",
-      joingame: "Join Game",
+      "create-game": "Create Lobby",
+      joingame: "Join Lobby",
       "session-start-control_ready": "Ready",
       "session-start-control_unready": "UnReady",
       "cancel": "Cancel",
-      "copy": "Copy Session",
+      "copy": "Copy Lobby\nInvite",
       "music": "♫ Music",
       "no-op": "No Opponent",
       "hi": "Hello PlayerID",
