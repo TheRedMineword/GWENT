@@ -892,9 +892,9 @@ francesca_hope_of_the_aen_seidhe:
           ok: "OK",
         },
         askForSessionId: {
-          header: "Dołącz do Sesji",
-          enter: "Wpisz ID Sesji",
-          input: "ID Sesji",
+          header: "Dołącz do Pokoju",
+          enter: "Wpisz ID Pokoju",
+          input: "ID Pokoju",
           ok: "Dołącz",
           notOk: "Anuluj",
         },
@@ -912,18 +912,18 @@ francesca_hope_of_the_aen_seidhe:
           askno: "Przeciwnik nie ukazał ci litości!",
         },
         session_mode: {
-          header: "Stwórz Grę",
-          text: "Wybierz tryb Sesji",
-          create: "Gra",
+          header: "Stwórz Pokój",
+          text: "Wybierz tryb Gry",
+          create: "Po Prostu Gra",
           custom: "Niestandardowa Gra",
         },
 
         custom_server: {
           header: "Niestandardowa Gra",
-          placeholder: "Wpisz JSON ustawień...",
+          placeholder: "Wpisz {JSON} ustawień...",
           start: "Rozpocznij",
           cancel: "Anuluj",
-          invalid_json: "Plik JSON jest nieprawidłowy!",
+          invalid_json: "Plik {JSON} jest nieprawidłowy!",
         },
 
         player_name: {
@@ -1061,12 +1061,12 @@ francesca_hope_of_the_aen_seidhe:
     },
     mmenu: {
       "leader-topic": "Dowódca",
-      "create-game": "Stwórz Grę",
-      joingame: "Dołącz do Gry",
+      "create-game": "Stwórz Pokój",
+      joingame: "Dołącz do Pokoju",
       "session-start-control_ready": "Gotów",
       "session-start-control_unready": "Niegotowy",
       "cancel": "Anuluj",
-      "copy": "Kupiuj Zaproszenie",
+      "copy": "Kupiuj Kod Zaproszenia",
       "music": "♫ Muzyka",
       "no-op": "Brak Przeciwnika",
       "hi": "Witaj Graczu",

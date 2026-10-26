@@ -970,7 +970,7 @@ STRNG["en"] = {
       "session-start-control_ready": "Ready",
       "session-start-control_unready": "UnReady",
       "cancel": "Cancel",
-      "copy": "Copy Lobby\nInvite",
+      "copy": "Copy Lobby Invite",
       "music": "♫ Music",
       "no-op": "No Opponent",
       "hi": "Hello PlayerID",

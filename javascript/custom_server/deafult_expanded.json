@@ -1746,9 +1746,9 @@
                 "ok": "OK"
               },
               "askForSessionId": {
-                "header": "Join Session",
-                "enter": "Enter Session ID",
-                "input": "Session ID",
+                "header": "Join Lobby",
+                "enter": "Enter Lobby ID",
+                "input": "Lobby ID",
                 "ok": "Join",
                 "notOk": "Cancel"
               },
@@ -1767,16 +1767,16 @@
               },
               "session_mode": {
                 "header": "Create Game",
-                "text": "Choose session type",
-                "create": "Create Server",
-                "custom": "Custom Server"
+                "text": "Choose lobby type",
+                "create": "Create Lobby",
+                "custom": "Custom Lobby"
               },
               "custom_server": {
-                "header": "Custom Server",
-                "placeholder": "Enter JSON config...",
+                "header": "Custom Lobby",
+                "placeholder": "Enter {JSON} config...",
                 "start": "Start",
                 "cancel": "Cancel",
-                "invalid_json": "Invalid JSON"
+                "invalid_json": "Invalid {JSON}"
               },
               "player_name": {
                 "header": "Player Name",
@@ -1889,12 +1889,12 @@
           },
           "mmenu": {
             "leader-topic": "Leader",
-            "create-game": "Create Game",
-            "joingame": "Join Game",
+            "create-game": "Create Lobby",
+            "joingame": "Join Lobby",
             "session-start-control_ready": "Ready",
             "session-start-control_unready": "UnReady",
             "cancel": "Cancel",
-            "copy": "Copy Session",
+            "copy": "Copy Lobby Invite",
             "music": "♫ Music",
             "no-op": "No Opponent",
             "hi": "Hello PlayerID",
@@ -2916,9 +2916,9 @@
                 "ok": "OK"
               },
               "askForSessionId": {
-                "header": "Dołącz do Sesji",
-                "enter": "Wpisz ID Sesji",
-                "input": "ID Sesji",
+                "header": "Dołącz do Pokoju",
+                "enter": "Wpisz ID Pokoju",
+                "input": "ID Pokoju",
                 "ok": "Dołącz",
                 "notOk": "Anuluj"
               },
@@ -2936,17 +2936,17 @@
                 "askno": "Przeciwnik nie ukazał ci litości!"
               },
               "session_mode": {
-                "header": "Stwórz Grę",
-                "text": "Wybierz tryb Sesji",
-                "create": "Gra",
+                "header": "Stwórz Pokój",
+                "text": "Wybierz tryb Gry",
+                "create": "Po Prostu Gra",
                 "custom": "Niestandardowa Gra"
               },
               "custom_server": {
                 "header": "Niestandardowa Gra",
-                "placeholder": "Wpisz JSON ustawień...",
+                "placeholder": "Wpisz {JSON} ustawień...",
                 "start": "Rozpocznij",
                 "cancel": "Anuluj",
-                "invalid_json": "Plik JSON jest nieprawidłowy!"
+                "invalid_json": "Plik {JSON} jest nieprawidłowy!"
               },
               "player_name": {
                 "header": "Nazwa Gracza",
@@ -3059,12 +3059,12 @@
           },
           "mmenu": {
             "leader-topic": "Dowódca",
-            "create-game": "Stwórz Grę",
-            "joingame": "Dołącz do Gry",
+            "create-game": "Stwórz Pokój",
+            "joingame": "Dołącz do Pokoju",
             "session-start-control_ready": "Gotów",
             "session-start-control_unready": "Niegotowy",
             "cancel": "Anuluj",
-            "copy": "Kupiuj Zaproszenie",
+            "copy": "Kupiuj Kod Zaproszenia",
             "music": "♫ Muzyka",
             "no-op": "Brak Przeciwnika",
             "hi": "Witaj Graczu",
@@ -7177,8 +7177,8 @@
     },
     "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 30
+    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }
