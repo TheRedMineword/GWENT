@@ -3015,9 +3015,9 @@ class Row extends CardContainer {
         card.pendingScorch = true;
         // this.scorch_a_card(card);
         if (card.abilities?.includes("witcherschool")) {
-          return deepclone(card.basePower + getWitcherUnityBonus(card));
+          return deepClone(card.basePower + getWitcherUnityBonus(card));
         } else {
-          return deepclone(card.basePower);
+          return deepClone(card.basePower);
         }
       }
     }
