@@ -548,7 +548,7 @@ STRNG["pl"] = {
     witchersforces: {
     name: "Siły Wiedźmińskie",
     description:
-      "Za każdą przegraną lub zremisowaną rundę dobierz kartę z tali.\nZ każdym Wiedźminem siła Szkoły Wiedźmińskiej rośnie!",
+      "W TRAKCIE TWORZENIA: Za każdą przegraną lub zremisowaną rundę dobierz kartę z tali.\nZ każdym Wiedźminem siła Szkoły Wiedźmińskiej rośnie!",
   }
 },
   card: {
@@ -845,7 +845,11 @@ francesca_hope_of_the_aen_seidhe:
     scary_flower: "Archespor",
     skylena: "Skylena Snow",
     kearseren: "Kear Selen",
-    carwitcher: "Wiedźmin Cechu Kota"
+    carwitcher: "Wiedźmin Cechu Kota",
+        grasstrail: "Próba Traw",
+        madoc: "Madoc",
+        reinadld: "Reinald",
+        ivald: "Ivar Złe Oko"
   },
   ui: {
     elem: {

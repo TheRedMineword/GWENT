@@ -452,7 +452,7 @@ STRNG["en"] = {
     witchersforces: {
     name: "Witcher Forces",
     description:
-      "Draw a card if round ends in draw or loss.\nWith each Witcher, Witcher School strenght grows!",
+      "WORK IN PROGGRES: Draw a card if round ends in draw or loss.\nWith each Witcher, Witcher School strenght grows!",
   }
   },
   card: {
@@ -749,7 +749,11 @@ STRNG["en"] = {
     scary_flower: "Archespores",
     skylena: "Skylena Snow",
     kearseren: "Kear Selen",
-    carwitcher: "Cat School Witcher"
+    carwitcher: "Cat School Witcher",
+    grasstrail: "Trial of Grasses",
+madoc: "Madoc",
+reinadld: "Reinald",
+ivald: "Ivald Evil-Eye"
   },
   ui: {
     elem: {

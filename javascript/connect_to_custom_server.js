@@ -165,6 +165,7 @@ const IGNORE_PATTERNS = [
   "PFP_STORAGE_KEY",
   "user_menu_el",
   "USER_MENU_ITEMS",
+  "pnAutoBusy",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 

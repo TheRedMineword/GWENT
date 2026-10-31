@@ -1944,6 +1944,8 @@ function closeOverlay(overlay) {
   openBoxEntry = null;
   overlay.remove();
   onPatchnoteEvent("box_close", entry);
+  // a lower-priority autodisplay entry may have been waiting behind this box
+  setTimeout(pnShowNextAuto, 0);
 }
 
 function startBoxCountdown(overlay, entry) {
@@ -2589,7 +2591,8 @@ async function refreshFromIndex() {
   renderDeck();
   scheduleWatcher(nextChange);
 
-  const popup = !openBoxEntry && auto && !isSeen(auto.id) ? auto : null;
+  const popup =
+    !openBoxEntry && !pnAutoBusy && auto && !isSeen(auto.id) ? auto : null;
 
   // cue for unseen entries that just became active (the popup one is skipped)
   pnCheckUnseenActive(popup?.id ?? null);
@@ -2597,8 +2600,30 @@ async function refreshFromIndex() {
   onPatchnoteEvent("refreshed", { pool: DECK_POOL, auto });
 
   if (popup) {
-    await presentEntry(popup, { fromAuto: true });
+    await pnPresentAuto(popup);
   }
+}
+
+let pnAutoBusy = false;
+
+async function pnPresentAuto(entry) {
+  if (pnAutoBusy || openBoxEntry) return;
+  pnAutoBusy = true; // set synchronously so concurrent callers can't double-open
+  try {
+    await presentEntry(entry, { fromAuto: true });
+  } finally {
+    pnAutoBusy = false;
+  }
+}
+
+async function pnShowNextAuto() {
+  if (openBoxEntry || pnAutoBusy || !INDEX_CACHE) return;
+
+  const { patchnoteCandidates, newsCandidates } = resolveIndex(INDEX_CACHE);
+  const next = pickAutoDisplay(patchnoteCandidates, newsCandidates);
+  if (!next || isSeen(next.id)) return;
+
+  await pnPresentAuto(next);
 }
 
 // ---------------------------------------------------------------------------
@@ -3001,7 +3026,8 @@ async function drainStreamQueue() {
   try {
     while (streamQueue.length) {
       // wait while a patch note / another message is open
-      while (openBoxEntry) await new Promise((r) => setTimeout(r, 500));
+      while (openBoxEntry || pnAutoBusy)
+        await new Promise((r) => setTimeout(r, 500));
 
       const entry = streamQueue.shift();
       if (entry.until <= Clock.now()) continue; // expired while queued
@@ -3014,7 +3040,7 @@ async function drainStreamQueue() {
         console.warn("Patch notes: stream content failed to load", entry.id, e);
         continue;
       }
-      if (openBoxEntry) {
+      if (openBoxEntry || pnAutoBusy) {
         streamQueue.unshift(entry); // something opened while loading
         continue;
       }

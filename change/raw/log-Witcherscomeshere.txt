@@ -1,0 +1,57 @@
+<small_text.text>
+NEWS / FEEDBACK & NEW FACTION
+</small_text.text>
+
+<images.logo>
+img/web/logo_round.png
+</images.logo>
+
+<images.banner>
+img/web/bar.png
+</images.banner>
+
+<box.lines_outline_hex>
+#aaad80
+</box.lines_outline_hex>
+
+<box.title>
+The Witcherfication has begun!
+</box.title>
+
+<box.text>
+Please welcome the **_Witchers Forces_**!
+-# (W.I.P. content)
+<fat1>
+Witcher faction forcess will work around _Witcher Unity_, each Witcher on board will raise strenght of _Witcher School_ on board!
+On top of that, for each lost or draw round Witcher faction pasive ability will trigger, allowing Witcher to draw a card!
+Work is still in progress so things can change!
+<fat1>
+As of the October 31, 2026 update **Witcher Forces** are now in game as **Work In Proggres** content!
+I hope this will help me bring feedback and balance changes needed.
+<fat1>
+As part of **Witcherfication** all existing Witcher cards recived **Witcher Bond** ability!
+<fat1>
+-##_ <color=#BBBCC1>Remember to join our Gwent [Discord Server](api/discord-iframe/page) to give me feedback!</color>
+<fat1>
+%%img src="img/icons/deck_shield_witchersforces.png" style="max-width:45%"%%
+-# 
+%%img src="img/icons/deck_back_witchersforces.jpg" style="max-width:15%"%%
+<fat2>
+%%img src="img\lg\neutral_geralt.jpg" style="max-width:25%"%% %%img src="img\lg\neutral_vesemir.jpg" style="max-width:25%"%%  %%img src="img\lg\skellige_gerry.jpg" style="max-width:25%"%%
+<fat1>
+%%img src="img\lg\witchersforces_kearseren.jpg" style="max-width:25%"%% %%img src="img\lg\witchersforces_carwitcher.jpg" style="max-width:25%"%% %%img src="img\lg\witchersforces_reinadld.jpg" style="max-width:25%"%% %%img src="img\lg\witchersforces_ivald.jpg" style="max-width:25%"%% %%img src="img\lg\witchersforces_madoc.jpg" style="max-width:25%"%%
+%%img src="img\lg\witchersforces_grasstrail.jpg" style="max-width:25%"%%
+</box.text>
+
+
+<button.name>
+CONTINUE
+</button.name>
+
+<load.text>
+<l>INCOMING DEV LOG!</l>
+</load.text>
+
+<load.duration_ms>
+3000
+</load.duration_ms>

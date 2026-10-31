@@ -903,6 +903,10 @@ let card_name_class = {
   skylena: "sky_skykid_%g",
   kearseren: "witcherschool_hardcoded",
   carwitcher: "witcher_%g",
+  grasstrail: "potion_%g",
+  madoc: "witcher_%g",
+  reinadld: "witcher_%g",
+  ivald: "witcher_%g",
 };
 let classDecorators = {
   undefined: { prefix: "⩫<", suffix: ">⩫" },

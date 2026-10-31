@@ -1559,8 +1559,23 @@ var ability_dict = {
         bdf.removed.push(() =>
           setTimeout(() => bdf.holder.grave.removeCard(bdf), 1001),
         );
-
-        await board.addCardToRow(bdf, targetData.row, card.holder);
+        var row_is = deepClone(targetData.row);
+        if (row_is === "agile") {
+          row_is = "close";
+        } else if (row_is === "all") {
+          row_is = "ranged";
+        }
+        console.log(
+          "spawn avenger using: ",
+          bdf,
+          row_is,
+          card.holder,
+          " row from: ",
+          targetData.row,
+          "target: ",
+          targetData,
+        );
+        await board.addCardToRow(bdf, row_is, card.holder);
         await bdf.animate("avenger_spawn_creature");
       } catch (e) {
         console.log(e);

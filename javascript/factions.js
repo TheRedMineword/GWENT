@@ -229,7 +229,7 @@ var factions = {
       "Keeps the strongest Unit Card out after each round. Factions full of morale boosting cards.",
   },
   witchersforces: {
-    _indev: true,
+    //  _indev: true,
     name: "Witcher Forces",
 
     factionAbility: (player) =>

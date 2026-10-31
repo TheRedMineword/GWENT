@@ -602,7 +602,11 @@
       "scary_puppy": "monster_%g",
       "skylena": "sky_skykid_%g",
       "kearseren": "witcherschool_hardcoded",
-      "carwitcher": "witcher_%g"
+      "carwitcher": "witcher_%g",
+      "grasstrail": "potion_%g",
+      "madoc": "witcher_%g",
+      "reinadld": "witcher_%g",
+      "ivald": "witcher_%g"
     },
     "classDecorators": {
       "undefined": {
@@ -1408,7 +1412,7 @@
           },
           "witchersforces": {
             "name": "Witcher Forces",
-            "description": "Draw a card if round ends in draw or loss.\nWith each Witcher, Witcher School strenght grows!"
+            "description": "WORK IN PROGGRES: Draw a card if round ends in draw or loss.\nWith each Witcher, Witcher School strenght grows!"
           }
         },
         "card": {
@@ -1704,7 +1708,11 @@
           "scary_flower": "Archespores",
           "skylena": "Skylena Snow",
           "kearseren": "Kear Selen",
-          "carwitcher": "Cat School Witcher"
+          "carwitcher": "Cat School Witcher",
+          "grasstrail": "Trial of Grasses",
+          "madoc": "Madoc",
+          "reinadld": "Reinald",
+          "ivald": "Ivald Evil-Eye"
         },
         "ui": {
           "elem": {
@@ -2578,7 +2586,7 @@
           },
           "witchersforces": {
             "name": "Siły Wiedźmińskie",
-            "description": "Za każdą przegraną lub zremisowaną rundę dobierz kartę z tali.\nZ każdym Wiedźminem siła Szkoły Wiedźmińskiej rośnie!"
+            "description": "W TRAKCIE TWORZENIA: Za każdą przegraną lub zremisowaną rundę dobierz kartę z tali.\nZ każdym Wiedźminem siła Szkoły Wiedźmińskiej rośnie!"
           }
         },
         "card": {
@@ -2874,7 +2882,11 @@
           "scary_flower": "Archespor",
           "skylena": "Skylena Snow",
           "kearseren": "Kear Selen",
-          "carwitcher": "Wiedźmin Cechu Kota"
+          "carwitcher": "Wiedźmin Cechu Kota",
+          "grasstrail": "Próba Traw",
+          "madoc": "Madoc",
+          "reinadld": "Reinald",
+          "ivald": "Ivar Złe Oko"
         },
         "ui": {
           "elem": {
@@ -3540,7 +3552,7 @@
         "deck": "neutral",
         "row": "close",
         "strength": "15",
-        "ability": "hero",
+        "ability": "hero bondwitcher",
         "filename": "geralt",
         "count": "1"
       },
@@ -3591,7 +3603,7 @@
         "deck": "neutral",
         "row": "close",
         "strength": "6",
-        "ability": "",
+        "ability": "bondwitcher",
         "filename": "vesemir",
         "count": "1"
       },
@@ -5295,7 +5307,7 @@
         "deck": "skellige",
         "row": "close",
         "strength": "15",
-        "ability": "hero",
+        "ability": "hero bondwitcher",
         "filename": "gerry",
         "count": "1"
       },
@@ -5305,7 +5317,7 @@
         "deck": "neutral",
         "row": "agile",
         "strength": "-3",
-        "ability": "sabotage",
+        "ability": "bondwitcher sabotage",
         "filename": "lethosabotage",
         "count": "1"
       },
@@ -5525,7 +5537,7 @@
         "deck": "neutral",
         "row": "close",
         "strength": "9",
-        "ability": "hero axii",
+        "ability": "hero bondwitcher axii",
         "filename": "lambert",
         "count": "1"
       },
@@ -5535,7 +5547,7 @@
         "deck": "neutral",
         "row": "close",
         "strength": "6",
-        "ability": "hero avenger",
+        "ability": "hero bondwitcher avenger",
         "filename": "eskel",
         "count": "1"
       },
@@ -5545,7 +5557,7 @@
         "deck": "neutral",
         "row": "agile",
         "strength": "5",
-        "ability": "gryffinSchool DontPickMeUp",
+        "ability": "bondwitcher gryffinSchool DontPickMeUp",
         "filename": "GryffinWitcher",
         "count": "2"
       },
@@ -5637,7 +5649,7 @@
         "deck": "neutral",
         "row": "close",
         "strength": "0",
-        "ability": "wshield DontPickMeUp",
+        "ability": "bondwitcher wshield DontPickMeUp",
         "filename": "wshield",
         "count": "2"
       },
@@ -6614,7 +6626,7 @@
         "deck": "neutral",
         "row": "close",
         "strength": "5",
-        "ability": "viperSchool DontPickMeUp",
+        "ability": "bondwitcher viperSchool DontPickMeUp",
         "filename": "viperwitcher",
         "count": "2"
       },
@@ -6790,7 +6802,7 @@
         "count": "0"
       },
       {
-        "name": "Kear Seren",
+        "name": "Cat Witcher",
         "id": "7001",
         "deck": "witchersforces",
         "row": "close",
@@ -6798,6 +6810,47 @@
         "ability": "bondwitcher",
         "filename": "carwitcher",
         "count": "3"
+      },
+      {
+        "name": "Reinald",
+        "id": "7002",
+        "deck": "witchersforces",
+        "row": "close",
+        "strength": "6",
+        "ability": "bondwitcher",
+        "filename": "reinadld",
+        "count": "1"
+      },
+      {
+        "name": "Ivald Evil-Eye",
+        "id": "7003",
+        "deck": "witchersforces",
+        "row": "ranged",
+        "strength": "6",
+        "ability": "bondwitcher",
+        "filename": "ivald",
+        "count": "1"
+      },
+      {
+        "name": "Madoc",
+        "id": "7004",
+        "deck": "witchersforces",
+        "row": "agile",
+        "strength": "8",
+        "ability": "hero bondwitcher",
+        "filename": "madoc",
+        "count": "1",
+        "avenger": "grasstrail"
+      },
+      {
+        "name": "Trail of Grasses",
+        "id": "7005",
+        "deck": "witchersforces",
+        "row": "siege",
+        "strength": "-2",
+        "ability": "avenger DontPickMeUp",
+        "filename": "grasstrail",
+        "count": "1"
       }
     ],
     "factions": {
@@ -6830,7 +6883,6 @@
         "description": "Keeps the strongest Unit Card out after each round. Factions full of morale boosting cards."
       },
       "witchersforces": {
-        "_indev": true,
         "name": "Witcher Forces",
         "description": "Draw a card if the round ends in a draw or loss. Units have 30% resistance to weather."
       }
@@ -7175,10 +7227,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
-    "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "yu197hlNWK0",
-    "tavern_yt_volume": 90
+    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
+    "audio_yt_vid_soundtrack_volume": 47,
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }
