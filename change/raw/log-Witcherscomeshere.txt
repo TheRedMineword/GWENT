@@ -41,6 +41,7 @@ As part of **Witcherfication** all existing Witcher cards recived **Witcher Bond
 <fat1>
 %%img src="img\lg\witchersforces_kearseren.jpg" style="max-width:25%"%% %%img src="img\lg\witchersforces_carwitcher.jpg" style="max-width:25%"%% %%img src="img\lg\witchersforces_reinadld.jpg" style="max-width:25%"%% %%img src="img\lg\witchersforces_ivald.jpg" style="max-width:25%"%% %%img src="img\lg\witchersforces_madoc.jpg" style="max-width:25%"%%
 %%img src="img\lg\witchersforces_grasstrail.jpg" style="max-width:25%"%%
+-# This message wont be updated to include cards added in recent updates!
 </box.text>
 
 

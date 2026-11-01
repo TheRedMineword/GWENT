@@ -166,6 +166,8 @@ const IGNORE_PATTERNS = [
   "user_menu_el",
   "USER_MENU_ITEMS",
   "pnAutoBusy",
+  "PN_MOONLIGHT_DEFAULT_CONFIG",
+  "PN_MOONLIGHT",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 

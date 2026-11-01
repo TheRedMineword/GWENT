@@ -1758,6 +1758,496 @@ function getWindow(entry, fromKey = "from", untilKey = "until") {
   return { from, until };
 }
 
+const PN_MOONLIGHT_DEFAULT_CONFIG = {
+  enabled: true,
+  upcoming_count: 1,
+  autodisplay: false,
+  countdown_format: "dd_hh_mm_ss",
+  countdown_expired: "NOW",
+  presets: {
+    newmoon: {
+      enabled: true,
+      appear_hours_before: 30,
+      visible_hours_after: 30,
+      icon: "news",
+      weight: 10,
+      showCountdown: true,
+      title: "New Moon coming",
+      advenced: {
+        bigpicture: "img/patchnotes/bigpicture/_newmoon.png",
+        own_size: true,
+        size: {
+          width_px: 360,
+          height_px: 50,
+        },
+        color_loading: {
+          box_outlines: "#d33737",
+        },
+        color_post: {
+          countdown: "#A1A1A1",
+        },
+        ifcountown__cords: "32 left, 4 bottom",
+      },
+      content:
+        '<small_text.text>\nNEWS / SPECIAL EVENT\n</small_text.text>\n\n<box.lines_outline_hex>\n#092f5e\n</box.lines_outline_hex>\n\n<box.title>\nAstral Events\n</box.title>\n\n<box.text>\n## <color=#092f5e>New Moon Coming!</color>\n<fat1>\n<color=#BBBCC1>_Moon less night coming..._</color>\n<color=#BBBCC1>_From night darkness Nightwraiths will leave for hunt_</color>\n<color=#BBBCC1>_All that lives seeks the cover_</color>\n<fat2>\n<color=#BBBCC1>The New Moon rises in: {{countdown}}</color>\n<color=#BBBCC1>For limited time between: {{window_start}} - {{window_end}}</color>\n<color=#BBBCC1>A New Moon card will be available for all factions, card summons Nightwraiths to the board!</color>\n<fat1>\n%%img src="img/lg/monsters_nightwraith.jpg" style="max-width:25%"%%\n</box.text>\n\n<button.name>\nCONTINUE\n</button.name>\n\n<load.text>\n<l>Loading...</l>\n</load.text>\n\n<load.duration_ms>\n101\n</load.duration_ms>',
+    },
+    fullmoon: {
+      enabled: true,
+      appear_hours_before: 30,
+      visible_hours_after: 30,
+      icon: "news",
+      weight: 10,
+      showCountdown: true,
+      title: "Full Moon coming",
+      advenced: {
+        bigpicture: "img/patchnotes/bigpicture/_fullmoon.png",
+        own_size: true,
+        size: {
+          width_px: 360,
+          height_px: 50,
+        },
+        color_loading: {
+          box_outlines: "#d33737",
+        },
+        color_post: {
+          countdown: "#A1A1A1",
+        },
+        ifcountown__cords: "32 left, 4 bottom",
+      },
+      content:
+        "<small_text.text>\nNEWS / SPECIAL EVENT\n</small_text.text>\n\n<box.lines_outline_hex>\n#092f5e\n</box.lines_outline_hex>\n\n<box.title>\nAstral Events\n</box.title>\n\n<box.text>\n## <color=#092f5e>Full Moon Coming!</color>\n<fat1>\n<color=#BBBCC1>_The night will be bright..._</color>\n<fat2>\n<color=#BBBCC1>The Full Moon rises in: {{countdown}}</color>\n<color=#BBBCC1>For limited time between: {{window_start}} - {{window_end}}</color>\n</box.text>\n\n<button.name>\nCONTINUE\n</button.name>\n\n<load.text>\n<l>Loading...</l>\n</load.text>\n\n<load.duration_ms>\n101\n</load.duration_ms>",
+    },
+  },
+};
+
+const PN_MOONLIGHT = (function () {
+  "use strict";
+  const MOONLIGHT_SUFFIX = "_moonlight";
+  const MOONLIGHT_ID_PREFIX = "moonlight-";
+  const HOUR_MS = 3600000;
+  const MOON_PHASES = { newmoon: 0, fullmoon: 0.5 };
+
+  const DEG = Math.PI / 180;
+  const DAY_MS = 86400000;
+
+  function sinDeg(x) {
+    return Math.sin(x * DEG);
+  }
+
+  function normDeg(x) {
+    x %= 360;
+    return x < 0 ? x + 360 : x;
+  }
+
+  function lunarPhaseFromK(k, phase = 0) {
+    const K = k + phase;
+    const T = K / 1236.85;
+    const T2 = T * T;
+    const T3 = T2 * T;
+    const T4 = T3 * T;
+
+    // Mean phase time, Julian Ephemeris Day
+    let jde =
+      2451550.09765 +
+      29.530588853 * K +
+      0.0001337 * T2 -
+      0.00000015 * T3 +
+      0.00000000073 * T4;
+
+    // Solar anomaly
+    const M = normDeg(
+      2.5534 + 29.1053567 * K - 0.0000014 * T2 - 0.00000011 * T3,
+    );
+
+    // Lunar anomaly
+    const Mp = normDeg(
+      201.5643 +
+        385.81693528 * K +
+        0.0107582 * T2 +
+        0.00001238 * T3 -
+        0.000000058 * T4,
+    );
+
+    // Moon's argument of latitude
+    const F = normDeg(
+      160.7108 +
+        390.67050284 * K -
+        0.0016118 * T2 -
+        0.00000227 * T3 +
+        0.000000011 * T4,
+    );
+
+    // Longitude of ascending node
+    const Omega = normDeg(
+      124.7746 - 1.5637558 * K + 0.0020672 * T2 + 0.00000215 * T3,
+    );
+
+    // Earth's orbital eccentricity
+    const E = 1 - 0.002516 * T - 0.0000074 * T2;
+
+    if (phase === 0) {
+      // NEW MOON
+      const correction =
+        -0.4072 * sinDeg(Mp) +
+        0.17241 * E * sinDeg(M) +
+        0.01608 * sinDeg(2 * Mp) +
+        0.01039 * sinDeg(2 * F) +
+        0.00739 * E * sinDeg(Mp - M) -
+        0.00514 * E * sinDeg(Mp + M) +
+        0.00208 * E * E * sinDeg(2 * M) -
+        0.00111 * sinDeg(Mp - 2 * F) -
+        0.00057 * sinDeg(Mp + 2 * F) +
+        0.00056 * E * sinDeg(2 * Mp + M) -
+        0.00042 * sinDeg(3 * Mp) +
+        0.00042 * E * sinDeg(M + 2 * F) +
+        0.00038 * E * sinDeg(M - 2 * F) -
+        0.00024 * E * sinDeg(2 * Mp - M) -
+        0.00017 * sinDeg(Omega) -
+        0.00007 * sinDeg(Mp + 2 * M) +
+        0.00004 * sinDeg(2 * Mp - 2 * F) +
+        0.00004 * sinDeg(3 * M) +
+        0.00003 * sinDeg(Mp + M - 2 * F) +
+        0.00003 * sinDeg(2 * Mp + 2 * F) -
+        0.00003 * sinDeg(Mp + M + 2 * F) +
+        0.00003 * sinDeg(Mp - M + 2 * F) -
+        0.00002 * sinDeg(Mp - M - 2 * F) -
+        0.00002 * sinDeg(3 * Mp + M) +
+        0.00002 * sinDeg(4 * Mp);
+
+      jde += correction;
+    } else {
+      // FULL MOON
+      const correction =
+        -0.40614 * sinDeg(Mp) +
+        0.17302 * E * sinDeg(M) +
+        0.01614 * sinDeg(2 * Mp) +
+        0.01043 * sinDeg(2 * F) +
+        0.00734 * E * sinDeg(Mp - M) -
+        0.00515 * E * sinDeg(Mp + M) +
+        0.00209 * E * E * sinDeg(2 * M) -
+        0.00111 * sinDeg(Mp - 2 * F) -
+        0.00057 * sinDeg(Mp + 2 * F) +
+        0.00056 * E * sinDeg(2 * Mp + M) -
+        0.00042 * sinDeg(3 * Mp) +
+        0.00042 * E * sinDeg(M + 2 * F) +
+        0.00038 * E * sinDeg(M - 2 * F) -
+        0.00024 * E * sinDeg(2 * Mp - M) -
+        0.00017 * sinDeg(Omega) -
+        0.00007 * sinDeg(Mp + 2 * M) +
+        0.00004 * sinDeg(2 * Mp - 2 * F) +
+        0.00004 * sinDeg(3 * M) +
+        0.00003 * sinDeg(Mp + M - 2 * F) +
+        0.00003 * sinDeg(Mp + M + 2 * F) -
+        0.00003 * sinDeg(Mp - M + 2 * F) -
+        0.00002 * sinDeg(Mp - M - 2 * F) -
+        0.00002 * sinDeg(3 * Mp + M) +
+        0.00002 * sinDeg(4 * Mp);
+
+      jde += correction;
+    }
+
+    // Additional planetary corrections
+    const A1 = 299.77 + 0.107408 * K - 0.000325 * T2;
+    const A2 = 251.88 + 0.016321 * K;
+    const A3 = 251.83 + 26.651886 * K;
+    const A4 = 349.42 + 36.412478 * K;
+    const A5 = 84.66 + 18.206239 * K;
+    const A6 = 141.74 + 53.303771 * K;
+    const A7 = 207.14 + 2.453732 * K;
+    const A8 = 154.84 + 7.30686 * K;
+    const A9 = 34.52 + 27.261239 * K;
+    const A10 = 207.19 + 0.121824 * K;
+    const A11 = 291.34 + 1.844379 * K;
+    const A12 = 161.72 + 24.198154 * K;
+    const A13 = 239.56 + 25.513099 * K;
+    const A14 = 331.55 + 3.592518 * K;
+
+    jde +=
+      0.000325 * sinDeg(A1) +
+      0.000165 * sinDeg(A2) +
+      0.000164 * sinDeg(A3) +
+      0.000126 * sinDeg(A4) +
+      0.00011 * sinDeg(A5) +
+      0.000062 * sinDeg(A6) +
+      0.00006 * sinDeg(A7) +
+      0.000056 * sinDeg(A8) +
+      0.000047 * sinDeg(A9) +
+      0.000042 * sinDeg(A10) +
+      0.00004 * sinDeg(A11) +
+      0.000037 * sinDeg(A12) +
+      0.000035 * sinDeg(A13) +
+      0.000023 * sinDeg(A14);
+
+    // Julian Day -> Unix milliseconds
+    return (jde - 2440587.5) * DAY_MS;
+  }
+
+  function getLunation(timestamp) {
+    const jd = timestamp / DAY_MS + 2440587.5;
+    return Math.round((jd - 2451550.09765) / 29.530588853);
+  }
+
+  function nowMs() {
+    return pnNow();
+  }
+
+  function mlLog(config, message, data) {
+    if (config?.debug === true) console.log("[Moonlight]", message, data ?? "");
+    else pnLog("moonlight", message, data);
+  }
+
+  function renderTemplate(str, vars) {
+    return String(str).replace(/\{\{\s*(\w+)\s*\}\}/g, (m, key) =>
+      key in vars ? vars[key] : m,
+    );
+  }
+
+  function renderDeep(value, vars) {
+    if (typeof value === "string") return renderTemplate(value, vars);
+    if (Array.isArray(value)) return value.map((v) => renderDeep(v, vars));
+    if (value && typeof value === "object") {
+      const out = {};
+      for (const k of Object.keys(value)) out[k] = renderDeep(value[k], vars);
+      return out;
+    }
+    return value;
+  }
+
+  function buildVars(
+    config,
+    phaseName,
+    eventMs,
+    startMs,
+    endMs,
+    before,
+    after,
+  ) {
+    const iso = (ms) => new Date(ms).toISOString();
+    const fmt = String(config.countdown_format || "dd_hh_mm_ss").replace(
+      /[^dhms_]/g,
+      "",
+    );
+    const expired = String(config.countdown_expired ?? "NOW").replace(
+      /["!\n]/g,
+      "",
+    );
+    const cd = (kind, ms) =>
+      `!${kind}_${fmt}_letzeros:${config.countdown_leading_zeros === false ? "false" : "true"}_"${expired}":${iso(ms)}!`;
+
+    return {
+      ...(config.vars || {}),
+      phase: phaseName,
+      hours_before: String(before),
+      hours_after: String(after),
+      time: `!time:${iso(eventMs)}!`,
+      window_start: `!time:${iso(startMs)}!`,
+      window_end: `!time:${iso(endMs)}!`,
+      countdown: cd("countdown", eventMs),
+      countdown_end: cd("countdown", endMs),
+      countup: cd("countup", eventMs),
+      time_iso: iso(eventMs),
+      time_unix: String(Math.floor(eventMs / 1000)),
+    };
+  }
+
+  function getMoonEvents(phaseName, now, count, before, after) {
+    const phase = MOON_PHASES[phaseName];
+    const events = [];
+    let upcoming = 0;
+    const k0 = getLunation(now) - 1;
+
+    for (let k = k0; upcoming < count && k < k0 + count + 6; k++) {
+      const t = lunarPhaseFromK(k, phase);
+      const start = t - before * HOUR_MS;
+      const end = t + after * HOUR_MS;
+      if (end < now) continue; // window already over
+      events.push({ k, t, start, end });
+      if (start > now) upcoming++;
+    }
+    return events;
+  }
+
+  /**
+   * Builds index-shaped `news` entries (what resolveIndex() already understands).
+   *
+   * Window settings (preset > config > default), in hours:
+   *   appear_hours_before  how long BEFORE the moon the message appears
+   *   visible_hours_after  how long AFTER the moon it stays
+   *   lifetime_hours       shorthand: used for either one that isn't set
+   */
+  function getMoonlightNews(config, now = nowMs()) {
+    if (!config || config.enabled === false) return [];
+
+    const entries = [];
+
+    for (const phaseName of Object.keys(MOON_PHASES)) {
+      const preset = config.presets?.[phaseName];
+      if (!preset || preset.enabled === false) continue;
+
+      const pick = (key) => preset[key] ?? config[key];
+      const life = pick("lifetime_hours") ?? 30;
+      const before = Number(pick("appear_hours_before") ?? life);
+      const after = Number(pick("visible_hours_after") ?? life);
+      const count = pick("upcoming_count") ?? 1;
+      const variants = preset.variants?.length ? preset.variants : [preset];
+
+      // config.test_event_in_hours: pretend every moon is N hours away, to preview
+      const testH = Number(config.test_event_in_hours);
+      const events =
+        config.test_event_in_hours != null && Number.isFinite(testH)
+          ? [
+              {
+                k: "test",
+                t: now + testH * HOUR_MS,
+                start: now + (testH - before) * HOUR_MS,
+                end: now + (testH + after) * HOUR_MS,
+              },
+            ]
+          : getMoonEvents(phaseName, now, count, before, after);
+
+      for (const { k, t, start, end } of events) {
+        // stable variant per lunation: the text doesn't flip between reloads
+        const variant = variants[(Number(k) || 0) % variants.length || 0];
+        const vars = buildVars(config, phaseName, t, start, end, before, after);
+        const startIso = new Date(start).toISOString();
+        const opt = (key) => variant[key] ?? preset[key] ?? config[key];
+
+        entries.push({
+          id: `${MOONLIGHT_ID_PREFIX}${phaseName}-${k}`, // by lunation, not time
+          start: startIso,
+          end: new Date(end).toISOString(),
+          title: renderTemplate(
+            variant.title ?? preset.title ?? phaseName,
+            vars,
+          ),
+          content: renderDeep(variant.content ?? preset.content ?? "", vars),
+          icon: opt("icon"),
+          display: opt("display"),
+          weight: opt("weight") ?? 0,
+          autodisplay: !!opt("autodisplay"),
+          showCountdown: !!opt("showCountdown"),
+          advenced: renderDeep(opt("advenced"), vars), // e.g. "_{{phase}}.png"
+          // same shape as the old fullmoon card
+          count_monitor: {
+            duration: {
+              duration: Math.floor((before + after) * 3600),
+              start: startIso,
+            },
+          },
+          event_time: new Date(t).toISOString(),
+          phase: phaseName,
+        });
+      }
+    }
+
+    return entries.sort((a, b) => a.event_time.localeCompare(b.event_time));
+  }
+
+  function moonlightUrlFor(indexUrl) {
+    const s = String(indexUrl);
+    const q = s.indexOf("?");
+    return q === -1
+      ? s + MOONLIGHT_SUFFIX
+      : s.slice(0, q) + MOONLIGHT_SUFFIX + s.slice(q);
+  }
+
+  async function fetchJson(url) {
+    try {
+      const res = await fetch(url);
+      return res.ok ? await res.json() : null;
+    } catch (err) {
+      console.warn("Moonlight: config unavailable", err);
+      return null;
+    }
+  }
+
+  async function resolveTemplates(config, configUrl) {
+    const abs = (rel) => {
+      //    try {
+      //      return new URL(rel, new URL(configUrl, window.location?.href)).href;
+      //     } catch (e) {
+      //      return rel;
+      //    }
+      var url = patchnotes_index_src;
+      if (window.location.host === "localhost:8080") {
+        url = `change/index.json?v=${cacheBust()}`;
+      }
+      if (window.location.host === "localhost:8081") {
+        url = `change/index.json?v=${cacheBust()}`;
+      }
+      url = url.replace("index.json", rel);
+      console.log("MOONLIGHT TEMPLATE", url);
+      return url;
+    };
+    const jobs = [];
+    const visit = (node) => {
+      if (!node?.template_url || node.content != null) return;
+      jobs.push(
+        fetch(abs(node.template_url))
+          .then((r) =>
+            r.ok ? r.text() : Promise.reject(new Error("HTTP " + r.status)),
+          )
+          .then((text) => (node.content = text))
+          .catch((e) =>
+            console.warn("Moonlight: template failed", node.template_url, e),
+          ),
+      );
+    };
+    for (const preset of Object.values(config.presets || {})) {
+      visit(preset);
+      (preset.variants || []).forEach(visit);
+    }
+    await Promise.all(jobs);
+    return config;
+  }
+
+  async function fetchMoonlightConfig(url) {
+    const hosted = await fetchJson(url);
+    if (hosted) {
+      mlLog(hosted, "config loaded", url);
+      return resolveTemplates(hosted, url);
+    }
+    console.warn(
+      "[Moonlight] no config at " + url + ", using the built-in default",
+    );
+    return JSON.parse(JSON.stringify(PN_MOONLIGHT_DEFAULT_CONFIG));
+  }
+
+  async function pnApplyMoonlight(index, indexUrl) {
+    try {
+      const config = await fetchMoonlightConfig(moonlightUrlFor(indexUrl));
+      const moon = getMoonlightNews(config);
+      mlLog(
+        config,
+        moon.length
+          ? "news built (shown only inside their start..end window)"
+          : "no moon window is open or upcoming",
+        moon.map((n) => ({
+          id: n.id,
+          start: n.start,
+          end: n.end,
+          event: n.event_time,
+        })),
+      );
+      const kept = (Array.isArray(index?.news) ? index.news : []).filter(
+        (n) => !String(n?.id ?? "").startsWith(MOONLIGHT_ID_PREFIX),
+      );
+      if (!moon.length && kept.length === (index?.news?.length ?? 0))
+        return index;
+      return { ...index, news: [...kept, ...moon] };
+    } catch (err) {
+      console.warn("Moonlight: failed, continuing without it", err);
+      return index;
+    }
+  }
+
+  return {
+    apply: pnApplyMoonlight,
+    getNews: getMoonlightNews,
+    fetchConfig: fetchMoonlightConfig,
+  };
+})();
+
 function resolveIndex(index) {
   const now = Clock.now();
   const patchnoteCandidates = [];
@@ -1828,6 +2318,8 @@ function resolveIndex(index) {
           kind: "news",
           id: news.id,
           text: news?.text ?? false,
+          streamData:
+            news.content != null ? pnContentToData(news.content) : null, // inline content (moonlight)
           weight: news.weight ?? 0,
           icon: news.icon || "news",
           title: news.title || news.id,
@@ -2568,6 +3060,7 @@ async function reloadIndexAndRefresh() {
       reinit_after = Clock.now();
 
       INDEX_CACHE = await indexRes.json();
+      INDEX_CACHE = await PN_MOONLIGHT.apply(INDEX_CACHE, url);
 
       json_patchnotes_for_this_session = INDEX_CACHE;
     } catch (e) {
@@ -3095,6 +3588,7 @@ async function initPatchnotes() {
     reinit_after = Clock.now();
 
     INDEX_CACHE = await indexRes.json();
+    INDEX_CACHE = await PN_MOONLIGHT.apply(INDEX_CACHE, url);
 
     json_patchnotes_for_this_session = INDEX_CACHE;
 

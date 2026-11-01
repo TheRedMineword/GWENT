@@ -502,6 +502,10 @@ STRNG["pl"] = {
     scorchstopper_single: {
      description: "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawaiania zależy od liderów z tą zdolnością w grze. Zwycięzca tury przejmuje pulę, przegrany zamienia cześć uwolnionej mocy w dobrnia kart. Ochrania jedną kartę przed efektem Piekielnej Pożogi"
     },
+    motherscare: {
+      name: "Matczyna Opieka",
+      description: "Daje graczowi który użył tej karty efekt (mikstury) \"Matczynej Opieki\", efekt na parę tur neutralizuje wszystkie efekty pogody dla gracza, Biały Miód neutralizuje efekt ochrony. "
+    }
 },
     factions: {
   realms: {
@@ -849,7 +853,8 @@ francesca_hope_of_the_aen_seidhe:
         grasstrail: "Próba Traw",
         madoc: "Madoc",
         reinadld: "Reinald",
-        ivald: "Ivar Złe Oko"
+        ivald: "Ivar Złe Oko",
+motheraurora: "AURORA"
   },
   ui: {
     elem: {
@@ -1381,11 +1386,13 @@ rule63: [  // for classes
       "op": "<color=#B33A3A>Przeciwnik:</color>"
     },
 
-    "spypotion": "<color=#C46A2B>Jaskółka</color> jest aktywna na następne <color=#E6D8B5>%s</color> tury!",
+    "spypotion": "<color=#C46A2B>Jaskółka</color> jest aktywna przez następne <color=#E6D8B5>%s</color> tury!",
 
     "elfendonion": "<color=#A69A45>Zupa z elfa i cebuli</color> jest tutaj przez kolejne <color=#E6D8B5>%s</color> tury!",
 
-    "grom": "<color=#3F6B32>Grzmot</color> jest aktywny na następne <color=#E6D8B5>%s</color> tury!"
+    "grom": "<color=#3F6B32>Grzmot</color> jest aktywny przez następne <color=#E6D8B5>%s</color> tury!",
+
+    "AURORA_mothers_care": "<color=#EBE359>Matczyna Opieka</color> jest aktywna przez następne <color=#E6D8B5>%s</color> tury!"
   },
   "ui_user_settings": {
   "menu.title": "Ustawienia Gracza",

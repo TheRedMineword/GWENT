@@ -3099,17 +3099,24 @@ class Row extends CardContainer {
         "[POWERGAIN]",
         ` Total valid cards: ${count}, making it ${bonus} bonus power by ${powergain.ForEachCardGain} for each card!`,
       );
-
-      // apply weather debuff
-      if (this.effects.weather) {
-        bonus *=
-          powergain.WeatherDebuffPercent * this_row_have_quen[row_name][1];
-        console.log(
-          "[POWERGAIN]",
-          ` Total valid cards: ${count}, making it ${bonus} (lost ${powergain.WeatherDebuffPercent} by weather) bonus power by ${powergain.ForEachCardGain} for each card!`,
-        );
+      if (
+        !(
+          potions.getPotion_fast(
+            card.holder.ThatPlayerId,
+            "AURORA_mothers_care",
+          )?.active ?? false
+        )
+      ) {
+        // apply weather debuff
+        if (this.effects.weather) {
+          bonus *=
+            powergain.WeatherDebuffPercent * this_row_have_quen[row_name][1];
+          console.log(
+            "[POWERGAIN]",
+            ` Total valid cards: ${count}, making it ${bonus} (lost ${powergain.WeatherDebuffPercent} by weather) bonus power by ${powergain.ForEachCardGain} for each card!`,
+          );
+        }
       }
-
       // rounding
       bonus = powergain.Ceil ? Math.ceil(bonus) : Math.floor(bonus);
       console.log(
@@ -3124,22 +3131,29 @@ class Row extends CardContainer {
     }
     // card.animate("powergain");
     if (card.hero) return total;
-    if (this.effects.weather) {
-      if (this_row_have_quen[row_name][0]) {
-        const multiplier = this_row_have_quen[row_name][1];
+    if (
+      !(
+        potions.getPotion_fast(card.holder.ThatPlayerId, "AURORA_mothers_care")
+          ?.active ?? false
+      )
+    ) {
+      if (this.effects.weather) {
+        if (this_row_have_quen[row_name][0]) {
+          const multiplier = this_row_have_quen[row_name][1];
 
-        if (total < 0 && weatherAffectNegativeCard) {
-          //  console.warn(`total = Math.floor(${total} * ${multiplier});`)
-          total = Math.floor(total * (1.57 * multiplier));
+          if (total < 0 && weatherAffectNegativeCard) {
+            //  console.warn(`total = Math.floor(${total} * ${multiplier});`)
+            total = Math.floor(total * (1.57 * multiplier));
+          } else {
+            total = Math.ceil(total * multiplier);
+          }
         } else {
-          total = Math.ceil(total * multiplier);
-        }
-      } else {
-        if (total > 0 && weatherAffectNegativeCard) {
-          //  console.warn(`total = Math.floor(${total} * ${multiplier});`)
-          total = Math.min(1, total);
-        } else {
-          total = Math.min(1, total);
+          if (total > 0 && weatherAffectNegativeCard) {
+            //  console.warn(`total = Math.floor(${total} * ${multiplier});`)
+            total = Math.min(1, total);
+          } else {
+            total = Math.min(1, total);
+          }
         }
       }
     }
@@ -4901,6 +4915,7 @@ class Card {
       muster: "ally",
       morale: "moral",
       bond: "moral",
+      witcherbonding: "moral",
       powergain: "moral", //no audio
       darkstrom: "moral",
       avenger_spawn_creature: "avenger",
@@ -4975,6 +4990,7 @@ class Card {
       muster: "ally",
       morale: "moral",
       bond: "moral",
+      witcherbonding: "moral",
       powergain: "moral",
       darkstrom: "moral",
       avenger_spawn_creature: "avenger",

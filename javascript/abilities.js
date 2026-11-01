@@ -1526,7 +1526,7 @@ var ability_dict = {
       } else {
         //  if (bonds.length > 1) {
         await Promise.all(
-          bonds.map((c) => c.animate("muster2")), // change me later
+          bonds.map((c) => c.animate("witcherbonding")), // change me later
         );
         //  }
 
@@ -2818,6 +2818,43 @@ var ability_dict = {
 
       // Place Devil
       row.removeCard(card);
+    },
+  },
+  motherscare: {
+    name: "",
+    description: "",
+    placed: async (card, row) => {
+      console.warn("MOTHER", row);
+      if (row === undefined) {
+        return false; // Missfire from leader, leader cards are placed?
+      } else {
+        const player = card.holder;
+
+        const potion = viper_potions_defs["AURORA_mothers_care"];
+
+        if (!potion) {
+          console.error("Potion definition not found:", "AURORA_mothers_care");
+          return;
+        }
+
+        const potionData = deepClone(potion.json);
+
+        await potions.addPotion(player.ThatPlayerId, potion.id, potionData);
+      }
+    },
+    activated: async (card) => {
+      const player = card.holder;
+
+      const potion = viper_potions_defs["AURORA_mothers_care"];
+
+      if (!potion) {
+        console.error("Potion definition not found:", "AURORA_mothers_care");
+        return;
+      }
+
+      const potionData = deepClone(potion.json);
+
+      await potions.addPotion(player.ThatPlayerId, potion.id, potionData);
     },
   },
 };

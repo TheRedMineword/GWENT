@@ -1,0 +1,64 @@
+{
+  "enabled": true,
+  "debug": false,
+  "appear_hours_before": 30,
+  "visible_hours_after": 0,
+  "upcoming_count": 2,
+  "autodisplay": false,
+  "countdown_format": "dd_hh_mm_ss",
+  "countdown_expired": "0s",
+  "presets": {
+    "newmoon": {
+      "enabled": true,
+      "appear_hours_before": 40,
+      "visible_hours_after": 0,
+      "icon": "moonstars",
+      "weight": 10,
+      "showCountdown": true,
+      "title": "New Moon coming",
+      "advenced": {
+        "bigpicture": "img/patchnotes/bigpicture/_newmoon.png",
+        "own_size": true,
+        "size": {
+          "width_px": 360,
+          "height_px": 50
+        },
+        "color_loading": {
+          "box_outlines": "#092f5e"
+        },
+        "color_post": {
+          "countdown": "#A1A1A1"
+        },
+        "ifcountown__cords": "32 left, 4 bottom"
+      },
+      "template_url": "log-moonlight-newmoon.template.txt"
+    },
+    "fullmoon": {
+      "enabled": true,
+      "appear_hours_before": 40,
+      "visible_hours_after": 0,
+      "icon": "moonstar",
+      "weight": 10,
+      "showCountdown": true,
+      "title": "Full Moon coming",
+      "advenced": {
+        "bigpicture": "img/patchnotes/bigpicture/_fullmoon.png",
+        "own_size": true,
+        "size": {
+          "width_px": 360,
+          "height_px": 50
+        },
+        "color_loading": {
+          "box_outlines": "#092f5e"
+        },
+        "color_post": {
+          "countdown": "#A1A1A1"
+        },
+        "ifcountown__cords": "32 left, 4 bottom"
+      },
+      "template_url": "log-moonlight-fullmoon.template.txt"
+      }
+  },
+  "vars": {
+  }
+}

@@ -58,6 +58,7 @@ https://pngtree.com/freebackground/vintage-crinkled-paper-texture-aged-brown-bac
 - Archespores: https://witcher.fandom.com/wiki/Archespore?file=Gwent_cardart_monsters_archespore.jpg monsters_scary_flower
 - Witchers Forces faction cards images comes from Witchers wikis like: https://witcher.fandom.com/wiki/School_of_the_Cat + (Reinald, Ivar Evil-Eye)
 - Trial of Grasses: https://gwent.one/en/card/200078 -> Avenger: Madoc https://witcher.fandom.com/wiki/Madoc
+- AURORA: https://sky-children-of-the-light.fandom.com/wiki/Season_of_AURORA?file=SoAurora-Promo-image-wide.png
 > Some card/mechanics/assets are used from other project like this (For example: RandomPianist/gwent-classic-v3.1, other similar project are mentioned at start of this copyright notice)
 
 

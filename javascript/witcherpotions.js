@@ -169,6 +169,9 @@ class PotionManager {
       case "row":
         return value?.includes(row._id.short) ?? false;
 
+      case "all":
+        return true;
+
       default:
         return false;
     }

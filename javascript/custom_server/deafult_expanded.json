@@ -606,7 +606,8 @@
       "grasstrail": "potion_%g",
       "madoc": "witcher_%g",
       "reinadld": "witcher_%g",
-      "ivald": "witcher_%g"
+      "ivald": "witcher_%g",
+      "motheraurora": "sky_spirit_%g"
     },
     "classDecorators": {
       "undefined": {
@@ -945,6 +946,7 @@
       "custom!sky_vincent_guys": "male",
       "custom!sky_vincent_medic": "male",
       "skylena": "female",
+      "motheraurora": "female",
       "undefined": "male"
     },
     "viper_potions_defs": {
@@ -997,6 +999,23 @@
             "type": "row",
             "value": "melee",
             "times": 1.5
+          }
+        }
+      },
+      "AURORA_mothers_care": {
+        "id": "AURORA_mothers_care",
+        "affects": {
+          "me": true,
+          "op": false,
+          "op_lasts": 1
+        },
+        "json": {
+          "translation_key": "potions.AURORA_mothers_care",
+          "turns_left": 5,
+          "refresh_rows": {
+            "type": "all",
+            "value": "value",
+            "times": 1
           }
         }
       }
@@ -1379,6 +1398,10 @@
           },
           "scorchstopper_single": {
             "description": "Random cards will appear in the \"bucket\" every few turns; the frequency of their appearance depends on the number of commanders with this ability currently in play. The winner of the round takes the pot, the loser turns some of the released power into cards draw. Protects single card from Scorch effect. "
+          },
+          "motherscare": {
+            "name": "Mother's Care",
+            "description": "Grants the player who uses this card the \"Mother's Care\" (potion) effect, which neutralizes all weather effects for the player for a few turns; White Honey neutralizes this protective effect. "
           }
         },
         "factions": {
@@ -1712,7 +1735,8 @@
           "grasstrail": "Trial of Grasses",
           "madoc": "Madoc",
           "reinadld": "Reinald",
-          "ivald": "Ivald Evil-Eye"
+          "ivald": "Ivald Evil-Eye",
+          "motheraurora": "AURORA"
         },
         "ui": {
           "elem": {
@@ -2189,7 +2213,8 @@
           },
           "spypotion": "\u003Ccolor=#C46A2B\u003ESwallow potion\u003C/color\u003E is active for next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!",
           "elfendonion": "\u003Ccolor=#A69A45\u003EElf and Onion soup\u003C/color\u003E is here for next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!",
-          "grom": "\u003Ccolor=#3F6B32\u003EThunderbolt potion\u003C/color\u003E active for next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!"
+          "grom": "\u003Ccolor=#3F6B32\u003EThunderbolt potion\u003C/color\u003E active for next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!",
+          "AURORA_mothers_care": "\u003Ccolor=#EBE359\u003EMother's Care/color\u003E is for next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!"
         },
         "ui_user_settings": {
           "menu.title": "Player Settings",
@@ -2553,6 +2578,10 @@
           },
           "scorchstopper_single": {
             "description": "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawaiania zależy od liderów z tą zdolnością w grze. Zwycięzca tury przejmuje pulę, przegrany zamienia cześć uwolnionej mocy w dobrnia kart. Ochrania jedną kartę przed efektem Piekielnej Pożogi"
+          },
+          "motherscare": {
+            "name": "Matczyna Opieka",
+            "description": "Daje graczowi który użył tej karty efekt (mikstury) \"Matczynej Opieki\", efekt na parę tur neutralizuje wszystkie efekty pogody dla gracza, Biały Miód neutralizuje efekt ochrony. "
           }
         },
         "factions": {
@@ -2886,7 +2915,8 @@
           "grasstrail": "Próba Traw",
           "madoc": "Madoc",
           "reinadld": "Reinald",
-          "ivald": "Ivar Złe Oko"
+          "ivald": "Ivar Złe Oko",
+          "motheraurora": "AURORA"
         },
         "ui": {
           "elem": {
@@ -3414,9 +3444,10 @@
             "me": "\u003Ccolor=#7FAF45\u003ETy:\u003C/color\u003E",
             "op": "\u003Ccolor=#B33A3A\u003EPrzeciwnik:\u003C/color\u003E"
           },
-          "spypotion": "\u003Ccolor=#C46A2B\u003EJaskółka\u003C/color\u003E jest aktywna na następne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!",
+          "spypotion": "\u003Ccolor=#C46A2B\u003EJaskółka\u003C/color\u003E jest aktywna przez następne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!",
           "elfendonion": "\u003Ccolor=#A69A45\u003EZupa z elfa i cebuli\u003C/color\u003E jest tutaj przez kolejne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!",
-          "grom": "\u003Ccolor=#3F6B32\u003EGrzmot\u003C/color\u003E jest aktywny na następne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!"
+          "grom": "\u003Ccolor=#3F6B32\u003EGrzmot\u003C/color\u003E jest aktywny przez następne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!",
+          "AURORA_mothers_care": "\u003Ccolor=#EBE359\u003EMatczyna Opieka\u003C/color\u003E jest aktywna przez następne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!"
         },
         "ui_user_settings": {
           "menu.title": "Ustawienia Gracza",
@@ -6748,16 +6779,7 @@
         "strength": "0",
         "ability": "decoy2 DontPickMeUp morale",
         "filename": "dziady",
-        "count": "0",
-        "count_monitor": {
-          "base": 1,
-          "monitor": "based",
-          "id": "dziady",
-          "duration": {
-            "start": "2026-11-01T05:20:00.000Z",
-            "duration": "9999999999"
-          }
-        },
+        "count": "1",
         "isDecoy": true,
         "isDecoyMath": false
       },
@@ -6850,6 +6872,16 @@
         "strength": "-2",
         "ability": "avenger DontPickMeUp",
         "filename": "grasstrail",
+        "count": "1"
+      },
+      {
+        "name": "AURORA",
+        "id": "3045",
+        "deck": "sky",
+        "row": "leader",
+        "strength": "0",
+        "ability": "motherscare",
+        "filename": "motheraurora",
         "count": "1"
       }
     ],
@@ -7225,12 +7257,16 @@
       "thedevil": {
         "name": "",
         "description": ""
+      },
+      "motherscare": {
+        "name": "",
+        "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 30
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack_volume": 90,
+    "tavern_yt_vid": "yu197hlNWK0",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }

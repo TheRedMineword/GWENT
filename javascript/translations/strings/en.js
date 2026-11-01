@@ -415,6 +415,10 @@ STRNG["en"] = {
   },
     scorchstopper_single: {
      description: "Random cards will appear in the \"bucket\" every few turns; the frequency of their appearance depends on the number of commanders with this ability currently in play. The winner of the round takes the pot, the loser turns some of the released power into cards draw. Protects single card from Scorch effect. "
+    },
+    motherscare: {
+      name: "Mother's Care",
+      description: "Grants the player who uses this card the \"Mother's Care\" (potion) effect, which neutralizes all weather effects for the player for a few turns; White Honey neutralizes this protective effect. "
     }
 },
   factions: {
@@ -753,7 +757,8 @@ STRNG["en"] = {
     grasstrail: "Trial of Grasses",
 madoc: "Madoc",
 reinadld: "Reinald",
-ivald: "Ivald Evil-Eye"
+ivald: "Ivald Evil-Eye",
+motheraurora: "AURORA"
   },
   ui: {
     elem: {
@@ -1281,7 +1286,9 @@ card_info: {
 
     "elfendonion": "<color=#A69A45>Elf and Onion soup</color> is here for next <color=#E6D8B5>%s</color> turns!",
 
-    "grom": "<color=#3F6B32>Thunderbolt potion</color> active for next <color=#E6D8B5>%s</color> turns!"
+    "grom": "<color=#3F6B32>Thunderbolt potion</color> active for next <color=#E6D8B5>%s</color> turns!",
+
+    "AURORA_mothers_care": "<color=#EBE359>Mother's Care/color> is for next <color=#E6D8B5>%s</color> turns!"
   },
   "ui_user_settings": {
   "menu.title": "Player Settings",
