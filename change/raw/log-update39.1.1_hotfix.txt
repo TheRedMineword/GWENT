@@ -26,6 +26,7 @@ Patch Notes:
 Forgot to add that in previous patch:
 ```diff
 --- Resolved (again) issue where diversion cards can be revived
+& Rumor has it (again): Mr.Beast has a cassino, my friend on discord told me that
 ```
 <fat3>
 # 2 November, 2026
