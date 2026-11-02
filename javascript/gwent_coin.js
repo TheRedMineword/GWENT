@@ -50,7 +50,7 @@ async function displayCoinToss(
   opColor,
   opFaction,
 ) {
-  const DEBUG = true;
+  const DEBUG = coin_cnfg.debug;
   const log = (...a) => DEBUG && console.log("[CoinToss]", ...a);
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -65,91 +65,85 @@ async function displayCoinToss(
     old.remove();
   }
 
-  if (!document.getElementById("gwent-coin-style")) {
+  // Replace older injected styles so config/CSS updates take effect immediately.
+  document.getElementById("gwent-coin-style")?.remove();
+  document.getElementById("gwent-coin-style-v2")?.remove();
+
+  if (!document.getElementById("gwent-coin-style-v2")) {
     log("Injecting CSS.");
 
     const style = document.createElement("style");
-    style.id = "gwent-coin-style";
+    style.id = "gwent-coin-style-v2";
 
     style.textContent = `
 #gwent-coin-toss{
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,.82);
     overflow:hidden;
     z-index:999999999;
     pointer-events:none;
     font-family:serif;
+
+    /* dark vignette, warm light in the middle like the table in Gwent */
+    background:
+        radial-gradient(ellipse at 50% 50%,
+            rgba(48,33,12,.55) 0%,
+            rgba(0,0,0,.86) 60%,
+            rgba(0,0,0,.96) 100%);
 }
 
+/* ---------- player panels ---------- */
 .gwent-player{
     position:absolute;
     display:flex;
     align-items:center;
     gap:1vw;
     opacity:0;
-    transition:opacity .8s;
+    transition:opacity .8s, transform .6s cubic-bezier(.2,.8,.2,1), box-shadow .6s;
     font-size:clamp(20px,1.6vw,34px);
 
     padding:1vh 1vw;
     border-radius:12px;
 
-    /* 🔥 dark tinted fill */
     background: color-mix(in srgb, var(--p-bg) 65%, rgba(0,0,0,0.85));
-
-    /* 🔥 strong readable outline */
     border:2px solid var(--p-color);
 
-    /* 🔥 outer glow so it pops on dark background */
     box-shadow:
         0 0 0 1px rgba(0,0,0,0.9),
         0 0 18px rgba(0,0,0,0.8);
 }
+.gwent-player.me{ left:2vw; bottom:2vh; transform-origin:left bottom; }
+.gwent-player.op{ right:2vw; top:2vh;   transform-origin:right top; }
 
-/* positions */
-.gwent-player.me{
-    left:2vw;
-    bottom:2vh;
+/* whoever goes first lights up */
+.gwent-player.winner{
+    transform:scale(1.07);
+    box-shadow:
+        0 0 0 1px rgba(0,0,0,0.9),
+        0 0 32px var(--p-color);
 }
 
-.gwent-player.op{
-    right:2vw;
-    top:2vh;
-}
-
-/* LEADER IMAGE */
 .gwent-player .leader{
     height:auto;
     max-height:12vh;
     width:auto;
-
     border-radius:8px;
-
     box-shadow:0 0 12px rgba(0,0,0,0.6);
 }
-
-/* FACTION ICON */
 .gwent-player .faction{
     width:clamp(28px,2vw,52px);
     height:auto;
-
-    /* ❌ removed circle */
     border-radius:0;
-
     box-shadow:0 0 8px rgba(0,0,0,0.6);
 }
-
-/* NAME */
 .gwent-player span{
     font-weight:600;
     letter-spacing:0.5px;
     color: var(--p-text);
-
-    /* ❌ removed ugly glow/shadow */
-    text-shadow: none;
+    text-shadow:none;
 }
 
-/* COIN */
+/* ---------- coin ---------- */
 .coin-area{
     position:absolute;
     left:50%;
@@ -157,33 +151,112 @@ async function displayCoinToss(
     transform:translate(-50%,-50%);
 }
 
-.coin {
-    position: relative;
-    width: clamp(150px, 12vw, 300px);
-    height: clamp(150px, 12vw, 300px);
-    transform-style: preserve-3d;
+.coin-stage{
+    --coin-size: clamp(150px, 12vw, 300px);
+    --half: calc(var(--coin-size) * var(--coin-face-offset, .03));
+    position:relative;
+    width:var(--coin-size);
+    height:var(--coin-size);
 }
 
-.coin-face {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    top: 0;
-    left: 0;
+/* warm light pool under the coin */
+.coin-spot{
+    position:absolute;
+    left:-120%; top:-120%;
+    width:340%; height:340%;
+    border-radius:50%;
+    background: radial-gradient(circle,
+        rgba(var(--impact-rgb, 255,214,120),.32) 0%,
+        rgba(var(--impact-rgb, 255,214,120),.12) 35%,
+        rgba(0,0,0,0) 68%);
+    opacity:0;
 }
 
-.coin-face.back {
-    transform: rotateY(180deg);
+/* contact shadow on the table */
+.coin-shadow{
+    position:absolute;
+    left:8%;
+    bottom:-16%;
+    width:84%;
+    height:22%;
+    border-radius:50%;
+    background: radial-gradient(ellipse, rgba(0,0,0,.85) 0%, rgba(0,0,0,0) 70%);
+    opacity:0;
 }
 
-.result {
+/* this element is thrown up / down; it also owns the 3D perspective */
+.coin-flight{
+    position:absolute;
+    inset:0;
+    perspective: calc(var(--coin-size) * 5);
+    filter:
+        drop-shadow(0 0 14px rgba(var(--impact-rgb, 255,214,120),.28))
+        drop-shadow(0 6px 10px rgba(0,0,0,.55));
+}
+
+/* this element tumbles end-over-end */
+.coin{
+    position:absolute;
+    inset:0;
+    transform-style:preserve-3d;
+}
+
+.coin-face{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    backface-visibility:hidden;
+}
+.coin-face.front{ transform: translateZ(var(--half)); }
+.coin-face.back { transform: rotateX(180deg) translateZ(var(--half)); }
+
+/* Stacked hollow rings create the visible edge without filling a PNG's hole. */
+.coin-edge{
+    position:absolute;
+    inset:var(--edge-inset, 3.5%);
+    border-radius:50%;
+    border:1px solid rgba(0,0,0,.34);
+    box-shadow:inset 0 0 1px rgba(255,255,255,.22);
+    transform: translateZ(calc(var(--coin-size) * var(--k)));
+    -webkit-mask:radial-gradient(circle at center,
+        transparent 0 calc(var(--coin-size) * var(--hole-radius, 0)),
+        #000 calc(var(--coin-size) * var(--hole-radius, 0) + 1px));
+    mask:radial-gradient(circle at center,
+        transparent 0 calc(var(--coin-size) * var(--hole-radius, 0)),
+        #000 calc(var(--coin-size) * var(--hole-radius, 0) + 1px));
+}
+
+/* impact effects */
+.coin-ring{
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    border:var(--impact-ring-border, 3px) solid rgba(var(--impact-rgb, 255,214,120),.95);
+    box-shadow:
+        0 0 24px rgba(var(--impact-rgb, 255,214,120),.7),
+        inset 0 0 24px rgba(var(--impact-rgb, 255,214,120),.5);
+    opacity:0;
+}
+.coin-spark{
+    position:absolute;
+    left:50%; top:50%;
+    width:var(--spark-size, 6px); height:var(--spark-size, 6px);
+    margin:calc(var(--spark-size, 6px) / -2) 0 0 calc(var(--spark-size, 6px) / -2);
+    border-radius:50%;
+    background:rgba(var(--impact-rgb, 255,214,120),.98);
+    box-shadow:0 0 8px 2px rgba(var(--impact-rgb, 255,214,120),.78);
+    opacity:0;
+}
+
+.result{
     position: absolute;
     left: 130%;
     top: 50%;
     transform: translateY(-50%);
 
-    width: 460px;      /* adjust as needed */
+    width: 460px;
     text-align: center;
 
     opacity: 0;
@@ -240,7 +313,6 @@ async function displayCoinToss(
     span.textContent = decodeAndStripHtml(name);
     span.style.color = textColor;
 
-    // ✅ IMPORTANT: ordering fix
     if (side === "op") {
       // name - shield - leader
       div.append(span, factionImg, leaderImg);
@@ -249,15 +321,10 @@ async function displayCoinToss(
       div.append(leaderImg, factionImg, span);
     }
 
-    console.log(
-      "COIN ASSETS LEADER PFP",
-      leaderImg.src,
-      `${faction}_${leader}`,
-    );
-
     return div;
   }
 
+  // ---- build DOM --------------------------------------------------------
   const overlay = document.createElement("div");
   overlay.id = "gwent-coin-toss";
 
@@ -269,8 +336,49 @@ async function displayCoinToss(
   const coinArea = document.createElement("div");
   coinArea.className = "coin-area";
 
+  const stage = document.createElement("div");
+  stage.className = "coin-stage";
+  stage.style.setProperty("--coin-face-offset", String(coin_cnfg.faceOffset));
+  stage.style.setProperty("--edge-inset", `${coin_cnfg.edgeInset}%`);
+  stage.style.setProperty(
+    "--impact-ring-border",
+    `${coin_cnfg.impactRingBorderPx}px`,
+  );
+  stage.style.setProperty("--spark-size", `${coin_cnfg.sparkSizePx}px`);
+
+  const spot = document.createElement("div");
+  spot.className = "coin-spot";
+
+  const shadow = document.createElement("div");
+  shadow.className = "coin-shadow";
+
+  const flight = document.createElement("div");
+  flight.className = "coin-flight";
+
   const coin = document.createElement("div");
   coin.className = "coin";
+
+  // Edge slices sit between the two faces. A radial mask keeps the centre
+  // hollow, so the PNG's transparent hole stays open during edge-on rotation.
+  const edgeSlices = [];
+  const fallbackRgb = [119, 115, 107];
+  for (let i = 0; i < coin_cnfg.edgeSlices; i++) {
+    const s = document.createElement("div");
+    s.className = "coin-edge";
+    const t = coin_cnfg.edgeSlices > 1 ? i / (coin_cnfg.edgeSlices - 1) : 0.5;
+    const depth = coin_cnfg.edgeDepthStart + coin_cnfg.edgeThickness * t;
+    s.style.setProperty("--k", depth.toFixed(4));
+    s.style.setProperty("--hole-radius", "0");
+    if (!coin_cnfg.hollowCoin) {
+      s.style.webkitMask = "none";
+      s.style.mask = "none";
+    }
+    s.style.backgroundColor = coin_cnfg.rimFallbackColor || "#77736b";
+    s.style.backgroundImage =
+      "linear-gradient(180deg, rgba(255,255,255,.16), rgba(0,0,0,.08) 48%, rgba(0,0,0,.24))";
+    edgeSlices.push(s);
+    coin.appendChild(s);
+  }
 
   const front = document.createElement("img");
   front.className = "coin-face front";
@@ -280,35 +388,229 @@ async function displayCoinToss(
   back.className = "coin-face back";
   back.src = coinImages.op;
 
-  coin.append(front, back);
+  for (const img of [front, back]) {
+    img.addEventListener("error", () =>
+      console.warn("[CoinToss] Missing coin image:", img.src),
+    );
+  }
 
-  coin.onerror = () => {
-    console.warn("[CoinToss] Missing coin image:", coin.src);
-  };
+  coin.append(front, back);
+  flight.appendChild(coin);
+
+  const ring = document.createElement("div");
+  ring.className = "coin-ring";
+
+  stage.append(spot, shadow, flight, ring);
 
   const result = document.createElement("div");
   result.className = "result";
 
-  coinArea.append(coin, result);
-
+  coinArea.append(stage, result);
   overlay.appendChild(coinArea);
-
   document.body.appendChild(overlay);
 
   log("Overlay added.");
 
   const mePanel = overlay.querySelector(".me");
-
   const opPanel = overlay.querySelector(".op");
 
-  await wait(50);
+  // make sure both coin faces are loaded so nothing pops in mid-flip
+  const faceReady = (img) =>
+    new Promise((res) => {
+      if (img.complete && img.naturalWidth) return res();
+      img.addEventListener("load", res, { once: true });
+      img.addEventListener("error", res, { once: true });
+    });
+  await Promise.race([
+    Promise.all([faceReady(front), faceReady(back)]),
+    wait(1500),
+  ]);
+
+  // Sample a narrow ring just inside each image's circular outer edge. This
+  // lets the 3D side inherit the coin's own metal/texture instead of using gold.
+  function sampleCoinRim(img) {
+    if (!img || !img.complete || !img.naturalWidth || !img.naturalHeight) {
+      return null;
+    }
+
+    try {
+      const maxSide = coin_cnfg.rimSampleSize || 256;
+      const scale = Math.min(
+        1,
+        maxSide / Math.max(img.naturalWidth, img.naturalHeight),
+      );
+      const w = Math.max(1, Math.round(img.naturalWidth * scale));
+      const h = Math.max(1, Math.round(img.naturalHeight * scale));
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      if (!ctx) return null;
+      ctx.drawImage(img, 0, 0, w, h);
+
+      const pixels = ctx.getImageData(0, 0, w, h).data;
+      const cx = (w - 1) / 2;
+      const cy = (h - 1) / 2;
+      const radius = Math.min(w, h) * 0.465;
+      const samples = [];
+
+      // Several nearby radii avoid relying on a single antialiased pixel row.
+      for (const r of [radius - 2, radius, radius + 2]) {
+        for (let n = 0; n < 72; n++) {
+          const a = (n / 72) * Math.PI * 2;
+          const x = Math.round(cx + Math.cos(a) * r);
+          const y = Math.round(cy + Math.sin(a) * r);
+          if (x < 0 || x >= w || y < 0 || y >= h) continue;
+          const p = (y * w + x) * 4;
+          const alpha = pixels[p + 3];
+          if (alpha < coin_cnfg.holeAlphaThreshold) continue; // ignore transparent corners/background
+          samples.push([pixels[p], pixels[p + 1], pixels[p + 2]]);
+        }
+      }
+
+      if (samples.length < 8) return null;
+
+      // Median is more resistant than a simple average to highlights and artwork.
+      const median = (channel) => {
+        const values = samples.map((rgb) => rgb[channel]).sort((a, b) => a - b);
+        return Math.round(values[Math.floor(values.length / 2)]);
+      };
+      return [median(0), median(1), median(2)];
+    } catch (err) {
+      // Canvas sampling can be blocked for cross-origin images; use the fallback.
+      console.debug("[CoinToss] Could not sample coin rim:", err);
+      return null;
+    }
+  }
+
+  // Read the transparent centre radius from a PNG. The returned value is
+  // a fraction of the full coin width, suitable for the CSS ring mask.
+  function detectTransparentHoleRadius(img) {
+    if (!img || !img.complete || !img.naturalWidth || !img.naturalHeight)
+      return null;
+    try {
+      const maxSide = coin_cnfg.rimSampleSize || 256;
+      const scale = Math.min(
+        1,
+        maxSide / Math.max(img.naturalWidth, img.naturalHeight),
+      );
+      const w = Math.max(1, Math.round(img.naturalWidth * scale));
+      const h = Math.max(1, Math.round(img.naturalHeight * scale));
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      if (!ctx) return null;
+      ctx.drawImage(img, 0, 0, w, h);
+      const pixels = ctx.getImageData(0, 0, w, h).data;
+      const cx = (w - 1) / 2;
+      const cy = (h - 1) / 2;
+      const maxRadius = Math.min(w, h) * 0.38;
+      const boundaries = [];
+      const alphaAt = (x, y) => pixels[(y * w + x) * 4 + 3];
+      const centerX = Math.round(cx);
+      const centerY = Math.round(cy);
+      // An opaque centre means this particular coin image has no transparent hole.
+      if (alphaAt(centerX, centerY) >= coin_cnfg.holeAlphaThreshold) return 0;
+
+      for (let angleIndex = 0; angleIndex < 96; angleIndex++) {
+        const angle = (angleIndex / 96) * Math.PI * 2;
+        let boundary = null;
+        for (let radius = 1; radius <= maxRadius; radius += 1) {
+          const x = Math.round(cx + Math.cos(angle) * radius);
+          const y = Math.round(cy + Math.sin(angle) * radius);
+          if (x < 0 || x >= w || y < 0 || y >= h) break;
+          if (alphaAt(x, y) >= coin_cnfg.holeAlphaThreshold) {
+            boundary = radius / Math.min(w, h);
+            break;
+          }
+        }
+        if (boundary !== null) boundaries.push(boundary);
+      }
+      if (boundaries.length < 24) return null;
+      boundaries.sort((a, b) => a - b);
+      return boundaries[Math.floor(boundaries.length / 2)];
+    } catch (err) {
+      console.debug("[CoinToss] Could not detect transparent coin hole:", err);
+      return null;
+    }
+  }
+
+  const backRim = coin_cnfg.sampleRimColors
+    ? sampleCoinRim(back) || fallbackRgb
+    : fallbackRgb;
+  const frontRim = coin_cnfg.sampleRimColors
+    ? sampleCoinRim(front) || backRim
+    : backRim;
+
+  if (coin_cnfg.hollowCoin) {
+    const frontHoleRadius = detectTransparentHoleRadius(front);
+    const backHoleRadius = detectTransparentHoleRadius(back);
+    const autoHoleRadius =
+      coin_cnfg.holeRadius === "auto"
+        ? frontHoleRadius === null && backHoleRadius === null
+          ? null
+          : Math.max(frontHoleRadius || 0, backHoleRadius || 0)
+        : Number(coin_cnfg.holeRadius);
+    // Use the fallback only when sampling was blocked/unavailable, not when
+    // both images were successfully inspected and have solid centres.
+    const holeRadius =
+      autoHoleRadius === null
+        ? coin_cnfg.holeRadiusFallback
+        : Number.isFinite(autoHoleRadius)
+          ? Math.max(0, autoHoleRadius)
+          : coin_cnfg.holeRadiusFallback;
+    edgeSlices.forEach((slice) => {
+      if (holeRadius > 0) {
+        slice.style.setProperty("--hole-radius", String(holeRadius));
+      } else {
+        slice.style.webkitMask = "none";
+        slice.style.mask = "none";
+      }
+    });
+    log("Hollow coin edge radius:", holeRadius);
+  }
+  const toHex = (rgb) =>
+    "#" +
+    rgb
+      .map((v) =>
+        Math.max(0, Math.min(255, Math.round(v)))
+          .toString(16)
+          .padStart(2, "0"),
+      )
+      .join("");
+  const mixRgb = (a, b, t) => a.map((v, i) => v * (1 - t) + b[i] * t);
+  const shadeRgb = (rgb, factor) =>
+    rgb.map((v) => Math.max(0, Math.min(255, v * factor)));
+
+  edgeSlices.forEach((slice, i) => {
+    const t = edgeSlices.length > 1 ? i / (edgeSlices.length - 1) : 0.5;
+    const faceTone = mixRgb(backRim, frontRim, t);
+    // Gentle alternating brightness creates a fine reeded-metal edge.
+    const tone = shadeRgb(
+      faceTone,
+      i % 2 ? coin_cnfg.rimShadowFactor : coin_cnfg.rimHighlightFactor,
+    );
+    slice.style.backgroundColor = toHex(tone);
+  });
+
+  overlay.animate([{ opacity: 0 }, { opacity: 1 }], {
+    duration: coin_cnfg.introFadeMs,
+  });
+  coinArea.animate(
+    [
+      { opacity: 0, scale: 0.8 },
+      { opacity: 1, scale: 1 },
+    ],
+    { duration: coin_cnfg.introScaleMs, easing: "ease-out" },
+  );
 
   mePanel.style.opacity = "1";
   opPanel.style.opacity = "1";
 
   log("Panels faded in.");
 
-  await wait(700);
+  await wait(coin_cnfg.panelDelayMs);
 
   try {
     if (typeof tocar === "function") {
@@ -319,89 +621,214 @@ async function displayCoinToss(
     console.warn(e);
   }
 
-  log("Starting spin.");
-
+  // ---- the toss ---------------------------------------------------------
   const landOnOp = starter === "op";
-  coin.src = landOnOp ? coinImages.op : coinImages.me;
-  let landingcoin = landOnOp ? coinImages.op : coinImages.me;
-  console.log("[COIN] land at end", landOnOp, coin.src);
+  const winnerFactionColor = fixColor(landOnOp ? opColor : meColor);
+  const impactColor = coin_cnfg.impactUseWinnerFactionColor
+    ? winnerFactionColor
+    : fixColor(coin_cnfg.impactColor);
+  const impactMatch = /^#?([0-9a-f]{6})$/i.exec(impactColor);
+  const impactHex = impactMatch ? impactMatch[1] : "ffd678";
+  const impactRgb = [0, 2, 4].map((i) =>
+    parseInt(impactHex.slice(i, i + 2), 16),
+  );
+  // NOTE: the winner color is applied only at impact (see below). Until then the
+  // CSS fallback (neutral gold) is used, so the glow can't reveal the winner early.
 
-  // ensure correct face BEFORE animation (no swapping later)
-  coin.style.transform = "rotateY(0deg)";
+  const T = coin_cnfg.flightMs;
+  const LAND = coin_cnfg.land;
+  // front (me) is up at multiples of 360, back (op) at +180
+  const finalX = coin_cnfg.flips * 360 + (landOnOp ? 180 : 0);
 
-  const spin = coin.animate(
+  log("Starting spin. Landing on:", landOnOp ? "op" : "me");
+
+  const up = `cubic-bezier(.2,.75,.35,1)`; // decelerating (rising)
+  const down = `cubic-bezier(.6,0,.9,.55)`; // accelerating (falling)
+
+  // 1) throw: up toward the camera, back down onto the table, then bounce
+  const flightAnim = flight.animate(
     [
-      { transform: "rotateY(0deg) rotateZ(0deg)" },
+      { offset: 0, transform: "translateY(0) scale(1)", easing: "ease-out" },
+      // little crouch before the flick
+      { offset: 0.06, transform: "translateY(1.6vh) scale(.95)", easing: up },
       {
-        transform: `rotateY(${4320 + (landOnOp ? 180 : 0)}deg) rotateZ(720deg)`,
+        offset: 0.46,
+        transform: `translateY(-${coin_cnfg.peakVh}vh) scale(${coin_cnfg.peakScale})`,
+        easing: down,
       },
+      { offset: LAND, transform: "translateY(0) scale(1)", easing: up },
+      { offset: 0.875, transform: "translateY(-5vh) scale(1.1)", easing: down },
+      { offset: 0.935, transform: "translateY(0) scale(1)", easing: up },
+      {
+        offset: 0.965,
+        transform: "translateY(-1.4vh) scale(1.03)",
+        easing: down,
+      },
+      { offset: 1, transform: "translateY(0) scale(1)" },
     ],
-    {
-      duration: 3000,
-      easing: "cubic-bezier(.15,.8,.2,1)",
-      fill: "forwards",
-    },
+    { duration: T, fill: "forwards" },
   );
 
-  const front2 = coin.querySelector(".front");
-  const back2 = coin.querySelector(".back");
+  // 2) tumble end over end, slowing down so the face can be read
+  const spinAnim = coin.animate(
+    [
+      { offset: 0, transform: "rotateX(0deg)", easing: "linear" },
+      {
+        offset: 0.06,
+        transform: "rotateX(0deg)",
+        easing: "cubic-bezier(.22,.55,.55,.95)",
+      },
+      { offset: LAND, transform: `rotateX(${finalX}deg)`, easing: "ease-out" },
+      // coin rocks a little on every bounce before lying flat
+      {
+        offset: 0.875,
+        transform: `rotateX(${finalX + 14}deg)`,
+        easing: "ease-in-out",
+      },
+      { offset: 0.935, transform: `rotateX(${finalX}deg)`, easing: "ease-out" },
+      {
+        offset: 0.965,
+        transform: `rotateX(${finalX - 5}deg)`,
+        easing: "ease-in-out",
+      },
+      { offset: 1, transform: `rotateX(${finalX}deg)` },
+    ],
+    { duration: T, fill: "forwards" },
+  );
 
-  const landOnOp2 = starter === "op";
-  coin.src = landOnOp2 ? coinImages.op : coinImages.me;
-  const landingcoin2 = landOnOp2 ? coinImages.op : coinImages.me;
+  // 3) slight drift in the picture plane so it doesn't look mechanical
+  const driftAnim = coin.animate(
+    [
+      { offset: 0, rotate: "0deg", easing: "ease-in-out" },
+      { offset: 0.46, rotate: "16deg", easing: "ease-in-out" },
+      { offset: LAND, rotate: "0deg" },
+      { offset: 1, rotate: "0deg" },
+    ],
+    { duration: T, fill: "forwards" },
+  );
 
-  console.log("2 COIN", landingcoin2, coin);
+  // 4) shadow on the table: small & faint while airborne, tight when close
+  const shadowAnim = shadow.animate(
+    [
+      { offset: 0, opacity: 0.55, transform: "scale(1)" },
+      { offset: 0.06, opacity: 0.6, transform: "scale(1.02)" },
+      { offset: 0.46, opacity: 0.16, transform: "scale(.5)" },
+      { offset: LAND, opacity: 0.75, transform: "scale(1)" },
+      { offset: 0.875, opacity: 0.45, transform: "scale(.85)" },
+      { offset: 0.935, opacity: 0.75, transform: "scale(1)" },
+      { offset: 0.965, opacity: 0.6, transform: "scale(.95)" },
+      { offset: 1, opacity: 0.7, transform: "scale(1)" },
+    ],
+    { duration: T, fill: "forwards" },
+  );
 
-  // --- smooth swap before animation ends ---
-  let swapped = false;
-  const swapDelay = 3000 - 120; // 120ms before end
+  // 5) light pool brightens on impact
+  const spotAnim = spot.animate(
+    [
+      { offset: 0, opacity: 0, scale: 0.7 },
+      { offset: 0.2, opacity: 0.55, scale: 1 },
+      { offset: LAND, opacity: 0.55, scale: 1 },
+      { offset: LAND + 0.03, opacity: 1, scale: 1.15 },
+      { offset: 1, opacity: 0.6, scale: 1 },
+    ],
+    { duration: T, fill: "forwards" },
+  );
 
-  setTimeout(() => {
-    if (!swapped) {
-      swapped = true;
-      front2.src = landingcoin2;
-      back2.src = landingcoin2;
-    }
-  }, swapDelay);
+  // 6) shockwave ring + sparks at the moment of impact
+  const impactDelay = T * LAND;
+  if (coin_cnfg.impactRingEnabled) {
+    ring.animate(
+      [
+        { opacity: 0.95, transform: "scale(.9)" },
+        { opacity: 0, transform: `scale(${coin_cnfg.impactRingEndScale})` },
+      ],
+      {
+        delay: impactDelay,
+        duration: coin_cnfg.impactRingDurationMs,
+        easing: "cubic-bezier(.1,.6,.3,1)",
+        fill: "forwards",
+      },
+    );
+  }
 
-  // wait for animation to finish
-  await spin.finished;
+  const stageSize = stage.offsetWidth || 150;
+  for (let i = 0; i < coin_cnfg.sparks; i++) {
+    const sp = document.createElement("div");
+    sp.className = "coin-spark";
+    sp.style.setProperty("--spark-size", `${coin_cnfg.sparkSizePx}px`);
+    stage.appendChild(sp);
 
-  // (optional safety fallback - usually not needed anymore)
-  // front2.src = landingcoin2;
-  // back2.src  = landingcoin2;
+    const ang = Math.random() * Math.PI * 2;
+    const dist = stageSize * (0.55 + Math.random() * 0.75);
+    const dx = Math.cos(ang) * dist;
+    const dy = Math.sin(ang) * dist * 0.6 + stageSize * 0.25; // slight gravity
 
-  // do nothing — image must NOT change after animation
-  log("Coin landed.", starter, coin.src);
+    sp.animate(
+      [
+        { opacity: 1, transform: "translate(0,0) scale(1)" },
+        { opacity: 0, transform: `translate(${dx}px,${dy}px) scale(.2)` },
+      ],
+      {
+        delay: impactDelay + Math.random() * 60,
+        duration:
+          coin_cnfg.sparkDurationMinMs +
+          Math.random() * coin_cnfg.sparkDurationVarianceMs,
+        easing: "cubic-bezier(.1,.7,.3,1)",
+        fill: "forwards",
+      },
+    );
+  }
+
+  // reveal the winner color exactly at touchdown (ring, sparks, light pool, coin glow)
+  await wait(impactDelay);
+  stage.style.setProperty("--impact-rgb", impactRgb.join(","));
+  stage.style.setProperty("--impact-color", `#${impactHex}`);
+
+  // light up the player who goes first the moment the coin touches down
+  await wait(40);
+
+  const winnerPanel = starter === "op" ? opPanel : mePanel;
+  const loserPanel = starter === "op" ? mePanel : opPanel;
+  winnerPanel.classList.add("winner");
+  loserPanel.style.opacity = ".45";
+
   try {
     if (typeof tocar === "function") {
-      log("Playing coin_land.");
-      //            tocar("coin_land", false); // disabled i dont want it
+      log("coin landed.");
+      // tocar("coin_land", false); // disabled on purpose
     }
   } catch (e) {
     console.warn(e);
   }
 
+  // wait for bounces to finish
+  await Promise.all([
+    flightAnim.finished,
+    spinAnim.finished,
+    driftAnim.finished,
+    shadowAnim.finished,
+    spotAnim.finished,
+  ]);
+
+  log("Coin landed.", starter);
+
+  // ---- slide coin aside, show result -------------------------------------
   const dir = -1;
   log("Sliding coin.", dir < 0 ? "towards me" : "towards opponent");
 
-  coin.animate(
+  stage.animate(
     [
-      {
-        transform: "translateX(0)",
-      },
-      {
-        transform: `translateX(${dir * 10}vw)`,
-      },
+      { transform: "translateX(0)" },
+      { transform: `translateX(${dir * coin_cnfg.slideDistanceVw}vw)` },
     ],
     {
-      duration: 700,
+      duration: coin_cnfg.slideDurationMs,
       easing: "ease-out",
       fill: "forwards",
     },
   );
 
-  await wait(700);
+  await wait(coin_cnfg.slideDurationMs);
 
   result.innerHTML = resultText.replace(/\n/g, "<br>");
 
@@ -411,29 +838,30 @@ async function displayCoinToss(
     [
       {
         opacity: 0,
-        transform: "translateY(-50%) scale(.8)",
+        transform: "translateY(-50%) translateX(-24px) scale(.9)",
       },
       {
         opacity: 1,
-        transform: "translateY(-50%) scale(1)",
+        transform: "translateY(-50%) translateX(0) scale(1)",
       },
     ],
     {
-      duration: 400,
+      duration: 450,
+      easing: "ease-out",
       fill: "forwards",
     },
   );
 
-  await wait(2500);
+  await wait(coin_cnfg.resultHoldMs);
 
   log("Closing overlay.");
 
   overlay.animate([{ opacity: 1 }, { opacity: 0 }], {
-    duration: 500,
+    duration: coin_cnfg.outroFadeMs,
     fill: "forwards",
   });
 
-  await wait(500);
+  await wait(coin_cnfg.outroFadeMs);
 
   overlay.remove();
 

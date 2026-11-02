@@ -1404,6 +1404,54 @@ let LEADER_HINT_CONFIG = {
   use: true,
 };
 
+let coin_cnfg = {
+  debug: true,
+
+  // Toss animation
+  flightMs: 3600,
+  land: 0.8,
+  flips: 7,
+  peakVh: 30,
+  peakScale: 1.6,
+  introFadeMs: 350,
+  introScaleMs: 500,
+  panelDelayMs: 700,
+  slideDistanceVw: 10,
+  slideDurationMs: 700,
+  resultHoldMs: 2500,
+  outroFadeMs: 850,
+
+  // 3D coin body
+  edgeSlices: 13,
+  edgeThickness: 0.056,
+  edgeDepthStart: -0.027,
+  edgeInset: 3.5,
+  faceOffset: 0.03,
+  hollowCoin: true,
+  holeRadius: 0.8, // or "auto"
+  holeRadiusFallback: 0.14,
+  holeAlphaThreshold: 100,
+
+  // Texture-matched edge
+  sampleRimColors: true,
+  rimSampleSize: 255,
+  rimFallbackColor: "#77736b",
+  rimHighlightFactor: 1.08,
+  rimShadowFactor: 0.82,
+
+  // Impact styling
+  impactUseWinnerFactionColor: true,
+  impactColor: "#ffd678",
+  impactRingEnabled: true,
+  impactRingBorderPx: 3,
+  impactRingDurationMs: 1200,
+  impactRingEndScale: 2.4,
+  sparks: 60,
+  sparkSizePx: 4,
+  sparkDurationMinMs: 600,
+  sparkDurationVarianceMs: 500,
+};
+
 let ThisDef = {
   name: "Default Config",
 
@@ -1505,6 +1553,7 @@ let ThisDef = {
     viper_potions_defs: deepClone(viper_potions_defs),
     patchnotesdebug_slowerload: deepClone(patchnotesdebug_slowerload),
     LEADER_HINT_CONFIG: deepClone(LEADER_HINT_CONFIG),
+    coin_cnfg: deepClone(coin_cnfg),
   },
 };
 

@@ -168,6 +168,9 @@ const IGNORE_PATTERNS = [
   "pnAutoBusy",
   "PN_MOONLIGHT_DEFAULT_CONFIG",
   "PN_MOONLIGHT",
+  // new coin flip
+  "wait",
+  "log",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 

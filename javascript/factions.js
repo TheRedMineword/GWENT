@@ -229,33 +229,43 @@ var factions = {
       "Keeps the strongest Unit Card out after each round. Factions full of morale boosting cards.",
   },
   witchersforces: {
-    //  _indev: true,
     name: "Witcher Forces",
 
     factionAbility: (player) =>
       game.roundStart.push(async () => {
-        if (game.roundCount <= 1) return false;
+        // Get the result of the immediately preceding round
+        const previousRound = game.roundHistory[game.roundHistory.length - 1];
 
-        const previousRound = game.roundHistory[game.roundCount - 2];
-        if (
-          previousRound.winner !== player &&
-          previousRound.winner !== player.opponent()
-        ) {
-          player.deck.draw(player.hand);
+        // First round: nothing to evaluate
+        if (!previousRound) return false;
 
-          await ui.notification(
-            "witcherforces_draw",
-            ui_display_times.faction_ability,
-          );
+        const lost = previousRound.winner === player.opponent();
 
-          await init_sync_hands();
-        }
+        const drawn = previousRound.winner === null;
 
-        return false;
+        // Only draw if the player lost or the round was a draw
+        if (!lost && !drawn) return false;
+
+        console.log("[WITCHER FORCES] Ability triggered", {
+          player: player.tag,
+          previousWinner: previousRound.winner?.tag ?? "DRAW",
+          round: game.roundCount,
+        });
+
+        // Draw and wait until the card has actually entered the hand
+        await player.deck.draw(player.hand);
+
+        await ui.notification(
+          "witcherforces_draw",
+          ui_display_times.faction_ability,
+        );
+
+        await init_sync_hands();
+
+        return false; // Keep the ability active for future rounds
       }),
 
-    description:
-      "Draw a card if the round ends in a draw or loss. Units have 30% resistance to weather.",
+    description: "Draw a card if the round ends in a draw or loss.",
   },
 };
 
