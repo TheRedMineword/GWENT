@@ -1315,14 +1315,31 @@ var ability_dict = {
 
           // if (!res) break;
         } else {
+          const canRevive = (c) => {
+            const abilities = Array.isArray(c?.abilities) ? c.abilities : [];
+
+            return (
+              c?.isUnit?.() === true &&
+              c.row !== "NaR" &&
+              !abilities.includes("decoy") &&
+              !abilities.includes("decoy2") &&
+              c.isDecoy !== true &&
+              c.isDecoyMath !== true
+            );
+          };
+
           await ui.queueCarousel(
             card.holder.grave,
             1,
             (c, i) => (wrapper.card = c.cards[i]),
-            (c) => c.isUnit(),
+            canRevive,
             true,
           );
+
           res = wrapper.card;
+
+          // Extra validation
+          if (!canRevive(res)) break;
         }
 
         if (!res) break;
@@ -1429,14 +1446,31 @@ var ability_dict = {
 
           // if (!res) break;
         } else {
+          const canRevive = (c) => {
+            const abilities = Array.isArray(c?.abilities) ? c.abilities : [];
+
+            return (
+              c?.isUnit?.() === true &&
+              c.row !== "NaR" &&
+              !abilities.includes("decoy") &&
+              !abilities.includes("decoy2") &&
+              c.isDecoy !== true &&
+              c.isDecoyMath !== true
+            );
+          };
+
           await ui.queueCarousel(
             card.holder.grave,
             1,
             (c, i) => (wrapper.card = c.cards[i]),
-            (c) => c.isUnit(),
+            canRevive,
             true,
           );
+
           res = wrapper.card;
+
+          // Extra validation
+          if (!canRevive(res)) break;
         }
 
         if (!res) break;
