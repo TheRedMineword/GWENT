@@ -1829,6 +1829,9 @@ const PN_MOONLIGHT = (function () {
 
   const DEG = Math.PI / 180;
   const DAY_MS = 86400000;
+  const SYNODIC = 29.530588853;
+  const EPOCH_JDE = 2451550.09765; // new moon of 2000-01-06
+  const DELTA_T_S = 69.2; // TT - UTC in seconds (~2026)
 
   function sinDeg(x) {
     return Math.sin(x * DEG);
@@ -1839,6 +1842,51 @@ const PN_MOONLIGHT = (function () {
     return x < 0 ? x + 360 : x;
   }
 
+  // [coef, E power, multiple of Mp, multiple of M, multiple of F]
+  // Meeus, Astronomical Algorithms ch. 49
+  const COMMON_TERMS = [
+    [-0.00111, 0, 1, 0, -2],
+    [-0.00057, 0, 1, 0, 2],
+    [0.00056, 1, 2, 1, 0],
+    [-0.00042, 0, 3, 0, 0],
+    [0.00042, 1, 0, 1, 2],
+    [0.00038, 1, 0, 1, -2],
+    [-0.00024, 1, 2, -1, 0],
+    [-0.00007, 0, 1, 2, 0],
+    [0.00004, 0, 2, 0, -2],
+    [0.00004, 0, 0, 3, 0],
+    [0.00003, 0, 1, 1, -2],
+    [0.00003, 0, 2, 0, 2],
+    [-0.00003, 0, 1, 1, 2],
+    [0.00003, 0, 1, -1, 2],
+    [-0.00002, 0, 1, -1, -2],
+    [-0.00002, 0, 3, 1, 0],
+    [0.00002, 0, 4, 0, 0],
+  ];
+
+  const NEW_TERMS = [
+    [-0.4072, 0, 1, 0, 0],
+    [0.17241, 1, 0, 1, 0],
+    [0.01608, 0, 2, 0, 0],
+    [0.01039, 0, 0, 0, 2],
+    [0.00739, 1, 1, -1, 0],
+    [-0.00514, 1, 1, 1, 0],
+    [0.00208, 2, 0, 2, 0],
+    ...COMMON_TERMS,
+  ];
+
+  const FULL_TERMS = [
+    [-0.40614, 0, 1, 0, 0],
+    [0.17302, 1, 0, 1, 0],
+    [0.01614, 0, 2, 0, 0],
+    [0.01043, 0, 0, 0, 2],
+    [0.00734, 1, 1, -1, 0],
+    [-0.00515, 1, 1, 1, 0],
+    [0.00209, 2, 0, 2, 0],
+    ...COMMON_TERMS,
+  ];
+
+  // Unix ms (UTC) of the new moon (phase 0) / full moon (phase 0.5) of lunation k
   function lunarPhaseFromK(k, phase = 0) {
     const K = k + phase;
     const T = K / 1236.85;
@@ -1846,20 +1894,16 @@ const PN_MOONLIGHT = (function () {
     const T3 = T2 * T;
     const T4 = T3 * T;
 
-    // Mean phase time, Julian Ephemeris Day
     let jde =
-      2451550.09765 +
-      29.530588853 * K +
+      EPOCH_JDE +
+      SYNODIC * K +
       0.0001337 * T2 -
       0.00000015 * T3 +
       0.00000000073 * T4;
 
-    // Solar anomaly
     const M = normDeg(
       2.5534 + 29.1053567 * K - 0.0000014 * T2 - 0.00000011 * T3,
     );
-
-    // Lunar anomaly
     const Mp = normDeg(
       201.5643 +
         385.81693528 * K +
@@ -1867,8 +1911,6 @@ const PN_MOONLIGHT = (function () {
         0.00001238 * T3 -
         0.000000058 * T4,
     );
-
-    // Moon's argument of latitude
     const F = normDeg(
       160.7108 +
         390.67050284 * K -
@@ -1876,115 +1918,44 @@ const PN_MOONLIGHT = (function () {
         0.00000227 * T3 +
         0.000000011 * T4,
     );
-
-    // Longitude of ascending node
     const Omega = normDeg(
       124.7746 - 1.5637558 * K + 0.0020672 * T2 + 0.00000215 * T3,
     );
-
-    // Earth's orbital eccentricity
     const E = 1 - 0.002516 * T - 0.0000074 * T2;
 
-    if (phase === 0) {
-      // NEW MOON
-      const correction =
-        -0.4072 * sinDeg(Mp) +
-        0.17241 * E * sinDeg(M) +
-        0.01608 * sinDeg(2 * Mp) +
-        0.01039 * sinDeg(2 * F) +
-        0.00739 * E * sinDeg(Mp - M) -
-        0.00514 * E * sinDeg(Mp + M) +
-        0.00208 * E * E * sinDeg(2 * M) -
-        0.00111 * sinDeg(Mp - 2 * F) -
-        0.00057 * sinDeg(Mp + 2 * F) +
-        0.00056 * E * sinDeg(2 * Mp + M) -
-        0.00042 * sinDeg(3 * Mp) +
-        0.00042 * E * sinDeg(M + 2 * F) +
-        0.00038 * E * sinDeg(M - 2 * F) -
-        0.00024 * E * sinDeg(2 * Mp - M) -
-        0.00017 * sinDeg(Omega) -
-        0.00007 * sinDeg(Mp + 2 * M) +
-        0.00004 * sinDeg(2 * Mp - 2 * F) +
-        0.00004 * sinDeg(3 * M) +
-        0.00003 * sinDeg(Mp + M - 2 * F) +
-        0.00003 * sinDeg(2 * Mp + 2 * F) -
-        0.00003 * sinDeg(Mp + M + 2 * F) +
-        0.00003 * sinDeg(Mp - M + 2 * F) -
-        0.00002 * sinDeg(Mp - M - 2 * F) -
-        0.00002 * sinDeg(3 * Mp + M) +
-        0.00002 * sinDeg(4 * Mp);
-
-      jde += correction;
-    } else {
-      // FULL MOON
-      const correction =
-        -0.40614 * sinDeg(Mp) +
-        0.17302 * E * sinDeg(M) +
-        0.01614 * sinDeg(2 * Mp) +
-        0.01043 * sinDeg(2 * F) +
-        0.00734 * E * sinDeg(Mp - M) -
-        0.00515 * E * sinDeg(Mp + M) +
-        0.00209 * E * E * sinDeg(2 * M) -
-        0.00111 * sinDeg(Mp - 2 * F) -
-        0.00057 * sinDeg(Mp + 2 * F) +
-        0.00056 * E * sinDeg(2 * Mp + M) -
-        0.00042 * sinDeg(3 * Mp) +
-        0.00042 * E * sinDeg(M + 2 * F) +
-        0.00038 * E * sinDeg(M - 2 * F) -
-        0.00024 * E * sinDeg(2 * Mp - M) -
-        0.00017 * sinDeg(Omega) -
-        0.00007 * sinDeg(Mp + 2 * M) +
-        0.00004 * sinDeg(2 * Mp - 2 * F) +
-        0.00004 * sinDeg(3 * M) +
-        0.00003 * sinDeg(Mp + M - 2 * F) +
-        0.00003 * sinDeg(Mp + M + 2 * F) -
-        0.00003 * sinDeg(Mp - M + 2 * F) -
-        0.00002 * sinDeg(Mp - M - 2 * F) -
-        0.00002 * sinDeg(3 * Mp + M) +
-        0.00002 * sinDeg(4 * Mp);
-
-      jde += correction;
+    const terms = phase === 0 ? NEW_TERMS : FULL_TERMS;
+    let corr = -0.00017 * sinDeg(Omega);
+    for (const [c, ePow, a, b, f] of terms) {
+      corr += c * Math.pow(E, ePow) * sinDeg(a * Mp + b * M + f * F);
     }
+    jde += corr;
 
-    // Additional planetary corrections
-    const A1 = 299.77 + 0.107408 * K - 0.000325 * T2;
-    const A2 = 251.88 + 0.016321 * K;
-    const A3 = 251.83 + 26.651886 * K;
-    const A4 = 349.42 + 36.412478 * K;
-    const A5 = 84.66 + 18.206239 * K;
-    const A6 = 141.74 + 53.303771 * K;
-    const A7 = 207.14 + 2.453732 * K;
-    const A8 = 154.84 + 7.30686 * K;
-    const A9 = 34.52 + 27.261239 * K;
-    const A10 = 207.19 + 0.121824 * K;
-    const A11 = 291.34 + 1.844379 * K;
-    const A12 = 161.72 + 24.198154 * K;
-    const A13 = 239.56 + 25.513099 * K;
-    const A14 = 331.55 + 3.592518 * K;
+    const A = [
+      [299.77 + 0.107408 * K - 0.000325 * T2, 0.000325],
+      [251.88 + 0.016321 * K, 0.000165],
+      [251.83 + 26.651886 * K, 0.000164],
+      [349.42 + 36.412478 * K, 0.000126],
+      [84.66 + 18.206239 * K, 0.00011],
+      [141.74 + 53.303771 * K, 0.000062],
+      [207.14 + 2.453732 * K, 0.00006],
+      [154.84 + 7.30686 * K, 0.000056],
+      [34.52 + 27.261239 * K, 0.000047],
+      [207.19 + 0.121824 * K, 0.000042],
+      [291.34 + 1.844379 * K, 0.00004],
+      [161.72 + 24.198154 * K, 0.000037],
+      [239.56 + 25.513099 * K, 0.000035],
+      [331.55 + 3.592518 * K, 0.000023],
+    ];
+    for (const [arg, c] of A) jde += c * sinDeg(arg);
 
-    jde +=
-      0.000325 * sinDeg(A1) +
-      0.000165 * sinDeg(A2) +
-      0.000164 * sinDeg(A3) +
-      0.000126 * sinDeg(A4) +
-      0.00011 * sinDeg(A5) +
-      0.000062 * sinDeg(A6) +
-      0.00006 * sinDeg(A7) +
-      0.000056 * sinDeg(A8) +
-      0.000047 * sinDeg(A9) +
-      0.000042 * sinDeg(A10) +
-      0.00004 * sinDeg(A11) +
-      0.000037 * sinDeg(A12) +
-      0.000035 * sinDeg(A13) +
-      0.000023 * sinDeg(A14);
-
-    // Julian Day -> Unix milliseconds
-    return (jde - 2440587.5) * DAY_MS;
+    // JDE is dynamical time (TT): convert to UTC, then to Unix ms
+    return (jde - 2440587.5) * DAY_MS - DELTA_T_S * 1000;
   }
 
+  // floor, not round: rounding could start the search after the current moon
   function getLunation(timestamp) {
     const jd = timestamp / DAY_MS + 2440587.5;
-    return Math.round((jd - 2451550.09765) / 29.530588853);
+    return Math.floor((jd - EPOCH_JDE) / SYNODIC);
   }
 
   function nowMs() {
@@ -2021,6 +1992,8 @@ const PN_MOONLIGHT = (function () {
     endMs,
     before,
     after,
+    cardBefore = 30,
+    cardAfter = 30,
   ) {
     const iso = (ms) => new Date(ms).toISOString();
     const fmt = String(config.countdown_format || "dd_hh_mm_ss").replace(
@@ -2040,8 +2013,13 @@ const PN_MOONLIGHT = (function () {
       hours_before: String(before),
       hours_after: String(after),
       time: `!time:${iso(eventMs)}!`,
-      window_start: `!time:${iso(startMs)}!`,
-      window_end: `!time:${iso(endMs)}!`,
+      // CARD availability window (moon - card_hours_before .. moon + card_hours_after),
+      // independent from when the notice itself shows up
+      window_start: `!time:${iso(eventMs - cardBefore * HOUR_MS)}!`,
+      window_end: `!time:${iso(eventMs + cardAfter * HOUR_MS)}!`,
+      // NOTICE window (appear_hours_before / visible_hours_after)
+      notice_start: `!time:${iso(startMs)}!`,
+      notice_end: `!time:${iso(endMs)}!`,
       countdown: cd("countdown", eventMs),
       countdown_end: cd("countdown", endMs),
       countup: cd("countup", eventMs),
@@ -2050,19 +2028,21 @@ const PN_MOONLIGHT = (function () {
     };
   }
 
+  // Moons whose window (t - before .. t + after) has not ended yet.
+  // Stops after `count` moons that are still in the future (t > now).
   function getMoonEvents(phaseName, now, count, before, after) {
     const phase = MOON_PHASES[phaseName];
     const events = [];
     let upcoming = 0;
-    const k0 = getLunation(now) - 1;
+    const k0 = getLunation(now) - 2;
 
-    for (let k = k0; upcoming < count && k < k0 + count + 6; k++) {
+    for (let k = k0; upcoming < count && k < k0 + count + 8; k++) {
       const t = lunarPhaseFromK(k, phase);
       const start = t - before * HOUR_MS;
       const end = t + after * HOUR_MS;
       if (end < now) continue; // window already over
       events.push({ k, t, start, end });
-      if (start > now) upcoming++;
+      if (t > now) upcoming++;
     }
     return events;
   }
@@ -2089,6 +2069,8 @@ const PN_MOONLIGHT = (function () {
       const before = Number(pick("appear_hours_before") ?? life);
       const after = Number(pick("visible_hours_after") ?? life);
       const count = pick("upcoming_count") ?? 1;
+      const cardBefore = Number(pick("card_hours_before") ?? 30);
+      const cardAfter = Number(pick("card_hours_after") ?? 30);
       const variants = preset.variants?.length ? preset.variants : [preset];
 
       // config.test_event_in_hours: pretend every moon is N hours away, to preview
@@ -2108,7 +2090,17 @@ const PN_MOONLIGHT = (function () {
       for (const { k, t, start, end } of events) {
         // stable variant per lunation: the text doesn't flip between reloads
         const variant = variants[(Number(k) || 0) % variants.length || 0];
-        const vars = buildVars(config, phaseName, t, start, end, before, after);
+        const vars = buildVars(
+          config,
+          phaseName,
+          t,
+          start,
+          end,
+          before,
+          after,
+          cardBefore,
+          cardAfter,
+        );
         const startIso = new Date(start).toISOString();
         const opt = (key) => variant[key] ?? preset[key] ?? config[key];
 
