@@ -1,0 +1,37 @@
+<small_text.text>
+NEWS / NOTICE
+</small_text.text>
+
+<images.logo>
+img/web/logo_round.png
+</images.logo>
+
+<images.banner>
+img/web/bar.png
+</images.banner>
+
+<box.lines_outline_hex>
+#aaad80
+</box.lines_outline_hex>
+
+<box.title>
+Slower work rate notice!
+</box.title>
+
+<box.text>
+Work on Gwent is slow due to my attention being diverted to other matters and projects, I apologize for any inconvenience this may cause.
+Gwent will be sooner or later updated!
+</box.text>
+
+
+<button.name>
+CONTINUE
+</button.name>
+
+<load.text>
+<l>INCOMING DEV LOG!</l>
+</load.text>
+
+<load.duration_ms>
+3000
+</load.duration_ms>
