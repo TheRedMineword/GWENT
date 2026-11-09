@@ -876,6 +876,22 @@ let the_image_json = {};
     });
   }
 
+  async function loaderrorcatcher(src) {
+    loadingscreenupdate(`Scripts SHA \"${sha}\"`);
+    loadingscreenupdate(`Loading error catcher`);
+    await loadScript(src);
+    loadingscreenupdate(`Testing error catcher`);
+    //await sleep(25);
+    try {
+      await loadingscreenupdate(
+        `Error Catcher said: ${await errorcatchsayhi()}`,
+      );
+    } catch (e) {
+      loadingscreenupdate(`Error Catcher said: Error`);
+      console.error("ERROR CATCHER ERRR", e);
+    }
+    return "OK";
+  }
   async function loadScripts() {
     for (const script of scripts) {
       console.log("Loading", script);
@@ -1077,6 +1093,7 @@ Location    : ${JSON.stringify(locationJson)}
     isHuman_json = null;
     apiUrlc_g = null;
     loadingscreenupdate("Clock ready, lunching scripts!");
+    await loaderrorcatcher(`javascript/__errorcatcher.js`);
     await loadScripts();
     loadingscreenupdate("Running postscripinit()");
     await postscripinit();

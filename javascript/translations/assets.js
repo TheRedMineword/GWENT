@@ -21,6 +21,7 @@ let STRNG = {};
 STRNG["failure"] = {
   en: { b: "No translation for the key %s", a: "NO-TEXT" },
   pl: { b: "Brak klucza tłumaczenia dla %s", a: "BRAK-TEKSTU" },
+  de: { b: "Keine Übersetzung für diesen Key %s", a: "KEIN-TEXT" },
 };
 
 function cssEscapeContent(str) {

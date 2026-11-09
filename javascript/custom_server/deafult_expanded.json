@@ -1088,6 +1088,10 @@
         "pl": {
           "b": "Brak klucza tłumaczenia dla %s",
           "a": "BRAK-TEKSTU"
+        },
+        "de": {
+          "b": "Keine Übersetzung für diesen Key %s",
+          "a": "KEIN-TEXT"
         }
       },
       "en": {
@@ -7302,10 +7306,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
+    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "8o-JI8VRyKo",
-    "tavern_yt_volume": 90
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }

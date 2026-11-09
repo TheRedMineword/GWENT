@@ -450,6 +450,11 @@ function normDeg(x) {
   return x < 0 ? x + 360 : x;
 }
 
+function deltaTSeconds(jde) {
+  const year = 2000 + (jde - 2451545.0) / 365.25;
+  return 69.2 + 0.15 * (year - 2026);
+}
+
 function lunarPhaseFromK(k, phase = 0) {
   const K = k + phase;
   const T = K / 1236.85;
@@ -495,10 +500,7 @@ function lunarPhaseFromK(k, phase = 0) {
   const E = 1 - 0.002516 * T - 0.0000074 * T2;
 
   if (phase === 0) {
-    // -------------------------
     // NEW MOON
-    // -------------------------
-
     const correction =
       -0.4072 * sinDeg(Mp) +
       0.17241 * E * sinDeg(M) +
@@ -528,10 +530,7 @@ function lunarPhaseFromK(k, phase = 0) {
 
     jde += correction;
   } else {
-    // -------------------------
     // FULL MOON
-    // -------------------------
-
     const correction =
       -0.40614 * sinDeg(Mp) +
       0.17302 * E * sinDeg(M) +
@@ -552,7 +551,8 @@ function lunarPhaseFromK(k, phase = 0) {
       0.00004 * sinDeg(2 * Mp - 2 * F) +
       0.00004 * sinDeg(3 * M) +
       0.00003 * sinDeg(Mp + M - 2 * F) +
-      0.00003 * sinDeg(Mp + M + 2 * F) -
+      0.00003 * sinDeg(2 * Mp + 2 * F) -
+      0.00003 * sinDeg(Mp + M + 2 * F) +
       0.00003 * sinDeg(Mp - M + 2 * F) -
       0.00002 * sinDeg(Mp - M - 2 * F) -
       0.00002 * sinDeg(3 * Mp + M) +
@@ -593,8 +593,8 @@ function lunarPhaseFromK(k, phase = 0) {
     0.000035 * sinDeg(A13) +
     0.000023 * sinDeg(A14);
 
-  // Julian Day -> Unix milliseconds
-  return (jde - 2440587.5) * DAY_MS;
+  // Julian Ephemeris Day (TT) -> Unix milliseconds (UTC)
+  return (jde - 2440587.5) * DAY_MS - deltaTSeconds(jde) * 1000;
 }
 
 function getLunation(timestamp) {

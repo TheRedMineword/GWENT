@@ -30,7 +30,7 @@ Astral Events
 <fat2>
 <color=#BBBCC1>The New Moon rises in: {{countdown}}</color>
 <color=#BBBCC1>For limited time between: {{window_start}} - {{window_end}}</color>
-<color=#BBBCC1>A New Moon card will be available for all factions, card summomns Nightwraiths to the board!</color>
+<color=#BBBCC1>A New Moon card will be available for all factions, card summons Nightwraiths to the board!</color>
 <fat1>
 %%img src="img/lg/monsters_nightwraith.jpg" style="max-width:25%"%% 
 </box.text>

@@ -6,7 +6,7 @@
   "upcoming_count": 5,
   "autodisplay": false,
   "countdown_format": "dd_hh_mm_ss",
-  "countdown_expired": "0s",
+  "countdown_expired": "*Astral Event Has Occurred*",
   "presets": {
     "newmoon": {
       "enabled": true,
