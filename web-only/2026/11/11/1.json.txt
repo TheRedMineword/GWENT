@@ -1,0 +1,9 @@
+<title>Server Update</title>
+<desc>Work has begun on the communication system (players-server) improvment!
+
+When update gets pushed to live server all clients will be forced to restart!
+Expect some new bugs!
+
+~DrMineword</desc>
+<bottom_link>true</bottom_link>
+<bottom_link_value>Join Discord Server for updates!###https://theredmineword.github.io/GWENT/api/discord-iframe/page</bottom_link_value>
