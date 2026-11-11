@@ -6,6 +6,15 @@ let eventStreamCloseAll = null;
 let processHandlersAttached = false;
 let onUncaughtException = null;
 let onUnhandledRejection = null;
+let upgradeHandler = null;
+const upgradedSockets = new WeakSet(); // sockets already handed to wss.handleUpgrade
+
+const sock = require("./socket");
+const comp_and_send = sock.send;      // same call signature as before
+const decodeIncoming = sock.read;
+const compressString = sock.compressString;
+// delete your old compress/decompress/send/heartbeat helpers
+
 
 function unmountRouter(app, router) {
     if (!router || !app?._router?.stack) return;
@@ -23,6 +32,11 @@ exports.stop = ({ app, server, wss }) => {
         clearInterval(id);
 
     intervals.length = 0;
+
+    try { sock.stop(); } catch (e) {}   // [FIX] clear ping timer / peers before terminating sockets
+    // remove the HTTP "upgrade" listener, otherwise every restart/hot-reload stacks another one
+    try { if (upgradeHandler) server.off("upgrade", upgradeHandler); } catch (e) {}
+    upgradeHandler = null;
 
     for (const fn of listeners)
         wss.off("connection", fn);
@@ -532,44 +546,8 @@ function decompressPayload(buffer) {
 //  return raw.toString("utf8");
 //}
 
-// ---------- send compressed ----------
-function comp_and_send(ws, objectOrString) {
-  try {
-    if (ws.readyState !== WebSocket.OPEN) {
-      console.log("Socket send failed reason: socket not open");
-      return false;
-    }
-
-    const json =
-      typeof objectOrString === "string"
-        ? objectOrString
-        : JSON.stringify(objectOrString);
-
-    const compressed = compressPayload(json);
-
-    ws.send(compressed, { binary: true }, (err) => {
-      if (err) {
-        console.log("Socket send failed reason: " + err.message);
-      }
-    });
-
-    return true;
-  } catch (err) {
-    console.log("Socket send failed reason: " + err.message);
-    return false;
-  }
-}
-
-// ---------- receive compressed ----------
-function decodeIncoming(message) {
-  try {
-    const json = decompressPayload(message);
-    return JSON.parse(json);
-  } catch (err) {
-    console.log("Socket decode failed reason: " + err.message);
-    return null;
-  }
-}
+// [FIX] old comp_and_send()/decodeIncoming() removed: they shadowed the sock.send / sock.read
+// aliases at the top of the file, so messages bypassed the sequence/ack/replay layer.
 
 let genlng = 2;
 // Helper function to generate a random 4-character code
@@ -716,6 +694,340 @@ router.use((req, res, next) => {
     next();
   }
 });
+const BR_TOKEN_TTL_MS = 2 * 60 * 1000;
+const BR_IP_LIMIT = 3; // reports per IP ...
+const BR_IP_WINDOW_MS = 10 * 60 * 1000; // ... per 10 min
+const BR_GLOBAL_LIMIT = 20; // reports sent to the queue ...
+const BR_GLOBAL_WINDOW_MS = 10 * 60 * 1000; // ... per 10 min, whole server
+// no size limit by default; set BR_MAX_BODY (e.g. "50mb") / BR_MAX_IMAGE_MB in .env to cap them
+const BR_MAX_BODY = process.env.BR_MAX_BODY || Infinity;
+const BR_MAX_IMAGE_BYTES = process.env.BR_MAX_IMAGE_MB
+  ? Number(process.env.BR_MAX_IMAGE_MB) * 1024 * 1024
+  : Infinity;
+const BR_MAX_LOG_CHARS = 400 * 1024;
+const BR_MAX_JSON_CHARS = 200 * 1024;
+
+const brTokens = new Map(); // token -> { ip, expires }
+const brIpHits = new Map(); // ip -> [timestamps]
+let brGlobalHits = [];
+
+const brClip = (v, n) => {
+  const s = String(v ?? "");
+  return s.length > n ? s.slice(0, n - 1) + "…" : s;
+};
+
+function brAllowIp(ip) {
+  const now = Date.now();
+  const hits = (brIpHits.get(ip) || []).filter((t) => now - t < BR_IP_WINDOW_MS);
+  const ok = hits.length < BR_IP_LIMIT;
+  if (ok) hits.push(now);
+  brIpHits.set(ip, hits);
+  return ok;
+}
+
+function brAllowGlobal() {
+  const now = Date.now();
+  brGlobalHits = brGlobalHits.filter((t) => now - t < BR_GLOBAL_WINDOW_MS);
+  if (brGlobalHits.length >= BR_GLOBAL_LIMIT) return false;
+  brGlobalHits.push(now);
+  return true;
+}
+
+intervals.push(
+  setInterval(() => {
+    const now = Date.now();
+    for (const [t, v] of brTokens) if (v.expires < now) brTokens.delete(t);
+    for (const [ip, hits] of brIpHits) {
+      const fresh = hits.filter((x) => now - x < BR_IP_WINDOW_MS);
+      if (fresh.length) brIpHits.set(ip, fresh);
+      else brIpHits.delete(ip);
+    }
+  }, 60 * 1000),
+);
+
+// only our own game pages may use this (browsers always send Origin on POST)
+function brOriginGuard(req, res, next) {
+  const origin = req.headers.origin;
+  if (!origin || !originMatches(origin)) return res.sendStatus(403);
+  next();
+}
+
+// consumes the one-time token BEFORE the body is parsed
+function brTokenGuard(req, res, next) {
+  const t = brTokens.get(req.params.token);
+  brTokens.delete(req.params.token);
+  if (!t || t.expires < Date.now() || t.ip !== getClientIp(req)) {
+    return res.sendStatus(403);
+  }
+  next();
+}
+
+// -- sanitising helpers ------------------------------------------------------
+function brImageFromBase64(b64) {
+  if (typeof b64 !== "string" || b64.length > BR_MAX_IMAGE_BYTES * 1.4) return null;
+  if (!/^[A-Za-z0-9+/=\s]+$/.test(b64)) return null;
+  const buf = Buffer.from(b64, "base64");
+  if (!buf.length || buf.length > BR_MAX_IMAGE_BYTES) return null;
+  // trust magic bytes, not the client's mime type
+  if (buf.subarray(0, 4).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47])))
+    return { buf, ext: "png", type: "image/png" };
+  if (buf.subarray(0, 3).equals(Buffer.from([0xff, 0xd8, 0xff])))
+    return { buf, ext: "jpg", type: "image/jpeg" };
+  if (
+    buf.subarray(0, 4).toString("latin1") === "RIFF" &&
+    buf.subarray(8, 12).toString("latin1") === "WEBP"
+  )
+    return { buf, ext: "webp", type: "image/webp" };
+  return null;
+}
+
+function brLogsFromBase64(b64) {
+  if (typeof b64 !== "string" || !/^[A-Za-z0-9+/=\s]+$/.test(b64)) return null;
+  let text = Buffer.from(b64, "base64").toString("utf8");
+  let count = null;
+  try {
+    const arr = JSON.parse(text);
+    if (Array.isArray(arr)) {
+      count = arr.length;
+      text = arr
+        .map((l) => `[${l?.time ?? ""}] [${l?.level ?? "log"}] ${l?.text ?? ""}`)
+        .join("\n");
+    }
+  } catch (e) {}
+  if (text.length > BR_MAX_LOG_CHARS) text = text.slice(-BR_MAX_LOG_CHARS); // keep the newest
+  return { text, count };
+}
+
+function brJsonFile(value) {
+  let s;
+  try {
+    s = JSON.stringify(value, null, 2);
+  } catch (e) {
+    s = String(value);
+  }
+  return brClip(s ?? "null", BR_MAX_JSON_CHARS);
+}
+
+function brCleanError(e) {
+  e = e && typeof e === "object" ? e : {};
+  return {
+    type: brClip(e.type, 40),
+    message: brClip(e.message, 4000),
+    source: brClip(e.source, 300),
+    line: Number(e.line) || 0,
+    column: Number(e.column) || 0,
+    time: brClip(e.time, 40),
+  };
+}
+
+// -- endpoints ---------------------------------------------------------------
+router.post("/api/bug-report/init", brOriginGuard, (req, res) => {
+  const ip = getClientIp(req);
+  if (!brAllowIp(ip)) return res.status(429).json({ ok: false, error: "rateLimited" });
+
+  const token = crypto.randomBytes(24).toString("base64url");
+  brTokens.set(token, { ip, expires: Date.now() + BR_TOKEN_TTL_MS });
+
+  const proto = String(req.headers["x-forwarded-proto"] || req.protocol)
+    .split(",")[0]
+    .trim();
+  res.json({ ok: true, url: `${proto}://${req.get("host")}/api/bug-report/${token}` });
+});
+
+router.post(
+  "/api/bug-report/:token",
+  brOriginGuard,
+  brTokenGuard,
+  express.json({ limit: BR_MAX_BODY }),
+  async (req, res) => {
+    res.status(200).set({
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-cache, no-transform",
+      "X-Accel-Buffering": "no",
+    });
+    res.flushHeaders();
+
+    const say = (line) => {
+      try {
+        res.write(line + "\n");
+      } catch (e) {}
+    };
+    const finish = (line) => {
+      if (line) say(line);
+      say("STOP");
+      try {
+        res.end();
+      } catch (e) {}
+    };
+
+    const reportId = crypto.randomUUID().slice(0, 8);
+
+    try {
+      say(`Report ${reportId} received`);
+
+      const apiUrl = process.env.BUG_REPORT_QUEUE_API;
+      const apiKey = process.env.BUG_REPORT_QUEUE_KEY;
+      if (!apiUrl || !apiKey) {
+        console.error("[bug-report] BUG_REPORT_QUEUE_API / _KEY not configured");
+        return finish("The server is not configured to receive reports");
+      }
+
+      const b = req.body && typeof req.body === "object" ? req.body : {};
+      const error = brCleanError(b.error);
+      const files = [];
+
+      // --- screenshot
+      say("Processing screenshot…");
+      const img = b.screenshot?.attached ? brImageFromBase64(b.screenshot.content) : null;
+      if (img) files.push({ name: `screenshot.${img.ext}`, type: img.type, data: img.buf });
+
+      // --- logs
+      say("Processing logs…");
+      const logs = b.logs?.attached ? brLogsFromBase64(b.logs.content) : null;
+      if (logs) files.push({ name: "logs.txt", type: "text/plain", data: Buffer.from(logs.text) });
+
+      // --- error + player data
+      files.push({
+        name: "error.json",
+        type: "application/json",
+        data: Buffer.from(brJsonFile(error)),
+      });
+      const pd = b.player_data ?? null;
+      if (pd !== null) {
+        files.push({
+          name: "player_data.json",
+          type: "application/json",
+          data: Buffer.from(brJsonFile(pd)),
+        });
+      }
+
+      // --- discord message
+      say("Building message…");
+      const ip = getClientIp(req);
+      const ipCensor = ip.replace(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/, (_, a) => `${a}.###.###.###`);
+      const ipHash = crypto.createHash("sha256").update(ip).digest("hex").slice(0, 8);
+      const playerId =
+        pd && typeof pd === "object" ? pd.playerId || pd.player_id || null : null;
+
+      const embed = {
+        title: brClip(`🐞 Bug report ${reportId} (${error.type || "?"})`, 256),
+        description:
+          "```\n" + brClip(error.message.replace(/```/g, "'''"), 1800) + "\n```",
+        color: 0xc0392b,
+        timestamp: new Date().toISOString(),
+        fields: [
+          {
+            name: "Source",
+            value: brClip(`${error.source || "-"}:${error.line}:${error.column}`, 1000),
+          },
+          { name: "Error time", value: brClip(error.time || "-", 100), inline: true },
+          { name: "Player", value: brClip(playerId || "-", 100), inline: true },
+          { name: "IP", value: `${ipCensor} (${ipHash})`, inline: true },
+          {
+            name: "User-Agent",
+            value: brClip(req.headers["user-agent"] || "unknown", 300),
+          },
+          {
+            name: "Attachments",
+            value: `Screenshot: ${img ? "✅" : "❌ " + brClip(b.screenshot?.error || "none", 100)}\nLogs: ${
+              logs ? "✅ " + (logs.count ?? "?") + " lines" : "❌"
+            }`,
+          },
+        ],
+      };
+      if (img) embed.image = { url: `attachment://screenshot.${img.ext}` };
+
+      const payload = {
+        username: "GWENT Bug Reports",
+      //  avatar_url: "https://theredmineword.github.io/GWENT/img/web/logo_round.png",
+        allowed_mentions: { parse: [] }, // no @everyone / role pings from user text
+        embeds: [embed],
+      };
+
+      console.log(JSON.stringify(payload));
+      // multipart/form-data (Discord webhook format). Serialised by hand so Xano
+      // gets the raw body (base64) + the Content-Type header (with the boundary).
+      const form = new FormData();
+      form.append("payload_json", JSON.stringify(payload));
+      files.forEach((f, i) =>
+        form.append(`files[${i}]`, new Blob([f.data], { type: f.type }), f.name),
+      );
+      const encoded = new Response(form); // generates boundary + serialises body
+      const mpHeader = encoded.headers.get("content-type"); // multipart/form-data; boundary=...
+      const mpContent = Buffer.from(await encoded.arrayBuffer()).toString("base64");
+
+      // --- global rate limit, then hand over to the queue
+      if (!brAllowGlobal()) {
+        return finish("Too many reports in a short time. Please try again later.");
+      }
+      say("Sending to the queue…");
+
+      const upstream = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+          "X-Report-Id": reportId,
+        },
+        body: JSON.stringify({ content: mpContent, header: mpHeader, _d: payload }),
+        signal: AbortSignal.timeout(30000),
+      });
+
+      // relay the queue's own stream (clipped). Xano may frame it as SSE
+      // ("id: 123" / "data: text" / empty "data:"), so strip those prefixes and
+      // ignore empty frames instead of treating "data:" as the last line.
+      let lastLine = "";
+      let sawDone = false;
+      let sawError = false;
+      const rawLines = [];
+      const onLine = (raw) => {
+        rawLines.push(raw);
+        let l = raw.trim();
+        if (/^id:\s*\S*$/i.test(l)) return; // SSE id frame
+        l = l.replace(/^(data|event):\s*/i, "").trim();
+        if (!l) return;
+        lastLine = l;
+        if (/^(done|stop)$/i.test(l)) {
+          sawDone = true;
+          return;
+        }
+        if (/error|fail|invalid|denied|reject|exceed|too large|rate.?limit|cannot|can't|unable|"code"\s*:\s*\d+/i.test(l)) sawError = true;
+        say("Queue: " + brClip(l, 200));
+      };
+      if (upstream.body) {
+        const reader = upstream.body.getReader();
+        const dec = new TextDecoder();
+        let buf = "";
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buf += dec.decode(value, { stream: true });
+          const parts = buf.split("\n");
+          buf = parts.pop();
+          parts.forEach(onLine);
+        }
+        onLine(buf);
+      }
+
+      // success = HTTP ok AND (explicit "done"/"stop" line, or the stream ended
+      // cleanly without any error-looking line)
+      const ok = upstream.ok && !sawError && (sawDone || rawLines.length > 0);
+      if (!ok) {
+        console.error(
+          `[bug-report] ${reportId} queue failed: HTTP ${upstream.status}, sawDone=${sawDone}, last="${lastLine}", raw=${JSON.stringify(rawLines).slice(0, 1000)}`,
+        );
+        return finish("Failed to add the report to the queue");
+      }
+      if (!sawDone) console.warn(`[bug-report] ${reportId} queue stream ended without "done" (last="${lastLine}")`);
+      console.log(`[bug-report] ${reportId} queued (${files.length} files)`);
+      finish(`Report ${reportId} added to the queue. Thank you!`);
+    } catch (e) {
+      console.error("[bug-report] failed:", e && e.stack ? e.stack : e);
+      finish("Internal server error while sending the report");
+    }
+  },
+);
+////////
 router.get("/api/recive-hearthbeat", (req, res) => {
   const id = req.query.db;
 
@@ -1542,7 +1854,7 @@ router.post("/api/message", (req, res) => {
   };
 
   try {
-    targetPlayer.send(compressPayload(JSON.stringify(payload)));
+    comp_and_send(targetPlayer, payload);
 
     // Return sent message too
     return res.json({
@@ -1731,21 +2043,16 @@ function broadcastToSession(sessionId, payload) {
   console.log(`broadcastToSession() ${sessionId}, ${payload}`);
   const session = sessions[sessionId];
   if (!session) return false;
-  let payload2 = null;
-  let data = null;
   session.players.forEach((player) => {
     try {
-      if (player.readyState === WebSocket.OPEN) {
-        console.log(`Sending mod msg to ${JSON.stringify(player.playerId)}`);
-        payload2 = {
-          type: "moderation",
-          message: payload || null,
-          session_id: sessionId,
-          player_id: player.playerId,
-        };
-        data = compressPayload(JSON.stringify(payload2));
-        player.send(data);
-      }
+      console.log(`Sending mod msg to ${JSON.stringify(player.playerId)}`);
+      // [FIX] comp_and_send routes through the player's peer (queues during the grace period)
+      comp_and_send(player, {
+        type: "moderation",
+        message: payload || null,
+        session_id: sessionId,
+        player_id: player.playerId,
+      });
     } catch (e) {
       console.log(`Broadcast error: ${JSON.stringify(e)}`);
     }
@@ -1754,7 +2061,7 @@ function broadcastToSession(sessionId, payload) {
   return true;
 }
 riskinfo = "{}";
-server.on("upgrade", (req, socket, head) => {
+upgradeHandler = (req, socket, head) => {
   try {
     const host = req.headers.host;
     const origin = req.headers.origin;
@@ -1767,7 +2074,7 @@ server.on("upgrade", (req, socket, head) => {
 
       if (!socket.destroyed) {
         socket.write(
-       //   "HTTP/1.1 403 Forbidden\r\n" +
+          "HTTP/1.1 403 Forbidden\r\n" +
           "Connection: close\r\n" +
           "\r\n"
         );
@@ -1775,6 +2082,10 @@ server.on("upgrade", (req, socket, head) => {
       }
       return;
     }
+
+    // never hand the same socket to ws twice (that error also destroyed the good connection)
+    if (upgradedSockets.has(socket)) return;
+    upgradedSockets.add(socket);
 
     wss.handleUpgrade(req, socket, head, (ws) => {
       wss.emit("connection", ws, req);
@@ -1791,23 +2102,19 @@ server.on("upgrade", (req, socket, head) => {
       if (!socket.destroyed) socket.destroy();
     } catch (e) {}
   }
-});
-const connectionHandler = async (ws, req) => {
+};
+server.on("upgrade", upgradeHandler);
+// [FIX] Runs ONLY for brand-new connections. ws.playerId is already set by sock.attach(),
+// and the message/close/error handlers are no longer attached here (see handleMessage / cleanupPlayer).
+const setupConnection = async (ws, req) => {
   ws.authenticated = false;
   ws.user = null;
-  ws.playerId = await generatePlayerId(req);
   ws.connectedAt = Date.now();
 
   playerSockets[ws.playerId] = ws;
 
-  ws.heartbeatInterval = setInterval(
-    () => {
-      if (ws.readyState !== WebSocket.OPEN) return;
-
-      sendHeartbeat(ws, req);
-    },
-    Number(trafficMonitor.askForPing) * 1000,
-  );
+  // [FIX] HTTP heartbeat disabled: socket.js already does ping/pong + timeout, and with
+  // trafficMonitor.firewsclose=true this killed any client that could not reach /api/recive-hearthbeat.
 
   const ip = getClientIp(req);
   const ip2 = crypto.createHash("sha256").update(ip).digest("hex");
@@ -1815,6 +2122,7 @@ const connectionHandler = async (ws, req) => {
     /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/,
     (_, a, b, c, d) => `${a}.###.###.###`,
   );
+  ws.ip_censor = ip_censor; // [FIX] used by handleMessage (no more closure variable)
   console.log(`-# Ip connected: ${ip_censor} hash ${ip2}`);
   players.push(ws);
 
@@ -1822,12 +2130,13 @@ const connectionHandler = async (ws, req) => {
   let geo = {};
 
   try {
-    const res = await fetch(`http://ip-api.com/json/${ip}`);
+    const res = await fetch(`http://ip-api.com/json/${ip}`, { signal: AbortSignal.timeout(3000) });
     geo = await res.json();
     geo.query = ip_censor;
     //ws.bot = bot;
     const res2 = await fetch(
       `https://proxycheck.io/v2/${ip}?key=111111-222222-333333-444444&vpn=3&asn=1&risk=2`,
+      { signal: AbortSignal.timeout(3000) },
     );
     geo2 = await res2.json();
     geo.risk = {
@@ -1912,26 +2221,31 @@ const connectionHandler = async (ws, req) => {
       2,
     ),
   );
-  let sessiondigitLength = 5;
-  let custom_server_prefix = "!CUSTOM%s!";
-  console.warn(`Session digits code ${sessiondigitLength}`);
-  function sessionIdToJoinCode(sessionId, digitLength = sessiondigitLength) {
-    // Hash session ID
-    const hash = crypto.createHash("sha256").update(sessionId).digest();
+};
 
-    // Convert first 4 bytes into number
-    const num = hash.readUInt32BE(0);
+// [FIX] hoisted out of connectionHandler so handleMessage() can use them
+let sessiondigitLength = 5;
+let custom_server_prefix = "!CUSTOM%s!";
+console.warn(`Session digits code ${sessiondigitLength}`);
+function sessionIdToJoinCode(sessionId, digitLength = sessiondigitLength) {
+// Hash session ID
+const hash = crypto.createHash("sha256").update(sessionId).digest();
 
-    // Range for requested digit length
-    const min = 10 ** (digitLength - 1);
-    const max = 10 ** digitLength;
+// Convert first 4 bytes into number
+const num = hash.readUInt32BE(0);
 
-    // Generate fixed-length code
-    return ((num % (max - min)) + min).toString();
-  }
-  ws.on("message", (message) => {
-    const msg_is = decompressPayload(message);
-    const data = JSON.parse(msg_is);
+// Range for requested digit length
+const min = 10 ** (digitLength - 1);
+const max = 10 ** digitLength;
+
+// Generate fixed-length code
+return ((num % (max - min)) + min).toString();
+}
+
+// [FIX] was ws.on("message", ...) inside connectionHandler. Called by sock.onMessage with the
+// already-decoded, de-duplicated object (no "_s"). Works for both new and resumed sockets.
+function handleMessage(ws, data) {
+    const ip_censor = ws.ip_censor || "unknown";
     const msg = JSON.stringify(data);
     const allowedBeforeAuth = ["ping"];
 
@@ -2002,14 +2316,10 @@ const connectionHandler = async (ws, req) => {
           console.log(`${player.id} cancelled try`);
           console.log(`SEND unready session, silent: ${data?.silent || false}`);
           if (`${data?.silent || false}` === `${false}`) {
-            player.send(
-              compressPayload(
-                JSON.stringify({
+            comp_and_send(player, {
                   type: "sessionUnready",
                   reason: "sessionCancelled",
-                }),
-              ),
-            );
+                });
           }
         } catch (e) {
           console.error("cancelSession notify error:", e);
@@ -2113,11 +2423,7 @@ const connectionHandler = async (ws, req) => {
         }),
       );
       sessions[sessionId].players.forEach((player, index) => {
-        player.send(
-          compressPayload(
-            JSON.stringify({ type: "sessionReady", player: index + 1 }),
-          ),
-        );
+        comp_and_send(player, { type: "sessionReady", player: index + 1 });
       });
 
       console.log(`Player joined ${joinCode}`);
@@ -2162,15 +2468,11 @@ const connectionHandler = async (ws, req) => {
         }
         console.log("firstPlayer = ", sessions[ws.sessionId].firstPlayer);
         session.players.forEach((player) => {
-          player.send(
-            compressPayload(
-              JSON.stringify({
+          comp_and_send(player, {
                 type: "coinToss",
                 player: sessions[ws.sessionId].firstPlayer,
                 special: sessions[ws.sessionId].special,
-              }),
-            ),
-          );
+              });
         });
       }
     }
@@ -2190,7 +2492,7 @@ const connectionHandler = async (ws, req) => {
 
         if (session.playersReady === 2) {
           session.players.forEach((player) => {
-            player.send(compressPayload(JSON.stringify({ type: "start" })));
+            comp_and_send(player, { type: "start" });
           });
           session.playersReady = 0;
         }
@@ -2224,77 +2526,15 @@ if (data.type === "discord_dm_me") {
       const sessionPlayers = sessions[ws.sessionId]?.players || [];
       sessionPlayers.forEach((player) => {
         if (player !== ws) {
-          player.send(compressPayload(JSON.stringify(data)));
+          comp_and_send(player, data);
         }
       });
     }
-  });
-  ws.on("error", (err) => {
-    clearInterval(ws.heartbeatInterval);
-    console.log(`Socket error ${ws.playerId}:`, err.code, err.message);
-    if (dcapi) {
-      dcapi
-        .onDisconnect(ws)
-        .catch((e) => console.error("[dcapi] onDisconnect error", e));
-    }
-    try {
-      console.log(`|| Player ${ws.playerId} disconnected`);
-      delete playerSockets[ws.playerId];
-      // Check if the player has an active session
-      if (ws.sessionId && sessions[ws.sessionId]) {
-        const session = sessions[ws.sessionId];
+  }
 
-        // Check if the player is the creator of the session
-        if (session.players[0] === ws) {
-          // If the creator disconnects, delete the session
-          console.log(
-            `|| Deleting session ${ws.sessionId} because the creator left`,
-          );
-          if (session.players.length > 1) {
-            try {
-              // session.players[1].send(compressPayload(JSON.stringify({ type: 'unReady' })));
-              session.players[1].send(
-                compressPayload(JSON.stringify({ type: "sessionUnready" })),
-              );
-            } catch (e) {
-              console.log("Err", e);
-            }
-          }
-          try {
-            delete joinIndex[sessions[ws.sessionId].joinCode];
-          } catch (e) {}
-          delete sessions[ws.sessionId];
-        } else {
-          try {
-            // If a non-creator disconnects, remove them from the session and notify the creator
-            session.players = session.players.filter((player) => player !== ws);
-            session.players[0].send(
-              compressPayload(JSON.stringify({ type: "unReady" })),
-            );
-            session.players[0].send(
-              compressPayload(JSON.stringify({ type: "sessionUnready" })),
-            );
-            console.log(
-              `|| Player ${ws.playerId} left the session ${ws.sessionId}`,
-            );
-            broadcastToSession(
-              ws.sessionId,
-              `Player ${ws.playerId} left the session`,
-            );
-          } catch (e) {
-            console.log("Err", e);
-          }
-        }
-      }
-
-      // Remove the player from the players list
-      players = players.filter((player) => player !== ws);
-      // });
-    } catch (e) {
-      console.error(e);
-    }
-  });
-  ws.on("close", () => {
+// [FIX] was ws.on("close") / ws.on("error") inside connectionHandler. Now called from the
+// onDisconnect hook, i.e. only after the reconnect grace period ended (or the client left with code 4000).
+function cleanupPlayer(ws) {
     clearInterval(ws.heartbeatInterval);
     if (dcapi) {
       dcapi
@@ -2316,9 +2556,7 @@ if (data.type === "discord_dm_me") {
         if (session.players.length > 1) {
           try {
             // session.players[1].send(compressPayload(JSON.stringify({ type: 'unReady' })));
-            session.players[1].send(
-              compressPayload(JSON.stringify({ type: "sessionUnready" })),
-            );
+            comp_and_send(session.players[1], { type: "sessionUnready" });
           } catch (e) {
             console.log("Err", e);
           }
@@ -2331,12 +2569,8 @@ if (data.type === "discord_dm_me") {
         try {
           // If a non-creator disconnects, remove them from the session and notify the creator
           session.players = session.players.filter((player) => player !== ws);
-          session.players[0].send(
-            compressPayload(JSON.stringify({ type: "unReady" })),
-          );
-          session.players[0].send(
-            compressPayload(JSON.stringify({ type: "sessionUnready" })),
-          );
+          comp_and_send(session.players[0], { type: "unReady" });
+          comp_and_send(session.players[0], { type: "sessionUnready" });
           console.log(
             `|| Player ${ws.playerId} left the session ${ws.sessionId}`,
           );
@@ -2352,11 +2586,37 @@ if (data.type === "discord_dm_me") {
 
     // Remove the player from the players list
     players = players.filter((player) => player !== ws);
-  });
-};
+}
 
-wss.on("connection", connectionHandler);
-listeners.push(connectionHandler);
+const onConnection = (ws, req) => {
+  // [FIX] attach() assigns ws.playerId (synchronous generatePlayerId) - it used to receive a Promise
+  const { resumed } = sock.attach(ws, req, () => generatePlayerId(req));
+
+  if (!resumed) {
+    setupConnection(ws, req).catch((e) => console.error("[setupConnection]", e));
+  }
+  // both new and resumed sockets must register the app-level handler
+  sock.onMessage(ws, (data) => handleMessage(ws, data));
+};
+wss.on("connection", onConnection);
+listeners.push(onConnection);
+
+// [FIX] hooks live here (inside start()) so they can see sessions/players/playerSockets
+sock.init({
+  onLost: (ws, graceMs) => {
+    console.log(`|| Player ${ws.playerId} lost connection, waiting ${graceMs}ms`);
+  },
+  onResume: (newWs, oldWs) => {
+    newWs.ip_censor = oldWs.ip_censor;
+    // everything that stored the old ws object must now point at the new one
+    playerSockets[newWs.playerId] = newWs;
+    players = players.map((p) => (p === oldWs ? newWs : p));
+    const s = newWs.sessionId && sessions[newWs.sessionId];
+    if (s) s.players = s.players.map((p) => (p === oldWs ? newWs : p));
+    console.log(`|| Player ${newWs.playerId} is back`);
+  },
+  onDisconnect: (ws) => cleanupPlayer(ws),
+});
 
 console.log("start lesser log");
 (async () => {
