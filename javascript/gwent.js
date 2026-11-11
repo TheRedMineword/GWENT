@@ -3688,8 +3688,13 @@ class Game {
     this.usebucket = false;
 
     weather.reset();
-    await board.row.forEach((r) => r.reset());
-    Bucket.reset();
+    // await board.row.forEach((r) => r.reset());
+    await Promise.all(board.row.map((r) => r.reset()));
+    try {
+      Bucket.reset();
+    } catch (e) {
+      console.error("BUCKET GAME RESET ERR?", e); // I think its non essential if bugs
+    }
     player_me.total = 0;
     player_op.total = 0;
     player_me.winning = false;
