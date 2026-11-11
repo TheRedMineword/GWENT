@@ -171,6 +171,13 @@ const IGNORE_PATTERNS = [
   // new coin flip
   "wait",
   "log",
+  // sockets recconect
+  "socket",
+
+  // error catcher
+  "IGNORED_ERRORS",
+  "error_strings",
+  "REPORT_INIT_URL",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 

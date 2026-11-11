@@ -631,6 +631,12 @@ function translate_ui_hub() {
     getTranslation("ui.mmenu.ingame")[1];
 
   try {
+    error_strings = deepClone(getTranslation("ui_error_strings"));
+    console.log("error strings is now:", error_strings);
+  } catch (e) {
+    console.error("error strings", e);
+  }
+  try {
     translation_user_settings = deepClone(getTranslation("ui_user_settings"));
     document.querySelector("#user_menu").textContent =
       getTranslation("ui_user_settings")["menu.title"];

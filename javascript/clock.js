@@ -838,6 +838,7 @@ let the_image_json = {};
     "javascript/factions.js",
     //  "javascript/hls.js@1.js",
     "javascript/external_deck.js",
+    "javascript/socket_client.js",
     "javascript/gwent_coin.js",
     "javascript/gwent.js",
     "javascript/session_registering.js",

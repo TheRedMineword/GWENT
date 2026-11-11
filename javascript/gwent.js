@@ -438,9 +438,9 @@ let socket = null;
 
 loadingscreenupdate("Starting webscoket");
 if (isHuman) {
-  socket = new WebSocket(wsUrl);
+  socket = new ResilientSocket(wsUrl);
 } else if (isLocalhost && !isElectronLauncher) {
-  socket = new WebSocket(wsUrl);
+  socket = new ResilientSocket(wsUrl);
 } else {
   showBrickScreen();
   warn_screen(
@@ -460,15 +460,15 @@ socket.onerror = (err) => {
 };
 
 socket.onclose = (event) => {
-  console.warn("WebSocket closed", event);
-
-  // Optional: treat early close as failure
-  if (!socket._connected) {
+  if (event.fatal || !socket._connected) {
+    warn_screen("Failed to start multiplayer, please refresh page!!!");
     showBrickScreen();
-    warn_screen(
-      "Failed to start multiplayer, please refresh page!!!\n\nIf it dont work wait for a moment before trying again!",
-    );
   }
+};
+
+socket.onstatus = (s) => {
+  if (s === "lost") showTooltip(getTranslation("ui_error_strings.xx.x.a"));
+  if (s === "resumed") showTooltip(getTranslation("ui_error_strings.xx.x.b"));
 };
 
 let amReady = false;
@@ -546,42 +546,23 @@ function wait(ms) {
 }
 
 // Start automatic queue processor
-setInterval(async () => {
+setInterval(() => {
   if (sendQueue.length === 0) return;
 
-  const item = sendQueue.shift(); // take first queued item
-  const { socket, jsonString } = item;
+  const { socket, jsonString } = sendQueue.shift();
+
+  let isPing = false;
+  try {
+    isPing = JSON.parse(jsonString).type === "ping";
+  } catch (e) {}
 
   try {
-    console.log("Comp and send:", socket, jsonString);
-
-    const before = TextEnc.encode(jsonString).length;
-
-    const compressed = await compressData(jsonString);
-
-    const after = compressed.length;
-    const saved = ((1 - after / before) * 100).toFixed(3);
-    const hash = await sha256(compressed);
-
-    console.log("Bytes before:", before);
-    console.log("Bytes after :", after);
-    console.log("Compressed% :", saved + "%");
-    console.log("Payload sha :", hash);
-
-    if (socket.readyState !== WebSocket.OPEN) {
-      if (JSON.parse(jsonString).type === "ping") {
-      } else {
-        throw new Error("socket not open");
-      }
-    }
-
-    socket.send(compressed);
+    // sendJson compresses, adds "_s", queues while offline and re-sends after a reconnect
+    const ok = socket.sendJson(jsonString);
+    if (!ok && !isPing) throw new Error("socket closed");
   } catch (err) {
     console.error(err);
-    if (JSON.parse(jsonString).type === "ping") {
-    } else {
-      warn_screen("Socket send failed: " + err.message);
-    }
+    if (!isPing) warn_screen("Socket send failed: " + err.message);
   }
 }, SEND_INTERVAL_MS);
 
@@ -596,6 +577,7 @@ function comp_and_send(socket, jsonString) {
 }
 
 async function recv_and_decomp(event) {
+  if (event && event.parsed) return event.parsed;
   console.log("recv_and_decomp");
   try {
     let buffer;
@@ -1042,6 +1024,9 @@ socket.onmessage = async (event) => {
       menubntconfig.wasINIT = true;
       break;
 
+    case "op_error":
+      showopponenterrored();
+      break;
     // Opponent has joined and the session is ready
     case "YourNamePls":
       if (
@@ -1204,11 +1189,15 @@ socket.onmessage = async (event) => {
     case "ready":
       showTooltip(getUiStrng("op_ready"));
       tocar("tf2/Vote_yes", false);
-      updateOpponentUI({
-        name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]}`,
-        state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
-        status: `${getTranslation("ui.mmenu.status.ready")} ${`${opponentReady}`.replace(true, getTranslation("ui.mmenu.isopready")[0]).replace(false, getTranslation("ui.mmenu.isopready")[1])}`,
-      });
+      try {
+        updateOpponentUI({
+          name: `${(current_op?.me_flag ?? null) === null ? "" : "( "}${(current_op?.me_flag ?? null) === null ? (players?.noflag ?? null) : (current_op?.me_flag ?? null)}${(current_op?.me_flag ?? null) === null ? "" : " ) "}${players["op"]}`,
+          state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
+          status: `${getTranslation("ui.mmenu.status.ready")} ${`${opponentReady}`.replace(true, getTranslation("ui.mmenu.isopready")[0]).replace(false, getTranslation("ui.mmenu.isopready")[1])}`,
+        });
+      } catch (e) {
+        console.error("op flag", e);
+      }
       player_op = new Player(
         1,
         players["op"]?.replace(
@@ -1233,11 +1222,15 @@ socket.onmessage = async (event) => {
       } else {
         opponentReadyElem.classList.remove("disabled");
         opponentReady = true;
-        updateOpponentUI({
-          name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]}`,
-          state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
-          status: `${getTranslation("ui.mmenu.status.ready")} ${`${opponentReady}`.replace(true, getTranslation("ui.mmenu.isopready")[0]).replace(false, getTranslation("ui.mmenu.isopready")[1])}`,
-        });
+        try {
+          updateOpponentUI({
+            name: `${(current_op?.me_flag ?? null) === null ? "" : "( "}${(current_op?.me_flag ?? null) === null ? (players?.noflag ?? null) : (current_op?.me_flag ?? null)}${(current_op?.me_flag ?? null) === null ? "" : " ) "}${players["op"]}`,
+            state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
+            status: `${getTranslation("ui.mmenu.status.ready")} ${`${opponentReady}`.replace(true, getTranslation("ui.mmenu.isopready")[0]).replace(false, getTranslation("ui.mmenu.isopready")[1])}`,
+          });
+        } catch (e) {
+          console.error("op flag", e);
+        }
       }
       break;
 
@@ -1263,11 +1256,15 @@ socket.onmessage = async (event) => {
         ),
       );
       op_icon_faction = `img/icons/deck_shield_${data.faction}.png`;
-      updateOpponentUI({
-        name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]?.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m])}`,
-        state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
-        status: `${getTranslation("ui.mmenu.status.ready")} ${`${opponentReady}`.replace(true, getTranslation("ui.mmenu.isopready")[0]).replace(false, getTranslation("ui.mmenu.isopready")[1])}`,
-      });
+      try {
+        updateOpponentUI({
+          name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]?.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m])}`,
+          state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
+          status: `${getTranslation("ui.mmenu.status.ready")} ${`${opponentReady}`.replace(true, getTranslation("ui.mmenu.isopready")[0]).replace(false, getTranslation("ui.mmenu.isopready")[1])}`,
+        });
+      } catch (e) {
+        console.error("op flag", e);
+      }
       // opponentReadyElem.querySelector("img").src = `img/icons/deck_shield_${data.faction}.png`
       break;
 
@@ -1285,11 +1282,15 @@ socket.onmessage = async (event) => {
       }
       // amReady = false;
       toggleReadyWaiting(amReady);
-      updateOpponentUI({
-        name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]?.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m])}`,
-        state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
-        status: `${getTranslation("ui.mmenu.status.ready")} ${`${opponentReady}`.replace(true, getTranslation("ui.mmenu.isopready")[0]).replace(false, getTranslation("ui.mmenu.isopready")[1])}`,
-      });
+      try {
+        updateOpponentUI({
+          name: `${current_op.me_flag === null ? "" : "( "}${current_op.me_flag === null ? players.noflag : current_op.me_flag}${current_op.me_flag === null ? "" : " ) "}${players["op"]?.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m])}`,
+          state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
+          status: `${getTranslation("ui.mmenu.status.ready")} ${`${opponentReady}`.replace(true, getTranslation("ui.mmenu.isopready")[0]).replace(false, getTranslation("ui.mmenu.isopready")[1])}`,
+        });
+      } catch (e) {
+        console.error("op flag", e);
+      }
       //	twoPlayersConnected = true;
       showTooltip(getUiStrng("op_unready"));
       // opponentReadyElem.classList.add("disabled");
@@ -3926,11 +3927,15 @@ class Game {
       true,
     );
     stop_wait_music();
-    updateOpponentUI({
-      name: " ",
-      state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
-      status: getTranslation("ui.mmenu.status.gameinprogress"),
-    });
+    try {
+      updateOpponentUI({
+        name: " ",
+        state: `${current_op.me_flag === null ? op_icon_faction : `<svg width=\"32\" height=\"32\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\r\n    <!-- Background image as base64 -->\r\n    <image href=\"${op_icon_faction}\" x=\"0\" y=\"0\" width=\"32\" height=\"32\" preserveAspectRatio=\"none\"\/>\r\n    <!-- Remote image in bottom-right corner -->\r\n    <image x=\"17\" y=\"17\" width=\"15\" height=\"15\" href=\"${current_op.me_flag === null ? op_icon_faction : `https://flagsapi.com/${current_op.me_flag}/flat/64.png`}\"\/>\r\n<\/svg>`}`,
+        status: getTranslation("ui.mmenu.status.gameinprogress"),
+      });
+    } catch (e) {
+      console.error("op flag", e);
+    }
     gameInProgress = true;
     setPatchnotesVisible(!gameInProgress);
     await sleep(10);

@@ -1303,5 +1303,36 @@ card_info: {
   "pfp.default": "Vanilla Ice Cream",
   "pfp.close": "Close",
   "pfp.empty": "No profile pictures available",
+},
+ui_error_strings: {
+  title: "Game Error",
+  default:
+    "An unexpected error occurred, and the game may not be working correctly. You can send a report to help us fix the issue.",
+  JavaScript:
+    "An error occurred in the game code. We recommend reloading the page. Please send a report to help us fix the issue.",
+  Promise:
+    "A background operation failed. The game may become unstable. Please send a report to help us fix the issue.",
+  ask: "Would you like to send an error report? A screenshot, logs, and player data will be included.",
+  btn_send: "Send Report",
+  btn_reload: "Reload",
+  btn_close: "Close",
+  sending_title: "Sending Report",
+  steps: {
+    screenshot: "Taking Screenshot",
+    logs: "Reading Logs",
+    connect: "Connecting to Server",
+    send: "Sending Report",
+    response: "Server Response",
+  },
+  done: "Report sent. Thank you!",
+  failed: "Failed to send raport: ",
+  "xx": {
+    "tits": "The Opponent's Play Sends an Error Signal!",
+    "cnt": "The opponent might not be able to continue the game!",
+    "x": {
+      a: "Connection lost, reconnecting...",
+      b: "Reconnected"
+    }
+  }
 }
 };

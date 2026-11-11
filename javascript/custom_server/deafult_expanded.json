@@ -2272,6 +2272,34 @@
           "pfp.default": "Vanilla Ice Cream",
           "pfp.close": "Close",
           "pfp.empty": "No profile pictures available"
+        },
+        "ui_error_strings": {
+          "title": "Game Error",
+          "default": "An unexpected error occurred, and the game may not be working correctly. You can send a report to help us fix the issue.",
+          "JavaScript": "An error occurred in the game code. We recommend reloading the page. Please send a report to help us fix the issue.",
+          "Promise": "A background operation failed. The game may become unstable. Please send a report to help us fix the issue.",
+          "ask": "Would you like to send an error report? A screenshot, logs, and player data will be included.",
+          "btn_send": "Send Report",
+          "btn_reload": "Reload",
+          "btn_close": "Close",
+          "sending_title": "Sending Report",
+          "steps": {
+            "screenshot": "Taking Screenshot",
+            "logs": "Reading Logs",
+            "connect": "Connecting to Server",
+            "send": "Sending Report",
+            "response": "Server Response"
+          },
+          "done": "Report sent. Thank you!",
+          "failed": "Failed to send raport: ",
+          "xx": {
+            "tits": "The Opponent's Play Sends an Error Signal!",
+            "cnt": "The opponent might not be able to continue the game!",
+            "x": {
+              "a": "Connection lost, reconnecting...",
+              "b": "Reconnected"
+            }
+          }
         }
       },
       "pl": {
@@ -3505,6 +3533,34 @@
           "pfp.default": "Lody Waniliowe",
           "pfp.close": "Zamknij",
           "pfp.empty": "Brak dostępnych awatarów!"
+        },
+        "ui_error_strings": {
+          "title": "Gra przestała działać",
+          "default": "Wystąpił nieoczekiwany błąd i gra mogła przestać działać poprawnie. Możesz wysłać raport, aby pomóc nam go naprawić.",
+          "JavaScript": "Wystąpił błąd w kodzie gry. Zalecamy przeładowanie strony. Wyślij raport, aby pomóc nam go naprawić.",
+          "Promise": "Operacja w tle zakończyła się niepowodzeniem. Gra może działać niestabilnie. Wyślij raport, aby pomóc nam go naprawić.",
+          "ask": "Czy chcesz wysłać raport o błędzie? Zostaną dołączone zrzut ekranu, logi i dane gracza.",
+          "btn_send": "Wyślij raport",
+          "btn_reload": "Przeładuj",
+          "btn_close": "Zamknij",
+          "sending_title": "Wysyłanie raportu",
+          "steps": {
+            "screenshot": "Robienie zrzutu ekranu",
+            "logs": "Odczyt logów",
+            "connect": "Łączenie z serwerem",
+            "send": "Wysyłanie raportu",
+            "response": "Odpowiedź serwera"
+          },
+          "done": "Raport wysłany. Dziękujemy!",
+          "failed": "Nie udało się wysłać raportu: ",
+          "xx": {
+            "tits": "Gra Przeciwnika Wysyła Sygnał Błędu!",
+            "cnt": "Przeciwnik może nie być w stanie kontynuować gry!",
+            "x": {
+              "a": "Utracono połączenie, trwa ponowne łączenie...",
+              "b": "Odzyskano Sygnał!"
+            }
+          }
         }
       }
     },
@@ -7306,10 +7362,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "M0sflDPa9zY",
+    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
     "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 30
+    "tavern_yt_vid": "8o-JI8VRyKo",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }

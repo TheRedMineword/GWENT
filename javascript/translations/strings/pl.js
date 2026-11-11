@@ -1407,5 +1407,36 @@ rule63: [  // for classes
   "pfp.default": "Lody Waniliowe",
   "pfp.close": "Zamknij",
   "pfp.empty": "Brak dostępnych awatarów!",
+},
+ui_error_strings: {
+  title: "Gra przestała działać",
+  default:
+    "Wystąpił nieoczekiwany błąd i gra mogła przestać działać poprawnie. Możesz wysłać raport, aby pomóc nam go naprawić.",
+  JavaScript:
+    "Wystąpił błąd w kodzie gry. Zalecamy przeładowanie strony. Wyślij raport, aby pomóc nam go naprawić.",
+  Promise:
+    "Operacja w tle zakończyła się niepowodzeniem. Gra może działać niestabilnie. Wyślij raport, aby pomóc nam go naprawić.",
+  ask: "Czy chcesz wysłać raport o błędzie? Zostaną dołączone zrzut ekranu, logi i dane gracza.",
+  btn_send: "Wyślij raport",
+  btn_reload: "Przeładuj",
+  btn_close: "Zamknij",
+  sending_title: "Wysyłanie raportu",
+  steps: {
+    screenshot: "Robienie zrzutu ekranu",
+    logs: "Odczyt logów",
+    connect: "Łączenie z serwerem",
+    send: "Wysyłanie raportu",
+    response: "Odpowiedź serwera",
+  },
+  done: "Raport wysłany. Dziękujemy!",
+  failed: "Nie udało się wysłać raportu: ",
+  "xx": {
+    "tits": "Gra Przeciwnika Wysyła Sygnał Błędu!",
+    "cnt": "Przeciwnik może nie być w stanie kontynuować gry!",
+    "x": {
+      a: "Utracono połączenie, trwa ponowne łączenie...",
+      b: "Odzyskano Sygnał!"
+    }
+  }
 }
 };
