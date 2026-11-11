@@ -3695,10 +3695,14 @@ class Game {
     } catch (e) {
       console.error("BUCKET GAME RESET ERR?", e); // I think its non essential if bugs
     }
-    player_me.total = 0;
-    player_op.total = 0;
-    player_me.winning = false;
-    player_op.winning = false;
+    try {
+      player_me.total = 0;
+      player_op.total = 0;
+      player_me.winning = false;
+      player_op.winning = false;
+    } catch (e) {
+      // during init they are no always defined
+    }
   }
 
   // Sets up player faction abilities and psasive leader abilities
