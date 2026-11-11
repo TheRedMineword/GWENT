@@ -27,6 +27,7 @@ An hour after update I got bug report :/
 I have no idea how you manage to crash game during init, but...
 ```diff
 --- Tried resolving "reset@https://theredmineword.github.io/GWENT/javascript/gwent.js:3692:11" error
+--- Fixed one more race condition
 ```
 You break it, I fix it
 <fat3>
