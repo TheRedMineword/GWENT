@@ -3344,6 +3344,7 @@
             "siege_isHero:false_male": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Oblężniczego",
             "siege_isHero:true_female": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Oblężniczej",
             "siege_isHero:false_female": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Oblężniczej",
+            "siege_isHero:false_femalegrass": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Oblężniczych",
             "ranged_isHero:true_male": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Dalekiego Zasięgu",
             "ranged_isHero:false_male": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Dalekiego Zasięgu",
             "ranged_isHero:true_female": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Dalekiego Zasięgu",
@@ -3365,6 +3366,7 @@
           "unit_female": "Jednostki",
           "hero_male": "Bohatera",
           "hero_female": "Bohaterki",
+          "unit_femalegrass": "Jednostki",
           "leader_male": "Dowódcy",
           "leader_female": "Dowódczyni",
           "factionIs": "%s; ",
@@ -3446,6 +3448,7 @@
             "rottenfruit_female": "Zbira",
             "potion_male": "Wiedźmińskich Eliksirów",
             "potion_female": "Wiedźmińskich Eliksirów",
+            "potion_femalegrass": "Wiedźmińskich Eliksirów",
             "dark_creature_male": "Istoty Ciemności",
             "dark_creature_female": "Istoty Ciemności",
             "light_creature_male": "Istoty Światła",
@@ -3488,6 +3491,11 @@
             {
               "if": "redcrab",
               "gender": "female",
+              "mode": "filename"
+            },
+            {
+              "if": "grasstrail",
+              "gender": "femalegrass",
               "mode": "filename"
             },
             {

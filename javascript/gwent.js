@@ -2160,6 +2160,7 @@ function card_name_info(card, overflow = 65) {
           `card_info.classes.${(aa ?? "undefined").replace("%g", gender)}`,
         ),
       );
+    // console.warn("a", a, `card_info.strings.${b}`, getTranslation(`card_info.strings.${b}`), b)
     if (a.split("\n")[1].length > overflow) {
       a = a.replace("\n", "\n-# ");
     }

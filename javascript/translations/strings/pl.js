@@ -1249,6 +1249,8 @@ card_info: {
 "siege_isHero:true_female": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Oblężniczej", // Ponieważ: card_name_info ⚑ **Sztandar Lyria i Rivii** Karta Bohaterki Sztandaru Oblężniczego // w sumie outdated ale zostawię
 "siege_isHero:false_female": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Oblężniczej",
 
+"siege_isHero:false_femalegrass": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Oblężniczych",
+
 "ranged_isHero:true_male": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Dalekiego Zasięgu",
 "ranged_isHero:false_male": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Dalekiego Zasięgu",
 "ranged_isHero:true_female": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Dalekiego Zasięgu",
@@ -1274,6 +1276,8 @@ card_info: {
   unit_female: "Jednostki",
   hero_male: "Bohatera",
   hero_female: "Bohaterki",
+
+  unit_femalegrass: "Jednostki",
   
   leader_male: "Dowódcy",
   leader_female: "Dowódczyni",
@@ -1359,6 +1363,7 @@ card_info: {
   rottenfruit_female: "Zbira",
   potion_male: "Wiedźmińskich Eliksirów",
   potion_female: "Wiedźmińskich Eliksirów",
+  potion_femalegrass: "Wiedźmińskich Eliksirów",
   dark_creature_male: "Istoty Ciemności",
   dark_creature_female: "Istoty Ciemności",
   light_creature_male: "Istoty Światła",
@@ -1375,6 +1380,7 @@ rule63: [  // for classes
   {"if": "magic", "gender": "female", "hero": false, "mode": "split"},
   {"if": "stennis", "gender": "female", "mode": "filename"},
    {"if": "redcrab", "gender": "female", "mode": "filename"},
+   {"if": "grasstrail", "gender": "femalegrass", "mode": "filename"},
   {"if": "sabotage_female", "mode": "notsplit", "hero": true, "gender": "female", "extra": "bad_lady", "extra2": true}, // ponieważ ortografia
   {"if": "aviary_medic", "mode": "filename", "gender": "male"},
   {"if": "custom!skyseason", "gender": "male", "mode": "filename"},
