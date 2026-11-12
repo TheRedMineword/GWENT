@@ -2904,7 +2904,7 @@
           "igni": "Znaki Wiedźmińskie: Ignii",
           "udalryka_leader": "Udalryk an Brokvar — Wybraniec Bogów",
           "keadwen_weather": "Taktyczna Prognoza — Dywizja z Keadwen",
-          "radovid_stern": "Radowid V Srogi — Zgubiony w Szaleństwie",
+          "radovid_stern": "Radowid V Srogi — Jaśnie Pierdolnięty",
           "fake_ciri": "Fałszywa Ciri — Cesarzowa Nilfgaardu",
           "whitefrost": "Białe Zimno",
           "temeriacall": "Temeria",
@@ -3177,7 +3177,7 @@
             "session-start-control_ready": "Gotów",
             "session-start-control_unready": "Niegotowy",
             "cancel": "Anuluj",
-            "copy": "Kupiuj Kod Zaproszenia",
+            "copy": "Kopiuj Kod Zaproszenia",
             "music": "♫ Muzyka",
             "no-op": "Brak Przeciwnika",
             "hi": "Witaj Graczu",
@@ -7362,10 +7362,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
-    "audio_yt_vid_soundtrack_volume": 90,
-    "tavern_yt_vid": "8o-JI8VRyKo",
-    "tavern_yt_volume": 90
+    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
+    "audio_yt_vid_soundtrack_volume": 47,
+    "tavern_yt_vid": "6U9gVpMHhiA",
+    "tavern_yt_volume": 30
   },
   "texture_pack_url": null
 }

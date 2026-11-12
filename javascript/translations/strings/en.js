@@ -684,36 +684,36 @@ STRNG["en"] = {
     temeriabluestripe_2: "Blue Stripe Commando — Soldier",
     temeriamoral_1: "Blue Stripe Commando — Scout",
     vernontemeria_call: "Vernon Roche — Blue Stripes Commando Leader",
-    steward: "Hopeful Steward",
+    steward: "Hopeful Steward", // dont translate this
     guard: "Royal Guard",
-    chibi_mask: "Chibi Mask",
-    krill: "Dark Dragon",
-    rico: "Cackling Cannoneer",
+    chibi_mask: "Chibi Mask", // dont translate this
+    krill: "Dark Dragon", // Dark as not color, but like dark magic.... creature of that name is just hate towards light, corruped warrior and etc
+    rico: "Cackling Cannoneer", // dont translate this
     arcadaoffun: "Wandering Carnival",
-    fortunedrum: "Fortune Drum",
-    spirit: "Ascended Ancestor Spirit",
+    fortunedrum: "Fortune Drum", // dont translate this
+    spirit: "Ascended Ancestor Spirit", // dont translate this
     "danielle": "Sky Kid — Danielle",
     redcrab: "Red Crab",
     crabspy: "Spy Crab",
     darkstorm: "Darkness Storm",
     darkness_storm_leader: "Eden King",
-    ranger: "Reassuring Ranger",
+    ranger: "Reassuring Ranger", // dont translate this
     tgc20: "20 Years Of ThatGameComapny",
-    elder_wasteland: "Elder of the Wasteland",
-    colorguide: "Days of Color Guide",
-    colorcollab: "Trevor Project",
+    elder_wasteland: "Elder of the Wasteland", // dont translate this
+    colorguide: "Days of Color Guide", // dont translate this
+    colorcollab: "Trevor Project", // dont translate this
     aviary_medic: "Aviary Village Emotional Support",
-    vault_elder_s2e: "Elder of the Vault — Two Embers",
+    vault_elder_s2e: "Elder of the Vault — Two Embers", // dont translate this
     fisstech: "Fisstech",
     sigi_reuven: "Sigi Reuven",
     king_of_beggers: "King of Beggers",
-    natureguide: "Days of Nature Guide",
-    naturecollab: "The Ocean Cleanup",
-    skyfest: "Sky Anniversary",
-    magister: "Magister",
+    natureguide: "Days of Nature Guide", // dont translate this
+    naturecollab: "The Ocean Cleanup", // dont translate this
+    skyfest: "Sky Anniversary", // dont translate this
+    magister: "Magister", // dont translate this
     "custom!power_place": "Circle of Elements",
     "custom!traveling_spirit": "Traveling Spirit",
-    "custom!dearvangogh": "Dear Van Gogh",
+    "custom!dearvangogh": "Dear Van Gogh", // dont translate this
     "custom!sky_vincent": "Vincent Van Gogh",
     "custom!vincent_painting_power": "Vincent Van Gogh: Painting",
     "custom!sky_vincent_guys": "Dear Van Gogh — Seasonal Spirits",
@@ -727,7 +727,7 @@ STRNG["en"] = {
     noonwraith: "Noonwraith",
     deatheatr: "Necrophages",
     wardancer: "Wardancer",
-    valley_twins: "Elders of the Valley",
+    valley_twins: "Elders of the Valley", // dont translate this
     sunbather_pink: "Chill Sunbather with a bow in thier hair",
     bluebird_a: "Blue Feather",
     bluebird_b: "Blue Bird",
