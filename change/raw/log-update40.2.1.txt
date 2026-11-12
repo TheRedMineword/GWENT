@@ -24,7 +24,7 @@ Patch Notes:
 <fat1>
 # 12 November, 2026 - HOTFIX V2
 From Bug Reports
-```
+```diff
 --- Enable Leader is now try catch in case reset leader is not reset able yet
 --- Full screen trigger will fail quitly now
 ```
