@@ -177,9 +177,10 @@ function bell(
  * ============================================================ */
 const player_switch = [true, false];
 async function playSong(songName) {
-  //console.log("playSong clock", songName, !clock_config.audio.enabled, player_switch[buttonmutemode]);
+  //console.log("playSong clock", songName, !clock_config.audio.enabled, player_switch[(typeof buttonmutemode !== "undefined" ? buttonmutemode : 0)]);
   if (!clock_config.audio.enabled) return;
-  if (player_switch[buttonmutemode]) return;
+  if (player_switch[typeof buttonmutemode !== "undefined" ? buttonmutemode : 0])
+    return;
 
   const song = clock_config.songs[songName];
 
@@ -212,7 +213,8 @@ async function playSong(songName) {
 
 async function strikeHour(hour24) {
   if (!clock_config.audio.enabled) return;
-  if (player_switch[buttonmutemode]) return;
+  if (player_switch[typeof buttonmutemode !== "undefined" ? buttonmutemode : 0])
+    return;
 
   await ensureAudio();
 

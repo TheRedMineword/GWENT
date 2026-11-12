@@ -1455,7 +1455,11 @@ socket.onmessage = async (event) => {
           data,
           cards_to_find_post,
         );
-        warn_screen(
+        // warn_screen(
+        //   "Failed sync op cars on end of execute path, check console for more \n\nReport it as bug!!!",
+        // );
+        ErrorCatcher.fatal(
+          e,
           "Failed sync op cars on end of execute path, check console for more \n\nReport it as bug!!!",
         );
       }
@@ -1545,7 +1549,11 @@ socket.onmessage = async (event) => {
           data,
           cards_to_find_post,
         );
-        warn_screen(
+        //  warn_screen(
+        //   "Failed sync op cars on end of execute path, check console for more \n\nReport it as bug!!!",
+        // );
+        ErrorCatcher.fatal(
+          e,
           "Failed sync op cars on end of execute path, check console for more \n\nReport it as bug!!!",
         );
       }
@@ -1705,8 +1713,12 @@ function shuffleSeeded2(array, seed, debug = null) {
       ` error `,
       e,
     );
-    warn_screen(
-      "GAME CRASH!\n\nFatal error at shuffleSeeded function, check console for more info\n\nReport is as bug!!",
+    // warn_screen(
+    //    "GAME CRASH!\n\nFatal error at shuffleSeeded function, check console for more info\n\nReport is as bug!!",
+    //  );
+    ErrorCatcher.fatal(
+      e,
+      "GAME CRASH!\n\nFatal error at shuffleSeeded function, check console for more info\n\nReport it as bug!!",
     );
   }
 }
@@ -8462,10 +8474,18 @@ async function postscripinit() {
     try {
       await custom_card_builder_init();
     } catch (e) {
-      warn_screen(
+      // \\  warn_screen(
+      //\\     "Fatal error at custom_card_builder_init()\n\nGame failed to lunch\n\nCheck console for more!",
+      //\\  );
+      console.error(
+        "FATAL",
+        e,
         "Fatal error at custom_card_builder_init()\n\nGame failed to lunch\n\nCheck console for more!",
       );
-      console.error("FATAL", e);
+      ErrorCatcher.fatal(
+        e,
+        "Fatal error at custom_card_builder_init()\n\nGame failed to lunch\n\nCheck console for more!",
+      );
     }
   }
 }

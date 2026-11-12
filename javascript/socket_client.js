@@ -148,6 +148,11 @@
           "&ack=" +
           this.inSeq;
       }
+      if (url.includes("?")) {
+        url = `${url}&`;
+      } else {
+        url = `${url}?`;
+      }
       this._status("connecting", {
         attempt: this.attempt,
         resume: this.isResume,
@@ -155,7 +160,9 @@
 
       let ws;
       try {
-        ws = new WebSocket(url);
+        ws = new WebSocket(
+          `${url}auth=${window?.authtokensocket ?? "N/A" ?? "N/A"}`,
+        );
       } catch (e) {
         return this._lost(e);
       }

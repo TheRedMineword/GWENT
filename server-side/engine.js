@@ -33,6 +33,7 @@ exports.stop = ({ app, server, wss }) => {
 
     intervals.length = 0;
 
+    try { require("./handshakeGen.js").clearTokens(); } catch (e) {}
     try { sock.stop(); } catch (e) {}   // [FIX] clear ping timer / peers before terminating sockets
     // remove the HTTP "upgrade" listener, otherwise every restart/hot-reload stacks another one
     try { if (upgradeHandler) server.off("upgrade", upgradeHandler); } catch (e) {}
@@ -80,6 +81,7 @@ const zlib = require("zlib");
 const { json } = require("stream/consumers");
 const fs = require("fs");
 const analyseBot = require("./botDetector.js");
+const handshake = require("./handshakeGen.js");
 
 require("dotenv").config();
 
@@ -1061,6 +1063,28 @@ router.get(process.env.A, (req, res) => {
   }
 
   res.sendFile(filePath);
+});
+// ---------------------------------------------------------------------------
+// GET /api-js/handshake.js?v=<expected ws version>
+// Returns freshly obfuscated JS that defines window.authtokensocket.
+// Every ws connection must then use  wss://host/?auth=<window.authtokensocket>
+// ---------------------------------------------------------------------------
+const SERVER_WS_VERSION = () =>
+  Number(trafficMonitor.wsversion ?? process.env.WS_VERSION ?? 1) || 1;
+
+router.get("/api-js/handshake.js", (req, res) => {
+  const clientVersion = parseInt(req.query.v, 10) || 0;
+  const js = handshake.build({
+    token: handshake.issueToken(getClientIp(req)),
+    clientVersion,
+    serverVersion: SERVER_WS_VERSION(),
+    ignorefork: Array.isArray(trafficMonitor.ignorefork) ? trafficMonitor.ignorefork : [],
+  });
+  res.set({
+    "Content-Type": "application/javascript; charset=utf-8",
+    "Cache-Control": "no-store, max-age=0",
+  });
+  res.send(js);
 });
 // router.use(cors({ origin: "*" }));
 router.use(express.static(path.resolve(__dirname, "..")));
@@ -2078,6 +2102,21 @@ upgradeHandler = (req, socket, head) => {
           "Connection: close\r\n" +
           "\r\n"
         );
+        socket.destroy();
+      }
+      return;
+    }
+
+    // auth token issued by /api-js/handshake.js must be in ?auth=
+    let authOk = false;
+    try {
+      const authToken = new URL(req.url, "http://x").searchParams.get("auth");
+      authOk = handshake.verifyToken(authToken, getClientIp(req));
+    } catch (e) {}
+    if (!authOk) {
+      console.log(`[Handshake] Rejected WebSocket upgrade (bad/missing auth) ip=${getClientIp(req)}`);
+      if (!socket.destroyed) {
+        socket.write("HTTP/1.1 401 Unauthorized\r\nConnection: close\r\n\r\n");
         socket.destroy();
       }
       return;

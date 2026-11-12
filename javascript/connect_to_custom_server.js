@@ -178,6 +178,7 @@ const IGNORE_PATTERNS = [
   "IGNORED_ERRORS",
   "error_strings",
   "REPORT_INIT_URL",
+  "expected_webscoket_communication_version",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 

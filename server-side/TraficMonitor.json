@@ -1,1 +1,1 @@
-{"askForPing": "45", "recive_window": "20", "firewsclose": true, "needauth": false, "blockedDomains": ["yrtxrr.github.io"]}
+{"askForPing": "45", "recive_window": "20", "firewsclose": true, "needauth": false, "blockedDomains": ["yrtxrr.github.io"],"ignorefork": ["theredmineword.github.io","gwent.localplayer.dev","localhost"],"wsversion":3}

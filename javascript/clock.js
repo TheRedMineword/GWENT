@@ -814,6 +814,7 @@ async function loadScript2(src) {
   });
 }
 let the_image_json = {};
+const expected_webscoket_communication_version = 3;
 (() => {
   loadingscreenupdate("Starting clock synchronization");
   let useSecureClock = false;
@@ -826,9 +827,22 @@ let the_image_json = {};
     // "javascript/transclations/assets.js",
     "javascript/clock_ui.js",
     "javascript/jszip.min.js",
+    //  "javascript/__versions.js",
     "javascript/defines.js",
     "javascript/witcherpotions.js",
     "javascript/gamestats.js",
+    `${
+      (window.location.hostname.startsWith("localhost") ||
+        window.location.hostname.startsWith("127.0.0.1") ||
+        window.location.hostname.startsWith("[::1]")) &&
+      location.port === "1111"
+        ? domain
+        : window.location.hostname.startsWith("localhost") ||
+            window.location.hostname.startsWith("127.0.0.1") ||
+            window.location.hostname.startsWith("[::1]")
+          ? "http://localhost:8081/"
+          : domain
+    }api-js/handshake.js?v=${expected_webscoket_communication_version}`,
     "javascript/card_skins.js",
     "javascript/cards.js",
     "javascript/bucket.js",
@@ -867,8 +881,11 @@ let the_image_json = {};
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
 
-      s.src = `${src}?ver=${encodeURIComponent(sha)}`;
-
+      if (src.includes("?")) {
+        s.src = `${src}&ver=${encodeURIComponent(sha)}`;
+      } else {
+        s.src = `${src}?ver=${encodeURIComponent(sha)}`;
+      }
       s.onload = resolve;
 
       s.onerror = reject;

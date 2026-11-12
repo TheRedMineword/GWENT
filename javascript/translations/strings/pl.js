@@ -1422,6 +1422,8 @@ ui_error_strings: {
     "Wystąpił błąd w kodzie gry. Zalecamy przeładowanie strony. Wyślij raport, aby pomóc nam go naprawić.",
   Promise:
     "Operacja w tle zakończyła się niepowodzeniem. Gra może działać niestabilnie. Wyślij raport, aby pomóc nam go naprawić.",
+    Fatal:
+    "Wystąpił krytyczny błąd i gra nie może być dalej poprawnie kontynuowana. Prosimy o przesłanie zgłoszenia, aby pomóc nam rozwiązać ten problem.",
   ask: "Czy chcesz wysłać raport o błędzie? Zostaną dołączone zrzut ekranu, logi i dane gracza.",
   btn_send: "Wyślij raport",
   btn_reload: "Przeładuj",

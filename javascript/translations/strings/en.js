@@ -1312,6 +1312,8 @@ ui_error_strings: {
     "An error occurred in the game code. We recommend reloading the page. Please send a report to help us fix the issue.",
   Promise:
     "A background operation failed. The game may become unstable. Please send a report to help us fix the issue.",
+  Fatal:
+    "A critical error occurred and the game cannot continue properly. Please send a report to help us fix the issue.",
   ask: "Would you like to send an error report? A screenshot, logs, and player data will be included.",
   btn_send: "Send Report",
   btn_reload: "Reload",

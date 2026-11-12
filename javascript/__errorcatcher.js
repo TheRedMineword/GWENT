@@ -19,6 +19,9 @@ let error_strings = {
     "An error occurred in the game code. We recommend reloading the page. Please send a report to help us fix the issue.",
   Promise:
     "A background operation failed. The game may become unstable. Please send a report to help us fix the issue.",
+  // Used by fatal(e) when no custom message is given
+  Fatal:
+    "A critical error occurred and the game cannot continue properly. Please send a report to help us fix the issue.",
   ask: "Would you like to send an error report? A screenshot, logs, and player data will be included.",
   btn_send: "Send Report",
   btn_reload: "Reload",
@@ -153,6 +156,7 @@ const ERRORS_KEY = "game_errors";
     errors: [],
     crashShown: false,
 
+    // Automatic errors (window "error" / "unhandledrejection")
     log(type, message, source = "", line = 0, column = 0) {
       message = String(message).slice(0, 4000);
 
@@ -165,15 +169,42 @@ const ERRORS_KEY = "game_errors";
         return;
       }
 
-      const error = {
+      this._record({
         type,
         message,
         source,
         line,
         column,
         time: new Date().toISOString(),
-      };
+      });
+    },
 
+    // Manual fatal error:   fatal(e, "MESSAGE")
+    // Shows the same crash window as any other error, but with YOUR message
+    // as the main text. The original error (stack) is kept in the report.
+    // Never filtered by IGNORED_ERRORS.
+    fatal(e, message) {
+      const original =
+        e instanceof Error ? e.stack || e.message : e == null ? "" : safeStr(e);
+      const custom = message == null ? "" : String(message);
+
+      this._record(
+        {
+          type: "Fatal",
+          message: [custom, original].filter(Boolean).join("\n").slice(0, 4000),
+          custom, // shown in the crash window
+          original: String(original).slice(0, 4000), // first line shown as detail
+          source: "manual",
+          line: 0,
+          column: 0,
+          time: new Date().toISOString(),
+        },
+        true,
+      );
+    },
+
+    // shared by log() and fatal()
+    _record(error, force = false) {
       this.errors.push(error);
       console.error("[Game Error]", error);
 
@@ -183,7 +214,12 @@ const ERRORS_KEY = "game_errors";
         store?.setItem(ERRORS_KEY, JSON.stringify(this.errors.slice(-20)));
       } catch (_) {}
 
-      if (!this.crashShown) {
+      // A report is being sent right now: never replace that window
+      const sending = !!document.getElementById("__ec_steps");
+
+      // Normal errors: only the first one opens the window.
+      // Fatal errors: always open the window (unless a report is sending).
+      if (force ? !sending : !this.crashShown) {
         this.crashShown = true;
         // body may not exist yet if the error happens very early
         whenBodyReady(() => {
@@ -216,9 +252,15 @@ const ERRORS_KEY = "game_errors";
 
     // Test the catcher. NOTE: errors typed directly into the DevTools console
     // do NOT reach window "error" events, so throw from async code instead.
+    // kinds: "js" (default), "promise", "fatal"
     test(kind = "js") {
       if (kind === "promise")
         Promise.reject(new Error("ErrorCatcher test (promise)"));
+      else if (kind === "fatal")
+        this.fatal(
+          new Error("ErrorCatcher test (fatal)"),
+          "Test fatal message",
+        );
       else
         setTimeout(() => {
           throw new Error("ErrorCatcher test (js)");
@@ -244,6 +286,8 @@ const ERRORS_KEY = "game_errors";
   });
 
   window.ErrorCatcher = ErrorCatcher;
+  // short global alias:  fatal(e, "MESSAGE")
+  window.fatal = (e, message) => ErrorCatcher.fatal(e, message);
 
   // ---------------------------------------------------------------------------
   // UI
@@ -294,7 +338,17 @@ const ERRORS_KEY = "game_errors";
     const old = $("__ec_overlay");
     if (old) old.remove();
 
-    const text = error_strings[error.type] || error_strings.default;
+    // Fatal errors show the custom message as the main text;
+    // everything else uses the translated text for its type.
+    const isFatal = error.type === "Fatal";
+    const text =
+      isFatal && error.custom
+        ? error.custom
+        : error_strings[error.type] || error_strings.default;
+    const detail = isFatal
+      ? String(error.original || "").split("\n")[0]
+      : String(error.message).split("\n")[0];
+
     const overlay = document.createElement("div");
     overlay.id = "__ec_overlay";
     overlay.innerHTML = `
@@ -302,7 +356,7 @@ const ERRORS_KEY = "game_errors";
         <div id="__ec_title">${esc(error_strings.title)}</div>
         <div id="__ec_body">
           <div>${esc(text)}</div>
-          <div id="__ec_detail">${esc(error.message.split("\n")[0])}</div>
+          ${detail ? `<div id="__ec_detail">${esc(detail)}</div>` : ""}
           <div style="margin-top:12px"><b>${esc(error_strings.ask)}</b></div>
         </div>
         <div id="__ec_btns">
