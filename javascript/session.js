@@ -827,39 +827,43 @@ function isLocalhost_session() {
 }
 
 function openFullscreen() {
-  const elem = document.documentElement;
-  const local = isLocalhost_session();
+  try {
+    const elem = document.documentElement;
+    const local = isLocalhost_session();
 
-  console.log("[FS] Attempting fullscreen");
-  console.log("[FS] Element:", elem);
-  console.log("[FS] Hostname:", window.location.hostname);
-  console.log("[FS] Is localhost:", local);
+    console.log("[FS] Attempting fullscreen");
+    console.log("[FS] Element:", elem);
+    console.log("[FS] Hostname:", window.location.hostname);
+    console.log("[FS] Is localhost:", local);
 
-  const allowed = local ? fullscreenConfig.localhost : fullscreenConfig.else;
+    const allowed = local ? fullscreenConfig.localhost : fullscreenConfig.else;
 
-  console.log("[FS] Fullscreen allowed:", allowed);
+    console.log("[FS] Fullscreen allowed:", allowed);
 
-  if (!allowed) {
-    console.warn("[FS] Fullscreen blocked by config");
-    return;
-  }
+    if (!allowed) {
+      console.warn("[FS] Fullscreen blocked by config");
+      return;
+    }
 
-  if (elem.requestFullscreen) {
-    console.log("[FS] Using standard requestFullscreen()");
-    elem.requestFullscreen();
-  } else if (elem.webkitRequestFullscreen) {
-    console.log("[FS] Using webkitRequestFullscreen()");
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) {
-    console.log("[FS] Using msRequestFullscreen()");
-    elem
-      .requestFullscreen()
-      .then(() => console.log("[FS] Success"))
-      .catch((err) => {
-        console.error("[FS] Failed:", err.name, err.message);
-      });
-  } else {
-    console.error("[FS] Fullscreen API not supported");
+    if (elem.requestFullscreen) {
+      console.log("[FS] Using standard requestFullscreen()");
+      elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) {
+      console.log("[FS] Using webkitRequestFullscreen()");
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+      console.log("[FS] Using msRequestFullscreen()");
+      elem
+        .requestFullscreen()
+        .then(() => console.log("[FS] Success"))
+        .catch((err) => {
+          console.error("[FS] Failed:", err.name, err.message);
+        });
+    } else {
+      console.error("[FS] Fullscreen API not supported");
+    }
+  } catch (e) {
+    console.error("[FS] Error ", e);
   }
 }
 

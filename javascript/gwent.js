@@ -1810,7 +1810,9 @@ class Player {
     ability_reset("me");
     ability_reset("op");
 
-    this.enableLeader();
+    try {
+      this.enableLeader();
+    } catch (e) {}
     try {
       player_me.passed = false;
     } catch (e) {}
