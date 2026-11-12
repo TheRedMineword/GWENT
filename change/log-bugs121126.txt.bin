@@ -1,0 +1,41 @@
+<small_text.text>
+NEWS / KNOWN ISSUE
+</small_text.text>
+
+<images.logo>
+img/web/logo_round.png
+</images.logo>
+
+<images.banner>
+img/web/bar_red.png
+</images.banner>
+
+<box.lines_outline_hex>
+#D45555
+</box.lines_outline_hex>
+
+<box.title>
+Thank you for bearing with us!
+</box.title>
+
+<box.text>
+Due to the implementation of a new error-catching system, Gwent has been hit by an avalanche of bugs!
+
+So far, all the errors that have been caught were non-critical and, in the past, were simply logged silently in the background.
+Attempts were made to patch them. I hope it will resolve the issue.
+
+**As a gesture of compensation, the Gwent board will revert to the "Dear Van Gogh" theme until the end of this message.**
+</box.text>
+
+
+<button.name>
+CONTINUE
+</button.name>
+
+<load.text>
+<l>Thank you for bearing with us!</l>
+</load.text>
+
+<load.duration_ms>
+3000
+</load.duration_ms>
