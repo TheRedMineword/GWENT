@@ -1,0 +1,12 @@
+<title>False Positve Bugs Detection</title>
+<desc>Despite my efforts, I was unable to resolve all the issues involving non-fatal bugs that trigger warnings.
+
+Tomorrow’s update aims to resolve this once and for all.
+
+I apologize for the disruptions to gameplay experimence.
+
+UPDATE: I have started now work on update!
+
+~DrMineword</desc>
+<bottom_link>true</bottom_link>
+<bottom_link_value>Join Discord Server for updates!###https://theredmineword.github.io/GWENT/api/discord-iframe/page</bottom_link_value>
