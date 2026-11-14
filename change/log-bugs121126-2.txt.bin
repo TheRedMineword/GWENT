@@ -19,10 +19,16 @@ Thank you for bearing with us!
 </box.title>
 
 <box.text>
+```diff
+_99 little bugs in the code, 99 little bugs._
+_Take one down, patch it around, 128 bugs in the code!_
+```
 Due to the implementation of a new error-catching system, Gwent has been hit by an avalanche of bugs!
 
 So far, all the errors that have been caught were non-critical and, in the past, were simply logged silently in the background.
 Attempts were made to patch them. I hope it will resolve the issue.
+
+**Update 14.11.2026**: Resolved more issues (again), and made error catcher let pass some errors!
 
 **As a gesture of compensation, the Gwent board will revert to the "Dear Van Gogh" theme until the end of this message.**
 </box.text>

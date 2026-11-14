@@ -59,6 +59,7 @@ https://pngtree.com/freebackground/vintage-crinkled-paper-texture-aged-brown-bac
 - Witchers Forces faction cards images comes from Witchers wikis like: https://witcher.fandom.com/wiki/School_of_the_Cat + (Reinald, Ivar Evil-Eye)
 - Trial of Grasses: https://gwent.one/en/card/200078 -> Avenger: Madoc https://witcher.fandom.com/wiki/Madoc
 - AURORA: https://sky-children-of-the-light.fandom.com/wiki/Season_of_AURORA?file=SoAurora-Promo-image-wide.png
+- Winter Theme: https://www.pexels.com/photo/broken-glass-wallpaper-866351/ https://www.pexels.com/photo/abstract-ice-texture-in-blue-tones-36324707/ https://www.magnific.com/pl/darmowe-wektory/recznie-rysowane-wieniec-swiateczny_11752142.htm https://www.magnific.com/pl/darmowe-zdjecie/tekstura-szarego-dywanu_1189817.htm https://www.magnific.com/pl/darmowe-wektory/tekstura-wody_983693.htm https://unsplash.com/photos/a-close-up-of-a-wooden-floor-with-dark-wood-JqMxVKsw4iM https://www.reddit.com/r/Witcher3/comments/78syii/christmas_in_october_with_geralt/
 > Some card/mechanics/assets are used from other project like this (For example: RandomPianist/gwent-classic-v3.1, other similar project are mentioned at start of this copyright notice)
 
 

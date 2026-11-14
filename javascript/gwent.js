@@ -1992,59 +1992,77 @@ class Player {
 
   // Enable access to leader ability and toggles leader visuals to on state
   async enableLeader() {
-    this.leaderAvailable = this.leader.activated.length > 0;
-    let elem = this.elem_leader.cloneNode(true);
-    this.elem_leader.parentNode.replaceChild(elem, this.elem_leader);
-    this.elem_leader = elem;
-    this.elem_leader.children[0].classList.remove("fade");
-    this.elem_leader.children[1].classList.remove("hide");
+    try {
+      this.leaderAvailable = this.leader.activated.length > 0;
+      let elem = this.elem_leader.cloneNode(true);
+      this.elem_leader.parentNode.replaceChild(elem, this.elem_leader);
+      this.elem_leader = elem;
+      this.elem_leader.children[0].classList.remove("fade");
+      this.elem_leader.children[1].classList.remove("hide");
 
-    if (this.id === 0 && this.leader.activated.length > 0) {
-      this.elem_leader.addEventListener("click", async () => {
-        await ui.viewCard(this.leader, async () => {
-          var now = Date.now();
-          var handData = await serializeCards(player_me.hand.cards);
-          console.log("HandData", handData);
-          await this.activateLeader();
-          var handData_after = await serializeCards(player_me.hand.cards);
-          console.log("HandData post", handData_after);
-          await comp_and_send(
-            socket,
-            JSON.stringify({
-              type: "useLeader",
-              player: this.id,
-              isMeHand: handData,
-              HandMePost: handData_after,
-            }),
-          );
-          await sleep(100);
-          await resolve_extrajson_procces();
-          await resolve_pass_post_extrajson(Date.now() - now);
-          now = 0;
-          //	await init_sync_hands();
-          //console.log("LEADER END TURN");
-          await player_me.endTurn();
+      if (this.id === 0 && this.leader.activated.length > 0) {
+        this.elem_leader.addEventListener("click", async () => {
+          try {
+            await ui.viewCard(this.leader, async () => {
+              try {
+                var now = Date.now();
+                var handData = await serializeCards(player_me.hand.cards);
+                console.log("HandData", handData);
+                await this.activateLeader();
+                var handData_after = await serializeCards(player_me.hand.cards);
+                console.log("HandData post", handData_after);
+                await comp_and_send(
+                  socket,
+                  JSON.stringify({
+                    type: "useLeader",
+                    player: this.id,
+                    isMeHand: handData,
+                    HandMePost: handData_after,
+                  }),
+                );
+                await sleep(100);
+                await resolve_extrajson_procces();
+                await resolve_pass_post_extrajson(Date.now() - now);
+                now = 0;
+                //	await init_sync_hands();
+                //console.log("LEADER END TURN");
+                await player_me.endTurn();
+              } catch (err) {
+                console.warn("enableLeader: useLeader callback failed", err);
+              }
+            });
+          } catch (err) {
+            console.warn("enableLeader: click handler failed", err);
+          }
         });
-      });
-    } else {
-      this.elem_leader.addEventListener(
-        "click",
-        async () => await ui.viewCard(this.leader),
-        false,
-      );
-      if (player_op.passed && !player_me.passed) {
-        ui.enablePlayer(false);
-        showTooltip(
-          getUiStrng("sync.sync").replace("%s", RegisterMovesHold / 1000),
+      } else {
+        this.elem_leader.addEventListener(
+          "click",
+          async () => {
+            try {
+              await ui.viewCard(this.leader);
+            } catch (err) {
+              console.warn("enableLeader: viewCard failed", err);
+            }
+          },
+          false,
         );
-        ui.enablePlayer(false);
-        showsync(RegisterMovesHold);
-        await sleep(RegisterMovesHold);
-        showTooltip(getUiStrng("sync.end"));
-        ui.enablePlayer(true);
+        if (player_op.passed && !player_me.passed) {
+          ui.enablePlayer(false);
+          showTooltip(
+            getUiStrng("sync.sync").replace("%s", RegisterMovesHold / 1000),
+          );
+          ui.enablePlayer(false);
+          showsync(RegisterMovesHold);
+          await sleep(RegisterMovesHold);
+          showTooltip(getUiStrng("sync.end"));
+          ui.enablePlayer(true);
+        }
+        //console.log("LEADER END TURN");
+        await player_me.endTurn();
       }
-      //console.log("LEADER END TURN");
-      await player_me.endTurn();
+    } catch (err) {
+      console.warn("enableLeader failed", err);
     }
   }
 }

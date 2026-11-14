@@ -1,3 +1,11 @@
+const frameRe = (fn, file) =>
+  new RegExp(
+    `(?:^|\\n)\\s*(?:at\\s+)?(?:async\\s+)?(?:new\\s+)?(?:[\\w$]+\\.)*${fn}(?:@|\\s+\\()[^\\n]*?${file.replace(
+      /\./g,
+      "\\.",
+    )}:\\d+:\\d+`,
+  );
+
 const IGNORED_ERRORS = [
   {
     type: "Promise",
@@ -9,6 +17,8 @@ const IGNORED_ERRORS = [
     message:
       /Cannot read properties of undefined \(reading 'passed'\)[\s\S]*at Player\.enableLeader/,
   },
+  { message: frameRe("enableLeader", "gwent.js") },
+  { message: frameRe("reset", "gwent.js") },
 ];
 
 let error_strings = {
@@ -19,7 +29,6 @@ let error_strings = {
     "An error occurred in the game code. We recommend reloading the page. Please send a report to help us fix the issue.",
   Promise:
     "A background operation failed. The game may become unstable. Please send a report to help us fix the issue.",
-  // Used by fatal(e) when no custom message is given
   Fatal:
     "A critical error occurred and the game cannot continue properly. Please send a report to help us fix the issue.",
   ask: "Would you like to send an error report? A screenshot, logs, and player data will be included.",
@@ -73,6 +82,22 @@ const ERRORS_KEY = "game_errors";
     }
   };
 
+  // Reads file / line / column from the top frame of a stack string.
+  //   Firefox: enableLeader@https://.../gwent.js:2035:20
+  //   Chrome:  at async Player.enableLeader (https://.../gwent.js:2035:20)
+  //            at https://.../gwent.js:2035:20
+  function parseStackLocation(stack) {
+    const empty = { source: "", line: 0, column: 0 };
+    if (typeof stack !== "string") return empty;
+    for (const raw of stack.split("\n")) {
+      const m = raw
+        .trim()
+        .match(/(?:^|@|\(|\s)((?:[a-z][\w+.-]*:)?[^\s()@]*?):(\d+):(\d+)\)?$/i);
+      if (m) return { source: m[1], line: +m[2], column: +m[3] };
+    }
+    return empty;
+  }
+
   const isIgnored = (type, message) =>
     IGNORED_ERRORS.some(
       (r) =>
@@ -102,6 +127,9 @@ const ERRORS_KEY = "game_errors";
   } catch (_) {}
 
   let logBuffer = [];
+  let logSeq = 0; // increasing id, lets us find "logs after the error"
+  // error object -> { before: copy of logs at crash time, seq: last log id }
+  const errorMeta = new WeakMap();
 
   // write to storage; on quota/size problems keep halving the buffer
   function persistLogs() {
@@ -135,7 +163,12 @@ const ERRORS_KEY = "game_errors";
   function pushLog(level, args) {
     let text = args.map(safeStr).join(" ");
     if (text.length > MAX_LOG_LEN) text = text.slice(0, MAX_LOG_LEN) + "…";
-    logBuffer.push({ level, text, time: new Date().toISOString() });
+    logBuffer.push({
+      seq: ++logSeq,
+      level,
+      text,
+      time: new Date().toISOString(),
+    });
     if (logBuffer.length > MAX_LOGS) logBuffer = logBuffer.slice(-MAX_LOGS);
     scheduleSave();
   }
@@ -205,6 +238,10 @@ const ERRORS_KEY = "game_errors";
 
     // shared by log() and fatal()
     _record(error, force = false) {
+      // instant copy of the logs that exist right now, taken before our own
+      // "[Game Error]" line is added, so the report shows what led to the crash
+      errorMeta.set(error, { before: logBuffer.slice(), seq: logSeq });
+
       this.errors.push(error);
       console.error("[Game Error]", error);
 
@@ -279,9 +316,14 @@ const ERRORS_KEY = "game_errors";
   });
 
   window.addEventListener("unhandledrejection", function (event) {
+    const reason = event.reason;
+    const loc = parseStackLocation(reason?.stack);
     ErrorCatcher.log(
       "Promise",
-      event.reason?.stack || event.reason?.message || String(event.reason),
+      reason?.stack || reason?.message || String(reason),
+      loc.source || reason?.fileName || "",
+      loc.line || reason?.lineNumber || 0,
+      loc.column || reason?.columnNumber || 0,
     );
   });
 
@@ -449,9 +491,27 @@ const ERRORS_KEY = "game_errors";
     }
   }
 
-  function readLogs() {
+  // Report layout:
+  //   <copy of the logs from before the error>
+  //   // error
+  //   <logs that happened after it, if the client kept running>
+  function buildReportLogs(error) {
+    const meta = errorMeta.get(error);
+    if (!meta) return [...logBuffer];
+
+    const marker = {
+      seq: meta.seq,
+      level: "marker",
+      text: "// error",
+      time: error?.time || new Date().toISOString(),
+    };
+    const after = logBuffer.filter((l) => l.seq > meta.seq);
+    return [...meta.before, marker, ...after];
+  }
+
+  function readLogs(error) {
     try {
-      const json = JSON.stringify(logBuffer);
+      const json = JSON.stringify(buildReportLogs(error));
       const bytes = new TextEncoder().encode(json);
       let bin = "";
       for (let i = 0; i < bytes.length; i += 0x8000)
@@ -473,7 +533,7 @@ const ERRORS_KEY = "game_errors";
 
       // 2. logs
       setStep("logs", "active");
-      const logs = readLogs();
+      const logs = readLogs(error);
       setStep("logs", logs.attached ? "done" : "fail");
 
       // 3. ask the server where to send the report

@@ -766,25 +766,27 @@
 // NOTE TO SELF: dont forget
 // Also 100% rewrite idea so users dont steal your discord webhook and spam it
 async function discord_integration_sendScreenshotToDiscord(webhookUrl, msg) {
-  const blob = await GwentScreenshot.capture();
+  try {
+    const blob = await GwentScreenshot.capture();
 
-  const formData = new FormData();
-  formData.append("files[0]", blob, "screenshot.png");
-  formData.append(
-    "payload_json",
-    JSON.stringify({
-      content: msg ?? "Gwent screenshot",
-    }),
-  );
+    const formData = new FormData();
+    formData.append("files[0]", blob, "screenshot.png");
+    formData.append(
+      "payload_json",
+      JSON.stringify({
+        content: msg ?? "Gwent screenshot",
+      }),
+    );
 
-  const response = await fetch(webhookUrl, {
-    method: "POST",
-    body: formData,
-  });
+    const response = await fetch(webhookUrl, {
+      method: "POST",
+      body: formData,
+    });
 
-  if (!response.ok) {
-    throw new Error(`failed: ${response.status} ${await response.text()}`);
-  }
+    if (!response.ok) {
+      throw new Error(`failed: ${response.status} ${await response.text()}`);
+    }
 
-  return response;
+    return response;
+  } catch (e) {}
 }
