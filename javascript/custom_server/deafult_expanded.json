@@ -607,7 +607,8 @@
       "madoc": "witcher_%g",
       "reinadld": "witcher_%g",
       "ivald": "witcher_%g",
-      "motheraurora": "sky_spirit_%g"
+      "motheraurora": "sky_spirit_%g",
+      "TheWitchers": "witcher_%g"
     },
     "classDecorators": {
       "undefined": {
@@ -1779,7 +1780,8 @@
           "madoc": "Madoc",
           "reinadld": "Reinald",
           "ivald": "Ivald Evil-Eye",
-          "motheraurora": "AURORA"
+          "motheraurora": "AURORA",
+          "TheWitchers": "W\u003Ccolor=#e91e23\u003E•\u003C/color\u003Ei\u003Ccolor=#02b2e7\u003E•\u003C/color\u003Et\u003Ccolor=#fabc16\u003E•\u003C/color\u003Ec\u003Ccolor=#e91e23\u003E•\u003C/color\u003Eh\u003Ccolor=#02b2e7\u003E•\u003C/color\u003Ee\u003Ccolor=#fabc16\u003E•\u003C/color\u003Er\u003Ccolor=#e91e23\u003E•\u003C/color\u003Es"
         },
         "ui": {
           "elem": {
@@ -2988,7 +2990,8 @@
           "madoc": "Madoc",
           "reinadld": "Reinald",
           "ivald": "Ivar Złe Oko",
-          "motheraurora": "AURORA"
+          "motheraurora": "AURORA",
+          "TheWitchers": "W\u003Ccolor=#e91e23\u003E•\u003C/color\u003Ei\u003Ccolor=#02b2e7\u003E•\u003C/color\u003Ee\u003Ccolor=#fabc16\u003E•\u003C/color\u003Ed\u003Ccolor=#e91e23\u003E•\u003C/color\u003Eź\u003Ccolor=#02b2e7\u003E•\u003C/color\u003Em\u003Ccolor=#fabc16\u003E•\u003C/color\u003Ei\u003Ccolor=#e91e23\u003E•\u003C/color\u003En\u003Ccolor=#02b2e7\u003E•\u003C/color\u003Ei"
         },
         "ui": {
           "elem": {
@@ -6992,6 +6995,16 @@
         "ability": "motherscare",
         "filename": "motheraurora",
         "count": "1"
+      },
+      {
+        "name": "W\u003Ccolor=#e91e23\u003E•\u003C/color\u003Ei\u003Ccolor=#02b2e7\u003E•\u003C/color\u003Et\u003Ccolor=#fabc16\u003E•\u003C/color\u003Ec\u003Ccolor=#e91e23\u003E•\u003C/color\u003Eh\u003Ccolor=#02b2e7\u003E•\u003C/color\u003Ee\u003Ccolor=#fabc16\u003E•\u003C/color\u003Er\u003Ccolor=#e91e23\u003E•\u003C/color\u003Es",
+        "id": "7006",
+        "deck": "witchersforces",
+        "row": "close",
+        "strength": "16",
+        "ability": "hero bondwitcher",
+        "filename": "TheWitchers",
+        "count": "1"
       }
     ],
     "factions": {
@@ -7372,10 +7385,10 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
-    "tavern_yt_vid": "6U9gVpMHhiA",
-    "tavern_yt_volume": 30
+    "audio_yt_vid_soundtrack": "UI3EdZNHB78",
+    "audio_yt_vid_soundtrack_volume": 90,
+    "tavern_yt_vid": "8o-JI8VRyKo",
+    "tavern_yt_volume": 90
   },
   "texture_pack_url": null
 }

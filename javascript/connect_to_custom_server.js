@@ -180,6 +180,7 @@ const IGNORE_PATTERNS = [
   "REPORT_INIT_URL",
   "expected_webscoket_communication_version",
   "frameRe",
+  "COLOR_RE",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 

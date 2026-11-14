@@ -2067,6 +2067,21 @@ class Player {
   }
 }
 
+function visibleLength(line) {
+  return String(line)
+    .replace(/^-# /, "")
+    .replace(
+      /<color=#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})>(.*?)<\/color>/g,
+      "$1",
+    )
+    .replace(/\*\*(.+?)\*\*/g, "$1") // bold markers
+    .replace(/\*(.+?)\*/g, "$1").length; // italic markers
+}
+
+function maxRowLength(text) {
+  return Math.max(0, ...String(text).split("\n").map(visibleLength));
+}
+
 function card_name_info(card, overflow = 65) {
   console.log("card_name_info", card);
   if ((card?.faction ?? "N/A") === "faction") {
@@ -2193,10 +2208,10 @@ function card_name_info(card, overflow = 65) {
         ),
       );
     // console.warn("a", a, `card_info.strings.${b}`, getTranslation(`card_info.strings.${b}`), b)
-    if (a.split("\n")[1].length > overflow) {
+    if (visibleLength(a.split("\n")[1].length) > overflow) {
       a = a.replace("\n", "\n-# ");
     }
-    if (a.split("\n")[0].length > overflow - 8) {
+    if (visibleLength(a.split("\n")[0].length) > overflow - 8) {
       a = `-# ${a}`;
     }
     console.log(
@@ -2334,6 +2349,14 @@ const GwentOverlay = (() => {
           line = line.slice(3);
         }
         let html = escapeHtml(line);
+
+        html = html.replace(
+          /&lt;color=(#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8}))&gt;(.*?)&lt;\/color&gt;/g,
+          '<span style="color:$1">$2</span>',
+        );
+
+        html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+        html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
         html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
         html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
         return small
@@ -2691,9 +2714,17 @@ class Deck extends CardContainer {
       removedFromDeck?.name,
     );
     try {
+      var name1 = card?.name || "";
+      var name2 = removedFromDeck?.name || "";
+      if (name1.includes("<color")) {
+        name1 = `<innercolor>${name1}</innercolor>`;
+      }
+      if (name2.includes("<color")) {
+        name2 = `<innercolor>${name2}</innercolor>`;
+      }
       var txt_draw = getUiStrng("redraw")
-        .replace("%x", card?.name || "")
-        .replace("%y", removedFromDeck?.name || "");
+        .replace("%x", name1)
+        .replace("%y", name2);
       console.log(txt_draw);
       cardredrawnotice(txt_draw);
     } catch (e) {

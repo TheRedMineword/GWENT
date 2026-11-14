@@ -854,7 +854,9 @@ francesca_hope_of_the_aen_seidhe:
         madoc: "Madoc",
         reinadld: "Reinald",
         ivald: "Ivar Złe Oko",
-motheraurora: "AURORA"
+motheraurora: "AURORA",
+TheWitchers: "W<color=#e91e23>•</color>i<color=#02b2e7>•</color>e<color=#fabc16>•</color>d<color=#e91e23>•</color>ź<color=#02b2e7>•</color>m<color=#fabc16>•</color>i<color=#e91e23>•</color>n<color=#02b2e7>•</color>i", // W•i•t•c•h•e•r•s but its in "Friends" (tv show) logo format
+
   },
   ui: {
     elem: {

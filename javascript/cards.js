@@ -3726,6 +3726,16 @@ var card_dict_base = [
     filename: "motheraurora",
     count: "1",
   },
+  {
+    name: "W<color=#e91e23>•</color>i<color=#02b2e7>•</color>t<color=#fabc16>•</color>c<color=#e91e23>•</color>h<color=#02b2e7>•</color>e<color=#fabc16>•</color>r<color=#e91e23>•</color>s", // W•i•t•c•h•e•r•s but its in "Friends" (tv show) logo format
+    id: "7006",
+    deck: "witchersforces",
+    row: "close",
+    strength: "16",
+    ability: "hero bondwitcher",
+    filename: "TheWitchers",
+    count: "1",
+  },
 ];
 let pickedfakecard = { a: false, b: null };
 
@@ -3857,40 +3867,36 @@ function scanMessages() {
 
   updateMessageBox();
 }
-function formatMessage(template, card, timer) {
-  let end = timer.start + timer.duration;
+const COLOR_RE =
+  /&lt;color=(#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8}))&gt;([\s\S]*?)&lt;\/color&gt;/g;
 
+function applyColors(escaped) {
+  return escaped.replace(COLOR_RE, '<span style="color:$1">$2</span>');
+}
+
+// card name: escape, then resolve ITS color tags right away
+function formatName(name) {
+  return applyColors(escapeHtml_cards(name));
+}
+
+function formatMessage(template, card, timer) {
+  const end = timer.start + timer.duration;
   let msg = escapeHtml_cards(template);
 
-  // Restore placeholders
-  msg = msg.replaceAll("&lt;$card&gt;", escapeHtml_cards(card.name));
   msg = msg.replaceAll("&lt;$duration&gt;", formatDuration(timer.duration));
   msg = msg.replaceAll("&lt;$enddatelocal&gt;", formatLocalDate(end));
+  msg = msg.replaceAll("&lt;$card&gt;", formatName(card.name)); // last
 
-  // New lines
   msg = msg.replaceAll("\n", "<br>");
-
-  // Restore <color=#xxxxxx>...</color>
-  msg = msg.replace(
-    /&lt;color=(#[0-9a-fA-F]{3,6})&gt;([\s\S]*?)&lt;\/color&gt;/g,
-    '<span style="color:$1">$2</span>',
-  );
-
-  return msg;
+  return applyColors(msg);
 }
+
 function formatMessage2(template) {
   let msg = escapeHtml_cards(template);
-  // New lines
   msg = msg.replaceAll("\n", "<br>");
-
-  // Restore <color=#xxxxxx>...</color>
-  msg = msg.replace(
-    /&lt;color=(#[0-9a-fA-F]{3,6})&gt;([\s\S]*?)&lt;\/color&gt;/g,
-    '<span style="color:$1">$2</span>',
-  );
-
-  return msg;
+  return applyColors(msg);
 }
+
 function formatDuration(ms) {
   let total = Math.floor(ms / 1000);
 

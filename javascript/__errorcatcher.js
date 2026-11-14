@@ -3,8 +3,30 @@ const frameRe = (fn, file) =>
     `(?:^|\\n)\\s*(?:at\\s+)?(?:async\\s+)?(?:new\\s+)?(?:[\\w$]+\\.)*${fn}(?:@|\\s+\\()[^\\n]*?${file.replace(
       /\./g,
       "\\.",
-    )}:\\d+:\\d+`,
+    )}(?:\\?[^\\s:]*)?:\\d+:\\d+`,
   );
+
+// Matches only if BOTH patterns appear, in any order
+const allOf = (...res) =>
+  new RegExp(res.map((re) => `(?=[\\s\\S]*(?:${re.source}))`).join(""));
+
+// "null.passed" error across Chrome / Firefox / Safari
+const NULL_PASSED_RE =
+  /Cannot read properties of null \(reading 'passed'\)|can't access property "passed",? [^\n]*? is null|null is not an object \(evaluating '[^']*\.passed'\)/;
+
+// Any "null/undefined .passed" error (read or write) in Chrome / Firefox / Safari
+const PASSED_ERROR_RE = new RegExp(
+  [
+    // Chrome: Cannot read/set properties of null|undefined (reading|setting 'passed')
+    `Cannot (?:read|set) propert(?:y|ies) of (?:null|undefined) \\((?:reading|setting) 'passed'\\)`,
+    // Firefox: can't access property "passed", x is null|undefined
+    `can't access property "passed",? [^\\n]*? is (?:null|undefined)`,
+    // Firefox (older/setting): can't set property "passed" of null|undefined
+    `can't (?:set|assign to) property "passed" (?:of|on) (?:null|undefined)`,
+    // Safari: null|undefined is not an object (evaluating 'x.passed')
+    `(?:null|undefined) is not an object \\(evaluating '[^']*\\.passed'\\)`,
+  ].join("|"),
+);
 
 const IGNORED_ERRORS = [
   {
@@ -17,8 +39,14 @@ const IGNORED_ERRORS = [
     message:
       /Cannot read properties of undefined \(reading 'passed'\)[\s\S]*at Player\.enableLeader/,
   },
+  {
+    type: "Promise",
+    message: allOf(NULL_PASSED_RE, frameRe("endTurn", "gwent.js")),
+  },
   { message: frameRe("enableLeader", "gwent.js") },
   { message: frameRe("reset", "gwent.js") },
+  { type: "Promise", message: PASSED_ERROR_RE },
+  { message: PASSED_ERROR_RE },
 ];
 
 let error_strings = {

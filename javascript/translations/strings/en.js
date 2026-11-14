@@ -758,7 +758,8 @@ STRNG["en"] = {
 madoc: "Madoc",
 reinadld: "Reinald",
 ivald: "Ivald Evil-Eye",
-motheraurora: "AURORA"
+motheraurora: "AURORA",
+TheWitchers: "W<color=#e91e23>•</color>i<color=#02b2e7>•</color>t<color=#fabc16>•</color>c<color=#e91e23>•</color>h<color=#02b2e7>•</color>e<color=#fabc16>•</color>r<color=#e91e23>•</color>s", // W•i•t•c•h•e•r•s but its in "Friends" (tv show) logo format
   },
   ui: {
     elem: {

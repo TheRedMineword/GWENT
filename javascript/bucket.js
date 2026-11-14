@@ -27,10 +27,11 @@ async function bucket_add_card_by_index(index) {
   if (game.usebucket) {
     var card = await new Card(card_dict[index], player_board);
     await Bucket.addCard(card);
-    var txt_draw = getUiStrng("bucket").replace(
-      "%s",
-      card_dict[index]?.name || "",
-    );
+    var c_name = card_dict[index]?.name || "";
+    if (c_name.includes("<color")) {
+      c_name = `<innercolor>${c_name}</innercolor>`;
+    }
+    var txt_draw = getUiStrng("bucket").replace("%s", c_name);
     console.log(txt_draw);
     cardredrawnotice(txt_draw);
     await card.animate("reinforce");

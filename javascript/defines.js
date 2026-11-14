@@ -1144,6 +1144,7 @@ let card_name_class = {
   reinadld: "witcher_%g",
   ivald: "witcher_%g",
   motheraurora: "sky_spirit_%g",
+  TheWitchers: "witcher_%g",
 };
 let classDecorators = {
   undefined: { prefix: "⩫<", suffix: ">⩫" },
