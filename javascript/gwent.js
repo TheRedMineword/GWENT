@@ -1723,142 +1723,242 @@ function shuffleSeeded2(array, seed, debug = null) {
   }
 }
 
-// Can make actions during turns like playing cards that it owns
+const IGNORABLE_ERROR_PATTERNS = [
+  // Chrome / Edge / Node (V8)
+  /is not defined/i,
+  /cannot read propert(y|ies) of (undefined|null)/i,
+  /cannot set propert(y|ies) of (undefined|null)/i,
+  /is not a function/i,
+  /before initialization/i,
+  // Firefox
+  /can't access property/i,
+  /can't access lexical declaration/i,
+  /\bis (undefined|null)\b/i,
+  // Safari
+  /can't find variable/i,
+  /(undefined|null) is not an object/i,
+  /undefined is not a function/i,
+];
+
+function isIgnorableError(e) {
+  if (!e) return false;
+  const name = e.name || (e.constructor && e.constructor.name) || "";
+  // Name check instead of instanceof so it also works across iframes
+  if (name !== "TypeError" && name !== "ReferenceError") return false;
+  const msg = String(e.message || e);
+  return IGNORABLE_ERROR_PATTERNS.some((re) => re.test(msg));
+}
+
+function describeError(e) {
+  if (e instanceof Error) return `${e.name}: ${e.message}\n${e.stack || ""}`;
+  try {
+    return typeof e === "string" ? e : JSON.stringify(e);
+  } catch (_) {
+    return String(e);
+  }
+}
+
+// Single place that decides: ignore or report
+function handlePlayerError(e, label) {
+  if (isIgnorableError(e)) {
+    console.debug(`[Player] ignored false positive in ${label}:`, e);
+    return;
+  }
+  if (typeof ErrorCatcher !== "undefined" && ErrorCatcher.fatal) {
+    ErrorCatcher.fatal(e, label);
+  } else {
+    console.error(`[Player] ${label}`, e);
+  }
+}
+
+if (!window.__playerRejectionHandlerInstalled) {
+  window.__playerRejectionHandlerInstalled = true;
+  window.addEventListener("unhandledrejection", (ev) => {
+    const e = ev.reason;
+    if (isIgnorableError(e)) {
+      ev.preventDefault();
+      console.debug("[ignored unhandled rejection]", describeError(e));
+      return;
+    }
+    if (typeof ErrorCatcher !== "undefined" && ErrorCatcher.fatal) {
+      ErrorCatcher.fatal(
+        e instanceof Error ? e : new Error(describeError(e)),
+        "Unhandled promise rejection",
+      );
+    } else {
+      console.error("Unhandled promise rejection", e);
+    }
+  });
+}
+
 class Player {
   constructor(id, name, deck) {
-    // console.log("PLAYER NEW", id, name, deck);
-    if (name === "$$valexample$$") {
-      name = getTranslation("ui.elem.definesJS.players.me");
+    try {
+      if (name === "$$valexample$$") {
+        name = getTranslation("ui.elem.definesJS.players.me");
+      }
+      let debug = null;
+      console.log("constructor player", id, name, deck);
+      if (name === "BoardBot") {
+        this.ThatPlayerId = "SystemId";
+        debug = "THAT_IS_OP__RETURN_THIS";
+      } else if (id === 0) {
+        this.ThatPlayerId = playerId;
+        debug = "ME";
+      } else {
+        this.ThatPlayerId = current_op.me_id;
+        debug = "THAT_IS_OP__RETURN_THIS";
+      }
+
+      this.id = id;
+      this.tag = "me";
+      this.controller =
+        id === 0 ? new Controller() : new ControllerOpponent(this);
+      var tmp_cards = shuffleSeeded(
+        deck.cards,
+        utf8ToBase64(
+          `${Math.random().toString(36).substring(2, 36)}${this.ThatPlayerId}`,
+        ),
+        debug,
+      );
+      deck.cards = tmp_cards.array;
+      this.deckseed = tmp_cards.seed;
+
+      this.hand =
+        id === 0
+          ? new Hand(document.getElementById("hand-row"))
+          : new HandOpponent();
+      this.grave = new Grave(document.getElementById("grave-" + this.tag));
+      this.deck = new Deck(
+        deck.faction,
+        document.getElementById("deck-" + this.tag),
+      );
+      this.deck_data = deck;
+
+      this.leader = new Card(deck.leader, this);
+      this.leader_init = new Card(deck.leader, this);
+      this.elem_leader = document.getElementById("leader-" + this.tag);
+      this.elem_leader.children[0].appendChild(this.leader.elem);
+
+      this.reset();
+
+      this.name = name;
+      document.getElementById("name-" + this.tag).innerHTML = name;
+
+      document.getElementById("deck-name-" + this.tag).textContent =
+        factions[deck.faction].name;
+      let x = document.querySelector(
+        "#stats-" + this.tag + " .profile-img > div > div",
+      );
+      x.style.backgroundImage = iconURL("deck_shield_" + deck.faction);
+    } catch (e) {
+      handlePlayerError(e, "Player.constructor");
     }
-    let debug = null;
-    console.log("constructior player", id, name, deck);
-    if (name === "BoardBot") {
-      this.ThatPlayerId = "SystemId";
-      debug = "THAT_IS_OP__RETURN_THIS";
-    } else if (id === 0) {
-      this.ThatPlayerId = playerId;
-      debug = "ME";
-    } else {
-      this.ThatPlayerId = current_op.me_id;
-      debug = "THAT_IS_OP__RETURN_THIS";
-    }
-
-    this.id = id;
-    this.tag = "me";
-    this.controller =
-      id === 0 ? new Controller() : new ControllerOpponent(this);
-    var tmp_cards = shuffleSeeded(
-      deck.cards,
-      utf8ToBase64(
-        `${Math.random().toString(36).substring(2, 36)}${this.ThatPlayerId}`,
-      ),
-      debug,
-    );
-    deck.cards = tmp_cards.array;
-    this.deckseed = tmp_cards.seed;
-
-    this.hand =
-      id === 0
-        ? new Hand(document.getElementById("hand-row"))
-        : new HandOpponent();
-    this.grave = new Grave(document.getElementById("grave-" + this.tag));
-    this.deck = new Deck(
-      deck.faction,
-      document.getElementById("deck-" + this.tag),
-    );
-    this.deck_data = deck;
-
-    this.leader = new Card(deck.leader, this);
-    this.leader_init = new Card(deck.leader, this);
-    this.elem_leader = document.getElementById("leader-" + this.tag);
-    this.elem_leader.children[0].appendChild(this.leader.elem);
-
-    this.reset();
-
-    this.name = name;
-    document.getElementById("name-" + this.tag).innerHTML = name;
-
-    document.getElementById("deck-name-" + this.tag).textContent =
-      factions[deck.faction].name;
-    document
-      .getElementById("stats-" + this.tag)
-      .getElementsByClassName("profile-img")[0].children[0].children[0];
-    let x = document.querySelector(
-      "#stats-" + this.tag + " .profile-img > div > div",
-    );
-    x.style.backgroundImage = iconURL("deck_shield_" + deck.faction);
   }
 
   // Sets default values
   reset() {
-    white_flame_lg_faction = {
-      me: null,
-      op: null,
-    };
-    gameended = false;
-    this.grave.reset();
-    this.hand.reset();
-    this.deck.reset();
-    this.deck.initializeFromID(this.deck_data.cards, this);
+    try {
+      white_flame_lg_faction = { me: null, op: null };
+      gameended = false;
+      this.grave.reset();
+      this.hand.reset();
+      this.deck.reset();
+      this.deck.initializeFromID(this.deck_data.cards, this);
 
-    this.health = maxhealth;
-    this.total = 0;
-    this.passed = false;
-    this.handsize = thishandsize;
-    this.winning = false;
-    potions.reset();
-    ability_reset("me");
-    ability_reset("op");
+      this.health = maxhealth;
+      this.total = 0;
+      this.passed = false;
+      this.handsize = thishandsize;
+      this.winning = false;
+      potions.reset();
+      ability_reset("me");
+      ability_reset("op");
+    } catch (e) {
+      handlePlayerError(e, "Player.reset (core)");
+    }
 
-    try {
-      this.enableLeader();
-    } catch (e) {}
-    try {
-      player_me.passed = false;
-    } catch (e) {}
-    try {
-      player_op.passed = false;
-    } catch (e) {}
-    try {
-      document.getElementById("passed-me").classList.remove("passed");
-    } catch (e) {}
-    try {
-      document.getElementById("passed-op").classList.remove("passed");
-    } catch (e) {}
-    // this.setPassed(false);
-    document.getElementById("gem1-" + this.tag).classList.add("gem-on");
-    document.getElementById("gem2-" + this.tag).classList.add("gem-on");
+    // Each step is checked separately so one failure doesn't skip the rest.
+    // Async steps (like enableLeader) return a promise, so their rejection
+    // must be caught with .catch(), a plain try/catch can't see it.
+    const steps = [
+      ["enableLeader", () => this.enableLeader()],
+      ["player_me.passed", () => (player_me.passed = false)],
+      ["player_op.passed", () => (player_op.passed = false)],
+      [
+        "passed-me class",
+        () => document.getElementById("passed-me").classList.remove("passed"),
+      ],
+      [
+        "passed-op class",
+        () => document.getElementById("passed-op").classList.remove("passed"),
+      ],
+      [
+        "gem1",
+        () =>
+          document.getElementById("gem1-" + this.tag).classList.add("gem-on"),
+      ],
+      [
+        "gem2",
+        () =>
+          document.getElementById("gem2-" + this.tag).classList.add("gem-on"),
+      ],
+    ];
+    for (const [label, fn] of steps) {
+      try {
+        const result = fn();
+        if (result && typeof result.then === "function") {
+          result.catch((e) => handlePlayerError(e, `Player.reset (${label})`));
+        }
+      } catch (e) {
+        handlePlayerError(e, `Player.reset (${label})`);
+      }
+    }
   }
 
   // Returns the opponent Player
   opponent() {
-    return board.opponent(this);
+    try {
+      return board.opponent(this);
+    } catch (e) {
+      handlePlayerError(e, "Player.opponent");
+      return null;
+    }
   }
 
-  // Updates the player's total score and notifies the gamee
+  // Updates the player's total score and notifies the game
   updateTotal(n) {
-    // console.log(`UPdtae total this`, this);
-    this.total += n;
-    document.getElementById("score-total-" + this.tag).children[0].innerHTML =
-      this.total;
-    board.updateLeader();
+    try {
+      this.total += n;
+      document.getElementById("score-total-" + this.tag).children[0].innerHTML =
+        this.total;
+      board.updateLeader();
+    } catch (e) {
+      handlePlayerError(e, "Player.updateTotal");
+    }
   }
 
   SetTotal(n) {
-    // console.log(`UPdtae total this`, this);
-    this.total = n;
-    document.getElementById("score-total-" + this.tag).children[0].innerHTML =
-      this.total;
-    board.updateLeader();
+    try {
+      this.total = n;
+      document.getElementById("score-total-" + this.tag).children[0].innerHTML =
+        this.total;
+      board.updateLeader();
+    } catch (e) {
+      handlePlayerError(e, "Player.SetTotal");
+    }
   }
 
   // Puts the player in the winning state
   setWinning(isWinning) {
-    this.winning = Boolean(isWinning);
-
-    document
-      .getElementById(`score-total-${this.tag}`)
-      .classList.toggle("score-leader", this.winning);
+    try {
+      this.winning = Boolean(isWinning);
+      document
+        .getElementById(`score-total-${this.tag}`)
+        .classList.toggle("score-leader", this.winning);
+    } catch (e) {
+      handlePlayerError(e, "Player.setWinning");
+    }
   }
 
   resetWinning() {
@@ -1867,130 +1967,189 @@ class Player {
 
   // Puts the player in the passed state
   setPassed(hasPassed) {
-    if (this.passed ^ hasPassed)
-      document.getElementById("passed-" + this.tag).classList.toggle("passed");
-    this.passed = hasPassed;
+    try {
+      if (Boolean(this.passed) !== Boolean(hasPassed))
+        document
+          .getElementById("passed-" + this.tag)
+          .classList.toggle("passed");
+      this.passed = hasPassed;
+    } catch (e) {
+      handlePlayerError(e, "Player.setPassed");
+    }
   }
 
   // Sets up board for turn
   async startTurn() {
-    document.getElementById("stats-" + this.tag).classList.add("current-turn");
-    if (this.leaderAvailable)
-      this.elem_leader.children[1].classList.remove("hide");
+    try {
+      document
+        .getElementById("stats-" + this.tag)
+        .classList.add("current-turn");
+      if (this.leaderAvailable)
+        this.elem_leader.children[1].classList.remove("hide");
 
-    if (this === player_me) {
-      document.getElementById("pass-button").classList.remove("noclick");
+      if (this === player_me) {
+        document.getElementById("pass-button").classList.remove("noclick");
+      }
+    } catch (e) {
+      handlePlayerError(e, "Player.startTurn");
     }
   }
 
   // Passes the round and ends the turn
   passRound() {
-    this.setPassed(true);
-    this.endTurn();
+    try {
+      this.setPassed(true);
+      this.endTurn();
+    } catch (e) {
+      handlePlayerError(e, "Player.passRound");
+    }
   }
 
   // Plays a scorch card
   async playScorch(card) {
-    console.log("playScorch", card, this);
-    await this.playCardAction(
-      card,
-      async () => await ability_dict["scorch"].activated(card),
-    );
+    try {
+      console.log("playScorch", card, this);
+      await this.playCardAction(
+        card,
+        async () => await ability_dict["scorch"].activated(card),
+      );
+    } catch (e) {
+      handlePlayerError(e, "Player.playScorch");
+    }
   }
 
   // Plays a card to a specific row
   async playCardToRow(card, row) {
-    await this.playCardAction(
-      card,
-      async () => await board.moveTo(card, row, this.hand),
-    );
+    try {
+      await this.playCardAction(
+        card,
+        async () => await board.moveTo(card, row, this.hand),
+      );
+    } catch (e) {
+      handlePlayerError(e, "Player.playCardToRow");
+    }
   }
 
   // Plays a card to the board
   async playCard(card) {
-    await this.playCardAction(card, async () => await card.autoplay(this.hand));
+    try {
+      await this.playCardAction(
+        card,
+        async () => await card.autoplay(this.hand),
+      );
+    } catch (e) {
+      handlePlayerError(e, "Player.playCard");
+    }
   }
 
-  // Shows a preview of the card being played, plays it to the board and ends the turn
+  // Shows a preview of the card being played, plays it, and ends the turn
   async playCardAction(card, action) {
-    console.log(
-      "[ShowCard]",
-      card,
-      action,
-      ui_display_times.show_me_that_card_you_have,
-    );
-    ui.showPreviewVisuals(card);
-    await sleep(ui_display_times.show_me_that_card_you_have);
-    ui.hidePreview(card);
-    await action();
-    this.endTurn();
+    try {
+      console.log(
+        "[ShowCard]",
+        card,
+        action,
+        ui_display_times.show_me_that_card_you_have,
+      );
+      ui.showPreviewVisuals(card);
+      await sleep(ui_display_times.show_me_that_card_you_have);
+      ui.hidePreview(card);
+      await action();
+      this.endTurn();
+    } catch (e) {
+      handlePlayerError(e, "Player.playCardAction");
+    }
   }
 
-  // Handles end of turn visuals and behavior the notifies the game
+  // Handles end of turn visuals and behavior, then notifies the game
   endTurn() {
-    if (!this.passed && !this.canPlay()) this.setPassed(true);
-    if (this === player_me) {
-      document.getElementById("pass-button").classList.add("noclick");
+    try {
+      if (!this.passed && !this.canPlay()) this.setPassed(true);
+      if (this === player_me) {
+        document.getElementById("pass-button").classList.add("noclick");
+      }
+      document
+        .getElementById("stats-" + this.tag)
+        .classList.remove("current-turn");
+      this.elem_leader.children[1].classList.add("hide");
+      game.endTurn();
+    } catch (e) {
+      handlePlayerError(e, "Player.endTurn");
     }
-    document
-      .getElementById("stats-" + this.tag)
-      .classList.remove("current-turn");
-    this.elem_leader.children[1].classList.add("hide");
-    game.endTurn();
   }
 
-  // Tells the the Player if it won the round. May damage health.
+  // Tells the Player if it won the round. May damage health.
   endRound(win) {
-    if (!win) {
-      if (this.health < 1) return;
-      var idc = this.health === 2 ? 1 : 2;
-      var docid = document.getElementById("gem" + idc + "-" + this.tag);
-      console.log("Break crystal", `${"gem" + idc + "-" + this.tag}`, docid);
-      animatePopFromObject(docid, "#C14842", "#953530", false);
-      //  docid.classList.remove("gem-on");
-      this.health--;
+    try {
+      if (!win) {
+        if (this.health < 1) return;
+        var idc = this.health === 2 ? 1 : 2;
+        var docid = document.getElementById("gem" + idc + "-" + this.tag);
+        console.log("Break crystal", `${"gem" + idc + "-" + this.tag}`, docid);
+        animatePopFromObject(docid, "#C14842", "#953530", false);
+        this.health--;
+      }
+      this.setPassed(false);
+      this.setWinning(false);
+    } catch (e) {
+      handlePlayerError(e, "Player.endRound");
     }
-    this.setPassed(false);
-    this.setWinning(false);
   }
 
   // Returns true if the Player can make any action other than passing
   canPlay() {
-    if (useCanPlay_for_autopass) {
-      console.log("CAN THIS PLAY?", this);
-      return this.hand.cards.length > 0 || this.leaderAvailable;
-    } else {
+    try {
+      if (useCanPlay_for_autopass) {
+        console.log("CAN THIS PLAY?", this);
+        return this.hand.cards.length > 0 || this.leaderAvailable;
+      }
       return true;
+    } catch (e) {
+      handlePlayerError(e, "Player.canPlay");
+      return true; // safe default: don't force an auto-pass on error
     }
   }
 
   // Use a leader's Activate ability, then disable the leader
   async activateLeader() {
-    ui.showPreviewVisuals(this.leader);
-    tocar("leader_horn", false);
-    await sleep(ui_display_times.faction_ability + 600);
-    ui.hidePreview(this.leader);
-    await this.leader.activated[0](this.leader, this);
-    this.disableLeader();
-    // this.endTurn();
+    try {
+      ui.showPreviewVisuals(this.leader);
+      tocar("leader_horn", false);
+      await sleep(ui_display_times.faction_ability + 600);
+      ui.hidePreview(this.leader);
+      await this.leader.activated[0](this.leader, this);
+      this.disableLeader();
+    } catch (e) {
+      handlePlayerError(e, "Player.activateLeader");
+    }
   }
 
-  // Disable access to leader ability and toggles leader visuals to off state
+  // Disable access to leader ability and toggle leader visuals to off state
   disableLeader() {
-    this.leaderAvailable = false;
-    let elem = this.elem_leader.cloneNode(true);
-    this.elem_leader.parentNode.replaceChild(elem, this.elem_leader);
-    this.elem_leader = elem;
-    this.elem_leader.children[0].classList.add("fade");
-    this.elem_leader.children[1].classList.add("hide");
-    this.elem_leader.addEventListener(
-      "click",
-      async () => await ui.viewCard(this.leader),
-      false,
-    );
+    try {
+      this.leaderAvailable = false;
+      let elem = this.elem_leader.cloneNode(true);
+      this.elem_leader.parentNode.replaceChild(elem, this.elem_leader);
+      this.elem_leader = elem;
+      this.elem_leader.children[0].classList.add("fade");
+      this.elem_leader.children[1].classList.add("hide");
+      this.elem_leader.addEventListener(
+        "click",
+        async () => {
+          try {
+            await ui.viewCard(this.leader);
+          } catch (e) {
+            handlePlayerError(e, "Player.disableLeader click");
+          }
+        },
+        false,
+      );
+    } catch (e) {
+      handlePlayerError(e, "Player.disableLeader");
+    }
   }
 
-  // Enable access to leader ability and toggles leader visuals to on state
+  // Enable access to leader ability and toggle leader visuals to on state
   async enableLeader() {
     try {
       this.leaderAvailable = this.leader.activated.length > 0;
@@ -2023,16 +2182,13 @@ class Player {
                 await sleep(100);
                 await resolve_extrajson_procces();
                 await resolve_pass_post_extrajson(Date.now() - now);
-                now = 0;
-                //	await init_sync_hands();
-                //console.log("LEADER END TURN");
                 await player_me.endTurn();
-              } catch (err) {
-                console.warn("enableLeader: useLeader callback failed", err);
+              } catch (e) {
+                handlePlayerError(e, "Player.enableLeader useLeader callback");
               }
             });
-          } catch (err) {
-            console.warn("enableLeader: click handler failed", err);
+          } catch (e) {
+            handlePlayerError(e, "Player.enableLeader click handler");
           }
         });
       } else {
@@ -2041,28 +2197,38 @@ class Player {
           async () => {
             try {
               await ui.viewCard(this.leader);
-            } catch (err) {
-              console.warn("enableLeader: viewCard failed", err);
+            } catch (e) {
+              handlePlayerError(e, "Player.enableLeader viewCard");
             }
           },
           false,
         );
+
+        // Called from constructor/reset before the game exists:
+        // don't touch turns, there is nothing to end yet.
+        if (
+          typeof player_me === "undefined" ||
+          !player_me ||
+          typeof player_op === "undefined" ||
+          !player_op
+        ) {
+          return;
+        }
+
         if (player_op.passed && !player_me.passed) {
           ui.enablePlayer(false);
           showTooltip(
             getUiStrng("sync.sync").replace("%s", RegisterMovesHold / 1000),
           );
-          ui.enablePlayer(false);
           showsync(RegisterMovesHold);
           await sleep(RegisterMovesHold);
           showTooltip(getUiStrng("sync.end"));
           ui.enablePlayer(true);
         }
-        //console.log("LEADER END TURN");
         await player_me.endTurn();
       }
-    } catch (err) {
-      console.warn("enableLeader failed", err);
+    } catch (e) {
+      handlePlayerError(e, "Player.enableLeader");
     }
   }
 }

@@ -1145,6 +1145,7 @@ let card_name_class = {
   ivald: "witcher_%g",
   motheraurora: "sky_spirit_%g",
   TheWitchers: "witcher_%g",
+  PanTwardowski: "faust_%g",
 };
 let classDecorators = {
   undefined: { prefix: "⩫<", suffix: ">⩫" },
@@ -1196,6 +1197,8 @@ let classDecorators = {
 
   dark_creature: { prefix: "▼", suffix: "▼" },
   light_creature: { prefix: "▽", suffix: "▽" },
+
+  faust: { prefix: "‹", suffix: "›" },
 };
 let card_gender = {
   mysterious_elf: "male",

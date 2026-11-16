@@ -856,7 +856,7 @@ francesca_hope_of_the_aen_seidhe:
         ivald: "Ivar Złe Oko",
 motheraurora: "AURORA",
 TheWitchers: "W<color=#e91e23>•</color>i<color=#02b2e7>•</color>e<color=#fabc16>•</color>d<color=#e91e23>•</color>ź<color=#02b2e7>•</color>m<color=#fabc16>•</color>i<color=#e91e23>•</color>n<color=#02b2e7>•</color>i", // W•i•t•c•h•e•r•s but its in "Friends" (tv show) logo format
-
+PanTwardowski: "Master Twardowski"
   },
   ui: {
     elem: {
@@ -1373,7 +1373,9 @@ card_info: {
   skyseasonevent_hardcoded: "Sezonu z \"Sky: Children of the Light\" Starcia",
   human_male: "Człowieka",
   human_female: "Człowieka",
-  witcherschool_hardcoded: "Szkoły Wiedźmińskiej"
+  witcherschool_hardcoded: "Szkoły Wiedźmińskiej",
+  faust_male: "Fausta",
+  faust_female: "Fausta"
 },
 rule63: [  // for classes
   {"if": "siege", "gender": "female", "hero": false, "mode": "split"}, // because siege strucutes powiny mieć "oblężniczej"

@@ -3736,6 +3736,24 @@ var card_dict_base = [
     filename: "TheWitchers",
     count: "1",
   },
+  {
+    name: "Master Twardowski",
+    id: "1063",
+    deck: "neutral",
+    row: "NaR",
+    strength: "4",
+    ability: "decoy2 DontPickMeUp",
+    filename: "PanTwardowski",
+    count: "0",
+    count_monitor: {
+      base: 1,
+      monitor: "fullmoon-normals",
+      id: "id.PanTwardowskiOnTheMoon",
+      duration: { start: "null", duration: "1" },
+    },
+    isDecoy: true,
+    isDecoyMath: false,
+  },
 ];
 let pickedfakecard = { a: false, b: null };
 

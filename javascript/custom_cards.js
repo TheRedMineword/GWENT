@@ -1130,6 +1130,36 @@ async function rebuildCustomCardsMaps() {
         };
         console.log(`Its new moon ${JSON.stringify(card)} at ${when_is}`);
         break;
+      case "fullmoon-normals":
+        var lifetime = 30;
+        var when_is = new Date(getNearestFullMoon(lifetime)).toISOString();
+        card.count_monitor = {
+          ...current,
+          duration: {
+            duration: Math.floor(lifetime * 60 * 60 * 2),
+            start: when_is,
+          },
+          base: 1,
+          monitor: "based",
+          id: `id.fullmoon${card?.filename}`,
+          msg: false, // set true + msg_data if you want a side notification
+        };
+        break;
+      case "newmoon-normals":
+        var lifetime = 30;
+        var when_is = new Date(getNearestNewMoon(lifetime)).toISOString();
+        card.count_monitor = {
+          ...current,
+          duration: {
+            duration: Math.floor(lifetime * 60 * 60 * 2),
+            start: when_is,
+          },
+          base: 1,
+          monitor: "based",
+          id: `id.newmoon${card?.filename}`,
+          msg: false,
+        };
+        break;
       default:
         // Unknown monitor
         break;

@@ -760,6 +760,8 @@ reinadld: "Reinald",
 ivald: "Ivald Evil-Eye",
 motheraurora: "AURORA",
 TheWitchers: "W<color=#e91e23>•</color>i<color=#02b2e7>•</color>t<color=#fabc16>•</color>c<color=#e91e23>•</color>h<color=#02b2e7>•</color>e<color=#fabc16>•</color>r<color=#e91e23>•</color>s", // W•i•t•c•h•e•r•s but its in "Friends" (tv show) logo format
+PanTwardowski: "Master Twardowski", // Master Twardowski/Pan Twardowski; is a famous figure in Polish folklore often referred to as the "Polish Faust", according to legend, made deal with devil, tried trick him, and ended on the moon
+                                  // Decided to call him here Master, but other trasnaltion are free to change it
   },
   ui: {
     elem: {
@@ -1272,8 +1274,9 @@ card_info: {
   skyseasonevent_hardcoded: "Sky: Children of the Light Seasonal",
   human_male: "Human",
   human_female: "Human",
-  witcherschool_hardcoded: "Witcher School"
-
+  witcherschool_hardcoded: "Witcher School",
+  faust_male: "Faust",
+  faust_female: "Faust"
 },
   rule63: [] // for classes if {"if": "siege", "gender": "female", "hero": false}
 },

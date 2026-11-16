@@ -35,6 +35,12 @@ Astral Events
 <color=#BBBCC1>A Full Moon card will be available to all factions, summoning Necrophages to the board!</color>
 <fat1>
 %%img src="img/lg/monsters_deatheatr.jpg" style="max-width:25%"%%
+```diff
+& Master Twardowski is back (for limited time)!
+& Still stuck on the moon!
+<fat1>
+%%img src="img/lg/neutral_PanTwardowski.jpg" style="max-width:25%"%%
+```
 </box.text>
 
 <button.name>
