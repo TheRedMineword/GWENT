@@ -1455,7 +1455,7 @@ router.post("/api/verdict", (req, res) => {
     ok: true,
   });
 });
-router.post("/api/bot-check", async (req, res) => {
+const botCheckHandler = async (req, res) => {
   const ip = getClientIp(req);
 
   const {
@@ -1499,7 +1499,8 @@ router.post("/api/bot-check", async (req, res) => {
     ip,
     result,
   });
-});
+};
+router.post("/api/bot-check", botCheckHandler);
 router.get("/api/get-health", (req, res) => {
     const { key } = req.query;
     let checkdchealth = false;
@@ -1586,6 +1587,11 @@ if (dcapi) {
   // router, so unmountRouter() in stop() takes it down along with
   // everything else.
   router.use("/api/dc", dcapi.router);
+
+  // Discord verification page backend (bot check + quiz + IP check) - see dcverify.js
+  const dcverify = require("./dcverify");
+  dcverify.init({ botCheck: botCheckHandler, getClientIp });
+  router.use("/api/dcverify", dcverify.router);
 
   dcapi
     .init({ sessions, playerSockets, sendToClient: comp_and_send })
@@ -2656,6 +2662,7 @@ sock.init({
   },
   onDisconnect: (ws) => cleanupPlayer(ws),
 });
+
 
 console.log("start lesser log");
 (async () => {

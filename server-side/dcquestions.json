@@ -1,0 +1,17 @@
+[
+{
+    "q": "Are you a human?",
+    "options": [
+      "Yes",
+      "No"
+    ]
+  },
+  {
+    "q": "How did you find this server/site?",
+    "type": "text"
+  },
+  {
+    "q": "What do you want to do here?",
+    "type": "text"
+  }
+]
