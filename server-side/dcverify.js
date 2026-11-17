@@ -3,8 +3,9 @@
 // ---------------------------------------------------------------------------
 // dcverify.js - Discord verification endpoint (bot check + quiz + IP check)
 //
-//   link (made by anything, not signed):  verify.html#auth=<base64("<discordId>:<unixExpSeconds>")>
-//   (JSON payload {"dc":"..","exp":..} works too)
+//   link (made by anything, not signed):  verify.html#auth=<base64("<discordId>:<unixExpSeconds>[:<random string>]")>
+//   (the random part is optional, it can also be appended after the base64 as "<base64>.<random>";
+//    JSON payload {"dc":"..","exp":..} works too)
 //
 //   page -> POST /api/dcverify/start       { auth }          -> { sid }
 //   page -> POST /api/dcverify/bot-check?sid=...             (same as /api/bot-check)
@@ -13,10 +14,14 @@
 //
 // On finish an event goes into dcstate's queue, picked up on the bot's next scan:
 //   { a:"verify", dc, ok, reason, value:"<json string>", answers:"<plain text>", at }
-// value = JSON.stringify({ sha, ip, others, vpn, hosting, risk })   <- only the ip info is json
+// value = JSON.stringify({ dc, sha, ip, others, vpn, proxy, type, hosting, mobile, risk,
+//                          country, countryCode, region, city, timezone, isp, org, asn, local })   <- only the ip info is json
+//   dc     discord user id (also on the event itself)
 //   sha    sha256 of the IP (salted with DCVERIFY_IP_SALT if set)
 //   ip     censored IP like engine.js, e.g. "203.###.###.###" ("localhost" for ::1)
 //   others how many OTHER discord ids already passed from the same IP
+//   rest   from ip-api.com (geo, isp, hosting, mobile) + proxycheck.io (vpn, proxy, type, risk), same as engine.js
+//          PROXYCHECK_KEY env is optional (without it proxycheck uses the free anonymous quota)
 // answers = plain text, "Q1: ...\nA1: ...\n\nQ2: ..." (no grading, sent as-is, not json)
 // ---------------------------------------------------------------------------
 
@@ -33,6 +38,9 @@ const QUESTIONS_PER_RUN = Number(process.env.DCVERIFY_QUESTIONS) || 3;
 const MAX_ANSWER_LEN = 300;
 const MAX_BOT_SCANS = 3;
 const DEBUG = process.env.DCVERIFY_DEBUG === '1';
+const PROXYCHECK_KEY = "111111-222222-333333-444444";
+const LOOKUP_TIMEOUT_MS = 3000;
+const IPINFO_TTL_MS = 10 * 60 * 1000;
 
 const router = express.Router();
 let botCheck = null;
@@ -87,13 +95,14 @@ function parseAuth(token) {
   if (typeof token !== 'string' || !token || token.length > 600) return { error: 'bad_token' };
   let dc, exp;
   try {
-    const text = Buffer.from(token, 'base64url').toString('utf8'); // accepts +/ too
+    const b64 = token.split(/[^A-Za-z0-9+/_=-]/)[0]; // anything after the base64 ("<base64>.<random>") is ignored
+    const text = Buffer.from(b64, 'base64url').toString('utf8'); // accepts +/ too
     if (text.trim().startsWith('{')) {
       const j = JSON.parse(text);
       dc = String(j.dc ?? j.id ?? j.userid ?? '');
       exp = Number(j.exp);
     } else {
-      const m = /^(\d{5,25}):(\d{9,13})$/.exec(text);
+      const m = /^(\d{5,25}):(\d{9,13})(?::[\s\S]*)?$/.exec(text); // dc:exp[:random]
       if (m) { dc = m[1]; exp = Number(m[2]); }
     }
   } catch { return { error: 'bad_token' }; }
@@ -114,6 +123,43 @@ function maskIp(ip) {
   if (v4) return `${v4[1]}.###.###.###`; // same censor as engine.js
   if (c.includes(':')) { const first = c.split(':')[0]; return first ? `${first}:###:###` : '::###'; }
   return '###';
+}
+
+const isLocalIp = (ip) => {
+  const c = cleanIp(ip);
+  return c === '::1' || /^(127\.|10\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.)/.test(c) || /^(fc|fd|fe80)/i.test(c);
+};
+const ipInfoCache = new Map(); // ip -> { at, data }
+
+// same two services engine.js uses: ip-api.com (geo, isp, hosting) + proxycheck.io (vpn, proxy, risk). Never throws.
+async function lookupIp(ip) {
+  const c = cleanIp(ip);
+  if (!/^[0-9a-fA-F:.]+$/.test(c)) return {}; // unknown / spoofed header text, do not put it in a url
+  if (isLocalIp(c)) return { local: true };
+  const hit = ipInfoCache.get(c);
+  if (hit && hit.at + IPINFO_TTL_MS > Date.now()) return hit.data;
+
+  const opt = { signal: AbortSignal.timeout(LOOKUP_TIMEOUT_MS) };
+  const fields = 'status,message,country,countryCode,regionName,city,timezone,isp,org,as,mobile,proxy,hosting,query';
+  const [geoR, pcR] = await Promise.allSettled([
+    fetch(`http://ip-api.com/json/${c}?fields=${fields}`, opt).then((r) => r.json()),
+    fetch(`https://proxycheck.io/v2/${c}?${PROXYCHECK_KEY ? `key=${PROXYCHECK_KEY}&` : ''}vpn=3&asn=1&risk=2`, opt).then((r) => r.json()),
+  ]);
+  const g = geoR.status === 'fulfilled' && geoR.value && geoR.value.status === 'success' ? geoR.value : null;
+  const p = pcR.status === 'fulfilled' && pcR.value && typeof pcR.value[c] === 'object' ? pcR.value[c] : null;
+
+  const data = {};
+  if (g) Object.assign(data, {
+    country: g.country, countryCode: g.countryCode, region: g.regionName, city: g.city, timezone: g.timezone,
+    isp: g.isp, org: g.org, asn: g.as, hosting: g.hosting, mobile: g.mobile,
+  });
+  if (p) Object.assign(data, {
+    vpn: p.vpn, proxy: p.proxy, type: p.type, risk: p.risk != null ? Number(p.risk) : undefined,
+  });
+  if (g || p) ipInfoCache.set(c, { at: Date.now(), data });
+  if (DEBUG && !g) console.warn('[dcverify] ip-api lookup failed for', maskIp(c));
+  if (DEBUG && !p) console.warn('[dcverify] proxycheck lookup failed for', maskIp(c));
+  return data;
 }
 
 const passedByIp = new Map(); // sha -> Set(discordId)
@@ -153,11 +199,16 @@ function finish(s, ok, reason, qa) {
   if (ok) { set.add(s.dc); passedByIp.set(sha, set); }
 
   const net = s.network || {};
+  const info = s.ipinfo || {};
+  const n = (v) => (v === undefined ? null : v);
   state.enqueueEvent({
     a: 'verify', dc: s.dc, ok, reason: reason || null,
     value: JSON.stringify({
-      sha, ip: maskIp(s.ip), others,
-      vpn: net.vpn ?? null, hosting: net.hosting ?? null, risk: net.risk ?? null,
+      dc: s.dc, sha, ip: maskIp(s.ip), others, local: !!info.local,
+      vpn: n(info.vpn ?? net.vpn), proxy: n(info.proxy), type: n(info.type),
+      hosting: n(info.hosting ?? net.hosting), mobile: n(info.mobile), risk: n(info.risk ?? net.risk),
+      country: n(info.country), countryCode: n(info.countryCode), region: n(info.region), city: n(info.city),
+      timezone: n(info.timezone), isp: n(info.isp), org: n(info.org), asn: n(info.asn),
     }),
     answers: qa ? qa.map((x, i) => `Q${i + 1}: ${x.q}\nA${i + 1}: ${x.a}`).join('\n\n') : null,
     at: Date.now(),
@@ -189,11 +240,13 @@ router.post('/start', (req, res) => {
   if (old) endSession(old);
 
   const sid = crypto.randomBytes(18).toString('base64url');
-  sessions.set(sid, {
+  const sess = {
     sid, dc: p.dc, exp: p.exp, key: p.key, ip: cleanIp(getClientIp(req)),
     expiresAt: Math.min(Date.now() + SESSION_TTL_MS, p.exp * 1000),
-    scans: 0, human: false, questions: null, network: null,
-  });
+    scans: 0, human: false, questions: null, network: null, ipinfo: null,
+  };
+  sessions.set(sid, sess);
+  lookupIp(sess.ip).then((d) => { sess.ipinfo = d; }).catch(() => {}); // runs while the user does the bot check + quiz
   tokenSession.set(p.key, sid);
   res.json({ ok: true, sid });
 });
