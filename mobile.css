@@ -1,0 +1,293 @@
+#stage { display: contents; }
+#mobile-frame { display: none; }
+
+/* ---------- page ---------- */
+html.is-mobile,
+html.is-mobile body {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+html.is-mobile body {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: 100%;
+  background: #000;
+}
+
+/* ---------- board: scaled + centered ---------- */
+html.is-mobile #stage {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: calc(100vw * 1080 / 1920);
+  transform-origin: 0 0;
+  transform: translate(var(--m-x, 0px), var(--m-y, 0px)) scale(var(--m-s, 1));
+  z-index: 1;
+}
+html.is-mobile main,
+html.is-mobile #deck-customization {
+  left: 0;
+  top: 0;
+}
+
+/* ---------- cutout frame (fills the space around the board) ---------- */
+html.is-mobile #mobile-frame {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: #000;
+}
+#mobile-frame .mf-a,
+#mobile-frame .mf-b {
+  position: absolute;
+  background-repeat: no-repeat;
+  background-color: #000;
+}
+#mobile-frame.dim .mf-a,
+#mobile-frame.dim .mf-b { filter: brightness(.45) saturate(.9); }
+
+/* free space left/right of the board (+1px overlap hides seams) */
+html.fill-h #mobile-frame .mf-a {
+  left: 0; top: 0; bottom: 0;
+  width: calc(var(--m-side, 0px) + 1px);
+  background-position: right center;
+}
+html.fill-h #mobile-frame .mf-b {
+  right: 0; top: 0; bottom: 0;
+  width: calc(var(--m-side-r, 0px) + 1px);
+  background-position: left center;
+}
+html.fill-h #mobile-frame.mirror .mf-b {
+  transform: scaleX(-1);
+  background-position: right center;
+}
+
+/* free space above/below the board */
+html.fill-v #mobile-frame .mf-a {
+  left: 0; right: 0; top: 0;
+  height: calc(var(--m-top, 0px) + 1px);
+  background-position: center bottom;
+}
+html.fill-v #mobile-frame .mf-b {
+  left: 0; right: 0; bottom: 0;
+  height: calc(var(--m-bottom, 0px) + 1px);
+  background-position: center top;
+}
+html.fill-v #mobile-frame.mirror .mf-b {
+  transform: scaleY(-1);
+  background-position: center bottom;
+}
+
+/* ---------- start screen ---------- */
+html.is-mobile #very_start_bg1 {
+  background-size: cover;
+  background-position: center;
+}
+html.is-mobile #very_start_bg2 {
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: 0;
+  background: rgba(0, 0, 0, .38);
+  display: flex;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding:
+    max(12px, env(safe-area-inset-top))
+    max(12px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom))
+    max(12px, env(safe-area-inset-left));
+}
+html.is-mobile #very_start {
+  position: relative;
+  padding-top: 0 !important;
+  margin: auto;                       /* centered, but scrollable if too tall */
+  width: min(100%, 480px);
+  font-size: clamp(16px, 4.6vmin, 24px);
+  line-height: 1.15;
+  text-shadow: 0 1px 6px #000, 0 0 2px #000;
+}
+html.is-mobile #very_start .start-game_class {
+  font-size: 16px;
+  padding: 12px 20px;
+  margin-top: 6px;
+  border-radius: 6px;
+}
+html.is-mobile #load_text { font-size: .8em; }
+
+html.is-mobile #dc_menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+}
+html.is-mobile #dc_menu .dc-button {
+  position: static !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 8px 12px !important;
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  transform: none !important;
+}
+html.is-mobile #dc_menu .dc-icon {
+  width: 38px !important;
+  height: 38px !important;
+  flex: 0 0 auto;
+}
+html.is-mobile #dc_menu .dc-text { flex: 1; min-width: 0; text-align: center; }
+html.is-mobile #dc_menu .dc-title { font-size: 16px !important; line-height: 1.15; }
+html.is-mobile #dc_menu .dc-sub   { font-size: 12px !important; line-height: 1.15; }
+
+/* landscape phones are short: cards side by side, title block tighter */
+html.m-land #very_start { width: min(100%, 620px); font-size: clamp(14px, 4.2vmin, 20px); }
+html.m-land #dc_menu { flex-direction: row; }
+html.m-land #dc_menu .dc-button { flex: 1 1 0; }
+
+/* ---------- top button + menu ---------- */
+html.is-mobile #top-menu-btn {
+  top: max(6px, env(safe-area-inset-top));
+  right: max(8px, env(safe-area-inset-right));
+  font-size: 26px;
+  padding: 4px 8px;
+  line-height: 1;
+}
+html.is-mobile #top-menu {
+  top: calc(max(6px, env(safe-area-inset-top)) + 40px);
+  right: max(8px, env(safe-area-inset-right));
+  padding: 8px;
+  gap: 5px;
+  max-height: calc(var(--vvh, 100dvh) - max(6px, env(safe-area-inset-top)) - 52px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+html.is-mobile #top-menu button {
+  min-width: 140px;
+  font-size: 14px;
+  padding: 7px 10px;
+}
+
+/* ---------- side notifications (message-box / side-tooltip / tooltips) ---------- */
+html.is-mobile .message-text { font-size: 12px; padding: 6px 9px; }
+html.is-mobile .message-progress { height: 3px; }
+html.is-mobile .side-tooltip,
+html.is-mobile .tooltip,
+html.is-mobile .tooltip2 { font-size: 12px; }
+html.is-mobile .side-tooltip { padding: 7px 11px; border-radius: 6px; }
+html.is-mobile .tooltip,
+html.is-mobile .tooltip2 { padding: 5px 10px; }
+html.is-mobile #yt-notice {
+  font-size: 11px !important;
+  padding: 8px 10px 8px 10px !important;
+  border-radius: 8px !important;
+}
+html.is-mobile #yt-notice button { font-size: 11px !important; padding: 5px 9px !important; }
+
+/* PORTRAIT: notifications go to the top / bottom (the cutout area) */
+html.m-port #message-box {
+  top: calc(max(6px, env(safe-area-inset-top)) + 4px);
+  bottom: auto;
+  left: max(8px, env(safe-area-inset-left));
+  right: 56px;                 /* keep clear of the menu button */
+  width: auto;
+  transform: none;
+  gap: 5px;
+}
+html.m-port .side-tooltip {
+  left: max(8px, env(safe-area-inset-left));
+  right: max(8px, env(safe-area-inset-right));
+  bottom: calc(max(8px, env(safe-area-inset-bottom)) + 4px);
+  text-align: center;
+}
+html.m-port .tooltip,
+html.m-port .tooltip2 {
+  bottom: calc(max(8px, env(safe-area-inset-bottom)) + 52px);
+  max-width: 92vw;
+  text-align: center;
+}
+html.m-port #yt-notice {
+  top: auto !important;
+  bottom: calc(max(8px, env(safe-area-inset-bottom)) + 96px) !important;
+  left: max(8px, env(safe-area-inset-left)) !important;
+  right: max(8px, env(safe-area-inset-right)) !important;
+  width: auto !important;
+}
+
+/* LANDSCAPE: same spots as on desktop, just smaller */
+html.m-land #message-box {
+  right: max(8px, env(safe-area-inset-right));
+  width: clamp(140px, 24vw, 220px);
+  gap: 5px;
+}
+html.m-land .side-tooltip {
+  left: max(8px, env(safe-area-inset-left));
+  bottom: 8px;
+  max-width: clamp(140px, 24vw, 220px);
+}
+html.m-land .tooltip,
+html.m-land .tooltip2 {
+  bottom: 8px;
+  max-width: 44vw;
+}
+html.m-land #yt-notice {
+  top: max(8px, env(safe-area-inset-top)) !important;
+  left: max(8px, env(safe-area-inset-left)) !important;
+  width: clamp(150px, 24vw, 210px) !important;
+}
+
+/* ---------- chat (send button always reachable, follows the keyboard) ---------- */
+html.is-mobile #chat-overlay {
+  right: max(8px, env(safe-area-inset-right));
+  bottom: calc(var(--kb, 0px) + max(8px, env(safe-area-inset-bottom)));
+  width: min(340px, calc(100vw - 16px));
+  height: min(360px, calc(var(--vvh, 100dvh) - 16px));
+  max-height: calc(var(--vvh, 100dvh) - 16px);
+  font-size: 14px;
+}
+html.m-port #chat-overlay {
+  left: max(8px, env(safe-area-inset-left));
+  width: auto;
+}
+html.m-land #chat-overlay {
+  width: min(360px, 48vw);
+  height: min(300px, calc(var(--vvh, 100dvh) - 12px));
+}
+html.is-mobile #chat-header { padding: 6px 10px; flex: 0 0 auto; }
+html.is-mobile #chat-close { padding: 0 6px; font-size: 18px; }
+html.is-mobile #chat-log { min-height: 0; }
+html.is-mobile #chat-controls {
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  padding: 6px;
+}
+html.is-mobile #chat-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 16px;                 /* >=16px stops iOS from zooming on focus */
+  padding: 6px 8px;
+  min-height: 38px;
+  border-radius: 4px;
+}
+html.is-mobile #chat-send {
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 0 16px;
+  font-size: 15px;
+}
+
+/* ---------- injected clock (next to the menu button) ---------- */
+html.is-mobile #injected-live-clock { font-size: 14px !important; }

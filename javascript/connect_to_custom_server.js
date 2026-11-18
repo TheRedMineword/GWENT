@@ -181,6 +181,22 @@ const IGNORE_PATTERNS = [
   "expected_webscoket_communication_version",
   "frameRe",
   "COLOR_RE",
+  // mobiles
+  "IS_MOBILE",
+  "setMobileConfig",
+  "setMobileBoardFallback",
+  "frame",
+  "cutoutCfg",
+  "boardPath",
+  "isMobile",
+  "probe",
+  "pending",
+  "root",
+  "params",
+  "RATIO",
+  "MAX_PHONE_SHORT_SIDE",
+  "MAX_WINDOW_SHORT_SIDE",
+  "MAX_WINDOW_WIDTH",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 

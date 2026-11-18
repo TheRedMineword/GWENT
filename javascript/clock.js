@@ -171,6 +171,15 @@ async function decompressBase64_init(base64) {
 
 function set_new_image(key, path, isvideo = false) {
   //  console.log("Visual", key, path);
+  if (key === "mobile") {
+    if (typeof window.setMobileConfig === "function") {
+      window.setMobileConfig(path);
+    }
+    return;
+  }
+  if (key === "board" && typeof window.setMobileBoardFallback === "function") {
+    window.setMobileBoardFallback(path);
+  }
   var the_key = false;
   if (key === "board") {
     the_key = "main";

@@ -16,10 +16,12 @@ With new cards and factions!" />
 
 	<meta property="og:type" content="website">
 	<meta name="twitter:card" content="summary_large_image">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 	<meta name="keywords" content="DrMineword, programmer, gwent, tw3, witcher, card, game, gamedev, play, multiplayer, gwent multiplayer, browser, gwint" />
 	<style id="dynamic-css"></style>
 	<link rel="stylesheet" type="text/css" href="gwent.css" />
+	<link rel="stylesheet" type="text/css" href="mobile.css" />
+	<script src="javascript/mobile.js"></script>
 
 </head>
 <style>
@@ -77,6 +79,7 @@ With new cards and factions!" />
 };
 </script>
 <body>
+	<div id="mobile-frame" aria-hidden="true"><div class="mf-a"></div><div class="mf-b"></div></div>
 	<div id="yt-notice" style="display:none;">
   <div>
     Sorry for interruption.<br>
@@ -123,6 +126,7 @@ With new cards and factions!" />
 <div id="youtube"></div>
 <div id="waitMusicYTPlayer" style="position:absolute; width:0; height:0; overflow:hidden;"></div>
 
+<div id="stage">
 <main style="display:none">
 
 	<section id="click-background" class="noclick"></section>
@@ -370,6 +374,7 @@ With new cards and factions!" />
 		<p id="cardstatsdisplay"></p>
 	</div>
 </section>
+</div><!-- /#stage -->
 
 <div id="tooltip" class="tooltip"></div>
 <div id="side-tooltip" class="side-tooltip"></div>
