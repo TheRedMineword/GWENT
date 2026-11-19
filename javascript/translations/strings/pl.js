@@ -64,7 +64,7 @@ STRNG["pl"] = {
   wshield: {
     name: "Tarcza",
     description:
-      "Częściowo chroni wszystkie karty w tym samym rzędzie przed efektami Pogody i Znakiem Axii. Róg Dowódcy nie działa w tym rzędzie. "
+      "Częściowo chroni wszystkie karty w tym samym rzędzie przed efektami Pogody i Znakiem Aksji. Róg Dowódcy nie działa w tym rzędzie. "
   },
 
   quen_desc: {
@@ -187,19 +187,19 @@ STRNG["pl"] = {
   axii: {
     name: "Znaki Wiedźmińskie",
     description:
-      "Karta wykorzystuje wiedźmińskie sztuczki, aby rzucić znak Axii na pole przeciwnika. Każda karta w rzędzie objętym efektem Axii, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
+      "Karta wykorzystuje wiedźmińskie sztuczki, aby rzucić znak Aksji na pole przeciwnika. Każda karta w rzędzie objętym efektem Aksji, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
   },
 
   axii2_desc: {
-    name: "Axii",
+    name: "Aksji",
     description:
-      "Każda karta w rzędzie objętym efektem Axii, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
+      "Każda karta w rzędzie objętym efektem Aksji, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
   },
 
   axii2_desc_playable: {
-    name: "Znaki Wiedźmińskie: Axii",
+    name: "Znaki Wiedźmińskie: Akji",
     description:
-      "Każda karta w rzędzie objętym efektem Axii, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
+      "Każda karta w rzędzie objętym efektem Aksji, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
   },
 
   gryffinSchool: {
@@ -488,7 +488,7 @@ STRNG["pl"] = {
     description: "(Elf z cebulą dobry, jak pomidor. Chcesz jeść?) Po użyciu karty wszyscy Mściciele obu graczy transformują się! "
   },
     potion_grom: {
-       name: "Grzmot",
+       name: "Grom",
     description: "Zwiększa ostateczną siłę jednostek Walczących Wręcz o 50% (według obliczeń); efekt ten działa przez 5 tur na gracza, który go aktywuje, oraz przez 3 tury na jego przeciwnika. "
     },
      potion_white: {
@@ -572,7 +572,7 @@ STRNG["pl"] = {
 "eredin_the_treacherous": "Eredin Bréacc Glas — Zdradziecki",
   mysterious_elf: "Tajemniczy Elf",
   decoy: "Manekin do Ćwiczeń",
-  "custom!Decoy2": "Dywersja",
+  "custom!Decoy2": "Bożątko",
   frost: "Trzaskający Mróz",
   ciri: "Cirilla Fiona Elen Riannon",
   clear: "Czyste Niebo",
@@ -748,12 +748,12 @@ francesca_hope_of_the_aen_seidhe:
     Ida_Emean_d20: "Ida Emean — Elfickie Wróżbictwo",
     spice_trader: "Kupiec Korzenny",
     roach: "Płotka",
-    axii: "Axii",
+    axii: "Aksji",
     lambert: "Lambert",
     eskel: "Eskel",
     GryffinWitcher: "Wiedźmin Szkoły Gryfa",
     cos: "Koniunkcja Sfer",
-    axii_p: "Znaki Wiedźmińskie: Axii",
+    axii_p: "Znaki Wiedźmińskie: Aksji",
     sab: "Vattier de Rideaux",
     scol_sab: "Iorveth",
     bad_lady: "Birna Bran — Sabotażystka",
@@ -811,7 +811,7 @@ francesca_hope_of_the_aen_seidhe:
     "custom!traveling_spirit": "Podróżująca Dusza",
     "custom!dearvangogh": "Dear Van Gogh",
     "custom!sky_vincent": "Vincent Van Gogh",
-    "custom!vincent_painting_power": "Vincent Van Gogh: Obraz",
+    "custom!vincent_painting_power": "Vincent Van Gogh — Obraz",
     "custom!sky_vincent_guys": "Dear Van Gogh — Sezonowe Dusze",
     "custom!sky_vincent_medic": "Dear Van Gogh — Sezonowe Serce",
     hym: "Him",
@@ -836,7 +836,7 @@ francesca_hope_of_the_aen_seidhe:
     potion_jaskolka: "Jaskółka",
     viperwitcher: "Wiedźmin Szkoły Żmiji",
     potion_soup: "Zupa z Elfa i Cebuli",
-    potion_grom: "Grzmot",
+    potion_grom: "Grom",
     potion_white: "Biały Miód",
     kingkrill: "Potwór Otchłani",
     olgierd_headless: "Olgierd von Everec — Bezgłowy",
@@ -1407,7 +1407,7 @@ rule63: [  // for classes
 
     "elfendonion": "<color=#A69A45>Zupa z Elfa i Cebuli</color> jest tutaj przez kolejne <color=#E6D8B5>%s</color> tury!",
 
-    "grom": "<color=#3F6B32>Grzmot</color> jest aktywny przez następne <color=#E6D8B5>%s</color> tury!",
+    "grom": "<color=#3F6B32>Grom</color> jest aktywny przez następne <color=#E6D8B5>%s</color> tury!",
 
     "AURORA_mothers_care": "<color=#EBE359>Matczyna Opieka</color> jest aktywna przez następne <color=#E6D8B5>%s</color> tury!"
   },

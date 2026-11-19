@@ -27,7 +27,7 @@ An patch full of coins and translation!
 ```diff
 --- Reworked game end screen, it use now "coin toss" results screen insted!
     Custom servers can use "uselegacyendscreen" value to swap back to old one!
-    Check Github repo; GWENT\javascript\custom_server\deafult_expanded.json for template!
+    Check Github repo; GWENT/javascript/custom＿server/deafult＿expanded.json for template!
 --- Translation strings were standarized!
 --- Fixed ThatGameCompany card, but droped its image quality for no reason
 --- Updated server; creating lobbies can be disabled, better handling for auth fail, before clients restarts matches gets cancelled
