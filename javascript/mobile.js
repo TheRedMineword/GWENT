@@ -5,9 +5,9 @@
   const params = new URLSearchParams(location.search);
 
   const MAX_PHONE_SHORT_SIDE = 600; // CSS px, shorter screen side (real devices)
-  const MAX_WINDOW_SHORT_SIDE = 600; // CSS px, shorter window side (desktop windows)
-  const MAX_WINDOW_WIDTH = 820; // narrow / portrait-ish desktop windows
 
+  // Real phones/tablets only. Desktop windows are never "mobile" (PC can go
+  // fullscreen); ?mobile=1 / ?mobile=0 still force it for testing.
   function detectMobile() {
     const force = params.get("mobile");
     if (force === "1") return true;
@@ -17,15 +17,47 @@
       window.matchMedia("(pointer: coarse)").matches &&
       window.matchMedia("(hover: none)").matches;
     const shortSide = Math.min(screen.width, screen.height);
-    if ((ua || touch) && shortSide <= MAX_PHONE_SHORT_SIDE) return true;
-    // desktop browser: switch by window size (also what devtools / resizing gives)
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    return Math.min(w, h) <= MAX_WINDOW_SHORT_SIDE || w <= MAX_WINDOW_WIDTH;
+    return (ua || touch) && shortSide <= MAX_PHONE_SHORT_SIDE;
   }
 
+  // Deck maker or board on screen (start screen is left alone on PC)
+  function visible(el) {
+    if (!el || el.classList.contains("hide")) return false;
+    return (
+      getComputedStyle(el).display !== "none" && el.getClientRects().length > 0
+    );
+  }
+  function boardActive() {
+    if (visible(document.getElementById("very_start_bg1"))) return false;
+    return (
+      visible(document.querySelector("main")) ||
+      visible(document.getElementById("deck-customization"))
+    );
+  }
+
+  // isMobile = real phone (scaling, touch UI, keyboard, pinch block).
+  // isFit    = board centered + cutout images shown. Phones: always.
+  //            PC: only while deck maker/board is open AND the window is
+  //            taller than the 16:9 board (gap under it, e.g. F12 open).
   let isMobile = false;
+  let isFit = false;
   window.IS_MOBILE = false;
+
+  const FIT_ON_PX = 2; // free space (px) needed to turn the fit on
+  const FIT_OFF_PX = 0.5; // below this it turns off again (avoids flicker)
+  const FIT_VARS = [
+    "--m-s",
+    "--m-x",
+    "--m-y",
+    "--m-bw",
+    "--m-bh",
+    "--m-w",
+    "--m-h",
+    "--m-side",
+    "--m-side-r",
+    "--m-top",
+    "--m-bottom",
+  ];
 
   /* ---------------- safe area probe ---------------- */
   let probe = null;
@@ -54,37 +86,11 @@
   function layout() {
     pending = 0;
     if (!document.body) return;
-    const now = detectMobile();
-    if (now !== isMobile) {
-      isMobile = now;
-      window.IS_MOBILE = now;
-      root.classList.toggle("is-mobile", now);
-      if (!now) {
-        root.classList.remove(
-          "m-land",
-          "m-port",
-          "kb-open",
-          "fill-v",
-          "fill-h",
-        );
-        [
-          "--m-s",
-          "--m-x",
-          "--m-y",
-          "--m-bw",
-          "--m-bh",
-          "--m-w",
-          "--m-h",
-          "--m-side",
-          "--m-side-r",
-          "--m-top",
-          "--m-bottom",
-          "--kb",
-          "--vvh",
-        ].forEach((k) => root.style.removeProperty(k));
-      }
-    }
-    if (!isMobile) return;
+
+    isMobile = detectMobile();
+    window.IS_MOBILE = isMobile;
+    root.classList.toggle("is-phone", isMobile);
+
     const W = window.innerWidth;
     const H = window.innerHeight;
     const land = W > H;
@@ -94,9 +100,35 @@
     const bh = W * RATIO; // layout height of the board (vw based)
 
     const availW = Math.max(100, W - sa.l - sa.r);
-    const s = Math.min(1, H / bh, availW / bw);
-    const x = sa.l + (availW - bw * s) / 2;
+    // phone: shrink to fit. PC: never scale, just center in the gap.
+    const s = isMobile ? Math.min(1, H / bh, availW / bw) : 1;
+    const x = isMobile ? sa.l + (availW - bw * s) / 2 : 0;
     const y = (H - bh * s) / 2;
+
+    // free space left around the board
+    const free = isMobile ? Math.max(H - bh * s, W - bw * s) : H - bh;
+    const wantFit =
+      isMobile ||
+      (boardActive() && (isFit ? free >= FIT_OFF_PX : free >= FIT_ON_PX));
+
+    if (wantFit !== isFit) {
+      isFit = wantFit;
+      // "is-mobile" kept as the layout class the CSS already uses
+      root.classList.toggle("is-mobile", isFit);
+      root.classList.toggle("is-fit", isFit);
+      if (!isFit) {
+        root.classList.remove("m-land", "m-port", "fill-v", "fill-h");
+        FIT_VARS.forEach((k) => root.style.removeProperty(k));
+      }
+    }
+
+    if (!isMobile) {
+      root.classList.remove("kb-open");
+      root.style.removeProperty("--kb");
+      root.style.removeProperty("--vvh");
+    }
+    if (!isFit) return;
+
     // fill whichever direction actually has the free space (works for near-square windows too)
     const fillV = H - bh * s > W - bw * s;
 
@@ -243,9 +275,20 @@
       const el = document.querySelector(sel);
       if (el) mo.observe(el, { attributes: true, attributeFilter: ["style"] });
     });
+    // start screen -> deck maker -> board switches: re-check the fit
+    const mo2 = new MutationObserver(schedule);
+    ["main", "#deck-customization", "#very_start_bg1"].forEach((sel) => {
+      const el = document.querySelector(sel);
+      if (el)
+        mo2.observe(el, {
+          attributes: true,
+          attributeFilter: ["class", "style"],
+        });
+    });
     setInterval(() => {
       hookSetNewImage();
       syncFallbackFromDom();
+      schedule();
     }, 1500);
     // iOS reports stale sizes right after rotation -> re-measure a few times
     const again = () => {

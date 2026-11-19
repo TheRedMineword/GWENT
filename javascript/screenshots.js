@@ -31,6 +31,7 @@
     "#click-background",
     "#tooltip",
     "#side-tooltip",
+    "#gwent-overlay-root", // card name/info box
   ];
 
   const SKIP_TAGS = new Set([
@@ -460,13 +461,22 @@
     let left = parseFloat(cs.left);
     let top = parseFloat(cs.top);
     if (Number.isNaN(left) || Number.isNaN(top)) {
+      // screen rect -> board layout px (undo mobile.js scale)
       const r = src.getBoundingClientRect();
-      left = r.left - (parseFloat(cs.marginLeft) || 0);
-      top = r.top - (parseFloat(cs.marginTop) || 0);
-    }
+      left =
+        (r.left - env.originX) / env.boardScale -
+        (parseFloat(cs.marginLeft) || 0);
+      top =
+        (r.top - env.originY) / env.boardScale -
+        (parseFloat(cs.marginTop) || 0);
+    } else if (!env.fixedInMain) {
+      // relative to the window -> relative to the board
+      left -= env.originX;
+      top -= env.originY;
+    } // else: already relative to <main> in layout px
     el.style.setProperty("position", "absolute");
-    el.style.setProperty("left", left - env.originX + "px");
-    el.style.setProperty("top", top - env.originY + "px");
+    el.style.setProperty("left", left + "px");
+    el.style.setProperty("top", top + "px");
     el.style.setProperty("right", "auto");
     el.style.setProperty("bottom", "auto");
     return el;
@@ -572,10 +582,20 @@
         "The board is not visible yet (start or join a game first).",
       );
     }
+    // rect = what is on screen (already scaled by mobile.js);
+    // W/H = layout size (what the frozen px styles were computed for).
     const rect = main.getBoundingClientRect();
-    const W = rect.width;
-    const H = rect.height;
+    const W = main.offsetWidth || rect.width;
+    const H = main.offsetHeight || rect.height;
     if (!(W > 0 && H > 0)) throw new Error("The board has no size.");
+    const boardScale = rect.width > 0 ? rect.width / W : 1;
+    const mainCS = getComputedStyle(main);
+    // a transformed <main> becomes the containing block of position:fixed children
+    const fixedInMain =
+      (mainCS.transform && mainCS.transform !== "none") ||
+      (mainCS.filter && mainCS.filter !== "none") ||
+      (mainCS.perspective && mainCS.perspective !== "none") ||
+      (mainCS.willChange || "").includes("transform");
 
     if (opts.delay > 0) await sleep(opts.delay);
     if (document.fonts && document.fonts.ready) {
@@ -587,7 +607,7 @@
     // output size
     let outW =
       opts.width === "screen"
-        ? Math.round(W * (window.devicePixelRatio || 1))
+        ? Math.round(rect.width * (window.devicePixelRatio || 1))
         : Math.max(16, Math.round(Number(opts.width) || BASE_W));
     let outH = Math.round((outW * H) / W);
     const over = Math.max(outW, outH) / MAX_SIDE;
@@ -617,6 +637,8 @@
       defaults: new StyleDefaults(),
       originX: rect.left,
       originY: rect.top,
+      boardScale,
+      fixedInMain,
       tasks: [],
       failed: new Set(),
       warnings: [],
@@ -644,6 +666,10 @@
     s.setProperty("width", W + "px");
     s.setProperty("height", H + "px");
     s.setProperty("transform", "none");
+    s.setProperty("translate", "none");
+    s.setProperty("scale", "none");
+    s.setProperty("rotate", "none");
+    s.setProperty("filter", "none");
 
     const holder = document.createElement("div");
     holder.style.cssText = `position:relative;width:${W}px;height:${H}px;overflow:hidden;margin:0;padding:0;`;

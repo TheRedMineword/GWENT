@@ -2520,11 +2520,13 @@ const GwentOverlay = (() => {
     if (rootEl) return rootEl;
     rootEl = document.createElement("div");
     rootEl.id = ROOT_ID;
-    document.body.appendChild(rootEl);
+    (document.querySelector("main") || document.body).appendChild(rootEl);
     return rootEl;
   }
 
   function ensureBox() {
+    const m = document.querySelector("main");
+    if (rootEl && m && rootEl.parentElement !== m) m.appendChild(rootEl);
     if (boxEl) return boxEl;
     boxEl = document.createElement("div");
     boxEl.id = "gwent-overlay-box";
