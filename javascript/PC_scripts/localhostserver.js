@@ -52,7 +52,86 @@ console.log("///////////////////////////");
 console.log("EXE CLIENT VERSION");
 console.log(getVersion());
 console.log("///////////////////////////");
+
+const FLAGS_FILE = 'lunchflags.txt';
+const DEFAULT_FLAGS = {
+    '--lunchmobile': 'false',
+    '--lunchlang': 'false'
+};
+
+function getFlagsPath() {
+    return path.join(path.dirname(process.execPath), FLAGS_FILE);
+}
+
+function parseFlags(text) {
+    const flags = {};
+    for (const raw of text.split(/\r?\n/)) {
+        const line = raw.trim();
+        if (!line || line.startsWith('#')) continue;
+        const i = line.indexOf('=');
+        if (i < 0) {
+            flags[line] = '';
+        } else {
+            flags[line.slice(0, i).trim()] = line.slice(i + 1).trim();
+        }
+    }
+    return flags;
+}
+
+function loadFlags() {
+    const file = getFlagsPath();
+    try {
+        let text;
+        if (!fs.existsSync(file)) {
+            text = Object.entries(DEFAULT_FLAGS)
+                .map(([k, v]) => `${k}=${v}`)
+                .join('\r\n') + '\r\n';
+            fs.writeFileSync(file, text, 'utf8');
+            console.log('Created', file);
+        } else {
+            text = fs.readFileSync(file, 'utf8');
+            const existing = parseFlags(text);
+            const missing = Object.keys(DEFAULT_FLAGS)
+                .filter(k => !(k in existing));
+
+            if (missing.length) {
+                const prefix = text.length && !text.endsWith('\n') ? '\r\n' : '';
+                const add = missing
+                    .map(k => `${k}=${DEFAULT_FLAGS[k]}`)
+                    .join('\r\n') + '\r\n';
+                fs.appendFileSync(file, prefix + add, 'utf8');
+                text += prefix + add;
+                console.log('Added missing flags:', missing.join(', '));
+            }
+        }
+        return { ...DEFAULT_FLAGS, ...parseFlags(text) };
+    } catch (err) {
+        console.error('lunchflags error:', err);
+        return { ...DEFAULT_FLAGS };
+    }
+}
+
+function getStartUrl() {
+    const flags = loadFlags();
+    const isTrue = v => ['true', '1'].includes(String(v).toLowerCase());
+
+    let url = 'http://localhost:1111/';
+
+    if (isTrue(flags['--lunchmobile'])) {
+        url += '?mobile=1';
+    }
+
+    const lang = flags['--lunchlang'];
+    if (lang && lang.toLowerCase() !== 'false') {
+        url += '#lang=' + encodeURIComponent(lang);
+    }
+
+    return url;
+}
+
 function startServer() {
+
+    loadFlags();
 
     const serverApp = express();
     const serverApp2 = express();
@@ -176,4 +255,4 @@ serverApp.use(express.static(APP_DIR));
     });
 }
 
-module.exports = { startServer };
+module.exports = { startServer, getStartUrl };

@@ -8,6 +8,9 @@ let onUncaughtException = null;
 let onUnhandledRejection = null;
 let upgradeHandler = null;
 const upgradedSockets = new WeakSet(); // sockets already handed to wss.handleUpgrade
+const ghostSockets = new Set();        // sockets that failed auth: kept open, told why, otherwise ignored
+const authFailByIp = new Map();        // ip -> { count, first } (repeat-failure tracking)
+let authFailSweep = null;
 
 const sock = require("./socket");
 const comp_and_send = sock.send;      // same call signature as before
@@ -38,6 +41,11 @@ exports.stop = ({ app, server, wss }) => {
     // remove the HTTP "upgrade" listener, otherwise every restart/hot-reload stacks another one
     try { if (upgradeHandler) server.off("upgrade", upgradeHandler); } catch (e) {}
     upgradeHandler = null;
+
+    for (const g of ghostSockets) { try { g.terminate(); } catch (e) {} }
+    ghostSockets.clear();
+    authFailByIp.clear();
+    if (authFailSweep) { clearInterval(authFailSweep); authFailSweep = null; }
 
     for (const fn of listeners)
         wss.off("connection", fn);
@@ -127,7 +135,11 @@ const blockedRelayTypes = new Set([
   "discordinventory",
   "discordintegration",
   "welcome",
-  "discordintegration__screenshot"
+  "discordintegration__screenshot",
+  // server-only notices: a client must never be able to forge these to its opponent
+  "update_stalemate_restart",
+  "lobby_locked",
+  "auth_failed"
 ]);
 
 const ADMIN_ENDPOINT_LOGIN = process.env.ADMIN_ENDPOINT_LOGIN;
@@ -300,6 +312,50 @@ console.log = (message) => {
 const heartbeatWaiting = new Map();
 
 const recentPushes = new Map(); // key: sha -> { sha, before, files, commits, repo, ref, time }
+
+// ---- update review lock ----
+// While a GitHub deployment is waiting for review/approval, NEW lobbies are refused.
+// Existing lobbies are left untouched. Auto-expires so a lost webhook can never lock forever.
+const UPDATE_LOCK_MAX_MS = 6 * 60 * 60 * 1000;
+let updateReviewPendingSince = 0;
+const UPDATE_LOCK_MESSAGE =
+  "An update is waiting for review, so creating new lobbies is temporarily disabled. Please try again in a few minutes.";
+function isUpdateReviewPending() {
+  if (!updateReviewPendingSince) return false;
+  if (Date.now() - updateReviewPendingSince > UPDATE_LOCK_MAX_MS) {
+    console.warn("[UPDATE] review lock expired (no resolving webhook received), unlocking");
+    updateReviewPendingSince = 0;
+    return false;
+  }
+  return true;
+}
+// ---- manual (admin) temporary lobby lock ----
+let manualLockUntil = 0;
+let manualLockMessage = "";
+const MANUAL_LOCK_MAX_MS = 24 * 60 * 60 * 1000;
+function getLobbyLock() {
+  if (manualLockUntil && Date.now() >= manualLockUntil) {
+    console.log("[ADMIN] manual lobby lock expired");
+    manualLockUntil = 0;
+    manualLockMessage = "";
+  }
+  if (manualLockUntil) {
+    return {
+      locked: true,
+      reason: "admin_lock",
+      message: manualLockMessage || "Creating new lobbies is temporarily disabled. Please try again shortly.",
+      until: manualLockUntil,
+    };
+  }
+  if (isUpdateReviewPending()) {
+    return { locked: true, reason: "update_review_pending", message: UPDATE_LOCK_MESSAGE, until: 0 };
+  }
+  return { locked: false, reason: null, message: "", until: 0 };
+}
+// Sessions that currently have 2+ players (a match is, or is about to be, running).
+function isMatchSession(session) {
+  return !!session && Array.isArray(session.players) && session.players.length >= 2;
+}
 function isKnownIssuePath(filename = "") {
   return (
     /^web-only\/isissue\.txt$/i.test(filename) ||
@@ -1563,6 +1619,47 @@ router.get("/api/custom_sync", (req, res) => {
 
   return res.end(payload);
 });
+// Temporary admin lock on creating NEW lobbies (existing lobbies are untouched).
+//   status : GET  /api/admin/lobby_lock?key=KEY
+//   lock   : POST /api/admin/lobby_lock?key=KEY&state=on&minutes=30&message=Maintenance   (JSON body works too)
+//   unlock : POST /api/admin/lobby_lock?key=KEY&state=off
+// Key may also be sent as header X-Admin-Key. Default 30 min, max 24 h, always expires on its own.
+router.all("/api/admin/lobby_lock", express.json({ limit: "8kb" }), (req, res) => {
+  const given = String(req.get("X-Admin-Key") || req.query.key || req.body?.key || "");
+  const expected = String(process.env.ADMIN_ENDPOINT_LOGIN || "");
+  const a = Buffer.from(given);
+  const b = Buffer.from(expected);
+  if (!expected || a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
+    return res.status(403).json({ success: false, error: "Invalid key." });
+  }
+  const src = { ...(req.body || {}), ...req.query };
+  const state = src.state === undefined ? null : String(src.state).toLowerCase();
+
+  if (state === "on" || state === "true" || state === "1") {
+    let minutes = Number(src.minutes ?? 30);
+    if (!Number.isFinite(minutes) || minutes <= 0) minutes = 30;
+    minutes = Math.min(minutes, MANUAL_LOCK_MAX_MS / 60000);
+    manualLockUntil = Date.now() + minutes * 60000;
+    manualLockMessage = String(src.message || "").slice(0, 300);
+    console.log(`[ADMIN] lobby creation locked for ${minutes} min`);
+  } else if (state === "off" || state === "false" || state === "0") {
+    manualLockUntil = 0;
+    manualLockMessage = "";
+    console.log("[ADMIN] lobby creation unlocked");
+  } else if (state !== null) {
+    return res.status(400).json({ success: false, error: "state must be on or off" });
+  }
+
+  const lock = getLobbyLock();
+  return res.json({
+    success: true,
+    locked: lock.locked,
+    reason: lock.reason,
+    until: lock.until ? new Date(lock.until).toISOString() : null,
+    secondsLeft: lock.until ? Math.ceil((lock.until - Date.now()) / 1000) : null,
+    updateReviewPending: isUpdateReviewPending(),
+  });
+});
 router.get("/api/force_update_server", async (req, res) => {
   const { key } = req.query;
 
@@ -1900,6 +1997,22 @@ router.post("/api/message", (req, res) => {
   }
 });
 
+// Clients call this when auth keeps failing (server told them persistent:true).
+const bugReportLast = new Map(); // ip -> last report time
+router.post("/api/bug-report", express.json({ limit: "8kb" }), (req, res) => {
+  const ip = getClientIp(req);
+  const now = Date.now();
+  if (now - (bugReportLast.get(ip) || 0) < 60 * 1000) return res.sendStatus(429);
+  bugReportLast.set(ip, now);
+  if (bugReportLast.size > 5000) bugReportLast.clear();
+  const b = req.body || {};
+  const clean = (v, n) => String(v ?? "").slice(0, n);
+  console.error(
+    `[BUG REPORT] kind=${clean(b.kind, 40)} reason=${clean(b.reason, 40)} count=${Number(b.count) || 0} ip=${ip} ua=${clean(b.userAgent, 200)} page=${clean(b.page, 200)}`,
+  );
+  res.sendStatus(204);
+});
+
 router.post("/api/github", async (req, res) => {
   const { key } = req.query;
   if (key !== process.env.ADMIN_ENDPOINT_LOGIN) return res.sendStatus(401);
@@ -1937,13 +2050,25 @@ router.post("/api/github", async (req, res) => {
     return res.sendStatus(200);
   }
 
-  // 2) Deployment status webhook: only proceed on success
-  if (
-    !payload.deployment_status ||
-    payload.deployment_status.state !== "success"
-  ) {
+  // 2) Deployment status webhook
+  const depState = payload.deployment_status?.state;
+  if (depState === "waiting") {
+    // deployment is waiting for a reviewer to approve it -> block NEW lobbies
+    if (!updateReviewPendingSince) console.log("[UPDATE] review pending -> new lobbies blocked");
+    updateReviewPendingSince = Date.now();
     return res.sendStatus(200);
   }
+  if (["failure", "error", "inactive"].includes(depState)) {
+    // rejected / failed / superseded -> nothing will be deployed, unlock
+    if (updateReviewPendingSince) console.log(`[UPDATE] deployment ${depState} -> new lobbies allowed again`);
+    updateReviewPendingSince = 0;
+    return res.sendStatus(200);
+  }
+  if (depState !== "success") {
+    return res.sendStatus(200);
+  }
+  // approved and deployed: release the lock before the restart notices go out
+  updateReviewPendingSince = 0;
 
   const deployment = payload.deployment;
   const sha = deployment?.sha;
@@ -2061,12 +2186,28 @@ router.post("/api/github", async (req, res) => {
     content: message,
   });
 
+  // Players sitting in a 2+ player session get a DIFFERENT message type: the client
+  // ends the running game as a stalemate (draw) and then restarts. Everybody else
+  // (no session / lobby with a single player) keeps the normal patchnotes flow.
+  const stalematePacket = JSON.stringify({
+    type: "update_stalemate_restart",
+    content: message,
+    reason: "server_update",
+    result: "stalemate",
+  });
+
   let sent = 0;
+  let sentStalemate = 0;
   for (const ws of players) {
-    if (comp_and_send(ws, packet)) sent++;
+    const sess = ws.sessionId && sessions[ws.sessionId];
+    if (isMatchSession(sess)) {
+      if (comp_and_send(ws, stalematePacket)) sentStalemate++;
+    } else if (comp_and_send(ws, packet)) {
+      sent++;
+    }
   }
 
-  console.log(`sent to: ${sent} players`);
+  console.log(`sent to: ${sent} players (+${sentStalemate} in 2-player sessions got stalemate-restart)`);
   res.sendStatus(200);
 });
 function broadcastToSession(sessionId, payload) {
@@ -2091,6 +2232,64 @@ function broadcastToSession(sessionId, payload) {
   return true;
 }
 riskinfo = "{}";
+
+// ---- ghost sockets (failed auth) ----
+const GHOST_MAX_PER_IP = 3;
+const GHOST_TTL_MS = 2 * 60 * 1000;
+const AUTH_FAIL_WINDOW_MS = 10 * 60 * 1000;
+const AUTH_FAIL_BUG_THRESHOLD = 3;
+const AUTH_MESSAGES = {
+  missing_auth: "Authentication is missing. Please reload the page and try again.",
+  invalid_auth: "Authentication failed or expired. Please reload the page and try again.",
+};
+
+// The socket is NOT dropped and never becomes a player: it is never added to players /
+// sessions / sock peers. It receives one JSON explaining why, then is ignored (only the
+// keep-alive ping is answered, so the client does not start reconnect storms).
+function ghostConnection(ws, ip, reason) {
+  const now = Date.now();
+  let rec = authFailByIp.get(ip);
+  if (!rec || now - rec.first > AUTH_FAIL_WINDOW_MS) rec = { count: 0, first: now };
+  rec.count++;
+  authFailByIp.set(ip, rec);
+  const persistent = rec.count >= AUTH_FAIL_BUG_THRESHOLD;
+  if (persistent) {
+    console.error(
+      `[BUG] Persistent auth handshake failure: ip=${ip} reason=${reason} count=${rec.count} in ${Math.round((now - rec.first) / 1000)}s`,
+    );
+  }
+
+  ws.ghost = true;
+  ws._ghostIp = ip;
+  ghostSockets.add(ws);
+
+  const ttl = setTimeout(() => { try { ws.terminate(); } catch (e) {} }, GHOST_TTL_MS);
+  if (ttl.unref) ttl.unref();
+  ws.on("message", (raw, isBinary) => {
+    // answer keep-alive ("1" -> "2") only; everything else is ghosted
+    if (!isBinary && String(raw) === "1") { try { ws.send("2"); } catch (e) {} }
+  });
+  ws.on("error", () => {});
+  ws.on("close", () => { clearTimeout(ttl); ghostSockets.delete(ws); });
+
+  // sock.send on an untracked ws = plain compressed JSON frame (same format as every other message)
+  sock.send(ws, {
+    type: "auth_failed",
+    reason,
+    message: AUTH_MESSAGES[reason],
+    attempt: rec.count,
+    persistent,       // true => client should report this as a bug
+    report_bug: persistent,
+  });
+}
+if (!authFailSweep) {
+  authFailSweep = setInterval(() => {
+    const now = Date.now();
+    for (const [ip, rec] of authFailByIp) if (now - rec.first > AUTH_FAIL_WINDOW_MS) authFailByIp.delete(ip);
+  }, 60 * 1000);
+  if (authFailSweep.unref) authFailSweep.unref();
+}
+
 upgradeHandler = (req, socket, head) => {
   try {
     const host = req.headers.host;
@@ -2120,11 +2319,25 @@ upgradeHandler = (req, socket, head) => {
       authOk = handshake.verifyToken(authToken, getClientIp(req));
     } catch (e) {}
     if (!authOk) {
-      console.log(`[Handshake] Rejected WebSocket upgrade (bad/missing auth) ip=${getClientIp(req)}`);
-      if (!socket.destroyed) {
-        socket.write("HTTP/1.1 401 Unauthorized\r\nConnection: close\r\n\r\n");
-        socket.destroy();
+      const ip = getClientIp(req);
+      console.log(`[Handshake] Bad/missing auth ip=${ip} -> ghosting socket`);
+      let rawTok = null;
+      try { rawTok = new URL(req.url, "http://x").searchParams.get("auth"); } catch (e) {}
+      const reason = !rawTok || rawTok === "N/A" ? "missing_auth" : "invalid_auth";
+
+      // too many ghosts from one IP: now really drop (resource protection)
+      let ipGhosts = 0;
+      for (const g of ghostSockets) if (g._ghostIp === ip) ipGhosts++;
+      if (ipGhosts >= GHOST_MAX_PER_IP) {
+        if (!socket.destroyed) {
+          socket.write("HTTP/1.1 429 Too Many Requests\r\nConnection: close\r\n\r\n");
+          socket.destroy();
+        }
+        return;
       }
+      if (upgradedSockets.has(socket)) return;
+      upgradedSockets.add(socket);
+      wss.handleUpgrade(req, socket, head, (ws) => ghostConnection(ws, ip, reason));
       return;
     }
 
@@ -2316,6 +2529,17 @@ function handleMessage(ws, data) {
       console.log(`|| Sombody pinged server!!!`);
     }
     if (data.type === "createSession") {
+      const lock = getLobbyLock();
+      if (lock.locked) {
+        // existing lobbies are kept, only NEW ones are refused
+        comp_and_send(ws, {
+          type: "lobby_locked",
+          reason: lock.reason,
+          message: lock.message,
+          until: lock.until || null,
+        });
+        return;
+      }
       const conf = data.custom_server?.active ? data.custom_server.conf : null;
 
       const sessionId = compressString(

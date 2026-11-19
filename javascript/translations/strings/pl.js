@@ -37,13 +37,13 @@ STRNG["pl"] = {
   storm: {
     name: "Skeligijski Sztorm",
     description:
-      "Zmniejsza siłę wszystkich jednostek dystansowych i oblężniczych do 1. "
+      "Zmniejsza siłę wszystkich jednostek Walczących na Dystans i Oblężniczych do 1. "
   },
 
   hero: {
     name: "Karta Bohatera",
     description:
-      "Nie podlega działaniu kart Specjalnych ani innych umiejętności. "
+      "Nie podlega działaniu kart Specjalnych ani innych zdolności. "
   },
 
   decoy: {
@@ -59,12 +59,12 @@ STRNG["pl"] = {
     all_rows: {
       name: "Efektywność Wielowymiarowa",
       description:
-        "Można ją umieścić w dowolnym rzędzie na planszy (z wyjątkiem rzędu pogody i kart specjalnych). ",
+        "Można ją umieścić w dowolnym rzędzie na planszy (z wyjątkiem rzędu Pogody i kart Specjalnych). ",
     },
   wshield: {
     name: "Tarcza",
     description:
-      "Częściowo chroni wszystkie karty w tym samym rzędzie przed efektami Pogody i Znakiem Aksji. Róg Dowódcy nie działa w tym rzędzie. "
+      "Częściowo chroni wszystkie karty w tym samym rzędzie przed efektami Pogody i Znakiem Axii. Róg Dowódcy nie działa w tym rzędzie. "
   },
 
   quen_desc: {
@@ -75,7 +75,7 @@ STRNG["pl"] = {
   yrden: {
     name: "Znaki Wiedźmińskie: Yrden",
     description:
-      "Magiczna pułapka wiedźmińska. Umieść ją w rzędzie dystansowym przeciwnika, aby każda jednostka otrzymała -1 do siły. Efekty się kumulują. Manekin do Ćwiczeń może zostać użyta do podniesienia tej karty. "
+      "Magiczna pułapka wiedźmińska. Umieść ją w rzędzie Walczących na Dystans przeciwnika, aby każda jednostka otrzymała -1 do siły. Efekty się kumulują. Manekin do Ćwiczeń może zostać użyty do podniesienia tej karty. "
   },
 
   horn: {
@@ -111,19 +111,19 @@ STRNG["pl"] = {
   scorch_c: {
     name: "Pożoga — Walka Wręcz",
     description:
-      "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika walczące wręcz, jeśli łączna siła jego jednostek w zwarciu wynosi 10 lub więcej. "
+      "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika Walczące Wręcz, jeśli łączna siła jego jednostek Walczących Wręcz wynosi 10 lub więcej. "
   },
 
   scorch_r: {
     name: "Pożoga — Dystans",
     description:
-      "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika walczące na dystans, jeśli łączna siła jego jednostek dystansowych wynosi 10 lub więcej. "
+      "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika Walczące na Dystans, jeśli łączna siła jego jednostek Walczących na Dystans wynosi 10 lub więcej. "
   },
 
   scorch_s: {
     name: "Pożoga — Oblężenie",
     description:
-      "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika w oblężeniu, jeśli łączna siła jego jednostek oblężniczych wynosi 10 lub więcej. "
+      "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika w Oblężeniu, jeśli łączna siła jego jednostek Oblężniczych wynosi 10 lub więcej. "
   },
 
   scorch_a: {
@@ -161,7 +161,7 @@ STRNG["pl"] = {
   },
 
   resilience: {
-    name: "Hart ducha",
+    name: "Hart Ducha",
     description:
       "Pozostaje na planszy w następnej rundzie. "
   },
@@ -179,7 +179,7 @@ STRNG["pl"] = {
   },
 
   aid: {
-    name: "Wezwanie do broni",
+    name: "Wezwanie do Broni",
     description:
       "Pozwala tobie i przeciwnikowi ponownie dobrać 5 kart. "
   },
@@ -187,19 +187,19 @@ STRNG["pl"] = {
   axii: {
     name: "Znaki Wiedźmińskie",
     description:
-      "Karta wykorzystuje wiedźmińskie sztuczki, aby rzucić znak Aksji na pole przeciwnika. Każda karta w rzędzie objętym efektem Aksji, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
+      "Karta wykorzystuje wiedźmińskie sztuczki, aby rzucić znak Axii na pole przeciwnika. Każda karta w rzędzie objętym efektem Axii, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
   },
 
   axii2_desc: {
-    name: "Aksji",
+    name: "Axii",
     description:
-      "Każda karta w rzędzie objętym efektem Aksji, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
+      "Każda karta w rzędzie objętym efektem Axii, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
   },
 
   axii2_desc_playable: {
-    name: "Znaki Wiedźmińskie: Aksji",
+    name: "Znaki Wiedźmińskie: Axii",
     description:
-      "Każda karta w rzędzie objętym efektem Aksji, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
+      "Każda karta w rzędzie objętym efektem Axii, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
   },
 
   gryffinSchool: {
@@ -211,13 +211,13 @@ STRNG["pl"] = {
   magicthegathering: {
     name: "Koniunkcja Sfer",
     description:
-      "Wybierz jedną kartę spośród 25 losowych kart i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Przynęty. Ta karta jest niestabilna — jej siła zmienia się co turę, najczęściej przyjmując wartości ujemne. "
+      "Wybierz jedną kartę spośród 25 losowych kart i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Manekina do Ćwiczeń. Ta karta jest niestabilna — jej siła zmienia się co turę, najczęściej przyjmując wartości ujemne. "
   },
 
   tgc_portal: {
     name: "ThatGameCompany",
     description:
-      "Wybierz jedną kartę spośród paru kart frakcji Nieba i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Przynęty. Ta karta jest niestabilna — jej siła zmienia się co turę, najczęściej przyjmując wartości ujemne. "
+      "Wybierz jedną kartę spośród paru kart frakcji Nieba i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Manekina do Ćwiczeń. Ta karta jest niestabilna — jej siła zmienia się co turę, najczęściej przyjmując wartości ujemne. "
   },
 
   dopler: {
@@ -251,7 +251,7 @@ STRNG["pl"] = {
   },
 
   powergain: {
-    name: "Przyrost siły",
+    name: "Przyrost Siły",
     description:
       "Bazowa siła karty rośnie o 1,11 za każdą kartę w rzędzie (poza sobą). Bazowa siła nie jest zmniejszana przez pogodę, ale dodatkowa siła jest zmniejszana o 75% podczas efektów Pogody. Wartości są zaokrąglane w dół. "
   },
@@ -259,19 +259,19 @@ STRNG["pl"] = {
   bond: {
     name: "Braterska Więź",
     description:
-      "Umieść obok karty o tej samej nazwie, aby znacznie zwiększyć siłę obu kart do pewnog stopnia. "
+      "Umieść obok karty o tej samej nazwie, aby znacznie zwiększyć siłę obu kart do pewnego stopnia. "
   },
 
   bondwitcher: {
       name: "Jedność Wiedźmińska",
       description:
-        "(Frakcja Sił Wiedźmińskich; Za każdą kartę Wiedźminów na planszy, Szkoła Wiedźmińska rośnię w siłę) ",
+        "(Frakcja Sił Wiedźmińskich; Za każdą kartę Wiedźminów na planszy, Szkoła Wiedźmińska rośnie w siłę) ",
     },
 
     witcherschool: {
       name: "Szkoła Wiedźmińska",
       description:
-        "Ta karta nie może być zniszona! ",
+        "Ta karta nie może być zniszczona! ",
     },
 
   avenger: {
@@ -298,7 +298,7 @@ STRNG["pl"] = {
 
   keadwen_weather: {
     description:
-      "Zagraj kartę Gęsta Mgła ze swojej talii. Jeśli jej nie znajdziesz, nadal zużywasz ładunek przywódcy. Pozwala pomijać tury, ale przeciwnik ma 50% szansy podczas każdego pominięcia na skopiowanie niebohaterskiej karty z planszy. Potrzebujesz 1 ładunku, aby pominąć turę. Otrzymujesz 0,2 ładunku za każdą swoją turę, maksymalnie 1 przechowywany ładunek."
+      "Zagraj kartę Gęsta Mgła ze swojej talii. Jeśli jej nie znajdziesz, nadal zużywasz ładunek Dowódcy. Pozwala pomijać tury, ale przeciwnik ma 50% szansy podczas każdego pominięcia na skopiowanie niebohaterskiej karty z planszy. Potrzebujesz 1 ładunku, aby pominąć turę. Otrzymujesz 0,2 ładunku za każdą swoją turę, maksymalnie 1 przechowywany ładunek."
   },
 
   foltest_lord: {
@@ -313,12 +313,12 @@ STRNG["pl"] = {
 
   foltest_steelforged: {
     description:
-      "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika w Oblężeniu, jeśli łączna siła jego jednostek oblężniczych wynosi 10 lub więcej."
+      "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika w Oblężeniu, jeśli łączna siła jego jednostek Oblężniczych wynosi 10 lub więcej."
   },
 
   foltest_son: {
     description:
-      "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika na Dystansie, jeśli łączna siła jego jednostek dystansowych wynosi 10 lub więcej."
+      "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika na Dystansie, jeśli łączna siła jego jednostek Walczących na Dystans wynosi 10 lub więcej."
   },
 
   emhyr_imperial: {
@@ -328,7 +328,7 @@ STRNG["pl"] = {
 
   nilf_drawmaster: {
     description:
-      "Po użyciu, jeśli masz mniej niż 3 karty w ręce, dobierz 1 kartę z talii oraz 1 dodatkową kartę za każdą jednostkę w twoim grobie (maksymalnie 3 dodatkowe karty). Rozpoczynasz grę z 2 kartami mniej w ręce, ale możesz wykonać dodatkowe przelosowania początku gry."
+      "Po użyciu, jeśli masz mniej niż 3 karty w ręce, dobierz 1 kartę z talii oraz 1 dodatkową kartę za każdą jednostkę w twoim stosie kart odrzuconych (maksymalnie 3 dodatkowe karty). Rozpoczynasz grę z 2 kartami mniej w ręce, ale możesz wykonać dodatkowe przelosowania początku gry."
   },
 
   temeria_call: {
@@ -353,7 +353,7 @@ STRNG["pl"] = {
 
   gaunter_neutral_leader: {
     description:
-      "Po użyciu obie strony otrzymują dodatkowe karty z talii w liczbie równej (60% + 1) liczby kart w swoich grobach. Wszyscy gracze rozpoczynają grę z 50% większą liczbą kart w ręce (na podstawie początkowej liczby kart)."
+      "Po użyciu obie strony otrzymują dodatkowe karty z talii w liczbie równej (60% + 1) liczby kart w swoich stosach kart odrzuconych. Wszyscy gracze rozpoczynają grę z 50% większą liczbą kart w ręce (na podstawie początkowej liczby kart)."
   },
 
   emhyr_emperor: {
@@ -363,12 +363,12 @@ STRNG["pl"] = {
 
   emhyr_whiteflame: {
     description:
-      "Anuluje umiejętność Przywódcy przeciwnika."
+      "Anuluje zdolność Dowódcy przeciwnika."
   },
 
   emhyr_whiteflame2: {
     description:
-      "Kopiuje kartę Przywódcy przeciwnika na początku gry, ale przeciwnik otrzymuje dodatkowe 2 przetasowania."
+      "Kopiuje kartę Dowódcy przeciwnika na początku gry, ale przeciwnik otrzymuje dodatkowe 2 przelosowania."
   },
 
   emhyr_relentless: {
@@ -378,7 +378,7 @@ STRNG["pl"] = {
 
   emhyr_invader: {
     description:
-      "Medyk nie może wybrać karty do wskrzeszenia i zawsze wybiera najsilniejszą kartę z grobu (dotyczy obu graczy)."
+      "Medyk nie może wybrać karty do wskrzeszenia i zawsze wybiera najsilniejszą kartę ze stosu kart odrzuconych (dotyczy obu graczy)."
   },
 
   eredin_commander: {
@@ -387,7 +387,7 @@ STRNG["pl"] = {
   },
 
   eredin_bringer_of_death: {
-    name: "Eredin: Zwiastun Śmierci",
+    name: "Eredin — Zwiastun Śmierci",
     description:
       "Otrzymujesz kopię karty ze swojego stosu kart odrzuconych do ręki."
   },
@@ -404,11 +404,11 @@ STRNG["pl"] = {
 
   eredin_treacherous: {
     description:
-      "Zwiększa siłe kart Szpiegostwa i Sabotażu (dotyczy obu graczy)."
+      "Zwiększa siłę kart Szpiegostwa i Sabotażu (dotyczy obu graczy)."
   },
     francesca_queen: {
     description:
-      "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika walczące wręcz, jeśli łączna siła jego jednostek w zwarciu wynosi 10 lub więcej."
+      "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika Walczące Wręcz, jeśli łączna siła jego jednostek Walczących Wręcz wynosi 10 lub więcej."
   },
 
   francesca_beautiful: {
@@ -462,14 +462,14 @@ STRNG["pl"] = {
   },
     time_round_reverse: {
       description:
-        "Obaj gracze odzyskają do jednego punktu życia, ostatnia runda zostanie wymaza, 60% kart z ich puli kart odrzuconych zostanie skopiowanych do ich rąk, a sama pula zostaną przeniesione do talii i przetasowana.",
+        "Obaj gracze odzyskują do jednego punktu życia, ostatnia runda zostaje wymazana, 60% kart z ich stosów kart odrzuconych zostaje skopiowanych do ich rąk, a same stosy zostają przeniesione do talii i przetasowane.",
     },
     thedevil: {
     name: "Diabeł",
-    description: "Karta zostaja odrzucona po zagraniu. Pozwala ci dobrać 1 z 3 losowych kart z talii. Oszukuje przeciwnika jakgby ta karta była zagrana! Nie może dobrać kart specjalnych! "
+    description: "Karta zostaje odrzucona po zagraniu. Pozwala ci dobrać 1 z 3 losowych kart z talii. Oszukuje przeciwnika jakby ta karta była zagrana! Nie może dobrać kart Specjalnych! "
   },
     bucket: {
-    description: "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawaiania zależy od liderów z tą zdolnością w grze. Zwycięzca tury przejmuje pulę, przegrany zamienia cześć uwolnionej mocy w dobrnia kart. "
+    description: "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawiania zależy od Dowódców z tą zdolnością w grze. Zwycięzca rundy przejmuje pulę, przegrany zamienia część uwolnionej mocy w dobieranie kart. "
   },
     discord: {
     name: "Społeczność Discord",
@@ -481,15 +481,15 @@ STRNG["pl"] = {
   },
     potion_jaskolka: {
     name: "Jaskółka",
-    description: "Nakłada efekt dla obu graczy pozwalający zdolnością Szpiegostwa, Sabotażu i Wezwania Do Broni dobrać dodatkową kartę. "
+    description: "Nakłada efekt dla obu graczy pozwalający zdolnością Szpiegostwa, Sabotażu i Wezwania do Broni dobrać dodatkową kartę. "
   },
     potion_soup: {
     name: "Zupa z Elfa i Cebuli",
-    description: "(Elf z cebulą dobry, jak pomidor. Chcesz jeść?) Po użyciu karty mścicieli obu graczy trasfromują się! "
+    description: "(Elf z cebulą dobry, jak pomidor. Chcesz jeść?) Po użyciu karty wszyscy Mściciele obu graczy transformują się! "
   },
     potion_grom: {
        name: "Grzmot",
-    description: "Zwiększa ostateczną siłę jednostek walczących wręcz o 50% (według obliczeń); efekt ten działa przez 5 tur na gracza, który go aktywuje, oraz przez 3 tury na jego przeciwnika. "
+    description: "Zwiększa ostateczną siłę jednostek Walczących Wręcz o 50% (według obliczeń); efekt ten działa przez 5 tur na gracza, który go aktywuje, oraz przez 3 tury na jego przeciwnika. "
     },
      potion_white: {
        name: "Biały Miód",
@@ -497,14 +497,14 @@ STRNG["pl"] = {
     },
     witcher_potion: {
     name: "Wiedźmiński Eliksir",
-    description: "Po użyciu karta zostaje odrzucona! Nadpisuje wszytskie efekty tej mikstury dla każdego z celów eliksiru! "
+    description: "Po użyciu karta zostaje odrzucona! Nadpisuje wszystkie efekty tego eliksiru dla każdego z celów eliksiru! "
   },
     scorchstopper_single: {
-     description: "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawaiania zależy od liderów z tą zdolnością w grze. Zwycięzca tury przejmuje pulę, przegrany zamienia cześć uwolnionej mocy w dobrnia kart. Ochrania jedną kartę przed efektem Piekielnej Pożogi"
+     description: "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawiania zależy od Dowódców z tą zdolnością w grze. Zwycięzca rundy przejmuje pulę, przegrany zamienia część uwolnionej mocy w dobieranie kart. Ochrania jedną kartę przed efektem Piekielnej Pożogi"
     },
     motherscare: {
       name: "Matczyna Opieka",
-      description: "Daje graczowi który użył tej karty efekt (mikstury) \"Matczynej Opieki\", efekt na parę tur neutralizuje wszystkie efekty pogody dla gracza, Biały Miód neutralizuje efekt ochrony. "
+      description: "Daje graczowi który użył tej karty efekt (eliksiru) \"Matczynej Opieki\", efekt na parę tur neutralizuje wszystkie efekty Pogody dla gracza, Biały Miód neutralizuje efekt ochrony. "
     }
 },
     factions: {
@@ -541,7 +541,7 @@ STRNG["pl"] = {
   syndicate: {
     name: "Syndykat",
     description:
-      "Rozpoczyna grę z kartą Morale na planszy.\nMoże tworzyć talię z nieprzywódczych kart frakcji: Cesarstwa Nilfgaardu, Scoia'tael, Skellige, Syndykatu oraz Królestwa Nieba."
+      "Rozpoczyna grę z kartą Morale na planszy.\nMoże tworzyć talię z niedowódczych kart frakcji: Cesarstwa Nilfgaardu, Scoia'tael, Skellige, Syndykatu oraz Królestwa Nieba."
   },
 
   sky: {
@@ -552,7 +552,7 @@ STRNG["pl"] = {
     witchersforces: {
     name: "Siły Wiedźmińskie",
     description:
-      "W TRAKCIE TWORZENIA: Za każdą przegraną lub zremisowaną rundę dobierz kartę z tali.\nZ każdym Wiedźminem siła Szkoły Wiedźmińskiej rośnie!",
+      "W TRAKCIE TWORZENIA: Za każdą przegraną lub zremisowaną rundę dobierz kartę z talii.\nZ każdym Wiedźminem siła Szkoły Wiedźmińskiej rośnie!",
   }
 },
   card: {
@@ -572,7 +572,7 @@ STRNG["pl"] = {
 "eredin_the_treacherous": "Eredin Bréacc Glas — Zdradziecki",
   mysterious_elf: "Tajemniczy Elf",
   decoy: "Manekin do Ćwiczeń",
-  "custom!Decoy2": "Bożątko",
+  "custom!Decoy2": "Dywersja",
   frost: "Trzaskający Mróz",
   ciri: "Cirilla Fiona Elen Riannon",
   clear: "Czyste Niebo",
@@ -589,8 +589,8 @@ STRNG["pl"] = {
   yennefer: "Yennefer z Vengerbergu",
   zoltan: "Zoltan Chivay",
   olgierd: "Olgierd von Everec",
-  gaunter_odimm: "Gaunter O'Dim",
-  gaunter_odimm_darkness: "Gaunter O'Dim — Ciemność",
+  gaunter_odimm: "Gaunter O'Dimm",
+  gaunter_odimm_darkness: "Gaunter O'Dimm — Ciemność",
   cow: "Krowa",
   chort: "Bovinny Korpus Obrony",
     ballista: "Balista",
@@ -744,7 +744,7 @@ francesca_hope_of_the_aen_seidhe:
     gerry: "Gerwazy z Rzeki",
     lethosabotage: "Letho — Sabotażysta",
     aidhorn: "Sztandar Lyrii i Rivii",
-    Gaunter_Leader: "Gaunter O'Dim",
+    Gaunter_Leader: "Gaunter O'Dimm",
     Ida_Emean_d20: "Ida Emean — Elfickie Wróżbictwo",
     spice_trader: "Kupiec Korzenny",
     roach: "Płotka",
@@ -768,18 +768,18 @@ francesca_hope_of_the_aen_seidhe:
     Arnjolf_the_Patricide: "Arnjolf Ojcobójca",
     aard: "Znaki Wiedźmińskie: Aard",
     yrden: "Znaki Wiedźmińskie: Yrden",
-    igni: "Znaki Wiedźmińskie: Ignii",
+    igni: "Znaki Wiedźmińskie: Igni",
     udalryka_leader: "Udalryk an Brokvar — Wybraniec Bogów",
-    keadwen_weather: "Taktyczna Prognoza — Dywizja z Keadwen",
+    keadwen_weather: "Taktyczna Prognoza — Dywizja z Kaedwen",
     radovid_stern: "Radowid V Srogi — Jaśnie Pierdolnięty",
     fake_ciri: "Fałszywa Ciri — Cesarzowa Nilfgaardu",
     whitefrost: "Białe Zimno",
     temeriacall: "Temeria",
     temeriamoral: "Komandosi Niebieskich Pasów — Zwiadowca",
     temeriabluestripe: "Komandosi Niebieskich Pasów — Żołnierz",
-    temeriabluestripe_2: "Komandosi Niebieskich Pasów — Żółnierz",
+    temeriabluestripe_2: "Komandosi Niebieskich Pasów — Żołnierz",
     temeriamoral_1: "Komandosi Niebieskich Pasów — Zwiadowca",
-    vernontemeria_call: "Vernon Roche — Dowódca Odziałów Specjalnych Niebieskich Pasów",
+    vernontemeria_call: "Vernon Roche — Dowódca Oddziałów Specjalnych Niebieskich Pasów",
     steward: "Hopeful Steward",
     guard: "Straż Królewska",
     chibi_mask: "Chibi Mask",
@@ -836,7 +836,7 @@ francesca_hope_of_the_aen_seidhe:
     potion_jaskolka: "Jaskółka",
     viperwitcher: "Wiedźmin Szkoły Żmiji",
     potion_soup: "Zupa z Elfa i Cebuli",
-    potion_grom: "Grom",
+    potion_grom: "Grzmot",
     potion_white: "Biały Miód",
     kingkrill: "Potwór Otchłani",
     olgierd_headless: "Olgierd von Everec — Bezgłowy",
@@ -861,7 +861,7 @@ PanTwardowski: "Master Twardowski"
   ui: {
     elem: {
       initial_redraw: {
-        "txt": "Wybierz do %s kart do przetasowania."
+        "txt": "Wybierz do %s kart do przelosowania."
       },
       definesJS: {
         players: {
@@ -911,7 +911,7 @@ PanTwardowski: "Master Twardowski"
         },
         brick: {
           name: "Awaria Trybu Wieloosobowego",
-          why: "Nieudało się połączyć do serwera!\nSerwer może być tymczasowo niedostępny.\n\nSpróbuj ponownie później!",
+          why: "Nie udało się połączyć do serwera!\nSerwer może być tymczasowo niedostępny.\n\nSpróbuj ponownie później!",
         },
         surrender_request: {
           sword: "🗡️",
@@ -924,8 +924,8 @@ PanTwardowski: "Master Twardowski"
         },
         session_mode: {
           header: "Stwórz Pokój",
-          text: "Wybierz tryb Gry",
-          create: "Po Prostu Gra",
+          text: "Wybierz tryb gry",
+          create: "Zwykła Gra",
           custom: "Niestandardowa Gra",
         },
 
@@ -948,10 +948,10 @@ PanTwardowski: "Master Twardowski"
       },
       no_op_ui: "Brak Przeciwnika",
       session_copied: "Skopiowano: %s",
-      session_joined: "Dołączono do sesji: %s",
-      session_made: "Stworzono sesję, ID Dołączenia: %s",
-      session_bad: "Nieprawidłowe ID Sesji",
-      op_left: "Przeciwnik opuścił grę i sesja nie jest już ważna",
+      session_joined: "Dołączono do pokoju: %s",
+      session_made: "Stworzono pokój, ID Pokoju: %s",
+      session_bad: "Nieprawidłowe ID Pokoju",
+      op_left: "Przeciwnik opuścił grę i pokój nie jest już ważny",
       op_left_short: "Przeciwnik wyszedł",
       op_ready:
         "Przeciwnik jest gotowy! Jeśli będziesz gotowy gra rozpocznie się natychmiastowo!",
@@ -967,7 +967,7 @@ PanTwardowski: "Master Twardowski"
       },
       end_turn: "<color=#abebe2>%s</color><color=#32a852> tura dobiegła końca!</color>",
       no_op_start: "Nie można rozpocząć gry: Brak drugiego Gracza",
-      me_ready: "Jesteś gotowy, Poczekaj na drugiego gracza",
+      me_ready: "Jesteś gotowy, poczekaj na drugiego gracza",
       me_unready: "Jesteś teraz niegotowy",
       redraw:
         "<color=#d5cfe3>Przelosowałeś kartę \"</color><color=#fa4441>%x</color><color=#d5cfe3>\" na \"</color><color=#41fa66>%y</color><color=#d5cfe3>\"</color>",
@@ -979,8 +979,8 @@ PanTwardowski: "Master Twardowski"
         skellige_mad_man: "Wybierz kartę do wygnania",
         skellige_mad_man_ok: "Wybierz kartę Braterskiej Więzi",
         devildeal: "Wybierz kartę do dobrania",
-        gryf: "Wybierz znak Wiedźmiński",
-        viper: "Wybierz eliksir Wiedźmiński"
+        gryf: "Wybierz Wiedźmiński Znak",
+        viper: "Wybierz Wiedźmiński Eliksir"
       },
         ordinal: {
       "st": "",
@@ -992,11 +992,11 @@ PanTwardowski: "Master Twardowski"
     notif: {
       "nilfgaard-wins-draws": "Nilfgaard wygrywa remisy",
       me_win_via_nilfgaard:
-        "Zdolność Nilfgaardu aktywowana:\nNilfgaard wygrywa każdą turę zakończoną remisem.",
+        "Zdolność Nilfgaardu aktywowana:\nNilfgaard wygrywa każdą rundę zakończoną remisem.",
       op_win_via_nilfgaard:
-        "Zdolność Nilfgaardu aktywowana:\nNilfgaard wygrywa każdą turę zakończoną remisem.",
+        "Zdolność Nilfgaardu aktywowana:\nNilfgaard wygrywa każdą rundę zakończoną remisem.",
       witcherforces_draw: "Zdolność Sił Wiedźmińskich aktywowana:\nWiedźmini dobierają kartę! ",
-      "op-leader": "Przeciwnik używa zdolności Leadera",
+      "op-leader": "Przeciwnik używa zdolności Dowódcy",
       "op-white-flame":
         "The opponent's leader cancel\nyour opponent's Leader Ability", //unused
       meve_white_queen:
@@ -1020,54 +1020,54 @@ PanTwardowski: "Master Twardowski"
       "me-turn": "Twoja tura!",
       "op-turn": "Tura przeciwnika",
       north:
-        "Zdolność Królest Połnocy została aktywyowana:\nPółnoc dobiera dodatkową kartę.",
+        "Zdolność Królestw Północy aktywowana:\nPółnoc dobiera dodatkową kartę.",
       "north-scorch-cancelled":
         "Northern Realms leader ability used:\nScorch ability cancelled for the rest of the round.", // dont thin its used
       scol_secondchance:
         "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from grave.", // dont thin its used
       gaunter:
-        "Zdolność Gauntera O'Dima użyta:\nObie strony dostają dodatkowe karty!",
+        "Zdolność Gauntera O'Dimma użyta:\nObie strony dostają dodatkowe karty!",
       gaunter2:
-        "Zdolność Gauntera O'Dima użyta:\nOstatnia runda została wymazana; Wszyscy gracze odzyskują jedno życie!",
+        "Zdolność Gauntera O'Dimma użyta:\nOstatnia runda została wymazana; Wszyscy gracze odzyskują jedno życie!",
       scol_secondchance_necro2:
-        "Zdolność Gauntera O'Dima użyta:\nObie strony dostają dodatkowe karty!",
+        "Zdolność Gauntera O'Dimma użyta:\nObie strony dostają dodatkowe karty!",
       monsters:
         "Zdolność frakcji Potworów aktywowana:\nJedna karta Potworów zostaje na planszy.",
       draw_end:
-        "Gra w Gwinta nie może zakończyć się remisem!\nStaw czoła przeciwnikowi po raz kolejny aż zwycięsca zostanie wybrany!",
+        "Gra w Gwinta nie może zakończyć się remisem!\nStaw czoła przeciwnikowi po raz kolejny aż zwycięzca zostanie wybrany!",
       scol_pick:
         "Zdolność Scoia'taela pozwala przeciwnikowi wybrać kto zacznie grę!",
       sky: "Zdolność Królestwa Nieba aktywowana:\nJedna karta Królestwa Nieba zostaje na planszy.",
       darkstorm:
-        "Ciemność nadeszła...\nCiemność przynosi destrukcję dla walczących wręcz!",
+        "Ciemność nadeszła...\nCiemność przynosi destrukcję dla Walczących Wręcz!",
       scoiatael: "Opponent used the Scoia'tael faction perk to go first.", //seems to not be used!
-      "skellige-op": "Zdolność Skellige aktywowana:\nSkellige przenosi dwie karty z grobów na planszę!",
-      "skellige-me": "Zdolność Skellige aktywowana:\nSkellige przenosi dwie karty z grobów na planszę!",
+      "skellige-op": "Zdolność Skellige aktywowana:\nSkellige przenosi dwie karty ze stosów kart odrzuconych na planszę!",
+      "skellige-me": "Zdolność Skellige aktywowana:\nSkellige przenosi dwie karty ze stosów kart odrzuconych na planszę!",
       witcher_universe: "Witcher Universe faction ability used:\nTurn skipped.", 
       toussaint:
         "Toussaint faction ability used:\nToussaint draws an additional card.", // Wrong Gwent not used
       "toussaint-decoy-cancelled":
-        "Umiejętność lidera Toussaint użyta:\nUmiejętność wabik anulowana przez reszte rundy.", // Wrong Gwent not used
+        "Zdolność Dowódcy Toussaint użyta:\nZdolność Manekina do Ćwiczeń anulowana na resztę rundy.", // Wrong Gwent not used
       lyria_rivia:
-        "Umiejętność frakcji Lyria & Rivia użyta:\nEfekt Wysokie Morale nałożony na cały rząd.", // Wrong Gwent not used
+        "Zdolność frakcji Lyria & Rivia użyta:\nEfekt Wysokie Morale nałożony na cały rząd.", // Wrong Gwent not used
       zerrikania:
-        "Umiejętność frakcji Zerrikania użyta:\nJednostka została przywrócona ze sterty odrzuconych.", // Wrong Gwent not used
+        "Zdolność frakcji Zerrikania użyta:\nJednostka została przywrócona ze stosu kart odrzuconych.", // Wrong Gwent not used
       "coin-false_player-me": "Pominąłeś swoją turę",
       "coin-true_player-me":
         "Pominąłeś swoją turę\nAle twój przeciwnik otrzymał dodatkową kartę",
       "coin-false_player-op": "Twój przeciwnik pominął swoją turę",
       "coin-true_player-op":
         "Twój przeciwnik pominął swoją turę\nI otrzymujesz dodatkową kartę",
-      "whiteflame2-op_nilfgaard": "Przeciwnik skopiował umiejętność twojego lidera",
-      "whiteflame2-op_syndicate": "Przeciwnik skopiował umiejętność twojego lidera!",
-      "whiteflame2-me_nilfgaard": "Skopiowałeś umiejętność lidera przeciwnika!",
-      "whiteflame2-me_syndicate": "Skopiowałeś umiejętność lidera przeciwnika!",
+      "whiteflame2-op_nilfgaard": "Przeciwnik skopiował zdolność twojego Dowódcy",
+      "whiteflame2-op_syndicate": "Przeciwnik skopiował zdolność twojego Dowódcy!",
+      "whiteflame2-me_nilfgaard": "Skopiowałeś zdolność Dowódcy przeciwnika!",
+      "whiteflame2-me_syndicate": "Skopiowałeś zdolność Dowódcy przeciwnika!",
     },
     notif_side: {
-      "ts": "Podróżująca Dusza \"<color=#00ff00>%s</color>\" odwiedza teraz <color=#add8e6>Królestwo Nieba</color>!\nWyruszy spowrotem w drogę dnia <color=#90D5FF><$enddatelocal></color>",
+      "ts": "Podróżująca Dusza \"<color=#00ff00>%s</color>\" odwiedza teraz <color=#add8e6>Królestwo Nieba</color>!\nWyruszy z powrotem w drogę dnia <color=#90D5FF><$enddatelocal></color>",
       "moon": {
         "new": "Plansza jest spowita w ciemnościach!\nKsiężyc jest w <color=#DDE8EB>nowiu</color>!\nDo dnia <color=#90D5FF><$enddatelocal></color> przypada <color=#DDE8EB>nów</color>!\nKsiężyc zniknie <color=#90D5FF>%s</color>!",
-        "full": "Światło <color=#DDE8EB>Pełni</color> roświetla planszę!\nPełnia będzie na niebie aż do <color=#90D5FF><$enddatelocal></color>!\nKsiężyc będzie w <color=#DDE8EB>Pełni</color> dnia <color=#90D5FF>%s</color>!"
+        "full": "Światło <color=#DDE8EB>Pełni</color> rozświetla planszę!\nPełnia będzie na niebie aż do <color=#90D5FF><$enddatelocal></color>!\nKsiężyc będzie w <color=#DDE8EB>Pełni</color> dnia <color=#90D5FF>%s</color>!"
       }
     },
     mmenu: {
@@ -1097,14 +1097,14 @@ PanTwardowski: "Master Twardowski"
   c: {
       "cl": "nie może zostać użyty jako dowódca",
       "leader": "Dowódca",
-      "wrongf": "nie pasuje do frakcji tali",
+      "wrongf": "nie pasuje do frakcji talii",
       "id": "ID",
       "cid": "nie posiada odpowiadającej karty.",
-      "wrongf2": "nie może zostać użyty w tej frakcji tali",
+      "wrongf2": "nie może zostać użyty w tej frakcji talii",
       "has": "Talia posiada",
       "exists": "dostępnych",
       "cards": "kart",
-      "warn1": "Kontyunować import tali?",
+      "warn1": "Kontynuować import talii?",
       "warn2": "Potwierdź",
       "warn3": "Nie udało się przetworzyć talii!",
       "warn4": "Przesłana talia nie jest poprawnie sformatowana!",
@@ -1114,8 +1114,8 @@ PanTwardowski: "Master Twardowski"
       "warn5_title": "Potwierdź"
   },
   d: {
-  "card_a": "Kolekcja Kard",
-  "card_b": "Karty w Tali",
+  "card_a": "Kolekcja Kart",
+  "card_b": "Karty w Talii",
   "load": "Wczytaj Talię",
   "change": "Zmień Frakcję",
   "getfile": "Pobierz Talię"
@@ -1125,8 +1125,8 @@ PanTwardowski: "Master Twardowski"
 "isopready": ["Tak", "Nie"]
     },
   startwarnings: {
-    "a": "Twoja talia musi mieć conajmniej %s kart jednostek ",
-    "b": "Twoja talia nie może mieć więcej niż %s kart specjalnych. ",
+    "a": "Twoja talia musi mieć co najmniej %s kart jednostek ",
+    "b": "Twoja talia nie może mieć więcej niż %s kart Specjalnych. ",
     "c": "Twoja talia nie może mieć więcej niż %s kart bohaterów. ",
     "d": "Masz w talii za dużo kopii \"%s\" (%z/%y)! "
   }
@@ -1146,11 +1146,11 @@ PanTwardowski: "Master Twardowski"
     "howtouse": "Kliknij licznik aby użyć zdolności Dowódcy!",
     "manup": "Twój pasek zdolności się wypełnił (%x/%y)",
     "powerup": "Masz teraz (%x/%y) w twoim pasku zdolności!",
-    "toolow": "Nie masz wystarczającej energi aby użyć tej zdolności (%x/%y)",
+    "toolow": "Nie masz wystarczającej energii aby użyć tej zdolności (%x/%y)",
     "toolow_shield": "Masz %x/%y ładunków tarczy",
     "ophas": "Przeciwnik ma %x/%y",
     "mehas": "Ty masz %x/%y",
-    "click": "Kliknij licznik aby użyć zdolności lidera!",
+    "click": "Kliknij licznik aby użyć zdolności Dowódcy!",
   "d20": {
     "critfail": {
       "me": "Krytyczna porażka, wyrzucono \"1\"\nPrzeciwnik dobiera dodatkową kartę!",
@@ -1160,7 +1160,7 @@ PanTwardowski: "Master Twardowski"
       "done": "Wyrzucono: %s",
       "name": "Rzut Losu",
       "name_sideB": "Przeciwnik rzuca kostką o dodatkowe karty",
-      "res1": "Krtytczna Porażka",
+      "res1": "Krytyczna Porażka",
       "res2": "Naturalna Dwudziestka!",
       "res3": "Sukces",
       "res4": "Porażka",
@@ -1176,11 +1176,11 @@ PanTwardowski: "Master Twardowski"
       "a": "Tak",
         "b": "Nie",
         "c": "Pominąć Turę?",
-        "d": "Przeciwnik dostanie 50/50 na zdobycie kopi karty z planszy!"
+        "d": "Przeciwnik dostanie 50/50 na zdobycie kopii karty z planszy!"
     }
   }
   },
-  game_end: {
+game_end: {
     "winners": {
       "me": "Ty",
       "op": "Przeciwnik",
@@ -1188,18 +1188,25 @@ PanTwardowski: "Master Twardowski"
     },
     "texts": {
       "round": "Runda: ",
-      "win": "Zwycięsca: "
+      "win": "Zwycięzca: "
     },
     "wiped": {
       "wiped": "Wymazano!",
       "res": {
-        "gaunter_revert": "Gaunter O'dim cofnął czas"
+        "gaunter_revert": "Gaunter O'Dimm cofnął czas"
       }
     },
     "sep": "|",
     "sur": {
       "me": "Poddałeś się!",
       "op": "Przeciwnik poddał się!"
+    },
+    "coin": {
+      "win": "Zwycięstwo",
+      "lose": "Porażka",
+      "draw": "Remis",
+      "returning": "Powrót do personalizacji za",
+      "return": "Wróć do personalizacji"
     }
   },
   cardsoftheday: {
@@ -1239,12 +1246,12 @@ PanTwardowski: "Master Twardowski"
 
   discord_error_generic:
     "<color=#2121DB>DISCORD</color>: Coś poszło nie tak <color=#FF5555>(%s)</color>.",
-  discord_card_recived: "<color=#2121DB>DISCORD</color>: Otrzymano ekwipunek z <color=#2121DB>discorda</color>!\nZsynchronizowano <color=#FFD700>%s</color> kart!\n<color=#AAAAFF>Jeśli nie widzisz tych kart odśwież kontruktor talii poprzez zmianę frakcji!</color>"
+  discord_card_recived: "<color=#2121DB>DISCORD</color>: Otrzymano ekwipunek z <color=#2121DB>Discorda</color>!\nZsynchronizowano <color=#FFD700>%s</color> kart!\n<color=#AAAAFF>Jeśli nie widzisz tych kart odśwież konstruktor talii poprzez zmianę frakcji!</color>"
 }, 
 card_info: {
   strings: {
     "": "{class_prefix}**{name}**{class_suffix}\nKarta Specjalna",
-    "leader": "**{class_prefix}{name}{class_suffix}**\n{faction}Karta {leader_but_gender}",
+    "leader": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {leader_but_gender}",
     "weather": "☁**{name}**\nKarta Pogody",
     "siege_isHero:true_male": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Oblężniczego",
 "siege_isHero:false_male": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Oblężniczego",
@@ -1398,7 +1405,7 @@ rule63: [  // for classes
 
     "spypotion": "<color=#C46A2B>Jaskółka</color> jest aktywna przez następne <color=#E6D8B5>%s</color> tury!",
 
-    "elfendonion": "<color=#A69A45>Zupa z elfa i cebuli</color> jest tutaj przez kolejne <color=#E6D8B5>%s</color> tury!",
+    "elfendonion": "<color=#A69A45>Zupa z Elfa i Cebuli</color> jest tutaj przez kolejne <color=#E6D8B5>%s</color> tury!",
 
     "grom": "<color=#3F6B32>Grzmot</color> jest aktywny przez następne <color=#E6D8B5>%s</color> tury!",
 
@@ -1449,6 +1456,23 @@ ui_error_strings: {
       a: "Utracono połączenie, trwa ponowne łączenie...",
       b: "Odzyskano Sygnał!"
     }
+  }
+},
+"interface_specialevents": {
+  match: {
+    topic: "SYTUCJA PATOWA",
+    reasons: {
+      fall: "Wiadomość serwera: \"%s\", Gra Anulowana",
+      server_update: "Gra Anulowana; Gra została zaktualizowana i wszystkie klienty zostaną zmuszone do restartu"
+    }
+  },
+  nolobbies: {
+    reason: "Tworzenie pokojów jest tymczasowo niedostępne\nPowód: \"%s\"",
+    reasonless: "Tworzenie pokojów jest tymczasowo niedostępne"
+  },
+  authfail: {
+    reason: "Autoryzacja niedudana! Spróbuj odświeżyć stronę.\nWiadomość serwera: \"%s\"\n\nJeśli to jest błąd zgłoś to!",
+    reasonless: "Autoryzacja niedudana! Spróbuj odświeżyć stronę.\n\nJeśli to się powtarza, zgłoś to jako błąd!"
   }
 }
 };

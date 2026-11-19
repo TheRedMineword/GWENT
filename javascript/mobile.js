@@ -143,8 +143,8 @@
 
   /* ---------------- cutout images ---------------- */
   const frame = { a: null, b: null };
-  let cutoutCfg = null; // from clock_config "mobile"
-  let boardPath = null; // fallback when no cutout configured
+  let cutoutCfg = null;
+  let boardPath = null;
 
   function cssUrl(p) {
     return `url("${String(p).replace(/"/g, '\\"')}")`;
@@ -198,9 +198,7 @@
     applyCutout();
   };
 
-  /* ---------------- background fallback read from the DOM ----------------
-   * Works even if clock.js was not patched: we watch the board / deck / start
-   * backgrounds and use whichever static image is currently set. */
+  /* ---------------- background fallback read from the DOM ---------------- */
   function bgUrl(el) {
     if (!el) return null;
     const m = /url\((['"]?)(.*?)\1\)/.exec(

@@ -825,6 +825,33 @@ socket.onmessage = async (event) => {
         console.error("apply new vars err", e);
       }
       break;
+    case "update_stalemate_restart":
+      if (gameInProgress) {
+        try {
+          var msg = getTranslation(
+            "interface_specialevents.match.reasons.fall",
+          ).replace("%s", data.reason);
+          switch (data.reason) {
+            case "server_update":
+              msg = getTranslation(
+                "interface_specialevents.match.reasons.server_update",
+              );
+              break;
+          }
+          displayCoinNotice(
+            getTranslation("interface_specialevents.match.topic"),
+            msg,
+            false,
+            { coinImage: "img/icons/notif_me_coin.png" },
+          );
+          await sleep(10 * 1000);
+        } catch (e) {}
+        var overlay = document.createElement("div");
+        overlay.className = "briefing-overlay";
+        document.body.appendChild(overlay);
+        renderBox(overlay, {}, parsePatchNotes(data.content.content));
+      }
+      break;
     case "show_patchnotes":
       if (data.content) {
         // console.log(
@@ -4328,9 +4355,30 @@ class Game {
           this.resetTurnUI("me");
           this.resetTurnUI("op");
 
-          var special = "";
+          var isspecial = false;
+          var scol = "_squirrel";
+          var specialme = "";
+          var specialop = "";
+          var specialid = "";
           try {
-            special = data.special;
+            specialme = data.special;
+            specialop = data.special;
+            specialid = data.special;
+            if (data.special !== "") {
+              isspecial = true;
+            }
+            if (!isspecial) {
+              switch (player_op.leader_init.faction) {
+                case "scoiatael":
+                  specialop = scol;
+                  break;
+              }
+              switch (player_me.leader_init.faction) {
+                case "scoiatael":
+                  specialme = scol;
+                  break;
+              }
+            }
           } catch (e) {}
 
           socket.removeEventListener("message", handleMessage);
@@ -4341,10 +4389,10 @@ class Game {
           await displayCoinToss(
             game.firstPlayer.tag,
             {
-              me: `img/icons/notif_me_coin${special}.png`,
-              op: `img/icons/notif_op_coin${special}.png`,
+              me: `img/icons/notif_me_coin${specialme}.png`,
+              op: `img/icons/notif_op_coin${specialop}.png`,
             },
-            map_results_txt[`_${game.firstPlayer.tag}${special}`],
+            map_results_txt[`_${game.firstPlayer.tag}${specialid}`],
 
             player_me.leader_init.filename,
             player_me.name,
@@ -4710,6 +4758,8 @@ class Game {
     setPatchnotesVisible(!gameInProgress);
     player_ssettings_allow(true, true, false);
     document.getElementById("session-start-control").classList.remove("ready");
+    var end_outcome = "draw"; // "me" | "op" | "draw"
+    var end_sound = null;
     let endScreen = document.getElementById("end-screen");
     const endText = document.getElementById("end-text");
     document.getElementById("end-text").innerHTML = buildRoundHistoryText(
@@ -4768,7 +4818,7 @@ class Game {
             reason: "normal",
           },
         });
-        tocar("tf2/game_draw_not_redraw", true);
+        end_sound = "tf2/game_draw_not_redraw";
         endScreen.getElementsByTagName("p")[0].classList.remove("hide");
         endScreen.children[0].classList.add("end-draw");
       }
@@ -4792,7 +4842,8 @@ class Game {
           reason: "normal",
         },
       });
-      tocar("game_win", true);
+      end_outcome = "me";
+      end_sound = "game_win";
       endScreen.children[0].classList.add("end-win");
       console.log("Game over || Victory");
       gameended = true;
@@ -4816,15 +4867,23 @@ class Game {
           reason: "normal",
         },
       });
-      tocar("game_lose", true);
+      end_outcome = "op";
+      end_sound = "game_lose";
       endScreen.children[0].classList.add("end-lose");
       endScreen.children[0].classList.add("end-lose");
       console.log("Game over || Defeat");
       gameended = true;
     }
     if (end_screen) {
-      fadeIn(endScreen, 300);
-      ui.enablePlayer(true);
+      if (typeof uselegacyendscreen !== "undefined" && uselegacyendscreen) {
+        if (end_sound) tocar(end_sound, true);
+        fadeIn(endScreen, 300);
+        ui.enablePlayer(true);
+      } else {
+        // coin + results (button / optional auto return)
+        ui.enablePlayer(false);
+        await displayGameEndCoin(end_outcome, "", 10, end_sound);
+      }
     } else {
       ui.enablePlayer(false);
     }
@@ -4902,8 +4961,6 @@ class Game {
       );
       console.log("Game over || Victory by surrender");
 
-      tocar("game_win", true);
-
       endScreen.children[0].classList.add("end-win");
     } else {
       comp_and_send(
@@ -4916,13 +4973,23 @@ class Game {
       );
       console.log("Game over || Defeat by surrender");
 
-      tocar("game_lose", true);
-
       endScreen.children[0].classList.add("end-lose");
     }
 
-    fadeIn(endScreen, 300);
-    ui.enablePlayer(true);
+    const sur_sound = winner === player_me ? "game_win" : "game_lose";
+    if (typeof uselegacyendscreen !== "undefined" && uselegacyendscreen) {
+      tocar(sur_sound, true);
+      fadeIn(endScreen, 300);
+      ui.enablePlayer(true);
+    } else {
+      // coin + results (with surrender text)
+      await displayGameEndCoin(
+        winner === player_me ? "me" : "op",
+        a,
+        10,
+        sur_sound,
+      );
+    }
   }
 
   // Returns the client to the deck customization screen

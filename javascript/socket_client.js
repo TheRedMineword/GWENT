@@ -289,6 +289,26 @@
         return;
       }
 
+      // ---- server says our handshake auth was bad/missing (socket is ghosted, not dropped) ----
+      if (data.type === "auth_failed") {
+        this._onAuthFailed(data);
+        // keep going: also forwarded to the game below so it can show its own UI
+      }
+
+      // ---- new lobbies are blocked while an update is in review ----
+      if (data.type === "lobby_locked" && !global.GWENT_HANDLES_NOTICES) {
+        try {
+          silent_cancelSession();
+          if (typeof warn_screen === "function")
+            warn_screen(
+              getTranslation(
+                "interface_specialevents.nolobbies.reason",
+              ).replace("%s", data.message) ||
+                getTranslation("interface_specialevents.nolobbies.reasonless"),
+            );
+        } catch (e) {}
+      }
+
       // ---- reliable data from server ----
       if (typeof data._s === "number") {
         if (data._s <= this.inSeq) {
@@ -317,6 +337,44 @@
           console.error("[socket] listener", e);
         }
       }
+    }
+
+    _onAuthFailed(data) {
+      if (this._authFailedHandled) return;
+      this._authFailedHandled = true;
+      const msg =
+        getTranslation("interface_specialevents.authfail.reason").replace(
+          "%s",
+          data.message,
+        ) || getTranslation("interface_specialevents.authfail.reasonless");
+      this._status("auth_failed", {
+        reason: data.reason,
+        attempt: data.attempt,
+      });
+
+      // client-side persistence counter (survives page reloads, 10 min window)
+      let count = 1;
+      try {
+        const KEY = "gwent_auth_fail";
+        const now = Date.now();
+        const rec = JSON.parse(global.localStorage.getItem(KEY) || "null");
+        if (rec && now - rec.first < 10 * 60 * 1000) count = rec.count + 1;
+        global.localStorage.setItem(
+          KEY,
+          JSON.stringify({ count, first: rec && count > 1 ? rec.first : now }),
+        );
+      } catch (e) {}
+      const persistent = !!data.persistent || !!data.report_bug || count >= 3;
+
+      try {
+        if (typeof global.onAuthFailed === "function")
+          global.onAuthFailed(data, persistent);
+        else if (typeof warn_screen === "function") warn_screen(msg);
+      } catch (e) {}
+      this._fail(null, "auth failed: " + (data.reason || "unknown"));
+      try {
+        this.ws && this.ws.close();
+      } catch (e) {}
     }
 
     /** Compatibility with existing code that does socket.addEventListener("message", fn) */

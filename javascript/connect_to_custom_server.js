@@ -197,6 +197,7 @@ const IGNORE_PATTERNS = [
   "MAX_PHONE_SHORT_SIDE",
   "MAX_WINDOW_SHORT_SIDE",
   "MAX_WINDOW_WIDTH",
+  "_coinNoticeState",
 ];
 const LOG_PREFIX = "[CUSTOM_SERVER]";
 

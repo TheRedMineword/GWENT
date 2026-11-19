@@ -868,6 +868,390 @@ async function displayCoinToss(
   log("Finished.");
 }
 
+async function displayGameEndCoin(
+  outcome,
+  extraLine = "",
+  seconds = 10,
+  endSound = null,
+) {
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  const autoReturn =
+    typeof returntocustomizationatmatchend !== "undefined" &&
+    returntocustomizationatmatchend === true;
+  const tr = (key, fallback) => {
+    try {
+      const v = getTranslation(key);
+      return typeof v === "string" && v && v !== key && v !== "undefined"
+        ? v
+        : fallback;
+    } catch (e) {
+      return fallback;
+    }
+  };
+  const esc = (v) =>
+    decodeAndStripHtml(String(v ?? ""))
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  const fixColor = (c) => (!c ? "#ffffff" : c.startsWith("#") ? c : "#" + c);
+
+  let overlay = null;
+  try {
+    document.getElementById("gwent-end-coin")?.remove();
+
+    const rounds = (game && game.roundHistoryResults) || [];
+    const winsMe = rounds.filter((r) => r.winner === player_me).length;
+    const winsOp = rounds.filter((r) => r.winner === player_op).length;
+
+    const head =
+      outcome === "me"
+        ? { txt: tr("game_end.coin.win", "Victory"), color: "#ffd978" }
+        : outcome === "op"
+          ? { txt: tr("game_end.coin.lose", "Defeat"), color: "#d9806f" }
+          : { txt: tr("game_end.coin.draw", "Draw"), color: "#cdbd92" };
+
+    const faces =
+      outcome === "me"
+        ? ["img/icons/notif_me_coin.png", "img/icons/notif_me_coin.png"]
+        : outcome === "op"
+          ? ["img/icons/notif_op_coin.png", "img/icons/notif_op_coin.png"]
+          : [
+              "img/icons/notif_op_coin_squirrel.png",
+              "img/icons/notif_me_coin_squirrel.png",
+            ];
+
+    document.getElementById("gwent-end-coin-style")?.remove();
+    const st = document.createElement("style");
+    st.id = "gwent-end-coin-style";
+    st.textContent = `
+#gwent-end-coin{
+    position:fixed; inset:0; z-index:999999999; box-sizing:border-box;
+    display:flex; align-items:center; justify-content:center;
+    padding:12vh 3vw 3vh; font-family:serif; text-align:center;
+    pointer-events:auto; color:#d8bc7d;
+    background:radial-gradient(ellipse at 50% 45%,
+        rgba(48,33,12,.6) 0%, rgba(0,0,0,.9) 60%, rgba(0,0,0,.97) 100%);
+}
+#gwent-end-coin .ge-players{
+    width:100%; display:flex; justify-content:space-between; align-items:flex-start;
+    position:absolute; top:2vh; left:0; padding:0 2vw; box-sizing:border-box;
+}
+#gwent-end-coin .ge-p{
+    display:flex; align-items:center; gap:1vw; padding:1vh 1vw; border-radius:12px;
+    font-size:clamp(18px,1.5vw,32px); font-weight:600;
+    background:color-mix(in srgb, var(--p-bg) 65%, rgba(0,0,0,.85));
+    border:2px solid var(--p-color); color:var(--p-text);
+    box-shadow:0 0 0 1px rgba(0,0,0,.9), 0 0 18px rgba(0,0,0,.8);
+    transition:opacity .5s, box-shadow .5s, transform .5s;
+}
+#gwent-end-coin .ge-p.win{ transform:scale(1.07); box-shadow:0 0 0 1px #000, 0 0 32px var(--p-color); }
+#gwent-end-coin .ge-p.lose{ opacity:.45; }
+#gwent-end-coin .ge-p img.leader{ max-height:11vh; width:auto; border-radius:8px; }
+#gwent-end-coin .ge-p img.faction{ width:clamp(28px,2vw,52px); height:auto; }
+#gwent-end-coin .ge-p .pbadge{
+    min-width:1.7em; height:1.7em; padding:0 .3em; box-sizing:border-box;
+    display:flex; align-items:center; justify-content:center; border-radius:999px;
+    background:var(--p-color); color:var(--p-text); font-weight:700;
+}
+#gwent-end-coin .ge-main{
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:4vw;
+}
+#gwent-end-coin .ge-stage{
+    --size:clamp(130px,13vw,250px);
+    position:relative; width:var(--size); height:var(--size);
+    perspective:calc(var(--size) * 5); flex:none;
+}
+#gwent-end-coin .ge-glow{
+    position:absolute; left:-90%; top:-90%; width:280%; height:280%; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,214,120,.32) 0%, rgba(255,214,120,.1) 38%, rgba(0,0,0,0) 68%);
+    opacity:.8;
+}
+#gwent-end-coin .ge-coin{
+    position:absolute; inset:0; transform-style:preserve-3d;
+    filter:drop-shadow(0 0 14px rgba(255,214,120,.3)) drop-shadow(0 6px 10px rgba(0,0,0,.6));
+}
+#gwent-end-coin .ge-face{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:contain; backface-visibility:hidden;
+}
+#gwent-end-coin .ge-face.back{ transform:rotateY(180deg); }
+#gwent-end-coin .ge-ring{
+    position:absolute; inset:0; border-radius:50%; opacity:0;
+    border:3px solid rgba(255,214,120,.95);
+    box-shadow:0 0 24px rgba(255,214,120,.7), inset 0 0 24px rgba(255,214,120,.5);
+}
+#gwent-end-coin .ge-side{
+    display:flex; flex-direction:column; align-items:center; gap:1.4vh;
+    width:min(560px,86vw);
+}
+#gwent-end-coin .ge-title{
+    margin:0; opacity:0; font-size:clamp(30px,3.2vw,66px); font-weight:700;
+    letter-spacing:3px; text-transform:uppercase; text-shadow:0 0 10px #000, 0 0 22px #000;
+}
+#gwent-end-coin .ge-score{
+    opacity:0; font-size:clamp(20px,1.8vw,38px); font-weight:700; color:#f3e3b0;
+    text-shadow:0 0 10px #000;
+}
+#gwent-end-coin .ge-rounds{
+    display:flex; flex-direction:column; gap:.4vh; width:100%;
+    font-size:clamp(15px,1.2vw,26px); text-shadow:0 0 8px #000;
+}
+#gwent-end-coin .ge-row{
+    display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:.8em;
+    padding:.35em .8em; border-radius:8px; opacity:0;
+    background:rgba(0,0,0,.45); border:1px solid rgba(216,188,125,.28);
+}
+#gwent-end-coin .ge-row .sm{ text-align:right; color:#9d9378; }
+#gwent-end-coin .ge-row .so{ text-align:left; color:#9d9378; }
+#gwent-end-coin .ge-row .mid{ color:#6f6650; }
+#gwent-end-coin .ge-row.w-me .sm, #gwent-end-coin .ge-row.w-op .so{
+    color:#ffe9a8; font-weight:700; text-shadow:0 0 10px rgba(255,214,120,.6);
+}
+#gwent-end-coin .ge-row .wipe{ grid-column:1 / -1; text-align:center; font-size:.8em; color:#c9806f; }
+#gwent-end-coin .ge-extra{ opacity:0; color:#cdbd92; font-size:clamp(14px,1.1vw,24px); }
+#gwent-end-coin .ge-count{
+    opacity:0; display:flex; flex-direction:column; align-items:center; gap:.8vh;
+    font-size:clamp(14px,1.1vw,24px); color:#cdbd92; text-shadow:0 0 10px #000;
+}
+#gwent-end-coin .ge-count b{ font-size:1.4em; color:#d8bc7d; font-variant-numeric:tabular-nums; }
+#gwent-end-coin .ge-bar{ width:min(340px,60vw); height:5px; border-radius:3px; overflow:hidden; background:rgba(255,255,255,.12); }
+#gwent-end-coin .ge-bar i{ display:block; height:100%; transform-origin:left center; background:#d8bc7d; }
+#gwent-end-coin .ge-btn{
+    opacity:0; cursor:pointer; font-family:inherit; font-size:clamp(16px,1.3vw,28px);
+    padding:.5em 1.6em; border-radius:10px; color:#e9dbb4;
+    background:linear-gradient(180deg, rgba(80,56,20,.95), rgba(32,22,8,.95));
+    border:2px solid #d4af37; box-shadow:0 0 18px rgba(212,175,55,.25);
+}
+#gwent-end-coin .ge-btn:hover{ filter:brightness(1.2); }
+`;
+    document.head.appendChild(st);
+
+    const mkPlayer = (side, p, wins) => {
+      const baseColor = fixColor(map_results_color[p.leader.faction]);
+      const d = document.createElement("div");
+      d.className = `ge-p ${side}`;
+      d.style.setProperty("--p-color", baseColor);
+      d.style.setProperty("--p-bg", getDarkerHex(baseColor, 0.35));
+      d.style.setProperty("--p-text", getContrastingTextColor(baseColor));
+      const leader = document.createElement("img");
+      leader.className = "leader";
+      const lf = p.leader_init.filename;
+      leader.src =
+        lf === "Gaunter_Leader" || lf === "Gaunter_Leader2"
+          ? `img/sm/neutral_${lf}.jpg`
+          : `img/sm/${p.leader_init.faction}_${lf}.jpg`;
+      const fac = document.createElement("img");
+      fac.className = "faction";
+      fac.src = `img/icons/deck_shield_${p.leader_init.faction}.png`;
+      const nm = document.createElement("span");
+      nm.textContent = decodeAndStripHtml(p.name);
+      const badge = document.createElement("div");
+      badge.className = "pbadge";
+      badge.textContent = String(wins);
+      if (side === "op") d.append(badge, nm, fac, leader);
+      else d.append(leader, fac, nm, badge);
+      return d;
+    };
+
+    overlay = document.createElement("div");
+    overlay.id = "gwent-end-coin";
+    overlay.setAttribute("role", "alertdialog");
+
+    const players = document.createElement("div");
+    players.className = "ge-players";
+    const meP = mkPlayer("me", player_me, winsMe);
+    const opP = mkPlayer("op", player_op, winsOp);
+    players.append(meP, opP);
+
+    // coin
+    const stage = document.createElement("div");
+    stage.className = "ge-stage";
+    const glow = document.createElement("div");
+    glow.className = "ge-glow";
+    const coin = document.createElement("div");
+    coin.className = "ge-coin";
+    const front = document.createElement("img");
+    front.className = "ge-face front";
+    front.src = faces[0];
+    const back = document.createElement("img");
+    back.className = "ge-face back";
+    back.src = faces[1];
+    coin.append(front, back);
+    const ring = document.createElement("div");
+    ring.className = "ge-ring";
+    stage.append(glow, coin, ring);
+
+    // results
+    const titleEl = document.createElement("h1");
+    titleEl.className = "ge-title";
+    titleEl.style.color = head.color;
+    titleEl.textContent = head.txt;
+
+    const scoreEl = document.createElement("div");
+    scoreEl.className = "ge-score";
+    scoreEl.innerHTML = `${esc(player_me.name)} ${winsMe} – ${winsOp} ${esc(player_op.name)}`;
+
+    const roundsEl = document.createElement("div");
+    roundsEl.className = "ge-rounds";
+    rounds.forEach((r, i) => {
+      const row = document.createElement("div");
+      const cls =
+        r.winner === player_me ? "w-me" : r.winner === player_op ? "w-op" : "";
+      row.className = `ge-row ${cls}`;
+      row.innerHTML =
+        `<span class="sm">${esc(r.score_me)}</span>` +
+        `<span class="mid">${esc(tr("game_end.texts.round", "Round "))}${i + 1}</span>` +
+        `<span class="so">${esc(r.score_op)}</span>` +
+        (r.wasWiped
+          ? `<div class="wipe">${esc(tr("game_end.wiped.wiped", "Wiped"))} (${esc(
+              tr(`game_end.wiped.res.${r.wipedreason}`, r.wipedreason || ""),
+            )})</div>`
+          : "");
+      roundsEl.appendChild(row);
+    });
+
+    const extraEl = document.createElement("div");
+    extraEl.className = "ge-extra";
+    extraEl.innerHTML = esc(extraLine).replace(/\n/g, "<br>");
+
+    const countEl = document.createElement("div");
+    countEl.className = "ge-count";
+    const countNum = document.createElement("b");
+    countNum.textContent = String(seconds);
+    const label = document.createElement("span");
+    label.append(
+      `${tr("game_end.coin.returning", "Returning to customization in")} `,
+      countNum,
+    );
+    const bar = document.createElement("div");
+    bar.className = "ge-bar";
+    const fill = document.createElement("i");
+    bar.appendChild(fill);
+    countEl.append(label, bar);
+
+    const btn = document.createElement("button");
+    btn.className = "ge-btn";
+    btn.textContent = tr("game_end.coin.return", "Return to customization");
+
+    const side = document.createElement("div");
+    side.className = "ge-side";
+    side.append(titleEl, scoreEl, roundsEl);
+    if (extraLine) side.appendChild(extraEl);
+    if (autoReturn) side.appendChild(countEl);
+    side.appendChild(btn);
+
+    const main = document.createElement("div");
+    main.className = "ge-main";
+    main.append(stage, side);
+    overlay.append(players, main);
+    document.body.appendChild(overlay);
+
+    const A = (el, frames, opts) =>
+      el.animate(frames, { fill: "forwards", ...opts });
+
+    A(overlay, [{ opacity: 0 }, { opacity: 1 }], { duration: 250 });
+
+    // FLIP: coin starts in the screen centre and slides to its place in the
+    // layout while it spins, so both happen at the same time.
+    await new Promise((r) => requestAnimationFrame(r));
+    const rc = stage.getBoundingClientRect();
+    const dx = window.innerWidth / 2 - (rc.left + rc.width / 2);
+    const dy = window.innerHeight / 2 - (rc.top + rc.height / 2);
+
+    const MOVE = 1100;
+    try {
+      if (typeof tocar === "function") tocar("coin_flip", false);
+    } catch (e) {}
+    A(
+      stage,
+      [
+        { transform: `translate(${dx}px, ${dy}px) scale(1.35)` },
+        { transform: "translate(0,0) scale(1)" },
+      ],
+      { duration: MOVE, easing: "cubic-bezier(.2,.8,.25,1)" },
+    );
+    const spin = A(
+      coin,
+      [{ transform: "rotateY(0deg)" }, { transform: `rotateY(${360 * 3}deg)` }],
+      { duration: MOVE, easing: "cubic-bezier(.15,.7,.25,1)" },
+    );
+
+    const fadeUp = (el, delay) =>
+      A(
+        el,
+        [
+          { opacity: 0, transform: "translateY(10px)" },
+          { opacity: 1, transform: "translateY(0)" },
+        ],
+        { duration: 350, delay, easing: "ease-out" },
+      );
+    // results start fading in while the coin is still travelling
+    fadeUp(titleEl, MOVE * 0.45);
+    fadeUp(scoreEl, MOVE * 0.45 + 120);
+    roundsEl
+      .querySelectorAll(".ge-row")
+      .forEach((row, i) => fadeUp(row, MOVE * 0.45 + 220 + i * 120));
+    const t = MOVE * 0.45 + 220 + rounds.length * 120;
+    if (extraLine) fadeUp(extraEl, t);
+    if (autoReturn) fadeUp(countEl, t + 100);
+    fadeUp(btn, t + 100);
+
+    await spin.finished;
+    try {
+      if (endSound && typeof tocar === "function") tocar(endSound, true);
+    } catch (e) {}
+    A(
+      ring,
+      [
+        { opacity: 0.95, transform: "scale(.9)" },
+        { opacity: 0, transform: "scale(2.1)" },
+      ],
+      { duration: 700, easing: "ease-out" },
+    );
+    if (outcome === "me") (meP.classList.add("win"), opP.classList.add("lose"));
+    if (outcome === "op") (opP.classList.add("win"), meP.classList.add("lose"));
+
+    // leave: button always, countdown only when auto return is enabled
+    let leave;
+    const left = new Promise((r) => (leave = r));
+    btn.addEventListener("click", () => leave(), { once: true });
+
+    if (autoReturn) {
+      (async () => {
+        await wait(Math.max(0, t + 450 - MOVE));
+        fill.animate([{ transform: "scaleX(1)" }, { transform: "scaleX(0)" }], {
+          duration: seconds * 1000,
+          easing: "linear",
+          fill: "both",
+        });
+        for (let n = seconds; n > 0; n--) {
+          countNum.textContent = String(n);
+          await wait(1000);
+        }
+        leave();
+      })();
+    }
+    await left;
+  } catch (e) {
+    console.error("[GameEndCoin] failed", e);
+  }
+
+  try {
+    if (overlay) {
+      await overlay.animate([{ opacity: 1 }, { opacity: 0 }], {
+        duration: 300,
+        fill: "forwards",
+      }).finished;
+      overlay.remove();
+    }
+  } catch (e) {
+    overlay?.remove();
+  }
+  game.returnToCustomization();
+}
+
 // toss an "fake" scoliatle coin after opponent pick first player
 async function scol_fake_coin() {
   await displayCoinToss(
@@ -1201,3 +1585,310 @@ async function displayD20Roll(resultValue = null, options = {}) {
 //    message: "roll failure",
 //    messageColor: "#ff6666"
 //});
+
+let _coinNoticeState = null;
+
+function hideCoinNotice() {
+  const st = _coinNoticeState;
+  if (st) st.close(false);
+}
+
+async function displayCoinNotice(
+  topic = "",
+  reason = "",
+  returntocustomization = null,
+  options = {},
+) {
+  const {
+    coinImage = null,
+    onTick = null,
+    onReturn = null,
+    color = "#d8bc7d",
+    countdownText = "Returning to customization in",
+  } = options || {};
+
+  // replace a notice that is already open
+  if (_coinNoticeState) _coinNoticeState.close(false, true);
+  document.getElementById("gwent-coin-notice")?.remove();
+
+  if (!document.getElementById("gwent-coin-notice-style")) {
+    const style = document.createElement("style");
+    style.id = "gwent-coin-notice-style";
+    style.textContent = `
+#gwent-coin-notice{
+    position:fixed; inset:0; z-index:999999999;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:2.2vh; padding:4vh 4vw; box-sizing:border-box;
+    pointer-events:auto; font-family:serif; text-align:center;
+    background:radial-gradient(ellipse at 50% 45%,
+        rgba(48,33,12,.6) 0%, rgba(0,0,0,.9) 60%, rgba(0,0,0,.97) 100%);
+    color:var(--cn-color);
+}
+#gwent-coin-notice .cn-stage{
+    --size:clamp(130px,13vw,260px);
+    position:relative; width:var(--size); height:var(--size);
+    perspective:calc(var(--size) * 5);
+}
+#gwent-coin-notice .cn-glow{
+    position:absolute; left:-90%; top:-90%; width:280%; height:280%; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,214,120,.34) 0%, rgba(255,214,120,.1) 38%, rgba(0,0,0,0) 68%);
+    opacity:0;
+}
+#gwent-coin-notice .cn-shadow{
+    position:absolute; left:10%; bottom:-14%; width:80%; height:18%; border-radius:50%;
+    background:radial-gradient(ellipse, rgba(0,0,0,.85) 0%, rgba(0,0,0,0) 70%);
+    opacity:0;
+}
+#gwent-coin-notice .cn-coin{
+    position:absolute; inset:0; border-radius:50%; transform-style:preserve-3d;
+    filter:drop-shadow(0 0 14px rgba(255,214,120,.3)) drop-shadow(0 6px 10px rgba(0,0,0,.6));
+    opacity:0;
+}
+#gwent-coin-notice .cn-face{
+    position:absolute; inset:0; width:100%; height:100%; border-radius:50%;
+    object-fit:contain; backface-visibility:hidden;
+}
+#gwent-coin-notice .cn-face.drawn{
+    background:
+        radial-gradient(circle at 50% 50%, transparent 0 56%, rgba(0,0,0,.28) 57% 58%, transparent 59%),
+        radial-gradient(circle at 35% 30%, #fff1b8 0%, #e2b955 38%, #a9791f 72%, #6d4a10 100%);
+    border:calc(var(--size) * .035) solid #8a5f14;
+    box-shadow:inset 0 0 calc(var(--size) * .09) rgba(0,0,0,.55);
+    box-sizing:border-box;
+}
+#gwent-coin-notice .cn-face.drawn::after{
+    content:"!"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size:calc(var(--size) * .55); font-weight:700; color:#6d4a10;
+    text-shadow:0 1px 0 rgba(255,241,184,.7), 0 -1px 0 rgba(0,0,0,.35);
+}
+#gwent-coin-notice .cn-face.back{ transform:rotateY(180deg); }
+#gwent-coin-notice .cn-ring{
+    position:absolute; inset:0; border-radius:50%; opacity:0;
+    border:3px solid rgba(255,214,120,.95);
+    box-shadow:0 0 24px rgba(255,214,120,.7), inset 0 0 24px rgba(255,214,120,.5);
+}
+#gwent-coin-notice .cn-topic{
+    margin:0; opacity:0; max-width:min(900px,90vw);
+    font-size:clamp(28px,3vw,64px); font-weight:700; letter-spacing:1px;
+    text-shadow:0 0 10px #000, 0 0 22px #000;
+}
+#gwent-coin-notice .cn-reason{
+    margin:0; opacity:0; max-width:min(760px,88vw); white-space:pre-line;
+    font-size:clamp(18px,1.6vw,34px); line-height:1.35; color:#e9dbb4;
+    text-shadow:0 0 10px #000, 0 0 18px #000;
+}
+#gwent-coin-notice .cn-count{
+    opacity:0; display:flex; flex-direction:column; align-items:center; gap:1vh;
+    font-size:clamp(16px,1.3vw,28px); color:#cdbd92;
+    text-shadow:0 0 10px #000;
+}
+#gwent-coin-notice .cn-count b{ font-size:1.5em; color:var(--cn-color); font-variant-numeric:tabular-nums; }
+#gwent-coin-notice .cn-bar{
+    width:min(360px,60vw); height:6px; border-radius:3px; overflow:hidden;
+    background:rgba(255,255,255,.12);
+}
+#gwent-coin-notice .cn-bar i{
+    display:block; height:100%; width:100%; transform-origin:left center;
+    background:var(--cn-color);
+}
+`;
+    document.head.appendChild(style);
+  }
+
+  // ---- DOM ----
+  const overlay = document.createElement("div");
+  overlay.id = "gwent-coin-notice";
+  overlay.style.setProperty("--cn-color", color);
+  overlay.setAttribute("role", "alertdialog");
+  overlay.setAttribute("aria-live", "assertive");
+
+  const stage = document.createElement("div");
+  stage.className = "cn-stage";
+  const glow = document.createElement("div");
+  glow.className = "cn-glow";
+  const shadow = document.createElement("div");
+  shadow.className = "cn-shadow";
+  const coin = document.createElement("div");
+  coin.className = "cn-coin";
+  const makeFace = (cls) => {
+    if (coinImage) {
+      const img = document.createElement("img");
+      img.className = `cn-face ${cls}`;
+      img.src = coinImage;
+      return img;
+    }
+    const d = document.createElement("div");
+    d.className = `cn-face drawn ${cls}`;
+    return d;
+  };
+  coin.append(makeFace("front"), makeFace("back"));
+  const ring = document.createElement("div");
+  ring.className = "cn-ring";
+  stage.append(glow, shadow, coin, ring);
+
+  const topicEl = document.createElement("h1");
+  topicEl.className = "cn-topic";
+  topicEl.textContent = decodeAndStripHtml(String(topic ?? ""));
+  const reasonEl = document.createElement("p");
+  reasonEl.className = "cn-reason";
+  reasonEl.textContent = decodeAndStripHtml(String(reason ?? ""));
+
+  const seconds = Math.max(0, Math.floor(Number(returntocustomization) || 0));
+  const countEl = document.createElement("div");
+  countEl.className = "cn-count";
+  const countLabel = document.createElement("span");
+  const countNum = document.createElement("b");
+  countLabel.append(`${countdownText} `, countNum);
+  const bar = document.createElement("div");
+  bar.className = "cn-bar";
+  const barFill = document.createElement("i");
+  bar.appendChild(barFill);
+  countEl.append(countLabel, bar);
+  countNum.textContent = String(seconds);
+
+  overlay.append(stage, topicEl, reasonEl);
+  if (seconds > 0) overlay.appendChild(countEl);
+  document.body.appendChild(overlay);
+
+  // ---- state / closing ----
+  let timer = null;
+  let finished = false;
+  let resolveDone;
+  const done = new Promise((r) => (resolveDone = r));
+  const state = {
+    close: async (returned, instant = false) => {
+      if (finished) return;
+      finished = true;
+      if (timer) clearInterval(timer);
+      if (_coinNoticeState === state) _coinNoticeState = null;
+      if (!instant) {
+        try {
+          await overlay.animate([{ opacity: 1 }, { opacity: 0 }], {
+            duration: 400,
+            fill: "forwards",
+          }).finished;
+        } catch (e) {}
+      }
+      overlay.remove();
+      resolveDone(returned);
+    },
+  };
+  _coinNoticeState = state;
+
+  // ---- animation: backdrop fades in, coin drops in spinning, lands with a ring pulse ----
+  const anim = (el, frames, opts) =>
+    el.animate(frames, { fill: "forwards", ...opts });
+
+  anim(overlay, [{ opacity: 0 }, { opacity: 1 }], { duration: 400 });
+  anim(glow, [{ opacity: 0 }, { opacity: 1 }], { duration: 900, delay: 350 });
+
+  anim(
+    coin,
+    [
+      {
+        opacity: 0,
+        transform: "translateY(-45vh) scale(.35) rotateY(0deg)",
+        offset: 0,
+      },
+      {
+        opacity: 1,
+        transform: "translateY(0) scale(1.12) rotateY(900deg)",
+        offset: 0.62,
+        easing: "ease-out",
+      },
+      {
+        opacity: 1,
+        transform: "translateY(-3vh) scale(1.02) rotateY(1080deg)",
+        offset: 0.8,
+        easing: "ease-in",
+      },
+      {
+        opacity: 1,
+        transform: "translateY(0) scale(1) rotateY(1080deg)",
+        offset: 1,
+      },
+    ],
+    { duration: 1300, delay: 250, easing: "cubic-bezier(.2,.7,.3,1)" },
+  );
+  anim(
+    shadow,
+    [
+      { opacity: 0, transform: "scale(.4)" },
+      { opacity: 1, transform: "scale(1)" },
+    ],
+    {
+      duration: 1000,
+      delay: 700,
+    },
+  );
+  // impact pulse when the coin lands
+  anim(
+    ring,
+    [
+      { opacity: 0.95, transform: "scale(.9)" },
+      { opacity: 0, transform: "scale(2.1)" },
+    ],
+    { duration: 800, delay: 1350, easing: "ease-out" },
+  );
+
+  try {
+    if (typeof tocar === "function") tocar("coin_flip", false);
+  } catch (e) {}
+
+  const fadeUp = (el, delay) =>
+    anim(
+      el,
+      [
+        { opacity: 0, transform: "translateY(14px)" },
+        { opacity: 1, transform: "translateY(0)" },
+      ],
+      { duration: 500, delay, easing: "ease-out" },
+    );
+  fadeUp(topicEl, 1500);
+  fadeUp(reasonEl, 1750);
+  if (seconds > 0) fadeUp(countEl, 2000);
+
+  if (seconds > 0) {
+    const startAt = performance.now() + 2000;
+    let lastShown = seconds;
+    barFill.animate([{ transform: "scaleX(1)" }, { transform: "scaleX(0)" }], {
+      duration: seconds * 1000,
+      delay: 2000,
+      easing: "linear",
+      fill: "both",
+    });
+    timer = setInterval(() => {
+      const elapsed = (performance.now() - startAt) / 1000;
+      if (elapsed < 0) return;
+      const left = Math.max(0, Math.ceil(seconds - elapsed));
+      if (left !== lastShown) {
+        lastShown = left;
+        countNum.textContent = String(left);
+        try {
+          if (typeof onTick === "function") onTick(left);
+        } catch (e) {
+          console.error("[CoinNotice] onTick", e);
+        }
+      }
+      if (left <= 0) {
+        clearInterval(timer);
+        timer = null;
+        (async () => {
+          try {
+            if (typeof onReturn === "function") await onReturn();
+            else if (typeof returnToCustomization === "function")
+              await returnToCustomization();
+          } catch (e) {
+            console.error("[CoinNotice] return to customization failed", e);
+          }
+          state.close(true);
+        })();
+      }
+    }, 100);
+  }
+
+  return done;
+}
+// displayCoinNotice("Server update", "The match ended in a stalemate.\nThe game will restart.", 10, {
+//   onReturn: () => { /* go back to customization */ },
+// });

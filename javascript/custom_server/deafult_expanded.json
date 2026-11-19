@@ -1,6 +1,8 @@
 {
   "name": "Default Config",
   "env_vars": {
+    "uselegacyendscreen": false,
+    "returntocustomizationatmatchend": false,
     "allowdiscordintegration": true,
     "showbankms": 9000,
     "fullscreenConfig": {
@@ -1131,7 +1133,7 @@
           },
           "storm": {
             "name": "Skellige Storm",
-            "description": "Reduces the Strength of all Range and Siege Units to 1. "
+            "description": "Sets the strength of all Ranged Combat and Siege Combat cards to 1 for both players. "
           },
           "hero": {
             "name": "Hero Card",
@@ -1147,11 +1149,11 @@
           },
           "all_rows": {
             "name": "Multidimensional Efficiency",
-            "description": "Can be placed in all yours board rows (Except for weather and special row). "
+            "description": "Can be placed in any of your board rows (except the Weather and Special rows). "
           },
           "wshield": {
             "name": "Shield",
-            "description": "Partialy protects all cards in same row from weather card effects and axii, Commander's Horn will have no effect in that row. "
+            "description": "Partially protects all cards in the same row from Weather card effects and Axii. Commander's Horn has no effect in that row. "
           },
           "quen_desc": {
             "name": "Witcher Signs: Quen",
@@ -1159,7 +1161,7 @@
           },
           "yrden": {
             "name": "Witcher Signs: Yrden",
-            "description": "Witchers Magic Trap, place on enemy ranged row to aplly -1 to each unit card. Effects stacks. Decoy can be used to pick up the card! "
+            "description": "Witcher's magic trap. Place it on the enemy's Ranged Combat row to apply -1 to each Unit card. Effects stack. Decoy can be used to pick up the card! "
           },
           "horn": {
             "name": "Commander's Horn",
@@ -1194,39 +1196,39 @@
             "description": "Destroy your enemy's strongest Siege Combat unit(s) if the combined strength of all his or her Siege Combat units is 10 or more."
           },
           "scorch_a": {
-            "name": "Scorch — Agilie",
+            "name": "Scorch — Opposite Row",
             "description": "Destroy your enemy's strongest opposite row Combat unit(s) if the combined strength of all his or her opposite row Combat units is 10 or more."
           },
           "scorchstopper": {
             "description": "Prevents Scorch effects by spending 1 Shield Charge per saved card. Starts with 5 charges, cannot be recharged, and breaks if you play any Scorch card."
           },
           "agile": {
-            "name": "agile",
+            "name": "Agile",
             "description": "Can be placed in either the Close Combat or the Ranged Combat row. Cannot be moved once placed. "
           },
           "muster": {
-            "name": "muster",
+            "name": "Muster",
             "description": "Find any cards with the same name in your deck and play them instantly. "
           },
           "spy": {
-            "name": "spy",
+            "name": "Spy",
             "description": "Place on your opponent's battlefield (counts towards your opponent's total) and draw 2 cards from your deck. "
           },
           "sabotage": {
-            "name": "sabotage",
-            "description": "Send to enemy fields this cards to lower their score and draw extra 1 card(s). "
+            "name": "Sabotage",
+            "description": "Place on your opponent's battlefield to lower their score and draw 1 extra card. "
           },
           "resilience": {
             "name": "Resilience",
             "description": "Remains on the board for the following round. "
           },
           "resilience_igni": {
-            "name": "Witcher Signs: Ignii",
-            "description": "Remains on the board for the following round. Adds +1 to all units in the row (excluding itself). Effects dont stacks"
+            "name": "Witcher Signs: Igni",
+            "description": "Remains on the board for the following round. Adds +1 to all units in the row (excluding itself). Effects don't stack. "
           },
           "aard": {
             "name": "Witcher Signs: Aard",
-            "description": "Push all enemy units in the opposing row one row back toward Siege, ignoring shields. Playing this card will damage your total score! Hero and few other cards will ignore push (Internal Game Desing). "
+            "description": "Push all enemy units in the opposing row one row back toward Siege, ignoring shields. Playing this card will reduce your total score! Hero cards and a few others ignore the push. "
           },
           "aid": {
             "name": "Call to Arms",
@@ -1234,15 +1236,15 @@
           },
           "axii": {
             "name": "Witcher Signs",
-            "description": "This card use Witchers tricks to cast into enemy fields Axii sign. Each card in row under Axii effect that base power is less than 5 will lose 2 power. Debuffs dont stack. Dont affect hero cards. "
+            "description": "This card uses Witcher tricks to cast the Axii Sign on the enemy's field. Each card in a row under the Axii effect whose base power is less than 5 loses 2 power. Debuffs don't stack. Doesn't affect Hero cards. "
           },
           "axii2_desc": {
             "name": "Axii",
-            "description": "Each card in row under Axii effect that base power is less than 5 will lose 2 power. Debuffs dont stack. Dont affect hero cards "
+            "description": "Each card in a row under the Axii effect whose base power is less than 5 loses 2 power. Debuffs don't stack. Doesn't affect Hero cards. "
           },
           "axii2_desc_playable": {
             "name": "Witcher Signs: Axii",
-            "description": "Each card in row under Axii effect that base power is less than 5 will lose 2 power. Debuffs dont stack. Dont affect hero cards "
+            "description": "Each card in a row under the Axii effect whose base power is less than 5 loses 2 power. Debuffs don't stack. Doesn't affect Hero cards. "
           },
           "gryffinSchool": {
             "name": "School of the Griffin",
@@ -1250,19 +1252,19 @@
           },
           "magicthegathering": {
             "name": "Conjunction of the Spheres",
-            "description": "Choose one card out of 25 random and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! This card is unstable, each turn it power will change in most of the time negative numbers (On averge power will be -3.27) "
+            "description": "Choose one card out of 25 random cards and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! This card is unstable: its power changes every turn, mostly to negative values (on average -3.27). "
           },
           "tgc_portal": {
             "name": "ThatGameCompany",
-            "description": "Choose one card out of few Sky Faction cards and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! This card is unstable, each turn it power will change in most of the time negative numbers (On averge power will be -3.27) "
+            "description": "Choose one card out of a few Sky Kingdom cards and add it to your hand. The card cannot be picked up with the Decoy once it has been placed! This card is unstable: its power changes every turn, mostly to negative values (on average -3.27). "
           },
           "dopler": {
             "name": "Doppler",
-            "description": "Send a shapeshifter to enemy fields that will will disguise itself as a strong card from the opponent's faction, so next round they can find a knife in their back"
+            "description": "Send a shapeshifter to enemy fields that will disguise itself as a strong card from the opponent's faction, so next round they can find a knife in their back."
           },
           "reinforce": {
             "name": "Reinforce",
-            "description": "Summons additional cards to board, summoned cards dont need to be in hand or deck. "
+            "description": "Summons additional cards to the board. Summoned cards don't need to be in your hand or deck. "
           },
           "medic": {
             "name": "Medic",
@@ -1286,11 +1288,11 @@
           },
           "bondwitcher": {
             "name": "Witcher Unity",
-            "description": "(Witcher Forces Faction; For each Witcher on board increase a bit base strenght of Witcher School) "
+            "description": "(Witcher Forces faction: for each Witcher on the board, the base strength of Witcher School grows.) "
           },
           "witcherschool": {
             "name": "Witcher School",
-            "description": "This card cant be destroyed! "
+            "description": "This card can't be destroyed! "
           },
           "avenger": {
             "name": "Avenger",
@@ -1308,7 +1310,7 @@
             "description": "Pick an Impenetrable Fog card from your deck and play it instantly."
           },
           "keadwen_weather": {
-            "description": "Play an Impenetrable Fog from your deck. If none is found, still consume leader charge. Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need 1 charge to skip turn, you get 0.2 charges per your turn, up to 1 max charge(s) stored!"
+            "description": "Play an Impenetrable Fog from your deck. If none is found, still consume leader charge. Lets you skip turns, but each skip gives your opponent a 50/50 chance to copy a non-Hero card from the board. You need 1 charge to skip a turn. You gain 0.2 charges per turn, up to a maximum of 1 stored charge."
           },
           "foltest_lord": {
             "description": "Clear any weather effects (resulting from Biting Frost, Torrential Rain or Impenetrable Fog cards) in play."
@@ -1326,22 +1328,22 @@
             "description": "Pick a Torrential Rain card from your deck and play it instantly."
           },
           "nilf_drawmaster": {
-            "description": "On use, if your hand has fewer than 3 cards, draw 1 cards from your deck, plus 1 additional card for each unit in your graveyard (up to 3 bonus cards). You start the game with 2 fewer cards in hand but you can on game start redraw extra 1 card(s)."
+            "description": "On use, if your hand has fewer than 3 cards, draw 1 card from your deck, plus 1 additional card for each unit in your discard pile (up to 3 bonus cards). You start the game with 2 fewer cards in hand, but you can redraw 1 extra card at the start of the game."
           },
           "temeria_call": {
-            "description": "Spawn Temeria Special Forcess attack in close combat row. Commander Horn in close combat row will lost its effect but close row will be partialy protected partialy from weather effects. After use makes you pass! Can't be used when opponent passed!"
+            "description": "Summons the Temerian Special Forces in the Close Combat row. Commander's Horn in that row loses its effect, but the row is partially protected from Weather effects. Using this ability makes you pass. Can't be used after your opponent has passed."
           },
           "darkness_storm_leader": {
-            "description": "Spawn Darkness Storm on both sides that destroys all non-hero cards in the close row"
+            "description": "Summons Darkness Storm on both sides, destroying all non-Hero cards in the Close Combat row."
           },
           "turn_skiper": {
-            "description": "Let you skip turns, but gives your opponent 50/50 each skip to copy non-hero card from board. You need 1 charge to skip turn, you get 0.35 charges per your turn, up to 2 max charge(s) stored!"
+            "description": "Lets you skip turns, but each skip gives your opponent a 50/50 chance to copy a non-Hero card from the board. You need 1 charge to skip a turn. You gain 0.35 charges per turn, up to a maximum of 2 stored charges."
           },
           "d20cloner": {
-            "description": "Let you roll D20 for chance to get additional card from board, but what card you can get depends on roll result. Success on even roll. You need 1 charge to roll dice, you get 0.16 charges per your turn, up to 1 max charge(s) stored!"
+            "description": "Lets you roll a D20 for a chance to get an additional card from the board; which card you can get depends on the roll. Success on an even roll. You need 1 charge to roll. You gain 0.16 charges per turn, up to a maximum of 1 stored charge."
           },
           "gaunter_neutral_leader": {
-            "description": "On use both sides will gain an additional (60%+1)  of the number of cards in the thier grave as additional cards from deck and all players start the game with 50% more cards in their hand (based on their starting number)"
+            "description": "On use, both sides draw additional cards from the deck equal to (60% + 1) of the number of cards in their discard pile, and all players start the game with 50% more cards in hand (based on their starting number)."
           },
           "emhyr_emperor": {
             "description": "Look at 3 random cards from your opponent's hand."
@@ -1350,20 +1352,20 @@
             "description": "Cancel your opponent's Leader Ability."
           },
           "emhyr_whiteflame2": {
-            "description": "Copy opponents's leader card at start of the game, but your opponent will have addtional 2 initial redraws"
+            "description": "Copy your opponent's Leader card at the start of the game, but your opponent gets 2 additional initial redraws."
           },
           "emhyr_relentless": {
             "description": "Draw a card from your opponent's discard pile."
           },
           "emhyr_invader": {
-            "description": "Medics cannot choose which card to revive and draw the strongest one from the graveyard (affects both players)."
+            "description": "Medics cannot choose which card to revive and always revive the strongest one from the discard pile (affects both players)."
           },
           "eredin_commander": {
-            "description": "Double the strength of all your Close Combat units (unless a Commander's horn is \talso present on that row)."
+            "description": "Double the strength of all your Close Combat units (unless a Commander's Horn is also present on that row)."
           },
           "eredin_bringer_of_death": {
-            "name": "Eredin : Bringer of Death",
-            "description": "Recive a copy of card from your discard pile to your hand."
+            "name": "Eredin — Bringer of Death",
+            "description": "Receive a copy of a card from your discard pile to your hand."
           },
           "eredin_destroyer": {
             "description": "Banish 2 cards from your hand and create a copy of a card from your deck."
@@ -1390,10 +1392,10 @@
             "description": "Move agile units to whichever valid row maximizes their strength (don't move units already in optimal row)."
           },
           "mediclove": {
-            "description": "Both players can revive extra card when using medic card ability. "
+            "description": "Both players can revive an extra card when using the Medic ability. "
           },
           "crach_an_craite": {
-            "description": "Shuffle all cards from each player's graveyard back into their decks."
+            "description": "Shuffle all cards from each player's discard pile back into their deck."
           },
           "king_bran": {
             "description": "Units only lose half their Strength in bad weather conditions."
@@ -1408,14 +1410,14 @@
             "description": "Banish a card with power greater than or equal to 4. Then create a Tight Bond card from your faction or Neutral and add it to your hand."
           },
           "time_round_reverse": {
-            "description": "Both players will regain up to one life and one recent round will be erased, 60% of the cards from their graveyards will be copied to their hands, and the graveyards will be moved into the decks and shuffled."
+            "description": "Both players regain up to one life and the most recent round is erased. 60% of the cards from their discard piles are copied to their hands, and the discard piles are moved into the decks and shuffled."
           },
           "thedevil": {
             "name": "The Devil",
-            "description": "Discard after playing. Lets you pick and draw to hand 1 out of 3 random picked cards from deck. Tricks opponent into thinking you played that card! Cant draw special cards! "
+            "description": "Discard after playing. Lets you choose 1 of 3 random cards from your deck and draw it to your hand. Tricks your opponent into thinking you played that card! Can't draw Special cards! "
           },
           "bucket": {
-            "description": "Random cards will appear in the \"bucket\" every few turns; the frequency of their appearance depends on the number of commanders with this ability currently in play. The winner of the round takes the pot, the loser turns some of the released power into cards draw."
+            "description": "Random cards will appear in the \"bucket\" every few turns; the frequency of their appearance depends on the number of Leaders with this ability currently in play. The winner of the round takes the pot, the loser turns some of the released power into cards draw."
           },
           "discord": {
             "name": "Discord Community",
@@ -1427,11 +1429,11 @@
           },
           "potion_jaskolka": {
             "name": "Swallow",
-            "description": "Apply for you and opponent potion effect that lets spy, sabotage and Call to Arms cards draw extra card "
+            "description": "Applies a potion effect to you and your opponent that lets Spy, Sabotage and Call to Arms cards draw an extra card. "
           },
           "potion_soup": {
             "name": "Elf and Onion Soup",
-            "description": "(Elf wich Onion goooood, tomato like, wanna some?) After use both players avenger cards will transform! "
+            "description": "(Elf wich Onion goooood, tomato like, wanna some?) After use, both players' Avenger cards will transform! "
           },
           "potion_grom": {
             "name": "Thunderbolt",
@@ -1443,10 +1445,10 @@
           },
           "witcher_potion": {
             "name": "Witcher Potion",
-            "description": "After use card gets discarded! Overwrites any active effect of this potion for target(s) player(s)! "
+            "description": "After use card gets discarded! Overwrites any active effect of this potion for the target player(s)! "
           },
           "scorchstopper_single": {
-            "description": "Random cards will appear in the \"bucket\" every few turns; the frequency of their appearance depends on the number of commanders with this ability currently in play. The winner of the round takes the pot, the loser turns some of the released power into cards draw. Protects single card from Scorch effect. "
+            "description": "Random cards will appear in the \"bucket\" every few turns; the frequency of their appearance depends on the number of Leaders with this ability currently in play. The winner of the round takes the pot, the loser turns some of the released power into cards draw. Protects a single card from Scorch effects. "
           },
           "motherscare": {
             "name": "Mother's Care",
@@ -1472,19 +1474,19 @@
           },
           "skellige": {
             "name": "Skellige",
-            "description": "The strongest 2 cards from the graveyard are placed on the battlefield at the start of the third round. Revived cards lose most abilities."
+            "description": "The strongest 2 cards from the discard pile are placed on the battlefield at the start of the third round. Revived cards lose most abilities."
           },
           "syndicate": {
             "name": "Syndicate",
-            "description": "Starts the game with the morale card on the board. \nCan create deck from Nilfgaardian Empire, Scoia'tael, Skellige, Syndicate, Sky Kingdom factions non-leader cards."
+            "description": "Starts the game with the Morale card on the board. \nCan create deck from Nilfgaardian Empire, Scoia'tael, Skellige, Syndicate, Sky Kingdom factions non-leader cards."
           },
           "sky": {
             "name": "Sky Kingdom",
-            "description": "Keeps the strongest Unit Card out after each round. Factions full of morale boosting cards."
+            "description": "Keeps the strongest Unit Card out after each round. A faction full of morale-boosting cards."
           },
           "witchersforces": {
             "name": "Witcher Forces",
-            "description": "WORK IN PROGGRES: Draw a card if round ends in draw or loss.\nWith each Witcher, Witcher School strenght grows!"
+            "description": "WORK IN PROGRESS: Draw a card if a round ends in a draw or loss.\nWith each Witcher, Witcher School strength grows!"
           }
         },
         "card": {
@@ -1579,8 +1581,8 @@
           "vreemde": "Vreemde",
           "young_emissary": "Young Emissary",
           "zerri": "Zerrikanian Fire Scorpion",
-          "arachas_1": "Arachas ",
-          "arachas_behemoth": "Arachas— Behemoth",
+          "arachas_1": "Arachas",
+          "arachas_behemoth": "Arachas — Behemoth",
           "poroniec": "Botchling",
           "celaeno_harpy": "Celaeno Harpy",
           "cockatrice": "Cockatrice",
@@ -1675,7 +1677,7 @@
           "gerry": "Gerry from the River",
           "lethosabotage": "Letho — The Saboteur",
           "aidhorn": "Lyria and Rivia Banner",
-          "Gaunter_Leader": "Gaunter O'Dim",
+          "Gaunter_Leader": "Gaunter O'Dimm",
           "Ida_Emean_d20": "Ida Emean — Elven Divination",
           "spice_trader": "Spice Merchant",
           "roach": "Roach",
@@ -1699,17 +1701,17 @@
           "Arnjolf_the_Patricide": "Arnjolf the Patricide",
           "aard": "Witcher Signs: Aard",
           "yrden": "Witcher Signs: Yrden",
-          "igni": "Witcher Signs: Ignii",
+          "igni": "Witcher Signs: Igni",
           "udalryka_leader": "Udalryk an Brokvar — Gods Choosen",
           "keadwen_weather": "Tactical Forecaster — Kaedwen Division",
           "radovid_stern": "Radovid V the Stern — In Madness",
           "fake_ciri": "False Ciri — Empress of Nilfgaard",
           "whitefrost": "White Frost",
           "temeriacall": "Temeria",
-          "temeriamoral": "Blue Stripe Commando — Scout",
-          "temeriabluestripe": "Blue Stripe Commando — Soldier",
-          "temeriabluestripe_2": "Blue Stripe Commando — Soldier",
-          "temeriamoral_1": "Blue Stripe Commando — Scout",
+          "temeriamoral": "Blue Stripes Commando — Scout",
+          "temeriabluestripe": "Blue Stripes Commando — Soldier",
+          "temeriabluestripe_2": "Blue Stripes Commando — Soldier",
+          "temeriamoral_1": "Blue Stripes Commando — Scout",
           "vernontemeria_call": "Vernon Roche — Blue Stripes Commando Leader",
           "steward": "Hopeful Steward",
           "guard": "Royal Guard",
@@ -1725,7 +1727,7 @@
           "darkstorm": "Darkness Storm",
           "darkness_storm_leader": "Eden King",
           "ranger": "Reassuring Ranger",
-          "tgc20": "20 Years Of ThatGameComapny",
+          "tgc20": "20 Years of ThatGameCompany",
           "elder_wasteland": "Elder of the Wasteland",
           "colorguide": "Days of Color Guide",
           "colorcollab": "Trevor Project",
@@ -1742,7 +1744,7 @@
           "custom!traveling_spirit": "Traveling Spirit",
           "custom!dearvangogh": "Dear Van Gogh",
           "custom!sky_vincent": "Vincent Van Gogh",
-          "custom!vincent_painting_power": "Vincent Van Gogh: Painting",
+          "custom!vincent_painting_power": "Vincent Van Gogh — Painting",
           "custom!sky_vincent_guys": "Dear Van Gogh — Seasonal Spirits",
           "custom!sky_vincent_medic": "Dear Van Gogh — Seasonal Hearth",
           "hym": "Hym",
@@ -1755,7 +1757,7 @@
           "deatheatr": "Necrophages",
           "wardancer": "Wardancer",
           "valley_twins": "Elders of the Valley",
-          "sunbather_pink": "Chill Sunbather with a bow in thier hair",
+          "sunbather_pink": "Chill Sunbather with a bow in their hair",
           "bluebird_a": "Blue Feather",
           "bluebird_b": "Blue Bird",
           "bluebird_sad": "Sad Child",
@@ -1766,7 +1768,7 @@
           "striga": "Striga",
           "potion_jaskolka": "Swallow",
           "viperwitcher": "Viper School Witcher",
-          "potion_soup": "Elf and Onion soup",
+          "potion_soup": "Elf and Onion Soup",
           "potion_grom": "Thunderbolt",
           "potion_white": "White Honey",
           "kingkrill": "Abyss Monster",
@@ -1872,14 +1874,14 @@
             },
             "no_op_ui": "No Opponent",
             "session_copied": "Copied: %s",
-            "session_joined": "Joined session: %s",
-            "session_made": "Created Session join code: %s",
-            "session_bad": "Invalid Session ID",
-            "op_left": "Opponent has left and the session is no longer ready",
+            "session_joined": "Joined lobby: %s",
+            "session_made": "Lobby created. Join code: %s",
+            "session_bad": "Invalid Lobby ID",
+            "op_left": "Opponent has left and the lobby is no longer ready",
             "op_left_short": "Opponent has left",
-            "op_ready": "Opponent is ready. If you are ready begin the game immediately",
-            "op_faction": "Opponent changed his faction to %s",
-            "op_unready": "Opponent is unReady.",
+            "op_ready": "Opponent is ready. If you are ready, the game will begin immediately!",
+            "op_faction": "Opponent changed faction to %s",
+            "op_unready": "Opponent is not ready!",
             "sync": {
               "init": "Initiating sync, wait %s seconds",
               "hold_progress": "The opponent synchronizes with the game (%x/%y), wait %ss",
@@ -1890,14 +1892,14 @@
             "end_turn": "\u003Ccolor=#32a852\u003EEnd of \u003C/color\u003E\u003Ccolor=#abebe2\u003E%s\u003C/color\u003E\u003Ccolor=#32a852\u003E turn\u003C/color\u003E",
             "no_op_start": "Cannot start game: waiting for second player.",
             "me_ready": "You are ready, please wait for opponent!",
-            "me_unready": "You are now UnReady",
+            "me_unready": "You are no longer ready!",
             "redraw": "\u003Ccolor=#d5cfe3\u003EYou redrawed card\u003C/color\u003E \u003Ccolor=#fa4441\u003E%x\u003C/color\u003E \u003Ccolor=#d5cfe3\u003Efor a\u003C/color\u003E \u003Ccolor=#41fa66\u003E%y\u003C/color\u003E",
             "bucket": "\u003Ccolor=#d5cfe3\u003EA new card has been added to the bucket:\u003C/color\u003E \u003Ccolor=#41fa66\u003E%s\u003C/color\u003E",
             "queueCarousel_other": {
-              "eredin1": "Choose card to banish (1/2)",
-              "eredin2": "Choose card to banish (2/2)",
+              "eredin1": "Choose a card to banish (1/2)",
+              "eredin2": "Choose a card to banish (2/2)",
               "eredin_ok": "Choose a card to create a copy of",
-              "skellige_mad_man": "Choose card to banish",
+              "skellige_mad_man": "Choose a card to banish",
               "skellige_mad_man_ok": "Choose Tight Bond card",
               "devildeal": "Choose a card to draw",
               "gryf": "Choose a Witcher Sign",
@@ -1915,7 +1917,7 @@
             "me_win_via_nilfgaard": "Nilfgaard faction ability triggered:\nNilfgaard wins any round that ends in a draw.",
             "op_win_via_nilfgaard": "Nilfgaard faction ability triggered:\nNilfgaard wins any round that ends in a draw.",
             "witcherforces_draw": "Witcher Forces faction ability triggered:\nWitchers draw a card. ",
-            "op-leader": "Opponent uses leader",
+            "op-leader": "Opponent uses leader ability",
             "op-white-flame": "The opponent's leader cancel\nyour opponent's Leader Ability",
             "meve_white_queen": "Lyria & Rivia leader allows both players to restore\n2 units when using the medic ability.",
             "medicextra": "You and opponent can revive extra card from medic ability!",
@@ -1926,7 +1928,7 @@
             "op-coin": "Your opponent will go first",
             "op-coin-lambert": "Lambert says that you suck!\nThe opponent starts the game!",
             "round-start": "Round Start",
-            "me-pass": "Round passed",
+            "me-pass": "You have passed",
             "op-pass": "Your opponent has passed",
             "win-round": "You won the round!",
             "win-opleft": "Your opponent left the game",
@@ -1937,18 +1939,18 @@
             "op-turn": "Opponent's turn",
             "north": "Northern Realms faction ability triggered:\nNorth draws an additional card.",
             "north-scorch-cancelled": "Northern Realms leader ability used:\nScorch ability cancelled for the rest of the round.",
-            "scol_secondchance": "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from grave.",
-            "gaunter": "Gaunter O'Dim Ability Used:\nBoth sides recived additional card!",
-            "gaunter2": "Gaunter O'Dim Ability Used:\nThe last round has been wiped; all players regain one life!",
-            "scol_secondchance_necro2": "Gaunter O'Dim Ability Used:\nBoth sides recived additional card!",
+            "scol_secondchance": "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from the discard pile.",
+            "gaunter": "Gaunter O'Dimm leader ability used:\nBoth sides received an additional card!",
+            "gaunter2": "Gaunter O'Dimm leader ability used:\nThe last round has been wiped; all players regain one life!",
+            "scol_secondchance_necro2": "Gaunter O'Dimm leader ability used:\nBoth sides received an additional card!",
             "monsters": "Monsters faction ability triggered:\nOne Monster Unit Card stays on the board.",
-            "draw_end": "Gwent game can't end in a draw!\nFace opponent again till winner is picked!",
+            "draw_end": "Gwent game can't end in a draw!\nFace your opponent again until a winner is decided!",
             "scol_pick": "Opponent used Scoia'tael faction ability to pick who play first!",
-            "sky": "Sky Kindom faction ability triggered:\nOne Sky Kindom Unit Card stays on the board.",
+            "sky": "Sky Kingdom faction ability triggered:\nOne Sky Kingdom Unit Card stays on the board.",
             "darkstorm": "Darkness is here...\nDarkness bring destruction to the close combat row!",
             "scoiatael": "Opponent used the Scoia'tael faction perk to go first.",
-            "skellige-op": "Opponent Skellige Ability Triggered!",
-            "skellige-me": "Skellige Ability Triggered!",
+            "skellige-op": "Opponent's Skellige faction ability triggered:\nSkellige places two cards from the discard pile on the board!",
+            "skellige-me": "Skellige faction ability triggered:\nSkellige places two cards from the discard pile on the board!",
             "witcher_universe": "Witcher Universe faction ability used:\nTurn skipped.",
             "toussaint": "Toussaint faction ability used:\nToussaint draws an additional card.",
             "toussaint-decoy-cancelled": "Toussaint leader ability used:\nDecoy ability cancelled for the rest of the round.",
@@ -1958,8 +1960,8 @@
             "coin-true_player-me": "You skipped your turn\nBut your opponent received an additional card",
             "coin-false_player-op": "Your opponent skipped their turn",
             "coin-true_player-op": "Your opponent skipped their turn\nAnd you received an additional card",
-            "whiteflame2-op_nilfgaard": "Your opponent copied your leader ability",
-            "whiteflame2-op_syndicate": "Your opponent copied your leader ability",
+            "whiteflame2-op_nilfgaard": "Your opponent copied your leader ability!",
+            "whiteflame2-op_syndicate": "Your opponent copied your leader ability!",
             "whiteflame2-me_nilfgaard": "You copied opponent leader ability!",
             "whiteflame2-me_syndicate": "You copied opponent leader ability!"
           },
@@ -1995,7 +1997,7 @@
             },
             "vpn": "⚠ VPN detected.\nVPN usage is not recommended and server may not support it.\nUse it at your own risk!\n\nOpponent country display is disabled for fairness.",
             "c": {
-              "cl": "is cannot be used as a leader",
+              "cl": "cannot be used as a leader",
               "leader": "Leader",
               "wrongf": "doesn't match deck faction",
               "id": "ID",
@@ -2042,7 +2044,7 @@
             "a": "Your deck must have at least %s unit cards. ",
             "b": "Your deck must have no more than %s special cards. ",
             "c": "Your deck must have no more than %s hero cards. ",
-            "d": "You have in hand too many of \"%s\" card copies (%z/%y)! "
+            "d": "You have too many copies of \"%s\" card copies (%z/%y)! "
           }
         },
         "scolpick": {
@@ -2060,20 +2062,20 @@
           "howtouse": "Click counter to use leader ability!",
           "manup": "Your ability bar has filled (%x/%y)",
           "powerup": "You have (%x/%y) in your faction ability meter!",
-          "toolow": "You dont have enought energy to activate ability (%x/%y)",
-          "toolow_shield": "You have %x/%y of shield charges",
-          "ophas": "Opponent have %x/%y",
+          "toolow": "You don't have enough energy to use this ability (%x/%y)",
+          "toolow_shield": "You have %x/%y shield charges",
+          "ophas": "Opponent has %x/%y",
           "mehas": "You have %x/%y",
           "click": "Click counter to use leader ability!",
           "d20": {
             "critfail": {
-              "me": "You rolled \"1\"\nOpponent draw an additional card!",
+              "me": "You rolled \"1\"\nOpponent draws an additional card!",
               "op": "Opponent rolled \"1\"\nYou draw an additional card!"
             },
             "roll": {
               "done": "Rolled: %s",
               "name": "Fate roll",
-              "name_sideB": "Opponent roll dice for addtional cards",
+              "name_sideB": "Opponent rolls the die for additional cards",
               "res1": "Critical Failure",
               "res2": "Natural 20!",
               "res3": "Success",
@@ -2098,7 +2100,7 @@
           "winners": {
             "me": "You",
             "op": "Opponent",
-            "draw": "Noone"
+            "draw": "No one"
           },
           "texts": {
             "round": "Round: ",
@@ -2107,19 +2109,26 @@
           "wiped": {
             "wiped": "Wiped!",
             "res": {
-              "gaunter_revert": "Gaunter O'dim reverted time"
+              "gaunter_revert": "Gaunter O'Dimm reverted time"
             }
           },
           "sep": "|",
           "sur": {
             "me": "You gave up.",
             "op": "Your opponent has surrendered."
+          },
+          "coin": {
+            "win": "Victory",
+            "lose": "Defeat",
+            "draw": "Draw",
+            "returning": "Returning to customization in",
+            "return": "Return to customization"
           }
         },
         "cardsoftheday": {
-          "topic": "\u003Ccolor=#96FF03\u003EToday daily boosted cards!\u003C/color\u003E",
+          "topic": "\u003Ccolor=#96FF03\u003EToday's boosted cards!\u003C/color\u003E",
           "for_each_card_line": "\u003Ccolor=#96FF03\u003E• \u003C/color\u003E\u003Ccolor=#94AB6F\u003E\"\u003C/color\u003E\u003Ccolor=#D7FAE9\u003E%s\u003C/color\u003E\u003Ccolor=#94AB6F\u003E\"\u003C/color\u003E",
-          "bottom": "\u003Ccolor=#96FF03\u003EEach card on this list recive addtional \u003C/color\u003E\u003Ccolor=#D7FAE9\u003E%s\u003C/color\u003E\u003Ccolor=#96FF03\u003E amount!\u003C/color\u003E"
+          "bottom": "\u003Ccolor=#96FF03\u003EEach card on this list receives \u003C/color\u003E\u003Ccolor=#D7FAE9\u003E%s\u003C/color\u003E\u003Ccolor=#96FF03\u003E additional copies!\u003C/color\u003E"
         },
         "discord": {
           "op": "Your opponent",
@@ -2133,12 +2142,12 @@
           "discord_refund": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Bet refunded: \u003Ccolor=#AAAAAA\u003E%s\u003C/color\u003E.",
           "discord_error_not_registered": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: You need to \u003Ccolor=#FFAA00\u003E!registerclient\u003C/color\u003E on Discord first.",
           "discord_error_generic": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Something went wrong \u003Ccolor=#FF5555\u003E(%s)\u003C/color\u003E.",
-          "discord_card_recived": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Recived inventory from \u003Ccolor=#2121DB\u003Ediscord\u003C/color\u003E!\nSynced \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E cards!\n\u003Ccolor=#AAAAFF\u003EIf you dont see these cards, please refresh current faction deck builder via changing faction!\u003C/color\u003E"
+          "discord_card_recived": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Received inventory from \u003Ccolor=#2121DB\u003Ediscord\u003C/color\u003E!\nSynced \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E cards!\n\u003Ccolor=#AAAAFF\u003EIf you don't see these cards, please refresh the current faction's deck builder by changing faction!\u003C/color\u003E"
         },
         "card_info": {
           "strings": {
             "": "{class_prefix}**{name}**{class_suffix}\nSpecial Card",
-            "leader": "**{class_prefix}{name}{class_suffix}**\n{faction}; {leader_but_gender} Card",
+            "leader": "{class_prefix}**{name}**{class_suffix}\n{faction}; {leader_but_gender} Card",
             "weather": "☁**{name}**\nWeather Card",
             "siege_isHero:true_male": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Siege Card",
             "siege_isHero:false_male": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Siege Card",
@@ -2148,10 +2157,10 @@
             "ranged_isHero:false_male": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Ranged Card",
             "ranged_isHero:true_female": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Ranged Card",
             "ranged_isHero:false_female": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Ranged Card",
-            "close_isHero:true_male": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Melee Card",
-            "close_isHero:false_male": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Melee Card",
-            "close_isHero:true_female": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Melee Card",
-            "close_isHero:false_female": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Melee Card",
+            "close_isHero:true_male": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Close Combat Card",
+            "close_isHero:false_male": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Close Combat Card",
+            "close_isHero:true_female": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Close Combat Card",
+            "close_isHero:false_female": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} {unit} Close Combat Card",
             "agile_isHero:true_male": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} Agile {unit} Card",
             "agile_isHero:false_male": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} Agile {unit} Card",
             "agile_isHero:true_female": "{class_prefix}**{name}**{class_suffix}\n{faction}; {class} Agile {unit} Card",
@@ -2264,10 +2273,10 @@
             "me": "\u003Ccolor=#7FAF45\u003EYou:\u003C/color\u003E",
             "op": "\u003Ccolor=#B33A3A\u003EOpponent:\u003C/color\u003E"
           },
-          "spypotion": "\u003Ccolor=#C46A2B\u003ESwallow potion\u003C/color\u003E is active for next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!",
-          "elfendonion": "\u003Ccolor=#A69A45\u003EElf and Onion soup\u003C/color\u003E is here for next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!",
-          "grom": "\u003Ccolor=#3F6B32\u003EThunderbolt potion\u003C/color\u003E active for next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!",
-          "AURORA_mothers_care": "\u003Ccolor=#EBE359\u003EMother's Care/color\u003E is for next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!"
+          "spypotion": "\u003Ccolor=#C46A2B\u003ESwallow potion\u003C/color\u003E is active for the next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!",
+          "elfendonion": "\u003Ccolor=#A69A45\u003EElf and Onion Soup\u003C/color\u003E is active for the next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!",
+          "grom": "\u003Ccolor=#3F6B32\u003EThunderbolt potion\u003C/color\u003E is active for the next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!",
+          "AURORA_mothers_care": "\u003Ccolor=#EBE359\u003EMother's Care\u003C/color\u003E is active for the next \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E turns!"
         },
         "ui_user_settings": {
           "menu.title": "Player Settings",
@@ -2302,7 +2311,7 @@
             "response": "Server Response"
           },
           "done": "Report sent. Thank you!",
-          "failed": "Failed to send raport: ",
+          "failed": "Failed to send report: ",
           "xx": {
             "tits": "The Opponent's Play Sends an Error Signal!",
             "cnt": "The opponent might not be able to continue the game!",
@@ -2310,6 +2319,23 @@
               "a": "Connection lost, reconnecting...",
               "b": "Reconnected"
             }
+          }
+        },
+        "interface_specialevents": {
+          "match": {
+            "topic": "STEALMATE",
+            "reasons": {
+              "fall": "Server Message: \"%s\", Match Cancelled",
+              "server_update": "Match Cancelled; Game was updated and clients about to restart"
+            }
+          },
+          "nolobbies": {
+            "reason": "Creating lobbies is temporarily disabled.\nReason: \"%s\"",
+            "reasonless": "Creating lobbies is temporarily disabled."
+          },
+          "authfail": {
+            "reason": "Authentication failed. Please reload the page. \nServer message: \"%s\"\n\nIf this is a mistake, please report it as a bug!",
+            "reasonless": "Authentication failed. Please reload the page.\n\nIf it keeps happening, please report it as a bug!"
           }
         }
       },
@@ -2344,11 +2370,11 @@
           },
           "storm": {
             "name": "Skeligijski Sztorm",
-            "description": "Zmniejsza siłę wszystkich jednostek dystansowych i oblężniczych do 1. "
+            "description": "Zmniejsza siłę wszystkich jednostek Walczących na Dystans i Oblężniczych do 1. "
           },
           "hero": {
             "name": "Karta Bohatera",
-            "description": "Nie podlega działaniu kart Specjalnych ani innych umiejętności. "
+            "description": "Nie podlega działaniu kart Specjalnych ani innych zdolności. "
           },
           "decoy": {
             "name": "Manekin do Ćwiczeń",
@@ -2360,11 +2386,11 @@
           },
           "all_rows": {
             "name": "Efektywność Wielowymiarowa",
-            "description": "Można ją umieścić w dowolnym rzędzie na planszy (z wyjątkiem rzędu pogody i kart specjalnych). "
+            "description": "Można ją umieścić w dowolnym rzędzie na planszy (z wyjątkiem rzędu Pogody i kart Specjalnych). "
           },
           "wshield": {
             "name": "Tarcza",
-            "description": "Częściowo chroni wszystkie karty w tym samym rzędzie przed efektami Pogody i Znakiem Aksji. Róg Dowódcy nie działa w tym rzędzie. "
+            "description": "Częściowo chroni wszystkie karty w tym samym rzędzie przed efektami Pogody i Znakiem Axii. Róg Dowódcy nie działa w tym rzędzie. "
           },
           "quen_desc": {
             "name": "Znaki Wiedźmińskie: Quen",
@@ -2372,7 +2398,7 @@
           },
           "yrden": {
             "name": "Znaki Wiedźmińskie: Yrden",
-            "description": "Magiczna pułapka wiedźmińska. Umieść ją w rzędzie dystansowym przeciwnika, aby każda jednostka otrzymała -1 do siły. Efekty się kumulują. Manekin do Ćwiczeń może zostać użyta do podniesienia tej karty. "
+            "description": "Magiczna pułapka wiedźmińska. Umieść ją w rzędzie Walczących na Dystans przeciwnika, aby każda jednostka otrzymała -1 do siły. Efekty się kumulują. Manekin do Ćwiczeń może zostać użyty do podniesienia tej karty. "
           },
           "horn": {
             "name": "Róg Dowódcy",
@@ -2396,15 +2422,15 @@
           },
           "scorch_c": {
             "name": "Pożoga — Walka Wręcz",
-            "description": "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika walczące wręcz, jeśli łączna siła jego jednostek w zwarciu wynosi 10 lub więcej. "
+            "description": "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika Walczące Wręcz, jeśli łączna siła jego jednostek Walczących Wręcz wynosi 10 lub więcej. "
           },
           "scorch_r": {
             "name": "Pożoga — Dystans",
-            "description": "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika walczące na dystans, jeśli łączna siła jego jednostek dystansowych wynosi 10 lub więcej. "
+            "description": "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika Walczące na Dystans, jeśli łączna siła jego jednostek Walczących na Dystans wynosi 10 lub więcej. "
           },
           "scorch_s": {
             "name": "Pożoga — Oblężenie",
-            "description": "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika w oblężeniu, jeśli łączna siła jego jednostek oblężniczych wynosi 10 lub więcej. "
+            "description": "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika w Oblężeniu, jeśli łączna siła jego jednostek Oblężniczych wynosi 10 lub więcej. "
           },
           "scorch_a": {
             "name": "Pożoga — Przeciwległy rząd",
@@ -2430,7 +2456,7 @@
             "description": "Umieść tę kartę na polu przeciwnika, aby obniżyć jego wynik i dobrać dodatkową kartę. "
           },
           "resilience": {
-            "name": "Hart ducha",
+            "name": "Hart Ducha",
             "description": "Pozostaje na planszy w następnej rundzie. "
           },
           "resilience_igni": {
@@ -2442,20 +2468,20 @@
             "description": "Przesuwa wszystkie wrogie jednostki w przeciwległym rzędzie o jeden rząd w stronę Oblężenia, ignorując Tarcze. Zagranie tej karty zmniejsza twój wynik. Bohaterowie i niektóre inne karty ignorują przesunięcie. "
           },
           "aid": {
-            "name": "Wezwanie do broni",
+            "name": "Wezwanie do Broni",
             "description": "Pozwala tobie i przeciwnikowi ponownie dobrać 5 kart. "
           },
           "axii": {
             "name": "Znaki Wiedźmińskie",
-            "description": "Karta wykorzystuje wiedźmińskie sztuczki, aby rzucić znak Aksji na pole przeciwnika. Każda karta w rzędzie objętym efektem Aksji, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
+            "description": "Karta wykorzystuje wiedźmińskie sztuczki, aby rzucić znak Axii na pole przeciwnika. Każda karta w rzędzie objętym efektem Axii, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
           },
           "axii2_desc": {
-            "name": "Aksji",
-            "description": "Każda karta w rzędzie objętym efektem Aksji, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
+            "name": "Axii",
+            "description": "Każda karta w rzędzie objętym efektem Axii, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
           },
           "axii2_desc_playable": {
-            "name": "Znaki Wiedźmińskie: Aksji",
-            "description": "Każda karta w rzędzie objętym efektem Aksji, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
+            "name": "Znaki Wiedźmińskie: Axii",
+            "description": "Każda karta w rzędzie objętym efektem Axii, której bazowa siła jest mniejsza niż 5, traci 2 siły. Efekty osłabienia się nie kumulują. Nie działa na karty Bohaterów. "
           },
           "gryffinSchool": {
             "name": "Szkoła Gryfa",
@@ -2463,11 +2489,11 @@
           },
           "magicthegathering": {
             "name": "Koniunkcja Sfer",
-            "description": "Wybierz jedną kartę spośród 25 losowych kart i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Przynęty. Ta karta jest niestabilna — jej siła zmienia się co turę, najczęściej przyjmując wartości ujemne. "
+            "description": "Wybierz jedną kartę spośród 25 losowych kart i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Manekina do Ćwiczeń. Ta karta jest niestabilna — jej siła zmienia się co turę, najczęściej przyjmując wartości ujemne. "
           },
           "tgc_portal": {
             "name": "ThatGameCompany",
-            "description": "Wybierz jedną kartę spośród paru kart frakcji Nieba i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Przynęty. Ta karta jest niestabilna — jej siła zmienia się co turę, najczęściej przyjmując wartości ujemne. "
+            "description": "Wybierz jedną kartę spośród paru kart frakcji Nieba i dodaj ją do swojej ręki. Po ustawieniu nie można jej podnieść za pomocą Manekina do Ćwiczeń. Ta karta jest niestabilna — jej siła zmienia się co turę, najczęściej przyjmując wartości ujemne. "
           },
           "dopler": {
             "name": "Doppler",
@@ -2490,20 +2516,20 @@
             "description": "Dodaje +1 do siły wszystkich jednostek w rzędzie (poza sobą). "
           },
           "powergain": {
-            "name": "Przyrost siły",
+            "name": "Przyrost Siły",
             "description": "Bazowa siła karty rośnie o 1,11 za każdą kartę w rzędzie (poza sobą). Bazowa siła nie jest zmniejszana przez pogodę, ale dodatkowa siła jest zmniejszana o 75% podczas efektów Pogody. Wartości są zaokrąglane w dół. "
           },
           "bond": {
             "name": "Braterska Więź",
-            "description": "Umieść obok karty o tej samej nazwie, aby znacznie zwiększyć siłę obu kart do pewnog stopnia. "
+            "description": "Umieść obok karty o tej samej nazwie, aby znacznie zwiększyć siłę obu kart do pewnego stopnia. "
           },
           "bondwitcher": {
             "name": "Jedność Wiedźmińska",
-            "description": "(Frakcja Sił Wiedźmińskich; Za każdą kartę Wiedźminów na planszy, Szkoła Wiedźmińska rośnię w siłę) "
+            "description": "(Frakcja Sił Wiedźmińskich; Za każdą kartę Wiedźminów na planszy, Szkoła Wiedźmińska rośnie w siłę) "
           },
           "witcherschool": {
             "name": "Szkoła Wiedźmińska",
-            "description": "Ta karta nie może być zniszona! "
+            "description": "Ta karta nie może być zniszczona! "
           },
           "avenger": {
             "name": "Mściciel",
@@ -2521,7 +2547,7 @@
             "description": "Wybierz kartę Gęsta Mgła ze swojej talii i natychmiast ją zagraj."
           },
           "keadwen_weather": {
-            "description": "Zagraj kartę Gęsta Mgła ze swojej talii. Jeśli jej nie znajdziesz, nadal zużywasz ładunek przywódcy. Pozwala pomijać tury, ale przeciwnik ma 50% szansy podczas każdego pominięcia na skopiowanie niebohaterskiej karty z planszy. Potrzebujesz 1 ładunku, aby pominąć turę. Otrzymujesz 0,2 ładunku za każdą swoją turę, maksymalnie 1 przechowywany ładunek."
+            "description": "Zagraj kartę Gęsta Mgła ze swojej talii. Jeśli jej nie znajdziesz, nadal zużywasz ładunek Dowódcy. Pozwala pomijać tury, ale przeciwnik ma 50% szansy podczas każdego pominięcia na skopiowanie niebohaterskiej karty z planszy. Potrzebujesz 1 ładunku, aby pominąć turę. Otrzymujesz 0,2 ładunku za każdą swoją turę, maksymalnie 1 przechowywany ładunek."
           },
           "foltest_lord": {
             "description": "Usuwa wszystkie efekty Pogody (wynikające z kart Trzaskający Mróz, Ulewny Deszcz i Gęsta Mgła) znajdujące się w grze."
@@ -2530,16 +2556,16 @@
             "description": "Podwaja siłę wszystkich twoich jednostek Oblężniczych (chyba że w tym rzędzie znajduje się również Róg Dowódcy)."
           },
           "foltest_steelforged": {
-            "description": "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika w Oblężeniu, jeśli łączna siła jego jednostek oblężniczych wynosi 10 lub więcej."
+            "description": "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika w Oblężeniu, jeśli łączna siła jego jednostek Oblężniczych wynosi 10 lub więcej."
           },
           "foltest_son": {
-            "description": "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika na Dystansie, jeśli łączna siła jego jednostek dystansowych wynosi 10 lub więcej."
+            "description": "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika na Dystansie, jeśli łączna siła jego jednostek Walczących na Dystans wynosi 10 lub więcej."
           },
           "emhyr_imperial": {
             "description": "Wybierz kartę Ulewny Deszcz ze swojej talii i natychmiast ją zagraj."
           },
           "nilf_drawmaster": {
-            "description": "Po użyciu, jeśli masz mniej niż 3 karty w ręce, dobierz 1 kartę z talii oraz 1 dodatkową kartę za każdą jednostkę w twoim grobie (maksymalnie 3 dodatkowe karty). Rozpoczynasz grę z 2 kartami mniej w ręce, ale możesz wykonać dodatkowe przelosowania początku gry."
+            "description": "Po użyciu, jeśli masz mniej niż 3 karty w ręce, dobierz 1 kartę z talii oraz 1 dodatkową kartę za każdą jednostkę w twoim stosie kart odrzuconych (maksymalnie 3 dodatkowe karty). Rozpoczynasz grę z 2 kartami mniej w ręce, ale możesz wykonać dodatkowe przelosowania początku gry."
           },
           "temeria_call": {
             "description": "Przywołuje Oddział Specjalny Temerskiej Armii w rzędzie Walczących Wręcz. Róg Dowódcy w tym rzędzie traci działanie, ale rząd otrzymuje częściową ochronę przed efektami Pogody. Po użyciu wymusza spasowanie. Nie można użyć, gdy przeciwnik spasował."
@@ -2554,28 +2580,28 @@
             "description": "Pozwala rzucić kością D20, aby zdobyć dodatkową kartę z planszy. Wynik rzutu określa, jaką kartę można otrzymać. Sukces następuje przy wyniku parzystym. Potrzebujesz 1 ładunku, aby rzucić kością. Otrzymujesz 0,16 ładunku za każdą swoją turę, maksymalnie 1 przechowywany ładunek."
           },
           "gaunter_neutral_leader": {
-            "description": "Po użyciu obie strony otrzymują dodatkowe karty z talii w liczbie równej (60% + 1) liczby kart w swoich grobach. Wszyscy gracze rozpoczynają grę z 50% większą liczbą kart w ręce (na podstawie początkowej liczby kart)."
+            "description": "Po użyciu obie strony otrzymują dodatkowe karty z talii w liczbie równej (60% + 1) liczby kart w swoich stosach kart odrzuconych. Wszyscy gracze rozpoczynają grę z 50% większą liczbą kart w ręce (na podstawie początkowej liczby kart)."
           },
           "emhyr_emperor": {
             "description": "Podejrzyj 3 losowe karty z ręki przeciwnika."
           },
           "emhyr_whiteflame": {
-            "description": "Anuluje umiejętność Przywódcy przeciwnika."
+            "description": "Anuluje zdolność Dowódcy przeciwnika."
           },
           "emhyr_whiteflame2": {
-            "description": "Kopiuje kartę Przywódcy przeciwnika na początku gry, ale przeciwnik otrzymuje dodatkowe 2 przetasowania."
+            "description": "Kopiuje kartę Dowódcy przeciwnika na początku gry, ale przeciwnik otrzymuje dodatkowe 2 przelosowania."
           },
           "emhyr_relentless": {
             "description": "Dobierz kartę ze stosu kart odrzuconych przeciwnika."
           },
           "emhyr_invader": {
-            "description": "Medyk nie może wybrać karty do wskrzeszenia i zawsze wybiera najsilniejszą kartę z grobu (dotyczy obu graczy)."
+            "description": "Medyk nie może wybrać karty do wskrzeszenia i zawsze wybiera najsilniejszą kartę ze stosu kart odrzuconych (dotyczy obu graczy)."
           },
           "eredin_commander": {
             "description": "Podwaja siłę wszystkich twoich jednostek Walczących Wręcz (chyba że w tym rzędzie znajduje się również Róg Dowódcy)."
           },
           "eredin_bringer_of_death": {
-            "name": "Eredin: Zwiastun Śmierci",
+            "name": "Eredin — Zwiastun Śmierci",
             "description": "Otrzymujesz kopię karty ze swojego stosu kart odrzuconych do ręki."
           },
           "eredin_destroyer": {
@@ -2585,10 +2611,10 @@
             "description": "Wybierz dowolną kartę Pogody ze swojej talii i natychmiast ją zagraj."
           },
           "eredin_treacherous": {
-            "description": "Zwiększa siłe kart Szpiegostwa i Sabotażu (dotyczy obu graczy)."
+            "description": "Zwiększa siłę kart Szpiegostwa i Sabotażu (dotyczy obu graczy)."
           },
           "francesca_queen": {
-            "description": "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika walczące wręcz, jeśli łączna siła jego jednostek w zwarciu wynosi 10 lub więcej."
+            "description": "Niszczy najsilniejszą jednostkę (lub jednostki) przeciwnika Walczące Wręcz, jeśli łączna siła jego jednostek Walczących Wręcz wynosi 10 lub więcej."
           },
           "francesca_beautiful": {
             "description": "Podwaja siłę wszystkich twoich jednostek Walczących na Dystans (chyba że w tym rzędzie znajduje się również Róg Dowódcy)."
@@ -2621,14 +2647,14 @@
             "description": "Wygnaj kartę o sile większej lub równej 4. Następnie stwórz kartę Więzi ze swojej frakcji lub kart neutralnych i dodaj ją do swojej ręki."
           },
           "time_round_reverse": {
-            "description": "Obaj gracze odzyskają do jednego punktu życia, ostatnia runda zostanie wymaza, 60% kart z ich puli kart odrzuconych zostanie skopiowanych do ich rąk, a sama pula zostaną przeniesione do talii i przetasowana."
+            "description": "Obaj gracze odzyskują do jednego punktu życia, ostatnia runda zostaje wymazana, 60% kart z ich stosów kart odrzuconych zostaje skopiowanych do ich rąk, a same stosy zostają przeniesione do talii i przetasowane."
           },
           "thedevil": {
             "name": "Diabeł",
-            "description": "Karta zostaja odrzucona po zagraniu. Pozwala ci dobrać 1 z 3 losowych kart z talii. Oszukuje przeciwnika jakgby ta karta była zagrana! Nie może dobrać kart specjalnych! "
+            "description": "Karta zostaje odrzucona po zagraniu. Pozwala ci dobrać 1 z 3 losowych kart z talii. Oszukuje przeciwnika jakby ta karta była zagrana! Nie może dobrać kart Specjalnych! "
           },
           "bucket": {
-            "description": "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawaiania zależy od liderów z tą zdolnością w grze. Zwycięzca tury przejmuje pulę, przegrany zamienia cześć uwolnionej mocy w dobrnia kart. "
+            "description": "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawiania zależy od Dowódców z tą zdolnością w grze. Zwycięzca rundy przejmuje pulę, przegrany zamienia część uwolnionej mocy w dobieranie kart. "
           },
           "discord": {
             "name": "Społeczność Discord",
@@ -2640,15 +2666,15 @@
           },
           "potion_jaskolka": {
             "name": "Jaskółka",
-            "description": "Nakłada efekt dla obu graczy pozwalający zdolnością Szpiegostwa, Sabotażu i Wezwania Do Broni dobrać dodatkową kartę. "
+            "description": "Nakłada efekt dla obu graczy pozwalający zdolnością Szpiegostwa, Sabotażu i Wezwania do Broni dobrać dodatkową kartę. "
           },
           "potion_soup": {
             "name": "Zupa z Elfa i Cebuli",
-            "description": "(Elf z cebulą dobry, jak pomidor. Chcesz jeść?) Po użyciu karty mścicieli obu graczy trasfromują się! "
+            "description": "(Elf z cebulą dobry, jak pomidor. Chcesz jeść?) Po użyciu karty wszyscy Mściciele obu graczy transformują się! "
           },
           "potion_grom": {
             "name": "Grzmot",
-            "description": "Zwiększa ostateczną siłę jednostek walczących wręcz o 50% (według obliczeń); efekt ten działa przez 5 tur na gracza, który go aktywuje, oraz przez 3 tury na jego przeciwnika. "
+            "description": "Zwiększa ostateczną siłę jednostek Walczących Wręcz o 50% (według obliczeń); efekt ten działa przez 5 tur na gracza, który go aktywuje, oraz przez 3 tury na jego przeciwnika. "
           },
           "potion_white": {
             "name": "Biały Miód",
@@ -2656,14 +2682,14 @@
           },
           "witcher_potion": {
             "name": "Wiedźmiński Eliksir",
-            "description": "Po użyciu karta zostaje odrzucona! Nadpisuje wszytskie efekty tej mikstury dla każdego z celów eliksiru! "
+            "description": "Po użyciu karta zostaje odrzucona! Nadpisuje wszystkie efekty tego eliksiru dla każdego z celów eliksiru! "
           },
           "scorchstopper_single": {
-            "description": "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawaiania zależy od liderów z tą zdolnością w grze. Zwycięzca tury przejmuje pulę, przegrany zamienia cześć uwolnionej mocy w dobrnia kart. Ochrania jedną kartę przed efektem Piekielnej Pożogi"
+            "description": "Losowe karty będą się pojawiać w \"wiadrze\" co parę tur; częstotliwość pojawiania zależy od Dowódców z tą zdolnością w grze. Zwycięzca rundy przejmuje pulę, przegrany zamienia część uwolnionej mocy w dobieranie kart. Ochrania jedną kartę przed efektem Piekielnej Pożogi"
           },
           "motherscare": {
             "name": "Matczyna Opieka",
-            "description": "Daje graczowi który użył tej karty efekt (mikstury) \"Matczynej Opieki\", efekt na parę tur neutralizuje wszystkie efekty pogody dla gracza, Biały Miód neutralizuje efekt ochrony. "
+            "description": "Daje graczowi który użył tej karty efekt (eliksiru) \"Matczynej Opieki\", efekt na parę tur neutralizuje wszystkie efekty Pogody dla gracza, Biały Miód neutralizuje efekt ochrony. "
           }
         },
         "factions": {
@@ -2689,7 +2715,7 @@
           },
           "syndicate": {
             "name": "Syndykat",
-            "description": "Rozpoczyna grę z kartą Morale na planszy.\nMoże tworzyć talię z nieprzywódczych kart frakcji: Cesarstwa Nilfgaardu, Scoia'tael, Skellige, Syndykatu oraz Królestwa Nieba."
+            "description": "Rozpoczyna grę z kartą Morale na planszy.\nMoże tworzyć talię z niedowódczych kart frakcji: Cesarstwa Nilfgaardu, Scoia'tael, Skellige, Syndykatu oraz Królestwa Nieba."
           },
           "sky": {
             "name": "Królestwo Nieba",
@@ -2697,7 +2723,7 @@
           },
           "witchersforces": {
             "name": "Siły Wiedźmińskie",
-            "description": "W TRAKCIE TWORZENIA: Za każdą przegraną lub zremisowaną rundę dobierz kartę z tali.\nZ każdym Wiedźminem siła Szkoły Wiedźmińskiej rośnie!"
+            "description": "W TRAKCIE TWORZENIA: Za każdą przegraną lub zremisowaną rundę dobierz kartę z talii.\nZ każdym Wiedźminem siła Szkoły Wiedźmińskiej rośnie!"
           }
         },
         "card": {
@@ -2717,7 +2743,7 @@
           "eredin_the_treacherous": "Eredin Bréacc Glas — Zdradziecki",
           "mysterious_elf": "Tajemniczy Elf",
           "decoy": "Manekin do Ćwiczeń",
-          "custom!Decoy2": "Bożątko",
+          "custom!Decoy2": "Dywersja",
           "frost": "Trzaskający Mróz",
           "ciri": "Cirilla Fiona Elen Riannon",
           "clear": "Czyste Niebo",
@@ -2734,8 +2760,8 @@
           "yennefer": "Yennefer z Vengerbergu",
           "zoltan": "Zoltan Chivay",
           "olgierd": "Olgierd von Everec",
-          "gaunter_odimm": "Gaunter O'Dim",
-          "gaunter_odimm_darkness": "Gaunter O'Dim — Ciemność",
+          "gaunter_odimm": "Gaunter O'Dimm",
+          "gaunter_odimm_darkness": "Gaunter O'Dimm — Ciemność",
           "cow": "Krowa",
           "chort": "Bovinny Korpus Obrony",
           "ballista": "Balista",
@@ -2888,7 +2914,7 @@
           "gerry": "Gerwazy z Rzeki",
           "lethosabotage": "Letho — Sabotażysta",
           "aidhorn": "Sztandar Lyrii i Rivii",
-          "Gaunter_Leader": "Gaunter O'Dim",
+          "Gaunter_Leader": "Gaunter O'Dimm",
           "Ida_Emean_d20": "Ida Emean — Elfickie Wróżbictwo",
           "spice_trader": "Kupiec Korzenny",
           "roach": "Płotka",
@@ -2912,18 +2938,18 @@
           "Arnjolf_the_Patricide": "Arnjolf Ojcobójca",
           "aard": "Znaki Wiedźmińskie: Aard",
           "yrden": "Znaki Wiedźmińskie: Yrden",
-          "igni": "Znaki Wiedźmińskie: Ignii",
+          "igni": "Znaki Wiedźmińskie: Igni",
           "udalryka_leader": "Udalryk an Brokvar — Wybraniec Bogów",
-          "keadwen_weather": "Taktyczna Prognoza — Dywizja z Keadwen",
+          "keadwen_weather": "Taktyczna Prognoza — Dywizja z Kaedwen",
           "radovid_stern": "Radowid V Srogi — Jaśnie Pierdolnięty",
           "fake_ciri": "Fałszywa Ciri — Cesarzowa Nilfgaardu",
           "whitefrost": "Białe Zimno",
           "temeriacall": "Temeria",
           "temeriamoral": "Komandosi Niebieskich Pasów — Zwiadowca",
           "temeriabluestripe": "Komandosi Niebieskich Pasów — Żołnierz",
-          "temeriabluestripe_2": "Komandosi Niebieskich Pasów — Żółnierz",
+          "temeriabluestripe_2": "Komandosi Niebieskich Pasów — Żołnierz",
           "temeriamoral_1": "Komandosi Niebieskich Pasów — Zwiadowca",
-          "vernontemeria_call": "Vernon Roche — Dowódca Odziałów Specjalnych Niebieskich Pasów",
+          "vernontemeria_call": "Vernon Roche — Dowódca Oddziałów Specjalnych Niebieskich Pasów",
           "steward": "Hopeful Steward",
           "guard": "Straż Królewska",
           "chibi_mask": "Chibi Mask",
@@ -2980,7 +3006,7 @@
           "potion_jaskolka": "Jaskółka",
           "viperwitcher": "Wiedźmin Szkoły Żmiji",
           "potion_soup": "Zupa z Elfa i Cebuli",
-          "potion_grom": "Grom",
+          "potion_grom": "Grzmot",
           "potion_white": "Biały Miód",
           "kingkrill": "Potwór Otchłani",
           "olgierd_headless": "Olgierd von Everec — Bezgłowy",
@@ -3005,7 +3031,7 @@
         "ui": {
           "elem": {
             "initial_redraw": {
-              "txt": "Wybierz do %s kart do przetasowania."
+              "txt": "Wybierz do %s kart do przelosowania."
             },
             "definesJS": {
               "players": {
@@ -3050,7 +3076,7 @@
               },
               "brick": {
                 "name": "Awaria Trybu Wieloosobowego",
-                "why": "Nieudało się połączyć do serwera!\nSerwer może być tymczasowo niedostępny.\n\nSpróbuj ponownie później!"
+                "why": "Nie udało się połączyć do serwera!\nSerwer może być tymczasowo niedostępny.\n\nSpróbuj ponownie później!"
               },
               "surrender_request": {
                 "sword": "🗡️",
@@ -3063,8 +3089,8 @@
               },
               "session_mode": {
                 "header": "Stwórz Pokój",
-                "text": "Wybierz tryb Gry",
-                "create": "Po Prostu Gra",
+                "text": "Wybierz tryb gry",
+                "create": "Zwykła Gra",
                 "custom": "Niestandardowa Gra"
               },
               "custom_server": {
@@ -3085,10 +3111,10 @@
             },
             "no_op_ui": "Brak Przeciwnika",
             "session_copied": "Skopiowano: %s",
-            "session_joined": "Dołączono do sesji: %s",
-            "session_made": "Stworzono sesję, ID Dołączenia: %s",
-            "session_bad": "Nieprawidłowe ID Sesji",
-            "op_left": "Przeciwnik opuścił grę i sesja nie jest już ważna",
+            "session_joined": "Dołączono do pokoju: %s",
+            "session_made": "Stworzono pokój, ID Pokoju: %s",
+            "session_bad": "Nieprawidłowe ID Pokoju",
+            "op_left": "Przeciwnik opuścił grę i pokój nie jest już ważny",
             "op_left_short": "Przeciwnik wyszedł",
             "op_ready": "Przeciwnik jest gotowy! Jeśli będziesz gotowy gra rozpocznie się natychmiastowo!",
             "op_faction": "Przeciwnik zmienił swoją frakcję na \"%s\"",
@@ -3102,7 +3128,7 @@
             },
             "end_turn": "\u003Ccolor=#abebe2\u003E%s\u003C/color\u003E\u003Ccolor=#32a852\u003E tura dobiegła końca!\u003C/color\u003E",
             "no_op_start": "Nie można rozpocząć gry: Brak drugiego Gracza",
-            "me_ready": "Jesteś gotowy, Poczekaj na drugiego gracza",
+            "me_ready": "Jesteś gotowy, poczekaj na drugiego gracza",
             "me_unready": "Jesteś teraz niegotowy",
             "redraw": "\u003Ccolor=#d5cfe3\u003EPrzelosowałeś kartę \"\u003C/color\u003E\u003Ccolor=#fa4441\u003E%x\u003C/color\u003E\u003Ccolor=#d5cfe3\u003E\" na \"\u003C/color\u003E\u003Ccolor=#41fa66\u003E%y\u003C/color\u003E\u003Ccolor=#d5cfe3\u003E\"\u003C/color\u003E",
             "bucket": "\u003Ccolor=#d5cfe3\u003ENowa karta wpadła do wiadra:\u003C/color\u003E \u003Ccolor=#41fa66\u003E%s\u003C/color\u003E",
@@ -3113,8 +3139,8 @@
               "skellige_mad_man": "Wybierz kartę do wygnania",
               "skellige_mad_man_ok": "Wybierz kartę Braterskiej Więzi",
               "devildeal": "Wybierz kartę do dobrania",
-              "gryf": "Wybierz znak Wiedźmiński",
-              "viper": "Wybierz eliksir Wiedźmiński"
+              "gryf": "Wybierz Wiedźmiński Znak",
+              "viper": "Wybierz Wiedźmiński Eliksir"
             },
             "ordinal": {
               "st": "",
@@ -3125,10 +3151,10 @@
           },
           "notif": {
             "nilfgaard-wins-draws": "Nilfgaard wygrywa remisy",
-            "me_win_via_nilfgaard": "Zdolność Nilfgaardu aktywowana:\nNilfgaard wygrywa każdą turę zakończoną remisem.",
-            "op_win_via_nilfgaard": "Zdolność Nilfgaardu aktywowana:\nNilfgaard wygrywa każdą turę zakończoną remisem.",
+            "me_win_via_nilfgaard": "Zdolność Nilfgaardu aktywowana:\nNilfgaard wygrywa każdą rundę zakończoną remisem.",
+            "op_win_via_nilfgaard": "Zdolność Nilfgaardu aktywowana:\nNilfgaard wygrywa każdą rundę zakończoną remisem.",
             "witcherforces_draw": "Zdolność Sił Wiedźmińskich aktywowana:\nWiedźmini dobierają kartę! ",
-            "op-leader": "Przeciwnik używa zdolności Leadera",
+            "op-leader": "Przeciwnik używa zdolności Dowódcy",
             "op-white-flame": "The opponent's leader cancel\nyour opponent's Leader Ability",
             "meve_white_queen": "Lyria & Rivia leader allows both players to restore\n2 units when using the medic ability.",
             "medicextra": "Ty i przeciwnik możecie wskrzesić medykami dodatkową kartę!",
@@ -3148,39 +3174,39 @@
             "draw-round": "Runda zakończyła się remisem",
             "me-turn": "Twoja tura!",
             "op-turn": "Tura przeciwnika",
-            "north": "Zdolność Królest Połnocy została aktywyowana:\nPółnoc dobiera dodatkową kartę.",
+            "north": "Zdolność Królestw Północy aktywowana:\nPółnoc dobiera dodatkową kartę.",
             "north-scorch-cancelled": "Northern Realms leader ability used:\nScorch ability cancelled for the rest of the round.",
             "scol_secondchance": "Scoia'tael leader passive ability triggered:\nScoia'tael draws an additional card from grave.",
-            "gaunter": "Zdolność Gauntera O'Dima użyta:\nObie strony dostają dodatkowe karty!",
-            "gaunter2": "Zdolność Gauntera O'Dima użyta:\nOstatnia runda została wymazana; Wszyscy gracze odzyskują jedno życie!",
-            "scol_secondchance_necro2": "Zdolność Gauntera O'Dima użyta:\nObie strony dostają dodatkowe karty!",
+            "gaunter": "Zdolność Gauntera O'Dimma użyta:\nObie strony dostają dodatkowe karty!",
+            "gaunter2": "Zdolność Gauntera O'Dimma użyta:\nOstatnia runda została wymazana; Wszyscy gracze odzyskują jedno życie!",
+            "scol_secondchance_necro2": "Zdolność Gauntera O'Dimma użyta:\nObie strony dostają dodatkowe karty!",
             "monsters": "Zdolność frakcji Potworów aktywowana:\nJedna karta Potworów zostaje na planszy.",
-            "draw_end": "Gra w Gwinta nie może zakończyć się remisem!\nStaw czoła przeciwnikowi po raz kolejny aż zwycięsca zostanie wybrany!",
+            "draw_end": "Gra w Gwinta nie może zakończyć się remisem!\nStaw czoła przeciwnikowi po raz kolejny aż zwycięzca zostanie wybrany!",
             "scol_pick": "Zdolność Scoia'taela pozwala przeciwnikowi wybrać kto zacznie grę!",
             "sky": "Zdolność Królestwa Nieba aktywowana:\nJedna karta Królestwa Nieba zostaje na planszy.",
-            "darkstorm": "Ciemność nadeszła...\nCiemność przynosi destrukcję dla walczących wręcz!",
+            "darkstorm": "Ciemność nadeszła...\nCiemność przynosi destrukcję dla Walczących Wręcz!",
             "scoiatael": "Opponent used the Scoia'tael faction perk to go first.",
-            "skellige-op": "Zdolność Skellige aktywowana:\nSkellige przenosi dwie karty z grobów na planszę!",
-            "skellige-me": "Zdolność Skellige aktywowana:\nSkellige przenosi dwie karty z grobów na planszę!",
+            "skellige-op": "Zdolność Skellige aktywowana:\nSkellige przenosi dwie karty ze stosów kart odrzuconych na planszę!",
+            "skellige-me": "Zdolność Skellige aktywowana:\nSkellige przenosi dwie karty ze stosów kart odrzuconych na planszę!",
             "witcher_universe": "Witcher Universe faction ability used:\nTurn skipped.",
             "toussaint": "Toussaint faction ability used:\nToussaint draws an additional card.",
-            "toussaint-decoy-cancelled": "Umiejętność lidera Toussaint użyta:\nUmiejętność wabik anulowana przez reszte rundy.",
-            "lyria_rivia": "Umiejętność frakcji Lyria & Rivia użyta:\nEfekt Wysokie Morale nałożony na cały rząd.",
-            "zerrikania": "Umiejętność frakcji Zerrikania użyta:\nJednostka została przywrócona ze sterty odrzuconych.",
+            "toussaint-decoy-cancelled": "Zdolność Dowódcy Toussaint użyta:\nZdolność Manekina do Ćwiczeń anulowana na resztę rundy.",
+            "lyria_rivia": "Zdolność frakcji Lyria & Rivia użyta:\nEfekt Wysokie Morale nałożony na cały rząd.",
+            "zerrikania": "Zdolność frakcji Zerrikania użyta:\nJednostka została przywrócona ze stosu kart odrzuconych.",
             "coin-false_player-me": "Pominąłeś swoją turę",
             "coin-true_player-me": "Pominąłeś swoją turę\nAle twój przeciwnik otrzymał dodatkową kartę",
             "coin-false_player-op": "Twój przeciwnik pominął swoją turę",
             "coin-true_player-op": "Twój przeciwnik pominął swoją turę\nI otrzymujesz dodatkową kartę",
-            "whiteflame2-op_nilfgaard": "Przeciwnik skopiował umiejętność twojego lidera",
-            "whiteflame2-op_syndicate": "Przeciwnik skopiował umiejętność twojego lidera!",
-            "whiteflame2-me_nilfgaard": "Skopiowałeś umiejętność lidera przeciwnika!",
-            "whiteflame2-me_syndicate": "Skopiowałeś umiejętność lidera przeciwnika!"
+            "whiteflame2-op_nilfgaard": "Przeciwnik skopiował zdolność twojego Dowódcy",
+            "whiteflame2-op_syndicate": "Przeciwnik skopiował zdolność twojego Dowódcy!",
+            "whiteflame2-me_nilfgaard": "Skopiowałeś zdolność Dowódcy przeciwnika!",
+            "whiteflame2-me_syndicate": "Skopiowałeś zdolność Dowódcy przeciwnika!"
           },
           "notif_side": {
-            "ts": "Podróżująca Dusza \"\u003Ccolor=#00ff00\u003E%s\u003C/color\u003E\" odwiedza teraz \u003Ccolor=#add8e6\u003EKrólestwo Nieba\u003C/color\u003E!\nWyruszy spowrotem w drogę dnia \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E",
+            "ts": "Podróżująca Dusza \"\u003Ccolor=#00ff00\u003E%s\u003C/color\u003E\" odwiedza teraz \u003Ccolor=#add8e6\u003EKrólestwo Nieba\u003C/color\u003E!\nWyruszy z powrotem w drogę dnia \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E",
             "moon": {
               "new": "Plansza jest spowita w ciemnościach!\nKsiężyc jest w \u003Ccolor=#DDE8EB\u003Enowiu\u003C/color\u003E!\nDo dnia \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E przypada \u003Ccolor=#DDE8EB\u003Enów\u003C/color\u003E!\nKsiężyc zniknie \u003Ccolor=#90D5FF\u003E%s\u003C/color\u003E!",
-              "full": "Światło \u003Ccolor=#DDE8EB\u003EPełni\u003C/color\u003E roświetla planszę!\nPełnia będzie na niebie aż do \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E!\nKsiężyc będzie w \u003Ccolor=#DDE8EB\u003EPełni\u003C/color\u003E dnia \u003Ccolor=#90D5FF\u003E%s\u003C/color\u003E!"
+              "full": "Światło \u003Ccolor=#DDE8EB\u003EPełni\u003C/color\u003E rozświetla planszę!\nPełnia będzie na niebie aż do \u003Ccolor=#90D5FF\u003E\u003C$enddatelocal\u003E\u003C/color\u003E!\nKsiężyc będzie w \u003Ccolor=#DDE8EB\u003EPełni\u003C/color\u003E dnia \u003Ccolor=#90D5FF\u003E%s\u003C/color\u003E!"
             }
           },
           "mmenu": {
@@ -3210,14 +3236,14 @@
             "c": {
               "cl": "nie może zostać użyty jako dowódca",
               "leader": "Dowódca",
-              "wrongf": "nie pasuje do frakcji tali",
+              "wrongf": "nie pasuje do frakcji talii",
               "id": "ID",
               "cid": "nie posiada odpowiadającej karty.",
-              "wrongf2": "nie może zostać użyty w tej frakcji tali",
+              "wrongf2": "nie może zostać użyty w tej frakcji talii",
               "has": "Talia posiada",
               "exists": "dostępnych",
               "cards": "kart",
-              "warn1": "Kontyunować import tali?",
+              "warn1": "Kontynuować import talii?",
               "warn2": "Potwierdź",
               "warn3": "Nie udało się przetworzyć talii!",
               "warn4": "Przesłana talia nie jest poprawnie sformatowana!",
@@ -3227,8 +3253,8 @@
               "warn5_title": "Potwierdź"
             },
             "d": {
-              "card_a": "Kolekcja Kard",
-              "card_b": "Karty w Tali",
+              "card_a": "Kolekcja Kart",
+              "card_b": "Karty w Talii",
               "load": "Wczytaj Talię",
               "change": "Zmień Frakcję",
               "getfile": "Pobierz Talię"
@@ -3252,8 +3278,8 @@
             ]
           },
           "startwarnings": {
-            "a": "Twoja talia musi mieć conajmniej %s kart jednostek ",
-            "b": "Twoja talia nie może mieć więcej niż %s kart specjalnych. ",
+            "a": "Twoja talia musi mieć co najmniej %s kart jednostek ",
+            "b": "Twoja talia nie może mieć więcej niż %s kart Specjalnych. ",
             "c": "Twoja talia nie może mieć więcej niż %s kart bohaterów. ",
             "d": "Masz w talii za dużo kopii \"%s\" (%z/%y)! "
           }
@@ -3273,11 +3299,11 @@
           "howtouse": "Kliknij licznik aby użyć zdolności Dowódcy!",
           "manup": "Twój pasek zdolności się wypełnił (%x/%y)",
           "powerup": "Masz teraz (%x/%y) w twoim pasku zdolności!",
-          "toolow": "Nie masz wystarczającej energi aby użyć tej zdolności (%x/%y)",
+          "toolow": "Nie masz wystarczającej energii aby użyć tej zdolności (%x/%y)",
           "toolow_shield": "Masz %x/%y ładunków tarczy",
           "ophas": "Przeciwnik ma %x/%y",
           "mehas": "Ty masz %x/%y",
-          "click": "Kliknij licznik aby użyć zdolności lidera!",
+          "click": "Kliknij licznik aby użyć zdolności Dowódcy!",
           "d20": {
             "critfail": {
               "me": "Krytyczna porażka, wyrzucono \"1\"\nPrzeciwnik dobiera dodatkową kartę!",
@@ -3287,7 +3313,7 @@
               "done": "Wyrzucono: %s",
               "name": "Rzut Losu",
               "name_sideB": "Przeciwnik rzuca kostką o dodatkowe karty",
-              "res1": "Krtytczna Porażka",
+              "res1": "Krytyczna Porażka",
               "res2": "Naturalna Dwudziestka!",
               "res3": "Sukces",
               "res4": "Porażka",
@@ -3303,7 +3329,7 @@
               "a": "Tak",
               "b": "Nie",
               "c": "Pominąć Turę?",
-              "d": "Przeciwnik dostanie 50/50 na zdobycie kopi karty z planszy!"
+              "d": "Przeciwnik dostanie 50/50 na zdobycie kopii karty z planszy!"
             }
           }
         },
@@ -3315,18 +3341,25 @@
           },
           "texts": {
             "round": "Runda: ",
-            "win": "Zwycięsca: "
+            "win": "Zwycięzca: "
           },
           "wiped": {
             "wiped": "Wymazano!",
             "res": {
-              "gaunter_revert": "Gaunter O'dim cofnął czas"
+              "gaunter_revert": "Gaunter O'Dimm cofnął czas"
             }
           },
           "sep": "|",
           "sur": {
             "me": "Poddałeś się!",
             "op": "Przeciwnik poddał się!"
+          },
+          "coin": {
+            "win": "Zwycięstwo",
+            "lose": "Porażka",
+            "draw": "Remis",
+            "returning": "Powrót do personalizacji za",
+            "return": "Wróć do personalizacji"
           }
         },
         "cardsoftheday": {
@@ -3346,12 +3379,12 @@
           "discord_refund": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Zakład zwrócony: \u003Ccolor=#AAAAAA\u003E%s\u003C/color\u003E.",
           "discord_error_not_registered": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Najpierw musisz użyć \u003Ccolor=#FFAA00\u003E!registerclient\u003C/color\u003E na Discordzie.",
           "discord_error_generic": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Coś poszło nie tak \u003Ccolor=#FF5555\u003E(%s)\u003C/color\u003E.",
-          "discord_card_recived": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Otrzymano ekwipunek z \u003Ccolor=#2121DB\u003Ediscorda\u003C/color\u003E!\nZsynchronizowano \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E kart!\n\u003Ccolor=#AAAAFF\u003EJeśli nie widzisz tych kart odśwież kontruktor talii poprzez zmianę frakcji!\u003C/color\u003E"
+          "discord_card_recived": "\u003Ccolor=#2121DB\u003EDISCORD\u003C/color\u003E: Otrzymano ekwipunek z \u003Ccolor=#2121DB\u003EDiscorda\u003C/color\u003E!\nZsynchronizowano \u003Ccolor=#FFD700\u003E%s\u003C/color\u003E kart!\n\u003Ccolor=#AAAAFF\u003EJeśli nie widzisz tych kart odśwież konstruktor talii poprzez zmianę frakcji!\u003C/color\u003E"
         },
         "card_info": {
           "strings": {
             "": "{class_prefix}**{name}**{class_suffix}\nKarta Specjalna",
-            "leader": "**{class_prefix}{name}{class_suffix}**\n{faction}Karta {leader_but_gender}",
+            "leader": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {leader_but_gender}",
             "weather": "☁**{name}**\nKarta Pogody",
             "siege_isHero:true_male": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Oblężniczego",
             "siege_isHero:false_male": "{class_prefix}**{name}**{class_suffix}\n{faction}Karta {unit} {class} Oblężniczego",
@@ -3539,7 +3572,7 @@
             "op": "\u003Ccolor=#B33A3A\u003EPrzeciwnik:\u003C/color\u003E"
           },
           "spypotion": "\u003Ccolor=#C46A2B\u003EJaskółka\u003C/color\u003E jest aktywna przez następne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!",
-          "elfendonion": "\u003Ccolor=#A69A45\u003EZupa z elfa i cebuli\u003C/color\u003E jest tutaj przez kolejne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!",
+          "elfendonion": "\u003Ccolor=#A69A45\u003EZupa z Elfa i Cebuli\u003C/color\u003E jest tutaj przez kolejne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!",
           "grom": "\u003Ccolor=#3F6B32\u003EGrzmot\u003C/color\u003E jest aktywny przez następne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!",
           "AURORA_mothers_care": "\u003Ccolor=#EBE359\u003EMatczyna Opieka\u003C/color\u003E jest aktywna przez następne \u003Ccolor=#E6D8B5\u003E%s\u003C/color\u003E tury!"
         },
@@ -3584,6 +3617,23 @@
               "a": "Utracono połączenie, trwa ponowne łączenie...",
               "b": "Odzyskano Sygnał!"
             }
+          }
+        },
+        "interface_specialevents": {
+          "match": {
+            "topic": "SYTUCJA PATOWA",
+            "reasons": {
+              "fall": "Wiadomość serwera: \"%s\", Gra Anulowana",
+              "server_update": "Gra Anulowana; Gra została zaktualizowana i wszystkie klienty zostaną zmuszone do restartu"
+            }
+          },
+          "nolobbies": {
+            "reason": "Tworzenie pokojów jest tymczasowo niedostępne\nPowód: \"%s\"",
+            "reasonless": "Tworzenie pokojów jest tymczasowo niedostępne"
+          },
+          "authfail": {
+            "reason": "Autoryzacja niedudana! Spróbuj odświeżyć stronę.\nWiadomość serwera: \"%s\"\n\nJeśli to jest błąd zgłoś to!",
+            "reasonless": "Autoryzacja niedudana! Spróbuj odświeżyć stronę.\n\nJeśli to się powtarza, zgłoś to jako błąd!"
           }
         }
       }
@@ -7417,8 +7467,8 @@
         "description": ""
       }
     },
-    "audio_yt_vid_soundtrack": "FTsuevfvQ9w",
-    "audio_yt_vid_soundtrack_volume": 47,
+    "audio_yt_vid_soundtrack": "2Isa4ugEbZI",
+    "audio_yt_vid_soundtrack_volume": 90,
     "tavern_yt_vid": "yu197hlNWK0",
     "tavern_yt_volume": 90
   },

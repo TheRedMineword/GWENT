@@ -13,6 +13,8 @@ let _debug_volume = 50;
 let videoMapLyrics = {};
 // Shared queue for medic cards, do not modify!!
 let medicrevivethat = [];
+let returntocustomizationatmatchend = false;
+let uselegacyendscreen = false;
 let custom_updater = false;
 let twoPlayersConnected = false; //host alone
 let extraJSON = [];
@@ -1460,6 +1462,8 @@ let ThisDef = {
   name: "Default Config",
 
   env_vars: {
+    uselegacyendscreen: deepClone(uselegacyendscreen),
+    returntocustomizationatmatchend: deepClone(returntocustomizationatmatchend),
     allowdiscordintegration: deepClone(allowdiscordintegration),
     showbankms: deepClone(showbankms),
 
