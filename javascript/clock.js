@@ -823,7 +823,7 @@ async function loadScript2(src) {
   });
 }
 let the_image_json = {};
-const expected_webscoket_communication_version = 3.1;
+const expected_webscoket_communication_version = 4;
 (() => {
   loadingscreenupdate("Starting clock synchronization");
   let useSecureClock = false;
