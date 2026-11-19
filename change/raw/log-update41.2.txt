@@ -24,7 +24,7 @@ Patch Notes:
 <fat1>
 # 19 November, 2026
 An patch full of coins and translation!
-```
+```diff
 --- Reworked game end screen, it use now "coin toss" results screen insted!
     Custom servers can use "uselegacyendscreen" value to swap back to old one!
     Check Github repo; GWENT\javascript\custom_server\deafult_expanded.json for template!
