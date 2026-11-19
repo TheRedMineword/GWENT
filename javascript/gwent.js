@@ -849,7 +849,11 @@ socket.onmessage = async (event) => {
         var overlay = document.createElement("div");
         overlay.className = "briefing-overlay";
         document.body.appendChild(overlay);
-        renderBox(overlay, {}, parsePatchNotes(data.content.content));
+        var a = data.content;
+        if (typeof a === "object") {
+          a = a.content;
+        }
+        renderBox(overlay, {}, parsePatchNotes(a));
       }
       break;
     case "show_patchnotes":
