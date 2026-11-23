@@ -1353,7 +1353,7 @@ ui_error_strings: {
     topic: "STEALMATE",
     reasons: {
       fall: "Server Message: \"%s\", Match Cancelled",
-      server_update: "Match Cancelled; Game was updated and clients about to restart"
+      server_update: "Match Cancelled; Game was updated and clients are about to restart"
     }
   },
   nolobbies: {
