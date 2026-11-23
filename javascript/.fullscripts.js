@@ -19,230 +19,172 @@ window.setupTimedImages = async function (
     //await eval(config.moon.script);
     // await new Function(config.moon.script)();
     // console.warn(`config.moon.script === \"${config.moon.script}\"`);
+    // Same algorithm as the news iframe (PN_MOONLIGHT): Meeus ch. 49 with the
+    // TT -> UTC correction (DELTA_T_S) and floor-based lunation lookup.
     window.getMoonBoardTheme = function (
-      time = Date.now(),
+      time = typeof Clock !== "undefined" && Clock?.now
+        ? Clock.now()
+        : Date.now(),
       lifetimeHours = 30,
     ) {
       const DAY = 86400000;
+      const HOUR = 3600000;
       const DEG = Math.PI / 180;
+      const SYNODIC = 29.530588853;
+      const EPOCH_JDE = 2451550.09765; // new moon of 2000-01-06
+      const DELTA_T_S = 69.2; // TT - UTC in seconds (~2026)
 
       const sinD = (x) => Math.sin(x * DEG);
       const norm = (x) => ((x % 360) + 360) % 360;
 
-      function phaseTime(k, full) {
-        const T = k / 1236.85;
+      // [coef, E power, multiple of Mp, multiple of M, multiple of F]
+      const COMMON = [
+        [-0.00111, 0, 1, 0, -2],
+        [-0.00057, 0, 1, 0, 2],
+        [0.00056, 1, 2, 1, 0],
+        [-0.00042, 0, 3, 0, 0],
+        [0.00042, 1, 0, 1, 2],
+        [0.00038, 1, 0, 1, -2],
+        [-0.00024, 1, 2, -1, 0],
+        [-0.00007, 0, 1, 2, 0],
+        [0.00004, 0, 2, 0, -2],
+        [0.00004, 0, 0, 3, 0],
+        [0.00003, 0, 1, 1, -2],
+        [0.00003, 0, 2, 0, 2],
+        [-0.00003, 0, 1, 1, 2],
+        [0.00003, 0, 1, -1, 2],
+        [-0.00002, 0, 1, -1, -2],
+        [-0.00002, 0, 3, 1, 0],
+        [0.00002, 0, 4, 0, 0],
+      ];
+      const NEW_TERMS = [
+        [-0.4072, 0, 1, 0, 0],
+        [0.17241, 1, 0, 1, 0],
+        [0.01608, 0, 2, 0, 0],
+        [0.01039, 0, 0, 0, 2],
+        [0.00739, 1, 1, -1, 0],
+        [-0.00514, 1, 1, 1, 0],
+        [0.00208, 2, 0, 2, 0],
+        ...COMMON,
+      ];
+      const FULL_TERMS = [
+        [-0.40614, 0, 1, 0, 0],
+        [0.17302, 1, 0, 1, 0],
+        [0.01614, 0, 2, 0, 0],
+        [0.01043, 0, 0, 0, 2],
+        [0.00734, 1, 1, -1, 0],
+        [-0.00515, 1, 1, 1, 0],
+        [0.00209, 2, 0, 2, 0],
+        ...COMMON,
+      ];
+
+      // Unix ms (UTC) of new (phase 0) / full (phase 0.5) moon of lunation k
+      function phaseTime(k, phase) {
+        const K = k + phase;
+        const T = K / 1236.85;
         const T2 = T * T;
         const T3 = T2 * T;
         const T4 = T3 * T;
         let jde =
-          2451550.09765 +
-          29.530588853 * k +
+          EPOCH_JDE +
+          SYNODIC * K +
           0.0001337 * T2 -
           0.00000015 * T3 +
           0.00000000073 * T4;
         const M = norm(
-          2.5534 + 29.1053567 * k - 0.0000014 * T2 - 0.00000011 * T3,
+          2.5534 + 29.1053567 * K - 0.0000014 * T2 - 0.00000011 * T3,
         );
         const Mp = norm(
           201.5643 +
-            385.81693528 * k +
+            385.81693528 * K +
             0.0107582 * T2 +
             0.00001238 * T3 -
             0.000000058 * T4,
         );
         const F = norm(
           160.7108 +
-            390.67050284 * k -
+            390.67050284 * K -
             0.0016118 * T2 -
             0.00000227 * T3 +
             0.000000011 * T4,
         );
         const O = norm(
-          124.7746 - 1.5637558 * k + 0.0020672 * T2 + 0.00000215 * T3,
+          124.7746 - 1.5637558 * K + 0.0020672 * T2 + 0.00000215 * T3,
         );
         const E = 1 - 0.002516 * T - 0.0000074 * T2;
-        if (!full) {
-          jde +=
-            -0.4072 * sinD(Mp) +
-            0.17241 * E * sinD(M) +
-            0.01608 * sinD(2 * Mp) +
-            0.01039 * sinD(2 * F) +
-            0.00739 * E * sinD(Mp - M) -
-            0.00514 * E * sinD(Mp + M) +
-            0.00208 * E * E * sinD(2 * M) -
-            0.00111 * sinD(Mp - 2 * F) -
-            0.00057 * sinD(Mp + 2 * F) +
-            0.00056 * E * sinD(2 * Mp + M) -
-            0.00042 * sinD(3 * Mp) +
-            0.00042 * E * sinD(M + 2 * F) +
-            0.00038 * E * sinD(M - 2 * F) -
-            0.00024 * E * sinD(2 * Mp - M) -
-            0.00017 * sinD(O) -
-            0.00007 * sinD(Mp + 2 * M) +
-            0.00004 * sinD(2 * Mp - 2 * F) +
-            0.00004 * sinD(3 * M) +
-            0.00003 * sinD(Mp + M - 2 * F) +
-            0.00003 * sinD(2 * Mp + 2 * F) -
-            0.00003 * sinD(Mp + M + 2 * F) +
-            0.00003 * sinD(Mp - M + 2 * F) -
-            0.00002 * sinD(Mp - M - 2 * F) -
-            0.00002 * sinD(3 * Mp + M) +
-            0.00002 * sinD(4 * Mp);
-        } else {
-          jde +=
-            -0.40614 * sinD(Mp) +
-            0.17302 * E * sinD(M) +
-            0.01614 * sinD(2 * Mp) +
-            0.01043 * sinD(2 * F) +
-            0.00734 * E * sinD(Mp - M) -
-            0.00515 * E * sinD(Mp + M) +
-            0.00209 * E * E * sinD(2 * M) -
-            0.00111 * sinD(Mp - 2 * F) -
-            0.00057 * sinD(Mp + 2 * F) +
-            0.00056 * E * sinD(2 * Mp + M) -
-            0.00042 * sinD(3 * Mp) +
-            0.00042 * E * sinD(M + 2 * F) +
-            0.00038 * E * sinD(M - 2 * F) -
-            0.00024 * E * sinD(2 * Mp - M) -
-            0.00017 * sinD(O) -
-            0.00007 * sinD(Mp + 2 * M) +
-            0.00004 * sinD(2 * Mp - 2 * F) +
-            0.00004 * sinD(3 * M) +
-            0.00003 * sinD(Mp + M - 2 * F) +
-            0.00003 * sinD(Mp + M + 2 * F) -
-            0.00003 * sinD(Mp - M + 2 * F) -
-            0.00002 * sinD(Mp - M - 2 * F) -
-            0.00002 * sinD(3 * Mp + M) +
-            0.00002 * sinD(4 * Mp);
+
+        let corr = -0.00017 * sinD(O);
+        for (const [c, ePow, a, b, f] of phase === 0 ? NEW_TERMS : FULL_TERMS) {
+          corr += c * Math.pow(E, ePow) * sinD(a * Mp + b * M + f * F);
         }
+        jde += corr;
+
         const A = [
-          [299.77, 0.107408, -0.000325],
-          [251.88, 0.016321, 0],
-          [251.83, 26.651886, 0],
-          [349.42, 36.412478, 0],
-          [84.66, 18.206239, 0],
-          [141.74, 53.303771, 0],
-          [207.14, 2.453732, 0],
-          [154.84, 7.30686, 0],
-          [34.52, 27.261239, 0],
-          [207.19, 0.121824, 0],
-          [291.34, 1.844379, 0],
-          [161.72, 24.198154, 0],
-          [239.56, 25.513099, 0],
-          [331.55, 3.592518, 0],
+          [299.77 + 0.107408 * K - 0.000325 * T2, 0.000325],
+          [251.88 + 0.016321 * K, 0.000165],
+          [251.83 + 26.651886 * K, 0.000164],
+          [349.42 + 36.412478 * K, 0.000126],
+          [84.66 + 18.206239 * K, 0.00011],
+          [141.74 + 53.303771 * K, 0.000062],
+          [207.14 + 2.453732 * K, 0.00006],
+          [154.84 + 7.30686 * K, 0.000056],
+          [34.52 + 27.261239 * K, 0.000047],
+          [207.19 + 0.121824 * K, 0.000042],
+          [291.34 + 1.844379 * K, 0.00004],
+          [161.72 + 24.198154 * K, 0.000037],
+          [239.56 + 25.513099 * K, 0.000035],
+          [331.55 + 3.592518 * K, 0.000023],
         ];
-        const coefficients = [
-          0.000325, 0.000165, 0.000164, 0.000126, 0.00011, 0.000062, 0.00006,
-          0.000056, 0.000047, 0.000042, 0.00004, 0.000037, 0.000035, 0.000023,
-        ];
-        for (let i = 0; i < A.length; i++) {
-          jde += coefficients[i] * sinD(A[i][0] + A[i][1] * k + A[i][2] * T2);
-        }
-        return (jde - 2440587.5) * DAY;
+        for (const [arg, c] of A) jde += c * sinD(arg);
+
+        // JDE is dynamical time (TT): convert to UTC, then to Unix ms
+        return (jde - 2440587.5) * DAY - DELTA_T_S * 1000;
       }
 
       const jd = time / DAY + 2440587.5;
+      // floor, not round: rounding could start the search after the current moon
+      const k0 = Math.floor((jd - EPOCH_JDE) / SYNODIC);
+      const span = lifetimeHours * HOUR;
 
-      const k = Math.round((jd - 2451550.09765) / 29.530588853);
-
-      const window = lifetimeHours * 3600000;
-
-      const events = [
-        {
-          type: "new",
-          time: phaseTime(k, false),
-        },
-        {
-          type: "new",
-          time: phaseTime(k + 1, false),
-        },
-        {
-          type: "full",
-          time: phaseTime(k - 0.5, true),
-        },
-        {
-          type: "full",
-          time: phaseTime(k + 0.5, true),
-        },
-      ];
-
-      const windows = events
-        .map((event) => {
-          const start = event.time - window;
-          const end = event.time + window;
-
-          return {
-            ...event,
-            start,
-            end,
-          };
-        })
-        .sort((a, b) => a.start - b.start);
-
-      const current = windows.find(
-        (event) => time >= event.start && time <= event.end,
-      );
-
-      const future = windows.find((event) => event.start > time);
-
-      if (current) {
-        return {
-          active: true,
-          type: current.type,
-
-          event: new Date(current.time).toISOString(),
-
-          start: new Date(current.start).toISOString(),
-
-          end: new Date(current.end).toISOString(),
-
-          eventUnix: Math.round(current.time),
-
-          startUnix: Math.round(current.start),
-
-          endUnix: Math.round(current.end),
-
-          nextType: future ? future.type : null,
-
-          nextEvent: future ? new Date(future.time).toISOString() : null,
-
-          nextStart: future ? new Date(future.start).toISOString() : null,
-
-          nextEnd: future ? new Date(future.end).toISOString() : null,
-
-          nextEventUnix: future ? Math.round(future.time) : null,
-
-          nextStartUnix: future ? Math.round(future.start) : null,
-
-          nextEndUnix: future ? Math.round(future.end) : null,
-        };
+      const windows = [];
+      for (let k = k0 - 2; k <= k0 + 3; k++) {
+        for (const [type, phase] of [
+          ["new", 0],
+          ["full", 0.5],
+        ]) {
+          const t = phaseTime(k, phase);
+          windows.push({ type, time: t, start: t - span, end: t + span });
+        }
       }
+      windows.sort((a, b) => a.start - b.start);
+
+      const current = windows.find((w) => time >= w.start && time <= w.end);
+      const future = windows.find((w) => w.start > time);
+
+      const iso = (ms) => (ms == null ? null : new Date(ms).toISOString());
+      const uni = (ms) => (ms == null ? null : Math.round(ms));
 
       return {
-        active: false,
-        type: null,
+        active: !!current,
+        type: current ? current.type : null,
 
-        event: null,
-        start: null,
-        end: null,
+        event: iso(current?.time),
+        start: iso(current?.start),
+        end: iso(current?.end),
 
-        eventUnix: null,
-        startUnix: null,
-        endUnix: null,
+        eventUnix: uni(current?.time),
+        startUnix: uni(current?.start),
+        endUnix: uni(current?.end),
 
         nextType: future ? future.type : null,
 
-        nextEvent: future ? new Date(future.time).toISOString() : null,
+        nextEvent: iso(future?.time),
+        nextStart: iso(future?.start),
+        nextEnd: iso(future?.end),
 
-        nextStart: future ? new Date(future.start).toISOString() : null,
-
-        nextEnd: future ? new Date(future.end).toISOString() : null,
-
-        nextEventUnix: future ? Math.round(future.time) : null,
-
-        nextStartUnix: future ? Math.round(future.start) : null,
-
-        nextEndUnix: future ? Math.round(future.end) : null,
+        nextEventUnix: uni(future?.time),
+        nextStartUnix: uni(future?.start),
+        nextEndUnix: uni(future?.end),
       };
     };
     if (debug) console.log("[TimedImages] Moon script evaluated successfully");
@@ -484,10 +426,14 @@ window.setupTimedImages = async function (
         if (!isNaN(nextStart) && nextStart < nextChange) {
           nextChange = nextStart;
 
-          console.log("[TimedImages] nextChange updated from next moon start", {
-            nextChange,
-            nextChangeDate: new Date(nextChange).toISOString(),
-          });
+          if (debug)
+            console.log(
+              "[TimedImages] nextChange updated from next moon start",
+              {
+                nextChange,
+                nextChangeDate: new Date(nextChange).toISOString(),
+              },
+            );
         }
       } else {
         if (debug)
@@ -683,7 +629,7 @@ window.setupTimedImages = async function (
     });
 
   return {
-    refresh: apply(debug),
+    refresh: () => apply(debug),
 
     destroy() {
       if (debug)

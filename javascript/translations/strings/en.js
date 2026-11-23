@@ -3,7 +3,7 @@ STRNG["en"] = {
     "_info": {
       "id": "English",
       "translated": true, "msg": "REPLACE THIS BY WARNING SCREEN MESSAGE ABOUT TRANSLATION IN PROCCES \"%s\"", tit: "TRANSLATION IN PROGRESS ETC ITS NAME OF AN ALERT"
-    },
+    }, // %s there is = TRANSLATED_BY field value
   ability: {
     leader: "Leader Ability",
     DontPickMeUp: {
