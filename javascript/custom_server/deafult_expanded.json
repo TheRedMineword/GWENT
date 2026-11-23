@@ -2,6 +2,7 @@
   "name": "Default Config",
   "env_vars": {
     "uselegacyendscreen": false,
+    "game_draw_force_rematch": true,
     "returntocustomizationatmatchend": false,
     "allowdiscordintegration": true,
     "showbankms": 9000,

@@ -29,6 +29,7 @@ Big thanks to **Wirbelpfote** for his brave move, Wirbelpfote is translating Gwe
 Other chances includes
 ```diff
 --- Moonlight theme change of board was updated to use new formula
+--- Custom server can change now restart game on draw value (true/false)
 ```
 <fat3>
 # 19 November, 2026

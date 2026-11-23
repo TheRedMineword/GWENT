@@ -105,7 +105,7 @@ let herocardanim = true; // Disabled before i can fix aniamtion to be schorch li
 let gameID = 0;
 let turncount = 0;
 let announce_turn_count = true;
-const game_draw_force_rematch = true; // Keep it true because Gwent game cant and in stealmate
+let game_draw_force_rematch = true; // Keep it true because Gwent game cant and in stealmate
 
 let SEND_INTERVAL_MS = 700; // change this to desired wait time
 
@@ -1463,6 +1463,7 @@ let ThisDef = {
 
   env_vars: {
     uselegacyendscreen: deepClone(uselegacyendscreen),
+    game_draw_force_rematch: deepClone(game_draw_force_rematch),
     returntocustomizationatmatchend: deepClone(returntocustomizationatmatchend),
     allowdiscordintegration: deepClone(allowdiscordintegration),
     showbankms: deepClone(showbankms),
